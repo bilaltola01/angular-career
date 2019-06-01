@@ -4,7 +4,119 @@
 // For testing colors https://material.io/tools/color/#!/?view.left=0&view.right=1
 // For color builder http://mcg.mbitson.com/#!?mcgpalette0=%230c2340&mcgpalette1=%2300a3d5&themename=careerfair
 @import '~@angular/material/theming';
+@import './variables';
 
+// Applies a property to an mat-button element for each of the supported palettes.
+
+@mixin mat-button-theme($theme) {
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+  
+    .mat-button, .mat-icon-button, .mat-stroked-button {
+      // Buttons without a background color should inherit the font color. This is necessary to
+      // ensure that the button is readable on custom background colors. It's wrong to always assume
+      // that those buttons are always placed inside of containers with the default background
+      // color of the theme (e.g. themed toolbars).
+      color: inherit;
+      background: transparent;
+  
+      @include _mat-button-theme-property($theme, 'color', default);
+      @include _mat-button-focus-overlay-color($theme);
+  
+      // Setup the ripple color to be based on the text color. This ensures that the ripples
+      // are matching with the current theme palette and are in contrast to the background color
+      // (e.g in themed toolbars).
+      .mat-ripple-element {
+        opacity: $_mat-button-ripple-opacity;
+        background-color: currentColor;
+      }
+    }
+  
+    .mat-button-focus-overlay {
+      background: map_get($foreground, base);
+    }
+  
+    // Note: this needs a bit extra specificity, because we're not guaranteed the inclusion
+    // order of the theme styles and the button reset may end up resetting this as well.
+    .mat-stroked-button:not([disabled]) {
+      border-color: mat-color($foreground, divider);
+    }
+  
+    .mat-flat-button, .mat-raised-button, .mat-fab, .mat-mini-fab {
+      // Default font and background color when not using any color palette.
+      color: mat-color($foreground, text);
+      background-color: mat-color($background, raised-button);
+  
+      @include _mat-button-theme-property($theme, 'color', default-contrast);
+      @include _mat-button-theme-property($theme, 'background-color', default);
+      @include _mat-button-ripple-color($theme, default-contrast);
+    }
+
+    .mat-stroked-button, .mat-flat-button {
+      @include _mat-theme-overridable-elevation(0, $theme);
+    }
+  
+    .mat-raised-button {
+      @include _mat-theme-overridable-elevation(2, $theme);
+  
+      &:not([disabled]):active {
+        @include _mat-theme-overridable-elevation(8, $theme);
+      }
+  
+      &[disabled] {
+        @include _mat-theme-overridable-elevation(0, $theme);
+      }
+      padding: 10px 40px !important;
+    }
+  
+    .mat-fab, .mat-mini-fab {
+      @include _mat-theme-overridable-elevation(6, $theme);
+  
+      &:not([disabled]):active {
+        @include _mat-theme-overridable-elevation(12, $theme);
+      }
+  
+      &[disabled] {
+        @include _mat-theme-overridable-elevation(0, $theme);
+      }
+    }
+
+    .mat-primary {
+        color: $btn-primary-text-color !important;
+        &:hover,
+        &:active {
+            .mat-button-focus-overlay {
+                background-color: $btn-primary-focus-overlay-color;
+                opacity: 0.2;
+            }
+        }
+    }
+
+    .mat-secondary {
+        color: $btn-secondary-text-color;
+        outline-color: $btn-secodary-outline-color !important;
+        &:hover,
+        &:active {
+            color: mat-color($primary);
+        }
+    }
+
+    .mat-teritory {
+        padding: 0 !important;
+        color: mat-color($primary);
+        &:hover,
+        &:active {
+            text-decoration: underline;
+            .mat-button-focus-overlay {
+                opacity: 0 !important;
+            }
+        }
+    }
+}
+  
 @include mat-core(); // Mixin for the base package
 
 // Official Colors
@@ -74,8 +186,6 @@ $md-cfaccent: (
     )
 );
 
-
-
 $client-primary: mat-palette($md-cfprimary);
 $client-accent: mat-palette($md-cfaccent);
 $client-warn: mat-palette($mat-red);
@@ -83,6 +193,49 @@ $client-warn: mat-palette($mat-red);
 $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
 
 @include angular-material-theme($client-theme);
+
+// Primary Button Color Palette
+
+$md-btn-primary: (
+    50: #e6f1fa,
+    100: #c1dcf3,
+    200: #98c5eb,
+    300: #6faee2,
+    400: #509cdc,
+    500: #318bd6,
+    600: #2c83d1,
+    700: #2578cc,
+    800: #1f6ec6,
+    900: #135bbc,
+    A100: #ecf4ff,
+    A200: #b9d4ff,
+    A400: #86b5ff,
+    A700: #6da6ff,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+$candy-app-primary: mat-palette($md-btn-primary);
+$candy-app-accent: mat-palette($mat-pink, A200, A100, A400);
+$candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent);
+
+@include mat-button-theme($candy-app-theme);
+
+
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,700|Roboto');
 @import url('//fonts.googleapis.com/icon?family=Material+Icons');
 
@@ -103,6 +256,5 @@ p {
 }
 
 button {
-    border-radius: 500px !important;
-    padding: 10px 40px !important;
+    border-radius: $btn-radius !important;
 }
