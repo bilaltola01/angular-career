@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { DataService } from 'src/app/services/data.service';
+
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-style-guide',
@@ -7,9 +10,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StyleGuideComponent implements OnInit {
 
-  constructor() { }
+  constructor(private data: DataService) { }
+
 
   ngOnInit() {
+    this.data.getTest().subscribe(
+      dataJson => {
+        console.log('TCL: StyleGuideComponent -> ngOnInit -> dataJson', dataJson);
+      },
+      error => console.log(error)
+    );
   }
+
+
 
 }
