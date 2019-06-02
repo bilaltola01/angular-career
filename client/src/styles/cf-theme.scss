@@ -1,190 +1,9 @@
 
 // Custom Theming for Angular Material
-// For more information: https://material.angular.io/guide/theming
-// For testing colors https://material.io/tools/color/#!/?view.left=0&view.right=1
-// For color builder http://mcg.mbitson.com/#!?mcgpalette0=%230c2340&mcgpalette1=%2300a3d5&themename=careerfair
 @import '~@angular/material/theming';
-@import './variables';
-
-// Applies a property to an mat-button element for each of the supported palettes.
-
-@mixin mat-button-theme($theme) {
-    $primary: map-get($theme, primary);
-    $accent: map-get($theme, accent);
-    $warn: map-get($theme, warn);
-    $background: map-get($theme, background);
-    $foreground: map-get($theme, foreground);
-  
-    .mat-button, .mat-icon-button, .mat-stroked-button {
-      // Buttons without a background color should inherit the font color. This is necessary to
-      // ensure that the button is readable on custom background colors. It's wrong to always assume
-      // that those buttons are always placed inside of containers with the default background
-      // color of the theme (e.g. themed toolbars).
-      color: inherit;
-      background: transparent;
-  
-      @include _mat-button-theme-property($theme, 'color', default);
-      @include _mat-button-focus-overlay-color($theme);
-  
-      // Setup the ripple color to be based on the text color. This ensures that the ripples
-      // are matching with the current theme palette and are in contrast to the background color
-      // (e.g in themed toolbars).
-      .mat-ripple-element {
-        opacity: $_mat-button-ripple-opacity;
-        background-color: currentColor;
-      }
-    }
-  
-    .mat-button-focus-overlay {
-      background: map_get($foreground, base);
-    }
-  
-    // Note: this needs a bit extra specificity, because we're not guaranteed the inclusion
-    // order of the theme styles and the button reset may end up resetting this as well.
-    .mat-stroked-button:not([disabled]) {
-      border-color: mat-color($foreground, divider);
-    }
-  
-    .mat-flat-button, .mat-raised-button, .mat-fab, .mat-mini-fab {
-      // Default font and background color when not using any color palette.
-      color: mat-color($foreground, text);
-      background-color: mat-color($background, raised-button);
-  
-      @include _mat-button-theme-property($theme, 'color', default-contrast);
-      @include _mat-button-theme-property($theme, 'background-color', default);
-      @include _mat-button-ripple-color($theme, default-contrast);
-    }
-
-    .mat-stroked-button, .mat-flat-button {
-      @include _mat-theme-overridable-elevation(0, $theme);
-    }
-  
-    .mat-raised-button {
-      @include _mat-theme-overridable-elevation(2, $theme);
-  
-      &:not([disabled]):active {
-        @include _mat-theme-overridable-elevation(8, $theme);
-      }
-  
-      &[disabled] {
-        @include _mat-theme-overridable-elevation(0, $theme);
-      }
-      padding: 10px 40px !important;
-    }
-  
-    .mat-fab, .mat-mini-fab {
-      @include _mat-theme-overridable-elevation(6, $theme);
-  
-      &:not([disabled]):active {
-        @include _mat-theme-overridable-elevation(12, $theme);
-      }
-  
-      &[disabled] {
-        @include _mat-theme-overridable-elevation(0, $theme);
-      }
-    }
-
-    .mat-primary {
-        color: $btn-primary-text-color !important;
-        &:hover,
-        &:active {
-            .mat-button-focus-overlay {
-                background-color: $btn-primary-focus-overlay-color;
-                opacity: 0.2;
-            }
-        }
-    }
-
-    .mat-secondary {
-        color: $btn-secondary-text-color;
-        outline-color: $btn-secodary-outline-color !important;
-        &:hover,
-        &:active {
-            color: mat-color($primary);
-        }
-    }
-
-    .mat-teritory {
-        padding: 0 !important;
-        color: mat-color($primary);
-        &:hover,
-        &:active {
-            text-decoration: underline;
-            .mat-button-focus-overlay {
-                opacity: 0 !important;
-            }
-        }
-    }
-}
+@import './variables.scss';
   
 @include mat-core(); // Mixin for the base package
-
-// Official Colors
-$md-cfprimary: (
-    50 : #e2e5e8,
-    100 : #b6bdc6,
-    200 : #8691a0,
-    300 : #556579,
-    400 : #30445d,
-    500 : #0c2340,
-    600 : #0a1f3a,
-    700 : #081a32,
-    800 : #06152a,
-    900 : #030c1c,
-    A100 : #5a83ff,
-    A200 : #275dff,
-    A400 : #003df3,
-    A700 : #0036da,
-    contrast: (
-        50 : #000000,
-        100 : #000000,
-        200 : #000000,
-        300 : #ffffff,
-        400 : #ffffff,
-        500 : #ffffff,
-        600 : #ffffff,
-        700 : #ffffff,
-        800 : #ffffff,
-        900 : #ffffff,
-        A100 : #000000,
-        A200 : #ffffff,
-        A400 : #ffffff,
-        A700 : #ffffff,
-    )
-);
-
-$md-cfaccent: (
-    50 : #e0f4fa,
-    100 : #b3e3f2,
-    200 : #80d1ea,
-    300 : #4dbfe2,
-    400 : #26b1db,
-    500 : #00a3d5,
-    600 : #009bd0,
-    700 : #0091ca,
-    800 : #0088c4,
-    900 : #0077ba,
-    A100 : #e3f3ff,
-    A200 : #b0deff,
-    A400 : #7dc9ff,
-    A700 : #63bfff,
-    contrast: (
-        50 : #000000,
-        100 : #000000,
-        200 : #000000,
-        300 : #000000,
-        400 : #000000,
-        500 : #ffffff,
-        600 : #ffffff,
-        700 : #ffffff,
-        800 : #ffffff,
-        900 : #ffffff,
-        A100 : #000000,
-        A200 : #000000,
-        A400 : #000000,
-        A700 : #000000,
-    )
-);
 
 $client-primary: mat-palette($md-cfprimary);
 $client-accent: mat-palette($md-cfaccent);
@@ -194,49 +13,143 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
 
 @include angular-material-theme($client-theme);
 
-// Primary Button Color Palette
+// Applies a property to an mat-button element for each of the supported palettes.
 
-$md-btn-primary: (
-    50: #e6f1fa,
-    100: #c1dcf3,
-    200: #98c5eb,
-    300: #6faee2,
-    400: #509cdc,
-    500: #318bd6,
-    600: #2c83d1,
-    700: #2578cc,
-    800: #1f6ec6,
-    900: #135bbc,
-    A100: #ecf4ff,
-    A200: #b9d4ff,
-    A400: #86b5ff,
-    A700: #6da6ff,
-    contrast: (
-        50 : #000000,
-        100 : #000000,
-        200 : #000000,
-        300 : #000000,
-        400 : #000000,
-        500 : #ffffff,
-        600 : #ffffff,
-        700 : #ffffff,
-        800 : #ffffff,
-        900 : #ffffff,
-        A100 : #000000,
-        A200 : #000000,
-        A400 : #000000,
-        A700 : #000000,
-    )
-);
+@mixin _mat-button-theme-property($theme, $property, $hue) {
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+  
+    &.mat-primary {
+      #{$property}: mat-color($primary, $hue, .84);
+    }
+    &.mat-accent {
+      #{$property}: mat-color($accent, $hue, .84);
+    }
+    &.mat-warn {
+      #{$property}: mat-color($warn, $hue, .84);
+    }
+  
+    &.mat-primary, &.mat-accent, &.mat-warn, &[disabled] {
+      &[disabled] {
+        $palette: if($property == 'color', $foreground, $background);
+        #{$property}: mat-color($palette, disabled-button);
+      }
+    }
+}
 
-$candy-app-primary: mat-palette($md-btn-primary);
-$candy-app-accent: mat-palette($mat-pink, A200, A100, A400);
-$candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent);
+@mixin mat-button-theme($theme) {
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
 
-@include mat-button-theme($candy-app-theme);
+    .mat-button, .mat-icon-button, .mat-stroked-button {
+        // Buttons without a background color should inherit the font color. This is necessary to
+        // ensure that the button is readable on custom background colors. It's wrong to always assume
+        // that those buttons are always placed inside of containers with the default background
+        // color of the theme (e.g. themed toolbars).
+        color: inherit;
+        background: transparent;
+
+        @include _mat-button-theme-property($theme, 'color', default);
+        @include _mat-button-focus-overlay-color($theme);
+
+        // Setup the ripple color to be based on the text color. This ensures that the ripples
+        // are matching with the current theme palette and are in contrast to the background color
+        // (e.g in themed toolbars).
+        .mat-ripple-element {
+        opacity: $_mat-button-ripple-opacity;
+        background-color: currentColor;
+        }
+    }
+
+    .mat-button-focus-overlay {
+        background: map_get($foreground, base);
+    }
+
+    // Note: this needs a bit extra specificity, because we're not guaranteed the inclusion
+    // order of the theme styles and the button reset may end up resetting this as well.
+    .mat-stroked-button:not([disabled]) {
+        border-color: mat-color($foreground, divider);
+    }
+
+    .mat-flat-button, .mat-raised-button, .mat-fab, .mat-mini-fab {
+        // Default font and background color when not using any color palette.
+        color: mat-color($foreground, text);
+        background-color: mat-color($background, raised-button);
+
+        @include _mat-button-theme-property($theme, 'color', default-contrast);
+        @include _mat-button-theme-property($theme, 'background-color', default);
+        @include _mat-button-ripple-color($theme, default-contrast);
+    }
+
+    .mat-stroked-button, .mat-flat-button {
+        @include _mat-theme-overridable-elevation(0, $theme);
+    }
+
+    .mat-raised-button {
+        @include _mat-theme-overridable-elevation(2, $theme);
+
+        &:not([disabled]):active {
+        @include _mat-theme-overridable-elevation(8, $theme);
+        }
+
+        &[disabled] {
+        @include _mat-theme-overridable-elevation(0, $theme);
+        }
+    }
+
+    .mat-fab, .mat-mini-fab {
+        @include _mat-theme-overridable-elevation(6, $theme);
+
+        &:not([disabled]):active {
+        @include _mat-theme-overridable-elevation(12, $theme);
+        }
+
+        &[disabled] {
+        @include _mat-theme-overridable-elevation(0, $theme);
+        }
+    }
+
+    .mat-raised-button {
+        &:hover,
+        &:active {
+            .mat-button-focus-overlay {
+                opacity: 0.2;
+            }
+        }
+    }
+
+    // .mat-secondary {
+    //     color: $btn-secondary-text-color;
+    //     outline-color: $btn-secodary-outline-color !important;
+    //     &:hover,
+    //     &:active {
+    //         color: mat-color($primary);
+    //     }
+    // }
+
+    // .mat-teritory {
+    //     padding: 0 !important;
+    //     color: mat-color($primary);
+    //     &:hover,
+    //     &:active {
+    //         text-decoration: underline;
+    //         .mat-button-focus-overlay {
+    //             opacity: 0 !important;
+    //         }
+    //     }
+    // }
+}
+
+@include mat-button-theme($client-theme);
 
 
-@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700|Roboto');
+@import url('https://fonts.googleapis.com/css?family=Poppins|Roboto&display=swap');
 @import url('//fonts.googleapis.com/icon?family=Material+Icons');
 
 html, body { height: 100%; }
@@ -245,16 +158,33 @@ body { margin: 0; font-family: 'Roboto', sans-serif; }
 /*
     Text Styles
 */
-h1, h2, h3, h4, h5, h6 {
-    font-family: 'Montserrat', sans-serif;
-    color: #2A415F;
-    font-weight: 700;
+h1, h2, h3, h4 {
+    font-family: 'Poppins-Bold', sans-serif;
+    color: map-get($md-cfaccent, 500);
 }
-
+h5, h6 {
+    font-family: 'Poppins', sans-serif;
+    color: map-get($md-cfaccent, 500);
+}
 p {
     font-family: 'Roboto', sans-serif;
+    color: map-get($md-cfaccent, 400);
 }
 
 button {
-    border-radius: $btn-radius !important;
+    border-radius: 500px !important;
+    padding: 10px 40px !important;
+}
+
+/*
+    Material Overwrites
+*/
+.mat-form-field-appearance-fill .mat-form-field-flex {
+    border: 1px solid map-get($md-cfgray, 500);
+}
+.mat-form-field-prefix {
+    margin-right: 10px;
+}
+.mat-form-field-appearance-fill .mat-form-field-flex {
+    background-color: rgba(0, 0, 0, 0.01);
 }
