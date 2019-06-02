@@ -1,0 +1,11 @@
+@import './../../../styles/variables.scss';
+
+span {
+    background-color: map-get($md-cfgray, 200);
+    padding: 3px 13px;
+    margin-right: 5px;
+    border-radius: 500px;
+    text-transform: capitalize;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.8em;
+}

@@ -1,4 +1,8 @@
-# Client
+# Intallation
+
+npm install
+
+## Client
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.1.5.
 
@@ -8,8 +12,10 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 
 ## Code scaffolding
 
-Run `ng g c ./pages/style-guide --dryRun=true` to dry run generation of a component.
-Run `ng generate component ./components/component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Run `ng generate component pages/page-name --dryRun=true` to dry run generation of a component page.
+Run `ng g c components/component-name` to generate a new component.
+
+You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
 ## Build
 
