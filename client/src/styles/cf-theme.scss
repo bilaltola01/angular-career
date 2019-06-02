@@ -11,11 +11,9 @@ $client-warn: mat-palette($mat-red);
 // Create the theme object (a scss map containing all of the palettes).
 $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
 
-@include angular-material-theme($client-theme);
-
 // Applies a property to an mat-button element for each of the supported palettes.
 
-@mixin _mat-button-theme-property($theme, $property, $hue) {
+@mixin _mat-button-theme-property($theme, $property, $hue, $opacity: 1) {
     $primary: map-get($theme, primary);
     $accent: map-get($theme, accent);
     $warn: map-get($theme, warn);
@@ -23,13 +21,13 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
     $foreground: map-get($theme, foreground);
   
     &.mat-primary {
-      #{$property}: mat-color($primary, $hue, .84);
+      #{$property}: mat-color($primary, $hue, $opacity);
     }
     &.mat-accent {
-      #{$property}: mat-color($accent, $hue, .84);
+      #{$property}: mat-color($accent, $hue, $opacity);
     }
     &.mat-warn {
-      #{$property}: mat-color($warn, $hue, .84);
+      #{$property}: mat-color($warn, $hue, $opacity);
     }
   
     &.mat-primary, &.mat-accent, &.mat-warn, &[disabled] {
@@ -47,24 +45,62 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
     $background: map-get($theme, background);
     $foreground: map-get($theme, foreground);
 
-    .mat-button, .mat-icon-button, .mat-stroked-button {
-        // Buttons without a background color should inherit the font color. This is necessary to
-        // ensure that the button is readable on custom background colors. It's wrong to always assume
-        // that those buttons are always placed inside of containers with the default background
-        // color of the theme (e.g. themed toolbars).
+    .mat-icon-button {
         color: inherit;
         background: transparent;
 
         @include _mat-button-theme-property($theme, 'color', default);
         @include _mat-button-focus-overlay-color($theme);
 
-        // Setup the ripple color to be based on the text color. This ensures that the ripples
-        // are matching with the current theme palette and are in contrast to the background color
-        // (e.g in themed toolbars).
         .mat-ripple-element {
-        opacity: $_mat-button-ripple-opacity;
-        background-color: currentColor;
+            opacity: $_mat-button-ripple-opacity;
+            background-color: currentColor;
         }
+    }
+
+    .mat-button {
+        color: inherit;
+        background: transparent;
+
+        @include _mat-button-theme-property($theme, 'color', default);
+
+        .mat-button-focus-overlay {
+            background-color: transparent;
+        }
+
+        .mat-ripple-element {
+            opacity: $_mat-button-ripple-opacity;
+            background-color: currentColor;
+        }
+    }
+
+    .mat-button:hover,
+    .mat-button:active {
+        text-decoration: underline;
+    }
+
+    .mat-stroked-button {
+        color: $btn-secondary-text-color;
+        background: transparent;
+        outline-color: $btn-secodary-outline-color;
+        
+        @include _mat-button-theme-property($theme, 'color', default);
+        @include _mat-button-focus-overlay-color($theme);
+
+        .mat-button-focus-overlay {
+            background-color: transparent;
+        }
+
+        .mat-ripple-element {
+            opacity: $_mat-button-ripple-opacity;
+            background-color: currentColor;
+        }
+    }
+
+    .mat-stroked-button:hover,
+    .mat-stroked-button:active {
+        color: $btn-primary-text-color;
+        @include _mat-button-theme-property($theme, 'color', default);
     }
 
     .mat-button-focus-overlay {
@@ -77,15 +113,24 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
         border-color: mat-color($foreground, divider);
     }
 
-    .mat-flat-button, .mat-raised-button, .mat-fab, .mat-mini-fab {
+    .mat-raised-button {
         // Default font and background color when not using any color palette.
         color: mat-color($foreground, text);
         background-color: mat-color($background, raised-button);
 
-        @include _mat-button-theme-property($theme, 'color', default-contrast);
+        @include _mat-button-theme-property($theme, 'color', default-contrast, 0.84);
         @include _mat-button-theme-property($theme, 'background-color', default);
         @include _mat-button-ripple-color($theme, default-contrast);
     }
+
+    .mat-flat-button, .mat-fab, .mat-mini-fab {
+        color: mat-color($foreground, text);
+        background-color: mat-color($background, raised-button);
+    
+        @include _mat-button-theme-property($theme, 'color', default-contrast);
+        @include _mat-button-theme-property($theme, 'background-color', default);
+        @include _mat-button-ripple-color($theme, default-contrast);
+      }
 
     .mat-stroked-button, .mat-flat-button {
         @include _mat-theme-overridable-elevation(0, $theme);
@@ -115,7 +160,8 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
         }
     }
 
-    .mat-raised-button {
+    .mat-raised-button,
+    .mat-flat-button {
         &:hover,
         &:active {
             .mat-button-focus-overlay {
@@ -123,30 +169,9 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
             }
         }
     }
-
-    // .mat-secondary {
-    //     color: $btn-secondary-text-color;
-    //     outline-color: $btn-secodary-outline-color !important;
-    //     &:hover,
-    //     &:active {
-    //         color: mat-color($primary);
-    //     }
-    // }
-
-    // .mat-teritory {
-    //     padding: 0 !important;
-    //     color: mat-color($primary);
-    //     &:hover,
-    //     &:active {
-    //         text-decoration: underline;
-    //         .mat-button-focus-overlay {
-    //             opacity: 0 !important;
-    //         }
-    //     }
-    // }
 }
 
-@include mat-button-theme($client-theme);
+@include angular-material-theme($client-theme);
 
 
 @import url('https://fonts.googleapis.com/css?family=Poppins|Roboto&display=swap');
