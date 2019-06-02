@@ -11,6 +11,7 @@ import { MaterialModule } from './modules/material.module';
 import { StyleGuideComponent } from './pages/style-guide/style-guide.component';
 import { SimpleTagComponent } from './components/simple-tag/simple-tag.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
+import { ActionButtonComponent } from './components/action-button/action-button.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { ToolbarComponent } from './components/toolbar/toolbar.component';
     StyleGuideComponent,
     SimpleTagComponent,
     ToolbarComponent,
+    ActionButtonComponent,
   ],
   imports: [
     BrowserModule,
