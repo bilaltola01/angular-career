@@ -2,6 +2,8 @@
 // Custom Theming for Angular Material
 @import '~@angular/material/theming';
 @import './variables.scss';
+
+$btn-text-color: rgba(map-get($md-cfaccent, 500), 0.84);
   
 @include mat-core(); // Mixin for the base package
 
@@ -46,7 +48,7 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
     $foreground: map-get($theme, foreground);
 
     .mat-icon-button {
-        color: inherit;
+        color: $btn-text-color;
         background: transparent;
 
         @include _mat-button-theme-property($theme, 'color', default);
@@ -59,7 +61,7 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
     }
 
     .mat-button {
-        color: inherit;
+        color: $btn-text-color;
         background: transparent;
 
         @include _mat-button-theme-property($theme, 'color', default);
@@ -80,9 +82,9 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
     }
 
     .mat-stroked-button {
-        color: $btn-secondary-text-color;
+        color: $btn-text-color;
         background: transparent;
-        outline-color: $btn-secodary-outline-color;
+        outline-color: map-get($md-cfgray, 500);
         
         @include _mat-button-theme-property($theme, 'color', default);
         @include _mat-button-focus-overlay-color($theme);
@@ -99,7 +101,7 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
 
     .mat-stroked-button:hover,
     .mat-stroked-button:active {
-        color: $btn-primary-text-color;
+        color: map-get($md-cfprimary, 500);
         @include _mat-button-theme-property($theme, 'color', default);
     }
 
@@ -107,15 +109,12 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
         background: map_get($foreground, base);
     }
 
-    // Note: this needs a bit extra specificity, because we're not guaranteed the inclusion
-    // order of the theme styles and the button reset may end up resetting this as well.
     .mat-stroked-button:not([disabled]) {
         border-color: mat-color($foreground, divider);
     }
 
     .mat-raised-button {
-        // Default font and background color when not using any color palette.
-        color: mat-color($foreground, text);
+        color: $btn-text-color;
         background-color: mat-color($background, raised-button);
 
         @include _mat-button-theme-property($theme, 'color', default-contrast, 0.84);
@@ -124,7 +123,7 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
     }
 
     .mat-flat-button, .mat-fab, .mat-mini-fab {
-        color: mat-color($foreground, text);
+        color: $btn-text-color;
         background-color: mat-color($background, raised-button);
     
         @include _mat-button-theme-property($theme, 'color', default-contrast);
