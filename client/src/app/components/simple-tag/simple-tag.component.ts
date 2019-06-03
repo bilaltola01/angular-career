@@ -8,17 +8,17 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./simple-tag.component.scss']
 })
 export class SimpleTagComponent implements OnInit {
-  @Input() type: string;
-  @Input() title: string;
-  @Input() onlineTag = false;
-  @Input() ellipseTag = false;
+  @Input() type: String = 'normal';
+  @Input() title: String;
+  @Input() onlineTag: Boolean = false;
+  @Input() ellipseTag: Boolean = false;
   @Input() value: Number = 0;
 
   tagClasseNames = {
-    'matched': 'tag-matched',
-    'missing': 'tag-missing',
-    'normal': 'tag-normal',
-    'required': 'tag-requied',
+    'green': 'tag-green',
+    'red': 'tag-red',
+    'gray': 'tag-gray',
+    'normal': 'tag-normal'
   };
 
   ellipseNumbers: Number = 6;

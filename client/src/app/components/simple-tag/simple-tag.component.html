@@ -1,9 +1,8 @@
-<ng-container *ngIf="type">
-  <div [class]="tagClasseNames[type]" [class.tag-ellipse]="ellipseTag" [class.tag-online]="onlineTag" [class.tag-container]="type">
-    <span *ngIf="title">{{title}}</span>
-    <mat-icon *ngIf="onlineTag">radio_button_checked</mat-icon>
-    <div *ngIf="ellipseTag" class='ellipse-container'>
-      <mat-icon *ngFor="let val of numbers" [class.active]="val < value">brightness_1</mat-icon>
-    </div>
+
+<div [class]="tagClasseNames[type]" [class.tag-ellipse]="ellipseTag" [class.tag-online]="onlineTag" [class.tag-container]="true">
+  <span *ngIf="title">{{title}}</span>
+  <mat-icon *ngIf="onlineTag">radio_button_checked</mat-icon>
+  <div *ngIf="ellipseTag" class='ellipse-container'>
+    <mat-icon *ngFor="let val of numbers" [class.active]="val < value">brightness_1</mat-icon>
   </div>
-</ng-container>
+</div>

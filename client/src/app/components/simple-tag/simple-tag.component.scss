@@ -21,13 +21,13 @@ $tag-red-color: map-get($md-cfred, 500);
     font-size: 0.8em;
     border: solid 1px rgba($tag-normal-color, 0.1);
     background-clip: padding-box;
-    &.tag-matched {
+    &.tag-green {
         @include tag-color($tag-green-color);
     }
-    &.tag-missing {
+    &.tag-red {
         @include tag-color($tag-red-color);
     }
-    &.tag-normal {
+    &.tag-gray {
         background-color: rgba($tag-normal-color, 0.05);
         border-color: rgba($tag-normal-color, 0.05);
     }
