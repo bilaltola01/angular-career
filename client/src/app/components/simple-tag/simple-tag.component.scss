@@ -10,7 +10,7 @@ $tag-red-color: map-get($md-cfred, 500);
     border-color: rgba($color, 0.05);
 }
 
-span {
+.tag-container {
     background-color: transparent;
     color: rgba($tag-normal-color, 0.84);
     padding: 3px 13px;
@@ -30,5 +30,49 @@ span {
     &.tag-normal {
         background-color: rgba($tag-normal-color, 0.05);
         border-color: rgba($tag-normal-color, 0.05);
+    }
+    &.tag-online {
+        display: flex;
+        align-items: center;
+        font-size: 1em;
+        font-weight: bold;
+        padding: 12px;
+        span {
+            margin: 0 10px;
+        }
+        .mat-icon {
+            font-size: 25px;
+            color: $tag-green-color;
+            width: initial;
+            height: initial;
+        }
+    }
+    &.tag-ellipse {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-content: flex-start;
+        padding: 8px 25px;
+        font-size: 0.9em;
+        .ellipse-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            height: 12px;
+            .mat-icon {
+                font-size: 0.8em;
+                color: rgba(#000000, 0.2);
+                width: initial;
+                height: initial;
+                margin: 0 2px;
+                &.active {
+                    color: $tag-green-color;
+                }
+            }
+            :first-child,
+            :last-child {
+                margin: 0;
+            }
+        }
     }
 }
