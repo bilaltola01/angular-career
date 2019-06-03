@@ -3,6 +3,8 @@
 @import '~@angular/material/theming';
 @import './variables.scss';
 
+$btn-text-color: rgba(map-get($md-cfaccent, 500), 0.84);
+  
 @include mat-core(); // Mixin for the base package
 
 $client-primary: mat-palette($md-cfprimary);
@@ -11,7 +13,166 @@ $client-warn: mat-palette($mat-red);
 // Create the theme object (a scss map containing all of the palettes).
 $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
 
+// Applies a property to an mat-button element for each of the supported palettes.
+
+@mixin _mat-button-theme-property($theme, $property, $hue, $opacity: 1) {
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+  
+    &.mat-primary {
+      #{$property}: mat-color($primary, $hue, $opacity);
+    }
+    &.mat-accent {
+      #{$property}: mat-color($accent, $hue, $opacity);
+    }
+    &.mat-warn {
+      #{$property}: mat-color($warn, $hue, $opacity);
+    }
+  
+    &.mat-primary, &.mat-accent, &.mat-warn, &[disabled] {
+      &[disabled] {
+        $palette: if($property == 'color', $foreground, $background);
+        #{$property}: mat-color($palette, disabled-button);
+      }
+    }
+}
+
+@mixin mat-button-theme($theme) {
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+
+    .mat-icon-button {
+        color: $btn-text-color;
+        background: transparent;
+
+        @include _mat-button-theme-property($theme, 'color', default);
+        @include _mat-button-focus-overlay-color($theme);
+
+        .mat-ripple-element {
+            opacity: $_mat-button-ripple-opacity;
+            background-color: currentColor;
+        }
+    }
+
+    .mat-button {
+        color: $btn-text-color;
+        background: transparent;
+
+        @include _mat-button-theme-property($theme, 'color', default);
+
+        .mat-button-focus-overlay {
+            background-color: transparent;
+        }
+
+        .mat-ripple-element {
+            opacity: $_mat-button-ripple-opacity;
+            background-color: currentColor;
+        }
+    }
+
+    .mat-button:hover,
+    .mat-button:active {
+        text-decoration: underline;
+    }
+
+    .mat-stroked-button {
+        color: $btn-text-color;
+        background: transparent;
+        outline-color: map-get($md-cfgray, 500);
+        
+        @include _mat-button-theme-property($theme, 'color', default);
+        @include _mat-button-focus-overlay-color($theme);
+
+        .mat-button-focus-overlay {
+            background-color: transparent;
+        }
+
+        .mat-ripple-element {
+            opacity: $_mat-button-ripple-opacity;
+            background-color: currentColor;
+        }
+    }
+
+    .mat-stroked-button:hover,
+    .mat-stroked-button:active {
+        color: map-get($md-cfprimary, 500);
+        @include _mat-button-theme-property($theme, 'color', default);
+    }
+
+    .mat-button-focus-overlay {
+        background: map_get($foreground, base);
+    }
+
+    .mat-stroked-button:not([disabled]) {
+        border-color: mat-color($foreground, divider);
+    }
+
+    .mat-raised-button {
+        color: $btn-text-color;
+        background-color: mat-color($background, raised-button);
+
+        @include _mat-button-theme-property($theme, 'color', default-contrast, 0.84);
+        @include _mat-button-theme-property($theme, 'background-color', default);
+        @include _mat-button-ripple-color($theme, default-contrast);
+    }
+
+    .mat-flat-button, .mat-fab, .mat-mini-fab {
+        color: $btn-text-color;
+        background-color: mat-color($background, raised-button);
+    
+        @include _mat-button-theme-property($theme, 'color', default-contrast);
+        @include _mat-button-theme-property($theme, 'background-color', default);
+        @include _mat-button-ripple-color($theme, default-contrast);
+      }
+
+    .mat-stroked-button, .mat-flat-button {
+        @include _mat-theme-overridable-elevation(0, $theme);
+    }
+
+    .mat-raised-button {
+        @include _mat-theme-overridable-elevation(2, $theme);
+
+        &:not([disabled]):active {
+        @include _mat-theme-overridable-elevation(8, $theme);
+        }
+
+        &[disabled] {
+        @include _mat-theme-overridable-elevation(0, $theme);
+        }
+    }
+
+    .mat-fab, .mat-mini-fab {
+        @include _mat-theme-overridable-elevation(6, $theme);
+
+        &:not([disabled]):active {
+        @include _mat-theme-overridable-elevation(12, $theme);
+        }
+
+        &[disabled] {
+        @include _mat-theme-overridable-elevation(0, $theme);
+        }
+    }
+
+    .mat-raised-button,
+    .mat-flat-button {
+        &:hover,
+        &:active {
+            .mat-button-focus-overlay {
+                opacity: 0.2;
+            }
+        }
+    }
+}
+
 @include angular-material-theme($client-theme);
+
+
 @import url('https://fonts.googleapis.com/css?family=Poppins|Roboto&display=swap');
 @import url('//fonts.googleapis.com/icon?family=Material+Icons');
 
