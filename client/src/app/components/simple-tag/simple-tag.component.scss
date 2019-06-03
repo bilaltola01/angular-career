@@ -1,11 +1,34 @@
 @import './../../../styles/variables.scss';
 
+$tag-normal-color: map-get($md-cfaccent, 500);
+$tag-green-color: map-get($md-cdgreen, 500);
+$tag-red-color: map-get($md-cfred, 500);
+
+@mixin tag-color($color) {
+    color: $color;
+    background-color: rgba($color, 0.05);
+    border-color: rgba($color, 0.05);
+}
+
 span {
-    background-color: map-get($md-cfgray, 200);
+    background-color: transparent;
+    color: rgba($tag-normal-color, 0.84);
     padding: 3px 13px;
     margin-right: 5px;
     border-radius: 500px;
     text-transform: capitalize;
     font-family: 'Poppins', sans-serif;
     font-size: 0.8em;
+    border: solid 1px rgba($tag-normal-color, 0.1);
+    background-clip: padding-box;
+    &.tag-matched {
+        @include tag-color($tag-green-color);
+    }
+    &.tag-missing {
+        @include tag-color($tag-red-color);
+    }
+    &.tag-normal {
+        background-color: rgba($tag-normal-color, 0.05);
+        border-color: rgba($tag-normal-color, 0.05);
+    }
 }

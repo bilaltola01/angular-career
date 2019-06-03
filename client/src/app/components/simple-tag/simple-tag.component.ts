@@ -8,7 +8,15 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./simple-tag.component.scss']
 })
 export class SimpleTagComponent implements OnInit {
-  @Input() name: string;
+  @Input() type: string;
+  @Input() title: string;
+
+  tagClasseNames = {
+    'matched': 'tag-matched',
+    'missing': 'tag-missing',
+    'normal': 'tag-normal',
+    'required': 'tag-requied'
+  };
 
   constructor() { }
 
