@@ -1,5 +1,24 @@
+@import './../../../styles/variables.scss';
+
+@mixin flex($direction, $align, $justify) {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: $direction;
+  align-items: $align;
+  justify-content: $justify;
+}
+
+div.container {
+  padding: 50px;
+  &__gray {
+    @include flex(row, center, flex-start);
+    background-color: rgba(map-get($md-cfaccent, 500), 0.2);
+  }
+}
+
 action-button,
-simple-tag {
+simple-tag,
+img {
   display: inline-block;
   margin: 8px;
 }
