@@ -8,11 +8,11 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./simple-tag.component.scss']
 })
 export class SimpleTagComponent implements OnInit {
-  @Input() type: String = 'normal';
-  @Input() title: String;
-  @Input() onlineTag: Boolean = false;
-  @Input() ellipseTag: Boolean = false;
-  @Input() value: Number = 0;
+  @Input() type = 'normal';
+  @Input() title: string;
+  @Input() onlineTag = false;
+  @Input() ellipseTag = false;
+  @Input() value = 0;
 
   tagClasseNames = {
     'green': 'tag-green',
@@ -26,7 +26,7 @@ export class SimpleTagComponent implements OnInit {
   numbers = [];
 
   constructor() {
-    this.numbers = Array.from(Array(this.ellipseNumbers), (x, i) => i);
+    this.numbers = Array.from(Array(this.ellipseNumbers), (_, i) => i);
   }
 
   ngOnInit() {
