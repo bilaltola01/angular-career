@@ -10,7 +10,7 @@ import { Component, OnInit, Input, NgModule } from '@angular/core';
 
 export class ActionButtonComponent implements OnInit {
 
-  @Input() type: string;
+  @Input() type = 'flat';
   @Input() title: string;
   @Input() color: string;
 

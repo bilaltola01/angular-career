@@ -1,20 +1,12 @@
-<ng-container *ngIf="type==='primary'">
-  <button mat-raised-button [color]="color">
-    {{title}}
-  </button>
-</ng-container>
-<ng-container *ngIf="type==='secondary'">
-  <button mat-stroked-button [color]="color">
-    {{title}}
-  </button>
-</ng-container>
-<ng-container *ngIf="type==='teritory'">
-  <button mat-button disableRipple="true" [color]="color">
-    {{title}}
-  </button>
-</ng-container>
-<ng-container *ngIf="!type">
-  <button mat-flat-button [color]="color">
-    {{title}}
-  </button>
-</ng-container>
+<button *ngIf="type==='raised'" mat-raised-button [color]="color">
+  {{title}}
+</button>
+<button *ngIf="type==='stroked'" mat-stroked-button [color]="color">
+  {{title}}
+</button>
+<button *ngIf="type==='text'" mat-button disableRipple="true" [color]="color">
+  {{title}}
+</button>
+<button *ngIf="type==='flat'" mat-flat-button [color]="color">
+  {{title}}
+</button>
