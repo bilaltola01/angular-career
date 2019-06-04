@@ -26,7 +26,7 @@ export class SimpleTagComponent implements OnInit {
   numbers = [];
 
   constructor() {
-    this.numbers = Array.from(Array(this.ellipseNumbers), (x, i) => i);
+    this.numbers = Array.from(Array(this.ellipseNumbers), (_, i) => i);
   }
 
   ngOnInit() {
