@@ -12,6 +12,7 @@ import { StyleGuideComponent } from './pages/style-guide/style-guide.component';
 import { SimpleTagComponent } from './components/simple-tag/simple-tag.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { ActionButtonComponent } from './components/action-button/action-button.component';
+import { LoginComponent } from './pages/login/login.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { ActionButtonComponent } from './components/action-button/action-button.
     SimpleTagComponent,
     ToolbarComponent,
     ActionButtonComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
