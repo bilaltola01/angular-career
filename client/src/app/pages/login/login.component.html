@@ -1,3 +1,44 @@
-<p>
-  login works!
-</p>
+<div class="container">
+  <div class="container__left">
+    <div class="row__info">
+      <h1>Career Fair</h1>
+      <p>
+        Career Fair is a free online job and internship clearing-house. Its primary goal is to reduce the effects of frictional unemployment through means of faster and more effective search processes, centralization of the application process, and the mitigation of necessary work required for simultaneous application submissions and mass application handling.
+      </p>
+      <a mat-button disableRipple="true" routerLink="#">Read More</a>
+    </div>
+    <div class="row__copyright">
+      <span>©2019 <a href="#">yourcareerfair.com</a> | Cookies, Privacy and Terms</span>
+    </div>
+  </div>
+  <div class="container__right">
+    <div class="row__user_roles">
+      <span class="user_role active">I’M AN APPLICANT<div class="active-border"></div></span>
+      <span class="user_role">I’M A RECRUITER<div class="active-border"></div></span>
+    </div>
+    <mat-form-field appearance="fill">
+      <mat-label>Email Address</mat-label>
+      <mat-icon matPrefix>mail_outline</mat-icon>
+      <input matInput placeholder="Email Address">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Password</mat-label>
+      <mat-icon matPrefix>lock_outline</mat-icon>
+      <input matInput placeholder="Password">
+    </mat-form-field>
+    <div class="row__checkbox">
+      <mat-checkbox class="example-margin">Remember Me</mat-checkbox>
+      <a mat-button disableRipple="true" routerLink="#">Forgot Password?</a>
+    </div>
+    <div class="row__buttons">
+      <action-button type="raised" title="Login Now" color="primary"></action-button>
+      <action-button type="raised" title="Create New Account"></action-button>
+    </div>
+    <p>Or you can join with</p>
+    <div class="row__social_icons">
+      <img src="assets/icons/ic_google_circle.svg">
+      <img src="assets/icons/ic_facebook_circle.svg">
+      <img src="assets/icons/ic_twitter_circle.svg">
+    </div>
+  </div>
+</div>
