@@ -17,6 +17,14 @@
       <span class="user_role" [class.active]="checkUserRole('recruiter')" (click)="switchRole('recruiter')">I’M A RECRUITER<div class="active-border"></div></span>
     </div>
     <mat-form-field appearance="fill">
+      <mat-label>First Name</mat-label>
+      <input matInput placeholder="First Name">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Last Name</mat-label>
+      <input matInput placeholder="Last Name">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
       <mat-label>Email Address</mat-label>
       <mat-icon matPrefix>mail_outline</mat-icon>
       <input matInput placeholder="Email Address">
@@ -27,12 +35,11 @@
       <input matInput placeholder="Password">
     </mat-form-field>
     <div class="row__checkbox">
-      <mat-checkbox class="example-margin">Remember Me</mat-checkbox>
-      <a mat-button disableRipple="true" routerLink="/login">Forgot Password?</a>
+      <mat-checkbox class="example-margin">I Agree Terms & Conditions</mat-checkbox>
     </div>
     <div class="row__buttons">
-      <action-button type="raised" title="Login Now" color="primary" (click)="login()"></action-button>
-      <action-button type="raised" title="Create New Account" (click)="navigateToSignUp() "></action-button>
+      <action-button type="raised" title="Login" (click)="navigateToLogin()"></action-button>
+      <action-button type="raised" title="Create Account" color="primary" (click)="signUp()"></action-button>
     </div>
     <p>Or you can join with</p>
     <div class="row__social_icons">

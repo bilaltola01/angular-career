@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  selector: 'app-registration',
+  templateUrl: './registration.component.html',
+  styleUrls: ['./registration.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class RegistrationComponent implements OnInit {
 
   userRoles: object = {
     'applicant': 0,
@@ -14,13 +14,18 @@ export class LoginComponent implements OnInit {
   };
 
   currentRole: number;
+  first_name: string;
+  last_name: string;
   emailAddress: string;
   password: string;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {
+  }
 
   ngOnInit() {
     this.currentRole = 0;
+    this.first_name = '';
+    this.last_name = '';
     this.emailAddress = '';
     this.password = '';
   }
@@ -33,10 +38,10 @@ export class LoginComponent implements OnInit {
     return this.currentRole === this.userRoles[role];
   }
 
-  navigateToSignUp() {
-    this.router.navigate(['/registration']);
+  navigateToLogin() {
+    this.router.navigate(['/login']);
   }
 
-  login() {}
+  signUp() {}
 
 }

@@ -13,6 +13,7 @@ import { SimpleTagComponent } from './components/simple-tag/simple-tag.component
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { ActionButtonComponent } from './components/action-button/action-button.component';
 import { LoginComponent } from './pages/login/login.component';
+import { RegistrationComponent } from './pages/registration/registration.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { LoginComponent } from './pages/login/login.component';
     ToolbarComponent,
     ActionButtonComponent,
     LoginComponent,
+    RegistrationComponent,
   ],
   imports: [
     BrowserModule,
