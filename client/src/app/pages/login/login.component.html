@@ -16,16 +16,19 @@
       <span class="user_role" [class.active]="checkUserRole('applicant')" (click)="switchRole('applicant')">I’M AN APPLICANT<div class="active-border"></div></span>
       <span class="user_role" [class.active]="checkUserRole('recruiter')" (click)="switchRole('recruiter')">I’M A RECRUITER<div class="active-border"></div></span>
     </div>
-    <mat-form-field appearance="fill">
-      <mat-label>Email Address</mat-label>
-      <mat-icon matPrefix>mail_outline</mat-icon>
-      <input matInput placeholder="Email Address">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Password</mat-label>
-      <mat-icon matPrefix>lock_outline</mat-icon>
-      <input matInput placeholder="Password">
-    </mat-form-field>
+    <div class="row__form">
+      <mat-form-field appearance="fill">
+        <mat-label>Email Address</mat-label>
+        <mat-icon matPrefix>mail_outline</mat-icon>
+        <input matInput placeholder="Email Address" type="email" [(ngModel)]="emailAddress" value="emailAddress">
+        <span matSuffix><mat-icon matPrefix>done</mat-icon></span>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Password</mat-label>
+        <mat-icon matPrefix>lock_outline</mat-icon>
+        <input matInput placeholder="Password" type="password" [(ngModel)]="password" value="password">
+      </mat-form-field>
+    </div>
     <div class="row__checkbox">
       <mat-checkbox class="example-margin">Remember Me</mat-checkbox>
       <a mat-button disableRipple="true" routerLink="/login">Forgot Password?</a>

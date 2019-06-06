@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,7 @@ export class LoginComponent implements OnInit {
   emailAddress: string;
   password: string;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private userService: UserService) { }
 
   ngOnInit() {
     this.currentRole = 0;
@@ -37,6 +38,26 @@ export class LoginComponent implements OnInit {
     this.router.navigate(['/registration']);
   }
 
-  login() {}
+  login() {
+    if (this.emailAddress !== '' && this.password !== '') {
+      const user = {
+        email: this.emailAddress,
+        password: this.password
+      };
+      this.userService.login(user).subscribe(
+        data => {
+          if (data['success']) {
+            console.log(data['message']);
+            this.router.navigate(['/style-guide']);
+          } else {
+            console.log(data['message']);
+          }
+        },
+        error => {
+          console.log(error);
+        }
+      );
+    }
+  }
 
 }
