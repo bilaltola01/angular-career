@@ -212,3 +212,13 @@ button {
 .mat-form-field-appearance-fill .mat-form-field-flex {
     background-color: rgba(0, 0, 0, 0.01);
 }
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-gap: 15px;
+    padding: 0 60px;
+    width: 100%;
+    max-width: $container-max-width;
+    box-sizing: border-box;
+}

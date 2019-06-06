@@ -5,7 +5,7 @@
       <p>
         Career Fair is a free online job and internship clearing-house. Its primary goal is to reduce the effects of frictional unemployment through means of faster and more effective search processes, centralization of the application process, and the mitigation of necessary work required for simultaneous application submissions and mass application handling.
       </p>
-      <a mat-button disableRipple="true" routerLink="#">Read More</a>
+      <a mat-button disableRipple="true" routerLink="/login">Read More</a>
     </div>
     <div class="row__copyright">
       <span>©2019 <a href="#">yourcareerfair.com</a> | Cookies, Privacy and Terms</span>
@@ -13,8 +13,8 @@
   </div>
   <div class="container__right">
     <div class="row__user_roles">
-      <span class="user_role active">I’M AN APPLICANT<div class="active-border"></div></span>
-      <span class="user_role">I’M A RECRUITER<div class="active-border"></div></span>
+      <span class="user_role" [class.active]="checkUserRole('applicant')" (click)="switchRole('applicant')">I’M AN APPLICANT<div class="active-border"></div></span>
+      <span class="user_role" [class.active]="checkUserRole('recruiter')" (click)="switchRole('recruiter')">I’M A RECRUITER<div class="active-border"></div></span>
     </div>
     <mat-form-field appearance="fill">
       <mat-label>Email Address</mat-label>
@@ -28,7 +28,7 @@
     </mat-form-field>
     <div class="row__checkbox">
       <mat-checkbox class="example-margin">Remember Me</mat-checkbox>
-      <a mat-button disableRipple="true" routerLink="#">Forgot Password?</a>
+      <a mat-button disableRipple="true" routerLink="/login">Forgot Password?</a>
     </div>
     <div class="row__buttons">
       <action-button type="raised" title="Login Now" color="primary"></action-button>

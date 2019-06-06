@@ -1,3 +1,7 @@
+@import './../../../styles/variables.scss';
+
+$primary-font-color: map-get($md-cfaccent, 500);
+
 :host {
   display: flex;
   align-items: center;
@@ -7,12 +11,6 @@
   box-sizing: border-box;
 }
 .container {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  grid-gap: 15px 15px;
-  padding: 0 60px;
-  width: 100%;
-  max-width: 1365px;
   &__left {
     grid-column-start: 1;
     grid-column-end: 6;
@@ -49,10 +47,14 @@
           padding: 20px 0;
           box-sizing: border-box;
           margin: 0 20px 40px 20px;
+          color: rgba($primary-font-color, .24);
+          font-weight: bold;
+          font-size: 20px;
           .active-border {
             display: none;
           }
           &.active {
+            color: rgba($primary-font-color, .84);
             .active-border {
               display: block;
               width: 30px;
