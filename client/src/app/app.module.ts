@@ -14,6 +14,7 @@ import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { ActionButtonComponent } from './components/action-button/action-button.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegistrationComponent } from './pages/registration/registration.component';
+import { VerificationComponent } from './pages/verification/verification.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { RegistrationComponent } from './pages/registration/registration.compone
     ActionButtonComponent,
     LoginComponent,
     RegistrationComponent,
+    VerificationComponent,
   ],
   imports: [
     BrowserModule,

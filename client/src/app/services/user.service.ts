@@ -57,6 +57,16 @@ export class UserService {
     );
   }
 
+  public emailVerification(user_id, verify_str, verify_key): Observable<any> {
+    return this.http.get(this.auth_service_url + `user/${user_id}/${verify_str}/${verify_key}`, this.httpOptions)
+    .pipe(
+      map(data => {
+        return {success: true, message: data['message']};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
   logOut() {
     localStorage.removeItem('token');
   }

@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { StyleGuideComponent } from './pages/style-guide/style-guide.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegistrationComponent } from './pages/registration/registration.component';
+import { VerificationComponent } from './pages/verification/verification.component';
 
 const routes: Routes = [
   {
@@ -16,7 +17,11 @@ const routes: Routes = [
   {
     path: 'registration',
     component: RegistrationComponent
-  }
+  },
+  {
+    path: 'verification/:user_id/:verify_str/:verify_key',
+    component: VerificationComponent
+  },
 ];
 
 @NgModule({
