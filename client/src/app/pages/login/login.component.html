@@ -16,17 +16,19 @@
       <span class="user_role" [class.active]="checkUserRole('applicant')" (click)="switchRole('applicant')">I’M AN APPLICANT<div class="active-border"></div></span>
       <span class="user_role" [class.active]="checkUserRole('recruiter')" (click)="switchRole('recruiter')">I’M A RECRUITER<div class="active-border"></div></span>
     </div>
-    <div class="row__form">
+    <div class="row__form first">
       <mat-form-field appearance="fill">
         <mat-label>Email Address</mat-label>
         <mat-icon matPrefix>mail_outline</mat-icon>
-        <input matInput placeholder="Email Address" type="email" [(ngModel)]="emailAddress" value="emailAddress">
-        <span matSuffix><mat-icon matPrefix>done</mat-icon></span>
+        <input matInput placeholder="Email Address" type="email" [formControl]="emailAddress">
+        <mat-icon matSuffix *ngIf="emailAddress.valid">done</mat-icon>
       </mat-form-field>
+    </div>
+    <div class="row__form last">
       <mat-form-field appearance="fill">
         <mat-label>Password</mat-label>
         <mat-icon matPrefix>lock_outline</mat-icon>
-        <input matInput placeholder="Password" type="password" [(ngModel)]="password" value="password">
+        <input matInput placeholder="Password" type="password" [formControl]="password">
       </mat-form-field>
     </div>
     <div class="row__checkbox">
@@ -34,7 +36,7 @@
       <a mat-button disableRipple="true" routerLink="/login">Forgot Password?</a>
     </div>
     <div class="row__buttons">
-      <action-button type="raised" title="Login Now" color="primary" (click)="login()"></action-button>
+      <action-button type="raised" title="Login Now" color="primary" (click)="login()" disabled="password.valid"></action-button>
       <action-button type="raised" title="Create New Account" (click)="navigateToSignUp() "></action-button>
     </div>
     <p>Or you can join with</p>

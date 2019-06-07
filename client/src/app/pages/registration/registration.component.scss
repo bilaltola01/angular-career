@@ -3,9 +3,7 @@
 $primary-font-color: map-get($md-cfaccent, 500);
 
 :host {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex(row, center, center);
   min-height: calc(100vh - 70px);
   padding: 70px 0;
   box-sizing: border-box;
@@ -14,15 +12,12 @@ $primary-font-color: map-get($md-cfaccent, 500);
   &__left {
     grid-column-start: 1;
     grid-column-end: 6;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-start;
+    @include flex(column, flex-start, space-between);
     .row {
       &__copyright {
-        color: rgba(#001D40, 0.44);
+        color: rgba($primary-font-color, 0.44);
         a {
-          color: rgba(#001D40, 0.44);
+          color: rgba($primary-font-color, 0.44);
           text-decoration: none;
         }
       }
@@ -39,9 +34,7 @@ $primary-font-color: map-get($md-cfaccent, 500);
     }
     .row {
       &__user_roles {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
+        @include flex(row, center, flex-start);
         .user_role {
           height: 70px;
           padding: 20px 0;
@@ -59,7 +52,7 @@ $primary-font-color: map-get($md-cfaccent, 500);
               display: block;
               width: 30px;
               height: 4px;
-              background-color: #318BD6;
+              background-color: map-get($md-cfprimary, 500);
               margin: 20px 0 0 0;
             }
           }
@@ -68,15 +61,30 @@ $primary-font-color: map-get($md-cfaccent, 500);
           margin: 0 0 40px 0;
         }
       }
+      &__form {
+        border: solid 1px $mat-form-border-color;
+        border-radius: 0;
+        border-bottom: none;
+        mat-form-field {
+          box-sizing: border-box;
+          font-size: 20px;
+        }
+        &.first {
+          border-radius: 4px 4px 0 0;
+          mat-form-field {
+            width: 50%;
+          }
+        }
+        &.last {
+          border-radius: 0 0 4px 4px;
+          border-bottom: solid 1px $mat-form-border-color;
+        }
+      }
       &__checkbox {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        @include flex(row, center, space-between);
       }
       &__buttons {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
+        @include flex(row, flex-start, flex-start);
         action-button {
           margin: 50px;
         }
@@ -85,9 +93,7 @@ $primary-font-color: map-get($md-cfaccent, 500);
         }
       }
       &__social_icons {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
+        @include flex(row, flex-start, flex-start);
         img {
           margin: 15px;
         }

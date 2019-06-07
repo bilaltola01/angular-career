@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -15,15 +16,17 @@ export class LoginComponent implements OnInit {
   };
 
   currentRole: number;
-  emailAddress: string;
-  password: string;
+  emailAddress: FormControl;
+  password: FormControl;
 
   constructor(private router: Router, private userService: UserService) { }
 
   ngOnInit() {
     this.currentRole = 0;
-    this.emailAddress = '';
-    this.password = '';
+    this.emailAddress = new FormControl('');
+    this.emailAddress.setValidators([Validators.required, Validators.email]);
+    this.password = new FormControl('');
+    this.password.setValidators([Validators.required]);
   }
 
   switchRole(role: string) {
@@ -39,10 +42,10 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    if (this.emailAddress !== '' && this.password !== '') {
+    if (this.emailAddress.valid && this.password.valid) {
       const user = {
-        email: this.emailAddress,
-        password: this.password
+        email: this.emailAddress.value,
+        password: this.password.value
       };
       this.userService.login(user).subscribe(
         data => {
