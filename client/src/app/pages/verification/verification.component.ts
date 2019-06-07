@@ -20,13 +20,17 @@ export class VerificationComponent implements OnInit {
   ngOnInit() {
     const tree: UrlTree = this.router.parseUrl(this.router.url);
     const segmentGroup: UrlSegmentGroup = tree.root.children['primary'];
-    const segments: UrlSegment[] = segmentGroup.segments;
+    if (segmentGroup) {
+      const segments: UrlSegment[] = segmentGroup.segments;
 
-    this.user_id = segments[1].path;
-    this.verify_str = segments[2].path;
-    this.verify_key = segments[3].path;
+      this.user_id = segments[1].path;
+      this.verify_str = segments[2].path;
+      this.verify_key = segments[3].path;
 
-    this.emailVerify();
+      this.emailVerify();
+    } else {
+      this.message = 'Link is Invalid!';
+    }
   }
 
   emailVerify() {

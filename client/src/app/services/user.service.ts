@@ -4,7 +4,6 @@ import { catchError, tap, map, finalize } from 'rxjs/operators';
 import { Observable, of, throwError } from 'rxjs';
 import { HttpClientModule } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { NewUser } from './../model/user';
 
 @Injectable({
   providedIn: 'root'
@@ -57,7 +56,7 @@ export class UserService {
     );
   }
 
-  public emailVerification(user_id, verify_str, verify_key): Observable<any> {
+  public emailVerification(user_id: string, verify_str: string, verify_key: string): Observable<any> {
     return this.http.get(this.auth_service_url + `user/${user_id}/${verify_str}/${verify_key}`, this.httpOptions)
     .pipe(
       map(data => {
