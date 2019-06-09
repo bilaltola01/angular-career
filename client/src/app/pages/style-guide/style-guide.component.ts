@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService } from 'src/app/services/data.service';
+import { UserService } from 'src/app/services/user.service';
 
 import { Observable, of } from 'rxjs';
 
@@ -10,11 +10,11 @@ import { Observable, of } from 'rxjs';
 })
 export class StyleGuideComponent implements OnInit {
 
-  constructor(private data: DataService) { }
+  constructor(private userService: UserService) { }
 
 
   ngOnInit() {
-    this.data.getTest().subscribe(
+    this.userService.loadUsers('offset=0&limit=20&name=Royce').subscribe(
       dataJson => {
         console.log('TCL: StyleGuideComponent -> ngOnInit -> dataJson', dataJson);
       },

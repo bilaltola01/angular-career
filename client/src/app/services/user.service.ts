@@ -12,21 +12,16 @@ import { environment } from '../../environments/environment';
 export class UserService {
 
   // store the URL so we can redirect after logging in
-  redirectUrl: string;
+  public redirectUrl: string;
 
   private auth_service_url = environment.serverUrl + environment.auth_service + `api/${environment.api_version}/`;
   private user_service_url = environment.serverUrl + environment.user_service + `api/${environment.api_version}/`;
 
-  httpOptions = {
+  private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
     })
   };
-
-  private extractData(res: Response) {
-    const body = res;
-    return body || { };
-  }
 
   constructor(private http: HttpClient) { }
 
@@ -69,11 +64,29 @@ export class UserService {
     );
   }
 
-  logOut() {
+  public loadUsers(params: string): Observable<any> {
+    const token = localStorage.getItem('token');
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'authorization': token
+      })
+    };
+
+    return this.http.get(this.user_service_url + `users?${params}`, httpOptions)
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  public logOut() {
     localStorage.removeItem('token');
   }
 
-  isLoggedIn(): boolean {
+  public isLoggedIn(): boolean {
     const token = localStorage.getItem('token');
     let isLoggedIn = false;
     if (token) {
@@ -82,7 +95,7 @@ export class UserService {
     return isLoggedIn;
   }
 
-  handleError(error) {
+  private handleError(error) {
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {
       errorMessage = error.message;
