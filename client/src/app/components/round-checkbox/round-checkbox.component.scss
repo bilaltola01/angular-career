@@ -1,0 +1,36 @@
+@import './../../../styles/variables.scss';
+:host {
+  position: relative;
+
+  label.icon {
+    position: absolute;
+    cursor: pointer;
+    height: 24px;
+    width: 24px;
+    left: 0;
+    top: 0;
+    background-image: url('/assets/icons/ic_checkbox_empty.svg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+  }
+
+  label.title {
+    font-size: 14px;
+    color: rgba(map-get($md-cfaccent, 500), .44);
+    margin-left: 20px;
+    @include disable-select();
+  }
+
+  input[type="checkbox"] {
+    visibility: hidden;
+  }
+
+  input[type="checkbox"]:checked + label.icon {
+    background-image: url('/assets/icons/ic_checkbox_checked.svg');
+  }
+
+  input[type="checkbox"]:indeterminate + label.icon {
+    background-image: url('/assets/icons/ic_checkbox_indeterminate.svg');
+  }
+}
