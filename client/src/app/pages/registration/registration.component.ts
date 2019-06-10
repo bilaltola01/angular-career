@@ -21,6 +21,8 @@ export class RegistrationComponent implements OnInit {
   emailAddress: FormControl;
   password: FormControl;
 
+  isAgreeTerm = false;
+
   passwordStrength = 'weak';
 
   strongRegex = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})');
@@ -68,7 +70,7 @@ export class RegistrationComponent implements OnInit {
   }
 
   signUp() {
-    if (this.first_name.valid && this.last_name.valid && this.emailAddress.valid && this.password.valid) {
+    if (this.isAgreeTerm && this.first_name.valid && this.last_name.valid && this.emailAddress.valid && this.password.valid) {
       const user = {
         first_name: this.first_name.value,
         last_name: this.last_name.value,
@@ -89,6 +91,10 @@ export class RegistrationComponent implements OnInit {
         }
       );
     }
+  }
+
+  toggleAgreeTerm(isAgreeTerm: boolean) {
+    this.isAgreeTerm = isAgreeTerm;
   }
 
 }

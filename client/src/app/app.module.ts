@@ -15,6 +15,7 @@ import { ActionButtonComponent } from './components/action-button/action-button.
 import { LoginComponent } from './pages/login/login.component';
 import { RegistrationComponent } from './pages/registration/registration.component';
 import { VerificationComponent } from './pages/verification/verification.component';
+import { RoundCheckboxComponent } from './components/round-checkbox/round-checkbox.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { VerificationComponent } from './pages/verification/verification.compone
     LoginComponent,
     RegistrationComponent,
     VerificationComponent,
+    RoundCheckboxComponent,
   ],
   imports: [
     BrowserModule,

@@ -4,6 +4,7 @@ import { LoginComponent } from './login.component';
 import { TestingModule } from 'src/app/modules/testing.module';
 import { MaterialModule } from 'src/app/modules/material.module';
 import { ActionButtonComponent } from './../../components/action-button/action-button.component';
+import { RoundCheckboxComponent } from './../../components/round-checkbox/round-checkbox.component';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -12,7 +13,7 @@ describe('LoginComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports : [ MaterialModule, TestingModule ],
-      declarations: [ LoginComponent, ActionButtonComponent ]
+      declarations: [ LoginComponent, ActionButtonComponent, RoundCheckboxComponent ]
     })
     .compileComponents();
   }));

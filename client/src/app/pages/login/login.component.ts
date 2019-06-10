@@ -19,6 +19,8 @@ export class LoginComponent implements OnInit {
   emailAddress: FormControl;
   password: FormControl;
 
+  isRememberMe = false;
+
   constructor(private router: Router, private userService: UserService) { }
 
   ngOnInit() {
@@ -61,6 +63,10 @@ export class LoginComponent implements OnInit {
         }
       );
     }
+  }
+
+  toggleRemember(isRememberMe: boolean) {
+    this.isRememberMe = isRememberMe;
   }
 
 }
