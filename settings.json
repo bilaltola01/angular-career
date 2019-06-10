@@ -1,0 +1,96 @@
+{
+   "DATABASES": {
+        "LOCAL_DOCKER": {
+            "host": "careerfair-db",
+            "user": "root",
+            "password": "devpass1",
+            "database": "careerfair",
+            "port": 3306
+        },
+        "LOCAL_DOCKER_PRESENTATION": {
+            "host": "presentation-db",
+            "user": "root",
+            "password": "devpass1",
+            "database": "careerfair",
+            "port": 3306
+        },
+        "LOCAL": {
+            "host": "localhost",
+            "user": "root",
+            "password": "devpass1",
+            "database": "careerfair",
+            "port": 33007
+        },
+        "TEST": {
+            "host": "localhost",
+            "database": "cftest",
+            "user": "cftest",
+            "password": "cf1234cf"
+        },
+        "PRODUCTION": {
+            "host": null,
+            "user": null,
+            "password": null,
+            "database": "careerfair",
+            "port": 3306
+        }
+    },
+    "URLS": {
+        "LOCAL_DOCKER": {
+            "USER_SERVICE": "user-service",
+            "AUTH_SERVICE": "auth-service",
+            "COMPANY_AUTH_SERVICE": "company-auth-service",
+            "GATEWAY": "http://localhost:8080",
+            "GATEWAY_NAME": "proxy",
+            "COMPANY_SERVICE": "companies-service",
+            "PRESENTATION_SERVICE": "presentation-service",
+            "CLUSTER_SERVICE": "cluster-service",
+            "SCORE_SERVICE": "score-service",
+            "CART_SERVICE": "cart-service",
+            "POSITION_SERVICE": "position-service",
+            "POSITION_MANAGEMENT_SERVICE": "position-management-service",
+            "RECRUITER_SERVICE": "recruiter-service",
+            "CAREERFAIR_SERVICE": "careerfair-service"
+        },
+        "PRODUCTION": {
+            "USER_SERVICE": "user-service",
+            "AUTH_SERVICE": "auth-service",
+            "COMPANY_AUTH_SERVICE": "company-auth-service",
+            "GATEWAY": "http://localhost:8080",
+            "GATEWAY_NAME": "proxy",
+            "COMPANY_SERVICE": "companies-service",
+            "PRESENTATION_SERVICE": "presentation-service",
+            "CLUSTER_SERVICE": "cluster-service",
+            "SCORE_SERVICE": "score-service",
+            "CART_SERVICE": "cart-service",
+            "POSITION_SERVICE": "position-service",
+            "POSITION_MANAGEMENT_SERVICE": "position-management-service",
+            "RECRUITER_SERVICE": "recruiter-service",
+            "CAREERFAIR_SERVICE": "careerfair-service"
+        }
+    },
+    "PROTOCOL": {
+        "LOCAL_DOCKER": "http",
+        "PRODUCTION_EXTERNAL": "https",
+        "PRODUCTION": "http"
+    },
+    "EMAILS": {
+        "NOREPLY": {
+            "EMAIL_ADDRESS": "noreply@yourcareerfair.com",
+            "EMAIL_PASSWORD": "cfs-pw-01-27-1995-1776-dev",
+            "CLIENT_ID": "583438807959-jiqavn69vs7k9kdr1iq6qdocn3jbhojt.apps.googleusercontent.com",
+            "CLIENT_SECRET": "6GSsWIrIucWT_NvCtutphUWM",
+            "AUTHORIZATION_CODE": "4/MQHxm_TNggfjHlLHIxzMZx6c7hi1T1s2WtvoggIdkPCdsM7QV3XTTXiuhck2bnY-wz5PZ4T_xMjSAEHxUSd3Xdg",
+            "REFRESH_TOKEN": "1/ZQRCmoBwRLcaxEguhXzhcFsWAnYohkJlyGXGBkNMRV8",
+            "ACCESS_TOKEN": "ya29.GlvwBiu3F4XiOjXZLElbf_zmcMPKAgezCCGCSUtuJGSiq7CQCtMMrE2TUNskwsiduWoMWEYw5HRAyz1trwB7Zcuhkdxubrj8u5SuTI2IwI4F3kVQocoIz9Gjo5Au"
+        }
+    },
+    "S3_BUCKETS": {
+        "LOCAL_DOCKER": {
+            "IMAGE_HOST": null
+        },
+        "PRODUCTION": {
+            "IMAGE_HOST": null
+        }
+    }
+}
