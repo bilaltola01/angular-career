@@ -50,7 +50,8 @@
             "POSITION_SERVICE": "position-service",
             "POSITION_MANAGEMENT_SERVICE": "position-management-service",
             "RECRUITER_SERVICE": "recruiter-service",
-            "CAREERFAIR_SERVICE": "careerfair-service"
+            "CAREERFAIR_SERVICE": "careerfair-service",
+            "CAREERFAIR_URL": "localhost:4200"
         },
         "PRODUCTION": {
             "USER_SERVICE": "user-service",
@@ -66,7 +67,8 @@
             "POSITION_SERVICE": "position-service",
             "POSITION_MANAGEMENT_SERVICE": "position-management-service",
             "RECRUITER_SERVICE": "recruiter-service",
-            "CAREERFAIR_SERVICE": "careerfair-service"
+            "CAREERFAIR_SERVICE": "careerfair-service",
+            "CAREERFAIR_URL": "https://www.yourcareerfair.com"
         }
     },
     "PROTOCOL": {
