@@ -1,6 +1,8 @@
 @import './../../../styles/variables.scss';
 :host {
   position: relative;
+  @include flex(row, center, center);
+  height: 24px;
 
   label.icon {
     position: absolute;
@@ -32,5 +34,17 @@
 
   input[type="checkbox"]:indeterminate + label.icon {
     background-image: url('/assets/icons/ic_checkbox_indeterminate.svg');
+  }
+
+  @media only screen and (max-width: $tablet-breakpoint) {
+    height: 18px;
+    label.icon {
+      height: 18px;
+      width: 18px;
+    }
+    label.title {
+      font-size: 12px;
+      margin-left: 10px;
+    }
   }
 }
