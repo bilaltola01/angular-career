@@ -110,7 +110,7 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
   }
 
   .mat-stroked-button:not([disabled]) {
-    border-color: mat-color($foreground, divider);
+    border-color: rgba(map-get($md-cfprimary, 500), .2);
   }
 
   .mat-raised-button {
@@ -270,7 +270,7 @@ p {
 button {
   border-radius: 500px !important;
   padding: 10px 40px !important;
-  min-width: 170px !important;
+  min-width: 160px !important;
 }
 
 .container {
