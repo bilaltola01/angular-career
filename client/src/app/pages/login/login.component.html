@@ -36,14 +36,17 @@
       <a mat-button disableRipple="true" routerLink="/login">Forgot Password?</a>
     </div>
     <div class="row__buttons">
-      <action-button type="raised" title="Login Now" color="primary" (click)="login()" disabled="password.valid"></action-button>
-      <action-button type="raised" title="Create New Account" (click)="navigateToSignUp() "></action-button>
+      <action-button type="flat" title="Login Now" color="primary" (click)="login()" disabled="password.valid"></action-button>
+      <action-button type="stroked" title="Create New Account" (click)="navigateToSignUp() "></action-button>
     </div>
     <p>Or you can join with</p>
     <div class="row__social_icons">
       <img src="assets/icons/ic_google_circle.svg">
       <img src="assets/icons/ic_facebook_circle.svg">
       <img src="assets/icons/ic_twitter_circle.svg">
+    </div>
+    <div class="row__copyright">
+      <span>©2019 <a href="#">yourcareerfair.com</a> | Cookies, Privacy and Terms</span>
     </div>
   </div>
 </div>

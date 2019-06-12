@@ -45,17 +45,20 @@
       </mat-form-field>
     </div>
     <div class="row__checkbox">
-      <round-checkbox id="agree-term" title="I Agree Terms & Conditions" [checked]="isAgreeTerm" (statusChange)="toggleAgreeTerm($event)"></round-checkbox>
+      <round-checkbox id="agree-term" title="I Agree Careerfair's Terms & Conditions" [checked]="isAgreeTerm" (statusChange)="toggleAgreeTerm($event)"></round-checkbox>
     </div>
     <div class="row__buttons">
-      <action-button type="raised" title="Login" (click)="navigateToLogin()"></action-button>
-      <action-button type="raised" title="Create Account" color="primary" (click)="signUp()"></action-button>
+      <action-button type="stroked" title="Login" (click)="navigateToLogin()"></action-button>
+      <action-button type="flat" title="Create Account" color="primary" (click)="signUp()"></action-button>
     </div>
     <p>Or you can join with</p>
     <div class="row__social_icons">
       <img src="assets/icons/ic_google_circle.svg">
       <img src="assets/icons/ic_facebook_circle.svg">
       <img src="assets/icons/ic_twitter_circle.svg">
+    </div>
+    <div class="row__copyright">
+      <span>©2019 <a href="#">yourcareerfair.com</a> | Cookies, Privacy and Terms</span>
     </div>
   </div>
 </div>
