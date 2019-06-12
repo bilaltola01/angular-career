@@ -1,0 +1,202 @@
+@import './../../../styles/variables.scss';
+
+$primary-font-color: map-get($md-cfaccent, 500);
+
+:host {
+  @include flex(row, flex-start, center);
+  min-height: calc(100vh - 70px);
+  padding: 70px 0;
+  box-sizing: border-box;
+  color: rgba($primary-font-color, .84);
+}
+
+h1 {
+  margin: 0 0 30px 0;
+  font-size: 50px;
+  line-height: 1.5;
+}
+
+h2 {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.5;
+}
+h3 {
+  margin: 0;
+  font-size: 20px;
+}
+
+p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.option-text {
+  position: absolute;
+  width: 100%;
+  top: 265px;
+  h1 {
+    color: rgba($primary-font-color, .84);
+  }
+}
+
+.option-box {
+  position: relative;
+  width: 85%;
+  max-width: 500px;
+  &:before{
+    content: "";
+    display: block;
+    padding-top: 80%;
+  }
+  &__content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    box-sizing: border-box;
+    border-radius: 20px;
+    background-image: url('/assets/icons/option-box.svg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+  }
+  &__title,
+  &__description {
+    width: 100%;
+    .icon-cv {
+      width: 30%;
+    }
+    h2 {
+      font-weight: bold;
+      color: rgba($primary-font-color, .34);
+    }
+    h3 {
+      color: rgba($primary-font-color, .34);
+    }
+    p {
+      color: rgba($primary-font-color, .44);
+    }
+  }
+}
+
+.option-title {
+  margin-top: 30px;
+  h2 {
+    color: rgba($primary-font-color, .84);
+  }
+  p {
+    font-size: 16px;
+    color: rgba($primary-font-color, .84);
+  }
+}
+
+.option-description {
+  margin-top: 30px;
+  p {
+    font-size: 16px;
+    color: rgba($primary-font-color, .54);
+  }
+}
+
+.container {
+  &.choose-option {
+    position: relative;
+    text-align: center;
+  }
+  &__full {
+    grid-column-start: 1;
+    grid-column-end: 13;
+    h1 {
+      color: rgba($primary-font-color, .84);
+    }
+  }
+  &__left {
+    grid-column-start: 1;
+    grid-column-end: 7;
+    @include flex(column, center, flex-start);
+    .option-box {
+      &__content {
+        @include flex(column, center, space-evenly);
+      }
+    }
+  }
+  &__right {
+    grid-column-start: 7;
+    grid-column-end: 13;
+    @include flex(column, center, flex-start);
+    .option-box {
+      &__content {
+        background-image: url('/assets/icons/option-box-transparent.svg');
+        @include flex(row, center, center);
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: $tablet-breakpoint) {
+  .option-text {
+    position: relative;
+    grid-column-start: 2;
+    grid-column-end: 12;
+    top: 0;
+    h1 {
+      margin: 30px 0;
+    }
+  }
+  .container {
+    padding: 0 40px;
+  }
+  .choose-option {
+    .container__left,
+    .container__right {
+      grid-column-start: 2;
+      grid-column-end: 12;
+    }
+  }
+}
+
+@media only screen and (max-width: $mobile-breakpoint) {
+  h1 {
+    font-size: 35px;
+    line-height: 1.2;
+  }
+  h2 {
+    font-size: 22px;
+    line-height: 1.2;
+  }
+  h3 {
+    font-size: 15px;
+    line-height: 1.2;
+  }
+  p {
+    font-size: 12px;
+  }
+  .option-text {
+    grid-column-start: 1;
+    grid-column-end: 13;
+    h1 {
+      margin: 20px 0;
+    }
+  }
+  .option-box {
+    width: 95%;
+    max-width: 400px;
+    &:before{
+      padding-top: 85%;
+    }
+  }
+  .container {
+    padding: 0 30px;
+  }
+  .choose-option {
+    .container__full,
+    .container__left,
+    .container__right {
+      grid-column-start: 1;
+      grid-column-end: 13;
+    }
+  }
+}
