@@ -12,10 +12,11 @@ export class CreateProfileComponent implements OnInit {
     'profile-basic',
     'profile-about',
     'profile-education',
-    'profile-work'
+    'profile-work',
+    'profile-skills'
   ];
 
-  selectedPageIndex = 4;
+  selectedPageIndex = 5;
 
   constructor() { }
 

@@ -52,8 +52,9 @@ $tag-red-color: map-get($md-cfred, 500);
         flex-direction: column;
         justify-content: center;
         align-content: flex-start;
-        padding: 8px 25px;
+        padding: 10px 15px;
         font-size: 0.9em;
+        border-radius: 18px;
         .ellipse-container {
             display: flex;
             align-items: center;
