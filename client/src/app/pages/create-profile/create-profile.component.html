@@ -1,3 +1,5 @@
+<!-- Create_Profile_Choose start -->
+
 <div *ngIf="selectedPageIndex===0" class="container {{profileCreationPages[0]}}">
   <div class="container__full">
     <h1>Choose To Create Profile</h1>
@@ -42,6 +44,10 @@
   </div>
 </div>
 
+<!-- Create_Profile_Choose end -->
+
+<!-- Create_Profile_Basic start -->
+
 <div *ngIf="selectedPageIndex===1" class="container {{profileCreationPages[1]}}">
   <div class="container__full">
     <div class="information-form">
@@ -78,37 +84,31 @@
     </div>
   </div>
   <div class="container__full">
-    <action-button type="flat" title="Next" color="primary" (click)="goToCreatProfilePage()"></action-button>
+    <action-button type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
   </div>
 </div>
 
-  <!-- <div class="profile__choose">
+<!-- Create_Profile_Basic end -->
 
-  </div>
-  <div class="profile__basic">
+<!-- Create_Profile_About start -->
 
+<div *ngIf="selectedPageIndex===2" class="container {{profileCreationPages[2]}}">
+  <div class="container__full">
+    <div class="about-form">
+      <h3 class="about-form__title">
+        ABOUT ME
+      </h3>
+      <div class="about-form__field">
+        <mat-form-field>
+          <textarea matInput placeholder="Explain Brief About Yourself" rows="15"></textarea>
+        </mat-form-field>
+      </div>
+    </div>
   </div>
-  <div class="profile__about">
-    
+  <div class="container__full">
+    <action-button type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
   </div>
-  <div class="profile__education">
-    
-  </div>
-  <div class="profile__work">
-    
-  </div>
-  <div class="profile__skills">
-    
-  </div>
-  <div class="profile__project">
-    
-  </div>
-  <div class="profile__publication">
-    
-  </div>
-  <div class="profile__links">
-    
-  </div>
-  <div class="profile__status">
-    
-  </div> -->
+</div>
+
+<!-- Create_Profile_About end -->
+

@@ -183,6 +183,39 @@ p {
       }
     }
   }
+  &.profile-about {
+    position: relative;
+    action-button {
+      min-width: 130px;
+      position: absolute;
+      bottom: 20%;
+      right: 2%;
+    }
+    .container__full {
+      @include flex(row, center, center);
+      .about-form {
+        width: 75%;
+        max-width: 880px;
+        padding: 60px;
+        box-sizing: border-box;
+        background-color: $white;
+        box-shadow: 0 3px 10px rgba($black, .07);
+        @include flex(column, center, flex-start);
+        &__field {
+          margin-top: 30px;
+          box-sizing: border-box;
+          width: 80%;
+          max-width: 615px;
+          border: solid 1px $mat-form-border-color;
+          border-radius: 5px;
+          padding: 10px 10px 5px 10px;
+          mat-form-field {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
 }
 
 @media only screen and (max-width: $tablet-breakpoint) {
@@ -221,6 +254,22 @@ p {
             width: 30%;
             max-width: 110px;
           }
+          &__field {
+            width: 90%;
+          }
+        }
+      }
+    }
+    &.profile-about {
+      action-button {
+        position: unset;
+        margin-top: 30px;
+      }
+      .container__full {
+        .about-form {
+          width: 85%;
+          max-width: 600px;
+          padding: 40px;
           &__field {
             width: 90%;
           }
@@ -285,6 +334,20 @@ p {
             width: 50%;
             max-width: 95px;
           }
+          &__field {
+            width: 95%;
+          }
+        }
+      }
+    }
+    &.profile-about {
+      action-button {
+        margin-top: 20px;
+      }
+      .container__full {
+        .about-form {
+          width: 100%;
+          padding: 30px;
           &__field {
             width: 95%;
           }
