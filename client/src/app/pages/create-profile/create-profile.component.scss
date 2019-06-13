@@ -219,7 +219,8 @@ p {
   &.profile-education,
   &.profile-project,
   &.profile-publication,
-  &.profile-links {
+  &.profile-links,
+  &.profile-status {
     position: relative;
     action-button.btn-next {
       min-width: 130px;
@@ -227,12 +228,16 @@ p {
       bottom: 20%;
       right: 2%;
     }
+    action-button.view-profile {
+      margin-top: 30px;
+    }
     .container__full {
       @include flex(row, center, center);
       .education-form,
       .project-form,
       .publication-form,
-      .links-form {
+      .links-form,
+      .status-form {
         width: 75%;
         max-width: 880px;
         padding: 60px;
@@ -265,6 +270,13 @@ p {
             @include flex(row, center, flex-start);
             action-button {
               max-width: 150px;
+            }
+          }
+          &.simple-tag {
+            border: none;
+            @include flex(column, center, center);
+            simple-tag {
+              margin: 10px 0;
             }
           }
           mat-form-field {
@@ -475,7 +487,8 @@ p {
     &.profile-education,
     &.profile-project,
     &.profile-publication,
-    &.profile-links {
+    &.profile-links,
+    &.profile-status {
       action-button.btn-next {
         position: unset;
         margin-top: 30px;
@@ -484,7 +497,8 @@ p {
         .education-form,
         .project-form,
         .publication-form,
-        .links-form {
+        .links-form,
+        .status-form {
           width: 85%;
           max-width: 600px;
           padding: 40px;
@@ -627,7 +641,8 @@ p {
     &.profile-education,
     &.profile-project,
     &.profile-publication,
-    &.profile-links {
+    &.profile-links,
+    &.profile-status {
       action-button.btn-next {
         margin-top: 20px;
       }
@@ -635,7 +650,8 @@ p {
         .education-form,
         .project-form,
         .publication-form,
-        .links-form {
+        .links-form,
+        .status-form {
           width: 100%;
           max-width: 450px;
           padding: 30px;

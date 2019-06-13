@@ -3,11 +3,18 @@
 $tag-normal-color: map-get($md-cfaccent, 500);
 $tag-green-color: map-get($md-cdgreen, 500);
 $tag-red-color: map-get($md-cfred, 500);
+$status-bg-color: #f4f5f8;
 
 @mixin tag-color($color) {
     color: $color;
     background-color: rgba($color, 0.05);
     border-color: rgba($color, 0.05);
+}
+
+:host.status {
+    .tag-container {
+        background-color: $status-bg-color;
+    }
 }
 
 .tag-container {

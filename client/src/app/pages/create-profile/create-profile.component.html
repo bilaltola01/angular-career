@@ -413,3 +413,23 @@
 
 <!-- Create_Profile_Links end -->
 
+<!-- Create_Profile_Status start -->
+
+<div *ngIf="selectedPageIndex===9" class="container {{profileCreationPages[9]}}">
+  <div class="container__full">
+    <div class="status-form">
+      <h3 class="status__title">
+        SET YOUR STATUS
+      </h3>
+      <div class="status-form__field simple-tag">
+        <simple-tag class="status" title="Actively Looking For Job" onlineTag="true"></simple-tag>
+        <simple-tag class="status" title="Exploring Opportunities" onlineTag="true"></simple-tag>
+      </div>
+    </div>
+  </div>
+  <div class="container__full">
+    <action-button class="view-profile" type="flat" title="View Profile" color="primary" (click)="goToNextPage()"></action-button>
+  </div>
+</div>
+
+<!-- Create_Profile_Links end -->
