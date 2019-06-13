@@ -16,9 +16,10 @@ export class CreateProfileComponent implements OnInit {
     'profile-skills',
     'profile-project',
     'profile-publication',
+    'profile-links'
   ];
 
-  selectedPageIndex = 6;
+  selectedPageIndex = 8;
 
   constructor() { }
 

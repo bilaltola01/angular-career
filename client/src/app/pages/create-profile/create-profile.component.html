@@ -368,3 +368,48 @@
 
 <!-- Create_Profile_Publication end -->
 
+<!-- Create_Profile_Links start -->
+
+<div *ngIf="selectedPageIndex===8" class="container {{profileCreationPages[8]}}">
+  <div class="container__full">
+    <div class="links-form">
+      <h3 class="links-form__title">
+        EXTERNAL LINKS
+      </h3>
+      <div class="links-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Twitter (Optional)</mat-label>
+          <img matSuffix src="assets/icons/ic_twitter.svg">
+          <input matInput placeholder="Twitter (Optional)" type="text">
+        </mat-form-field>
+      </div>
+      <div class="links-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Facebook (Optional)</mat-label>
+          <img matSuffix src="assets/icons/ic_facebook.svg">
+          <input matInput placeholder="Facebook (Optional)" type="text">
+        </mat-form-field>
+      </div>
+      <div class="links-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Google (Optional)</mat-label>
+          <img matSuffix src="assets/icons/ic_google.svg">
+          <input matInput placeholder="Twitter (Optional)" type="text">
+        </mat-form-field>
+      </div>
+      <div class="links-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Linkedin (Optional)</mat-label>
+          <img matSuffix src="assets/icons/ic_linkedin.svg">
+          <input matInput placeholder="Twitter (Optional)" type="text">
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div class="container__full">
+    <action-button class="btn-next" type="flat" title="Finish" color="primary" (click)="goToNextPage()"></action-button>
+  </div>
+</div>
+
+<!-- Create_Profile_Links end -->
+

@@ -268,6 +268,8 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
       .mat-form-field-wrapper {
         .mat-form-field-flex {
           background-color: transparent;
+          display: flex;
+          align-items: center;
         }
       }
     }
