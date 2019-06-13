@@ -112,3 +112,54 @@
 
 <!-- Create_Profile_About end -->
 
+<!-- Create_Profile_Education start -->
+
+<div *ngIf="selectedPageIndex===3" class="container {{profileCreationPages[3]}}">
+  <div class="container__full">
+    <div class="education-form">
+      <h3 class="education-form__title">
+        EDUCATION
+      </h3>
+      <div class="education-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Select University</mat-label>
+          <input matInput placeholder="Select University" type="text">
+        </mat-form-field>
+      </div>
+      <div class="education-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Degree</mat-label>
+          <input matInput placeholder="Degree" type="text">
+        </mat-form-field>
+      </div>
+      <div class="education-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Course</mat-label>
+          <input matInput placeholder="Course" type="text">
+        </mat-form-field>
+      </div>
+      <div class="education-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Year of Completion</mat-label>
+          <input matInput placeholder="Year of Completion" type="text">
+        </mat-form-field>
+      </div>
+      <div class="education-form__field textarea">
+        <mat-form-field>
+          <textarea matInput placeholder="Description (Optional)" rows="3"></textarea>
+        </mat-form-field>
+      </div>
+      <div class="education-form__field border">
+      </div>
+      <div class="education-form__field btn">
+        <action-button type="stroked" title="Add Another"></action-button>
+      </div>
+    </div>
+  </div>
+  <div class="container__full">
+    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
+  </div>
+</div>
+
+<!-- Create_Profile_Education end -->
+

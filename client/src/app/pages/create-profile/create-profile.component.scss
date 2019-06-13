@@ -216,6 +216,58 @@ p {
       }
     }
   }
+  &.profile-education {
+    position: relative;
+    action-button.btn-next {
+      min-width: 130px;
+      position: absolute;
+      bottom: 20%;
+      right: 2%;
+    }
+    .container__full {
+      @include flex(row, center, center);
+      .education-form {
+        width: 75%;
+        max-width: 880px;
+        padding: 60px;
+        box-sizing: border-box;
+        background-color: $white;
+        box-shadow: 0 3px 10px rgba($black, .07);
+        @include flex(column, center, flex-start);
+        &__field {
+          margin-top: 30px;
+          box-sizing: border-box;
+          width: 80%;
+          max-width: 615px;
+          border: solid 1px $mat-form-border-color;
+          border-radius: 5px;
+          padding: 0 10px;
+          &.textarea {
+            padding: 10px 10px 5px 10px;
+          }
+          &.border {
+            margin-top: 60px;
+            padding: 0;
+          }
+          action-button {
+            max-width: 150px;
+          }
+          &.btn {
+            margin-top: 60px;
+            border: none;
+            padding: 0;
+            @include flex(row, center, flex-start);
+            action-button {
+              max-width: 150px;
+            }
+          }
+          mat-form-field {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
 }
 
 @media only screen and (max-width: $tablet-breakpoint) {
@@ -272,6 +324,28 @@ p {
           padding: 40px;
           &__field {
             width: 90%;
+          }
+        }
+      }
+    }
+    &.profile-education {
+      action-button.btn-next {
+        position: unset;
+        margin-top: 30px;
+      }
+      .container__full {
+        .education-form {
+          width: 85%;
+          max-width: 600px;
+          padding: 40px;
+          &__field {
+            width: 90%;
+            &.border {
+              margin-top: 40px;
+            }
+            &.btn {
+              margin-top: 40px;
+            }
           }
         }
       }
@@ -346,6 +420,20 @@ p {
       }
       .container__full {
         .about-form {
+          width: 100%;
+          padding: 30px;
+          &__field {
+            width: 95%;
+          }
+        }
+      }
+    }
+    &.profile-education {
+      action-button.btn-next {
+        margin-top: 20px;
+      }
+      .container__full {
+        .education-form {
           width: 100%;
           padding: 30px;
           &__field {
