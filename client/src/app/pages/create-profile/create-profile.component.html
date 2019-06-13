@@ -163,3 +163,80 @@
 
 <!-- Create_Profile_Education end -->
 
+<!-- Create_Profile_Work start -->
+
+<div *ngIf="selectedPageIndex===4" class="container {{profileCreationPages[4]}}">
+  <div class="container__full">
+    <div class="work-form">
+      <h3 class="work-form__title">
+        WORK EXPERIENCE
+      </h3>
+      <div class="work-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Company Name</mat-label>
+          <input matInput placeholder="Company Name" type="text">
+        </mat-form-field>
+      </div>
+      <div class="work-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Years Served</mat-label>
+          <input matInput placeholder="Years Served" type="text">
+        </mat-form-field>
+      </div>
+      <div class="work-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Designation</mat-label>
+          <input matInput placeholder="Designation" type="text">
+        </mat-form-field>
+      </div>
+      <div class="work-form__field textarea">
+        <mat-form-field>
+          <textarea matInput placeholder="Description (Optional)" rows="3"></textarea>
+        </mat-form-field>
+      </div>
+      <div class="work-form__field search">
+        <h3>Skills Trained <span class="limit">8</span></h3>
+        <mat-form-field appearance="standard" class="search">
+          <mat-icon matSuffix>search</mat-icon>
+          <input matInput placeholder="Search skills" type="text">
+        </mat-form-field>
+        <div class="skills">
+          <simple-tag type="gray" title="Software Engineering"></simple-tag>
+          <simple-tag type="gray" title="Programing"></simple-tag>
+          <simple-tag type="gray" title="Machine Learning"></simple-tag>
+          <simple-tag type="gray" title="Medicare"></simple-tag>
+          <simple-tag type="gray" title="Node JS"></simple-tag>
+          <simple-tag type="gray" title="Python"></simple-tag>
+          <simple-tag type="gray" title="HTML5"></simple-tag><simple-tag type="gray" title="Adobe Photoshop"></simple-tag>
+        </div>
+      </div>
+      <div class="work-form__field search">
+        <h3>Additional Exposure <span class="limit">8</span></h3>
+        <mat-form-field appearance="standard" class="search">
+          <mat-icon matSuffix>search</mat-icon>
+          <input matInput placeholder="Search skills" type="text">
+        </mat-form-field>
+        <div class="skills">
+          <simple-tag type="gray" title="Software Engineering"></simple-tag>
+          <simple-tag type="gray" title="Programing"></simple-tag>
+          <simple-tag type="gray" title="Machine Learning"></simple-tag>
+          <simple-tag type="gray" title="Medicare"></simple-tag>
+          <simple-tag type="gray" title="Node JS"></simple-tag>
+          <simple-tag type="gray" title="Python"></simple-tag>
+          <simple-tag type="gray" title="HTML5"></simple-tag><simple-tag type="gray" title="Adobe Photoshop"></simple-tag>
+        </div>
+      </div>
+      <div class="work-form__field border">
+      </div>
+      <div class="work-form__field btn">
+        <action-button type="stroked" title="Add Another"></action-button>
+      </div>
+    </div>
+  </div>
+  <div class="container__full">
+    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
+  </div>
+</div>
+
+<!-- Create_Profile_Work end -->
+

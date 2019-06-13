@@ -170,6 +170,46 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
   }
 }
 
+@mixin mat-form-field-standard-theme($theme) {
+  $foreground: map-get($theme, foreground);
+  $is-dark-theme: map-get($theme, is-dark);
+
+  $underline-color: mat-color($foreground, divider, if($is-dark-theme, 0.7, 0.42));
+
+  .mat-form-field-appearance-standard {
+    &.search {
+      color: $btn-text-color;
+      .mat-form-field-wrapper {
+        padding: 4px 20px;
+        .mat-form-field-flex {
+          padding-top: 0;
+          display: flex;
+          align-items: center;
+          .mat-form-field-infix {
+            border-top: none;
+            label {
+              color: rgba(map-get($md-cfaccent, 500), 0.44);
+            }
+          }
+        }
+        .mat-form-field-suffix {
+          color: rgba(map-get($md-cfaccent, 500), .34);
+        }
+      }
+      .mat-form-field-underline {
+        display: none;
+      }
+    }
+    .mat-form-field-underline {
+      background-color: $underline-color;
+    }
+
+    &.mat-form-field-disabled .mat-form-field-underline {
+      @include mat-control-disabled-underline($underline-color);
+    }
+  }
+}
+
 @mixin mat-form-field-legacy-theme($theme) {
   $foreground: map-get($theme, foreground);
   $is-dark-theme: map-get($theme, is-dark);

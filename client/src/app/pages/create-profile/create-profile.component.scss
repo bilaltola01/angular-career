@@ -268,6 +268,81 @@ p {
       }
     }
   }
+  &.profile-work {
+    position: relative;
+    action-button.btn-next {
+      min-width: 130px;
+      position: absolute;
+      bottom: 20%;
+      right: 2%;
+    }
+    .container__full {
+      @include flex(row, center, center);
+      .work-form {
+        width: 75%;
+        max-width: 880px;
+        padding: 60px;
+        box-sizing: border-box;
+        background-color: $white;
+        box-shadow: 0 3px 10px rgba($black, .07);
+        @include flex(column, center, flex-start);
+        &__field {
+          margin-top: 30px;
+          box-sizing: border-box;
+          width: 80%;
+          max-width: 615px;
+          border: solid 1px $mat-form-border-color;
+          border-radius: 5px;
+          padding: 0 10px;
+          &.textarea {
+            padding: 10px 20px 5px 20px;
+          }
+          &.border {
+            margin-top: 60px;
+            padding: 0;
+          }
+          &.btn {
+            margin-top: 60px;
+            border: none;
+            padding: 0;
+            @include flex(row, center, flex-start);
+            action-button {
+              max-width: 150px;
+            }
+          }
+          &.search {
+            border: none;
+            padding: 0;
+            h3 {
+              color: rgba(map-get($md-cfaccent, 500), 0.84);
+            }
+            .limit {
+              font-size: 14px;
+              font-weight: 400;
+            }
+            mat-form-field {
+              margin-top: 10px;
+              background-color: $host-bg-color;
+              border-radius: 25px;
+            }
+            .skills {
+              margin-top: 10px;
+              @include flex(row, flex-start, flex-start);
+              simple-tag {
+                margin: 5px;
+              }
+            }
+          }
+          action-button {
+            max-width: 150px;
+          }
+          mat-form-field {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
 }
 
 @media only screen and (max-width: $tablet-breakpoint) {
@@ -335,6 +410,28 @@ p {
       }
       .container__full {
         .education-form {
+          width: 85%;
+          max-width: 600px;
+          padding: 40px;
+          &__field {
+            width: 90%;
+            &.border {
+              margin-top: 40px;
+            }
+            &.btn {
+              margin-top: 40px;
+            }
+          }
+        }
+      }
+    }
+    &.profile-work {
+      action-button.btn-next {
+        position: unset;
+        margin-top: 30px;
+      }
+      .container__full {
+        .work-form {
           width: 85%;
           max-width: 600px;
           padding: 40px;
@@ -434,6 +531,20 @@ p {
       }
       .container__full {
         .education-form {
+          width: 100%;
+          padding: 30px;
+          &__field {
+            width: 95%;
+          }
+        }
+      }
+    }
+    &.profile-work {
+      action-button.btn-next {
+        margin-top: 20px;
+      }
+      .container__full {
+        .work-form {
           width: 100%;
           padding: 30px;
           &__field {
