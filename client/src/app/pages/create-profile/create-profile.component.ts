@@ -7,9 +7,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreateProfileComponent implements OnInit {
 
+  profileCreationPages = [
+    'choose-option',
+    'profile-basic',
+  ];
+
+  selectedPageIndex = 1;
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+  goToCreatProfilePage() {
+    this.selectedPageIndex = 1;
   }
 
 }

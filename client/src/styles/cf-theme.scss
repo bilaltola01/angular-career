@@ -188,6 +188,13 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
         }
       }
     }
+    &.bg-transparent {
+      .mat-form-field-wrapper {
+        .mat-form-field-flex {
+          background-color: transparent;
+        }
+      }
+    }
     .mat-form-field-wrapper {
       padding-bottom: 0;
       .mat-form-field-flex {
@@ -196,7 +203,7 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
       }
       .mat-form-field-prefix {
         margin-right: 15px;
-        color: rgba(#525252, 0.3);
+        color: rgba($mat-form-prefix-color, 0.3);
       }
       .mat-form-field-infix {
         label {
@@ -273,7 +280,6 @@ p {
 button {
   border-radius: 500px !important;
   padding: 10px 40px !important;
-  min-width: 160px !important;
 }
 
 .container {

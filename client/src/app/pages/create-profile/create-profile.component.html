@@ -1,4 +1,4 @@
-<div class="container choose-option">
+<div *ngIf="selectedPageIndex===0" class="container {{profileCreationPages[0]}}">
   <div class="container__full">
     <h1>Choose To Create Profile</h1>
   </div>
@@ -29,7 +29,7 @@
   <div class="container__right">
     <div class="option-box">
       <div class="option-box__content">
-        <action-button type="flat" title="Create Profile" color="primary"></action-button>
+        <action-button type="flat" title="Create Profile" color="primary" (click)="goToCreatProfilePage()"></action-button>
       </div>
     </div>
     <div class="option-title">
@@ -40,6 +40,48 @@
       <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
     </div>
   </div>
+</div>
+
+<div *ngIf="selectedPageIndex===1" class="container {{profileCreationPages[1]}}">
+  <div class="container__full">
+    <div class="information-form">
+      <h3 class="information-form__title">
+        BASIC INFORMATION
+      </h3>
+      <div class="information-form__image">
+        <img alt="Profile Image" src="assets/icons/profile-image.svg">
+      </div>
+      <div class="information-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Your Location</mat-label>
+          <input matInput placeholder="Your Location" type="text">
+        </mat-form-field>
+      </div>
+      <div class="information-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Date Of Birth</mat-label>
+          <input matInput placeholder="Date Of Birth" type="date">
+        </mat-form-field>
+      </div>
+      <div class="information-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Gender</mat-label>
+          <input matInput placeholder="Gender" type="text">
+        </mat-form-field>
+      </div>
+      <div class="information-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Ethnicity</mat-label>
+          <input matInput placeholder="Ethnicity" type="text">
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div class="container__full">
+    <action-button type="flat" title="Next" color="primary" (click)="goToCreatProfilePage()"></action-button>
+  </div>
+</div>
+
   <!-- <div class="profile__choose">
 
   </div>
@@ -70,4 +112,3 @@
   <div class="profile__status">
     
   </div> -->
-</div>

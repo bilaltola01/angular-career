@@ -1,13 +1,15 @@
 @import './../../../styles/variables.scss';
 
 $primary-font-color: map-get($md-cfaccent, 500);
+$host-bg-color: #f4f5f8;
 
 :host {
-  @include flex(row, flex-start, center);
+  @include flex(row, center, center);
   min-height: calc(100vh - 70px);
   padding: 70px 0;
   box-sizing: border-box;
   color: rgba($primary-font-color, .84);
+  background-color: $host-bg-color;
 }
 
 h1 {
@@ -102,41 +104,91 @@ p {
 }
 
 .container {
-  &.choose-option {
-    position: relative;
-    text-align: center;
-  }
   &__full {
     grid-column-start: 1;
     grid-column-end: 13;
-    h1 {
-      color: rgba($primary-font-color, .84);
-    }
   }
   &__left {
     grid-column-start: 1;
     grid-column-end: 7;
-    @include flex(column, center, flex-start);
-    .option-box {
-      &__content {
-        @include flex(column, center, space-evenly);
-      }
-    }
   }
   &__right {
     grid-column-start: 7;
     grid-column-end: 13;
-    @include flex(column, center, flex-start);
-    .option-box {
-      &__content {
-        background-image: url('/assets/icons/option-box-transparent.svg');
-        @include flex(row, center, center);
+  }
+  &.choose-option {
+    position: relative;
+    text-align: center;
+    .container__full {
+      h1 {
+        color: rgba($primary-font-color, .84);
+      }
+    }
+    .container__left {
+      @include flex(column, center, flex-start);
+      .option-box {
+        &__content {
+          @include flex(column, center, space-evenly);
+        }
+      }
+    }
+    .container__right {
+      @include flex(column, center, flex-start);
+      .option-box {
+        &__content {
+          background-image: url('/assets/icons/option-box-transparent.svg');
+          @include flex(row, center, center);
+        }
+      }
+    }
+  }
+  &.profile-basic {
+    position: relative;
+    action-button {
+      min-width: 130px;
+      position: absolute;
+      bottom: 20%;
+      right: 2%;
+    }
+    .container__full {
+      @include flex(row, center, center);
+      .information-form {
+        width: 75%;
+        max-width: 880px;
+        padding: 60px;
+        box-sizing: border-box;
+        background-color: $white;
+        box-shadow: 0 3px 10px rgba($black, .07);
+        @include flex(column, center, flex-start);
+        &__image {
+          margin-top: 30px;
+          width: 20%;
+          max-width: 125px;
+          img {
+            width: 100%;
+          }
+        }
+        &__field {
+          margin-top: 30px;
+          box-sizing: border-box;
+          width: 80%;
+          max-width: 615px;
+          border: solid 1px $mat-form-border-color;
+          border-radius: 5px;
+          padding: 0 10px;
+          mat-form-field {
+            width: 100%;
+          }
+        }
       }
     }
   }
 }
 
 @media only screen and (max-width: $tablet-breakpoint) {
+  :host {
+    padding: 50px 0;
+  }
   .option-text {
     position: relative;
     grid-column-start: 2;
@@ -148,17 +200,40 @@ p {
   }
   .container {
     padding: 0 40px;
-  }
-  .choose-option {
-    .container__left,
-    .container__right {
-      grid-column-start: 2;
-      grid-column-end: 12;
+    &.choose-option {
+      .container__left,
+      .container__right {
+        grid-column-start: 2;
+        grid-column-end: 12;
+      }
     }
-  }
+    &.profile-basic {
+      action-button {
+        position: unset;
+        margin-top: 30px;
+      }
+      .container__full {
+        .information-form {
+          width: 85%;
+          max-width: 600px;
+          padding: 40px;
+          &__image {
+            width: 30%;
+            max-width: 110px;
+          }
+          &__field {
+            width: 90%;
+          }
+        }
+      }
+    }
+  }  
 }
 
 @media only screen and (max-width: $mobile-breakpoint) {
+  :host {
+    padding: 35px 0;
+  }
   h1 {
     font-size: 35px;
     line-height: 1.2;
@@ -190,13 +265,31 @@ p {
   }
   .container {
     padding: 0 30px;
-  }
-  .choose-option {
-    .container__full,
-    .container__left,
-    .container__right {
-      grid-column-start: 1;
-      grid-column-end: 13;
+    &.choose-option {
+      .container__full,
+      .container__left,
+      .container__right {
+        grid-column-start: 1;
+        grid-column-end: 13;
+      }
+    }
+    &.profile-basic {
+      action-button {
+        margin-top: 20px;
+      }
+      .container__full {
+        .information-form {
+          width: 100%;
+          padding: 30px;
+          &__image {
+            width: 50%;
+            max-width: 95px;
+          }
+          &__field {
+            width: 95%;
+          }
+        }
+      }
     }
   }
 }

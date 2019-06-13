@@ -119,6 +119,11 @@ $primary-font-color: map-get($md-cfaccent, 500);
   a.mat-button {
     padding: 0;
   }
+
+  action-button {
+    min-width: 160px;
+  }
+
   @media only screen and (max-width: $tablet-breakpoint) {
     padding: 0 40px;
     p {
