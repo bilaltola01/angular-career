@@ -1,0 +1,217 @@
+@import './../../../styles/variables.scss';
+
+$primary-font-color: map-get($md-cfaccent, 500);
+
+:host {
+  @include flex(row, center, center);
+  min-height: calc(100vh - 70px);
+  padding: 70px 0;
+  box-sizing: border-box;
+  @media only screen and (max-width: $tablet-breakpoint) {
+    padding: 40px 0;
+  }
+}
+.container {
+  &__left {
+    grid-column-start: 1;
+    grid-column-end: 6;
+    @include flex(column, flex-start, space-between);
+    .row {
+      &__copyright {
+        color: rgba($primary-font-color, 0.44);
+        a {
+          color: rgba($primary-font-color, 0.44);
+          text-decoration: none;
+        }
+      }
+    }
+  }
+  &__right {
+    grid-column-start: 7;
+    grid-column-end: 12;
+    .mat-form-field {
+      width: 100%;
+      .mat-form-field-wrapper {
+        padding-bottom: 0;
+      }
+    }
+    .row {
+      &__user_roles {
+        @include flex(row, center, flex-start);
+        .user_role {
+          height: 70px;
+          padding: 20px 0;
+          box-sizing: border-box;
+          margin: 0 20px 40px 20px;
+          color: rgba($primary-font-color, .24);
+          font-weight: bold;
+          font-size: 20px;
+          .active-border {
+            display: none;
+          }
+          &.active {
+            color: rgba($primary-font-color, .84);
+            .active-border {
+              display: block;
+              width: 30px;
+              height: 4px;
+              background-color: map-get($md-cfprimary, 500);
+              margin: 20px 0 0 0;
+            }
+          }
+        }
+        :first-child {
+          margin: 0 0 40px 0;
+        }
+      }
+      &__form {
+        border: solid 1px $mat-form-border-color;
+        border-radius: 0;
+        border-bottom: none;
+        mat-form-field {
+          box-sizing: border-box;
+          font-size: 20px;
+        }
+        &.first {
+          border-radius: 4px 4px 0 0;
+        }
+        &.last {
+          border-radius: 0 0 4px 4px;
+          border-bottom: solid 1px $mat-form-border-color;
+        }
+      }
+      &__checkbox {
+        @include flex(row, center, space-between);
+        padding: 15px 20px;
+      }
+      &__buttons {
+        padding: 20px 0;
+        @include flex(row, flex-start, flex-start);
+        action-button {
+          margin: 0 20px;
+        }
+        :first-child {
+          margin: 0;
+        }
+      }
+      &__social_icons {
+        @include flex(row, flex-start, flex-start);
+        img {
+          margin: 15px;
+        }
+        :first-child {
+          margin: 15px 15px 15px 0px;
+        }
+      }
+      &__copyright {
+        display: none;
+        color: rgba($primary-font-color, 0.44);
+        a {
+          color: rgba($primary-font-color, 0.44);
+          text-decoration: none;
+        }
+      }
+    }
+  }
+  a.mat-button {
+    padding: 0;
+  }
+
+  @media only screen and (max-width: $tablet-breakpoint) {
+    padding: 0 40px;
+    p {
+      font-size: 13px;
+    }
+    &__left {
+      grid-column-start: 1;
+      grid-column-end: 6;
+      .row {
+        &__copyright {
+          font-size: 13px;
+        }
+      }
+    }
+    &__right {
+      margin-top: 30px;
+      grid-column-start: 7;
+      grid-column-end: 13;
+      .row {
+        &__user_roles {
+          .user_role {
+            height: 50px;
+            padding: 10px 0;
+            margin: 0 15px 25px 15px;
+            font-size: 13px;
+            &.active {
+              .active-border {
+                width: 20px;
+                height: 3px;
+                margin: 10px 0 0 0;
+              }
+            }
+          }
+          :first-child {
+            margin: 0 0 25px 0;
+          }
+        }
+        &__checkbox {
+          padding: 10px;
+          a {
+            font-size: 12px;
+          }
+        }
+        &__buttons {
+          padding: 10px 0;
+          margin-bottom: 20px;
+          action-button {
+            margin: 10px;
+          }
+          :first-child {
+            margin: 10px;
+          }
+        }
+        &__social_icons {
+          margin-bottom: 20px;
+          img {
+            margin: 10px;
+          }
+          :first-child {
+            margin: 10px 10px 10px 0px;
+          }
+        }
+      }
+    }
+  }
+  @media only screen and (max-width: $mobile-breakpoint) {
+    padding: 0 30px;
+    &__left {
+      grid-column-start: 1;
+      grid-column-end: 13;
+      .row {
+        &__copyright {
+          display: none;
+        }
+      }
+    }
+    &__right {
+      grid-column-start: 1;
+      grid-column-end: 13;
+      .row {
+        &__checkbox {
+          padding: 20px 10px;
+        }
+        &__buttons {
+          margin-bottom: 50px;
+        }
+        &__social_icons {
+          margin-bottom: 30px;
+        }
+        &__copyright {
+          display: block;
+          font-size: 13px;
+          text-align: center;
+        }
+      }
+    }
+  }
+}

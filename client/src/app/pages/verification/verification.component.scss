@@ -1,0 +1,16 @@
+@import './../../../styles/variables.scss';
+
+:host {
+  @include flex(row, center, center);
+  min-height: calc(100vh - 70px);
+  padding: 70px 0;
+  box-sizing: border-box;
+}
+
+.container {
+  .row {
+    grid-column-start: 1;
+    grid-column-end: 13;
+    @include flex(column, center, center);
+  }
+}

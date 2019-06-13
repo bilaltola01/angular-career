@@ -1,17 +1,21 @@
 import { TestBed, async } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { TestingModule } from './modules/testing.module';
+import { MaterialModule } from './modules/material.module';
 import { AppComponent } from './app.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
+import { ActionButtonComponent } from './components/action-button/action-button.component';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule
+        TestingModule,
+        MaterialModule
       ],
       declarations: [
         AppComponent,
-        ToolbarComponent
+        ToolbarComponent,
+        ActionButtonComponent
       ],
     }).compileComponents();
   }));

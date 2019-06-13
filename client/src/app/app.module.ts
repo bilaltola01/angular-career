@@ -12,6 +12,10 @@ import { StyleGuideComponent } from './pages/style-guide/style-guide.component';
 import { SimpleTagComponent } from './components/simple-tag/simple-tag.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { ActionButtonComponent } from './components/action-button/action-button.component';
+import { LoginComponent } from './pages/login/login.component';
+import { RegistrationComponent } from './pages/registration/registration.component';
+import { VerificationComponent } from './pages/verification/verification.component';
+import { RoundCheckboxComponent } from './components/round-checkbox/round-checkbox.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +24,10 @@ import { ActionButtonComponent } from './components/action-button/action-button.
     SimpleTagComponent,
     ToolbarComponent,
     ActionButtonComponent,
+    LoginComponent,
+    RegistrationComponent,
+    VerificationComponent,
+    RoundCheckboxComponent,
   ],
   imports: [
     BrowserModule,
