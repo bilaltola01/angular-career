@@ -216,7 +216,9 @@ p {
       }
     }
   }
-  &.profile-education {
+  &.profile-education,
+  &.profile-project,
+  &.profile-publication {
     position: relative;
     action-button.btn-next {
       min-width: 130px;
@@ -226,7 +228,9 @@ p {
     }
     .container__full {
       @include flex(row, center, center);
-      .education-form {
+      .education-form,
+      .project-form,
+      .publication-form {
         width: 75%;
         max-width: 880px;
         padding: 60px;
@@ -243,7 +247,7 @@ p {
           border-radius: 5px;
           padding: 0 10px;
           &.textarea {
-            padding: 10px 10px 5px 10px;
+            padding: 10px 20px 5px 20px;
           }
           &.border {
             margin-top: 60px;
@@ -462,13 +466,17 @@ p {
         }
       }
     }
-    &.profile-education {
+    &.profile-education,
+    &.profile-project,
+    &.profile-publication {
       action-button.btn-next {
         position: unset;
         margin-top: 30px;
       }
       .container__full {
-        .education-form {
+        .education-form,
+        .project-form,
+        .publication-form {
           width: 85%;
           max-width: 600px;
           padding: 40px;
@@ -575,6 +583,7 @@ p {
       .container__full {
         .information-form {
           width: 100%;
+          max-width: 450px;
           padding: 30px;
           &__image {
             width: 50%;
@@ -593,6 +602,7 @@ p {
       .container__full {
         .about-form {
           width: 100%;
+          max-width: 450px;
           padding: 30px;
           &__field {
             width: 95%;
@@ -600,16 +610,27 @@ p {
         }
       }
     }
-    &.profile-education {
+    &.profile-education,
+    &.profile-project,
+    &.profile-publication {
       action-button.btn-next {
         margin-top: 20px;
       }
       .container__full {
-        .education-form {
+        .education-form,
+        .project-form,
+        .publication-form {
           width: 100%;
+          max-width: 450px;
           padding: 30px;
           &__field {
             width: 95%;
+            &.border {
+              margin-top: 30px;
+            }
+            &.btn {
+              margin-top: 30px;
+            }
           }
         }
       }
@@ -621,9 +642,16 @@ p {
       .container__full {
         .work-form {
           width: 100%;
+          max-width: 450px;
           padding: 30px;
           &__field {
             width: 95%;
+            &.border {
+              margin-top: 30px;
+            }
+            &.btn {
+              margin-top: 30px;
+            }
           }
         }
       }
@@ -635,6 +663,7 @@ p {
       .container__full {
         .skills-form {
           width: 100%;
+          max-width: 450px;
           padding: 30px;
           &__field {
             width: 95%;

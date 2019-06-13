@@ -13,10 +13,12 @@ export class CreateProfileComponent implements OnInit {
     'profile-about',
     'profile-education',
     'profile-work',
-    'profile-skills'
+    'profile-skills',
+    'profile-project',
+    'profile-publication',
   ];
 
-  selectedPageIndex = 5;
+  selectedPageIndex = 6;
 
   constructor() { }
 
@@ -28,7 +30,7 @@ export class CreateProfileComponent implements OnInit {
   }
 
   goToNextPage() {
-    if (this.selectedPageIndex < this.profileCreationPages.length) {
+    if (this.selectedPageIndex < this.profileCreationPages.length - 1) {
       this.selectedPageIndex++;
     }
   }

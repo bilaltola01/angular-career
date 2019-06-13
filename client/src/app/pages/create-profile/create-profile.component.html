@@ -290,3 +290,81 @@
 
 <!-- Create_Profile_Skills end -->
 
+<!-- Create_Profile_Project start -->
+
+<div *ngIf="selectedPageIndex===6" class="container {{profileCreationPages[6]}}">
+  <div class="container__full">
+    <div class="project-form">
+      <h3 class="project-form__title">
+        PROJECTS
+      </h3>
+      <div class="project-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Project Name</mat-label>
+          <input matInput placeholder="Project Name" type="text">
+        </mat-form-field>
+      </div>
+      <div class="project-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Year of Completion</mat-label>
+          <input matInput placeholder="Year of Completion" type="text">
+        </mat-form-field>
+      </div>
+      <div class="project-form__field textarea">
+        <mat-form-field>
+          <textarea matInput placeholder="Description (Optional)" rows="3"></textarea>
+        </mat-form-field>
+      </div>
+      <div class="project-form__field border">
+      </div>
+      <div class="project-form__field btn">
+        <action-button type="stroked" title="Add Another"></action-button>
+      </div>
+    </div>
+  </div>
+  <div class="container__full">
+    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
+  </div>
+</div>
+
+<!-- Create_Profile_Project end -->
+
+<!-- Create_Profile_Publication start -->
+
+<div *ngIf="selectedPageIndex===7" class="container {{profileCreationPages[7]}}">
+  <div class="container__full">
+    <div class="publication-form">
+      <h3 class="publication-form__title">
+        PUBLICATIONS
+      </h3>
+      <div class="publication-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Publication Name</mat-label>
+          <input matInput placeholder="Publication Name" type="text">
+        </mat-form-field>
+      </div>
+      <div class="publication-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Year of Completion</mat-label>
+          <input matInput placeholder="Year of Completion" type="text">
+        </mat-form-field>
+      </div>
+      <div class="publication-form__field textarea">
+        <mat-form-field>
+          <textarea matInput placeholder="Description (Optional)" rows="3"></textarea>
+        </mat-form-field>
+      </div>
+      <div class="publication-form__field border">
+      </div>
+      <div class="publication-form__field btn">
+        <action-button type="stroked" title="Add Another"></action-button>
+      </div>
+    </div>
+  </div>
+  <div class="container__full">
+    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
+  </div>
+</div>
+
+<!-- Create_Profile_Publication end -->
+
