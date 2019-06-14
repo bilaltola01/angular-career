@@ -214,7 +214,7 @@ export class CreateProfileComponent implements OnInit {
 
   profile_status = this.statuses[0];
 
-  selectedPageIndex = 4;
+  selectedPageIndex = 0;
 
   constructor() { }
 

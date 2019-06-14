@@ -60,32 +60,32 @@
 
 <div *ngIf="selectedPageIndex===1" class="container {{profileCreationPages[1]}}">
   <div class="container__full">
-    <div class="information-form">
-      <h3 class="information-form__title">
+    <div class="profile-form">
+      <h3 class="profile-form__title">
         BASIC INFORMATION
       </h3>
-      <div class="information-form__image">
+      <div class="profile-form__image">
         <img alt="Profile Image" src="assets/icons/profile-image.svg">
       </div>
-      <div class="information-form__field">
+      <div class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
           <mat-label>Your Location</mat-label>
           <input matInput placeholder="Your Location" type="text" [(ngModel)]="basic_information.location" value="basic_information.location">
         </mat-form-field>
       </div>
-      <div class="information-form__field">
+      <div class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
           <mat-label>Date Of Birth</mat-label>
           <input matInput placeholder="Date Of Birth" type="text" [(ngModel)]="basic_information.birthOfDay" value="basic_information.birthOfDay">
         </mat-form-field>
       </div>
-      <div class="information-form__field">
+      <div class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
           <mat-label>Gender</mat-label>
           <input matInput placeholder="Gender" type="text" [(ngModel)]="basic_information.gender" value="basic_information.gender">
         </mat-form-field>
       </div>
-      <div class="information-form__field">
+      <div class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
           <mat-label>Ethnicity</mat-label>
           <input matInput placeholder="Ethnicity" type="text" [(ngModel)]="basic_information.ethnicity" value="basic_information.ethnicity">
@@ -104,11 +104,11 @@
 
 <div *ngIf="selectedPageIndex===2" class="container {{profileCreationPages[2]}}">
   <div class="container__full">
-    <div class="about-form">
-      <h3 class="about-form__title">
+    <div class="profile-form">
+      <h3 class="profile-form__title">
         ABOUT ME
       </h3>
-      <div class="about-form__field textarea">
+      <div class="profile-form__field textarea">
         <mat-form-field>
           <textarea matInput placeholder="Explain Brief About Yourself" rows="15" [(ngModel)]="about_me" value="about_me"></textarea>
         </mat-form-field>
@@ -126,44 +126,44 @@
 
 <div *ngIf="selectedPageIndex===3" class="container {{profileCreationPages[3]}}">
   <div class="container__full">
-    <div class="education-form">
-      <h3 class="education-form__title">
+    <div class="profile-form">
+      <h3 class="profile-form__title">
         EDUCATION
       </h3>
       <ng-container *ngFor="let eduction of educations; let i = index">
-        <div class="education-form__field">
+        <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>Select University</mat-label>
             <input matInput placeholder="Select University" type="text" [(ngModel)]="educations[i].university" value="educations[i].university">
           </mat-form-field>
         </div>
-        <div class="education-form__field">
+        <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>Degree</mat-label>
             <input matInput placeholder="Degree" type="text" [(ngModel)]="educations[i].degree" value="educations[i].degree">
           </mat-form-field>
         </div>
-        <div class="education-form__field">
+        <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>Course</mat-label>
             <input matInput placeholder="Course" type="text" [(ngModel)]="educations[i].course" value="educations[i].course">
           </mat-form-field>
         </div>
-        <div class="education-form__field">
+        <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>Year of Completion</mat-label>
             <input matInput placeholder="Year of Completion" type="text" [(ngModel)]="educations[i].completion" value="educations[i].completion">
           </mat-form-field>
         </div>
-        <div class="education-form__field textarea">
+        <div class="profile-form__field textarea">
           <mat-form-field>
             <textarea matInput placeholder="Description (Optional)" rows="3" [(ngModel)]="educations[i].description" value="educations[i].description"></textarea>
           </mat-form-field>
         </div>
-        <div class="education-form__field border">
+        <div class="profile-form__field border">
         </div>
       </ng-container>
-      <div class="education-form__field btn">
+      <div class="profile-form__field btn">
         <action-button type="stroked" title="Add Another" (click)="addEducation()"></action-button>
       </div>
     </div>
@@ -179,35 +179,35 @@
 
 <div *ngIf="selectedPageIndex===4" class="container {{profileCreationPages[4]}}">
   <div class="container__full">
-    <div class="work-form">
-      <h3 class="work-form__title">
+    <div class="profile-form">
+      <h3 class="profile-form__title">
         WORK EXPERIENCE
       </h3>
       <ng-container *ngFor="let experience of work_experiences; let i = index">
-        <div class="work-form__field">
+        <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>Company Name</mat-label>
             <input matInput placeholder="Company Name" type="text" [(ngModel)]="work_experiences[i].company_name" value="work_experiences[i].company_name">
           </mat-form-field>
         </div>
-        <div class="work-form__field">
+        <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>Years Served</mat-label>
             <input matInput placeholder="Years Served" type="text" [(ngModel)]="work_experiences[i].years" value="work_experiences[i].years">
           </mat-form-field>
         </div>
-        <div class="work-form__field">
+        <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>Designation</mat-label>
             <input matInput placeholder="Designation" type="text" [(ngModel)]="work_experiences[i].designation" value="work_experiences[i].designation">
           </mat-form-field>
         </div>
-        <div class="work-form__field textarea">
+        <div class="profile-form__field textarea">
           <mat-form-field>
             <textarea matInput placeholder="Description (Optional)" rows="3" [(ngModel)]="work_experiences[i].description" value="work_experiences[i].description"></textarea>
           </mat-form-field>
         </div>
-        <div class="work-form__field search">
+        <div class="profile-form__field search">
           <h3>Skills Trained <span *ngIf="work_experiences[i].skills_trained.length > 0" class="count">{{work_experiences[i].skills_trained.length}}</span></h3>
           <mat-form-field appearance="standard" class="search">
             <mat-icon matSuffix>search</mat-icon>
@@ -217,7 +217,7 @@
             <simple-tag *ngFor="let skill of work_experiences[i].skills_trained; let j = index" type="gray" title="{{skill}}"></simple-tag>
           </div>
         </div>
-        <div class="work-form__field search">
+        <div class="profile-form__field search">
           <h3>Additional Exposure <span *ngIf="work_experiences[i].additional_exposure.length > 0" class="count">{{work_experiences[i].additional_exposure.length}}</span></h3>
           <mat-form-field appearance="standard" class="search">
             <mat-icon matSuffix>search</mat-icon>
@@ -227,10 +227,10 @@
             <simple-tag *ngFor="let skill of work_experiences[i].additional_exposure; let j = index" type="gray" title="{{skill}}"></simple-tag>
           </div>
         </div>
-        <div class="work-form__field border">
+        <div class="profile-form__field border">
         </div>
       </ng-container>
-      <div class="work-form__field btn">
+      <div class="profile-form__field btn">
         <action-button type="stroked" title="Add Another" (click)="addWorkExperience()"></action-button>
       </div>
     </div>
@@ -246,11 +246,11 @@
 
 <div *ngIf="selectedPageIndex===5" class="container {{profileCreationPages[5]}}">
   <div class="container__full">
-    <div class="skills-form">
-      <h3 class="skills-form__title">
+    <div class="profile-form">
+      <h3 class="profile-form__title">
         SKILLS & INTERESTS
       </h3>
-      <div class="skills-form__field search">
+      <div class="profile-form__field search">
         <h3>Skills <span *ngIf="skills.length > 0" class="count">{{skills.length}}</span></h3>
         <mat-form-field appearance="standard" class="search">
           <mat-icon matSuffix>search</mat-icon>
@@ -260,7 +260,7 @@
           <simple-tag *ngFor="let skill of skills; let i = index" type="gray" title="{{skills[i].title}}" ellipseTag="true" value="{{skills[i].proficieny}}"></simple-tag>
         </div>
       </div>
-      <div class="skills-form__field search">
+      <div class="profile-form__field search">
         <h3>Interests <span *ngIf="interests.length > 0" class="count">{{interests.length}}</span></h3>
         <mat-form-field appearance="standard" class="search">
           <mat-icon matSuffix>search</mat-icon>
@@ -283,32 +283,32 @@
 
 <div *ngIf="selectedPageIndex===6" class="container {{profileCreationPages[6]}}">
   <div class="container__full">
-    <div class="project-form">
-      <h3 class="project-form__title">
+    <div class="profile-form">
+      <h3 class="profile-form__title">
         PROJECTS
       </h3>
       <ng-container *ngFor="let project of projects; let i = index">
-        <div class="project-form__field">
+        <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>Project Name</mat-label>
             <input matInput placeholder="Project Name" type="text" [(ngModel)]="projects[i].project_name" value="projects[i].project_name">
           </mat-form-field>
         </div>
-        <div class="project-form__field">
+        <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>Year of Completion</mat-label>
             <input matInput placeholder="Year of Completion" type="text" [(ngModel)]="projects[i].years" value="projects[i].years">
           </mat-form-field>
         </div>
-        <div class="project-form__field textarea">
+        <div class="profile-form__field textarea">
           <mat-form-field>
             <textarea matInput placeholder="Description (Optional)" rows="3" [(ngModel)]="projects[i].description" value="projects[i].description"></textarea>
           </mat-form-field>
         </div>
-        <div class="project-form__field border">
+        <div class="profile-form__field border">
         </div>
       </ng-container>
-      <div class="project-form__field btn">
+      <div class="profile-form__field btn">
         <action-button type="stroked" title="Add Another" (click)="addProjects()"></action-button>
       </div>
     </div>
@@ -324,32 +324,32 @@
 
 <div *ngIf="selectedPageIndex===7" class="container {{profileCreationPages[7]}}">
   <div class="container__full">
-    <div class="publication-form">
-      <h3 class="publication-form__title">
+    <div class="profile-form">
+      <h3 class="profile-form__title">
         PUBLICATIONS
       </h3>
       <ng-container *ngFor="let publication of publications; let i = index">
-        <div class="publication-form__field">
+        <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>Publication Name</mat-label>
             <input matInput placeholder="Publication Name" type="text" [(ngModel)]="publications[i].publication_name" value="publications[i].publication_name">
           </mat-form-field>
         </div>
-        <div class="publication-form__field">
+        <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>Year of Completion</mat-label>
             <input matInput placeholder="Year of Completion" type="text" [(ngModel)]="publications[i].years" value="publications[i].years">
           </mat-form-field>
         </div>
-        <div class="publication-form__field textarea">
+        <div class="profile-form__field textarea">
           <mat-form-field>
             <textarea matInput placeholder="Description (Optional)" rows="3" [(ngModel)]="publications[i].description" value="publications[i].description"></textarea>
           </mat-form-field>
         </div>
-        <div class="publication-form__field border">
+        <div class="profile-form__field border">
         </div>
       </ng-container>
-      <div class="publication-form__field btn">
+      <div class="profile-form__field btn">
         <action-button type="stroked" title="Add Another" (click)="addPublications()"></action-button>
       </div>
     </div>
@@ -365,32 +365,32 @@
 
 <div *ngIf="selectedPageIndex===8" class="container {{profileCreationPages[8]}}">
   <div class="container__full">
-    <div class="links-form">
-      <h3 class="links-form__title">
+    <div class="profile-form">
+      <h3 class="profile-form__title">
         EXTERNAL LINKS
       </h3>
-      <div class="links-form__field">
+      <div class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
           <mat-label>Twitter (Optional)</mat-label>
           <img matSuffix src="assets/icons/ic_twitter.svg">
           <input matInput placeholder="Paste your link here" type="text" [(ngModel)]="external_links.twitter" value="external_links.twitter">
         </mat-form-field>
       </div>
-      <div class="links-form__field">
+      <div class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
           <mat-label>Facebook (Optional)</mat-label>
           <img matSuffix src="assets/icons/ic_facebook.svg">
           <input matInput placeholder="Paste your link here" type="text" [(ngModel)]="external_links.facebook" value="external_links.facebook">
         </mat-form-field>
       </div>
-      <div class="links-form__field">
+      <div class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
           <mat-label>Google (Optional)</mat-label>
           <img matSuffix src="assets/icons/ic_google.svg">
           <input matInput placeholder="Paste your link here" type="text" [(ngModel)]="external_links.google" value="external_links.google">
         </mat-form-field>
       </div>
-      <div class="links-form__field">
+      <div class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
           <mat-label>Linkedin (Optional)</mat-label>
           <img matSuffix src="assets/icons/ic_linkedin.svg">
@@ -410,11 +410,11 @@
 
 <div *ngIf="selectedPageIndex===9" class="container {{profileCreationPages[9]}}">
   <div class="container__full">
-    <div class="status-form">
+    <div class="profile-form">
       <h3 class="status__title">
         SET YOUR STATUS
       </h3>
-      <div class="status-form__field simple-tag">
+      <div class="profile-form__field simple-tag">
         <simple-tag *ngFor="let status of statuses; let i = index" class="status" title="{{statuses[i]}}" onlineTag="true" [active]="profile_status === statuses[i]" (click)="setProfileStatus(i)"></simple-tag>
       </div>
     </div>

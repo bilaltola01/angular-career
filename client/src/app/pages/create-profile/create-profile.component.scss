@@ -3,6 +3,24 @@
 $primary-font-color: map-get($md-cfaccent, 500);
 $host-bg-color: #f4f5f8;
 
+$container-mt-desktop: 70px;
+$container-mt-tablet: 50px;
+$container-mt-mobile: 35px;
+
+$container-padding-desktop: 0 60px;
+$container-padding-tablet: 0 40px;
+$container-padding-mobile: 0 25px;
+
+$profile-form-padding-desktop: 60px;
+$profile-form-padding-tablet: 40px;
+$profile-form-padding-mobile: 25px;
+
+$profile-form-max-width-desktop: 880px;
+$profile-form-max-width-tablet: 600px;
+$profile-form-max-width-mobile: 450px;
+
+$profile-form-field-mt: 30px;
+
 :host {
   @include flex(column, center, flex-start);
   min-height: calc(100vh - 70px);
@@ -16,7 +34,6 @@ $host-bg-color: #f4f5f8;
     height: 70px;
     background-color: $white;
     @include flex(row, center, center);
-    display: none;
     .container {
       padding: 0;
       position: relative;
@@ -149,7 +166,7 @@ p {
     grid-column-end: 13;
   }
   &.choose-option {
-    margin-top: 70px;
+    margin-top: $container-mt-desktop;
     position: relative;
     text-align: center;
     .container__full {
@@ -185,36 +202,28 @@ p {
   &.profile-links,
   &.profile-status {
     position: relative;
-    margin-top: 70px;
+    margin-top: $container-mt-desktop;
     action-button.btn-next {
       min-width: 130px;
-      position: absolute;
-      bottom: 20%;
+      position: fixed;
+      bottom: 15%;
       right: 2%;
     }
     action-button.view-profile {
-      margin-top: 30px;
+      margin-top: $profile-form-field-mt;
     }
     .container__full {
       @include flex(row, center, center);
-      .information-form,
-      .about-form,
-      .education-form,
-      .work-form,
-      .skills-form,
-      .project-form,
-      .publication-form,
-      .links-form,
-      .status-form {
+      .profile-form {
         width: 75%;
-        max-width: 880px;
-        padding: 60px;
+        max-width: $profile-form-max-width-desktop;
+        padding: $profile-form-padding-desktop;
         box-sizing: border-box;
         background-color: $white;
         box-shadow: 0 3px 10px rgba($black, .07);
         @include flex(column, center, flex-start);
         &__image {
-          margin-top: 30px;
+          margin-top: $profile-form-field-mt;
           width: 20%;
           max-width: 125px;
           img {
@@ -222,7 +231,7 @@ p {
           }
         }
         &__field {
-          margin-top: 30px;
+          margin-top: $profile-form-field-mt;
           box-sizing: border-box;
           width: 80%;
           max-width: 615px;
@@ -293,7 +302,7 @@ p {
 
 @media only screen and (max-width: $tablet-breakpoint) {
   :host {
-    // padding: 50px 0;
+    padding-bottom: 50px;
   }
   .option-text {
     position: relative;
@@ -305,8 +314,9 @@ p {
     }
   }
   .container {
-    padding: 0 40px;
+    padding: $container-padding-tablet;
     &.choose-option {
+      margin-top: $container-mt-tablet;
       .container__left,
       .container__right {
         grid-column-start: 2;
@@ -322,23 +332,16 @@ p {
     &.profile-publication,
     &.profile-links,
     &.profile-status {
+      margin-top: $container-mt-tablet;
       action-button.btn-next {
         position: unset;
         margin-top: 30px;
       }
       .container__full {
-        .information-form,
-        .about-form,
-        .education-form,
-        .work-form,
-        .skills-form,
-        .project-form,
-        .publication-form,
-        .links-form,
-        .status-form {
+        .profile-form {
           width: 85%;
-          max-width: 600px;
-          padding: 40px;
+          max-width: $profile-form-max-width-tablet;
+          padding: $profile-form-padding-tablet;
           &__image {
             width: 30%;
             max-width: 110px;
@@ -353,8 +356,8 @@ p {
             }
             mat-form-field {
               img {
-                width: 26px;
-                height: 26px;
+                width: 24px;
+                height: 24px;
               }
             }
           }
@@ -366,7 +369,7 @@ p {
 
 @media only screen and (max-width: $mobile-breakpoint) {
   :host {
-    // padding: 35px 0;
+    padding-bottom: 35px;
   }
   h1 {
     font-size: 35px;
@@ -398,8 +401,9 @@ p {
     }
   }
   .container {
-    padding: 0 30px;
+    padding: $container-padding-mobile;
     &.choose-option {
+      margin-top: $container-mt-mobile;
       .container__full,
       .container__left,
       .container__right {
@@ -416,22 +420,15 @@ p {
     &.profile-publication,
     &.profile-links,
     &.profile-status {
+      margin-top: $container-mt-mobile;
       action-button.btn-next {
         margin-top: 20px;
       }
       .container__full {
-        .information-form,
-        .about-form,
-        .education-form,
-        .work-form,
-        .skills-form,
-        .project-form,
-        .publication-form,
-        .links-form,
-        .status-form {
+        .profile-form {
           width: 100%;
-          max-width: 450px;
-          padding: 30px;
+          max-width: $profile-form-max-width-mobile;
+          padding: $profile-form-padding-mobile;
           &__image {
             width: 50%;
             max-width: 95px;
@@ -446,8 +443,8 @@ p {
             }
             mat-form-field {
               img {
-                width: 24px;
-                height: 24px;
+                width: 20px;
+                height: 20px;
               }
             }
           }
