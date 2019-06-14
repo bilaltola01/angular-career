@@ -1,5 +1,5 @@
 
-<div [class]="tagClasseNames[type]" [class.tag-ellipse]="ellipseTag" [class.tag-online]="onlineTag" [class.tag-container]="true">
+<div [class]="tagClasseNames[type]" [class.tag-ellipse]="ellipseTag" [class.tag-online]="onlineTag" [class.tag-container]="true" [class.active]="active">
   <span *ngIf="title">{{title}}</span>
   <mat-icon *ngIf="onlineTag">radio_button_checked</mat-icon>
   <div *ngIf="ellipseTag" class='ellipse-container'>

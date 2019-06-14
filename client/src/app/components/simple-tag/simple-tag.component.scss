@@ -49,9 +49,14 @@ $status-bg-color: #f4f5f8;
         }
         .mat-icon {
             font-size: 25px;
-            color: $tag-green-color;
+            color: rgba($tag-normal-color, .2);
             width: initial;
             height: initial;
+        }
+        &.active {
+            .mat-icon {
+                color: $tag-green-color;
+            }
         }
     }
     &.tag-ellipse {

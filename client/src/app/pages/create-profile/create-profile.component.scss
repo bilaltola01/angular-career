@@ -4,12 +4,43 @@ $primary-font-color: map-get($md-cfaccent, 500);
 $host-bg-color: #f4f5f8;
 
 :host {
-  @include flex(row, center, center);
+  @include flex(column, center, flex-start);
   min-height: calc(100vh - 70px);
-  padding: 70px 0;
+  padding: 0 0 70px 0;
   box-sizing: border-box;
   color: rgba($primary-font-color, .84);
   background-color: $host-bg-color;
+  .profile-completion {
+    position: relative;
+    width: 100%;
+    height: 70px;
+    background-color: $white;
+    @include flex(row, center, center);
+    .container {
+      padding: 0;
+      position: relative;
+      height: 100%;
+      @include flex(row, center, space-around);
+      & > * {
+        width: calc(100% / 9);
+      }
+      .progress-label {
+        font-size: 16px;
+        text-align: center;
+        &.done {
+          color: map-get($md-cdgreen, 500);
+        }
+      }
+    }
+    .progress-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background-color: map-get($md-cfprimary, 500);
+    }
+  }
 }
 
 h1 {
@@ -117,6 +148,7 @@ p {
     grid-column-end: 13;
   }
   &.choose-option {
+    margin-top: 70px;
     position: relative;
     text-align: center;
     .container__full {
@@ -144,6 +176,7 @@ p {
   }
   &.profile-basic {
     position: relative;
+    margin-top: 70px;
     action-button {
       min-width: 130px;
       position: absolute;
@@ -185,6 +218,7 @@ p {
   }
   &.profile-about {
     position: relative;
+    margin-top: 70px;
     action-button {
       min-width: 130px;
       position: absolute;
@@ -222,6 +256,7 @@ p {
   &.profile-links,
   &.profile-status {
     position: relative;
+    margin-top: 70px;
     action-button.btn-next {
       min-width: 130px;
       position: absolute;
@@ -292,6 +327,7 @@ p {
   }
   &.profile-work {
     position: relative;
+    margin-top: 70px;
     action-button.btn-next {
       min-width: 130px;
       position: absolute;
@@ -338,7 +374,7 @@ p {
             h3 {
               color: rgba(map-get($md-cfaccent, 500), 0.84);
             }
-            .limit {
+            .count {
               font-size: 14px;
               font-weight: 400;
             }
@@ -367,6 +403,7 @@ p {
   }
   &.profile-skills {
     position: relative;
+    margin-top: 70px;
     action-button.btn-next {
       min-width: 130px;
       position: absolute;
@@ -397,7 +434,7 @@ p {
             h3 {
               color: rgba(map-get($md-cfaccent, 500), 0.84);
             }
-            .limit {
+            .count {
               font-size: 14px;
               font-weight: 400;
             }
@@ -428,7 +465,7 @@ p {
 
 @media only screen and (max-width: $tablet-breakpoint) {
   :host {
-    padding: 50px 0;
+    // padding: 50px 0;
   }
   .option-text {
     position: relative;
@@ -563,7 +600,7 @@ p {
 
 @media only screen and (max-width: $mobile-breakpoint) {
   :host {
-    padding: 35px 0;
+    // padding: 35px 0;
   }
   h1 {
     font-size: 35px;

@@ -355,9 +355,18 @@ p {
   color: map-get($md-cfaccent, 400);
 }
 
-button {
-  border-radius: 500px !important;
-  padding: 10px 40px !important;
+action-button {
+  & > button {
+    border-radius: 500px !important;
+    padding: 10px 40px !important;
+  }
+  &.link-btn {
+    & > button {
+      border-radius: 0 !important;
+      border: none !important;
+      padding: 0 !important;
+    }
+  }
 }
 
 .container {
