@@ -16,6 +16,7 @@ $host-bg-color: #f4f5f8;
     height: 70px;
     background-color: $white;
     @include flex(row, center, center);
+    display: none;
     .container {
       padding: 0;
       position: relative;
@@ -174,18 +175,37 @@ p {
       }
     }
   }
-  &.profile-basic {
+  &.profile-basic,
+  &.profile-about,
+  &.profile-education,
+  &.profile-work,
+  &.profile-skills,
+  &.profile-project,
+  &.profile-publication,
+  &.profile-links,
+  &.profile-status {
     position: relative;
     margin-top: 70px;
-    action-button {
+    action-button.btn-next {
       min-width: 130px;
       position: absolute;
       bottom: 20%;
       right: 2%;
     }
+    action-button.view-profile {
+      margin-top: 30px;
+    }
     .container__full {
       @include flex(row, center, center);
-      .information-form {
+      .information-form,
+      .about-form,
+      .education-form,
+      .work-form,
+      .skills-form,
+      .project-form,
+      .publication-form,
+      .links-form,
+      .status-form {
         width: 75%;
         max-width: 880px;
         padding: 60px;
@@ -209,94 +229,12 @@ p {
           border: solid 1px $mat-form-border-color;
           border-radius: 5px;
           padding: 0 10px;
-          mat-form-field {
-            width: 100%;
-          }
-        }
-      }
-    }
-  }
-  &.profile-about {
-    position: relative;
-    margin-top: 70px;
-    action-button {
-      min-width: 130px;
-      position: absolute;
-      bottom: 20%;
-      right: 2%;
-    }
-    .container__full {
-      @include flex(row, center, center);
-      .about-form {
-        width: 75%;
-        max-width: 880px;
-        padding: 60px;
-        box-sizing: border-box;
-        background-color: $white;
-        box-shadow: 0 3px 10px rgba($black, .07);
-        @include flex(column, center, flex-start);
-        &__field {
-          margin-top: 30px;
-          box-sizing: border-box;
-          width: 80%;
-          max-width: 615px;
-          border: solid 1px $mat-form-border-color;
-          border-radius: 5px;
-          padding: 10px 10px 5px 10px;
-          mat-form-field {
-            width: 100%;
-          }
-        }
-      }
-    }
-  }
-  &.profile-education,
-  &.profile-project,
-  &.profile-publication,
-  &.profile-links,
-  &.profile-status {
-    position: relative;
-    margin-top: 70px;
-    action-button.btn-next {
-      min-width: 130px;
-      position: absolute;
-      bottom: 20%;
-      right: 2%;
-    }
-    action-button.view-profile {
-      margin-top: 30px;
-    }
-    .container__full {
-      @include flex(row, center, center);
-      .education-form,
-      .project-form,
-      .publication-form,
-      .links-form,
-      .status-form {
-        width: 75%;
-        max-width: 880px;
-        padding: 60px;
-        box-sizing: border-box;
-        background-color: $white;
-        box-shadow: 0 3px 10px rgba($black, .07);
-        @include flex(column, center, flex-start);
-        &__field {
-          margin-top: 30px;
-          box-sizing: border-box;
-          width: 80%;
-          max-width: 615px;
-          border: solid 1px $mat-form-border-color;
-          border-radius: 5px;
-          padding: 0 10px;
           &.textarea {
             padding: 10px 20px 5px 20px;
           }
           &.border {
             margin-top: 60px;
             padding: 0;
-          }
-          action-button {
-            max-width: 150px;
           }
           &.btn {
             margin-top: 60px;
@@ -305,6 +243,29 @@ p {
             @include flex(row, center, flex-start);
             action-button {
               max-width: 150px;
+            }
+          }
+          &.search {
+            border: none;
+            padding: 0;
+            h3 {
+              color: rgba(map-get($md-cfaccent, 500), 0.84);
+            }
+            .count {
+              font-size: 14px;
+              font-weight: 400;
+            }
+            mat-form-field {
+              margin-top: 10px;
+              background-color: $host-bg-color;
+              border-radius: 25px;
+            }
+            .skills {
+              margin-top: 10px;
+              @include flex(row, flex-start, flex-start);
+              simple-tag {
+                margin: 5px;
+              }
             }
           }
           &.simple-tag {
@@ -314,148 +275,15 @@ p {
               margin: 10px 0;
             }
           }
+          action-button {
+            max-width: 150px;
+          }
           mat-form-field {
             width: 100%;
             img {
               width: 30px;
               height: 30px;
             }
-          }
-        }
-      }
-    }
-  }
-  &.profile-work {
-    position: relative;
-    margin-top: 70px;
-    action-button.btn-next {
-      min-width: 130px;
-      position: absolute;
-      bottom: 20%;
-      right: 2%;
-    }
-    .container__full {
-      @include flex(row, center, center);
-      .work-form {
-        width: 75%;
-        max-width: 880px;
-        padding: 60px;
-        box-sizing: border-box;
-        background-color: $white;
-        box-shadow: 0 3px 10px rgba($black, .07);
-        @include flex(column, center, flex-start);
-        &__field {
-          margin-top: 30px;
-          box-sizing: border-box;
-          width: 80%;
-          max-width: 615px;
-          border: solid 1px $mat-form-border-color;
-          border-radius: 5px;
-          padding: 0 10px;
-          &.textarea {
-            padding: 10px 20px 5px 20px;
-          }
-          &.border {
-            margin-top: 60px;
-            padding: 0;
-          }
-          &.btn {
-            margin-top: 60px;
-            border: none;
-            padding: 0;
-            @include flex(row, center, flex-start);
-            action-button {
-              max-width: 150px;
-            }
-          }
-          &.search {
-            border: none;
-            padding: 0;
-            h3 {
-              color: rgba(map-get($md-cfaccent, 500), 0.84);
-            }
-            .count {
-              font-size: 14px;
-              font-weight: 400;
-            }
-            mat-form-field {
-              margin-top: 10px;
-              background-color: $host-bg-color;
-              border-radius: 25px;
-            }
-            .skills {
-              margin-top: 10px;
-              @include flex(row, flex-start, flex-start);
-              simple-tag {
-                margin: 5px;
-              }
-            }
-          }
-          action-button {
-            max-width: 150px;
-          }
-          mat-form-field {
-            width: 100%;
-          }
-        }
-      }
-    }
-  }
-  &.profile-skills {
-    position: relative;
-    margin-top: 70px;
-    action-button.btn-next {
-      min-width: 130px;
-      position: absolute;
-      bottom: 20%;
-      right: 2%;
-    }
-    .container__full {
-      @include flex(row, center, center);
-      .skills-form {
-        width: 75%;
-        max-width: 880px;
-        padding: 60px;
-        box-sizing: border-box;
-        background-color: $white;
-        box-shadow: 0 3px 10px rgba($black, .07);
-        @include flex(column, center, flex-start);
-        &__field {
-          margin-top: 30px;
-          box-sizing: border-box;
-          width: 80%;
-          max-width: 615px;
-          border: solid 1px $mat-form-border-color;
-          border-radius: 5px;
-          padding: 0 10px;
-          &.search {
-            border: none;
-            padding: 0;
-            h3 {
-              color: rgba(map-get($md-cfaccent, 500), 0.84);
-            }
-            .count {
-              font-size: 14px;
-              font-weight: 400;
-            }
-            mat-form-field {
-              margin-top: 10px;
-              background-color: $host-bg-color;
-              border-radius: 25px;
-            }
-            .skills {
-              margin-top: 10px;
-              @include flex(row, flex-start, flex-start);
-              simple-tag {
-                margin: 5px;
-              }
-            }
-          }
-          action-button {
-            max-width: 150px;
-          }
-          mat-form-field {
-            width: 100%;
           }
         }
       }
@@ -485,43 +313,11 @@ p {
         grid-column-end: 12;
       }
     }
-    &.profile-basic {
-      action-button {
-        position: unset;
-        margin-top: 30px;
-      }
-      .container__full {
-        .information-form {
-          width: 85%;
-          max-width: 600px;
-          padding: 40px;
-          &__image {
-            width: 30%;
-            max-width: 110px;
-          }
-          &__field {
-            width: 90%;
-          }
-        }
-      }
-    }
-    &.profile-about {
-      action-button {
-        position: unset;
-        margin-top: 30px;
-      }
-      .container__full {
-        .about-form {
-          width: 85%;
-          max-width: 600px;
-          padding: 40px;
-          &__field {
-            width: 90%;
-          }
-        }
-      }
-    }
+    &.profile-basic,
+    &.profile-about,
     &.profile-education,
+    &.profile-work,
+    &.profile-skills,
     &.profile-project,
     &.profile-publication,
     &.profile-links,
@@ -531,7 +327,11 @@ p {
         margin-top: 30px;
       }
       .container__full {
+        .information-form,
+        .about-form,
         .education-form,
+        .work-form,
+        .skills-form,
         .project-form,
         .publication-form,
         .links-form,
@@ -539,6 +339,10 @@ p {
           width: 85%;
           max-width: 600px;
           padding: 40px;
+          &__image {
+            width: 30%;
+            max-width: 110px;
+          }
           &__field {
             width: 90%;
             &.border {
@@ -553,44 +357,6 @@ p {
                 height: 26px;
               }
             }
-          }
-        }
-      }
-    }
-    &.profile-work {
-      action-button.btn-next {
-        position: unset;
-        margin-top: 30px;
-      }
-      .container__full {
-        .work-form {
-          width: 85%;
-          max-width: 600px;
-          padding: 40px;
-          &__field {
-            width: 90%;
-            &.border {
-              margin-top: 40px;
-            }
-            &.btn {
-              margin-top: 40px;
-            }
-          }
-        }
-      }
-    }
-    &.profile-skills {
-      action-button.btn-next {
-        position: unset;
-        margin-top: 30px;
-      }
-      .container__full {
-        .skills-form {
-          width: 85%;
-          max-width: 600px;
-          padding: 40px;
-          &__field {
-            width: 90%;
           }
         }
       }
@@ -641,41 +407,11 @@ p {
         grid-column-end: 13;
       }
     }
-    &.profile-basic {
-      action-button {
-        margin-top: 20px;
-      }
-      .container__full {
-        .information-form {
-          width: 100%;
-          max-width: 450px;
-          padding: 30px;
-          &__image {
-            width: 50%;
-            max-width: 95px;
-          }
-          &__field {
-            width: 95%;
-          }
-        }
-      }
-    }
-    &.profile-about {
-      action-button {
-        margin-top: 20px;
-      }
-      .container__full {
-        .about-form {
-          width: 100%;
-          max-width: 450px;
-          padding: 30px;
-          &__field {
-            width: 95%;
-          }
-        }
-      }
-    }
+    &.profile-basic,
+    &.profile-about,
     &.profile-education,
+    &.profile-work,
+    &.profile-skills,
     &.profile-project,
     &.profile-publication,
     &.profile-links,
@@ -684,7 +420,11 @@ p {
         margin-top: 20px;
       }
       .container__full {
+        .information-form,
+        .about-form,
         .education-form,
+        .work-form,
+        .skills-form,
         .project-form,
         .publication-form,
         .links-form,
@@ -692,6 +432,10 @@ p {
           width: 100%;
           max-width: 450px;
           padding: 30px;
+          &__image {
+            width: 50%;
+            max-width: 95px;
+          }
           &__field {
             width: 95%;
             &.border {
@@ -706,42 +450,6 @@ p {
                 height: 24px;
               }
             }
-          }
-        }
-      }
-    }
-    &.profile-work {
-      action-button.btn-next {
-        margin-top: 20px;
-      }
-      .container__full {
-        .work-form {
-          width: 100%;
-          max-width: 450px;
-          padding: 30px;
-          &__field {
-            width: 95%;
-            &.border {
-              margin-top: 30px;
-            }
-            &.btn {
-              margin-top: 30px;
-            }
-          }
-        }
-      }
-    }
-    &.profile-skills {
-      action-button.btn-next {
-        margin-top: 20px;
-      }
-      .container__full {
-        .skills-form {
-          width: 100%;
-          max-width: 450px;
-          padding: 30px;
-          &__field {
-            width: 95%;
           }
         }
       }
