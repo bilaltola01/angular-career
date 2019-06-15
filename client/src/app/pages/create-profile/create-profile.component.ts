@@ -1,4 +1,32 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { FormGroup, FormControl, FormArray} from '@angular/forms';
+import { AutoCompleteService } from 'src/app/services/auto-complete.service';
+
+export interface City {
+  city: string;
+  city_id: number;
+}
+
+export interface School {
+  school_name: string;
+  school_id: number;
+}
+
+export interface Major {
+  major_id: number;
+  major_name: string;
+}
+
+export interface Skill {
+  skill_id: number;
+  skill: string;
+}
+
+export interface Interest {
+  interest_id: number;
+  interest: string;
+}
 
 @Component({
   selector: 'app-create-profile',
@@ -76,136 +104,33 @@ export class CreateProfileComponent implements OnInit {
     }
   ];
 
-  basic_information = {
-    location: 'Los Angeles, California, USA',
-    birthOfDay: 'August 27, 1995',
-    gender: 'Male',
-    ethnicity: 'American'
-  };
-
-  about_me = 'Explain Brief About Yourself.';
-
-  educations = [
-    {
-      university: 'Brown University',
-      degree: 'Master’s of Science',
-      course: 'Computer Science',
-      completion: '2012 - 2015',
-      description: ''
-    }
+  genders = [
+    'Male',
+    'Female'
   ];
 
-  work_experiences = [
-    {
-      company_name: 'Renew Information Technology',
-      years: 'May 2017 - Present',
-      designation: 'Software Engineer',
-      description: '',
-      skills_trained: [
-        'Software Engineering',
-        'Programing',
-        'Machine Learning',
-        'Medicare',
-        'Node JS',
-        'Python',
-        'HTML5',
-        'Adobe Photoshop'
-      ],
-      additional_exposure: [
-        'Software Engineering',
-        'Programing',
-        'Machine Learning',
-        'Medicare',
-        'Node JS',
-        'Python',
-        'HTML5',
-        'Adobe Photoshop'
-      ]
-    }
-  ];
+  skills_trained: string[][];
+  additional_exposure: string[][];
+  skills: object[];
+  interests: string[];
 
-  skill_trained = [
-    ''
-  ];
-  additional_exposure = [
-    ''
-  ];
+  // FormGroups
+  basicInfoForm: FormGroup;
+  educationFormArray: FormArray;
+  aboutMeForm: FormGroup;
+  workExperienceFormArray: FormArray;
+  skillsAndInterestsForm: FormGroup;
+  projectsFormArray: FormArray;
+  publicationsFormArray: FormArray;
+  externalLinksForm: FormGroup;
 
-  skills = [
-    {
-      title: 'Motion Design',
-      proficieny: 4
-    },
-    {
-      title: 'Indesign',
-      proficieny: 3
-    },
-    {
-      title: 'Data Science',
-      proficieny: 4
-    },
-    {
-      title: 'Adobe XD',
-      proficieny: 4
-    },
-    {
-      title: 'Adobe Photoshop',
-      proficieny: 5
-    },
-    {
-      title: 'Adobe Indesign',
-      proficieny: 5
-    },
-    {
-      title: 'Node JS',
-      proficieny: 1
-    },
-    {
-      title: 'Adobe After Effects',
-      proficieny: 1
-    }
-  ];
-
-  skill = {
-    title: '',
-    proficieny: 4
-  };
-
-  interests = [
-    'Software Engineering',
-    'Programing',
-    'Machine Learning',
-    'Medicare',
-    'Node JS',
-    'Python',
-    'HTML5',
-    'Adobe Photoshop'
-  ];
-
-  interest = '';
-
-  projects = [
-    {
-      project_name: 'Stem Kids New York City',
-      years: '2012 - 2015',
-      description: ''
-    }
-  ];
-
-  publications = [
-    {
-      publication_name: 'Stem Kids New York City',
-      years: '2012 - 2015',
-      description: ''
-    }
-  ];
-
-  external_links = {
-    twitter: 'twitter.com/markzucker1965',
-    facebook: 'facebook.com/markzucker1965',
-    google: 'google.com/markzucker1965',
-    linkedin: ''
-  };
+  // autocomplete lists
+  autocomplete_locations: City[] = [];
+  autocomplete_genders: string[] = [];
+  autocomplete_universities = [];
+  autocomplete_skills: Skill[] = [];
+  autocomplete_interests: Interest[] = [];
+  autocomplete_majors: Major[] = [];
 
   statuses = [
     'Actively Looking For Job',
@@ -214,11 +139,19 @@ export class CreateProfileComponent implements OnInit {
 
   profile_status = this.statuses[0];
 
-  selectedPageIndex = 0;
+  selectedPageIndex = 8;
 
-  constructor() { }
+  constructor(private router: Router, private autoCompleteService: AutoCompleteService) { }
 
   ngOnInit() {
+    this.initBasicInfoForm();
+    this.initEducationFormArray();
+    this.initAboutMeForm();
+    this.initWorkExperienceFormArray();
+    this.initSkillsAndInterestsForm();
+    this.initProjectsFormArray();
+    this.initPublicationsFormArray();
+    this.initExternalLinksForm();
   }
 
   goToCreatProfilePage() {
@@ -239,81 +172,6 @@ export class CreateProfileComponent implements OnInit {
     }
   }
 
-  addEducation() {
-    const education = {
-      university: '',
-      degree: '',
-      course: '',
-      completion: '',
-      description: ''
-    };
-
-    this.educations.push(education);
-  }
-
-  addWorkExperience() {
-    const work_experience = {
-      company_name: 'Renew Information Technology',
-      years: 'May 2017 - Present',
-      designation: 'Software Engineer',
-      description: '',
-      skills_trained: [],
-      additional_exposure: []
-    };
-    this.work_experiences.push(work_experience);
-    this.skill_trained.push('');
-    this.additional_exposure.push('');
-  }
-
-  addSkillsTrained(index: number) {
-    if (this.skill_trained[index]) {
-      this.work_experiences[index].skills_trained.push(this.skill_trained[index]);
-      this.skill_trained[index] = '';
-    }
-  }
-
-  addAdditionalExposure(index: number) {
-    if (this.additional_exposure[index]) {
-      this.work_experiences[index].additional_exposure.push(this.additional_exposure[index]);
-      this.additional_exposure[index] = '';
-    }
-  }
-
-  addSkills() {
-    if (this.skill.title) {
-      this.skills.push(this.skill);
-      this.skill = {
-        title: '',
-        proficieny: 4
-      };
-    }
-  }
-
-  addInterests() {
-    if (this.interest) {
-      this.interests.push(this.interest);
-      this.interest = '';
-    }
-  }
-
-  addProjects() {
-    const project = {
-      project_name: '',
-      years: '',
-      description: ''
-    };
-    this.projects.push(project);
-  }
-
-  addPublications() {
-    const publication = {
-      publication_name: '',
-      years: '',
-      description: ''
-    };
-    this.publications.push(publication);
-  }
-
   setProfileStatus(index: number) {
     this.profile_status = this.statuses[index];
   }
@@ -321,22 +179,332 @@ export class CreateProfileComponent implements OnInit {
   blurSkillSearchField(type: string, index: number) {
     switch (type) {
       case 'skill_trained':
-        this.skill_trained[index] = '';
+        this.workExperienceFormArray.controls[index]['controls']['skills_trained'].setValue('');
+        this.autocomplete_skills = [];
         break;
       case 'additional_exposure':
-        this.additional_exposure[index] = '';
+        this.workExperienceFormArray.controls[index]['controls']['additional_exposure'].setValue('');
+        this.autocomplete_skills = [];
         break;
-      case 'skill':
-        this.skill = {
-          title: '',
-          proficieny: 4
-        };
+      case 'skills':
+        this.skillsAndInterestsForm.controls.skills.setValue('');
+        this.autocomplete_skills = [];
         break;
-      case 'interest':
-        this.interest = '';
+      case 'interests':
+        this.skillsAndInterestsForm.controls.interests.setValue('');
+        this.autocomplete_interests = [];
         break;
       default:
         break;
     }
   }
+
+  // Basic Information Form
+
+  initBasicInfoForm() {
+
+    this.autocomplete_locations = [];
+    this.autocomplete_genders = [];
+
+    this.basicInfoForm = new FormGroup({
+      basicInfoLocation: new FormControl(''),
+      basicInfoBirth: new FormControl(''),
+      basicInfoGender: new FormControl(''),
+      basicInfoEthnicity: new FormControl('')
+    });
+
+    this.basicInfoForm.controls.basicInfoLocation.valueChanges.subscribe((location) => {
+      this.onLoactionValueChanges(location);
+    });
+
+    this.basicInfoForm.controls.basicInfoGender.valueChanges.subscribe(
+      (gender) => {
+        this.onGenderValueChanges(gender);
+      }
+    );
+  }
+
+  // About Me Form
+
+  initAboutMeForm() {
+    this.aboutMeForm = new FormGroup({
+      aboutMe: new FormControl('')
+    });
+  }
+
+  // Education Form
+
+  initEducationFormArray() {
+    this.educationFormArray = new FormArray([]);
+    this.addEducationFormGroup();
+  }
+
+  addEducationFormGroup() {
+    this.autocomplete_universities = [];
+    this.autocomplete_majors = [];
+
+    const educationForm = new FormGroup({
+      university: new FormControl(''),
+      degree: new FormControl(''),
+      course: new FormControl(''),
+      completion: new FormControl(''),
+      description: new FormControl('')
+    });
+
+    educationForm.controls.university.valueChanges.subscribe(
+      (university) => {
+        this.onUniversityValueChanges(university);
+      }
+    );
+
+    educationForm.controls.course.valueChanges.subscribe(
+      (major) => {
+        this.onMajorValueChanges(major);
+      }
+    );
+
+    this.educationFormArray.push(educationForm);
+  }
+
+  // Work Experience Form
+
+  initWorkExperienceFormArray() {
+    this.workExperienceFormArray = new FormArray([]);
+    this.skills_trained = [];
+    this.additional_exposure = [];
+    this.addWorkExperienceForm();
+  }
+
+  addWorkExperienceForm() {
+    this.autocomplete_skills = [];
+    this.skills_trained.push([]);
+    this.additional_exposure.push([]);
+
+    const workExperienceForm = new FormGroup({
+      company_name: new FormControl(''),
+      years: new FormControl(''),
+      designation: new FormControl(''),
+      description: new FormControl(''),
+      skills_trained: new FormControl(''),
+      additional_exposure: new FormControl('')
+    });
+
+    workExperienceForm.controls.skills_trained.valueChanges.subscribe(
+      (skill) => {
+        this.onSkillValueChanges(skill);
+      }
+    );
+
+    workExperienceForm.controls.additional_exposure.valueChanges.subscribe(
+      (skill) => {
+        this.onSkillValueChanges(skill);
+      }
+    );
+
+    this.workExperienceFormArray.push(workExperienceForm);
+  }
+
+  addSkillsTrained(index: number, skill: string) {
+    if (skill) {
+      if (!this.skills_trained[index].includes(skill)) {
+        this.skills_trained[index].push(skill);
+      }
+      this.workExperienceFormArray.controls[index]['controls']['skills_trained'].setValue('');
+      this.autocomplete_skills = [];
+    }
+  }
+
+  addAdditionalExposure(index: number, skill: string) {
+    if (skill) {
+      if (!this.additional_exposure[index].includes(skill)) {
+        this.additional_exposure[index].push(skill);
+      }
+      this.workExperienceFormArray.controls[index]['controls']['additional_exposure'].setValue('');
+      this.autocomplete_skills = [];
+    }
+  }
+
+  // Skills And Interests Form
+
+  initSkillsAndInterestsForm() {
+    this.autocomplete_skills = [];
+    this.autocomplete_interests = [];
+    this.skills = [];
+    this.interests = [];
+
+    this.skillsAndInterestsForm = new FormGroup({
+      skills: new FormControl(''),
+      interests: new FormControl('')
+    });
+
+    this.skillsAndInterestsForm.controls.skills.valueChanges.subscribe(
+      (skill) => {
+        this.onSkillValueChanges(skill);
+      }
+    );
+
+    this.skillsAndInterestsForm.controls.interests.valueChanges.subscribe(
+      (skill) => {
+        this.onInterestValueChanges(skill);
+      }
+    );
+  }
+
+  addSkills(skill: string) {
+    if (skill) {
+      const data = {
+        skill: skill,
+        proficieny: 4
+      };
+
+      this.skills.filter(value => value['skill'] === skill);
+
+      if (this.skills.filter(value => value['skill'] === skill).length < 1) {
+        this.skills.push(data);
+      }
+
+      this.skillsAndInterestsForm.controls.skills.setValue('');
+      this.autocomplete_skills = [];
+    }
+  }
+
+  addInterests(interest: string) {
+    if (interest) {
+      if (!this.interests.includes(interest)) {
+        this.interests.push(interest);
+      }
+      this.skillsAndInterestsForm.controls.interests.setValue('');
+      this.autocomplete_interests = [];
+    }
+  }
+
+
+  // Projects Form
+
+  initProjectsFormArray() {
+    this.projectsFormArray = new FormArray([]);
+    this.addProjectsForm();
+  }
+
+  addProjectsForm() {
+    const projectsForm = new FormGroup({
+      project_name: new FormControl(''),
+      years: new FormControl(''),
+      description: new FormControl('')
+    });
+
+    this.projectsFormArray.push(projectsForm);
+  }
+
+  // Publications Form
+
+  initPublicationsFormArray() {
+    this.publicationsFormArray = new FormArray([]);
+    this.addPublicationsForm();
+  }
+
+  addPublicationsForm() {
+    const publicationsForm = new FormGroup({
+      publication_name: new FormControl(''),
+      years: new FormControl(''),
+      description: new FormControl('')
+    });
+
+    this.publicationsFormArray.push(publicationsForm);
+  }
+
+  // External Links Form
+
+  initExternalLinksForm() {
+    this.externalLinksForm = new FormGroup({
+      twitter_link: new FormControl(''),
+      facebook_link: new FormControl(''),
+      google_link: new FormControl(''),
+      linkedin_link: new FormControl('')
+    });
+  }
+
+  // Get AutoComplete lists
+
+  onLoactionValueChanges(location: string) {
+    this.autoCompleteService.autoComplete(location, 'cities').subscribe(
+      dataJson => {
+        if (dataJson['success']) {
+          this.autocomplete_locations = dataJson['data'];
+        } else {
+          this.autocomplete_locations = [];
+        }
+      },
+      error => {
+        console.log(error);
+        this.autocomplete_locations = [];
+      }
+    );
+  }
+
+  onGenderValueChanges(gender: string) {
+    const filterValue = gender.toLowerCase();
+    this.autocomplete_genders =  this.genders.filter(value => value.toLowerCase().indexOf(filterValue) === 0);
+  }
+
+  onUniversityValueChanges(school: string) {
+    this.autoCompleteService.autoComplete(school, 'schools').subscribe(
+      dataJson => {
+        if (dataJson['success']) {
+          this.autocomplete_universities = dataJson['data'];
+        }
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
+  onMajorValueChanges(major: string) {
+    this.autoCompleteService.autoComplete(major, 'majors').subscribe(
+      dataJson => {
+        if (dataJson['success']) {
+          this.autocomplete_majors = dataJson['data'];
+        }
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
+  onSkillValueChanges(skill: string) {
+    if (skill) {
+      this.autoCompleteService.autoComplete(skill, 'skills').subscribe(
+        dataJson => {
+          if (dataJson['success']) {
+            this.autocomplete_skills = dataJson['data'];
+          }
+        },
+        error => {
+          console.log(error);
+        }
+      );
+    } else {
+      this.autocomplete_skills = [];
+    }
+  }
+
+  onInterestValueChanges(interest: string) {
+    if (interest) {
+      this.autoCompleteService.autoComplete(interest, 'interests').subscribe(
+        dataJson => {
+          if (dataJson['success']) {
+            this.autocomplete_interests = dataJson['data'];
+          }
+        },
+        error => {
+          console.log(error);
+        }
+      );
+    } else {
+      this.autocomplete_interests = [];
+    }
+  }
+
 }

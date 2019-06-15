@@ -8,6 +8,7 @@ export const environment = {
   serverUrl: settings['URLS']['LOCAL_DOCKER']['GATEWAY'],
   auth_service: 'auth-service',
   user_service: 'user-service',
+  autocomplete_service: 'autocomplete-service',
   api_version: 'v1'
 };
 

@@ -14,6 +14,7 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 
 Run `ng generate component pages/page-name --dryRun=true` to dry run generation of a component page.
 Run `ng g c components/component-name` to generate a new component.
+Run `ng g s services/service-name` to generate a new service.
 
 You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
