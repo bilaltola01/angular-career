@@ -278,7 +278,7 @@ export class CreateProfileComponent implements OnInit {
 
   updateGeneralInfoRequest() {
     this.generalInfoRequest = {
-      photo: this.generalInfoResponse.photo,
+      photo: this.generalInfoResponse.photo ? this.generalInfoResponse.photo : null,
       first_name: this.generalInfoResponse.first_name,
       last_name: this.generalInfoResponse.last_name,
       birthdate: this.generalInfoResponse.birthdate,
@@ -592,7 +592,7 @@ export class CreateProfileComponent implements OnInit {
   updateGeneralInfo() {
     this.generalInfoRequest.gender = this.basicInfoForm.controls.basicInfoGender.value;
 
-    this.userService.updateGeneralInfo({userInfo: this.generalInfoRequest}).subscribe(
+    this.userService.updateGeneralInfo(this.generalInfoRequest).subscribe(
       dataJson => {
         this.generalInfoResponse = dataJson['data'];
         this.updateBasicInformationForm();
