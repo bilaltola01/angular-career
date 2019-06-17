@@ -12,14 +12,7 @@ export class StyleGuideComponent implements OnInit {
   constructor(private userService: UserService,
     private alertsService: AlertsService) { }
 
-  ngOnInit() {
-    this.userService.loadUsers('offset=0&limit=20&name=Royce').subscribe(
-      dataJson => {
-        console.log('TCL: StyleGuideComponent -> ngOnInit -> dataJson', dataJson);
-      },
-      error => console.log(error)
-    );
-  }
+  ngOnInit() { }
 
   openSnackBarError() {
     this.alertsService.show('This is error', AlertType.error);

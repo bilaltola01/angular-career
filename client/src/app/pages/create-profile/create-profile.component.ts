@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, FormArray} from '@angular/forms';
 import { AutoCompleteService } from 'src/app/services/auto-complete.service';
+import { UserService } from 'src/app/services/user.service';
 
 export interface City {
   city: string;
@@ -26,6 +27,43 @@ export interface Skill {
 export interface Interest {
   interest_id: number;
   interest: string;
+}
+
+export interface GeneralInfoResponse {
+  user_id: number;
+  email: string;
+  photo: string;
+  first_name: string;
+  last_name: string;
+  birthdate: string;
+  gender: string;
+  phone_num: string;
+  recruiter: number;
+  applicant: number;
+  city_id: number;
+  country_id: number;
+  state_id: number;
+  site_admin: number;
+  date_created: Date;
+  verified: number;
+  identity_valid: number;
+  title: string;
+}
+
+export interface GeneralInfoRequest {
+  photo: string;
+  first_name: string;
+  last_name: string;
+  birthdate: string;
+  gender: string;
+  phone_num: string;
+  recruiter: number;
+  applicant: number;
+  city_id: number;
+  country_id: number;
+  state_id: number;
+  is_looking: number;
+  title: string;
 }
 
 @Component({
@@ -139,9 +177,12 @@ export class CreateProfileComponent implements OnInit {
 
   profile_status = this.statuses[0];
 
-  selectedPageIndex = 8;
+  selectedPageIndex = 1;
 
-  constructor(private router: Router, private autoCompleteService: AutoCompleteService) { }
+  generalInfoResponse: GeneralInfoResponse;
+  generalInfoRequest: GeneralInfoRequest;
+
+  constructor(private router: Router, private autoCompleteService: AutoCompleteService, private userService: UserService) { }
 
   ngOnInit() {
     this.initBasicInfoForm();
@@ -152,6 +193,9 @@ export class CreateProfileComponent implements OnInit {
     this.initProjectsFormArray();
     this.initPublicationsFormArray();
     this.initExternalLinksForm();
+    this.generalInfoResponse = null;
+    this.generalInfoRequest = null;
+    this.getGeneralInfo();
   }
 
   goToCreatProfilePage() {
@@ -159,6 +203,9 @@ export class CreateProfileComponent implements OnInit {
   }
 
   goToNextPage() {
+    if (this.selectedPageIndex === 1) {
+      this.updateGeneralInfo();
+    }
     if (this.selectedPageIndex < this.profileCreationPages.length - 1) {
       this.selectedPageIndex++;
     } else {
@@ -222,6 +269,29 @@ export class CreateProfileComponent implements OnInit {
         this.onGenderValueChanges(gender);
       }
     );
+  }
+
+  updateBasicInformationForm() {
+    this.updateGeneralInfoRequest();
+    this.basicInfoForm.controls.basicInfoGender.setValue(this.generalInfoResponse.gender);
+  }
+
+  updateGeneralInfoRequest() {
+    this.generalInfoRequest = {
+      photo: this.generalInfoResponse.photo,
+      first_name: this.generalInfoResponse.first_name,
+      last_name: this.generalInfoResponse.last_name,
+      birthdate: this.generalInfoResponse.birthdate,
+      gender: this.generalInfoResponse.gender,
+      phone_num: this.generalInfoResponse.phone_num,
+      recruiter: this.generalInfoResponse.recruiter,
+      applicant: this.generalInfoResponse.applicant,
+      city_id: this.generalInfoResponse.city_id,
+      country_id: this.generalInfoResponse.country_id,
+      state_id: this.generalInfoResponse.state_id,
+      is_looking: 0,
+      title: this.generalInfoResponse.title
+    };
   }
 
   // About Me Form
@@ -505,6 +575,30 @@ export class CreateProfileComponent implements OnInit {
     } else {
       this.autocomplete_interests = [];
     }
+  }
+
+  //
+
+  getGeneralInfo() {
+    this.userService.getGeneralInfo().subscribe(
+      dataJson => {
+        this.generalInfoResponse = dataJson['data'];
+        this.updateBasicInformationForm();
+      },
+      error => console.log(error)
+    );
+  }
+
+  updateGeneralInfo() {
+    this.generalInfoRequest.gender = this.basicInfoForm.controls.basicInfoGender.value;
+
+    this.userService.updateGeneralInfo({userInfo: this.generalInfoRequest}).subscribe(
+      dataJson => {
+        this.generalInfoResponse = dataJson['data'];
+        this.updateBasicInformationForm();
+      },
+      error => console.log(error)
+    );
   }
 
 }
