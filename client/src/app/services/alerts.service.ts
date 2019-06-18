@@ -5,10 +5,6 @@ import { Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class AlertsService {
-
-
-  durationInSeconds = 5;
-
   private snackbarSubject = new Subject<any>();
   public snackbarState = this.snackbarSubject.asObservable();
 
