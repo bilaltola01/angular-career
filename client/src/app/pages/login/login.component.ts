@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { FormControl, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AlertsService } from 'src/app/services/alerts.service';
 
 @Component({
   selector: 'app-login',
@@ -21,14 +23,16 @@ export class LoginComponent implements OnInit {
 
   isRememberMe = false;
 
-  constructor(private router: Router, private userService: UserService) { }
+  constructor(private router: Router,
+              private userService: UserService,
+              private alertsService: AlertsService) { }
 
   ngOnInit() {
     this.currentRole = 0;
     this.emailAddress = new FormControl('');
-    this.emailAddress.setValidators([Validators.required, Validators.email]);
+    this.emailAddress.setValidators([Validators.required, Validators.email, , Validators.maxLength(50)]);
     this.password = new FormControl('');
-    this.password.setValidators([Validators.required]);
+    this.password.setValidators([Validators.required, Validators.minLength(6)]);
   }
 
   switchRole(role: string) {
@@ -60,6 +64,7 @@ export class LoginComponent implements OnInit {
         },
         error => {
           console.log(error);
+          this.alertsService.show(error.message, 'error');
         }
       );
     }
@@ -68,5 +73,4 @@ export class LoginComponent implements OnInit {
   toggleRemember(isRememberMe: boolean) {
     this.isRememberMe = isRememberMe;
   }
-
 }

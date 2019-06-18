@@ -22,6 +22,7 @@
         <mat-icon matPrefix>mail_outline</mat-icon>
         <input matInput placeholder="Email Address" type="email" [formControl]="emailAddress">
         <mat-icon matSuffix *ngIf="emailAddress.valid">done</mat-icon>
+        <mat-icon matSuffix class="error-field" *ngIf="!emailAddress.valid && emailAddress.touched">close</mat-icon>
       </mat-form-field>
     </div>
     <div class="row__form last">
@@ -29,6 +30,7 @@
         <mat-label>Password</mat-label>
         <mat-icon matPrefix>lock_outline</mat-icon>
         <input matInput placeholder="Password" type="password" [formControl]="password">
+        <mat-icon matSuffix class="error-field" *ngIf="!password.valid && password.touched">close</mat-icon>
       </mat-form-field>
     </div>
     <div class="row__checkbox">

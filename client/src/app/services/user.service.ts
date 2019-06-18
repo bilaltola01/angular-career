@@ -100,7 +100,7 @@ export class UserService {
     if (error.error instanceof ErrorEvent) {
       errorMessage = error.message;
     } else {
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.error.message}`;
+      errorMessage = `Error Code: ${error.status}. Message: ${error.error.message}`;
     }
     return throwError({success: false, message: errorMessage});
   }

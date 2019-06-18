@@ -214,6 +214,9 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
         .medium {
           color: map-get($md-cfyellow, 500);
         }
+        .error-field {
+          color: map-get($md-cfyellow, 500);
+        }
       }
     }
 

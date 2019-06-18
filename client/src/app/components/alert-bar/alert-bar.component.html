@@ -1,0 +1,13 @@
+<div *ngIf="show"
+     @state
+     [ngClass]="['snackbar-wrap',type]">
+
+  <mat-icon [ngClass]="[type]">check</mat-icon>
+
+  <p [ngClass]="['snackbar-text',type]">
+    {{message}}
+  </p>
+
+  <mat-icon (click)="close()" class="close">close</mat-icon>
+
+</div>

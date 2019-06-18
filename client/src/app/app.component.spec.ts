@@ -4,6 +4,7 @@ import { MaterialModule } from './modules/material.module';
 import { AppComponent } from './app.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { ActionButtonComponent } from './components/action-button/action-button.component';
+import { AlertBarComponent } from './components/alert-bar/alert-bar.component';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -15,7 +16,8 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent,
         ToolbarComponent,
-        ActionButtonComponent
+        ActionButtonComponent,
+        AlertBarComponent
       ],
     }).compileComponents();
   }));

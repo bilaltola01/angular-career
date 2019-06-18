@@ -16,6 +16,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { RegistrationComponent } from './pages/registration/registration.component';
 import { VerificationComponent } from './pages/verification/verification.component';
 import { RoundCheckboxComponent } from './components/round-checkbox/round-checkbox.component';
+import { AlertBarComponent } from './components/alert-bar/alert-bar.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { RoundCheckboxComponent } from './components/round-checkbox/round-checkb
     RegistrationComponent,
     VerificationComponent,
     RoundCheckboxComponent,
+    AlertBarComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,6 +41,7 @@ import { RoundCheckboxComponent } from './components/round-checkbox/round-checkb
     ReactiveFormsModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [AlertBarComponent]
 })
 export class AppModule { }
