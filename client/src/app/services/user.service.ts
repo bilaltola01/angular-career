@@ -22,7 +22,7 @@ export class UserService {
   private user_service_url = `${environment.serverUrl}/${environment.user_service}/api/${environment.api_version}/`;
 
   constructor(private http: HttpClient) {
-    if (this.isLoggedIn) {
+    if (this.isLoggedIn()) {
       const token = localStorage.getItem('token');
       this.user_id = this.helper.decodeToken(token).user_id;
     }
