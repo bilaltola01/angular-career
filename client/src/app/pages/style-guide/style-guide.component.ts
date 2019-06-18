@@ -1,9 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
-
-import { AlertBarComponent } from './../../components/alert-bar/alert-bar.component';
-
-import { Observable, of } from 'rxjs';
 import { AlertsService } from 'src/app/services/alerts.service';
 
 @Component({
