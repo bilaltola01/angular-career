@@ -38,3 +38,18 @@ export interface UserExperienceItemData {
   skill_ids_trained: any[];
   add_industry_ids: any[];
 }
+
+export interface UserProjectItemData {
+  project_name:	string;
+  description: string;
+  date_finished: Date;
+  href: string;
+}
+
+export interface UserPublicationItemData {
+  publication_title: string;
+  description: string;
+  date_published: string;
+  href: string;
+  publisher: string;
+}

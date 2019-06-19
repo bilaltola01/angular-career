@@ -10,6 +10,8 @@ import {
   UserExperienceItem, UserExperienceItemData,
   UserSkillItem,
   UserInterestItem,
+  UserProjectItem,
+  UserProjectItemData,
 } from 'src/app/models';
 
 @Component({
@@ -136,6 +138,8 @@ export class CreateProfileComponent implements OnInit {
   userSkillsDataList: UserSkillItem[];
   userInterestsList: UserInterestItem[];
   userInterestsDataList: UserInterestItem[];
+  userProjectsList: UserProjectItem[];
+  userProjectsDataList: UserProjectItemData[];
 
   constructor(private router: Router, private autoCompleteService: AutoCompleteService, private userService: UserService) { }
 
@@ -154,6 +158,7 @@ export class CreateProfileComponent implements OnInit {
     this.getExperienceList();
     this.getUserSkillsList();
     this.getUserInterestsList();
+    this.getUserProjectsList();
   }
 
   goToCreatProfilePage() {
@@ -176,6 +181,7 @@ export class CreateProfileComponent implements OnInit {
         this.updateUserInteretsData();
         break;
       case 6:
+        this.updateUserProjectsData();
         break;
       default:
         break;
@@ -569,17 +575,56 @@ export class CreateProfileComponent implements OnInit {
 
   initProjectsFormArray() {
     this.projectsFormArray = new FormArray([]);
-    this.addProjectsForm();
+    this.userProjectsList = [];
+    this.userProjectsDataList = [];
   }
-
-  addProjectsForm() {
+  addProjectsForm(project: UserProjectItem) {
+    const projectItem = {
+      project_name: project ? project.project_name : null,
+      description: project ? project.description : null,
+      date_finished: project ? new Date(project.date_finished) : new Date(),
+      href: project ? project.href : null
+    };
+    this.userProjectsDataList.push(projectItem);
+    const arrIndex = this.userProjectsDataList.length - 1;
     const projectsForm = new FormGroup({
-      project_name: new FormControl(''),
-      years: new FormControl(''),
-      description: new FormControl('')
+      project_name: new FormControl(project ? project.project_name : ''),
+      years: new FormControl(project ? this.formattedDate(new Date(project.date_finished)) : ''),
+      description: new FormControl(project ? project.description : '')
     });
-
+    projectsForm.controls.project_name.valueChanges.subscribe(
+      (project_name) => {
+        this.onProjectNameValueChange(arrIndex, project_name);
+      }
+    );
+    projectsForm.controls.description.valueChanges.subscribe(
+      (description) => {
+        this.onProjectDescriptionValueChange(arrIndex, description);
+      }
+    );
+    projectsForm.controls.years.valueChanges.subscribe(
+      (date_finished) => {
+        this.onProjectDateFinishedValueChange(arrIndex, date_finished);
+      }
+    );
     this.projectsFormArray.push(projectsForm);
+  }
+  updateProjectsForm() {
+    this.userProjectsList.forEach(project => {
+      this.addProjectsForm(project);
+    });
+  }
+  onProjectNameValueChange(arrIndex: number, project_name: string) {
+    this.userProjectsDataList[arrIndex].project_name = project_name;
+  }
+  onProjectDescriptionValueChange(arrIndex: number, description: string) {
+    this.userProjectsDataList[arrIndex].description = description;
+  }
+  onProjectDateFinishedValueChange(arrIndex: number, date_finished: string) {
+    this.userProjectsDataList[arrIndex].date_finished = new Date(date_finished);
+  }
+  onProjectHrefValueChange(arrIndex: number, href: string) {
+    this.userProjectsDataList[arrIndex].href = href;
   }
 
   // Publications Form
@@ -874,6 +919,41 @@ export class CreateProfileComponent implements OnInit {
     this.userInterestsDataList.forEach((interestData, index) => {
       if (index > this.userInterestsList.length - 1) {
         this.userService.postUserInterestsInfo(interestData).subscribe(
+          dataJson => {
+            console.log(dataJson['data']);
+          },
+          error => console.log(error)
+        );
+      }
+    });
+  }
+
+
+  // User Projects information
+  getUserProjectsList() {
+    this.userService.getProjectsInfo().subscribe(
+      dataJson => {
+        this.userProjectsList = dataJson['data']['data'];
+        this.updateProjectsForm();
+        console.log('userSkills_List', this.userInterestsList);
+      },
+      error => {
+        console.log(error);
+        this.initProjectsFormArray();
+      }
+    );
+  }
+  updateUserProjectsData() {
+    this.userProjectsDataList.forEach((project, index) => {
+      if (index < this.userProjectsList.length) {
+        this.userService.patchProjectInfoById(project, this.userProjectsList[index].project_id).subscribe(
+          dataJson => {
+            console.log(dataJson['data']);
+          },
+          error => console.log(error)
+        );
+      } else {
+        this.userService.postProjectInfo(project).subscribe(
           dataJson => {
             console.log(dataJson['data']);
           },

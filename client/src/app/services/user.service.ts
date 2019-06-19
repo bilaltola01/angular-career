@@ -632,7 +632,7 @@ export class UserService {
       catchError(this.handleError)
     );
   }
-  public patchProjectInfo(projectInfo: any, projectId: number): Observable<any> {
+  public patchProjectInfoById(projectInfo: any, projectId: number): Observable<any> {
     return this.http.patch(this.user_service_url + `user/${this.user_id}/project/${projectId}`, projectInfo, this.authHttpOptions())
     .pipe(
       map(data => {
@@ -641,7 +641,7 @@ export class UserService {
       catchError(this.handleError)
     );
   }
-  public deleteProjectInfo(projectId: number): Observable<any> {
+  public deleteProjectInfoById(projectId: number): Observable<any> {
     return this.http.delete(this.user_service_url + `user/${this.user_id}/project/${projectId}`, this.authHttpOptions())
     .pipe(
       map(data => {

@@ -68,3 +68,20 @@ export interface UserInterestItem {
   interest_id: number;
   interest_name: string;
 }
+
+export interface UserProjectItem {
+  project_id:	number;
+  project_name:	string;
+  description: string;
+  date_finished: string;
+  href: string;
+}
+
+export interface UserPublicationItem {
+  publication_id: number;
+  publication_title: string;
+  description: string;
+  date_published: string;
+  href: string;
+  publisher: string;
+}
