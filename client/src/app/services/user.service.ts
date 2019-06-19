@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { UserObject } from 'src/app/models';
 
 import { JwtHelperService } from '@auth0/angular-jwt';
 
@@ -131,6 +132,8 @@ export class UserService {
     );
   }
 
+  // General Information Services
+
   public getGeneralInfo(): Observable<any> {
     return this.http.get(this.user_service_url + `user/${this.user_id}`, this.authHttpOptions())
     .pipe(
@@ -141,7 +144,7 @@ export class UserService {
     );
   }
 
-  public updateGeneralInfo(generalInfo: any): Observable<any> {
+  public updateGeneralInfo(generalInfo: UserObject): Observable<any> {
     return this.http.patch(this.user_service_url + `user/${this.user_id}`, generalInfo, this.authHttpOptions())
     .pipe(
       map(data => {
@@ -150,6 +153,242 @@ export class UserService {
       catchError(this.handleError)
     );
   }
+
+  // Education Information Services
+
+  public getEducationInfo(): Observable<any> {
+    return this.http.get(this.user_service_url + `user/${this.user_id}/education`, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  public getEducationInfoById(educationId: number): Observable<any> {
+    return this.http.get(this.user_service_url + `user/${this.user_id}/education/${educationId}`, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  public postEducationInfo(educationInfo: any): Observable<any> {
+    return this.http.post(this.user_service_url + `user/${this.user_id}/education`, educationInfo, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  public patchEducationInfoById(educationInfo: any, educationId: number): Observable<any> {
+    return this.http.patch(this.user_service_url + `user/${this.user_id}/education/${educationId}`, educationInfo, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  public deleteEducationInfoById(educationId: number): Observable<any> {
+    return this.http.patch(this.user_service_url + `user/${this.user_id}/education/${educationId}`, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  // Work Experience Services
+
+  public getExperienceInfo(): Observable<any> {
+    return this.http.get(this.user_service_url + `user/${this.user_id}/experience`, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  public getExperienceInfoById(experienceId: number): Observable<any> {
+    return this.http.get(this.user_service_url + `user/${this.user_id}/experience/${experienceId}`, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  public postExperienceInfo(experienceInfo: any): Observable<any> {
+    return this.http.post(this.user_service_url + `user/${this.user_id}/experience`, experienceInfo, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  public patchExperienceInfoById(experienceInfo: any, experienceId: number): Observable<any> {
+    return this.http.patch(this.user_service_url + `user/${this.user_id}/experience/${experienceId}`, experienceInfo, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  public deleteExperienceInfoById(experienceId: number): Observable<any> {
+    return this.http.patch(this.user_service_url + `user/${this.user_id}/experience/${experienceId}`, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  public getAdditionalIndustries(experienceId: number): Observable<any> {
+    return this.http.get(this.user_service_url + `user/${this.user_id}/experience/${experienceId}/additional-industries`, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  public postAdditionalIndustry(additionalIndustryInfo: any): Observable<any> {
+    return this.http.post(this.user_service_url + `user/${this.user_id}/additional-industry`, additionalIndustryInfo, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  public getAdditionalIndustryById(experienceId: number, industryId: number): Observable<any> {
+    return this.http.get(this.user_service_url + `user/${this.user_id}/experience/${experienceId}/additional-industry/${industryId}`, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  public DeleteAdditionalIndustryById(experienceId: number, industryId: number): Observable<any> {
+    return this.http.delete(this.user_service_url + `user/${this.user_id}/experience/${experienceId}/additional-industry/${industryId}`, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  public getSkillsTrained(experienceId: number): Observable<any> {
+    return this.http.get(this.user_service_url + `user/${this.user_id}/experience/${experienceId}/skills-trained`, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  public postSkillTrained(skillInfo: any): Observable<any> {
+    return this.http.post(this.user_service_url + `user/${this.user_id}/skill-trained`, skillInfo, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  public getSkillTrainedById(experienceId: number, skillId: number): Observable<any> {
+    return this.http.get(this.user_service_url + `user/${this.user_id}/experience/${experienceId}/skill-trained/${skillId}`, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  public DeleteSkillTrainedById(experienceId: number, skillId: number): Observable<any> {
+    return this.http.delete(this.user_service_url + `user/${this.user_id}/experience/${experienceId}/skill-trained/${skillId}`, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  public getSkills(): Observable<any> {
+    return this.http.get(this.user_service_url + `user/${this.user_id}/skills`, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  public postSkill(skillData: any): Observable<any> {
+    return this.http.post(this.user_service_url + `user/${this.user_id}/skill`, skillData, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  public getSkillById(userSkillId: number): Observable<any> {
+    return this.http.get(this.user_service_url + `user/${this.user_id}/skill/${userSkillId}`, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  public patchSkillById(userSkillId: number, skillData: any): Observable<any> {
+    return this.http.patch(this.user_service_url + `user/${this.user_id}/skill/${userSkillId}`, skillData, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  public delteSkillById(userSkillId: number): Observable<any> {
+    return this.http.delete(this.user_service_url + `user/${this.user_id}/skill/${userSkillId}`, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+
 
   private handleError(error) {
     let errorMessage = '';

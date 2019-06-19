@@ -83,7 +83,7 @@
       <div class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
           <mat-label>Date Of Birth</mat-label>
-          <input matInput placeholder="Date Of Birth" type="text" [formControl]="basicInfoForm.controls.basicInfoBirth">
+          <input matInput placeholder="Date Of Birth" type="date" [formControl]="basicInfoForm.controls.basicInfoBirth">
         </mat-form-field>
       </div>
       <div class="profile-form__field">
@@ -148,7 +148,7 @@
             <mat-label>Select University</mat-label>
             <input matInput placeholder="Select University" type="text" [matAutocomplete]="autocompleteUniversity" [formControl]="educationFormArray.controls[i].controls.university">
             <mat-autocomplete #autocompleteUniversity="matAutocomplete">
-              <mat-option *ngFor="let autocomplete_university of autocomplete_universities" [value]="autocomplete_university.school_name">
+              <mat-option *ngFor="let autocomplete_university of autocomplete_universities" [value]="autocomplete_university.school_name" (onSelectionChange)="onSelectUniversity(i, autocomplete_university)">
                 <span>{{autocomplete_university.school_name}}</span>
               </mat-option>
             </mat-autocomplete>
@@ -165,7 +165,7 @@
             <mat-label>Course</mat-label>
             <input matInput placeholder="Course" type="text" [matAutocomplete]="autocompleteMajor" [formControl]="educationFormArray.controls[i].controls.course">
             <mat-autocomplete #autocompleteMajor="matAutocomplete">
-              <mat-option *ngFor="let autocomplete_major of autocomplete_majors" [value]="autocomplete_major.major_name">
+              <mat-option *ngFor="let autocomplete_major of autocomplete_majors" [value]="autocomplete_major.major_name" onSelectMajor(i, autocomplete_autocomplete_major)>
                 <span>{{autocomplete_major.major_name}}</span>
               </mat-option>
             </mat-autocomplete>
