@@ -126,7 +126,7 @@ export class CreateProfileComponent implements OnInit {
 
   profile_status = this.statuses[0];
 
-  selectedPageIndex = 9;
+  selectedPageIndex = 0;
 
   generalInfoResponse: UserGeneralInfo;
   generalInfoRequest: UserObject;
