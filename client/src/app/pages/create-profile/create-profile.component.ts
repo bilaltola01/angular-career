@@ -8,6 +8,8 @@ import {
   UserGeneralInfo, UserObject,
   UserEducationItem, UserEducationItemData,
   UserExperienceItem, UserExperienceItemData,
+  UserSkillItem,
+  UserInterestItem,
 } from 'src/app/models';
 
 @Component({
@@ -122,7 +124,7 @@ export class CreateProfileComponent implements OnInit {
 
   profile_status = this.statuses[0];
 
-  selectedPageIndex = 4;
+  selectedPageIndex = 6;
 
   generalInfoResponse: UserGeneralInfo;
   generalInfoRequest: UserObject;
@@ -130,6 +132,10 @@ export class CreateProfileComponent implements OnInit {
   educationDataList: UserEducationItemData[];
   experienceList: UserExperienceItem[];
   experienceDataList: UserExperienceItemData[];
+  userSkillsList: UserSkillItem[];
+  userSkillsDataList: UserSkillItem[];
+  userInterestsList: UserInterestItem[];
+  userInterestsDataList: UserInterestItem[];
 
   constructor(private router: Router, private autoCompleteService: AutoCompleteService, private userService: UserService) { }
 
@@ -146,6 +152,8 @@ export class CreateProfileComponent implements OnInit {
     this.getGeneralInfo();
     this.getEducationList();
     this.getExperienceList();
+    this.getUserSkillsList();
+    this.getUserInterestsList();
   }
 
   goToCreatProfilePage() {
@@ -164,6 +172,8 @@ export class CreateProfileComponent implements OnInit {
         // this.updateExperienceData();
         break;
       case 5:
+        this.updateUserSkillsData();
+        this.updateUserInteretsData();
         break;
       case 6:
         break;
@@ -494,13 +504,17 @@ export class CreateProfileComponent implements OnInit {
     }
   }
 
-  // Skills And Interests Form
 
+
+
+  // Skills And Interests Form
   initSkillsAndInterestsForm() {
     this.autocomplete_skills = [];
     this.autocomplete_interests = [];
-    this.skills = [];
-    this.interests = [];
+    this.userSkillsList = [];
+    this.userSkillsDataList = [];
+    this.userInterestsList = [];
+    this.userInterestsDataList = [];
 
     this.skillsAndInterestsForm = new FormGroup({
       skills: new FormControl(''),
@@ -520,17 +534,15 @@ export class CreateProfileComponent implements OnInit {
     );
   }
 
-  addSkills(skill: string) {
-    if (skill) {
-      const data = {
-        skill: skill,
-        proficieny: 4
-      };
-
-      this.skills.filter(value => value['skill'] === skill);
-
-      if (this.skills.filter(value => value['skill'] === skill).length < 1) {
-        this.skills.push(data);
+  addSkills(skillItem: Skill) {
+    const skillItemData = {
+      skill_id: skillItem.skill_id,
+      skill: skillItem.skill,
+      skill_level: 4
+    };
+    if (skillItemData) {
+      if (this.userSkillsDataList.filter(value => value.skill === skillItemData.skill).length < 1) {
+        this.userSkillsDataList.push(skillItemData);
       }
 
       this.skillsAndInterestsForm.controls.skills.setValue('');
@@ -538,10 +550,14 @@ export class CreateProfileComponent implements OnInit {
     }
   }
 
-  addInterests(interest: string) {
-    if (interest) {
-      if (!this.interests.includes(interest)) {
-        this.interests.push(interest);
+  addInterests(interestItem: Interest) {
+    const interestItemData = {
+      interest_id: interestItem.interest_id,
+      interest_name: interestItem.interest
+    };
+    if (interestItemData) {
+      if (this.userInterestsDataList.filter(value => value.interest_name === interestItem.interest).length < 1) {
+        this.userInterestsDataList.push(interestItemData);
       }
       this.skillsAndInterestsForm.controls.interests.setValue('');
       this.autocomplete_interests = [];
@@ -729,7 +745,11 @@ export class CreateProfileComponent implements OnInit {
         console.log(this.educationList);
         this.updateEducationForm();
       },
-      error => console.log(error)
+      error => {
+        console.log(error);
+        this.educationList = [];
+        this.updateEducationForm();
+      }
     );
   }
 
@@ -762,7 +782,11 @@ export class CreateProfileComponent implements OnInit {
         console.log('experience_List', this.experienceList);
         this.updateWorkExperienceForm();
       },
-      error => console.log(error)
+      error => {
+        console.log(error);
+        this.experienceList = [];
+        this.updateWorkExperienceForm();
+      }
     );
   }
 
@@ -777,6 +801,79 @@ export class CreateProfileComponent implements OnInit {
         // );
       } else {
         this.userService.postExperienceInfo(experience).subscribe(
+          dataJson => {
+            console.log(dataJson['data']);
+          },
+          error => console.log(error)
+        );
+      }
+    });
+  }
+
+
+  // User Skills Information
+  getUserSkillsList() {
+    this.userService.getSkillsInfo().subscribe(
+      dataJson => {
+        this.userSkillsList = dataJson['data'];
+        this.userSkillsDataList = [];
+        this.userSkillsList.forEach(skillItem => {
+          this.userSkillsDataList.push(skillItem);
+        });
+        console.log('userSkills_List', this.userSkillsList);
+      },
+      error => {
+        console.log(error);
+        this.userSkillsList = [];
+        this.userSkillsDataList = [];
+      }
+    );
+  }
+  updateUserSkillsData() {
+    this.userSkillsDataList.forEach((skillData, index) => {
+      if (index < this.userSkillsList.length) {
+        if (skillData.skill_level !== this.userSkillsList[index].skill_level) {
+          this.userService.patchSkillInfoById(skillData.skill_id, skillData).subscribe(
+            dataJson => {
+              console.log(dataJson['data']);
+            },
+            error => console.log(error)
+          );
+        }
+      } else {
+        this.userService.postSkillInfo(skillData).subscribe(
+          dataJson => {
+            console.log(dataJson['data']);
+          },
+          error => console.log(error)
+        );
+      }
+    });
+  }
+
+
+  // User Interests Information
+  getUserInterestsList() {
+    this.userService.getUserInterestsInfo().subscribe(
+      dataJson => {
+        this.userInterestsList = dataJson['data'];
+        this.userInterestsDataList = [];
+        this.userInterestsList.forEach(interestItem => {
+          this.userInterestsDataList.push(interestItem);
+        });
+        console.log('userSkills_List', this.userInterestsList);
+      },
+      error => {
+        console.log(error);
+        this.userInterestsList = [];
+        this.userInterestsDataList = [];
+      }
+    );
+  }
+  updateUserInteretsData() {
+    this.userInterestsDataList.forEach((interestData, index) => {
+      if (index > this.userInterestsList.length - 1) {
+        this.userService.postUserInterestsInfo(interestData).subscribe(
           dataJson => {
             console.log(dataJson['data']);
           },

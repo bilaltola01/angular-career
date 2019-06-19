@@ -57,3 +57,14 @@ export interface UserExperienceItem {
   skills_trained: any[];
   add_industry_names: any[];
 }
+
+export interface UserSkillItem {
+  skill_id:	number;
+  skill: string;
+  skill_level: number;
+}
+
+export interface UserInterestItem {
+  interest_id: number;
+  interest_name: string;
+}
