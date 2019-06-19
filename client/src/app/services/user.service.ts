@@ -416,7 +416,7 @@ export class UserService {
       catchError(this.handleError)
     );
   }
-  public patchPublicationsInfo(publicationData: any, publicationId: number): Observable<any> {
+  public patchPublicationsInfoById(publicationData: any, publicationId: number): Observable<any> {
     return this.http.patch(this.user_service_url + `user/${this.user_id}/publications/${publicationId}`, publicationData, this.authHttpOptions())
     .pipe(
       map(data => {

@@ -20,6 +20,7 @@ export interface UserGeneralInfo {
   site_admin: number;
   date_created: Date;
   photo: string;
+  is_looking: number;
 }
 
 export interface UserEducationItem {

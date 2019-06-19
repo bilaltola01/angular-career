@@ -12,6 +12,7 @@ export interface UserObject {
   is_looking: number;
   photo: string;
   title: string;
+  user_intro: string;
 }
 
 export interface UserEducationItemData {
@@ -49,7 +50,7 @@ export interface UserProjectItemData {
 export interface UserPublicationItemData {
   publication_title: string;
   description: string;
-  date_published: string;
+  date_published: Date;
   href: string;
   publisher: string;
 }

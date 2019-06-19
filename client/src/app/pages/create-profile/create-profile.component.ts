@@ -12,6 +12,8 @@ import {
   UserInterestItem,
   UserProjectItem,
   UserProjectItemData,
+  UserPublicationItem,
+  UserPublicationItemData,
 } from 'src/app/models';
 
 @Component({
@@ -97,8 +99,6 @@ export class CreateProfileComponent implements OnInit {
 
   skills_trained: string[][];
   additional_exposure: string[][];
-  skills: object[];
-  interests: string[];
 
   // FormGroups
   basicInfoForm: FormGroup;
@@ -120,13 +120,13 @@ export class CreateProfileComponent implements OnInit {
   autocomplete_companies: any[] = [];
 
   statuses = [
-    'Actively Looking For Job',
-    'Exploring Opportunities'
+    'Exploring Opportunities',
+    'Actively Looking For Job'
   ];
 
   profile_status = this.statuses[0];
 
-  selectedPageIndex = 6;
+  selectedPageIndex = 9;
 
   generalInfoResponse: UserGeneralInfo;
   generalInfoRequest: UserObject;
@@ -140,6 +140,8 @@ export class CreateProfileComponent implements OnInit {
   userInterestsDataList: UserInterestItem[];
   userProjectsList: UserProjectItem[];
   userProjectsDataList: UserProjectItemData[];
+  userPublicationsList: UserPublicationItem[];
+  userPublicationsDataList: UserPublicationItemData[];
 
   constructor(private router: Router, private autoCompleteService: AutoCompleteService, private userService: UserService) { }
 
@@ -159,6 +161,7 @@ export class CreateProfileComponent implements OnInit {
     this.getUserSkillsList();
     this.getUserInterestsList();
     this.getUserProjectsList();
+    this.getUserPublicationsList();
   }
 
   goToCreatProfilePage() {
@@ -168,6 +171,9 @@ export class CreateProfileComponent implements OnInit {
   goToNextPage() {
     switch (this.selectedPageIndex) {
       case 1:
+        this.updateGeneralInfo();
+        break;
+      case 2:
         this.updateGeneralInfo();
         break;
       case 3:
@@ -183,6 +189,10 @@ export class CreateProfileComponent implements OnInit {
       case 6:
         this.updateUserProjectsData();
         break;
+      case 7:
+        this.updateUserPublicationsData();
+      case 9:
+        this.updateGeneralInfo();
       default:
         break;
     }
@@ -204,8 +214,9 @@ export class CreateProfileComponent implements OnInit {
     return date.getFullYear() + '-' + (date.getMonth() + 1 < 10 ? '0' : '') + (date.getMonth() + 1) + '-' + (date.getDate() < 10 ? '0' : '') + date.getDate();
   }
 
-  setProfileStatus(index: number) {
-    this.profile_status = this.statuses[index];
+  setProfileStatus(is_looking: number) {
+    this.profile_status = this.statuses[is_looking];
+    this.generalInfoRequest.is_looking = is_looking;
   }
 
   blurSkillSearchField(type: string, index: number) {
@@ -271,6 +282,8 @@ export class CreateProfileComponent implements OnInit {
     this.basicInfoForm.controls.basicInfoGender.setValue(this.generalInfoResponse.gender);
     this.basicInfoForm.controls.basicInfoBirth.setValue(birthdate);
     this.aboutMeForm.controls.aboutMe.setValue(this.generalInfoResponse.user_intro);
+    this.updateAboutMeForm();
+    this.setProfileStatus(this.generalInfoResponse.is_looking);
   }
 
   updateGeneralInfoRequest() {
@@ -288,11 +301,11 @@ export class CreateProfileComponent implements OnInit {
       city_id: this.generalInfoResponse.city_id,
       country_id: this.generalInfoResponse.country_id,
       state_id: this.generalInfoResponse.state_id,
-      is_looking: 0,
-      title: this.generalInfoResponse.title
+      is_looking: this.generalInfoResponse.is_looking,
+      title: this.generalInfoResponse.title,
+      user_intro: this.generalInfoResponse.user_intro
     };
   }
-
 
 
 
@@ -301,6 +314,18 @@ export class CreateProfileComponent implements OnInit {
     this.aboutMeForm = new FormGroup({
       aboutMe: new FormControl('')
     });
+
+  }
+  updateAboutMeForm() {
+    this.aboutMeForm.controls.aboutMe.setValue(this.generalInfoResponse.user_intro ? this.generalInfoResponse.user_intro : '');
+    this.aboutMeForm.controls.aboutMe.valueChanges.subscribe(
+      (aboutMe) => {
+        this.onAboutMeValueChanges(aboutMe);
+      }
+    );
+  }
+  onAboutMeValueChanges(aboutMe: string) {
+    this.generalInfoRequest.user_intro = aboutMe;
   }
 
 
@@ -586,7 +611,9 @@ export class CreateProfileComponent implements OnInit {
       href: project ? project.href : null
     };
     this.userProjectsDataList.push(projectItem);
+
     const arrIndex = this.userProjectsDataList.length - 1;
+
     const projectsForm = new FormGroup({
       project_name: new FormControl(project ? project.project_name : ''),
       years: new FormControl(project ? this.formattedDate(new Date(project.date_finished)) : ''),
@@ -631,17 +658,64 @@ export class CreateProfileComponent implements OnInit {
 
   initPublicationsFormArray() {
     this.publicationsFormArray = new FormArray([]);
-    this.addPublicationsForm();
+    this.userPublicationsList = [];
+    this.userPublicationsDataList = [];
   }
 
-  addPublicationsForm() {
+  addPublicationsForm(publication: UserPublicationItem) {
+    const publicationItem = {
+      publication_title: publication ? publication.publication_title : null,
+      description: publication ? publication.description : null,
+      date_published: publication ? new Date(publication.date_published) : new Date(),
+      href: publication ? publication.href : null,
+      publisher: publication ? publication.publisher : null
+    };
+    this.userPublicationsDataList.push(publicationItem);
+
+    const arrIndex = this.userPublicationsDataList.length - 1;
+
     const publicationsForm = new FormGroup({
-      publication_name: new FormControl(''),
-      years: new FormControl(''),
-      description: new FormControl('')
+      publication_name: new FormControl(publication ? publication.publication_title : ''),
+      years: new FormControl(publication ? this.formattedDate(new Date(publication.date_published)) : ''),
+      description: new FormControl(publication ? publication.description : '')
     });
+    publicationsForm.controls.publication_name.valueChanges.subscribe(
+      (publication_title) => {
+        this.onPublicationNameValueChange(arrIndex, publication_title);
+      }
+    );
+    publicationsForm.controls.description.valueChanges.subscribe(
+      (description) => {
+        this.onPublicationDescriptionValueChange(arrIndex, description);
+      }
+    );
+    publicationsForm.controls.years.valueChanges.subscribe(
+      (date_published) => {
+        this.onPublicationDatePublishedValueChange(arrIndex, date_published);
+      }
+    );
 
     this.publicationsFormArray.push(publicationsForm);
+  }
+  updatePublicationsForm() {
+    this.userPublicationsList.forEach(publication => {
+      this.addPublicationsForm(publication);
+    });
+  }
+  onPublicationNameValueChange(arrIndex: number, publication_title: string) {
+    this.userPublicationsDataList[arrIndex].publication_title = publication_title;
+  }
+  onPublicationDescriptionValueChange(arrIndex: number, description: string) {
+    this.userPublicationsDataList[arrIndex].description = description;
+  }
+  onPublicationDatePublishedValueChange(arrIndex: number, date_published: string) {
+    this.userPublicationsDataList[arrIndex].date_published = new Date(date_published);
+  }
+  onPublicationHrefValueChange(arrIndex: number, href: string) {
+    this.userPublicationsDataList[arrIndex].href = href;
+  }
+  onPublicationPublisherValueChange(arrIndex: number, publisher: string) {
+    this.userPublicationsDataList[arrIndex].publisher = publisher;
   }
 
   // External Links Form
@@ -935,7 +1009,7 @@ export class CreateProfileComponent implements OnInit {
       dataJson => {
         this.userProjectsList = dataJson['data']['data'];
         this.updateProjectsForm();
-        console.log('userSkills_List', this.userInterestsList);
+        console.log('userProjects_List', this.userInterestsList);
       },
       error => {
         console.log(error);
@@ -962,5 +1036,43 @@ export class CreateProfileComponent implements OnInit {
       }
     });
   }
+
+
+
+
+  // User Publications Information
+  getUserPublicationsList() {
+    this.userService.getPublicationsInfo().subscribe(
+      dataJson => {
+        this.userPublicationsList = dataJson['data'];
+        this.updatePublicationsForm();
+        console.log('uesrPublications_list', this.userPublicationsList);
+      },
+      error => {
+        console.log(error);
+        this.initPublicationsFormArray();
+      }
+    );
+  }
+  updateUserPublicationsData() {
+    this.userPublicationsDataList.forEach((publication, index) => {
+      if (index < this.userPublicationsList.length) {
+        this.userService.patchPublicationsInfoById(publication, this.userPublicationsList[index].publication_id).subscribe(
+          dataJson => {
+            console.log(dataJson['data']);
+          },
+          error => console.log(error)
+        );
+      } else {
+        this.userService.postPublicationsInfo(publication).subscribe(
+          dataJson => {
+            console.log(dataJson['data']);
+          },
+          error => console.log(error)
+        );
+      }
+    });
+  }
+  
 
 }
