@@ -5,6 +5,7 @@ import { StyleGuideComponent } from './pages/style-guide/style-guide.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegistrationComponent } from './pages/registration/registration.component';
 import { VerificationComponent } from './pages/verification/verification.component';
+import { EmailSentComponent } from './pages/email-sent/email-sent.component';
 
 const routes: Routes = [
   {
@@ -24,6 +25,10 @@ const routes: Routes = [
     path: 'verification/:user_id/:verify_str/:verify_key',
     component: VerificationComponent
   },
+  {
+    path: 'email-sent',
+    component: EmailSentComponent
+  }
 ];
 
 @NgModule({

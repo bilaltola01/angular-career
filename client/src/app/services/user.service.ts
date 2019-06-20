@@ -106,6 +106,16 @@ export class UserService {
     return isLoggedIn;
   }
 
+  public resendEmail(email: object) {
+    return this.http.post(this.auth_service_url + `send-email`, email, this.httpOptions)
+    .pipe(
+      map(data => {
+        return {success: true, message: data['message']};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
   private handleError(error) {
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {
