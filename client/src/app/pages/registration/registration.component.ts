@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
-import { FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AlertsService, AlertType } from 'src/app/services/alerts.service';
 
 @Component({
@@ -16,15 +16,11 @@ export class RegistrationComponent implements OnInit {
     'recruiter': 1
   };
 
+  registrationForm: FormGroup;
+
   currentRole: number;
-  first_name: FormControl;
-  last_name: FormControl;
-  emailAddress: FormControl;
-  password: FormControl;
-
-  isAgreeTerm = false;
-
-  passwordStrength = 'weak';
+  isAgreeTerm: boolean;
+  passwordStrength: string;
 
   strongRegex = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})');
   mediumRegex = new RegExp('^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})');
@@ -34,16 +30,19 @@ export class RegistrationComponent implements OnInit {
 
   ngOnInit() {
     this.currentRole = 0;
-    this.first_name = new FormControl('');
-    this.first_name.setValidators([Validators.required, Validators.maxLength(20)]);
-    this.last_name = new FormControl('');
-    this.last_name.setValidators([Validators.required, Validators.maxLength(20)]);
-    this.emailAddress = new FormControl('');
-    this.emailAddress.setValidators([Validators.required, Validators.email, Validators.maxLength(50)]);
-    this.password = new FormControl('');
-    this.password.setValidators([Validators.required, Validators.minLength(6)]);
+    this.isAgreeTerm = false;
+    this.passwordStrength = 'weak';
+    this.initiRegistrationForm();
+  }
 
-    this.password.valueChanges.subscribe((password) => {
+  initiRegistrationForm() {
+    this.registrationForm = new FormGroup({
+      first_name: new FormControl('', [Validators.required, Validators.maxLength(20)]),
+      last_name: new FormControl('', [Validators.required, Validators.maxLength(20)]),
+      emailAddress: new FormControl('', [Validators.required, Validators.email, Validators.maxLength(50)]),
+      password: new FormControl('', [Validators.required, Validators.minLength(6)])
+    });
+    this.registrationForm.controls.password.valueChanges.subscribe((password) => {
       this.checkPasswordStrength(password);
     });
   }
@@ -63,7 +62,7 @@ export class RegistrationComponent implements OnInit {
   checkPasswordStrength(password: string) {
     if (this.strongRegex.test(password)) {
       this.passwordStrength = 'strong';
-    } else if (this.mediumRegex.test(this.password.value)) {
+    } else if (this.mediumRegex.test(password)) {
       this.passwordStrength = 'medium';
     } else {
       this.passwordStrength = 'weak';
@@ -71,12 +70,12 @@ export class RegistrationComponent implements OnInit {
   }
 
   signUp() {
-    if (this.isAgreeTerm && this.first_name.valid && this.last_name.valid && this.emailAddress.valid && this.password.valid) {
+    if (this.isAgreeTerm && this.registrationForm.valid) {
       const user = {
-        first_name: this.first_name.value,
-        last_name: this.last_name.value,
-        email: this.emailAddress.value,
-        password: this.password.value,
+        first_name: this.registrationForm.controls.first_name.value,
+        last_name: this.registrationForm.controls.last_name.value,
+        email: this.registrationForm.controls.emailAddress.value,
+        password: this.registrationForm.controls.password.value,
         captcha: 0,
       };
       this.userService.signUp(user).subscribe(
