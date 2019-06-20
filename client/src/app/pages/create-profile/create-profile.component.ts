@@ -191,8 +191,10 @@ export class CreateProfileComponent implements OnInit {
         break;
       case 7:
         this.updateUserPublicationsData();
+        break;
       case 9:
         this.updateGeneralInfo();
+        break;
       default:
         break;
     }
@@ -1073,6 +1075,5 @@ export class CreateProfileComponent implements OnInit {
       }
     });
   }
-  
 
 }
