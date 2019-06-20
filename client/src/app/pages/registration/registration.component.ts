@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { FormControl, Validators } from '@angular/forms';
+import { AlertsService } from 'src/app/services/alerts.service';
 
 @Component({
   selector: 'app-registration',
@@ -28,19 +29,19 @@ export class RegistrationComponent implements OnInit {
   strongRegex = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})');
   mediumRegex = new RegExp('^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})');
 
-  constructor(private router: Router, private userService: UserService) {
+  constructor(private router: Router, private userService: UserService, private alertsService: AlertsService) {
   }
 
   ngOnInit() {
     this.currentRole = 0;
     this.first_name = new FormControl('');
-    this.first_name.setValidators([Validators.required]);
+    this.first_name.setValidators([Validators.required, Validators.maxLength(20)]);
     this.last_name = new FormControl('');
-    this.last_name.setValidators([Validators.required]);
+    this.last_name.setValidators([Validators.required, Validators.maxLength(20)]);
     this.emailAddress = new FormControl('');
-    this.emailAddress.setValidators([Validators.required, Validators.email]);
+    this.emailAddress.setValidators([Validators.required, Validators.email, Validators.maxLength(50)]);
     this.password = new FormControl('');
-    this.password.setValidators([Validators.required, Validators.minLength(4)]);
+    this.password.setValidators([Validators.required, Validators.minLength(6)]);
 
     this.password.valueChanges.subscribe((password) => {
       this.checkPasswordStrength(password);
@@ -88,6 +89,7 @@ export class RegistrationComponent implements OnInit {
         },
         error => {
           console.log(error['message']);
+          this.alertsService.show(error.message, 'error');
         }
       );
     }
