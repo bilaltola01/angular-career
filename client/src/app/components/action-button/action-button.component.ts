@@ -13,6 +13,7 @@ export class ActionButtonComponent implements OnInit {
   @Input() type = 'flat';
   @Input() title: string;
   @Input() color: string;
+  @Input() disabled = false;
 
   constructor() { }
 

@@ -161,8 +161,8 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
 
   .mat-raised-button,
   .mat-flat-button {
-    &:hover,
-    &:active {
+    &:not([disabled]):hover,
+    &:not([disabled]):active {
       .mat-button-focus-overlay {
         opacity: 0.2;
       }

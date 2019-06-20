@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
-import { FormControl, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AlertsService, AlertType } from 'src/app/services/alerts.service';
 
 @Component({
@@ -17,22 +16,31 @@ export class LoginComponent implements OnInit {
     'recruiter': 1
   };
 
+  loginForm: FormGroup;
   currentRole: number;
-  emailAddress: FormControl;
-  password: FormControl;
-
   isRememberMe = false;
 
-  constructor(private router: Router,
-              private userService: UserService,
-              private alertsService: AlertsService) { }
+  constructor(private router: Router, private userService: UserService, private alertsService: AlertsService) { }
 
   ngOnInit() {
+    this.initLoginForm();
+  }
+
+  private initLoginForm() {
+    this.checkStoredUser();
     this.currentRole = 0;
-    this.emailAddress = new FormControl('');
-    this.emailAddress.setValidators([Validators.required, Validators.email, , Validators.maxLength(50)]);
-    this.password = new FormControl('');
-    this.password.setValidators([Validators.required, Validators.minLength(6)]);
+
+    this.loginForm = new FormGroup({
+      emailAddress: new FormControl('', [Validators.required, Validators.email, , Validators.maxLength(50)]),
+      password: new FormControl('', [Validators.required, Validators.minLength(6)])
+    });
+  }
+
+  private checkStoredUser() {
+    const user = this.userService.checkStoredUser();
+    if (user) {
+      this.router.navigate(['/style-guide']);
+    }
   }
 
   switchRole(role: string) {
@@ -48,12 +56,12 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    if (this.emailAddress.valid && this.password.valid) {
+    if (this.loginForm.valid) {
       const user = {
-        email: this.emailAddress.value,
-        password: this.password.value
+        email: this.loginForm.controls.emailAddress.value,
+        password: this.loginForm.controls.password.value
       };
-      this.userService.login(user).subscribe(
+      this.userService.login(user, this.isRememberMe).subscribe(
         data => {
           if (data['success']) {
             console.log(data['message']);
