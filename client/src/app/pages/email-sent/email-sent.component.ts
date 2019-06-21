@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
-import { AlertsService } from 'src/app/services/alerts.service';
+import { AlertsService, AlertType } from 'src/app/services/alerts.service';
 
 @Component({
   selector: 'app-email-sent',
@@ -39,13 +39,13 @@ export class EmailSentComponent implements OnInit {
         data => {
           if (data['success']) {
             console.log(data['message']);
-            this.alertsService.show(data['message'], 'success');
+            this.alertsService.show(data.message, AlertType.success);
             this.isSent = true;
           }
         },
         error => {
           console.log(error);
-          this.alertsService.show(error.message, 'error');
+          this.alertsService.show(error.message, AlertType.error);
         }
       );
     }
