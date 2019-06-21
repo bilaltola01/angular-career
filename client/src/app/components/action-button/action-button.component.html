@@ -1,12 +1,12 @@
-<button *ngIf="type==='raised'" mat-raised-button [color]="color">
+<button *ngIf="type==='raised'" mat-raised-button [color]="color" [disabled]="disabled">
   {{title}}
 </button>
-<button *ngIf="type==='stroked'" mat-stroked-button [color]="color">
+<button *ngIf="type==='stroked'" mat-stroked-button [color]="color" [disabled]="disabled">
   {{title}}
 </button>
-<button *ngIf="type==='text'" mat-button disableRipple="true" [color]="color">
+<button *ngIf="type==='text'" mat-button disableRipple="true" [color]="color" [disabled]="disabled">
   {{title}}
 </button>
-<button *ngIf="type==='flat'" mat-flat-button [color]="color">
+<button *ngIf="type==='flat'" mat-flat-button [color]="color" [disabled]="disabled">
   {{title}}
 </button>

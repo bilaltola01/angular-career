@@ -41,17 +41,27 @@ export class UserService {
     );
   }
 
-  public login(user): Observable<any> {
+  public login(user, isRemember: boolean): Observable<any> {
     return this.http.post(this.auth_service_url + 'login', user, this.httpOptions)
     .pipe(
       map(data => {
         if (data['token']) {
           localStorage.setItem('token', data['token']);
+          if (isRemember) {
+            localStorage.setItem('storedUser', JSON.stringify(user));
+          } else {
+            localStorage.setItem('storedUser', null);
+          }
         }
         return {success: this.isLoggedIn(), message: data['message']};
       }),
       catchError(this.handleError)
     );
+  }
+
+  public checkStoredUser(): any {
+    const user = localStorage.getItem('storedUser');
+    return JSON.parse(user);
   }
 
   public emailVerification(user_id: string, verify_str: string, verify_key: string): Observable<any> {
@@ -84,6 +94,7 @@ export class UserService {
 
   public logOut() {
     localStorage.removeItem('token');
+    localStorage.removeItem('storedUser');
   }
 
   public isLoggedIn(): boolean {

@@ -11,7 +11,7 @@
       <span>©2019 <a href="#">yourcareerfair.com</a> | Cookies, Privacy and Terms</span>
     </div>
   </div>
-  <div class="container__right">
+  <div class="container__right" [formGroup]="registrationForm">
     <div class="row__user_roles">
       <span class="user_role" [class.active]="checkUserRole('applicant')" (click)="switchRole('applicant')">I’M AN APPLICANT<div class="active-border"></div></span>
       <span class="user_role" [class.active]="checkUserRole('recruiter')" (click)="switchRole('recruiter')">I’M A RECRUITER<div class="active-border"></div></span>
@@ -20,32 +20,32 @@
       <mat-form-field appearance="fill">
         <mat-label>First Name</mat-label>
         <mat-icon matPrefix>person_outline</mat-icon>
-        <input matInput placeholder="First Name" type="text" [formControl]="first_name">
+        <input matInput placeholder="First Name" type="text" [formControl]="registrationForm.controls.first_name">
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Last Name</mat-label>
-        <mat-icon matSuffix *ngIf="first_name.valid && last_name.valid">done</mat-icon>
-        <mat-icon matSuffix class="error-field" *ngIf="(!first_name.valid || !last_name.valid) && (first_name.touched && last_name.touched)">close</mat-icon>
+        <mat-icon matSuffix *ngIf="registrationForm.controls.first_name.valid && registrationForm.controls.last_name.valid">done</mat-icon>
+        <mat-icon matSuffix class="error-field" *ngIf="(!registrationForm.controls.first_name.valid || !registrationForm.controls.last_name.valid) && (registrationForm.controls.first_name.touched && registrationForm.controls.last_name.touched)">close</mat-icon>
 
-        <input matInput placeholder="Last Name" type="text" [formControl]="last_name">
+        <input matInput placeholder="Last Name" type="text" [formControl]="registrationForm.controls.last_name">
       </mat-form-field>
     </div>
     <div class="row__form">
       <mat-form-field appearance="fill">
         <mat-label>Email Address</mat-label>
         <mat-icon matPrefix>mail_outline</mat-icon>
-        <input matInput placeholder="Email Address" type="email" [formControl]="emailAddress">
-        <mat-icon matSuffix *ngIf="emailAddress.valid">done</mat-icon>
-        <mat-icon matSuffix class="error-field" *ngIf="!emailAddress.valid && emailAddress.touched">close</mat-icon>
+        <input matInput placeholder="Email Address" type="email" [formControl]="registrationForm.controls.emailAddress">
+        <mat-icon matSuffix *ngIf="registrationForm.controls.emailAddress.valid">done</mat-icon>
+        <mat-icon matSuffix class="error-field" *ngIf="!registrationForm.controls.emailAddress.valid && registrationForm.controls.emailAddress.touched">close</mat-icon>
       </mat-form-field>
     </div>
     <div class="row__form last">
       <mat-form-field appearance="fill">
         <mat-label>Password</mat-label>
         <mat-icon matPrefix>lock_outline</mat-icon>
-        <input matInput placeholder="Password" type="password" [formControl]="password">
-        <span matSuffix *ngIf="password.valid" [class.weak]="passwordStrength==='weak'" [class.medium]="passwordStrength==='medium'">{{passwordStrength}}</span>
-        <mat-icon matSuffix class="error-field" *ngIf="!emailAddress.valid && emailAddress.touched">close</mat-icon>
+        <input matInput placeholder="Password" type="password" [formControl]="registrationForm.controls.password">
+        <span matSuffix *ngIf="registrationForm.controls.password.valid" [class.weak]="passwordStrength==='weak'" [class.medium]="passwordStrength==='medium'">{{passwordStrength}}</span>
+        <mat-icon matSuffix class="error-field" *ngIf="!registrationForm.controls.emailAddress.valid && registrationForm.controls.emailAddress.touched">close</mat-icon>
       </mat-form-field>
     </div>
     <div class="row__checkbox">
@@ -53,7 +53,7 @@
     </div>
     <div class="row__buttons">
       <action-button type="stroked" title="Login" (click)="navigateToLogin()"></action-button>
-      <action-button type="flat" title="Create Account" color="primary" (click)="signUp()"></action-button>
+      <action-button type="flat" title="Create Account" color="primary" (click)="signUp()" [disabled]="!(registrationForm.valid && isAgreeTerm)"></action-button>
     </div>
     <p>Or you can join with</p>
     <div class="row__social_icons">
