@@ -41,6 +41,9 @@
       <action-button type="flat" title="Login Now" color="primary" (click)="login()" [disabled]="!loginForm.valid"></action-button>
       <action-button type="stroked" title="Create New Account" (click)="navigateToSignUp() "></action-button>
     </div>
+    <div class="row__buttons">
+      <action-button type="text" title="Resend Email" color="primary" (click)="goToEmailSentPage()"></action-button>
+    </div>
     <p>Or you can join with</p>
     <div class="row__social_icons">
       <img src="assets/icons/ic_google_circle.svg">

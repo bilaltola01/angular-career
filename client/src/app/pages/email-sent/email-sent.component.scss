@@ -1,0 +1,48 @@
+@import './../../../styles/variables.scss';
+
+$primary-font-color: map-get($md-cfaccent, 500);
+
+:host {
+  @include flex(row, flex-start, center);
+  min-height: calc(100vh - 70px);
+  padding: 100px 0 70px 0;
+  box-sizing: border-box;
+  h2, p {
+    color: rgba($primary-font-color, .84);
+  }
+  @media only screen and (max-width: $tablet-breakpoint) {
+    padding: 60px 0 40px;
+  }
+}
+
+.container {
+  &__full {
+    grid-column-start: 1;
+    grid-column-end: 13;
+    @include flex(column, center, center);
+    .row {
+      &__email-sent {
+        text-align: center;
+      }
+      &__resend-form {
+        border: solid 1px $mat-form-border-color;
+        border-radius: 4px;
+        min-width: 400px;
+        mat-form-field {
+          box-sizing: border-box;
+          font-size: 20px;
+          width: 100%;
+          .mat-form-field-wrapper {
+            padding-bottom: 0;
+          }
+        }
+        @media only screen and (max-width: $tablet-breakpoint) {
+          min-width: 280px;
+        }
+      }
+      &__btn-send {
+        margin-top: 50px;
+      }
+    }
+  }
+}

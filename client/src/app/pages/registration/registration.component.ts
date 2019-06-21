@@ -82,8 +82,7 @@ export class RegistrationComponent implements OnInit {
         data => {
           if (data['success']) {
             console.log(data['message']);
-          } else {
-            console.log(data['message']);
+            this.router.navigate(['/email-sent']);
           }
         },
         error => {

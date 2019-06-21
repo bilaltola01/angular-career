@@ -81,4 +81,8 @@ export class LoginComponent implements OnInit {
   toggleRemember(isRememberMe: boolean) {
     this.isRememberMe = isRememberMe;
   }
+
+  goToEmailSentPage() {
+    this.router.navigate(['/email-sent'], {queryParams: {from: 'login'}});
+  }
 }
