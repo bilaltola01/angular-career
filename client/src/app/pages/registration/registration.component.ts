@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { FormControl, Validators } from '@angular/forms';
-import { AlertsService } from 'src/app/services/alerts.service';
+import { AlertsService, AlertType } from 'src/app/services/alerts.service';
 
 @Component({
   selector: 'app-registration',
@@ -89,7 +89,7 @@ export class RegistrationComponent implements OnInit {
         },
         error => {
           console.log(error['message']);
-          this.alertsService.show(error.message, 'error');
+          this.alertsService.show(error.message, AlertType.error);
         }
       );
     }
