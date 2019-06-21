@@ -329,6 +329,63 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
   }
 }
 
+@mixin mat-select-theme($theme) {
+  $foreground: map-get($theme, foreground);
+  $background: map-get($theme, background);
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $warn: map-get($theme, warn);
+
+  .mat-select-value {
+    color: $btn-text-color;
+  }
+
+  .mat-select-placeholder {
+    color: _mat-control-placeholder-color($theme);
+  }
+
+  .mat-select-disabled .mat-select-value {
+    color: mat-color($foreground, disabled-text);
+  }
+
+  .mat-select-arrow {
+    color: mat-color($foreground, secondary-text);
+  }
+
+  .mat-select-panel {
+    background: mat-color($background, card);
+    @include _mat-theme-overridable-elevation(4, $theme);
+
+    .mat-option.mat-selected:not(.mat-option-multiple) {
+      background: mat-color($background, hover, 0.12);
+    }
+  }
+
+  .mat-form-field {
+    &.mat-focused {
+      &.mat-primary .mat-select-arrow {
+        color: mat-color($primary);
+      }
+
+      &.mat-accent .mat-select-arrow {
+        color: mat-color($accent);
+      }
+
+      &.mat-warn .mat-select-arrow {
+        color: mat-color($warn);
+      }
+    }
+
+    .mat-select.mat-select-invalid .mat-select-arrow {
+      color: mat-color($warn);
+    }
+
+    .mat-select.mat-select-disabled .mat-select-arrow {
+      color: mat-color($foreground, disabled-text);
+    }
+  }
+}
+
 
 @include angular-material-theme($client-theme);
 

@@ -3,6 +3,11 @@ export interface City {
   city_id: number;
 }
 
+export interface State {
+  state: string;
+  state_id: number;
+}
+
 export interface School {
   school_name: string;
   school_id: number;

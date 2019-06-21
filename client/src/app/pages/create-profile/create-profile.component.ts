@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormGroup, FormControl, FormArray} from '@angular/forms';
+import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { AutoCompleteService } from 'src/app/services/auto-complete.service';
 import { UserService } from 'src/app/services/user.service';
+import { AlertsService, AlertType } from 'src/app/services/alerts.service';
 import {
   City, School, Major, Skill, Interest,
   UserGeneralInfo, UserObject,
@@ -14,6 +15,10 @@ import {
   UserProjectItemData,
   UserPublicationItem,
   UserPublicationItemData,
+  EthnicityTypes,
+  Genders,
+  State,
+  Countries,
 } from 'src/app/models';
 
 @Component({
@@ -92,10 +97,10 @@ export class CreateProfileComponent implements OnInit {
     }
   ];
 
-  genders = [
-    'Male',
-    'Female'
-  ];
+  // contants
+  genders: string[] = Genders;
+  ethnicityTypes: string[] = EthnicityTypes;
+  countries: string[] = Countries;
 
   skills_trained: string[][];
   additional_exposure: string[][];
@@ -111,8 +116,10 @@ export class CreateProfileComponent implements OnInit {
   externalLinksForm: FormGroup;
 
   // autocomplete lists
-  autocomplete_locations: City[] = [];
-  autocomplete_genders: string[] = [];
+  autocomplete_cities: City[] = [];
+  temp_city: City;
+  autocomplete_states: State[] = [];
+  temp_state: State;
   autocomplete_universities = [];
   autocomplete_skills: Skill[] = [];
   autocomplete_interests: Interest[] = [];
@@ -126,7 +133,7 @@ export class CreateProfileComponent implements OnInit {
 
   profile_status = this.statuses[0];
 
-  selectedPageIndex = 0;
+  selectedPageIndex = 1;
 
   generalInfoResponse: UserGeneralInfo;
   generalInfoRequest: UserObject;
@@ -143,7 +150,7 @@ export class CreateProfileComponent implements OnInit {
   userPublicationsList: UserPublicationItem[];
   userPublicationsDataList: UserPublicationItemData[];
 
-  constructor(private router: Router, private autoCompleteService: AutoCompleteService, private userService: UserService) { }
+  constructor(private router: Router, private autoCompleteService: AutoCompleteService, private userService: UserService, private alertsService: AlertsService) { }
 
   ngOnInit() {
     this.initBasicInfoForm();
@@ -199,11 +206,11 @@ export class CreateProfileComponent implements OnInit {
         break;
     }
 
-    if (this.selectedPageIndex < this.profileCreationPages.length - 1) {
-      this.selectedPageIndex++;
-    } else {
-      this.selectedPageIndex = 0;
-    }
+    // if (this.selectedPageIndex < this.profileCreationPages.length - 1) {
+    //   this.selectedPageIndex++;
+    // } else {
+    //   this.selectedPageIndex = 0;
+    // }
   }
 
   goToPage(index: number) {
@@ -249,22 +256,32 @@ export class CreateProfileComponent implements OnInit {
 
   // Basic Information Form
   initBasicInfoForm() {
-    this.autocomplete_locations = [];
-    this.autocomplete_genders = [];
+    this.autocomplete_cities = [];
+    this.autocomplete_states = [];
 
     this.generalInfoResponse = null;
     this.generalInfoRequest = null;
 
     this.basicInfoForm = new FormGroup({
-      basicInfoLocation: new FormControl(''),
+      basicInfoCity: new FormControl('', [Validators.required]),
+      basicInfoState: new FormControl('', [Validators.required]),
+      basicInfoCountry: new FormControl('', [Validators.required]),
       basicInfoBirth: new FormControl(''),
-      basicInfoGender: new FormControl(''),
-      basicInfoEthnicity: new FormControl('')
+      basicInfoGender: new FormControl('', [Validators.required]),
+      basicInfoEthnicity: new FormControl('', [Validators.required])
     });
 
-    this.basicInfoForm.controls.basicInfoLocation.valueChanges.subscribe((location) => {
-      this.onLoactionValueChanges(location);
+    this.basicInfoForm.controls.basicInfoCity.valueChanges.subscribe((city) => {
+      city ? this.onCityValueChanges(city) : this.autocomplete_cities = [];
     });
+    this.basicInfoForm.controls.basicInfoState.valueChanges.subscribe((state) => {
+      state ? this.onStateValueChanges(state) : this.autocomplete_states = [];
+    });
+    this.basicInfoForm.controls.basicInfoCountry.valueChanges.subscribe(
+      (country) => {
+        this.onCountryValueChanges(country);
+      }
+    );
     this.basicInfoForm.controls.basicInfoGender.valueChanges.subscribe(
       (gender) => {
         this.onGenderValueChanges(gender);
@@ -275,17 +292,24 @@ export class CreateProfileComponent implements OnInit {
         this.generalInfoRequest.birthdate = date;
       }
     );
+    this.basicInfoForm.controls.basicInfoEthnicity.valueChanges.subscribe(
+      (ethnicity) => {
+        this.onEthnicityValueChanges(ethnicity);
+      }
+    );
   }
 
   updateBasicInformationForm() {
     this.updateGeneralInfoRequest();
     const birthdate = this.generalInfoResponse.birthdate ?  this.formattedDate(new Date(this.generalInfoResponse.birthdate)) : null;
 
+    this.basicInfoForm.controls.basicInfoCity.setValue(this.generalInfoResponse.city);
+    this.basicInfoForm.controls.basicInfoState.setValue(this.generalInfoResponse.state);
+    this.basicInfoForm.controls.basicInfoCountry.setValue(this.generalInfoResponse.country);
     this.basicInfoForm.controls.basicInfoGender.setValue(this.generalInfoResponse.gender);
     this.basicInfoForm.controls.basicInfoBirth.setValue(birthdate);
+    this.basicInfoForm.controls.basicInfoEthnicity.setValue(this.generalInfoResponse.ethnicity);
     this.aboutMeForm.controls.aboutMe.setValue(this.generalInfoResponse.user_intro);
-    this.updateAboutMeForm();
-    this.setProfileStatus(this.generalInfoResponse.is_looking);
   }
 
   updateGeneralInfoRequest() {
@@ -305,8 +329,57 @@ export class CreateProfileComponent implements OnInit {
       state_id: this.generalInfoResponse.state_id,
       is_looking: this.generalInfoResponse.is_looking,
       title: this.generalInfoResponse.title,
-      user_intro: this.generalInfoResponse.user_intro
+      user_intro: this.generalInfoResponse.user_intro,
+      ethnicity: this.generalInfoResponse.ethnicity
     };
+  }
+
+  onEthnicityValueChanges(ethnicity: string) {
+    this.generalInfoRequest.ethnicity = ethnicity;
+  }
+  onGenderValueChanges(gender: string) {
+    this.generalInfoRequest.gender = gender;
+  }
+  onCountryValueChanges(country: string) {
+    this.generalInfoRequest.country_id = this.countries.indexOf(country) + 1;
+
+    console.log(this.generalInfoRequest);
+  }
+  onSelectCity(city: City) {
+    this.generalInfoRequest.city_id = city.city_id;
+    this.temp_city = city;
+  }
+  onBlurCity() {
+    if (this.temp_city) {
+      this.temp_city = null;
+    } else {
+      if (this.basicInfoForm.controls.basicInfoCity.value !== this.generalInfoResponse.city) {
+        this.basicInfoForm.controls.basicInfoCity.setValue('');
+        this.generalInfoRequest.city_id = null;
+      }
+    }
+  }
+  clearCity() {
+    this.basicInfoForm.controls.basicInfoCity.setValue('');
+    this.generalInfoRequest.city_id = null;
+  }
+  onSelectState(state: State) {
+    this.generalInfoRequest.state_id = state.state_id;
+    this.temp_state = state;
+  }
+  onBlurState() {
+    if (this.temp_state) {
+      this.temp_state = null;
+    } else {
+      if (this.basicInfoForm.controls.basicInfoState.value !== this.generalInfoResponse.state) {
+        this.basicInfoForm.controls.basicInfoState.setValue('');
+        this.generalInfoRequest.state_id = null;
+      }
+    }
+  }
+  clearState() {
+    this.basicInfoForm.controls.basicInfoState.setValue('');
+    this.generalInfoRequest.state_id = null;
   }
 
 
@@ -733,25 +806,40 @@ export class CreateProfileComponent implements OnInit {
 
   // Get AutoComplete lists
 
-  onLoactionValueChanges(location: string) {
-    this.autoCompleteService.autoComplete(location, 'cities').subscribe(
+  onCityValueChanges(city: string) {
+    this.autoCompleteService.autoComplete(city, 'cities').subscribe(
       dataJson => {
         if (dataJson['success']) {
-          this.autocomplete_locations = dataJson['data'];
-        } else {
-          this.autocomplete_locations = [];
+          this.autocomplete_cities = dataJson['data'];
+          if (this.autocomplete_cities.length === 0) {
+            this.clearCity();
+          }
         }
       },
       error => {
-        console.log(error);
-        this.autocomplete_locations = [];
+        this.alertsService.show(error.message, AlertType.error);
+        this.autocomplete_cities = [];
+        this.clearCity();
       }
     );
   }
 
-  onGenderValueChanges(gender: string) {
-    const filterValue = gender.toLowerCase();
-    this.autocomplete_genders =  this.genders.filter(value => value.toLowerCase().indexOf(filterValue) === 0);
+  onStateValueChanges(state: string) {
+    this.autoCompleteService.autoComplete(state, 'states').subscribe(
+      dataJson => {
+        if (dataJson['success']) {
+          this.autocomplete_states = dataJson['data'];
+          if (this.autocomplete_states.length === 0) {
+            this.clearState();
+          }
+        }
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+        this.autocomplete_states = [];
+        this.clearState();
+      }
+    );
   }
 
   onUniversityValueChanges(school: string, arrIndex: number) {
@@ -838,23 +926,30 @@ export class CreateProfileComponent implements OnInit {
   getGeneralInfo() {
     this.userService.getGeneralInfo().subscribe(
       dataJson => {
+        console.log('Gernal User Information', dataJson['data']);
         this.generalInfoResponse = dataJson['data'];
         this.updateBasicInformationForm();
+        this.updateAboutMeForm();
+        this.setProfileStatus(this.generalInfoResponse.is_looking);
       },
       error => console.log(error)
     );
   }
 
   updateGeneralInfo() {
-    this.generalInfoRequest.gender = this.basicInfoForm.controls.basicInfoGender.value;
-
-    this.userService.updateGeneralInfo(this.generalInfoRequest).subscribe(
-      dataJson => {
-        this.generalInfoResponse = dataJson['data'];
-        this.updateBasicInformationForm();
-      },
-      error => console.log(error)
-    );
+    if (this.selectedPageIndex === 1 && this.basicInfoForm.valid) {
+      this.userService.updateGeneralInfo(this.generalInfoRequest).subscribe(
+        dataJson => {
+          this.generalInfoResponse = dataJson['data'];
+          this.updateBasicInformationForm();
+          this.alertsService.show('General information has been updated Successfully!', AlertType.success);
+          this.selectedPageIndex++;
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    }
   }
 
   // Education Information

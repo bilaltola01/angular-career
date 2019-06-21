@@ -69,15 +69,32 @@
       </div>
       <div class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
-          <mat-label>Your Location</mat-label>
-          <input matInput placeholder="Your Location" type="text"  [matAutocomplete]="autocompleteCity" [formControl]="basicInfoForm.controls.basicInfoLocation">
-
-          <mat-autocomplete #autocompleteCity="matAutocomplete">
-            <mat-option *ngFor="let location of autocomplete_locations" [value]="location.city">
-              <span>{{location.city}}</span>
+          <mat-label>City</mat-label>
+          <input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity" [formControl]="basicInfoForm.controls.basicInfoCity">
+          <mat-autocomplete #autocompleteCity="matAutocomplete" (closed)="onBlurCity()">
+            <mat-option *ngFor="let city of autocomplete_cities" [value]="city.city" (onSelectionChange)="onSelectCity(city)">
+              <span>{{city.city}}</span>
             </mat-option>
           </mat-autocomplete>
-
+        </mat-form-field>
+      </div>
+      <div class="profile-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>State</mat-label>
+          <input matInput placeholder="State" type="text" [matAutocomplete]="autocompleteState" [formControl]="basicInfoForm.controls.basicInfoState">
+          <mat-autocomplete #autocompleteState="matAutocomplete" (closed)="onBlurState()">
+            <mat-option *ngFor="let state of autocomplete_states" [value]="state.state" (onSelectionChange)="onSelectState(state)">
+              <span>{{state.state}}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <div class="profile-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Country</mat-label>
+          <mat-select [formControl]="basicInfoForm.controls.basicInfoCountry">
+            <mat-option *ngFor="let country of countries" value="{{country}}">{{country}}</mat-option>
+          </mat-select>
         </mat-form-field>
       </div>
       <div class="profile-form__field">
@@ -89,24 +106,23 @@
       <div class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
           <mat-label>Gender</mat-label>
-          <input matInput placeholder="Gender" type="text" [matAutocomplete]="autocompleteGender" [formControl]="basicInfoForm.controls.basicInfoGender">
-          <mat-autocomplete #autocompleteGender="matAutocomplete">
-            <mat-option *ngFor="let autocomplete_gender of autocomplete_genders" [value]="autocomplete_gender">
-              <span>{{autocomplete_gender}}</span>
-            </mat-option>
-          </mat-autocomplete>
+          <mat-select [formControl]="basicInfoForm.controls.basicInfoGender">
+            <mat-option *ngFor="let gender of genders" value="{{gender}}">{{gender}}</mat-option>
+          </mat-select>
         </mat-form-field>
       </div>
       <div class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
           <mat-label>Ethnicity</mat-label>
-          <input matInput placeholder="Ethnicity" type="text" [formControl]="basicInfoForm.controls.basicInfoEthnicity">
+          <mat-select [formControl]="basicInfoForm.controls.basicInfoEthnicity">
+            <mat-option *ngFor="let ethnicityType of ethnicityTypes" value="{{ethnicityType}}">{{ethnicityType}}</mat-option>
+          </mat-select>
         </mat-form-field>
       </div>
     </div>
   </div>
   <div class="container__full">
-    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
+    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!basicInfoForm.valid"></action-button>
   </div>
 </div>
 
