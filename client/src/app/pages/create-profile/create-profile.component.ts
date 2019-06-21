@@ -133,7 +133,7 @@ export class CreateProfileComponent implements OnInit {
 
   profile_status = this.statuses[0];
 
-  selectedPageIndex = 1;
+  selectedPageIndex = 0;
 
   generalInfoResponse: UserGeneralInfo;
   generalInfoRequest: UserObject;
@@ -342,8 +342,6 @@ export class CreateProfileComponent implements OnInit {
   }
   onCountryValueChanges(country: string) {
     this.generalInfoRequest.country_id = this.countries.indexOf(country) + 1;
-
-    console.log(this.generalInfoRequest);
   }
   onSelectCity(city: City) {
     this.generalInfoRequest.city_id = city.city_id;
@@ -387,9 +385,8 @@ export class CreateProfileComponent implements OnInit {
   // About Me Form
   initAboutMeForm() {
     this.aboutMeForm = new FormGroup({
-      aboutMe: new FormControl('')
+      aboutMe: new FormControl('', [Validators.required])
     });
-
   }
   updateAboutMeForm() {
     this.aboutMeForm.controls.aboutMe.setValue(this.generalInfoResponse.user_intro ? this.generalInfoResponse.user_intro : '');
@@ -926,23 +923,35 @@ export class CreateProfileComponent implements OnInit {
   getGeneralInfo() {
     this.userService.getGeneralInfo().subscribe(
       dataJson => {
-        console.log('Gernal User Information', dataJson['data']);
+        console.log('Gernal_Information', dataJson['data']);
         this.generalInfoResponse = dataJson['data'];
         this.updateBasicInformationForm();
         this.updateAboutMeForm();
         this.setProfileStatus(this.generalInfoResponse.is_looking);
       },
-      error => console.log(error)
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
     );
   }
 
   updateGeneralInfo() {
-    if (this.selectedPageIndex === 1 && this.basicInfoForm.valid) {
+    if ((this.selectedPageIndex === 1 && this.basicInfoForm.valid) || (this.selectedPageIndex === 2 && this.aboutMeForm.valid)) {
       this.userService.updateGeneralInfo(this.generalInfoRequest).subscribe(
         dataJson => {
           this.generalInfoResponse = dataJson['data'];
-          this.updateBasicInformationForm();
-          this.alertsService.show('General information has been updated Successfully!', AlertType.success);
+          switch (this.selectedPageIndex) {
+            case 1:
+              this.updateBasicInformationForm();
+              this.alertsService.show('General information has been updated Successfully!', AlertType.success);
+              break;
+            case 2:
+              this.updateAboutMeForm();
+              this.alertsService.show('Introduction information has been updated Successfully!', AlertType.success);
+              break;
+            default:
+              break;
+          }
           this.selectedPageIndex++;
         },
         error => {
