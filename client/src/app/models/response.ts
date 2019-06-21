@@ -1,26 +1,27 @@
 export interface UserGeneralInfo {
   user_id: number;
+  recruiter: number;
+  applicant: number;
   email: string;
   first_name: string;
   last_name: string;
-  birthdate: string;
-  gender: string;
-  phone_num: string;
-  recruiter: number;
-  applicant: number;
-  title: string;
   city_id: number;
   city: string;
-  country_id: number;
-  country: string;
   state_id: number;
   state: string;
   state_abrev: string;
+  country_id: number;
+  country: string;
+  ethnicity: string;
+  birthdate: string;
+  gender: string;
+  phone_num: string;
+  title: string;
   user_intro: string;
-  site_admin: number;
-  date_created: Date;
   photo: string;
   is_looking: number;
+  site_admin: number;
+  date_created: Date;
 }
 
 export interface UserEducationItem {

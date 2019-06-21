@@ -13,6 +13,7 @@ export interface UserObject {
   photo: string;
   title: string;
   user_intro: string;
+  ethnicity: string;
 }
 
 export interface UserEducationItemData {
