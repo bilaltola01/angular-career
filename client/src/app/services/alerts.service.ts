@@ -1,6 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
+export enum AlertType {
+  success = 'success',
+  warning = 'warning',
+  error = 'error',
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -10,7 +16,7 @@ export class AlertsService {
 
   constructor() { }
 
-  show(message: string, type?: string) {
+  show(message: string, type?: AlertType) {
     this.snackbarSubject.next({
       show: true,
       message,

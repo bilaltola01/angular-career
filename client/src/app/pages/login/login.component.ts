@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AlertsService } from 'src/app/services/alerts.service';
+import { AlertsService, AlertType } from 'src/app/services/alerts.service';
 
 @Component({
   selector: 'app-login',
@@ -64,7 +64,7 @@ export class LoginComponent implements OnInit {
         },
         error => {
           console.log(error);
-          this.alertsService.show(error.message, 'error');
+          this.alertsService.show(error.message, AlertType.error);
         }
       );
     }

@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
-import { AlertsService } from 'src/app/services/alerts.service';
+import { AlertsService, AlertType } from 'src/app/services/alerts.service';
 import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({

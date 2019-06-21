@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
-import { AlertsService } from 'src/app/services/alerts.service';
+import { AlertsService, AlertType } from 'src/app/services/alerts.service';
 
 @Component({
   selector: 'app-style-guide',
@@ -22,15 +22,15 @@ export class StyleGuideComponent implements OnInit {
   }
 
   openSnackBarError() {
-    this.alertsService.show('This is error', 'error');
+    this.alertsService.show('This is error', AlertType.error);
   }
 
   openSnackBarWarning() {
-    this.alertsService.show('This is warning', 'warning');
+    this.alertsService.show('This is warning', AlertType.warning);
   }
 
   openSnackBarSuccess() {
-    this.alertsService.show('This is success', 'success');
+    this.alertsService.show('This is success', AlertType.success);
   }
 
 }
