@@ -6,6 +6,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { RegistrationComponent } from './pages/registration/registration.component';
 import { VerificationComponent } from './pages/verification/verification.component';
 import { EmailSentComponent } from './pages/email-sent/email-sent.component';
+import { CreateProfileComponent } from './pages/create-profile/create-profile.component';
 
 const routes: Routes = [
   {
@@ -28,6 +29,11 @@ const routes: Routes = [
   {
     path: 'email-sent',
     component: EmailSentComponent
+  },
+  {
+    path: 'create-profile',
+    component: CreateProfileComponent,
+    canActivate: [AuthGuard]
   }
 ];
 

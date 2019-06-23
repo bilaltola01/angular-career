@@ -3,11 +3,18 @@
 $tag-normal-color: map-get($md-cfaccent, 500);
 $tag-green-color: map-get($md-cdgreen, 500);
 $tag-red-color: map-get($md-cfred, 500);
+$status-bg-color: #f4f5f8;
 
 @mixin tag-color($color) {
     color: $color;
     background-color: rgba($color, 0.05);
     border-color: rgba($color, 0.05);
+}
+
+:host.status {
+    .tag-container {
+        background-color: $status-bg-color;
+    }
 }
 
 .tag-container {
@@ -42,9 +49,14 @@ $tag-red-color: map-get($md-cfred, 500);
         }
         .mat-icon {
             font-size: 25px;
-            color: $tag-green-color;
+            color: rgba($tag-normal-color, .2);
             width: initial;
             height: initial;
+        }
+        &.active {
+            .mat-icon {
+                color: $tag-green-color;
+            }
         }
     }
     &.tag-ellipse {
@@ -52,8 +64,9 @@ $tag-red-color: map-get($md-cfred, 500);
         flex-direction: column;
         justify-content: center;
         align-content: flex-start;
-        padding: 8px 25px;
+        padding: 10px 15px;
         font-size: 0.9em;
+        border-radius: 18px;
         .ellipse-container {
             display: flex;
             align-items: center;

@@ -13,6 +13,7 @@ export class SimpleTagComponent implements OnInit {
   @Input() onlineTag = false;
   @Input() ellipseTag = false;
   @Input() value = 0;
+  @Input() active = false;
 
   tagClasseNames = {
     'green': 'tag-green',

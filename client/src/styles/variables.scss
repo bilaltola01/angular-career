@@ -204,12 +204,16 @@ $md-cfred: (
   )
 );
 
+$white: #ffffff;
+$black: #000000;
+
 $btn-radius: 28pt;
 
 $container-max-width: 1365px;
 
 $mat-form-bg-color: #ecf3fc;
 $mat-form-border-color: #dae4f1;
+$mat-form-prefix-color: #525252;
 
 @mixin flex($direction, $align, $justify) {
   display: flex;

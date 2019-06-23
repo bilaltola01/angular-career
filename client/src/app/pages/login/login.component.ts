@@ -65,7 +65,7 @@ export class LoginComponent implements OnInit {
         data => {
           if (data['success']) {
             console.log(data['message']);
-            this.router.navigate(['/style-guide']);
+            this.router.navigate(['/create-profile']);
           } else {
             console.log(data['message']);
           }

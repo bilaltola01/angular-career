@@ -18,6 +18,7 @@ import { VerificationComponent } from './pages/verification/verification.compone
 import { RoundCheckboxComponent } from './components/round-checkbox/round-checkbox.component';
 import { AlertBarComponent } from './components/alert-bar/alert-bar.component';
 import { EmailSentComponent } from './pages/email-sent/email-sent.component';
+import { CreateProfileComponent } from './pages/create-profile/create-profile.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { EmailSentComponent } from './pages/email-sent/email-sent.component';
     RoundCheckboxComponent,
     AlertBarComponent,
     EmailSentComponent,
+    CreateProfileComponent,
   ],
   imports: [
     BrowserModule,

@@ -5,7 +5,7 @@
   {{title}}
 </button>
 <button *ngIf="type==='text'" mat-button disableRipple="true" [color]="color" [disabled]="disabled">
-  {{title}}
+  <img *ngIf="done" src="assets/icons/ic_done.svg">{{title}}
 </button>
 <button *ngIf="type==='flat'" mat-flat-button [color]="color" [disabled]="disabled">
   {{title}}
