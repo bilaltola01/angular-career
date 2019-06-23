@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
     this.currentRole = 0;
 
     this.loginForm = new FormGroup({
-      emailAddress: new FormControl('', [Validators.required, Validators.email, , Validators.maxLength(50)]),
+      emailAddress: new FormControl('', [Validators.required, Validators.email, Validators.maxLength(50)]),
       password: new FormControl('', [Validators.required, Validators.minLength(6)])
     });
   }

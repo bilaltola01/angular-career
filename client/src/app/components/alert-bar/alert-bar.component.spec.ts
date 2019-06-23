@@ -25,4 +25,10 @@ describe('AlertBarComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should be able to close', () => {
+    component.close();
+    expect(component.show).toBeFalsy();
+  });
+
 });

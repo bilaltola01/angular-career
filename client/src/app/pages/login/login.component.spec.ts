@@ -27,4 +27,16 @@ describe('LoginComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should switchRole to applicant', () => {
+    component.switchRole('applicant');
+    expect(component.currentRole).toEqual(0);
+    expect(component.checkUserRole('applicant')).toBeTruthy();
+  });
+
+  it('should switchRole to recruiter', () => {
+    component.switchRole('recruiter');
+    expect(component.checkUserRole('recruiter')).toBeTruthy();
+    expect(component.currentRole).toEqual(1);
+  });
 });

@@ -22,4 +22,14 @@ describe('RoundCheckboxComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+
+  it('checking toggleChecks toggle check', () => {
+    component.checked = false;
+    component.toggleCheck();
+    expect(component.checked).toBeTruthy();
+    component.toggleCheck();
+    expect(component.checked).toBeFalsy();
+  });
+
 });
