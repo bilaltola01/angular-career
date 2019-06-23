@@ -161,10 +161,10 @@
       <ng-container *ngFor="let eductionForm of educationFormArray.controls; let i = index" [formGroup]="educationFormArray.controls[i]">
         <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
-            <mat-label>Select University</mat-label>
-            <input matInput placeholder="Select University" type="text" [matAutocomplete]="autocompleteUniversity" [formControl]="educationFormArray.controls[i].controls.university">
-            <mat-autocomplete #autocompleteUniversity="matAutocomplete">
-              <mat-option *ngFor="let autocomplete_university of autocomplete_universities" [value]="autocomplete_university.school_name" (onSelectionChange)="onSelectUniversity(i, autocomplete_university)">
+            <mat-label>School</mat-label>
+            <input matInput placeholder="School" type="text" [matAutocomplete]="autocompleteUniversity" [formControl]="educationFormArray.controls[i].controls.university">
+            <mat-autocomplete #autocompleteUniversity="matAutocomplete" (closed)="onBlurUniversity(i)">
+              <mat-option *ngFor="let autocomplete_university of autocomplete_universities[i]" [value]="autocomplete_university.school_name" (onSelectionChange)="onSelectUniversity(i, autocomplete_university)">
                 <span>{{autocomplete_university.school_name}}</span>
               </mat-option>
             </mat-autocomplete>
@@ -173,15 +173,17 @@
         <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>Degree</mat-label>
-            <input matInput placeholder="Degree" type="text" [formControl]="educationFormArray.controls[i].controls.degree">
+            <mat-select [formControl]="educationFormArray.controls[i].controls.degree">
+              <mat-option *ngFor="let degree of degrees" value="{{degree.education_level}}">{{degree.education_level}}</mat-option>
+            </mat-select>
           </mat-form-field>
         </div>
         <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
-            <mat-label>Course</mat-label>
-            <input matInput placeholder="Course" type="text" [matAutocomplete]="autocompleteMajor" [formControl]="educationFormArray.controls[i].controls.course">
-            <mat-autocomplete #autocompleteMajor="matAutocomplete">
-              <mat-option *ngFor="let autocomplete_major of autocomplete_majors" [value]="autocomplete_major.major_name" onSelectMajor(i, autocomplete_autocomplete_major)>
+            <mat-label>Major</mat-label>
+            <input matInput placeholder="Major" type="text" [matAutocomplete]="autocompleteMajor" [formControl]="educationFormArray.controls[i].controls.major">
+            <mat-autocomplete #autocompleteMajor="matAutocomplete" (closed)="onBlurMajor(i)">
+              <mat-option *ngFor="let autocomplete_major of autocomplete_majors[i]" [value]="autocomplete_major.major_name" (onSelectionChange)="onSelectMajor(i, autocomplete_major)">
                 <span>{{autocomplete_major.major_name}}</span>
               </mat-option>
             </mat-autocomplete>
@@ -189,8 +191,43 @@
         </div>
         <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
-            <mat-label>Year of Completion</mat-label>
-            <input matInput placeholder="Year of Completion" type="text" [formControl]="educationFormArray.controls[i].controls.completion">
+            <mat-label>Focus Major</mat-label>
+            <input matInput placeholder="Focus Major" type="text" [matAutocomplete]="autocompleteFocusMajor" [formControl]="educationFormArray.controls[i].controls.focus_major">
+            <mat-autocomplete #autocompleteFocusMajor="matAutocomplete" (closed)="onBlurFocusMajor(i)">
+              <mat-option *ngFor="let autocomplete_focus_major of autocomplete_focus_majors[i]" [value]="autocomplete_focus_major.major_name" (onSelectionChange)="onSelectFocusMajor(i, autocomplete_focus_major)">
+                <span>{{autocomplete_focus_major.major_name}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="profile-form__field">
+          <mat-form-field class="bg-transparent" appearance="fill">
+            <mat-label>Start Date</mat-label>
+            <input matInput placeholder="YYYY" type="text" [formControl]="educationFormArray.controls[i].controls.start_date" readonly>
+            <input class="hide" [matDatepicker]="start_date" [max]="maxEduStartDate()">
+            <mat-datepicker-toggle matSuffix [for]="start_date"></mat-datepicker-toggle>
+            <mat-datepicker
+              touchUi
+              #start_date
+              startView="multi-year"
+              (yearSelected)="onEducationYearSelect($event, i, true, start_date)"
+            >
+            </mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="profile-form__field" *ngIf="isExistStartDate(i)">
+          <mat-form-field class="bg-transparent" appearance="fill">
+            <mat-label>Graduation Date</mat-label>
+            <input matInput placeholder="YYYY" type="text" [formControl]="educationFormArray.controls[i].controls.graduation_date" readonly>
+            <input class="hide" [matDatepicker]="graduation_date" [min]="minEduGraduationDate(i)">
+            <mat-datepicker-toggle matSuffix [for]="graduation_date"></mat-datepicker-toggle>
+            <mat-datepicker
+              touchUi
+              #graduation_date
+              startView="multi-year"
+              (yearSelected)="onEducationYearSelect($event, i, false, graduation_date)"
+            >
+            </mat-datepicker>
           </mat-form-field>
         </div>
         <div class="profile-form__field textarea">
@@ -201,13 +238,16 @@
         <div class="profile-form__field border">
         </div>
       </ng-container>
-      <div class="profile-form__field btn">
+      <div class="profile-form__field btn" *ngIf="educationDataList.length === 0">
+        <action-button type="stroked" title="Add Education Info" (click)="addEducationFormGroup()"></action-button>
+      </div>
+      <div class="profile-form__field btn" *ngIf="educationDataList.length > 0 && educationDataList.length < 3">
         <action-button type="stroked" title="Add Another" (click)="addEducationFormGroup()"></action-button>
       </div>
     </div>
   </div>
   <div class="container__full">
-    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
+    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!educationFormArray.valid"></action-button>
   </div>
 </div>
 
@@ -483,6 +523,14 @@
     <action-button class="view-profile" type="flat" title="View Profile" color="primary" (click)="goToNextPage()"></action-button>
   </div>
 </div>
+
+<!-- <mat-datepicker
+  touchUi
+  #graduation_date
+  startView="multi-year"
+  (yearSelected)="onEducationYearSelect($event, i, false, graduation_date)"
+>
+</mat-datepicker> -->
 
 <!-- Create_Profile_Status end -->
 

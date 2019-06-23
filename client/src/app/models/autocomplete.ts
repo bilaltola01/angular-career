@@ -27,3 +27,9 @@ export interface Interest {
   interest_id: number;
   interest: string;
 }
+
+export interface Level {
+  level_id: number;
+  level: number;
+  education_level: string;
+}

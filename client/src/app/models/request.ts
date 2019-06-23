@@ -20,8 +20,8 @@ export interface UserEducationItemData {
   school_id: number;
   major_id: number;
   focus_major: number;
-  start_date: string;
-  graduation_date: string;
+  start_date: Date;
+  graduation_date: Date;
   gpa: number;
   edu_desc: string;
   user_specified_school_name: string;
