@@ -296,7 +296,7 @@ export class CreateProfileComponent implements OnInit {
     );
     this.basicInfoForm.controls.basicInfoBirth.valueChanges.subscribe(
       (date) => {
-        this.generalInfoRequest.birthdate = this.formattedDate(new Date(date));
+        this.generalInfoRequest.birthdate = new Date(date);
       }
     );
     this.basicInfoForm.controls.basicInfoEthnicity.valueChanges.subscribe(
@@ -322,7 +322,7 @@ export class CreateProfileComponent implements OnInit {
       photo: this.generalInfoResponse.photo ? this.generalInfoResponse.photo : null,
       first_name: this.generalInfoResponse.first_name,
       last_name: this.generalInfoResponse.last_name,
-      birthdate: this.generalInfoResponse.birthdate ? this.formattedDate(new Date(this.generalInfoResponse.birthdate)) : null,
+      birthdate: this.generalInfoResponse.birthdate ? new Date(this.generalInfoResponse.birthdate) : null,
       gender: this.generalInfoResponse.gender,
       phone_num: this.generalInfoResponse.phone_num,
       recruiter: this.generalInfoResponse.recruiter,
