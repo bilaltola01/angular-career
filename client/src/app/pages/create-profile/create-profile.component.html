@@ -71,8 +71,10 @@
         <mat-form-field class="bg-transparent" appearance="fill">
           <mat-label>City</mat-label>
           <input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity" [formControl]="basicInfoForm.controls.basicInfoCity">
+          <mat-icon matSuffix *ngIf="basicInfoForm.controls.basicInfoCity.valid && onCheckCityValidation()">done</mat-icon>
+          <mat-icon matSuffix class="error-field" *ngIf="(!basicInfoForm.controls.basicInfoCity.valid || !onCheckCityValidation()) && basicInfoForm.controls.basicInfoCity.touched">close</mat-icon>
           <mat-autocomplete #autocompleteCity="matAutocomplete" (closed)="onBlurCity()">
-            <mat-option *ngFor="let city of autocomplete_cities" [value]="city.city" (onSelectionChange)="onSelectCity(city)">
+            <mat-option *ngFor="let city of autocomplete_cities" [value]="getCityNameFromAutoComplete(city.city)" (onSelectionChange)="onSelectCity(city)">
               <span>{{city.city}}</span>
             </mat-option>
           </mat-autocomplete>

@@ -356,16 +356,33 @@ export class CreateProfileComponent implements OnInit {
   }
   onBlurCity() {
     if (this.temp_city) {
-      this.temp_city = null;
+      if (this.basicInfoForm.controls.basicInfoCity.value !== this.getCityNameFromAutoComplete(this.temp_city.city)) {
+        this.clearCity();
+        this.temp_city = null;
+      }
     } else {
       if (this.basicInfoForm.controls.basicInfoCity.value !== this.generalInfoResponse.city) {
-        this.basicInfoForm.controls.basicInfoCity.setValue('');
-        this.generalInfoRequest.city_id = null;
+        this.clearCity();
       }
     }
   }
+  onCheckCityValidation(): boolean {
+    let valid = false;
+    if (this.temp_city) {
+      valid = this.basicInfoForm.controls.basicInfoCity.value === this.getCityNameFromAutoComplete(this.temp_city.city);
+    } else {
+      valid = this.basicInfoForm.controls.basicInfoCity.value === this.generalInfoResponse.city;
+    }
+    return valid;
+  }
+  getCityNameFromAutoComplete(cityValue: string) {
+    let city;
+    if (cityValue.includes(', ')) {
+      city = cityValue.split(', ')[0];
+    }
+    return city;
+  }
   clearCity() {
-    this.basicInfoForm.controls.basicInfoCity.setValue('');
     this.generalInfoRequest.city_id = null;
   }
   onSelectState(state: State) {
@@ -899,11 +916,7 @@ export class CreateProfileComponent implements OnInit {
 
   // Get AutoComplete lists
 
-  onCityValueChanges(cityValue: string) {
-    let city = cityValue;
-    if (cityValue.includes(', ')) {
-      city = cityValue.split(', ')[0];
-    }
+  onCityValueChanges(city: string) {
     this.autoCompleteService.autoComplete(city, 'cities').subscribe(
       dataJson => {
         if (dataJson['success']) {
