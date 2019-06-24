@@ -102,7 +102,7 @@ export class CreateProfileComponent implements OnInit {
   // contants
   genders: string[] = Genders;
   ethnicityTypes: string[] = EthnicityTypes;
-  countries: string[] = Countries;
+  countries: string[] = Countries.slice().sort();
   degrees: Level[] = Levels;
 
   skills_trained: string[][];
@@ -348,7 +348,7 @@ export class CreateProfileComponent implements OnInit {
     this.generalInfoRequest.gender = gender;
   }
   onCountryValueChanges(country: string) {
-    this.generalInfoRequest.country_id = this.countries.indexOf(country) + 1;
+    this.generalInfoRequest.country_id = Countries.indexOf(country) + 1;
   }
   onSelectCity(city: City) {
     this.generalInfoRequest.city_id = city.city_id;
@@ -899,7 +899,11 @@ export class CreateProfileComponent implements OnInit {
 
   // Get AutoComplete lists
 
-  onCityValueChanges(city: string) {
+  onCityValueChanges(cityValue: string) {
+    let city = cityValue;
+    if (cityValue.includes(', ')) {
+      city = cityValue.split(', ')[0];
+    }
     this.autoCompleteService.autoComplete(city, 'cities').subscribe(
       dataJson => {
         if (dataJson['success']) {
