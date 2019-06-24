@@ -248,11 +248,8 @@
         <div class="profile-form__field border">
         </div>
       </ng-container>
-      <div class="profile-form__field btn" *ngIf="educationDataList.length === 0">
+      <div class="profile-form__field btn">
         <action-button type="stroked" title="Add Education Info" (click)="addEducationFormGroup()"></action-button>
-      </div>
-      <div class="profile-form__field btn" *ngIf="educationDataList.length > 0 && educationDataList.length < 3">
-        <action-button type="stroked" title="Add Another" (click)="addEducationFormGroup()"></action-button>
       </div>
     </div>
   </div>

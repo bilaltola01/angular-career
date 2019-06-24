@@ -449,80 +449,82 @@ export class CreateProfileComponent implements OnInit {
    * @param education
    */
   addEducationFormGroup(education: UserEducationItem) {
-    if (this.educationDataList.length < 3) {
-      this.autocomplete_universities.push([]);
-      this.autocomplete_majors.push([]);
-      this.autocomplete_focus_majors.push([]);
-      this.temp_university.push(null);
-      this.temp_major.push(null);
-      this.temp_focus_major.push(null);
+    this.autocomplete_universities.push([]);
+    this.autocomplete_majors.push([]);
+    this.autocomplete_focus_majors.push([]);
+    this.temp_university.push(null);
+    this.temp_major.push(null);
+    this.temp_focus_major.push(null);
 
-      const eduactionData = {
-        school_id: education ? education.school_id : null,
-        major_id: education ? education.major_id : null,
-        focus_major: education ? education.focus_major : null,
-        start_date: education ? new Date(education.start_date) : null,
-        graduation_date: education ? new Date(education.graduation_date) : null,
-        gpa: education ? education.gpa : null,
-        edu_desc: education ? education.edu_desc : null,
-        user_specified_school_name: education ? education.user_specified_school_name : null,
-        level_id: education ? education.level_id : null,
-        focus_major_name: education ? education.focus_major_name : null
-      };
+    const eduactionData = {
+      school_id: education ? education.school_id : null,
+      major_id: education ? education.major_id : null,
+      focus_major: education ? education.focus_major : null,
+      start_date: education ? new Date(education.start_date) : null,
+      graduation_date: education ? new Date(education.graduation_date) : null,
+      gpa: education ? education.gpa : null,
+      edu_desc: education ? education.edu_desc : null,
+      user_specified_school_name: education ? education.user_specified_school_name : null,
+      level_id: education ? education.level_id : null,
+      focus_major_name: education ? education.focus_major_name : null
+    };
 
-      const educationForm = new FormGroup({
-        university: new FormControl(education ? education.school_name : '', [Validators.required]),
-        degree: new FormControl(education ? education.education_level : '', [Validators.required]),
-        major: new FormControl(education ? education.major_name : '', [Validators.required]),
-        focus_major: new FormControl(education ? education.focus_major_name : ''),
-        start_date: new FormControl(education ? new Date(education.start_date).getFullYear() : '', [Validators.required]),
-        graduation_date: new FormControl(education ? new Date(education.graduation_date).getFullYear() : ''),
-        description: new FormControl(education ? education.edu_desc : '')
-      });
+    const educationForm = new FormGroup({
+      university: new FormControl(education ? education.school_name : '', [Validators.required]),
+      degree: new FormControl(education ? education.education_level : '', [Validators.required]),
+      major: new FormControl(education ? education.major_name : '', [Validators.required]),
+      focus_major: new FormControl(education ? education.focus_major_name : ''),
+      start_date: new FormControl(education ? new Date(education.start_date).getFullYear() : '', [Validators.required]),
+      graduation_date: new FormControl(education ? new Date(education.graduation_date).getFullYear() : ''),
+      description: new FormControl(education ? education.edu_desc : '')
+    });
 
-      this.educationDataList.push(eduactionData);
+    this.educationDataList.push(eduactionData);
 
-      const arrIndex = this.educationDataList.length - 1;
+    const arrIndex = this.educationDataList.length - 1;
 
-      educationForm.controls.university.valueChanges.subscribe(
-        (university) => {
-          if (university) {
-            this.onUniversityValueChanges(university, arrIndex);
-          } else {
-            this.autocomplete_universities[arrIndex] = [];
-            this.onSelectSpecificUniversity(arrIndex, null);
-          }
+    educationForm.controls.university.valueChanges.subscribe(
+      (university) => {
+        if (university) {
+          this.onUniversityValueChanges(university, arrIndex);
+        } else {
+          this.autocomplete_universities[arrIndex] = [];
+          this.onSelectSpecificUniversity(arrIndex, null);
         }
-      );
-      educationForm.controls.degree.valueChanges.subscribe(
-        (degree) => {
-          this.onDegreeValueChanges(degree, arrIndex);
-        }
-      );
-      educationForm.controls.major.valueChanges.subscribe(
-        (major) => {
-          major ? this.onMajorValueChanges(major, arrIndex) : this.autocomplete_majors[arrIndex] = [] ;
-        }
-      );
-      educationForm.controls.focus_major.valueChanges.subscribe(
-        (focus_major) => {
-          focus_major ? this.onMajorValueChanges(focus_major, arrIndex, true) : this.autocomplete_focus_majors[arrIndex] = [];
-        }
-      );
-      educationForm.controls.description.valueChanges.subscribe(
-        (description) => {
-          this.onDescriptionValueChange(arrIndex, description);
-        }
-      );
+      }
+    );
+    educationForm.controls.degree.valueChanges.subscribe(
+      (degree) => {
+        this.onDegreeValueChanges(degree, arrIndex);
+      }
+    );
+    educationForm.controls.major.valueChanges.subscribe(
+      (major) => {
+        major ? this.onMajorValueChanges(major, arrIndex) : this.autocomplete_majors[arrIndex] = [] ;
+      }
+    );
+    educationForm.controls.focus_major.valueChanges.subscribe(
+      (focus_major) => {
+        focus_major ? this.onMajorValueChanges(focus_major, arrIndex, true) : this.autocomplete_focus_majors[arrIndex] = [];
+      }
+    );
+    educationForm.controls.description.valueChanges.subscribe(
+      (description) => {
+        this.onDescriptionValueChange(arrIndex, description);
+      }
+    );
 
-      this.educationFormArray.push(educationForm);
-    }
+    this.educationFormArray.push(educationForm);
   }
 
   updateEducationForm() {
-    this.educationList.forEach((education) => {
-      this.addEducationFormGroup(education);
-    });
+    if (this.educationList.length === 0) {
+      this.addEducationFormGroup(null);
+    } else {
+      this.educationList.forEach((education) => {
+        this.addEducationFormGroup(education);
+      });
+    }
   }
   onDegreeValueChanges(degree: string, index: number) {
     const filter = this.degrees.filter(value => value.education_level === degree);
