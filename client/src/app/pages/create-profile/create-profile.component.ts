@@ -470,7 +470,7 @@ export class CreateProfileComponent implements OnInit {
     };
 
     const educationForm = new FormGroup({
-      university: new FormControl(education ? education.school_name : '', [Validators.required]),
+      university: new FormControl(education ? (education.school_id ? education.school_name : education.user_specified_school_name) : '', [Validators.required]),
       degree: new FormControl(education ? education.education_level : '', [Validators.required]),
       major: new FormControl(education ? education.major_name : '', [Validators.required]),
       focus_major: new FormControl(education ? education.focus_major_name : ''),
