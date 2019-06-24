@@ -391,16 +391,26 @@ export class CreateProfileComponent implements OnInit {
   }
   onBlurState() {
     if (this.temp_state) {
-      this.temp_state = null;
+      if (this.basicInfoForm.controls.basicInfoState.value !== this.temp_state.state) {
+        this.clearState();
+        this.temp_state = null;
+      }
     } else {
       if (this.basicInfoForm.controls.basicInfoState.value !== this.generalInfoResponse.state) {
-        this.basicInfoForm.controls.basicInfoState.setValue('');
-        this.generalInfoRequest.state_id = null;
+        this.clearState();
       }
     }
   }
+  onCheckStateValidation(): boolean {
+    let valid = false;
+    if (this.temp_state) {
+      valid = this.basicInfoForm.controls.basicInfoState.value === this.temp_state.state;
+    } else {
+      valid = this.basicInfoForm.controls.basicInfoState.value === this.generalInfoResponse.state;
+    }
+    return valid;
+  }
   clearState() {
-    this.basicInfoForm.controls.basicInfoState.setValue('');
     this.generalInfoRequest.state_id = null;
   }
 

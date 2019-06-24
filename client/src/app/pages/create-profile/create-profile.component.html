@@ -84,6 +84,8 @@
         <mat-form-field class="bg-transparent" appearance="fill">
           <mat-label>State</mat-label>
           <input matInput placeholder="State" type="text" [matAutocomplete]="autocompleteState" [formControl]="basicInfoForm.controls.basicInfoState">
+          <mat-icon matSuffix *ngIf="basicInfoForm.controls.basicInfoState.valid && onCheckStateValidation()">done</mat-icon>
+          <mat-icon matSuffix class="error-field" *ngIf="(!basicInfoForm.controls.basicInfoState.valid || !onCheckStateValidation()) && basicInfoForm.controls.basicInfoState.touched">close</mat-icon>
           <mat-autocomplete #autocompleteState="matAutocomplete" (closed)="onBlurState()">
             <mat-option *ngFor="let state of autocomplete_states" [value]="state.state" (onSelectionChange)="onSelectState(state)">
               <span>{{state.state}}</span>
