@@ -192,6 +192,8 @@
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>Major</mat-label>
             <input matInput placeholder="Major" type="text" [matAutocomplete]="autocompleteMajor" [formControl]="educationFormArray.controls[i].controls.major">
+            <mat-icon matSuffix *ngIf="educationFormArray.controls[i].controls.major.valid && onCheckMajorValidation(i, false)">done</mat-icon>
+            <mat-icon matSuffix class="error-field" *ngIf="(!educationFormArray.controls[i].controls.major.valid || !onCheckMajorValidation(i, false)) && educationFormArray.controls[i].controls.major.touched">close</mat-icon>
             <mat-autocomplete #autocompleteMajor="matAutocomplete" (closed)="onBlurMajor(i)">
               <mat-option *ngFor="let autocomplete_major of autocomplete_majors[i]" [value]="autocomplete_major.major_name" (onSelectionChange)="onSelectMajor(i, autocomplete_major)">
                 <span>{{autocomplete_major.major_name}}</span>
@@ -203,6 +205,8 @@
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>Focus Major</mat-label>
             <input matInput placeholder="Focus Major" type="text" [matAutocomplete]="autocompleteFocusMajor" [formControl]="educationFormArray.controls[i].controls.focus_major">
+            <mat-icon matSuffix *ngIf="educationFormArray.controls[i].controls.focus_major.valid && onCheckMajorValidation(i, true)">done</mat-icon>
+            <mat-icon matSuffix class="error-field" *ngIf="(!educationFormArray.controls[i].controls.focus_major.valid || !onCheckMajorValidation(i, true)) && educationFormArray.controls[i].controls.focus_major.touched">close</mat-icon>
             <mat-autocomplete #autocompleteFocusMajor="matAutocomplete" (closed)="onBlurFocusMajor(i)">
               <mat-option *ngFor="let autocomplete_focus_major of autocomplete_focus_majors[i]" [value]="autocomplete_focus_major.major_name" (onSelectionChange)="onSelectFocusMajor(i, autocomplete_focus_major)">
                 <span>{{autocomplete_focus_major.major_name}}</span>
@@ -254,7 +258,7 @@
     </div>
   </div>
   <div class="container__full">
-    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!educationFormArray.valid"></action-button>
+    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!(educationFormArray.valid && onCheckAllMajorValidation())"></action-button>
   </div>
 </div>
 

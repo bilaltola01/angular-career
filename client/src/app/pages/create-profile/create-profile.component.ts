@@ -500,7 +500,7 @@ export class CreateProfileComponent implements OnInit {
     );
     educationForm.controls.major.valueChanges.subscribe(
       (major) => {
-        major ? this.onMajorValueChanges(major, arrIndex) : this.autocomplete_majors[arrIndex] = [] ;
+        major ? this.onMajorValueChanges(major, arrIndex) : this.autocomplete_majors[arrIndex] = [];
       }
     );
     educationForm.controls.focus_major.valueChanges.subscribe(
@@ -568,8 +568,34 @@ export class CreateProfileComponent implements OnInit {
       }
     }
   }
+  onCheckMajorValidation(arrIndex: number, isFocusMajor: boolean): boolean {
+    let valid = false;
+    if (isFocusMajor) {
+      if (this.temp_focus_major[arrIndex]) {
+        valid = this.educationFormArray.controls[arrIndex]['controls'].focus_major.value === this.temp_focus_major[arrIndex].major_name;
+      } else {
+        valid = this.educationList[arrIndex] && this.educationFormArray.controls[arrIndex]['controls'].focus_major.value === this.educationList[arrIndex].focus_major_name;
+      }
+    } else {
+      if (this.temp_major[arrIndex]) {
+        valid = this.educationFormArray.controls[arrIndex]['controls'].major.value === this.temp_major[arrIndex].major_name;
+      } else {
+        valid = this.educationList[arrIndex] && this.educationFormArray.controls[arrIndex]['controls'].major.value === this.educationList[arrIndex].major_name;
+      }
+    }
+    return valid;
+  }
+  onCheckAllMajorValidation(): boolean {
+    let valid = true;
+    this.educationDataList.forEach((value, index) => {
+      if (!this.onCheckMajorValidation(index, false) || !this.onCheckMajorValidation
+      (index, true)) {
+        valid = false;
+      }
+    });
+    return valid;
+  }
   clearMajor(index: number) {
-    this.educationFormArray.controls[index]['controls'].major.setValue('');
     this.educationDataList[index].major_id = null;
   }
   onSelectFocusMajor(index: number, major: Major) {
@@ -589,7 +615,6 @@ export class CreateProfileComponent implements OnInit {
     }
   }
   clearFocusMajor(index: number) {
-    this.educationFormArray.controls[index]['controls'].focus_major.setValue('');
     this.educationDataList[index].focus_major = null;
   }
   onEducationYearSelect(date: any, index: number, isStartDate: boolean = true, datePicker: MatDatepicker<any>) {
