@@ -104,7 +104,13 @@
       <div class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
           <mat-label>Date Of Birth</mat-label>
-          <input matInput placeholder="Date Of Birth" type="date" [formControl]="basicInfoForm.controls.basicInfoBirth">
+          <input matInput placeholder="Date Of Birth" type="text" [formControl]="basicInfoForm.controls.basicInfoBirth" readonly [matDatepicker]="birthdate">
+          <mat-datepicker-toggle matSuffix [for]="birthdate"></mat-datepicker-toggle>
+          <mat-datepicker
+            touchUi
+            #birthdate
+          >
+          </mat-datepicker>
         </mat-form-field>
       </div>
       <div class="profile-form__field">
@@ -126,7 +132,7 @@
     </div>
   </div>
   <div class="container__full">
-    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!basicInfoForm.valid"></action-button>
+    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!(basicInfoForm.valid && onCheckCityValidation() && onCheckStateValidation())"></action-button>
   </div>
 </div>
 

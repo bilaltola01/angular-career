@@ -296,7 +296,7 @@ export class CreateProfileComponent implements OnInit {
     );
     this.basicInfoForm.controls.basicInfoBirth.valueChanges.subscribe(
       (date) => {
-        this.generalInfoRequest.birthdate = date;
+        this.generalInfoRequest.birthdate = this.formattedDate(new Date(date));
       }
     );
     this.basicInfoForm.controls.basicInfoEthnicity.valueChanges.subscribe(
@@ -308,25 +308,21 @@ export class CreateProfileComponent implements OnInit {
 
   updateBasicInformationForm() {
     this.updateGeneralInfoRequest();
-    const birthdate = this.generalInfoResponse.birthdate ?  this.formattedDate(new Date(this.generalInfoResponse.birthdate)) : null;
-
     this.basicInfoForm.controls.basicInfoCity.setValue(this.generalInfoResponse.city);
     this.basicInfoForm.controls.basicInfoState.setValue(this.generalInfoResponse.state);
     this.basicInfoForm.controls.basicInfoCountry.setValue(this.generalInfoResponse.country);
     this.basicInfoForm.controls.basicInfoGender.setValue(this.generalInfoResponse.gender);
-    this.basicInfoForm.controls.basicInfoBirth.setValue(birthdate);
+    this.basicInfoForm.controls.basicInfoBirth.setValue(this.generalInfoResponse.birthdate ? new Date(this.generalInfoResponse.birthdate) : '');
     this.basicInfoForm.controls.basicInfoEthnicity.setValue(this.generalInfoResponse.ethnicity);
     this.aboutMeForm.controls.aboutMe.setValue(this.generalInfoResponse.user_intro);
   }
 
   updateGeneralInfoRequest() {
-    const birthdate = this.generalInfoResponse.birthdate ?  this.formattedDate(new Date(this.generalInfoResponse.birthdate)) : null;
-
     this.generalInfoRequest = {
       photo: this.generalInfoResponse.photo ? this.generalInfoResponse.photo : null,
       first_name: this.generalInfoResponse.first_name,
       last_name: this.generalInfoResponse.last_name,
-      birthdate: birthdate,
+      birthdate: this.generalInfoResponse.birthdate ? this.formattedDate(new Date(this.generalInfoResponse.birthdate)) : null,
       gender: this.generalInfoResponse.gender,
       phone_num: this.generalInfoResponse.phone_num,
       recruiter: this.generalInfoResponse.recruiter,
@@ -1077,7 +1073,7 @@ export class CreateProfileComponent implements OnInit {
   }
 
   updateGeneralInfo() {
-    if ((this.selectedPageIndex === 1 && this.basicInfoForm.valid) || (this.selectedPageIndex === 2 && this.aboutMeForm.valid)) {
+    if ((this.selectedPageIndex === 1 && this.basicInfoForm.valid && this.onCheckCityValidation() && this.onCheckStateValidation()) || (this.selectedPageIndex === 2 && this.aboutMeForm.valid)) {
       this.userService.updateGeneralInfo(this.generalInfoRequest).subscribe(
         dataJson => {
           this.generalInfoResponse = dataJson['data'];
