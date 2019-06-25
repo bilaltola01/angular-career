@@ -442,17 +442,16 @@ export class CreateProfileComponent implements OnInit {
     this.autocomplete_focus_majors = [];
   }
 
-  onRemoveEducationFormGroup(index: number) {
+  onRemoveEducationData(index: number) {
     if (index > this.educationList.length - 1) {
       this.removeEducationFormGroup(index);
     } else {
       this.deleteEducationData(index);
     }
   }
-
   removeEducationFormGroup(index: number) {
     this.educationDataList.splice(index, 1);
-    this.educationFormArray.controls.splice(index, 1);
+    this.educationFormArray.removeAt(index);
     this.autocomplete_universities.splice(index, 1);
     this.autocomplete_majors.splice(index, 1);
     this.autocomplete_focus_majors.splice(index, 1);
@@ -460,7 +459,11 @@ export class CreateProfileComponent implements OnInit {
       this.addEducationFormGroup(null);
     }
   }
-
+  onAddEducationData() {
+    if (this.educationFormArray.valid && this.checkAllMajorValidation()) {
+      this.addEducationFormGroup(null);
+    }
+  }
   /**
    * Add Education FormGroup
    * @param education
@@ -489,7 +492,7 @@ export class CreateProfileComponent implements OnInit {
     const educationForm = new FormGroup({
       university: new FormControl(education ? (education.school_id ? education.school_name : education.user_specified_school_name) : '', [Validators.required]),
       degree: new FormControl(education ? education.education_level : '', [Validators.required]),
-      major: new FormControl(education ? education.major_name : '', [Validators.required]),
+      major: new FormControl(education ? education.major_name : ''),
       focus_major: new FormControl(education ? education.focus_major_name : ''),
       start_date: new FormControl(education ? new Date(education.start_date).getFullYear() : '', [Validators.required]),
       graduation_date: new FormControl(education ? new Date(education.graduation_date).getFullYear() : '', [Validators.required]),
@@ -585,27 +588,40 @@ export class CreateProfileComponent implements OnInit {
       }
     }
   }
-  onCheckMajorValidation(arrIndex: number, isFocusMajor: boolean): boolean {
-    let valid = false;
+  /**
+   *
+   * Check Input of Major/Focus Major if these values selected from autocomplete list.
+   * @param arrIndex - Index of FormGroup Array
+   * @param isFocusMajor - Major or Focus Major
+   *
+   */
+  checkMajorValidation(arrIndex: number, isFocusMajor: boolean): boolean {
     if (isFocusMajor) {
       if (this.temp_focus_major[arrIndex]) {
-        valid = this.educationFormArray.controls[arrIndex]['controls'].focus_major.value === this.temp_focus_major[arrIndex].major_name;
+        return (this.educationFormArray.controls[arrIndex]['controls'].focus_major.value === this.temp_focus_major[arrIndex].major_name) ? true : false;
       } else {
-        valid = this.educationList[arrIndex] && this.educationFormArray.controls[arrIndex]['controls'].focus_major.value === this.educationList[arrIndex].focus_major_name;
+        if (this.educationFormArray.controls[arrIndex]['controls'].focus_major.value) {
+          return (this.educationList[arrIndex] && this.educationFormArray.controls[arrIndex]['controls'].focus_major.value === this.educationList[arrIndex].focus_major_name) ? true : false;
+        } else {
+          return true;
+        }
       }
     } else {
       if (this.temp_major[arrIndex]) {
-        valid = this.educationFormArray.controls[arrIndex]['controls'].major.value === this.temp_major[arrIndex].major_name;
+        return (this.educationFormArray.controls[arrIndex]['controls'].major.value === this.temp_major[arrIndex].major_name) ? true : false;
       } else {
-        valid = this.educationList[arrIndex] && this.educationFormArray.controls[arrIndex]['controls'].major.value === this.educationList[arrIndex].major_name;
+        if (this.educationFormArray.controls[arrIndex]['controls'].major.value) {
+          return (this.educationList[arrIndex] && this.educationFormArray.controls[arrIndex]['controls'].major.value === this.educationList[arrIndex].major_name) ? true : false;
+        } else {
+          return true;
+        }
       }
     }
-    return valid;
   }
-  onCheckAllMajorValidation(): boolean {
+  checkAllMajorValidation(): boolean {
     let valid = true;
     this.educationDataList.forEach((value, index) => {
-      if (!this.onCheckMajorValidation(index, false) || !this.onCheckMajorValidation
+      if (!this.checkMajorValidation(index, false) || !this.checkMajorValidation
       (index, true)) {
         valid = false;
       }
