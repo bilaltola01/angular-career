@@ -249,6 +249,9 @@
             <textarea matInput placeholder="Description (Optional)" rows="3" [formControl]="educationFormArray.controls[i].controls.description"></textarea>
           </mat-form-field>
         </div>
+        <div class="profile-form__field btn">
+          <action-button title="Remove" color="warn" (click)="onRemoveEducationFormGroup(i)"></action-button>
+        </div>
         <div class="profile-form__field border">
         </div>
       </ng-container>

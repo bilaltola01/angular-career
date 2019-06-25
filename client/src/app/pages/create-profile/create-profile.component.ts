@@ -140,7 +140,7 @@ export class CreateProfileComponent implements OnInit {
 
   profile_status = this.statuses[0];
 
-  selectedPageIndex = 0;
+  selectedPageIndex = 3;
 
   generalInfoResponse: UserGeneralInfo;
   generalInfoRequest: UserObject;
@@ -442,6 +442,25 @@ export class CreateProfileComponent implements OnInit {
     this.autocomplete_universities = [];
     this.autocomplete_majors = [];
     this.autocomplete_focus_majors = [];
+  }
+
+  onRemoveEducationFormGroup(index: number) {
+    if (index > this.educationList.length - 1) {
+      this.removeEducationFormGroup(index);
+    } else {
+      this.deleteEducationData(index);
+    }
+  }
+
+  removeEducationFormGroup(index: number) {
+    this.educationDataList.splice(index, 1);
+    this.educationFormArray.controls.splice(index, 1);
+    this.autocomplete_universities.splice(index, 1);
+    this.autocomplete_majors.splice(index, 1);
+    this.autocomplete_focus_majors.splice(index, 1);
+    if (this.educationDataList.length === 0) {
+      this.addEducationFormGroup(null);
+    }
   }
 
   /**
@@ -1175,6 +1194,19 @@ export class CreateProfileComponent implements OnInit {
         }
       });
     }
+  }
+
+  deleteEducationData(index: number) {
+    this.userService.deleteEducationInfoById(this.educationList[index].education_id).subscribe(
+      dataJson => {
+        console.log('Delete Education_List', dataJson);
+        this.educationList.splice(index, 1);
+        this.removeEducationFormGroup(index);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
   }
 
   // Experience Information

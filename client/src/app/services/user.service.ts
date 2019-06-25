@@ -197,7 +197,7 @@ export class UserService {
   }
 
   public deleteEducationInfoById(educationId: number): Observable<any> {
-    return this.http.patch(this.user_service_url + `user/${this.user_id}/education/${educationId}`, this.authHttpOptions())
+    return this.http.delete(this.user_service_url + `user/${this.user_id}/education/${educationId}`, this.authHttpOptions())
     .pipe(
       map(data => {
         return {success: true, message: 'Success!', data: data};
