@@ -221,9 +221,7 @@ export class CreateProfileComponent implements OnInit {
   }
 
   goToPage(index: number) {
-    if (this.selectedPageIndex > index) {
-      this.selectedPageIndex = index;
-    }
+    this.selectedPageIndex = index;
   }
 
   formattedDate(date: Date): string {
@@ -494,7 +492,7 @@ export class CreateProfileComponent implements OnInit {
       major: new FormControl(education ? education.major_name : '', [Validators.required]),
       focus_major: new FormControl(education ? education.focus_major_name : ''),
       start_date: new FormControl(education ? new Date(education.start_date).getFullYear() : '', [Validators.required]),
-      graduation_date: new FormControl(education ? new Date(education.graduation_date).getFullYear() : ''),
+      graduation_date: new FormControl(education ? new Date(education.graduation_date).getFullYear() : '', [Validators.required]),
       description: new FormControl(education ? education.edu_desc : '')
     });
 
