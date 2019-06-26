@@ -341,7 +341,7 @@
             </mat-autocomplete>
           </mat-form-field>
           <div class="skills" *ngIf="skills_trained[i].length > 0">
-            <simple-tag *ngFor="let skill of skills_trained[i]; let j = index" type="gray" title="{{skill.skill}}"></simple-tag>
+            <simple-tag *ngFor="let skill of skills_trained[i]; let j = index" type="gray" title="{{skill.skill}}" removeTag="true" (click)="removeSkillsTrained(i, j, skill)"></simple-tag>
           </div>
         </div>
 
@@ -357,7 +357,7 @@
             </mat-autocomplete>
           </mat-form-field>
           <div class="skills" *ngIf="additional_industries[i].length > 0">
-            <simple-tag *ngFor="let industry of additional_industries[i]; let j = index" type="gray" title="{{industry.industry_name}}"></simple-tag>
+            <simple-tag *ngFor="let industry of additional_industries[i]; let j = index" type="gray" title="{{industry.industry_name}}" removeTag="true" (click)="removeAdditionalIndustry(i, j, industry)"></simple-tag>
           </div>
         </div>
         <div class="profile-form__field btn">
@@ -367,7 +367,7 @@
         </div>
       </ng-container>
       <div class="profile-form__field btn">
-        <action-button type="stroked" title="Add Another" (click)="addExperienceFormGroup()" [disabled]="!workExperienceFormArray.valid"></action-button>
+        <action-button type="stroked" title="Add Another" (click)="onAddExperienceData()" [disabled]="!workExperienceFormArray.valid"></action-button>
       </div>
     </div>
   </div>

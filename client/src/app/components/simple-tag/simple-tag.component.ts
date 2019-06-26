@@ -14,6 +14,7 @@ export class SimpleTagComponent implements OnInit {
   @Input() ellipseTag = false;
   @Input() value = 0;
   @Input() active = false;
+  @Input() removeTag = false;
 
   tagClasseNames = {
     'green': 'tag-green',

@@ -5,4 +5,7 @@
   <div *ngIf="ellipseTag" class='ellipse-container'>
     <mat-icon *ngFor="let val of numbers" [class.active]="val < value">brightness_1</mat-icon>
   </div>
+  <div *ngIf="removeTag" class="tag-remove">
+    <mat-icon>delete</mat-icon>
+  </div>
 </div>
