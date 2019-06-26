@@ -334,9 +334,9 @@
           <mat-form-field appearance="standard" class="search">
             <mat-icon matSuffix>search</mat-icon>
             <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompleteSkillsTrained" [formControl]="workExperienceFormArray.controls[i].controls.skills_trained">
-            <mat-autocomplete #autocompleteSkillsTrained="matAutocomplete" (closed)="blurSkillSearchField('skill_trained', i)">
-              <mat-option *ngFor="let autocomplete_skill of autocomplete_skills" [value]="autocomplete_skill.skill" (onSelectionChange)="addSkillsTrained(i, autocomplete_skill.skill)">
-                <span>{{autocomplete_skill.skill}}</span>
+            <mat-autocomplete #autocompleteSkillsTrained="matAutocomplete">
+              <mat-option *ngFor="let autocomplete_skill_trained of autocomplete_skills_trained[i]" [value]="autocomplete_skill_trained.skill" (onSelectionChange)="addSkillsTrained(i, autocomplete_skill_trained.skill)">
+                <span>{{autocomplete_skill_trained.skill}}</span>
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>

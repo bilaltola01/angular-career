@@ -131,6 +131,7 @@ export class CreateProfileComponent implements OnInit {
   temp_focus_major: Major[] = [];
   autocomplete_companies: Company[][] = [];
   temp_company: Company[] = [];
+  autocomplete_skills_trained: Skill[][] = [];
   autocomplete_skills: Skill[] = [];
   autocomplete_interests: Interest[] = [];
 
@@ -682,6 +683,7 @@ export class CreateProfileComponent implements OnInit {
     this.experienceList = [];
     this.experienceDataList = [];
     this.autocomplete_companies = [];
+    this.autocomplete_skills_trained = [];
     this.skills_trained = [];
     this.additional_exposure = [];
   }
@@ -696,9 +698,7 @@ export class CreateProfileComponent implements OnInit {
     this.experienceDataList.splice(index, 1);
     this.workExperienceFormArray.removeAt(index);
     this.autocomplete_companies.splice(index, 1);
-    if (this.experienceDataList.length === 0) {
-      this.addExperienceFormGroup(null);
-    }
+    this.autocomplete_skills_trained.splice(index, 1);
   }
   onAddExperienceData() {
     if (this.educationFormArray.valid && this.checkAllMajorValidation()) {
@@ -713,6 +713,7 @@ export class CreateProfileComponent implements OnInit {
 
   addExperienceFormGroup(experience: UserExperienceItem) {
     this.autocomplete_companies.push([]);
+    this.autocomplete_skills_trained.push([]);
     this.autocomplete_skills = [];
     this.skills_trained.push(experience ? experience.skills_trained : []);
     this.additional_exposure.push(experience ? experience.industry_names : []);
@@ -766,7 +767,7 @@ export class CreateProfileComponent implements OnInit {
 
     workExperienceForm.controls.skills_trained.valueChanges.subscribe(
       (skill) => {
-        this.onSkillValueChanges(skill);
+        skill ? this.onSkillTrainedValueChanges(skill, arrIndex) : this.autocomplete_skills_trained[arrIndex] = [];
       }
     );
     workExperienceForm.controls.additional_exposure.valueChanges.subscribe(
@@ -832,11 +833,6 @@ export class CreateProfileComponent implements OnInit {
 
   onExpDescValueChange(index: number, exp_desc: string) {
     this.experienceDataList[index].exp_desc = exp_desc;
-  }
-
-  onSelectSpecificCompnay(index: number, company: string) {
-    this.experienceDataList[index].company_id = null;
-    this.experienceDataList[index].user_specified_company_name = company;
   }
 
   addSkillsTrained(index: number, skill: string) {
@@ -1144,7 +1140,7 @@ export class CreateProfileComponent implements OnInit {
         if (dataJson['success']) {
           this.autocomplete_companies[arrIndex] = dataJson['data'];
           if (this.autocomplete_companies.length === 0) {
-            this.onSelectSpecificCompnay(arrIndex, company);
+            this.onSelectSpecificCompany(arrIndex, company);
           }
         }
       },
@@ -1154,6 +1150,20 @@ export class CreateProfileComponent implements OnInit {
       }
     );
   }
+  onSkillTrainedValueChanges(skill: string, arrIndex: number) {
+    this.autoCompleteService.autoComplete(skill, 'skills').subscribe(
+      dataJson => {
+        if (dataJson['success']) {
+          this.autocomplete_skills_trained[arrIndex] = dataJson['data'];
+        }
+      },
+      error => {
+        this.autocomplete_skills_trained[arrIndex] = [];
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
 
   onSkillValueChanges(skill: string) {
     if (skill) {
