@@ -1145,7 +1145,7 @@ export class CreateProfileComponent implements OnInit {
       dataJson => {
         if (dataJson['success']) {
           this.autocomplete_companies[arrIndex] = dataJson['data'];
-          if (this.autocomplete_companies.length === 0) {
+          if (this.autocomplete_companies[arrIndex].length === 0) {
             this.onSelectSpecificCompany(arrIndex, company);
           }
         }
