@@ -737,7 +737,7 @@ export class CreateProfileComponent implements OnInit {
       company_name: new FormControl(experience ? experience.company_name : '', [Validators.required]),
       start_date: new FormControl(experience ? new Date(experience.start_date).getFullYear() : '', [Validators.required]),
       end_date: new FormControl(experience ? new Date(experience.end_date).getFullYear() : ''),
-      designation: new FormControl(experience ? experience.position_name : '', [Validators.required]),
+      position_name: new FormControl(experience ? experience.position_name : '', [Validators.required]),
       description: new FormControl(experience ? experience.exp_desc : ''),
       skills_trained: new FormControl(''),
       additional_exposure: new FormControl('')
@@ -753,7 +753,7 @@ export class CreateProfileComponent implements OnInit {
         }
       }
     );
-    workExperienceForm.controls.designation.valueChanges.subscribe(
+    workExperienceForm.controls.position_name.valueChanges.subscribe(
       (position) => {
         this.onPositionValueChange(arrIndex, position);
       }

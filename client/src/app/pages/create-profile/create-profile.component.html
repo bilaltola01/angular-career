@@ -320,7 +320,7 @@
         <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>Designation</mat-label>
-            <input matInput placeholder="Designation" type="text" [formControl]="workExperienceFormArray.controls[i].controls.designation">
+            <input matInput placeholder="Designation" type="text" [formControl]="workExperienceFormArray.controls[i].controls.position_name">
           </mat-form-field>
         </div>
         <div class="profile-form__field textarea">
@@ -360,6 +360,9 @@
             <simple-tag *ngFor="let skill of additional_exposure[i]; let j = index" type="gray" title="{{skill}}"></simple-tag>
           </div>
         </div>
+        <div class="profile-form__field btn">
+          <action-button title="Remove" color="warn" (click)="onRemoveExperienceData(i)"></action-button>
+        </div>
         <div class="profile-form__field border">
         </div>
       </ng-container>
@@ -369,7 +372,7 @@
     </div>
   </div>
   <div class="container__full">
-    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
+    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!workExperienceFormArray.valid"></action-button>
   </div>
 </div>
 
