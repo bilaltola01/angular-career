@@ -55,9 +55,9 @@ export interface UserExperienceItem {
   user_specified_company_name: string;
   work_hist_id: number;
   main_industry_name: string;
-  industry_names: any[];
+  industries: any[];
   skills_trained: any[];
-  add_industry_names: any[];
+  add_industries: any[];
 }
 
 export interface UserSkillItem {

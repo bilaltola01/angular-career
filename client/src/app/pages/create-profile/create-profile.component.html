@@ -330,34 +330,34 @@
         </div>
 
         <div class="profile-form__field search">
-          <h3>Skills Trained <span *ngIf="skills_trained.length > 0" class="count">{{skills_trained.length}}</span></h3>
+          <h3>Skills Trained <span *ngIf="skills_trained[i].length > 0" class="count">{{skills_trained[i].length}}</span></h3>
           <mat-form-field appearance="standard" class="search">
             <mat-icon matSuffix>search</mat-icon>
             <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompleteSkillsTrained" [formControl]="workExperienceFormArray.controls[i].controls.skills_trained">
             <mat-autocomplete #autocompleteSkillsTrained="matAutocomplete">
-              <mat-option *ngFor="let autocomplete_skill_trained of autocomplete_skills_trained[i]" [value]="autocomplete_skill_trained.skill" (onSelectionChange)="addSkillsTrained(i, autocomplete_skill_trained.skill)">
+              <mat-option *ngFor="let autocomplete_skill_trained of autocomplete_skills_trained[i]" [value]="autocomplete_skill_trained.skill" (onSelectionChange)="addSkillsTrained(i, autocomplete_skill_trained)">
                 <span>{{autocomplete_skill_trained.skill}}</span>
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
           <div class="skills" *ngIf="skills_trained[i].length > 0">
-            <simple-tag *ngFor="let skill of skills_trained[i]; let j = index" type="gray" title="{{skill}}"></simple-tag>
+            <simple-tag *ngFor="let skill of skills_trained[i]; let j = index" type="gray" title="{{skill.skill}}"></simple-tag>
           </div>
         </div>
 
         <div class="profile-form__field search">
-          <h3>Additional Exposure <span *ngIf="additional_exposure[i].length > 0" class="count">{{additional_exposure.length}}</span></h3>
+          <h3>Additional Industry Exposure <span *ngIf="additional_industries[i].length > 0" class="count">{{additional_industries.length}}</span></h3>
           <mat-form-field appearance="standard" class="search">
             <mat-icon matSuffix>search</mat-icon>
-            <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompleteAdditionalExposure" [formControl]="workExperienceFormArray.controls[i].controls.additional_exposure">
-            <mat-autocomplete #autocompleteAdditionalExposure="matAutocomplete" (closed)="blurSkillSearchField('additional_exposure', i)">
-              <mat-option *ngFor="let autocomplete_skill of autocomplete_skills" [value]="autocomplete_skill.skill" (onSelectionChange)="addAdditionalExposure(i, autocomplete_skill.skill)">
-                <span>{{autocomplete_skill.skill}}</span>
+            <input matInput placeholder="Search Industries" type="text" [matAutocomplete]="autocompleteAdditionalIndustry" [formControl]="workExperienceFormArray.controls[i].controls.additional_industries">
+            <mat-autocomplete #autocompleteAdditionalIndustry="matAutocomplete">
+              <mat-option *ngFor="let autocomplete_additional_industry of autocomplete_additional_industries[i]" [value]="autocomplete_additional_industry.industry_name" (onSelectionChange)="addAdditionalIndustry(i, autocomplete_additional_industry)">
+                <span>{{autocomplete_additional_industry.industry_name}}</span>
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
-          <div class="skills" *ngIf="additional_exposure[i].length > 0">
-            <simple-tag *ngFor="let skill of additional_exposure[i]; let j = index" type="gray" title="{{skill}}"></simple-tag>
+          <div class="skills" *ngIf="additional_industries[i].length > 0">
+            <simple-tag *ngFor="let industry of additional_industries[i]; let j = index" type="gray" title="{{industry.industry_name}}"></simple-tag>
           </div>
         </div>
         <div class="profile-form__field btn">
@@ -367,7 +367,7 @@
         </div>
       </ng-container>
       <div class="profile-form__field btn">
-        <action-button type="stroked" title="Add Another" (click)="addExperienceFormGroup()"></action-button>
+        <action-button type="stroked" title="Add Another" (click)="addExperienceFormGroup()" [disabled]="!workExperienceFormArray.valid"></action-button>
       </div>
     </div>
   </div>
