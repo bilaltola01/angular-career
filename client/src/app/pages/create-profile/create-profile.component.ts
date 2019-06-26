@@ -455,9 +455,6 @@ export class CreateProfileComponent implements OnInit {
     this.autocomplete_universities.splice(index, 1);
     this.autocomplete_majors.splice(index, 1);
     this.autocomplete_focus_majors.splice(index, 1);
-    if (this.educationDataList.length === 0) {
-      this.addEducationFormGroup(null);
-    }
   }
   onAddEducationData() {
     if (this.educationFormArray.valid && this.checkAllMajorValidation()) {
@@ -1176,37 +1173,41 @@ export class CreateProfileComponent implements OnInit {
   }
 
   updateEducationData() {
-    if (this.educationFormArray.valid) {
-      let counts = 0;
-      this.educationDataList.forEach((education, index) => {
-        if (index < this.educationList.length) {
-          this.userService.patchEducationInfoById(education, this.educationList[index].education_id).subscribe(
-            dataJson => {
-              this.educationList[index] = dataJson['data'];
-              counts++;
-              if (counts === this.educationDataList.length) {
-                this.selectedPageIndex++;
+    if (this.educationDataList.length !== 0) {
+      if (this.educationFormArray.valid) {
+        let counts = 0;
+        this.educationDataList.forEach((education, index) => {
+          if (index < this.educationList.length) {
+            this.userService.patchEducationInfoById(education, this.educationList[index].education_id).subscribe(
+              dataJson => {
+                this.educationList[index] = dataJson['data'];
+                counts++;
+                if (counts === this.educationDataList.length) {
+                  this.selectedPageIndex++;
+                }
+              },
+              error => {
+                this.alertsService.show(error.message, AlertType.error);
               }
-            },
-            error => {
-              this.alertsService.show(error.message, AlertType.error);
-            }
-          );
-        } else {
-          this.userService.postEducationInfo(education).subscribe(
-            dataJson => {
-              this.educationList[index] = dataJson['data'];
-              counts++;
-              if (counts === this.educationDataList.length) {
-                this.selectedPageIndex++;
+            );
+          } else {
+            this.userService.postEducationInfo(education).subscribe(
+              dataJson => {
+                this.educationList[index] = dataJson['data'];
+                counts++;
+                if (counts === this.educationDataList.length) {
+                  this.selectedPageIndex++;
+                }
+              },
+              error => {
+                this.alertsService.show(error.message, AlertType.error);
               }
-            },
-            error => {
-              this.alertsService.show(error.message, AlertType.error);
-            }
-          );
-        }
-      });
+            );
+          }
+        });
+      }
+    } else {
+      this.selectedPageIndex++;
     }
   }
 
