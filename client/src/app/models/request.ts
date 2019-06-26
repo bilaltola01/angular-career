@@ -1,7 +1,7 @@
 export interface UserObject {
   first_name: string;
   last_name: string;
-  birthdate: string;
+  birthdate: Date;
   gender: string;
   phone_num: string;
   recruiter: number;

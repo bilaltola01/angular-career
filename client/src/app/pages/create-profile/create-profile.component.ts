@@ -102,7 +102,7 @@ export class CreateProfileComponent implements OnInit {
   // contants
   genders: string[] = Genders;
   ethnicityTypes: string[] = EthnicityTypes;
-  countries: string[] = Countries;
+  countries: string[] = Countries.slice().sort();
   degrees: Level[] = Levels;
 
   skills_trained: string[][];
@@ -140,7 +140,7 @@ export class CreateProfileComponent implements OnInit {
 
   profile_status = this.statuses[0];
 
-  selectedPageIndex = 0;
+  selectedPageIndex = 3;
 
   generalInfoResponse: UserGeneralInfo;
   generalInfoRequest: UserObject;
@@ -221,9 +221,7 @@ export class CreateProfileComponent implements OnInit {
   }
 
   goToPage(index: number) {
-    if (this.selectedPageIndex > index) {
-      this.selectedPageIndex = index;
-    }
+    this.selectedPageIndex = index;
   }
 
   formattedDate(date: Date): string {
@@ -296,7 +294,7 @@ export class CreateProfileComponent implements OnInit {
     );
     this.basicInfoForm.controls.basicInfoBirth.valueChanges.subscribe(
       (date) => {
-        this.generalInfoRequest.birthdate = date;
+        this.generalInfoRequest.birthdate = new Date(date);
       }
     );
     this.basicInfoForm.controls.basicInfoEthnicity.valueChanges.subscribe(
@@ -308,25 +306,21 @@ export class CreateProfileComponent implements OnInit {
 
   updateBasicInformationForm() {
     this.updateGeneralInfoRequest();
-    const birthdate = this.generalInfoResponse.birthdate ?  this.formattedDate(new Date(this.generalInfoResponse.birthdate)) : null;
-
     this.basicInfoForm.controls.basicInfoCity.setValue(this.generalInfoResponse.city);
     this.basicInfoForm.controls.basicInfoState.setValue(this.generalInfoResponse.state);
     this.basicInfoForm.controls.basicInfoCountry.setValue(this.generalInfoResponse.country);
     this.basicInfoForm.controls.basicInfoGender.setValue(this.generalInfoResponse.gender);
-    this.basicInfoForm.controls.basicInfoBirth.setValue(birthdate);
+    this.basicInfoForm.controls.basicInfoBirth.setValue(this.generalInfoResponse.birthdate ? new Date(this.generalInfoResponse.birthdate) : '');
     this.basicInfoForm.controls.basicInfoEthnicity.setValue(this.generalInfoResponse.ethnicity);
     this.aboutMeForm.controls.aboutMe.setValue(this.generalInfoResponse.user_intro);
   }
 
   updateGeneralInfoRequest() {
-    const birthdate = this.generalInfoResponse.birthdate ?  this.formattedDate(new Date(this.generalInfoResponse.birthdate)) : null;
-
     this.generalInfoRequest = {
       photo: this.generalInfoResponse.photo ? this.generalInfoResponse.photo : null,
       first_name: this.generalInfoResponse.first_name,
       last_name: this.generalInfoResponse.last_name,
-      birthdate: birthdate,
+      birthdate: this.generalInfoResponse.birthdate ? new Date(this.generalInfoResponse.birthdate) : null,
       gender: this.generalInfoResponse.gender,
       phone_num: this.generalInfoResponse.phone_num,
       recruiter: this.generalInfoResponse.recruiter,
@@ -348,7 +342,7 @@ export class CreateProfileComponent implements OnInit {
     this.generalInfoRequest.gender = gender;
   }
   onCountryValueChanges(country: string) {
-    this.generalInfoRequest.country_id = this.countries.indexOf(country) + 1;
+    this.generalInfoRequest.country_id = Countries.indexOf(country) + 1;
   }
   onSelectCity(city: City) {
     this.generalInfoRequest.city_id = city.city_id;
@@ -356,16 +350,33 @@ export class CreateProfileComponent implements OnInit {
   }
   onBlurCity() {
     if (this.temp_city) {
-      this.temp_city = null;
+      if (this.basicInfoForm.controls.basicInfoCity.value !== this.getCityNameFromAutoComplete(this.temp_city.city)) {
+        this.clearCity();
+        this.temp_city = null;
+      }
     } else {
       if (this.basicInfoForm.controls.basicInfoCity.value !== this.generalInfoResponse.city) {
-        this.basicInfoForm.controls.basicInfoCity.setValue('');
-        this.generalInfoRequest.city_id = null;
+        this.clearCity();
       }
     }
   }
+  onCheckCityValidation(): boolean {
+    let valid = false;
+    if (this.temp_city) {
+      valid = this.basicInfoForm.controls.basicInfoCity.value === this.getCityNameFromAutoComplete(this.temp_city.city);
+    } else {
+      valid = this.basicInfoForm.controls.basicInfoCity.value === this.generalInfoResponse.city;
+    }
+    return valid;
+  }
+  getCityNameFromAutoComplete(cityValue: string) {
+    let city;
+    if (cityValue.includes(', ')) {
+      city = cityValue.split(', ')[0];
+    }
+    return city;
+  }
   clearCity() {
-    this.basicInfoForm.controls.basicInfoCity.setValue('');
     this.generalInfoRequest.city_id = null;
   }
   onSelectState(state: State) {
@@ -374,16 +385,26 @@ export class CreateProfileComponent implements OnInit {
   }
   onBlurState() {
     if (this.temp_state) {
-      this.temp_state = null;
+      if (this.basicInfoForm.controls.basicInfoState.value !== this.temp_state.state) {
+        this.clearState();
+        this.temp_state = null;
+      }
     } else {
       if (this.basicInfoForm.controls.basicInfoState.value !== this.generalInfoResponse.state) {
-        this.basicInfoForm.controls.basicInfoState.setValue('');
-        this.generalInfoRequest.state_id = null;
+        this.clearState();
       }
     }
   }
+  onCheckStateValidation(): boolean {
+    let valid = false;
+    if (this.temp_state) {
+      valid = this.basicInfoForm.controls.basicInfoState.value === this.temp_state.state;
+    } else {
+      valid = this.basicInfoForm.controls.basicInfoState.value === this.generalInfoResponse.state;
+    }
+    return valid;
+  }
   clearState() {
-    this.basicInfoForm.controls.basicInfoState.setValue('');
     this.generalInfoRequest.state_id = null;
   }
 
@@ -421,85 +442,106 @@ export class CreateProfileComponent implements OnInit {
     this.autocomplete_focus_majors = [];
   }
 
+  onRemoveEducationData(index: number) {
+    if (index > this.educationList.length - 1) {
+      this.removeEducationFormGroup(index);
+    } else {
+      this.deleteEducationData(index);
+    }
+  }
+  removeEducationFormGroup(index: number) {
+    this.educationDataList.splice(index, 1);
+    this.educationFormArray.removeAt(index);
+    this.autocomplete_universities.splice(index, 1);
+    this.autocomplete_majors.splice(index, 1);
+    this.autocomplete_focus_majors.splice(index, 1);
+  }
+  onAddEducationData() {
+    if (this.educationFormArray.valid && this.checkAllMajorValidation()) {
+      this.addEducationFormGroup(null);
+    }
+  }
   /**
    * Add Education FormGroup
    * @param education
    */
   addEducationFormGroup(education: UserEducationItem) {
-    if (this.educationDataList.length < 3) {
-      this.autocomplete_universities.push([]);
-      this.autocomplete_majors.push([]);
-      this.autocomplete_focus_majors.push([]);
-      this.temp_university.push(null);
-      this.temp_major.push(null);
-      this.temp_focus_major.push(null);
+    this.autocomplete_universities.push([]);
+    this.autocomplete_majors.push([]);
+    this.autocomplete_focus_majors.push([]);
+    this.temp_university.push(null);
+    this.temp_major.push(null);
+    this.temp_focus_major.push(null);
 
-      const eduactionData = {
-        school_id: education ? education.school_id : null,
-        major_id: education ? education.major_id : null,
-        focus_major: education ? education.focus_major : null,
-        start_date: education ? new Date(education.start_date) : null,
-        graduation_date: education ? new Date(education.graduation_date) : null,
-        gpa: education ? education.gpa : null,
-        edu_desc: education ? education.edu_desc : null,
-        user_specified_school_name: education ? education.user_specified_school_name : null,
-        level_id: education ? education.level_id : null,
-        focus_major_name: education ? education.focus_major_name : null
-      };
+    const eduactionData = {
+      school_id: education ? education.school_id : null,
+      major_id: education ? education.major_id : null,
+      focus_major: education ? education.focus_major : null,
+      start_date: education ? new Date(education.start_date) : null,
+      graduation_date: education ? new Date(education.graduation_date) : null,
+      gpa: education ? education.gpa : null,
+      edu_desc: education ? education.edu_desc : null,
+      user_specified_school_name: education ? education.user_specified_school_name : null,
+      level_id: education ? education.level_id : null,
+      focus_major_name: education ? education.focus_major_name : null
+    };
 
-      const educationForm = new FormGroup({
-        university: new FormControl(education ? education.school_name : '', [Validators.required]),
-        degree: new FormControl(education ? education.education_level : '', [Validators.required]),
-        major: new FormControl(education ? education.major_name : '', [Validators.required]),
-        focus_major: new FormControl(education ? education.focus_major_name : ''),
-        start_date: new FormControl(education ? new Date(education.start_date).getFullYear() : '', [Validators.required]),
-        graduation_date: new FormControl(education ? new Date(education.graduation_date).getFullYear() : ''),
-        description: new FormControl(education ? education.edu_desc : '')
-      });
+    const educationForm = new FormGroup({
+      university: new FormControl(education ? (education.school_id ? education.school_name : education.user_specified_school_name) : '', [Validators.required]),
+      degree: new FormControl(education ? education.education_level : '', [Validators.required]),
+      major: new FormControl(education ? education.major_name : ''),
+      focus_major: new FormControl(education ? education.focus_major_name : ''),
+      start_date: new FormControl(education ? new Date(education.start_date).getFullYear() : '', [Validators.required]),
+      graduation_date: new FormControl(education ? new Date(education.graduation_date).getFullYear() : '', [Validators.required]),
+      description: new FormControl(education ? education.edu_desc : '')
+    });
 
-      this.educationDataList.push(eduactionData);
+    this.educationDataList.push(eduactionData);
 
-      const arrIndex = this.educationDataList.length - 1;
+    const arrIndex = this.educationDataList.length - 1;
 
-      educationForm.controls.university.valueChanges.subscribe(
-        (university) => {
-          if (university) {
-            this.onUniversityValueChanges(university, arrIndex);
-          } else {
-            this.autocomplete_universities[arrIndex] = [];
-            this.onSelectSpecificUniversity(arrIndex, null);
-          }
+    educationForm.controls.university.valueChanges.subscribe(
+      (university) => {
+        if (university) {
+          this.onUniversityValueChanges(university, arrIndex);
+        } else {
+          this.autocomplete_universities[arrIndex] = [];
+          this.onSelectSpecificUniversity(arrIndex, null);
         }
-      );
-      educationForm.controls.degree.valueChanges.subscribe(
-        (degree) => {
-          this.onDegreeValueChanges(degree, arrIndex);
-        }
-      );
-      educationForm.controls.major.valueChanges.subscribe(
-        (major) => {
-          major ? this.onMajorValueChanges(major, arrIndex) : this.autocomplete_majors[arrIndex] = [] ;
-        }
-      );
-      educationForm.controls.focus_major.valueChanges.subscribe(
-        (focus_major) => {
-          focus_major ? this.onMajorValueChanges(focus_major, arrIndex, true) : this.autocomplete_focus_majors[arrIndex] = [];
-        }
-      );
-      educationForm.controls.description.valueChanges.subscribe(
-        (description) => {
-          this.onDescriptionValueChange(arrIndex, description);
-        }
-      );
+      }
+    );
+    educationForm.controls.degree.valueChanges.subscribe(
+      (degree) => {
+        this.onDegreeValueChanges(degree, arrIndex);
+      }
+    );
+    educationForm.controls.major.valueChanges.subscribe(
+      (major) => {
+        major ? this.onMajorValueChanges(major, arrIndex) : this.autocomplete_majors[arrIndex] = [];
+      }
+    );
+    educationForm.controls.focus_major.valueChanges.subscribe(
+      (focus_major) => {
+        focus_major ? this.onMajorValueChanges(focus_major, arrIndex, true) : this.autocomplete_focus_majors[arrIndex] = [];
+      }
+    );
+    educationForm.controls.description.valueChanges.subscribe(
+      (description) => {
+        this.onDescriptionValueChange(arrIndex, description);
+      }
+    );
 
-      this.educationFormArray.push(educationForm);
-    }
+    this.educationFormArray.push(educationForm);
   }
 
   updateEducationForm() {
-    this.educationList.forEach((education) => {
-      this.addEducationFormGroup(education);
-    });
+    if (this.educationList.length === 0) {
+      this.addEducationFormGroup(null);
+    } else {
+      this.educationList.forEach((education) => {
+        this.addEducationFormGroup(education);
+      });
+    }
   }
   onDegreeValueChanges(degree: string, index: number) {
     const filter = this.degrees.filter(value => value.education_level === degree);
@@ -543,8 +585,47 @@ export class CreateProfileComponent implements OnInit {
       }
     }
   }
+  /**
+   *
+   * Check Input of Major/Focus Major if these values selected from autocomplete list.
+   * @param arrIndex - Index of FormGroup Array
+   * @param isFocusMajor - Major or Focus Major
+   *
+   */
+  checkMajorValidation(arrIndex: number, isFocusMajor: boolean): boolean {
+    if (isFocusMajor) {
+      if (this.temp_focus_major[arrIndex]) {
+        return (this.educationFormArray.controls[arrIndex]['controls'].focus_major.value === this.temp_focus_major[arrIndex].major_name) ? true : false;
+      } else {
+        if (this.educationFormArray.controls[arrIndex]['controls'].focus_major.value) {
+          return (this.educationList[arrIndex] && this.educationFormArray.controls[arrIndex]['controls'].focus_major.value === this.educationList[arrIndex].focus_major_name) ? true : false;
+        } else {
+          return true;
+        }
+      }
+    } else {
+      if (this.temp_major[arrIndex]) {
+        return (this.educationFormArray.controls[arrIndex]['controls'].major.value === this.temp_major[arrIndex].major_name) ? true : false;
+      } else {
+        if (this.educationFormArray.controls[arrIndex]['controls'].major.value) {
+          return (this.educationList[arrIndex] && this.educationFormArray.controls[arrIndex]['controls'].major.value === this.educationList[arrIndex].major_name) ? true : false;
+        } else {
+          return true;
+        }
+      }
+    }
+  }
+  checkAllMajorValidation(): boolean {
+    let valid = true;
+    this.educationDataList.forEach((value, index) => {
+      if (!this.checkMajorValidation(index, false) || !this.checkMajorValidation
+      (index, true)) {
+        valid = false;
+      }
+    });
+    return valid;
+  }
   clearMajor(index: number) {
-    this.educationFormArray.controls[index]['controls'].major.setValue('');
     this.educationDataList[index].major_id = null;
   }
   onSelectFocusMajor(index: number, major: Major) {
@@ -564,7 +645,6 @@ export class CreateProfileComponent implements OnInit {
     }
   }
   clearFocusMajor(index: number) {
-    this.educationFormArray.controls[index]['controls'].focus_major.setValue('');
     this.educationDataList[index].focus_major = null;
   }
   onEducationYearSelect(date: any, index: number, isStartDate: boolean = true, datePicker: MatDatepicker<any>) {
@@ -1050,7 +1130,7 @@ export class CreateProfileComponent implements OnInit {
   }
 
   updateGeneralInfo() {
-    if ((this.selectedPageIndex === 1 && this.basicInfoForm.valid) || (this.selectedPageIndex === 2 && this.aboutMeForm.valid)) {
+    if ((this.selectedPageIndex === 1 && this.basicInfoForm.valid && this.onCheckCityValidation() && this.onCheckStateValidation()) || (this.selectedPageIndex === 2 && this.aboutMeForm.valid)) {
       this.userService.updateGeneralInfo(this.generalInfoRequest).subscribe(
         dataJson => {
           this.generalInfoResponse = dataJson['data'];
@@ -1093,38 +1173,55 @@ export class CreateProfileComponent implements OnInit {
   }
 
   updateEducationData() {
-    if (this.educationFormArray.valid) {
-      let counts = 0;
-      this.educationDataList.forEach((education, index) => {
-        if (index < this.educationList.length) {
-          this.userService.patchEducationInfoById(education, this.educationList[index].education_id).subscribe(
-            dataJson => {
-              this.educationList[index] = dataJson['data'];
-              counts++;
-              if (counts === this.educationDataList.length) {
-                this.selectedPageIndex++;
+    if (this.educationDataList.length !== 0) {
+      if (this.educationFormArray.valid) {
+        let counts = 0;
+        this.educationDataList.forEach((education, index) => {
+          if (index < this.educationList.length) {
+            this.userService.patchEducationInfoById(education, this.educationList[index].education_id).subscribe(
+              dataJson => {
+                this.educationList[index] = dataJson['data'];
+                counts++;
+                if (counts === this.educationDataList.length) {
+                  this.selectedPageIndex++;
+                }
+              },
+              error => {
+                this.alertsService.show(error.message, AlertType.error);
               }
-            },
-            error => {
-              this.alertsService.show(error.message, AlertType.error);
-            }
-          );
-        } else {
-          this.userService.postEducationInfo(education).subscribe(
-            dataJson => {
-              this.educationList[index] = dataJson['data'];
-              counts++;
-              if (counts === this.educationDataList.length) {
-                this.selectedPageIndex++;
+            );
+          } else {
+            this.userService.postEducationInfo(education).subscribe(
+              dataJson => {
+                this.educationList[index] = dataJson['data'];
+                counts++;
+                if (counts === this.educationDataList.length) {
+                  this.selectedPageIndex++;
+                }
+              },
+              error => {
+                this.alertsService.show(error.message, AlertType.error);
               }
-            },
-            error => {
-              this.alertsService.show(error.message, AlertType.error);
-            }
-          );
-        }
-      });
+            );
+          }
+        });
+      }
+    } else {
+      this.selectedPageIndex++;
     }
+  }
+
+  deleteEducationData(index: number) {
+    this.userService.deleteEducationInfoById(this.educationList[index].education_id).subscribe(
+      dataJson => {
+        console.log('Delete Education_List', dataJson);
+        this.educationList.splice(index, 1);
+        this.removeEducationFormGroup(index);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
   }
 
   // Experience Information
