@@ -37,6 +37,7 @@ export interface Level {
 export interface Company {
   company_id: number;
   company_name: string;
+  company_logo: string;
 }
 
 export interface Industry {

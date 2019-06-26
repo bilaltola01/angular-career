@@ -6,7 +6,7 @@ import { AutoCompleteService } from 'src/app/services/auto-complete.service';
 import { UserService } from 'src/app/services/user.service';
 import { AlertsService, AlertType } from 'src/app/services/alerts.service';
 import {
-  City, School, Major, Skill, Interest, Level,
+  City, School, Major, Skill, Interest, Level, Company,
   UserGeneralInfo, UserObject,
   UserEducationItem, UserEducationItemData,
   UserExperienceItem, UserExperienceItemData,
@@ -129,9 +129,10 @@ export class CreateProfileComponent implements OnInit {
   temp_university: School[] = [];
   temp_major: Major[] = [];
   temp_focus_major: Major[] = [];
+  autocomplete_companies: Company[][] = [];
+  temp_company: Company[] = [];
   autocomplete_skills: Skill[] = [];
   autocomplete_interests: Interest[] = [];
-  autocomplete_companies: any[] = [];
 
   statuses = [
     'Exploring Opportunities',
@@ -140,7 +141,7 @@ export class CreateProfileComponent implements OnInit {
 
   profile_status = this.statuses[0];
 
-  selectedPageIndex = 3;
+  selectedPageIndex = 4;
 
   generalInfoResponse: UserGeneralInfo;
   generalInfoRequest: UserObject;
@@ -163,7 +164,7 @@ export class CreateProfileComponent implements OnInit {
     this.initBasicInfoForm();
     this.initEducationFormArray();
     this.initAboutMeForm();
-    this.initWorkExperienceFormArray();
+    this.initExperienceFormArray();
     this.initSkillsAndInterestsForm();
     this.initProjectsFormArray();
     this.initPublicationsFormArray();
@@ -194,7 +195,7 @@ export class CreateProfileComponent implements OnInit {
         this.updateEducationData();
         break;
       case 4:
-        // this.updateExperienceData();
+        this.updateExperienceData();
         break;
       case 5:
         this.updateUserSkillsData();
@@ -672,18 +673,46 @@ export class CreateProfileComponent implements OnInit {
 
 
 
-
-  // Work Experience Form
-  initWorkExperienceFormArray() {
+  /**
+   * Work Experience Form
+   *  Work Experience FormGroup Array Initialization
+   */
+  initExperienceFormArray() {
+    this.workExperienceFormArray = new FormArray([]);
     this.experienceList = [];
     this.experienceDataList = [];
-    this.workExperienceFormArray = new FormArray([]);
+    this.autocomplete_companies = [];
     this.skills_trained = [];
     this.additional_exposure = [];
   }
+  onRemoveExperienceData(index: number) {
+    if (index > this.experienceList.length - 1) {
+      this.removeExperienceFormGroup(index);
+    } else {
+      this.deleteExperienceData(index);
+    }
+  }
+  removeExperienceFormGroup(index: number) {
+    this.experienceDataList.splice(index, 1);
+    this.workExperienceFormArray.removeAt(index);
+    this.autocomplete_companies.splice(index, 1);
+    if (this.experienceDataList.length === 0) {
+      this.addExperienceFormGroup(null);
+    }
+  }
+  onAddExperienceData() {
+    if (this.educationFormArray.valid && this.checkAllMajorValidation()) {
+      this.addExperienceFormGroup(null);
+    }
+  }
 
-  addWorkExperienceForm(experience: UserExperienceItem) {
-    this.autocomplete_companies = [];
+  /**
+   * Add Work Expereince FormGroup
+   * @param experience
+   */
+
+  addExperienceFormGroup(experience: UserExperienceItem) {
+    this.autocomplete_companies.push([]);
     this.autocomplete_skills = [];
     this.skills_trained.push(experience ? experience.skills_trained : []);
     this.additional_exposure.push(experience ? experience.industry_names : []);
@@ -691,8 +720,8 @@ export class CreateProfileComponent implements OnInit {
     const experienceData = {
       company_id: experience ? experience.company_id : null,
       job: experience ? experience.job : null,
-      start_date: experience ? experience.start_date : null,
-      end_date: experience ? experience.end_date : null,
+      start_date: experience ? new Date(experience.start_date) : null,
+      end_date: experience ? new Date(experience.end_date) : null,
       position_name: experience ? experience.position_name : null,
       exp_desc: experience ? experience.exp_desc : null,
       user_specified_company_name: experience ? experience.user_specified_company_name : null,
@@ -705,9 +734,10 @@ export class CreateProfileComponent implements OnInit {
     const arrIndex = this.experienceDataList.length - 1;
 
     const workExperienceForm = new FormGroup({
-      company_name: new FormControl(experience ? experience.company_name : ''),
-      years: new FormControl(experience ? experience.end_date : ''),
-      designation: new FormControl(experience ? experience.position_name : ''),
+      company_name: new FormControl(experience ? experience.company_name : '', [Validators.required]),
+      start_date: new FormControl(experience ? new Date(experience.start_date).getFullYear() : '', [Validators.required]),
+      end_date: new FormControl(experience ? new Date(experience.end_date).getFullYear() : ''),
+      designation: new FormControl(experience ? experience.position_name : '', [Validators.required]),
       description: new FormControl(experience ? experience.exp_desc : ''),
       skills_trained: new FormControl(''),
       additional_exposure: new FormControl('')
@@ -715,7 +745,12 @@ export class CreateProfileComponent implements OnInit {
 
     workExperienceForm.controls.company_name.valueChanges.subscribe(
       (company_name) => {
-        this.onCompanyValueChanges(company_name, arrIndex);
+        if (company_name) {
+          this.onCompanyValueChanges(company_name, arrIndex);
+        } else {
+          this.autocomplete_companies[arrIndex] = [];
+          this.onSelectSpecificCompany(arrIndex, null);
+        }
       }
     );
     workExperienceForm.controls.designation.valueChanges.subscribe(
@@ -734,7 +769,6 @@ export class CreateProfileComponent implements OnInit {
         this.onSkillValueChanges(skill);
       }
     );
-
     workExperienceForm.controls.additional_exposure.valueChanges.subscribe(
       (skill) => {
         this.onSkillValueChanges(skill);
@@ -744,10 +778,52 @@ export class CreateProfileComponent implements OnInit {
     this.workExperienceFormArray.push(workExperienceForm);
   }
 
-  updateWorkExperienceForm() {
-    this.experienceList.forEach((experience) => {
-      this.addWorkExperienceForm(experience);
-    });
+  updateExperienceForm() {
+    if (this.experienceList.length === 0) {
+      this.addExperienceFormGroup(null);
+    } else {
+      this.experienceList.forEach((experience) => {
+        this.addExperienceFormGroup(experience);
+      });
+    }
+  }
+  onSelectSpecificCompany(index: number, company: string) {
+    this.experienceDataList[index].user_specified_company_name = company;
+    this.experienceDataList[index].company_id = null;
+  }
+  onSelectCompany(index: number, company: Company) {
+    this.experienceDataList[index].company_id = company.company_id;
+    this.experienceDataList[index].user_specified_company_name = null;
+    this.temp_company[index] = company;
+  }
+  onBlurCompany(index: number) {
+    if (this.temp_company[index]) {
+      if (this.workExperienceFormArray.controls[index]['controls'].company_name.value !== this.temp_company[index].company_name) {
+        this.onSelectSpecificCompany(index, this.workExperienceFormArray.controls[index]['controls'].company_name.value);
+        this.temp_company[index] = null;
+      }
+    } else {
+      this.onSelectSpecificCompany(index, this.workExperienceFormArray.controls[index]['controls'].company.value);
+    }
+  }
+  onExperienceYearSelect(date: any, index: number, isStartDate: boolean = true, datePicker: MatDatepicker<any>) {
+    const dateValue = new Date(date);
+    datePicker.close();
+    this.workExperienceFormArray.controls[index]['controls'][isStartDate ? 'start_date' : 'end_date'].setValue(dateValue.getFullYear());
+    this.experienceDataList[index][isStartDate ? 'start_date' : 'end_date'] = dateValue;
+  }
+  isExperienceStartDate(index: number): boolean {
+    if (this.workExperienceFormArray.controls[index]['controls']['start_date'].value) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  maxExperienceStartDate(): Date {
+    return new Date();
+  }
+  minExperienceEndDate(index: number): Date {
+    return this.experienceDataList[index].start_date;
   }
 
   onPositionValueChange(index: number, position_name: string) {
@@ -1066,14 +1142,15 @@ export class CreateProfileComponent implements OnInit {
     this.autoCompleteService.autoComplete(company, 'companies').subscribe(
       dataJson => {
         if (dataJson['success']) {
-          this.autocomplete_companies = dataJson['data'];
+          this.autocomplete_companies[arrIndex] = dataJson['data'];
           if (this.autocomplete_companies.length === 0) {
             this.onSelectSpecificCompnay(arrIndex, company);
           }
         }
       },
       error => {
-        console.log(error);
+        this.autocomplete_universities[arrIndex] = [];
+        this.alertsService.show(error.message, AlertType.error);
       }
     );
   }
@@ -1224,41 +1301,74 @@ export class CreateProfileComponent implements OnInit {
     );
   }
 
-  // Experience Information
-
+  /**
+   *
+   * Services for Work Experinece Information
+   * getExperienceList()
+   * updateExperienceData()
+   * deleteExperienceData()
+   *
+   */
   getExperienceList() {
     this.userService.getExperienceInfo().subscribe(
       dataJson => {
         this.experienceList = dataJson['data'];
-        console.log('experience_List', this.experienceList);
-        this.updateWorkExperienceForm();
+        console.log('Experience_List', this.experienceList);
+        this.updateExperienceForm();
       },
       error => {
-        console.log(error);
+        this.alertsService.show(error.message, AlertType.error);
         this.experienceList = [];
-        this.updateWorkExperienceForm();
+        this.updateExperienceForm();
       }
     );
   }
-
   updateExperienceData() {
-    this.experienceDataList.forEach((experience, index) => {
-      if (index < this.experienceList.length) {
-        // this.userService.patchExperienceInfoById(experience, this.experienceList[index].experience_id)subscribe(
-        //   dataJson => {
-        //     console.log(dataJson['data']);
-        //   },
-        //   error => console.log(error)
-        // );
-      } else {
-        this.userService.postExperienceInfo(experience).subscribe(
-          dataJson => {
-            console.log(dataJson['data']);
-          },
-          error => console.log(error)
-        );
+    console.log(this.experienceDataList);
+    // if (this.workExperienceFormArray.valid) {
+    //   let counts = 0;
+    //   this.experienceDataList.forEach((experience, index) => {
+    //     if (index < this.experienceList.length) {
+    //       this.userService.patchExperienceInfoById(experience, this.experienceList[index].work_hist_id).subscribe(
+    //         dataJson => {
+    //           this.experienceList[index] = dataJson['data'];
+    //           counts++;
+    //           if (counts === this.experienceDataList.length) {
+    //             this.selectedPageIndex++;
+    //           }
+    //         },
+    //         error => {
+    //           this.alertsService.show(error.message, AlertType.error);
+    //         }
+    //       );
+    //     } else {
+    //       this.userService.postExperienceInfo(experience).subscribe(
+    //         dataJson => {
+    //           this.experienceList[index] = dataJson['data'];
+    //           counts++;
+    //           if (counts === this.experienceDataList.length) {
+    //             this.selectedPageIndex++;
+    //           }
+    //         },
+    //         error => {
+    //           this.alertsService.show(error.message, AlertType.error);
+    //         }
+    //       );
+    //     }
+    //   });
+    // }
+  }
+  deleteExperienceData(index: number) {
+    this.userService.deleteExperienceInfoById(this.experienceList[index].work_hist_id).subscribe(
+      dataJson => {
+        console.log('Delete Education_List', dataJson);
+        this.educationList.splice(index, 1);
+        this.removeExperienceFormGroup(index);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
       }
-    });
+    );
   }
 
 

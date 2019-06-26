@@ -279,13 +279,42 @@
         <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>Company Name</mat-label>
-            <input matInput placeholder="Company Name" type="text" [formControl]="workExperienceFormArray.controls[i].controls.company_name">
+            <input matInput placeholder="Company Name" type="text" [matAutocomplete]="autocompleteCompany" [formControl]="workExperienceFormArray.controls[i].controls.company_name">
+            <mat-autocomplete #autocompleteCompany="matAutocomplete" (closed)="onBlurCompany(i)">
+              <mat-option *ngFor="let autocomplete_company of autocomplete_companies[i]" [value]="autocomplete_company.company_name" (onSelectionChange)="onSelectCompany(i, autocomplete_company)">
+                <span>{{autocomplete_company.company_name}}</span>
+              </mat-option>
+            </mat-autocomplete>
           </mat-form-field>
         </div>
         <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
-            <mat-label>Years Served</mat-label>
-            <input matInput placeholder="Years Served" type="text" [formControl]="workExperienceFormArray.controls[i].controls.years">
+            <mat-label>Start Date</mat-label>
+            <input matInput placeholder="YYYY" type="text" [formControl]="workExperienceFormArray.controls[i].controls.start_date" readonly>
+            <input class="hide" [matDatepicker]="experience_start_date" [max]="maxExperienceStartDate()">
+            <mat-datepicker-toggle matSuffix [for]="experience_start_date"></mat-datepicker-toggle>
+            <mat-datepicker
+              touchUi
+              #experience_start_date
+              startView="multi-year"
+              (yearSelected)="onExperienceYearSelect($event, i, true, experience_start_date)"
+            >
+            </mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="profile-form__field" *ngIf="isExperienceStartDate(i)">
+          <mat-form-field class="bg-transparent" appearance="fill">
+            <mat-label>End Date</mat-label>
+            <input matInput placeholder="YYYY" type="text" [formControl]="workExperienceFormArray.controls[i].controls.end_date" readonly>
+            <input class="hide" [matDatepicker]="experience_end_date" [min]="minExperienceEndDate(i)" [max]="maxExperienceStartDate()">
+            <mat-datepicker-toggle matSuffix [for]="experience_end_date"></mat-datepicker-toggle>
+            <mat-datepicker
+              touchUi
+              #experience_end_date
+              startView="multi-year"
+              (yearSelected)="onExperienceYearSelect($event, i, false, experience_end_date)"
+            >
+            </mat-datepicker>
           </mat-form-field>
         </div>
         <div class="profile-form__field">
@@ -335,7 +364,7 @@
         </div>
       </ng-container>
       <div class="profile-form__field btn">
-        <action-button type="stroked" title="Add Another" (click)="addWorkExperienceForm()"></action-button>
+        <action-button type="stroked" title="Add Another" (click)="addExperienceFormGroup()"></action-button>
       </div>
     </div>
   </div>
