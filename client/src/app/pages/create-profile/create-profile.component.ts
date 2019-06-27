@@ -994,18 +994,6 @@ export class CreateProfileComponent implements OnInit {
     }
     this.skillsAndInterestsForm.controls.skills.setValue('');
   }
-  addInterests(interestItem: Interest) {
-    const interestItemData = {
-      interest_id: interestItem.interest_id,
-      interest_name: interestItem.interest
-    };
-    if (interestItemData) {
-      if (this.userInterestsDataList.filter(value => value.interest_name === interestItem.interest).length < 1) {
-        this.userInterestsDataList.push(interestItemData);
-      }
-      this.skillsAndInterestsForm.controls.interests.setValue('');
-    }
-  }
   getUserSkillsList() {
     this.userService.getSkillsInfo().subscribe(
       dataJson => {
@@ -1041,10 +1029,67 @@ export class CreateProfileComponent implements OnInit {
     );
   }
   removeUserSkillsData(index: number, userSkillItem: UserSkillItem) {
-    this.userService.patchSkillInfoById(userSkillItem.skill_id, userSkillItem).subscribe(
+    this.userService.deleteSkillInfoById(userSkillItem.skill_id).subscribe(
       dataJson => {
         console.log(dataJson['data']);
         this.userSkillsList.splice(index, 1);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+  addInterests(interestItem: Interest) {
+    const interestItemData = {
+      interest_id: interestItem.interest_id,
+      interest_name: interestItem.interest
+    };
+    if (interestItemData) {
+      if (this.userInterestsDataList.filter(value => value.interest_name === interestItem.interest).length < 1) {
+        this.userInterestsDataList.push(interestItemData);
+      }
+      this.skillsAndInterestsForm.controls.interests.setValue('');
+    }
+  }
+  getUserInterestsList() {
+    this.userService.getUserInterestsInfo().subscribe(
+      dataJson => {
+        console.log('userInterests_List', this.userInterestsList);
+        this.userInterestsList = dataJson['data'];
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+        this.userInterestsList = [];
+      }
+    );
+  }
+  updateUserInteretsData(arrIndex: number, userInterestItem: UserInterestItem) {
+    this.userService.patchUserInterestsInfoById(userInterestItem.interest_id, userInterestItem).subscribe(
+      dataJson => {
+        console.log(dataJson['data']);
+        this.userInterestsList[arrIndex] = dataJson['data'];
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+  addUserInteretsData(userInterestItem: UserInterestItem) {
+    this.userService.postUserInterestsInfo(userInterestItem).subscribe(
+      dataJson => {
+        console.log(dataJson['data']);
+        this.userInterestsList.push(dataJson['data']);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+  removeUserInteretsData(index: number, userInterestItem: UserInterestItem) {
+    this.userService.deleteUserInterestsInfoById(userInterestItem.interest_id).subscribe(
+      dataJson => {
+        console.log(dataJson['data']);
+        this.userInterestsList.splice(index, 1);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -1499,42 +1544,6 @@ export class CreateProfileComponent implements OnInit {
         this.alertsService.show(error.message, AlertType.error);
       }
     );
-  }
-
-
-  // User Skills Information
-  
-
-
-  // User Interests Information
-  getUserInterestsList() {
-    this.userService.getUserInterestsInfo().subscribe(
-      dataJson => {
-        this.userInterestsList = dataJson['data'];
-        this.userInterestsDataList = [];
-        this.userInterestsList.forEach(interestItem => {
-          this.userInterestsDataList.push(interestItem);
-        });
-        console.log('userSkills_List', this.userInterestsList);
-      },
-      error => {
-        console.log(error);
-        this.userInterestsList = [];
-        this.userInterestsDataList = [];
-      }
-    );
-  }
-  updateUserInteretsData() {
-    this.userInterestsDataList.forEach((interestData, index) => {
-      if (index > this.userInterestsList.length - 1) {
-        this.userService.postUserInterestsInfo(interestData).subscribe(
-          dataJson => {
-            console.log(dataJson['data']);
-          },
-          error => console.log(error)
-        );
-      }
-    });
   }
 
 
