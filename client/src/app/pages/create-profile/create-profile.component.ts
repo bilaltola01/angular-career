@@ -721,19 +721,18 @@ export class CreateProfileComponent implements OnInit {
     this.autocomplete_companies.push([]);
     this.autocomplete_skills_trained.push([]);
     this.autocomplete_additional_industries.push([]);
-    this.skills_trained.push(experience ? experience.skills_trained : []);
-    this.additional_industries.push(experience ? experience.add_industries : []);
+    this.skills_trained.push(experience && experience.skills_trained ? experience.skills_trained : []);
+    this.additional_industries.push(experience && experience.add_industries ? experience.add_industries : []);
 
     const experienceData = {
       company_id: experience ? experience.company_id : null,
       job: experience ? experience.job : null,
       start_date: experience ? new Date(experience.start_date) : null,
-      end_date: experience ? new Date(experience.end_date) : null,
-      position_name: experience ? experience.position_name : null,
-      exp_desc: experience ? experience.exp_desc : null,
+      end_date: experience && experience.end_date ? new Date(experience.end_date) : null,
+      job_desc: experience ? experience.job_desc : null,
       user_specified_company_name: experience ? experience.user_specified_company_name : null,
-      skill_ids_trained: experience && experience.skills_trained.length > 0 ? experience.skills_trained.map(x => x.skill_id) : [],
-      add_industry_ids: experience && experience.add_industries.length > 0 ? experience.add_industries.map(x => x.industry_id) : [],
+      skill_ids_trained: (experience && experience.skills_trained && experience.skills_trained.length > 0) ? experience.skills_trained.map(x => x.skill_id) : [],
+      add_industry_ids: (experience && experience.add_industries && experience.add_industries.length) > 0 ? experience.add_industries.map(x => x.industry_id) : [],
     };
 
     this.experienceDataList.push(experienceData);
@@ -741,11 +740,11 @@ export class CreateProfileComponent implements OnInit {
     const arrIndex = this.experienceDataList.length - 1;
 
     const workExperienceForm = new FormGroup({
-      company_name: new FormControl(experience ? experience.company_name : '', [Validators.required]),
+      company_name: new FormControl(experience ? (experience.company_id ? experience.company_name : experience.user_specified_company_name) : '', [Validators.required]),
       start_date: new FormControl(experience ? new Date(experience.start_date).getFullYear() : '', [Validators.required]),
-      end_date: new FormControl(experience ? new Date(experience.end_date).getFullYear() : ''),
-      position_name: new FormControl(experience ? experience.position_name : '', [Validators.required]),
-      description: new FormControl(experience ? experience.exp_desc : ''),
+      end_date: new FormControl(experience && experience.end_date ? new Date(experience.end_date).getFullYear() : ''),
+      job: new FormControl(experience ? experience.job : '', [Validators.required]),
+      description: new FormControl(experience ? experience.job_desc : ''),
       skills_trained: new FormControl(''),
       additional_industries: new FormControl('')
     });
@@ -760,7 +759,7 @@ export class CreateProfileComponent implements OnInit {
         }
       }
     );
-    workExperienceForm.controls.position_name.valueChanges.subscribe(
+    workExperienceForm.controls.job.valueChanges.subscribe(
       (position) => {
         this.onPositionValueChange(arrIndex, position);
       }
@@ -833,12 +832,12 @@ export class CreateProfileComponent implements OnInit {
     return this.experienceDataList[index].start_date;
   }
 
-  onPositionValueChange(index: number, position_name: string) {
-    this.experienceDataList[index].position_name = position_name;
+  onPositionValueChange(index: number, job: string) {
+    this.experienceDataList[index].job = job;
   }
 
-  onExpDescValueChange(index: number, exp_desc: string) {
-    this.experienceDataList[index].exp_desc = exp_desc;
+  onExpDescValueChange(index: number, job_desc: string) {
+    this.experienceDataList[index].job_desc = job_desc;
   }
 
   addSkillsTrained(index: number, skill: Skill) {
@@ -1405,7 +1404,7 @@ export class CreateProfileComponent implements OnInit {
     this.userService.deleteExperienceInfoById(this.experienceList[index].work_hist_id).subscribe(
       dataJson => {
         console.log('Delete Education_List', dataJson);
-        this.educationList.splice(index, 1);
+        this.experienceList.splice(index, 1);
         this.removeExperienceFormGroup(index);
       },
       error => {

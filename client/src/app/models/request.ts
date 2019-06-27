@@ -34,8 +34,7 @@ export interface UserExperienceItemData {
   job: string;
   start_date: Date;
   end_date: Date;
-  position_name: string;
-  exp_desc: string;
+  job_desc: string;
   user_specified_company_name: string;
   skill_ids_trained: any[];
   add_industry_ids: any[];
