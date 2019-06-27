@@ -249,7 +249,7 @@ export class UserService {
   }
 
   public deleteExperienceInfoById(experienceId: number): Observable<any> {
-    return this.http.patch(this.user_service_url + `user/${this.user_id}/experience/${experienceId}`, this.authHttpOptions())
+    return this.http.delete(this.user_service_url + `user/${this.user_id}/experience/${experienceId}`, this.authHttpOptions())
     .pipe(
       map(data => {
         return {success: true, message: 'Success!', data: data};

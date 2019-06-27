@@ -6,7 +6,7 @@ import { AutoCompleteService } from 'src/app/services/auto-complete.service';
 import { UserService } from 'src/app/services/user.service';
 import { AlertsService, AlertType } from 'src/app/services/alerts.service';
 import {
-  City, School, Major, Skill, Interest, Level,
+  City, School, Major, Skill, Interest, Level, Company,
   UserGeneralInfo, UserObject,
   UserEducationItem, UserEducationItemData,
   UserExperienceItem, UserExperienceItemData,
@@ -21,6 +21,7 @@ import {
   State,
   Countries,
   Levels,
+  Industry,
 } from 'src/app/models';
 
 @Component({
@@ -105,8 +106,8 @@ export class CreateProfileComponent implements OnInit {
   countries: string[] = Countries.slice().sort();
   degrees: Level[] = Levels;
 
-  skills_trained: string[][];
-  additional_exposure: string[][];
+  skills_trained: Skill[][];
+  additional_industries: Industry[][];
 
   // FormGroups
   basicInfoForm: FormGroup;
@@ -129,9 +130,12 @@ export class CreateProfileComponent implements OnInit {
   temp_university: School[] = [];
   temp_major: Major[] = [];
   temp_focus_major: Major[] = [];
+  autocomplete_companies: Company[][] = [];
+  temp_company: Company[] = [];
+  autocomplete_skills_trained: Skill[][] = [];
+  autocomplete_additional_industries: Industry[][] = [];
   autocomplete_skills: Skill[] = [];
   autocomplete_interests: Interest[] = [];
-  autocomplete_companies: any[] = [];
 
   statuses = [
     'Exploring Opportunities',
@@ -140,7 +144,7 @@ export class CreateProfileComponent implements OnInit {
 
   profile_status = this.statuses[0];
 
-  selectedPageIndex = 3;
+  selectedPageIndex = 4;
 
   generalInfoResponse: UserGeneralInfo;
   generalInfoRequest: UserObject;
@@ -163,7 +167,7 @@ export class CreateProfileComponent implements OnInit {
     this.initBasicInfoForm();
     this.initEducationFormArray();
     this.initAboutMeForm();
-    this.initWorkExperienceFormArray();
+    this.initExperienceFormArray();
     this.initSkillsAndInterestsForm();
     this.initProjectsFormArray();
     this.initPublicationsFormArray();
@@ -194,7 +198,7 @@ export class CreateProfileComponent implements OnInit {
         this.updateEducationData();
         break;
       case 4:
-        // this.updateExperienceData();
+        this.updateExperienceData();
         break;
       case 5:
         this.updateUserSkillsData();
@@ -672,32 +676,63 @@ export class CreateProfileComponent implements OnInit {
 
 
 
-
-  // Work Experience Form
-  initWorkExperienceFormArray() {
+  /**
+   * Work Experience Form
+   *  Work Experience FormGroup Array Initialization
+   */
+  initExperienceFormArray() {
+    this.workExperienceFormArray = new FormArray([]);
     this.experienceList = [];
     this.experienceDataList = [];
-    this.workExperienceFormArray = new FormArray([]);
+    this.autocomplete_companies = [];
+    this.autocomplete_skills_trained = [];
+    this.autocomplete_additional_industries = [];
     this.skills_trained = [];
-    this.additional_exposure = [];
+    this.additional_industries = [];
+  }
+  onRemoveExperienceData(index: number) {
+    if (index > this.experienceList.length - 1) {
+      this.removeExperienceFormGroup(index);
+    } else {
+      this.deleteExperienceData(index);
+    }
+  }
+  removeExperienceFormGroup(index: number) {
+    this.experienceDataList.splice(index, 1);
+    this.skills_trained.splice(index, 1);
+    this.additional_industries.splice(index, 1);
+    this.workExperienceFormArray.removeAt(index);
+    this.autocomplete_companies.splice(index, 1);
+    this.autocomplete_skills_trained.splice(index, 1);
+    this.autocomplete_additional_industries.splice(index, 1);
+  }
+  onAddExperienceData() {
+    if (this.workExperienceFormArray.valid) {
+      this.addExperienceFormGroup(null);
+    }
   }
 
-  addWorkExperienceForm(experience: UserExperienceItem) {
-    this.autocomplete_companies = [];
-    this.autocomplete_skills = [];
-    this.skills_trained.push(experience ? experience.skills_trained : []);
-    this.additional_exposure.push(experience ? experience.industry_names : []);
+  /**
+   * Add Work Expereince FormGroup
+   * @param experience
+   */
+
+  addExperienceFormGroup(experience: UserExperienceItem) {
+    this.autocomplete_companies.push([]);
+    this.autocomplete_skills_trained.push([]);
+    this.autocomplete_additional_industries.push([]);
+    this.skills_trained.push(experience && experience.skills_trained ? experience.skills_trained : []);
+    this.additional_industries.push(experience && experience.add_industries ? experience.add_industries : []);
 
     const experienceData = {
       company_id: experience ? experience.company_id : null,
       job: experience ? experience.job : null,
-      start_date: experience ? experience.start_date : null,
-      end_date: experience ? experience.end_date : null,
-      position_name: experience ? experience.position_name : null,
-      exp_desc: experience ? experience.exp_desc : null,
+      start_date: experience ? new Date(experience.start_date) : null,
+      end_date: experience && experience.end_date ? new Date(experience.end_date) : null,
+      job_desc: experience ? experience.job_desc : null,
       user_specified_company_name: experience ? experience.user_specified_company_name : null,
-      skill_ids_trained: [],
-      add_industry_ids: [],
+      skill_ids_trained: (experience && experience.skills_trained && experience.skills_trained.length > 0) ? experience.skills_trained.map(x => x.skill_id) : null,
+      add_industry_ids: (experience && experience.add_industries && experience.add_industries.length) > 0 ? experience.add_industries.map(x => x.industry_id) : null,
     };
 
     this.experienceDataList.push(experienceData);
@@ -705,20 +740,26 @@ export class CreateProfileComponent implements OnInit {
     const arrIndex = this.experienceDataList.length - 1;
 
     const workExperienceForm = new FormGroup({
-      company_name: new FormControl(experience ? experience.company_name : ''),
-      years: new FormControl(experience ? experience.end_date : ''),
-      designation: new FormControl(experience ? experience.position_name : ''),
-      description: new FormControl(experience ? experience.exp_desc : ''),
+      company_name: new FormControl(experience ? (experience.company_id ? experience.company_name : experience.user_specified_company_name) : '', [Validators.required]),
+      start_date: new FormControl(experience ? new Date(experience.start_date).getFullYear() : '', [Validators.required]),
+      end_date: new FormControl(experience && experience.end_date ? new Date(experience.end_date).getFullYear() : ''),
+      job: new FormControl(experience ? experience.job : '', [Validators.required]),
+      description: new FormControl(experience ? experience.job_desc : ''),
       skills_trained: new FormControl(''),
-      additional_exposure: new FormControl('')
+      additional_industries: new FormControl('')
     });
 
     workExperienceForm.controls.company_name.valueChanges.subscribe(
       (company_name) => {
-        this.onCompanyValueChanges(company_name, arrIndex);
+        if (company_name) {
+          this.onCompanyValueChanges(company_name, arrIndex);
+        } else {
+          this.autocomplete_companies[arrIndex] = [];
+          this.onSelectSpecificCompany(arrIndex, null);
+        }
       }
     );
-    workExperienceForm.controls.designation.valueChanges.subscribe(
+    workExperienceForm.controls.job.valueChanges.subscribe(
       (position) => {
         this.onPositionValueChange(arrIndex, position);
       }
@@ -731,56 +772,161 @@ export class CreateProfileComponent implements OnInit {
 
     workExperienceForm.controls.skills_trained.valueChanges.subscribe(
       (skill) => {
-        this.onSkillValueChanges(skill);
+        skill ? this.onSkillTrainedValueChanges(skill, arrIndex) : this.autocomplete_skills_trained[arrIndex] = [];
       }
     );
-
-    workExperienceForm.controls.additional_exposure.valueChanges.subscribe(
-      (skill) => {
-        this.onSkillValueChanges(skill);
+    workExperienceForm.controls.additional_industries.valueChanges.subscribe(
+      (industry) => {
+        industry ? this.onAdditionalIndustryValueChanges(industry, arrIndex) : this.autocomplete_additional_industries[arrIndex] = [];
       }
     );
 
     this.workExperienceFormArray.push(workExperienceForm);
   }
 
-  updateWorkExperienceForm() {
-    this.experienceList.forEach((experience) => {
-      this.addWorkExperienceForm(experience);
-    });
+  updateExperienceForm() {
+    if (this.experienceList.length === 0) {
+      this.addExperienceFormGroup(null);
+    } else {
+      this.experienceList.forEach((experience) => {
+        this.addExperienceFormGroup(experience);
+      });
+    }
   }
-
-  onPositionValueChange(index: number, position_name: string) {
-    this.experienceDataList[index].position_name = position_name;
-  }
-
-  onExpDescValueChange(index: number, exp_desc: string) {
-    this.experienceDataList[index].exp_desc = exp_desc;
-  }
-
-  onSelectSpecificCompnay(index: number, company: string) {
-    this.experienceDataList[index].company_id = null;
+  onSelectSpecificCompany(index: number, company: string) {
     this.experienceDataList[index].user_specified_company_name = company;
+    this.experienceDataList[index].company_id = null;
+  }
+  onSelectCompany(index: number, company: Company) {
+    this.experienceDataList[index].company_id = company.company_id;
+    this.experienceDataList[index].user_specified_company_name = null;
+    this.temp_company[index] = company;
+  }
+  onBlurCompany(index: number) {
+    if (this.temp_company[index]) {
+      if (this.workExperienceFormArray.controls[index]['controls'].company_name.value !== this.temp_company[index].company_name) {
+        this.onSelectSpecificCompany(index, this.workExperienceFormArray.controls[index]['controls'].company_name.value);
+        this.temp_company[index] = null;
+      }
+    } else {
+      this.onSelectSpecificCompany(index, this.workExperienceFormArray.controls[index]['controls'].company.value);
+    }
+  }
+  onExperienceYearSelect(date: any, index: number, isStartDate: boolean = true, datePicker: MatDatepicker<any>) {
+    const dateValue = new Date(date);
+    datePicker.close();
+    this.workExperienceFormArray.controls[index]['controls'][isStartDate ? 'start_date' : 'end_date'].setValue(dateValue.getFullYear());
+    this.experienceDataList[index][isStartDate ? 'start_date' : 'end_date'] = dateValue;
+  }
+  isExperienceStartDate(index: number): boolean {
+    if (this.workExperienceFormArray.controls[index]['controls']['start_date'].value) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  maxExperienceStartDate(): Date {
+    return new Date();
+  }
+  minExperienceEndDate(index: number): Date {
+    return this.experienceDataList[index].start_date;
   }
 
-  addSkillsTrained(index: number, skill: string) {
+  onPositionValueChange(index: number, job: string) {
+    this.experienceDataList[index].job = job;
+  }
+
+  onExpDescValueChange(index: number, job_desc: string) {
+    this.experienceDataList[index].job_desc = job_desc;
+  }
+
+  addSkillsTrained(index: number, skill: Skill) {
     if (skill) {
-      if (!this.skills_trained[index].includes(skill)) {
+      if (this.skills_trained[index].filter(skill_trained => skill_trained.skill_id === skill.skill_id).length === 0) {
         this.skills_trained[index].push(skill);
+        if (this.experienceDataList[index].skill_ids_trained) {
+          this.experienceDataList[index].skill_ids_trained.push(skill.skill_id);
+        } else {
+          this.experienceDataList[index].skill_ids_trained = [skill.skill_id];
+        }
       }
       this.workExperienceFormArray.controls[index]['controls']['skills_trained'].setValue('');
-      this.autocomplete_skills = [];
     }
   }
-
-  addAdditionalExposure(index: number, skill: string) {
-    if (skill) {
-      if (!this.additional_exposure[index].includes(skill)) {
-        this.additional_exposure[index].push(skill);
+  onRemoveSkillsTrained(formArrIndex: number, arrIndex: number, skill: Skill) {
+    if (formArrIndex < this.experienceList.length) {
+      if (this.experienceList[formArrIndex].skills_trained.filter(skill_trained => skill_trained.skill_id === skill.skill_id).length > 0) {
+        this.removeExperienceSkillTrainedData(formArrIndex, arrIndex, skill);
+      } else {
+        this.removeSkillsTrained(formArrIndex, arrIndex, skill);
       }
-      this.workExperienceFormArray.controls[index]['controls']['additional_exposure'].setValue('');
-      this.autocomplete_skills = [];
+    } else {
+      this.removeSkillsTrained(formArrIndex, arrIndex, skill);
     }
+  }
+  removeSkillsTrained(formArrIndex: number, arrIndex: number, skill: Skill) {
+    if (this.skills_trained[formArrIndex][arrIndex].skill_id === skill.skill_id) {
+      this.skills_trained[formArrIndex].splice(arrIndex, 1);
+      this.experienceDataList[formArrIndex].skill_ids_trained.splice(arrIndex, 1);
+      if (this.experienceDataList[formArrIndex].skill_ids_trained.length === 0) {
+        this.experienceDataList[formArrIndex].skill_ids_trained = null;
+      }
+    }
+  }
+  removeExperienceSkillTrainedData(formArrIndex: number, arrIndex: number, skill: Skill) {
+    this.userService.DeleteSkillTrainedById(this.experienceList[formArrIndex].work_hist_id, skill.skill_id).subscribe(
+      dataJson => {
+        console.log('Delete Education_List', dataJson);
+        this.removeSkillsTrained(formArrIndex, arrIndex, skill);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+  addAdditionalIndustry(index: number, industry: Industry) {
+    if (industry) {
+      if (this.additional_industries[index].filter(additional_industry => additional_industry.industry_id === industry.industry_id).length === 0) {
+        this.additional_industries[index].push(industry);
+        if (this.experienceDataList[index].add_industry_ids) {
+          this.experienceDataList[index].add_industry_ids.push(industry.industry_id);
+        } else {
+          this.experienceDataList[index].add_industry_ids = [industry.industry_id];
+        }
+      }
+      this.workExperienceFormArray.controls[index]['controls']['additional_industries'].setValue('');
+    }
+  }
+  onRemoveAdditionalIndustry(formArrIndex: number, arrIndex: number, industry: Industry) {
+    if (formArrIndex < this.experienceList.length) {
+      if (this.experienceList[formArrIndex].add_industries.filter(add_industry => add_industry.industry_id === industry.industry_id).length > 0) {
+        this.removeAdditionalIndustryData(formArrIndex, arrIndex, industry);
+      } else {
+        this.removeAdditionalIndustry(formArrIndex, arrIndex, industry);
+      }
+    } else {
+      this.removeAdditionalIndustry(formArrIndex, arrIndex, industry);
+    }
+  }
+  removeAdditionalIndustry(formArrIndex: number, arrIndex: number, industry: Industry) {
+    if (this.additional_industries[formArrIndex][arrIndex].industry_id === industry.industry_id) {
+      this.additional_industries[formArrIndex].splice(arrIndex, 1);
+      this.experienceDataList[formArrIndex].add_industry_ids.splice(arrIndex, 1);
+      if (this.experienceDataList[formArrIndex].add_industry_ids.length === 0) {
+        this.experienceDataList[formArrIndex].add_industry_ids = null;
+      }
+    }
+  }
+  removeAdditionalIndustryData(formArrIndex: number, arrIndex: number, industry: Industry) {
+    this.userService.DeleteAdditionalIndustryById(this.experienceList[formArrIndex].work_hist_id, industry.industry_id).subscribe(
+      dataJson => {
+        console.log('Delete Education_List', dataJson);
+        this.removeAdditionalIndustry(formArrIndex, arrIndex, industry);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
   }
 
 
@@ -1066,17 +1212,45 @@ export class CreateProfileComponent implements OnInit {
     this.autoCompleteService.autoComplete(company, 'companies').subscribe(
       dataJson => {
         if (dataJson['success']) {
-          this.autocomplete_companies = dataJson['data'];
-          if (this.autocomplete_companies.length === 0) {
-            this.onSelectSpecificCompnay(arrIndex, company);
+          this.autocomplete_companies[arrIndex] = dataJson['data'];
+          if (this.autocomplete_companies[arrIndex].length === 0) {
+            this.onSelectSpecificCompany(arrIndex, company);
           }
         }
       },
       error => {
-        console.log(error);
+        this.autocomplete_universities[arrIndex] = [];
+        this.alertsService.show(error.message, AlertType.error);
       }
     );
   }
+  onSkillTrainedValueChanges(skill: string, arrIndex: number) {
+    this.autoCompleteService.autoComplete(skill, 'skills').subscribe(
+      dataJson => {
+        if (dataJson['success']) {
+          this.autocomplete_skills_trained[arrIndex] = dataJson['data'];
+        }
+      },
+      error => {
+        this.autocomplete_skills_trained[arrIndex] = [];
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+  onAdditionalIndustryValueChanges(industry: string, arrIndex: number) {
+    this.autoCompleteService.autoComplete(industry, 'industries').subscribe(
+      dataJson => {
+        if (dataJson['success']) {
+          this.autocomplete_additional_industries[arrIndex] = dataJson['data'];
+        }
+      },
+      error => {
+        this.autocomplete_additional_industries[arrIndex] = [];
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
 
   onSkillValueChanges(skill: string) {
     if (skill) {
@@ -1224,41 +1398,77 @@ export class CreateProfileComponent implements OnInit {
     );
   }
 
-  // Experience Information
-
+  /**
+   *
+   * Services for Work Experinece Information
+   * getExperienceList()
+   * updateExperienceData()
+   * deleteExperienceData()
+   *
+   */
   getExperienceList() {
     this.userService.getExperienceInfo().subscribe(
       dataJson => {
         this.experienceList = dataJson['data'];
-        console.log('experience_List', this.experienceList);
-        this.updateWorkExperienceForm();
+        console.log('Experience_List', this.experienceList);
+        this.updateExperienceForm();
       },
       error => {
-        console.log(error);
+        this.alertsService.show(error.message, AlertType.error);
         this.experienceList = [];
-        this.updateWorkExperienceForm();
+        this.updateExperienceForm();
       }
     );
   }
-
   updateExperienceData() {
-    this.experienceDataList.forEach((experience, index) => {
-      if (index < this.experienceList.length) {
-        // this.userService.patchExperienceInfoById(experience, this.experienceList[index].experience_id)subscribe(
-        //   dataJson => {
-        //     console.log(dataJson['data']);
-        //   },
-        //   error => console.log(error)
-        // );
-      } else {
-        this.userService.postExperienceInfo(experience).subscribe(
-          dataJson => {
-            console.log(dataJson['data']);
-          },
-          error => console.log(error)
-        );
+    if (this.experienceDataList.length !== 0) {
+      if (this.workExperienceFormArray.valid) {
+        let counts = 0;
+        this.experienceDataList.forEach((experience, index) => {
+          if (index < this.experienceList.length) {
+            this.userService.patchExperienceInfoById(experience, this.experienceList[index].work_hist_id).subscribe(
+              dataJson => {
+                this.experienceList[index] = dataJson['data'];
+                counts++;
+                if (counts === this.experienceDataList.length) {
+                  this.selectedPageIndex++;
+                }
+              },
+              error => {
+                this.alertsService.show(error.message, AlertType.error);
+              }
+            );
+          } else {
+            this.userService.postExperienceInfo(experience).subscribe(
+              dataJson => {
+                this.experienceList[index] = dataJson['data'];
+                counts++;
+                if (counts === this.experienceDataList.length) {
+                  this.selectedPageIndex++;
+                }
+              },
+              error => {
+                this.alertsService.show(error.message, AlertType.error);
+              }
+            );
+          }
+        });
       }
-    });
+    } else {
+      this.selectedPageIndex++;
+    }
+  }
+  deleteExperienceData(index: number) {
+    this.userService.deleteExperienceInfoById(this.experienceList[index].work_hist_id).subscribe(
+      dataJson => {
+        console.log('Delete Education_List', dataJson);
+        this.experienceList.splice(index, 1);
+        this.removeExperienceFormGroup(index);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
   }
 
 

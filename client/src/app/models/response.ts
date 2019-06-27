@@ -50,14 +50,13 @@ export interface UserExperienceItem {
   start_date: string;
   end_date: string;
   company_name: string;
-  position_name: string;
-  exp_desc: string;
+  job_desc: string;
   user_specified_company_name: string;
   work_hist_id: number;
   main_industry_name: string;
-  industry_names: any[];
+  industries: any[];
   skills_trained: any[];
-  add_industry_names: any[];
+  add_industries: any[];
 }
 
 export interface UserSkillItem {

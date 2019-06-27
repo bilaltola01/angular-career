@@ -32,10 +32,9 @@ export interface UserEducationItemData {
 export interface UserExperienceItemData {
   company_id: number;
   job: string;
-  start_date: string;
-  end_date: string;
-  position_name: string;
-  exp_desc: string;
+  start_date: Date;
+  end_date: Date;
+  job_desc: string;
   user_specified_company_name: string;
   skill_ids_trained: any[];
   add_industry_ids: any[];

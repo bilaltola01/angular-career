@@ -33,3 +33,14 @@ export interface Level {
   level: number;
   education_level: string;
 }
+
+export interface Company {
+  company_id: number;
+  company_name: string;
+  company_logo: string;
+}
+
+export interface Industry {
+  industry_id: number;
+  industry_name: string;
+}
