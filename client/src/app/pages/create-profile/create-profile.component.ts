@@ -853,6 +853,17 @@ export class CreateProfileComponent implements OnInit {
       this.workExperienceFormArray.controls[index]['controls']['skills_trained'].setValue('');
     }
   }
+  onRemoveSkillsTrained(formArrIndex: number, arrIndex: number, skill: Skill) {
+    if (formArrIndex < this.experienceList.length) {
+      if (this.experienceList[formArrIndex].skills_trained.filter(skill_trained => skill_trained.skill_id === skill.skill_id).length > 0) {
+        this.removeExperienceSkillTrainedData(formArrIndex, arrIndex, skill);
+      } else {
+        this.removeSkillsTrained(formArrIndex, arrIndex, skill);
+      }
+    } else {
+      this.removeSkillsTrained(formArrIndex, arrIndex, skill);
+    }
+  }
   removeSkillsTrained(formArrIndex: number, arrIndex: number, skill: Skill) {
     if (this.skills_trained[formArrIndex][arrIndex].skill_id === skill.skill_id) {
       this.skills_trained[formArrIndex].splice(arrIndex, 1);
@@ -861,6 +872,17 @@ export class CreateProfileComponent implements OnInit {
         this.experienceDataList[formArrIndex].skill_ids_trained = null;
       }
     }
+  }
+  removeExperienceSkillTrainedData(formArrIndex: number, arrIndex: number, skill: Skill) {
+    this.userService.DeleteSkillTrainedById(this.experienceList[formArrIndex].work_hist_id, skill.skill_id).subscribe(
+      dataJson => {
+        console.log('Delete Education_List', dataJson);
+        this.removeSkillsTrained(formArrIndex, arrIndex, skill);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
   }
   addAdditionalIndustry(index: number, industry: Industry) {
     if (industry) {
@@ -875,6 +897,17 @@ export class CreateProfileComponent implements OnInit {
       this.workExperienceFormArray.controls[index]['controls']['additional_industries'].setValue('');
     }
   }
+  onRemoveAdditionalIndustry(formArrIndex: number, arrIndex: number, industry: Industry) {
+    if (formArrIndex < this.experienceList.length) {
+      if (this.experienceList[formArrIndex].add_industries.filter(add_industry => add_industry.industry_id === industry.industry_id).length > 0) {
+        this.removeAdditionalIndustryData(formArrIndex, arrIndex, industry);
+      } else {
+        this.removeAdditionalIndustry(formArrIndex, arrIndex, industry);
+      }
+    } else {
+      this.removeAdditionalIndustry(formArrIndex, arrIndex, industry);
+    }
+  }
   removeAdditionalIndustry(formArrIndex: number, arrIndex: number, industry: Industry) {
     if (this.additional_industries[formArrIndex][arrIndex].industry_id === industry.industry_id) {
       this.additional_industries[formArrIndex].splice(arrIndex, 1);
@@ -883,6 +916,17 @@ export class CreateProfileComponent implements OnInit {
         this.experienceDataList[formArrIndex].add_industry_ids = null;
       }
     }
+  }
+  removeAdditionalIndustryData(formArrIndex: number, arrIndex: number, industry: Industry) {
+    this.userService.DeleteAdditionalIndustryById(this.experienceList[formArrIndex].work_hist_id, industry.industry_id).subscribe(
+      dataJson => {
+        console.log('Delete Education_List', dataJson);
+        this.removeAdditionalIndustry(formArrIndex, arrIndex, industry);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
   }
 
 
