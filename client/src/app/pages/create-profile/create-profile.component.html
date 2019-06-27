@@ -402,18 +402,18 @@
         </div>
       </div>
       <div class="profile-form__field search">
-        <h3>Interests <span *ngIf="userInterestsDataList.length > 0" class="count">{{userInterestsDataList.length}}</span></h3>
+        <h3>Interests <span *ngIf="userInterestsList.length > 0" class="count">{{userInterestsList.length}}</span></h3>
         <mat-form-field appearance="standard" class="search">
           <mat-icon matSuffix>search</mat-icon>
           <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompleteInterests" [formControl]="skillsAndInterestsForm.controls.interests">
-          <mat-autocomplete #autocompleteInterests="matAutocomplete" (closed)="blurSkillSearchField('interests')">
+          <mat-autocomplete #autocompleteInterests="matAutocomplete">
             <mat-option *ngFor="let autocomplete_interest of autocomplete_interests" [value]="autocomplete_interest.interest" (onSelectionChange)="addInterests(autocomplete_interest)">
               <span>{{autocomplete_interest.interest}}</span>
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
-        <div *ngIf="userInterestsDataList.length > 0" class="skills">
-          <simple-tag *ngFor="let interest of userInterestsDataList; let i = index" type="gray" title="{{userInterestsDataList[i].interest_name}}"></simple-tag>
+        <div *ngIf="userInterestsList.length > 0" class="skills">
+          <simple-tag *ngFor="let interestData of userInterestsList; let i = index" type="gray" removeTag="true" title="{{interestData.interest}}" (click)="removeUserInteretsData(i, interestData)"></simple-tag>
         </div>
       </div>
     </div>

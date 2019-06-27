@@ -153,9 +153,7 @@ export class CreateProfileComponent implements OnInit {
   experienceList: UserExperienceItem[];
   experienceDataList: UserExperienceItemData[];
   userSkillsList: UserSkillItem[];
-  userSkillsDataList: UserSkillItem[];
   userInterestsList: UserInterestItem[];
-  userInterestsDataList: UserInterestItem[];
   userProjectsList: UserProjectItem[];
   userProjectsDataList: UserProjectItemData[];
   userPublicationsList: UserPublicationItem[];
@@ -936,9 +934,7 @@ export class CreateProfileComponent implements OnInit {
     this.autocomplete_skills = [];
     this.autocomplete_interests = [];
     this.userSkillsList = [];
-    this.userSkillsDataList = [];
     this.userInterestsList = [];
-    this.userInterestsDataList = [];
 
     this.skillsAndInterestsForm = new FormGroup({
       skills: new FormControl(''),
@@ -1042,14 +1038,12 @@ export class CreateProfileComponent implements OnInit {
   addInterests(interestItem: Interest) {
     const interestItemData = {
       interest_id: interestItem.interest_id,
-      interest_name: interestItem.interest
+      interest: interestItem.interest
     };
-    if (interestItemData) {
-      if (this.userInterestsDataList.filter(value => value.interest_name === interestItem.interest).length < 1) {
-        this.userInterestsDataList.push(interestItemData);
-      }
-      this.skillsAndInterestsForm.controls.interests.setValue('');
+    if (this.userInterestsList.filter(value => value.interest === interestItem.interest).length === 0) {
+      this.addUserInteretsData(interestItemData);
     }
+    this.skillsAndInterestsForm.controls.interests.setValue('');
   }
   getUserInterestsList() {
     this.userService.getUserInterestsInfo().subscribe(
@@ -1060,17 +1054,6 @@ export class CreateProfileComponent implements OnInit {
       error => {
         this.alertsService.show(error.message, AlertType.error);
         this.userInterestsList = [];
-      }
-    );
-  }
-  updateUserInteretsData(arrIndex: number, userInterestItem: UserInterestItem) {
-    this.userService.patchUserInterestsInfoById(userInterestItem.interest_id, userInterestItem).subscribe(
-      dataJson => {
-        console.log(dataJson['data']);
-        this.userInterestsList[arrIndex] = dataJson['data'];
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
       }
     );
   }

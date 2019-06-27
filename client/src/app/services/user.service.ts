@@ -466,15 +466,6 @@ export class UserService {
       catchError(this.handleError)
     );
   }
-  public patchUserInterestsInfoById(userInterestId: number, interestData: any): Observable<any> {
-    return this.http.patch(this.user_service_url + `user/${this.user_id}/interests/${userInterestId}`, interestData, this.authHttpOptions())
-    .pipe(
-      map(data => {
-        return {success: true, message: 'Success!', data: data};
-      }),
-      catchError(this.handleError)
-    );
-  }
   public deleteUserInterestsInfoById(userInterestId: number): Observable<any> {
     return this.http.delete(this.user_service_url + `user/${this.user_id}/interests/${userInterestId}`, this.authHttpOptions())
     .pipe(
