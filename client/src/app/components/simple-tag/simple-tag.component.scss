@@ -73,12 +73,13 @@ $status-bg-color: #f4f5f8;
             align-items: center;
             justify-content: flex-start;
             height: 12px;
-            .mat-icon {
+            mat-icon {
                 font-size: 0.8em;
                 color: rgba(#000000, 0.2);
                 width: initial;
                 height: initial;
                 margin: 0 2px;
+                cursor: pointer;
                 &.active {
                     color: $tag-green-color;
                 }
@@ -88,6 +89,22 @@ $status-bg-color: #f4f5f8;
                 margin: 0;
             }
         }
+        mat-icon.remove-icon {
+            position: absolute;
+            top: 10px;
+            right: 5px;
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+            color: rgba(#000000, 0.2);
+            cursor: pointer;
+            &:hover {
+                color: $tag-red-color;
+            }
+        }
+    }
+    &.tag-control {
+        padding: 10px 30px 10px 15px;
     }
     .tag-remove {
         display: none;

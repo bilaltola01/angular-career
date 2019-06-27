@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   // TODO: Fix lint rules
@@ -15,6 +15,10 @@ export class SimpleTagComponent implements OnInit {
   @Input() value = 0;
   @Input() active = false;
   @Input() removeTag = false;
+  @Input() isControl = false;
+  @Output() levelChanged = new EventEmitter();
+  @Output() removeClick = new EventEmitter();
+
 
   tagClasseNames = {
     'green': 'tag-green',
@@ -32,6 +36,18 @@ export class SimpleTagComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  onSelectLevel(level: number) {
+    if (this.isControl) {
+      this.levelChanged.emit(level + 1);
+    }
+  }
+
+  onRemove() {
+    if (this.isControl) {
+      this.removeClick.emit();
+    }
   }
 
 }
