@@ -406,7 +406,7 @@
         <h3>Interests <span *ngIf="userInterestsList.length > 0" class="count">{{userInterestsList.length}}</span></h3>
         <mat-form-field appearance="standard" class="search">
           <mat-icon matSuffix>search</mat-icon>
-          <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompleteInterests" [formControl]="skillsAndInterestsForm.controls.interests">
+          <input matInput placeholder="Search Interests" type="text" [matAutocomplete]="autocompleteInterests" [formControl]="skillsAndInterestsForm.controls.interests">
           <mat-autocomplete #autocompleteInterests="matAutocomplete">
             <mat-option *ngFor="let autocomplete_interest of autocomplete_interests" [value]="autocomplete_interest.interest" (onSelectionChange)="addInterests(autocomplete_interest)">
               <span>{{autocomplete_interest.interest}}</span>
