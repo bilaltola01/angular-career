@@ -990,6 +990,14 @@ export class CreateProfileComponent implements OnInit {
     }
     this.skillsAndInterestsForm.controls.skills.setValue('');
   }
+  onLevelChanged(level: number, index: number) {
+    const skillItemData = {
+      skill_id: this.userSkillsList[index].skill_id,
+      skill: this.userSkillsList[index].skill,
+      skill_level: level
+    };
+    this.updateUserSkillsData(index, skillItemData);
+  }
   getUserSkillsList() {
     this.userService.getSkillsInfo().subscribe(
       dataJson => {

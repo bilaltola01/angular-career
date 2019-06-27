@@ -398,7 +398,8 @@
           </mat-autocomplete>
         </mat-form-field>
         <div *ngIf="userSkillsList.length > 0" class="skills">
-          <simple-tag *ngFor="let skillData of userSkillsList; let i = index" type="gray" title="{{skillData.skill}}" ellipseTag="true" value="{{skillData.skill_level}}" (click)="removeUserSkillsData(i, skillData)"></simple-tag>
+          <!-- <simple-tag *ngFor="let skillData of userSkillsList; let i = index" type="gray" title="{{skillData.skill}}" ellipseTag="true" value="{{skillData.skill_level}}" (click)="removeUserSkillsData(i, skillData)"></simple-tag> -->
+          <simple-tag *ngFor="let skillData of userSkillsList; let i = index" type="gray" title="{{skillData.skill}}" ellipseTag="true" isControl='true' value="{{skillData.skill_level}}" (levelChanged)="onLevelChanged($event, i)" (removeClick)="removeUserSkillsData(i, skillData)"></simple-tag>
         </div>
       </div>
       <div class="profile-form__field search">
