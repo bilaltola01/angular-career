@@ -983,7 +983,7 @@ export class CreateProfileComponent implements OnInit {
     const skillItemData = {
       skill_id: skillItem.skill_id,
       skill: skillItem.skill,
-      skill_level: 0
+      skill_level: 3
     };
     if (this.userSkillsList.filter(value => value.skill_id === skillItemData.skill_id).length === 0) {
       this.addUserSkillsData(skillItemData);
