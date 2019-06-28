@@ -443,25 +443,40 @@
         </div>
         <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
-            <mat-label>Year of Completion</mat-label>
-            <input matInput placeholder="Year of Completion" type="text" [formControl]="projectsFormArray.controls[i].controls.years">
+            <mat-label>Date of Completion</mat-label>
+            <input matInput placeholder="Year of Completion" type="text" [formControl]="projectsFormArray.controls[i].controls.date_finished" [matDatepicker]="project_finished_date" [max]="maxDate">
+            <mat-datepicker-toggle matSuffix [for]="project_finished_date"></mat-datepicker-toggle>
+            <mat-datepicker
+              touchUi
+              #project_finished_date
+            >
+            </mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="profile-form__field">
+          <mat-form-field class="bg-transparent" appearance="fill">
+            <mat-label>Link</mat-label>
+            <input matInput placeholder="Link" type="text" [formControl]="projectsFormArray.controls[i].controls.href">
           </mat-form-field>
         </div>
         <div class="profile-form__field textarea">
           <mat-form-field>
-            <textarea matInput placeholder="Description (Optional)" rows="3" [formControl]="projectsFormArray.controls[i].controls.description"></textarea>
+            <textarea matInput placeholder="Description" rows="3" [formControl]="projectsFormArray.controls[i].controls.description"></textarea>
           </mat-form-field>
+        </div>
+        <div class="profile-form__field btn">
+          <action-button title="Remove" color="warn" (click)="onRemoveProjectData(i)"></action-button>
         </div>
         <div class="profile-form__field border">
         </div>
       </ng-container>
       <div class="profile-form__field btn">
-        <action-button type="stroked" title="Add Another" (click)="addProjectsForm()"></action-button>
+        <action-button type="stroked" title="Add Another" (click)="onAddProjectData()" [disabled]="!projectsFormArray.valid"></action-button>
       </div>
     </div>
   </div>
   <div class="container__full">
-    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
+    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!projectsFormArray.valid"></action-button>
   </div>
 </div>
 

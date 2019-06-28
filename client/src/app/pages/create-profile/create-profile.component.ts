@@ -100,6 +100,8 @@ export class CreateProfileComponent implements OnInit {
     }
   ];
 
+  maxDate = new Date();
+
   // contants
   genders: string[] = Genders;
   ethnicityTypes: string[] = EthnicityTypes;
@@ -146,7 +148,7 @@ export class CreateProfileComponent implements OnInit {
 
   profile_status = this.statuses[0];
 
-  selectedPageIndex = 5;
+  selectedPageIndex = 6;
 
   generalInfoResponse: UserGeneralInfo;
   generalInfoRequest: UserObject;
@@ -1106,50 +1108,79 @@ export class CreateProfileComponent implements OnInit {
 
 
 
-  // Projects Form
+  /**
+   *  Projects Information From
+   *  Projects FormGroup Array Initialization
+   */
 
   initProjectsFormArray() {
     this.projectsFormArray = new FormArray([]);
     this.userProjectsList = [];
     this.userProjectsDataList = [];
   }
-  addProjectsForm(project: UserProjectItem) {
+  onRemoveProjectData(arrIndex: number) {
+    if (arrIndex > this.userProjectsList.length - 1) {
+      this.removeProjectFormGroup(arrIndex);
+    } else {
+      this.deleteUserProjectData(arrIndex);
+    }
+  }
+  removeProjectFormGroup(arrIndex: number) {
+    this.projectsFormArray.removeAt(arrIndex);
+    this.userProjectsDataList.splice(arrIndex, 1);
+  }
+  onAddProjectData() {
+    if (this.projectsFormArray.valid) {
+      this.addProjectFormGroup(null);
+    }
+  }
+  addProjectFormGroup(project: UserProjectItem) {
     const projectItem = {
       project_name: project ? project.project_name : null,
       description: project ? project.description : null,
-      date_finished: project ? new Date(project.date_finished) : new Date(),
+      date_finished: (project && project.date_finished) ? new Date(project.date_finished) : null,
       href: project ? project.href : null
     };
     this.userProjectsDataList.push(projectItem);
 
     const arrIndex = this.userProjectsDataList.length - 1;
 
-    const projectsForm = new FormGroup({
-      project_name: new FormControl(project ? project.project_name : ''),
-      years: new FormControl(project ? this.formattedDate(new Date(project.date_finished)) : ''),
-      description: new FormControl(project ? project.description : '')
+    const projectFormGroup = new FormGroup({
+      project_name: new FormControl(project ? project.project_name : '', [Validators.required]),
+      date_finished: new FormControl((project && project.date_finished) ? new Date(project.date_finished) : ''),
+      description: new FormControl(project ? project.description : ''),
+      href: new FormControl(project ? project.href : '')
     });
-    projectsForm.controls.project_name.valueChanges.subscribe(
+    projectFormGroup.controls.project_name.valueChanges.subscribe(
       (project_name) => {
         this.onProjectNameValueChange(arrIndex, project_name);
       }
     );
-    projectsForm.controls.description.valueChanges.subscribe(
+    projectFormGroup.controls.description.valueChanges.subscribe(
       (description) => {
         this.onProjectDescriptionValueChange(arrIndex, description);
       }
     );
-    projectsForm.controls.years.valueChanges.subscribe(
+    projectFormGroup.controls.date_finished.valueChanges.subscribe(
       (date_finished) => {
         this.onProjectDateFinishedValueChange(arrIndex, date_finished);
       }
     );
-    this.projectsFormArray.push(projectsForm);
+    projectFormGroup.controls.href.valueChanges.subscribe(
+      (href) => {
+        this.onProjectHrefValueChange(arrIndex, href);
+      }
+    );
+    this.projectsFormArray.push(projectFormGroup);
   }
-  updateProjectsForm() {
-    this.userProjectsList.forEach(project => {
-      this.addProjectsForm(project);
-    });
+  updateProjectsFormArray() {
+    if (this.userProjectsList.length === 0) {
+      this.addProjectFormGroup(null);
+    } else {
+      this.userProjectsList.forEach(project => {
+        this.addProjectFormGroup(project);
+      });
+    }
   }
   onProjectNameValueChange(arrIndex: number, project_name: string) {
     this.userProjectsDataList[arrIndex].project_name = project_name;
@@ -1158,10 +1189,72 @@ export class CreateProfileComponent implements OnInit {
     this.userProjectsDataList[arrIndex].description = description;
   }
   onProjectDateFinishedValueChange(arrIndex: number, date_finished: string) {
-    this.userProjectsDataList[arrIndex].date_finished = new Date(date_finished);
+    this.userProjectsDataList[arrIndex].date_finished = date_finished ?  new Date(date_finished) : null;
   }
   onProjectHrefValueChange(arrIndex: number, href: string) {
     this.userProjectsDataList[arrIndex].href = href;
+  }
+  getUserProjectsList() {
+    this.userService.getProjectsInfo().subscribe(
+      dataJson => {
+        this.userProjectsList = dataJson['data']['data'];
+        this.updateProjectsFormArray();
+        console.log('UserProjects_List', this.userInterestsList);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+        this.userProjectsList = [];
+        this.updateProjectsFormArray();
+      }
+    );
+  }
+  updateUserProjectsData() {
+    if (this.userProjectsDataList.length !== 0) {
+      let counts = 0;
+      this.userProjectsDataList.forEach((project, index) => {
+        if (index < this.userProjectsList.length) {
+          this.userService.patchProjectInfoById(project, this.userProjectsList[index].project_id).subscribe(
+            dataJson => {
+              this.userProjectsList[index] = dataJson['data'];
+              counts++;
+              if (counts === this.userProjectsDataList.length) {
+                this.selectedPageIndex++;
+              }
+            },
+            error => {
+              this.alertsService.show(error.message, AlertType.error);
+            }
+          );
+        } else {
+          this.userService.postProjectInfo(project).subscribe(
+            dataJson => {
+              this.userProjectsList[index] = dataJson['data'];
+              counts++;
+              if (counts === this.userProjectsDataList.length) {
+                this.selectedPageIndex++;
+              }
+            },
+            error => {
+              this.alertsService.show(error.message, AlertType.error);
+            }
+          );
+        }
+      });
+    } else {
+      this.selectedPageIndex++;
+    }
+  }
+  deleteUserProjectData(arrIndex: number) {
+    this.userService.deleteProjectInfoById(this.userProjectsList[arrIndex].project_id).subscribe(
+      dataJson => {
+        console.log('Delete Education_List', dataJson);
+        this.userProjectsList.splice(arrIndex, 1);
+        this.removeProjectFormGroup(arrIndex);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
   }
 
   // Publications Form
@@ -1554,39 +1647,7 @@ export class CreateProfileComponent implements OnInit {
   }
 
 
-  // User Projects information
-  getUserProjectsList() {
-    this.userService.getProjectsInfo().subscribe(
-      dataJson => {
-        this.userProjectsList = dataJson['data']['data'];
-        this.updateProjectsForm();
-        console.log('userProjects_List', this.userInterestsList);
-      },
-      error => {
-        console.log(error);
-        this.initProjectsFormArray();
-      }
-    );
-  }
-  updateUserProjectsData() {
-    this.userProjectsDataList.forEach((project, index) => {
-      if (index < this.userProjectsList.length) {
-        this.userService.patchProjectInfoById(project, this.userProjectsList[index].project_id).subscribe(
-          dataJson => {
-            console.log(dataJson['data']);
-          },
-          error => console.log(error)
-        );
-      } else {
-        this.userService.postProjectInfo(project).subscribe(
-          dataJson => {
-            console.log(dataJson['data']);
-          },
-          error => console.log(error)
-        );
-      }
-    });
-  }
+  
 
 
 
