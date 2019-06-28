@@ -136,6 +136,8 @@ export class CreateProfileComponent implements OnInit {
   autocomplete_additional_industries: Industry[][] = [];
   autocomplete_skills: Skill[] = [];
   autocomplete_interests: Interest[] = [];
+  prevent_skills_autocomplete: boolean;
+  prevent_interets_autocomplete: boolean;
 
   statuses = [
     'Exploring Opportunities',
@@ -441,6 +443,8 @@ export class CreateProfileComponent implements OnInit {
     this.autocomplete_universities = [];
     this.autocomplete_majors = [];
     this.autocomplete_focus_majors = [];
+    this.prevent_skills_autocomplete = false;
+    this.prevent_interets_autocomplete = false;
   }
 
   onRemoveEducationData(index: number) {
@@ -954,41 +958,52 @@ export class CreateProfileComponent implements OnInit {
     );
   }
   onSkillValueChanges(skill: string) {
-    this.autoCompleteService.autoComplete(skill, 'skills').subscribe(
-      dataJson => {
-        if (dataJson['success']) {
-          this.autocomplete_skills = dataJson['data'];
+    if (!this.prevent_skills_autocomplete) {
+      this.autoCompleteService.autoComplete(skill, 'skills').subscribe(
+        dataJson => {
+          if (dataJson['success']) {
+            this.autocomplete_skills = dataJson['data'];
+          }
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+          this.autocomplete_skills = [];
         }
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-        this.autocomplete_skills = [];
-      }
-    );
+      );
+    } else {
+      this.autocomplete_skills = [];
+      this.prevent_skills_autocomplete = false;
+    }
   }
   onInterestValueChanges(interest: string) {
-    this.autoCompleteService.autoComplete(interest, 'interests').subscribe(
-      dataJson => {
-        if (dataJson['success']) {
-          this.autocomplete_interests = dataJson['data'];
+    if (!this.prevent_interets_autocomplete) {
+      this.autoCompleteService.autoComplete(interest, 'interests').subscribe(
+        dataJson => {
+          if (dataJson['success']) {
+            this.autocomplete_interests = dataJson['data'];
+          }
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+          this.autocomplete_interests = [];
         }
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-        this.autocomplete_interests = [];
-      }
-    );
+      );
+    } else {
+      this.autocomplete_interests = [];
+      this.prevent_interets_autocomplete = false;
+    }
   }
   addSkills(skillItem: Skill) {
     const skillItemData = {
       skill_id: skillItem.skill_id,
       skill: skillItem.skill,
-      skill_level: 3
+      skill_level: 1
     };
     if (this.userSkillsList.filter(value => value.skill_id === skillItemData.skill_id).length === 0) {
       this.addUserSkillsData(skillItemData);
     }
     this.skillsAndInterestsForm.controls.skills.setValue('');
+    this.prevent_skills_autocomplete = true;
   }
   onLevelChanged(level: number, index: number) {
     const skillItemData = {
@@ -1052,6 +1067,7 @@ export class CreateProfileComponent implements OnInit {
       this.addUserInteretsData(interestItemData);
     }
     this.skillsAndInterestsForm.controls.interests.setValue('');
+    this.prevent_interets_autocomplete = true;
   }
   getUserInterestsList() {
     this.userService.getUserInterestsInfo().subscribe(
