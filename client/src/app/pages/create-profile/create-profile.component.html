@@ -499,25 +499,40 @@
         </div>
         <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
-            <mat-label>Year of Completion</mat-label>
-            <input matInput placeholder="Year of Completion" type="text" [formControl]="publicationsFormArray.controls[i].controls.years">
+            <mat-label>Date Published</mat-label>
+            <input matInput placeholder="Year of Completion" type="text" [formControl]="publicationsFormArray.controls[i].controls.date_published" [matDatepicker]="publication_date_published" [max]="maxDate">
+            <mat-datepicker-toggle matSuffix [for]="publication_date_published"></mat-datepicker-toggle>
+            <mat-datepicker
+              touchUi
+              #publication_date_published
+            >
+            </mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="profile-form__field">
+          <mat-form-field class="bg-transparent" appearance="fill">
+            <mat-label>Link</mat-label>
+            <input matInput placeholder="Link" type="text" [formControl]="publicationsFormArray.controls[i].controls.href">
           </mat-form-field>
         </div>
         <div class="profile-form__field textarea">
           <mat-form-field>
-            <textarea matInput placeholder="Description (Optional)" rows="3" [formControl]="publicationsFormArray.controls[i].controls.description"></textarea>
+            <textarea matInput placeholder="Description" rows="3" [formControl]="publicationsFormArray.controls[i].controls.description"></textarea>
           </mat-form-field>
+        </div>
+        <div class="profile-form__field btn">
+          <action-button title="Remove" color="warn" (click)="onRemovePublicationData(i)"></action-button>
         </div>
         <div class="profile-form__field border">
         </div>
       </ng-container>
       <div class="profile-form__field btn">
-        <action-button type="stroked" title="Add Another" (click)="addPublicationsForm()"></action-button>
+        <action-button type="stroked" title="Add Another" (click)="onAddPublicationData()" [disabled]="!publicationsFormArray.valid"></action-button>
       </div>
     </div>
   </div>
   <div class="container__full">
-    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
+    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!publicationsFormArray.valid"></action-button>
   </div>
 </div>
 

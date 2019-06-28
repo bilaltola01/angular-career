@@ -399,7 +399,7 @@ export class UserService {
     );
   }
   public postPublicationsInfo(publicationData: any): Observable<any> {
-    return this.http.post(this.user_service_url + `user/${this.user_id}/publications`, publicationData, this.authHttpOptions())
+    return this.http.post(this.user_service_url + `user/${this.user_id}/publication`, publicationData, this.authHttpOptions())
     .pipe(
       map(data => {
         return {success: true, message: 'Success!', data: data};
@@ -408,7 +408,7 @@ export class UserService {
     );
   }
   public getPublicationsInfoById(publicationId: number): Observable<any> {
-    return this.http.get(this.user_service_url + `user/${this.user_id}/publications/${publicationId}`, this.authHttpOptions())
+    return this.http.get(this.user_service_url + `user/${this.user_id}/publication/${publicationId}`, this.authHttpOptions())
     .pipe(
       map(data => {
         return {success: true, message: 'Success!', data: data};
@@ -417,7 +417,7 @@ export class UserService {
     );
   }
   public patchPublicationsInfoById(publicationData: any, publicationId: number): Observable<any> {
-    return this.http.patch(this.user_service_url + `user/${this.user_id}/publications/${publicationId}`, publicationData, this.authHttpOptions())
+    return this.http.patch(this.user_service_url + `user/${this.user_id}/publication/${publicationId}`, publicationData, this.authHttpOptions())
     .pipe(
       map(data => {
         return {success: true, message: 'Success!', data: data};
@@ -426,7 +426,7 @@ export class UserService {
     );
   }
   public deletePublicationsInfoById(publicationId: number): Observable<any> {
-    return this.http.delete(this.user_service_url + `user/${this.user_id}/publications/${publicationId}`, this.authHttpOptions())
+    return this.http.delete(this.user_service_url + `user/${this.user_id}/publication/${publicationId}`, this.authHttpOptions())
     .pipe(
       map(data => {
         return {success: true, message: 'Success!', data: data};

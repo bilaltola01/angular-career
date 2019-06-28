@@ -148,7 +148,7 @@ export class CreateProfileComponent implements OnInit {
 
   profile_status = this.statuses[0];
 
-  selectedPageIndex = 6;
+  selectedPageIndex = 7;
 
   generalInfoResponse: UserGeneralInfo;
   generalInfoRequest: UserObject;
@@ -1257,19 +1257,38 @@ export class CreateProfileComponent implements OnInit {
     );
   }
 
-  // Publications Form
 
+  /**
+   *  Publications Information Form
+   *  Publicatinos FormGroup Initialilzation
+   */
   initPublicationsFormArray() {
     this.publicationsFormArray = new FormArray([]);
     this.userPublicationsList = [];
     this.userPublicationsDataList = [];
   }
+  onRemovePublicationData(arrIndex: number) {
+    if (arrIndex > this.userPublicationsList.length - 1) {
+      this.removePublicationFormGroup(arrIndex);
+    } else {
+      this.deleteUserPublicationData(arrIndex);
+    }
+  }
+  removePublicationFormGroup(arrIndex: number) {
+    this.publicationsFormArray.removeAt(arrIndex);
+    this.userPublicationsDataList.splice(arrIndex, 1);
+  }
+  onAddPublicationData() {
+    if (this.publicationsFormArray.valid) {
+      this.addPublicationFormGroup(null);
+    }
+  }
 
-  addPublicationsForm(publication: UserPublicationItem) {
+  addPublicationFormGroup(publication: UserPublicationItem) {
     const publicationItem = {
       publication_title: publication ? publication.publication_title : null,
       description: publication ? publication.description : null,
-      date_published: publication ? new Date(publication.date_published) : new Date(),
+      date_published: publication && publication.date_published ? new Date(publication.date_published) : null,
       href: publication ? publication.href : null,
       publisher: publication ? publication.publisher : null
     };
@@ -1277,33 +1296,42 @@ export class CreateProfileComponent implements OnInit {
 
     const arrIndex = this.userPublicationsDataList.length - 1;
 
-    const publicationsForm = new FormGroup({
-      publication_name: new FormControl(publication ? publication.publication_title : ''),
-      years: new FormControl(publication ? this.formattedDate(new Date(publication.date_published)) : ''),
-      description: new FormControl(publication ? publication.description : '')
+    const publicationFormGroup = new FormGroup({
+      publication_name: new FormControl(publication ? publication.publication_title : '', [Validators.required]),
+      date_published: new FormControl(publication && publication.date_published ? new Date(publication.date_published) : ''),
+      description: new FormControl(publication ? publication.description : ''),
+      href: new FormControl(publication ? publication.href : '')
     });
-    publicationsForm.controls.publication_name.valueChanges.subscribe(
+    publicationFormGroup.controls.publication_name.valueChanges.subscribe(
       (publication_title) => {
         this.onPublicationNameValueChange(arrIndex, publication_title);
       }
     );
-    publicationsForm.controls.description.valueChanges.subscribe(
+    publicationFormGroup.controls.description.valueChanges.subscribe(
       (description) => {
         this.onPublicationDescriptionValueChange(arrIndex, description);
       }
     );
-    publicationsForm.controls.years.valueChanges.subscribe(
+    publicationFormGroup.controls.date_published.valueChanges.subscribe(
       (date_published) => {
         this.onPublicationDatePublishedValueChange(arrIndex, date_published);
       }
     );
-
-    this.publicationsFormArray.push(publicationsForm);
+    publicationFormGroup.controls.href.valueChanges.subscribe(
+      (href) => {
+        this.onPublicationHrefValueChange(arrIndex, href);
+      }
+    );
+    this.publicationsFormArray.push(publicationFormGroup);
   }
-  updatePublicationsForm() {
-    this.userPublicationsList.forEach(publication => {
-      this.addPublicationsForm(publication);
-    });
+  updatePublicationsFormArray() {
+    if (this.userPublicationsList.length === 0) {
+      this.addPublicationFormGroup(null);
+    } else {
+      this.userPublicationsList.forEach(publication => {
+        this.addPublicationFormGroup(publication);
+      });
+    }
   }
   onPublicationNameValueChange(arrIndex: number, publication_title: string) {
     this.userPublicationsDataList[arrIndex].publication_title = publication_title;
@@ -1312,13 +1340,75 @@ export class CreateProfileComponent implements OnInit {
     this.userPublicationsDataList[arrIndex].description = description;
   }
   onPublicationDatePublishedValueChange(arrIndex: number, date_published: string) {
-    this.userPublicationsDataList[arrIndex].date_published = new Date(date_published);
+    this.userPublicationsDataList[arrIndex].date_published = date_published ? new Date(date_published) : null;
   }
   onPublicationHrefValueChange(arrIndex: number, href: string) {
     this.userPublicationsDataList[arrIndex].href = href;
   }
   onPublicationPublisherValueChange(arrIndex: number, publisher: string) {
     this.userPublicationsDataList[arrIndex].publisher = publisher;
+  }
+  getUserPublicationsList() {
+    this.userService.getPublicationsInfo().subscribe(
+      dataJson => {
+        this.userPublicationsList = dataJson['data'];
+        this.updatePublicationsFormArray();
+        console.log('uesrPublications_list', this.userPublicationsList);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+        this.userPublicationsList = [];
+        this.updatePublicationsFormArray();
+      }
+    );
+  }
+  updateUserPublicationsData() {
+    if (this.userPublicationsDataList.length !== 0) {
+      let counts = 0;
+      this.userPublicationsDataList.forEach((publication, index) => {
+        if (index < this.userPublicationsList.length) {
+          this.userService.patchPublicationsInfoById(publication, this.userPublicationsList[index].publication_id).subscribe(
+            dataJson => {
+              this.userPublicationsList[index] = dataJson['data'];
+              counts++;
+              if (counts === this.userPublicationsDataList.length) {
+                this.selectedPageIndex++;
+              }
+            },
+            error => {
+              this.alertsService.show(error.message, AlertType.error);
+            }
+          );
+        } else {
+          this.userService.postPublicationsInfo(publication).subscribe(
+            dataJson => {
+              this.userPublicationsList[index] = dataJson['data'];
+              counts++;
+              if (counts === this.userPublicationsDataList.length) {
+                this.selectedPageIndex++;
+              }
+            },
+            error => {
+              this.alertsService.show(error.message, AlertType.error);
+            }
+          );
+        }
+      });
+    } else {
+      this.selectedPageIndex++;
+    }
+  }
+  deleteUserPublicationData(arrIndex: number) {
+    this.userService.deletePublicationsInfoById(this.userPublicationsList[arrIndex].publication_id).subscribe(
+      dataJson => {
+        console.log('Delete Education_List', dataJson);
+        this.userPublicationsList.splice(arrIndex, 1);
+        this.removePublicationFormGroup(arrIndex);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
   }
 
   // External Links Form
@@ -1644,46 +1734,6 @@ export class CreateProfileComponent implements OnInit {
         this.alertsService.show(error.message, AlertType.error);
       }
     );
-  }
-
-
-  
-
-
-
-
-  // User Publications Information
-  getUserPublicationsList() {
-    this.userService.getPublicationsInfo().subscribe(
-      dataJson => {
-        this.userPublicationsList = dataJson['data'];
-        this.updatePublicationsForm();
-        console.log('uesrPublications_list', this.userPublicationsList);
-      },
-      error => {
-        console.log(error);
-        this.initPublicationsFormArray();
-      }
-    );
-  }
-  updateUserPublicationsData() {
-    this.userPublicationsDataList.forEach((publication, index) => {
-      if (index < this.userPublicationsList.length) {
-        this.userService.patchPublicationsInfoById(publication, this.userPublicationsList[index].publication_id).subscribe(
-          dataJson => {
-            console.log(dataJson['data']);
-          },
-          error => console.log(error)
-        );
-      } else {
-        this.userService.postPublicationsInfo(publication).subscribe(
-          dataJson => {
-            console.log(dataJson['data']);
-          },
-          error => console.log(error)
-        );
-      }
-    });
   }
 
 }
