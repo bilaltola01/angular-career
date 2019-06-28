@@ -136,6 +136,8 @@ export class CreateProfileComponent implements OnInit {
   autocomplete_additional_industries: Industry[][] = [];
   autocomplete_skills: Skill[] = [];
   autocomplete_interests: Interest[] = [];
+  prevent_skills_autocomplete: boolean;
+  prevent_interets_autocomplete: boolean;
 
   statuses = [
     'Exploring Opportunities',
@@ -144,7 +146,7 @@ export class CreateProfileComponent implements OnInit {
 
   profile_status = this.statuses[0];
 
-  selectedPageIndex = 4;
+  selectedPageIndex = 5;
 
   generalInfoResponse: UserGeneralInfo;
   generalInfoRequest: UserObject;
@@ -153,9 +155,7 @@ export class CreateProfileComponent implements OnInit {
   experienceList: UserExperienceItem[];
   experienceDataList: UserExperienceItemData[];
   userSkillsList: UserSkillItem[];
-  userSkillsDataList: UserSkillItem[];
   userInterestsList: UserInterestItem[];
-  userInterestsDataList: UserInterestItem[];
   userProjectsList: UserProjectItem[];
   userProjectsDataList: UserProjectItemData[];
   userPublicationsList: UserPublicationItem[];
@@ -201,8 +201,7 @@ export class CreateProfileComponent implements OnInit {
         this.updateExperienceData();
         break;
       case 5:
-        this.updateUserSkillsData();
-        this.updateUserInteretsData();
+        this.selectedPageIndex++;
         break;
       case 6:
         this.updateUserProjectsData();
@@ -444,6 +443,8 @@ export class CreateProfileComponent implements OnInit {
     this.autocomplete_universities = [];
     this.autocomplete_majors = [];
     this.autocomplete_focus_majors = [];
+    this.prevent_skills_autocomplete = false;
+    this.prevent_interets_autocomplete = false;
   }
 
   onRemoveEducationData(index: number) {
@@ -937,9 +938,7 @@ export class CreateProfileComponent implements OnInit {
     this.autocomplete_skills = [];
     this.autocomplete_interests = [];
     this.userSkillsList = [];
-    this.userSkillsDataList = [];
     this.userInterestsList = [];
-    this.userInterestsDataList = [];
 
     this.skillsAndInterestsForm = new FormGroup({
       skills: new FormControl(''),
@@ -948,46 +947,163 @@ export class CreateProfileComponent implements OnInit {
 
     this.skillsAndInterestsForm.controls.skills.valueChanges.subscribe(
       (skill) => {
-        this.onSkillValueChanges(skill);
+        skill ? this.onSkillValueChanges(skill) : this.autocomplete_skills = [];
       }
     );
 
     this.skillsAndInterestsForm.controls.interests.valueChanges.subscribe(
-      (skill) => {
-        this.onInterestValueChanges(skill);
+      (interest) => {
+        interest ? this.onInterestValueChanges(interest) : this.autocomplete_interests = [];
       }
     );
   }
-
+  onSkillValueChanges(skill: string) {
+    if (!this.prevent_skills_autocomplete) {
+      this.autoCompleteService.autoComplete(skill, 'skills').subscribe(
+        dataJson => {
+          if (dataJson['success']) {
+            this.autocomplete_skills = dataJson['data'];
+          }
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+          this.autocomplete_skills = [];
+        }
+      );
+    } else {
+      this.autocomplete_skills = [];
+      this.prevent_skills_autocomplete = false;
+    }
+  }
+  onInterestValueChanges(interest: string) {
+    if (!this.prevent_interets_autocomplete) {
+      this.autoCompleteService.autoComplete(interest, 'interests').subscribe(
+        dataJson => {
+          if (dataJson['success']) {
+            this.autocomplete_interests = dataJson['data'];
+          }
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+          this.autocomplete_interests = [];
+        }
+      );
+    } else {
+      this.autocomplete_interests = [];
+      this.prevent_interets_autocomplete = false;
+    }
+  }
   addSkills(skillItem: Skill) {
     const skillItemData = {
       skill_id: skillItem.skill_id,
       skill: skillItem.skill,
-      skill_level: 4
+      skill_level: 1
     };
-    if (skillItemData) {
-      if (this.userSkillsDataList.filter(value => value.skill === skillItemData.skill).length < 1) {
-        this.userSkillsDataList.push(skillItemData);
-      }
-
-      this.skillsAndInterestsForm.controls.skills.setValue('');
-      this.autocomplete_skills = [];
+    if (this.userSkillsList.filter(value => value.skill_id === skillItemData.skill_id).length === 0) {
+      this.addUserSkillsData(skillItemData);
     }
+    this.skillsAndInterestsForm.controls.skills.setValue('');
+    this.prevent_skills_autocomplete = true;
   }
-
+  onLevelChanged(level: number, index: number) {
+    const skillItemData = {
+      skill_id: this.userSkillsList[index].skill_id,
+      skill: this.userSkillsList[index].skill,
+      skill_level: level
+    };
+    this.updateUserSkillsData(index, skillItemData);
+  }
+  getUserSkillsList() {
+    this.userService.getSkillsInfo().subscribe(
+      dataJson => {
+        console.log('userSkills_List', this.userSkillsList);
+        this.userSkillsList = dataJson['data'];
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+        this.userSkillsList = [];
+      }
+    );
+  }
+  updateUserSkillsData(arrIndex: number, userSkillItem: UserSkillItem) {
+    this.userService.patchSkillInfoById(userSkillItem.skill_id, userSkillItem).subscribe(
+      dataJson => {
+        console.log(dataJson['data']);
+        this.userSkillsList[arrIndex] = dataJson['data'];
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+  addUserSkillsData(userSkillItem: UserSkillItem) {
+    this.userService.postSkillInfo(userSkillItem).subscribe(
+      dataJson => {
+        console.log(dataJson['data']);
+        this.userSkillsList.push(dataJson['data']);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+  removeUserSkillsData(index: number, userSkillItem: UserSkillItem) {
+    this.userService.deleteSkillInfoById(userSkillItem.skill_id).subscribe(
+      dataJson => {
+        console.log(dataJson['data']);
+        this.userSkillsList.splice(index, 1);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
   addInterests(interestItem: Interest) {
     const interestItemData = {
       interest_id: interestItem.interest_id,
-      interest_name: interestItem.interest
+      interest: interestItem.interest
     };
-    if (interestItemData) {
-      if (this.userInterestsDataList.filter(value => value.interest_name === interestItem.interest).length < 1) {
-        this.userInterestsDataList.push(interestItemData);
-      }
-      this.skillsAndInterestsForm.controls.interests.setValue('');
-      this.autocomplete_interests = [];
+    if (this.userInterestsList.filter(value => value.interest === interestItem.interest).length === 0) {
+      this.addUserInteretsData(interestItemData);
     }
+    this.skillsAndInterestsForm.controls.interests.setValue('');
+    this.prevent_interets_autocomplete = true;
   }
+  getUserInterestsList() {
+    this.userService.getUserInterestsInfo().subscribe(
+      dataJson => {
+        console.log('userInterests_List', this.userInterestsList);
+        this.userInterestsList = dataJson['data'];
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+        this.userInterestsList = [];
+      }
+    );
+  }
+  addUserInteretsData(userInterestItem: UserInterestItem) {
+    this.userService.postUserInterestsInfo(userInterestItem).subscribe(
+      dataJson => {
+        console.log(dataJson['data']);
+        this.userInterestsList.push(dataJson['data']);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+  removeUserInteretsData(index: number, userInterestItem: UserInterestItem) {
+    this.userService.deleteUserInterestsInfoById(userInterestItem.interest_id).subscribe(
+      dataJson => {
+        console.log(dataJson['data']);
+        this.userInterestsList.splice(index, 1);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
 
 
   // Projects Form
@@ -1252,40 +1368,6 @@ export class CreateProfileComponent implements OnInit {
   }
 
 
-  onSkillValueChanges(skill: string) {
-    if (skill) {
-      this.autoCompleteService.autoComplete(skill, 'skills').subscribe(
-        dataJson => {
-          if (dataJson['success']) {
-            this.autocomplete_skills = dataJson['data'];
-          }
-        },
-        error => {
-          console.log(error);
-        }
-      );
-    } else {
-      this.autocomplete_skills = [];
-    }
-  }
-
-  onInterestValueChanges(interest: string) {
-    if (interest) {
-      this.autoCompleteService.autoComplete(interest, 'interests').subscribe(
-        dataJson => {
-          if (dataJson['success']) {
-            this.autocomplete_interests = dataJson['data'];
-          }
-        },
-        error => {
-          console.log(error);
-        }
-      );
-    } else {
-      this.autocomplete_interests = [];
-    }
-  }
-
   // General Information
 
   getGeneralInfo() {
@@ -1469,79 +1551,6 @@ export class CreateProfileComponent implements OnInit {
         this.alertsService.show(error.message, AlertType.error);
       }
     );
-  }
-
-
-  // User Skills Information
-  getUserSkillsList() {
-    this.userService.getSkillsInfo().subscribe(
-      dataJson => {
-        this.userSkillsList = dataJson['data'];
-        this.userSkillsDataList = [];
-        this.userSkillsList.forEach(skillItem => {
-          this.userSkillsDataList.push(skillItem);
-        });
-        console.log('userSkills_List', this.userSkillsList);
-      },
-      error => {
-        console.log(error);
-        this.userSkillsList = [];
-        this.userSkillsDataList = [];
-      }
-    );
-  }
-  updateUserSkillsData() {
-    this.userSkillsDataList.forEach((skillData, index) => {
-      if (index < this.userSkillsList.length) {
-        if (skillData.skill_level !== this.userSkillsList[index].skill_level) {
-          this.userService.patchSkillInfoById(skillData.skill_id, skillData).subscribe(
-            dataJson => {
-              console.log(dataJson['data']);
-            },
-            error => console.log(error)
-          );
-        }
-      } else {
-        this.userService.postSkillInfo(skillData).subscribe(
-          dataJson => {
-            console.log(dataJson['data']);
-          },
-          error => console.log(error)
-        );
-      }
-    });
-  }
-
-
-  // User Interests Information
-  getUserInterestsList() {
-    this.userService.getUserInterestsInfo().subscribe(
-      dataJson => {
-        this.userInterestsList = dataJson['data'];
-        this.userInterestsDataList = [];
-        this.userInterestsList.forEach(interestItem => {
-          this.userInterestsDataList.push(interestItem);
-        });
-        console.log('userSkills_List', this.userInterestsList);
-      },
-      error => {
-        console.log(error);
-        this.userInterestsList = [];
-        this.userInterestsDataList = [];
-      }
-    );
-  }
-  updateUserInteretsData() {
-    this.userInterestsDataList.forEach((interestData, index) => {
-      if (index > this.userInterestsList.length - 1) {
-        this.userService.postUserInterestsInfo(interestData).subscribe(
-          dataJson => {
-            console.log(dataJson['data']);
-          },
-          error => console.log(error)
-        );
-      }
-    });
   }
 
 

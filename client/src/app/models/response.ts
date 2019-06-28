@@ -67,7 +67,7 @@ export interface UserSkillItem {
 
 export interface UserInterestItem {
   interest_id: number;
-  interest_name: string;
+  interest: string;
 }
 
 export interface UserProjectItem {

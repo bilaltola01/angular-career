@@ -378,7 +378,7 @@ export class UserService {
     );
   }
 
-  public delteSkillInfoById(userSkillId: number): Observable<any> {
+  public deleteSkillInfoById(userSkillId: number): Observable<any> {
     return this.http.delete(this.user_service_url + `user/${this.user_id}/skill/${userSkillId}`, this.authHttpOptions())
     .pipe(
       map(data => {
@@ -449,7 +449,7 @@ export class UserService {
     );
   }
   public postUserInterestsInfo(interestData: any): Observable<any> {
-    return this.http.post(this.user_service_url + `user/${this.user_id}/interests`, interestData, this.authHttpOptions())
+    return this.http.post(this.user_service_url + `user/${this.user_id}/interest`, interestData, this.authHttpOptions())
     .pipe(
       map(data => {
         return {success: true, message: 'Success!', data: data};
