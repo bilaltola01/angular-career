@@ -651,6 +651,45 @@ export class UserService {
     );
   }
 
+  public getExternalResourcesInfo(): Observable<any> {
+    return this.http.get(this.user_service_url + `user/${this.user_id}/external-resources`, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  public postExternalResourcesInfo(resourceInfo: any): Observable<any> {
+    return this.http.post(this.user_service_url + `user/${this.user_id}/external-resources`, resourceInfo, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  public patchExternalResourcesById(resourceInfo: any, resourceId: number): Observable<any> {
+    return this.http.patch(this.user_service_url + `user/${this.user_id}/external-resources/${resourceId}`, resourceInfo, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+  public deleteExternalResourcesById(resourceId: number): Observable<any> {
+    return this.http.delete(this.user_service_url + `user/${this.user_id}/external-resources/${resourceId}`, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
 
   private handleError(error) {
     let errorMessage = '';

@@ -54,3 +54,8 @@ export interface UserPublicationItemData {
   href: string;
   publisher: string;
 }
+
+export interface UserExternalResourcesItemData {
+  link: string;
+  description: string;
+}

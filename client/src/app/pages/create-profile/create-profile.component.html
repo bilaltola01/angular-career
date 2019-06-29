@@ -542,36 +542,15 @@
 
 <div *ngIf="selectedPageIndex===8" class="container {{profileCreationPages[8]}}">
   <div class="container__full">
-    <div class="profile-form" [formGroup]="externalLinksForm">
+    <div class="profile-form" [formGroup]="externalResourcesForm">
       <h3 class="profile-form__title">
         EXTERNAL LINKS
       </h3>
-      <div class="profile-form__field">
+      <div *ngFor="let resource of externalResources" class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
-          <mat-label>Twitter (Optional)</mat-label>
-          <img matSuffix src="assets/icons/ic_twitter.svg">
-          <input matInput placeholder="Paste your link here" type="text" [formControl]="externalLinksForm.controls.twitter_link">
-        </mat-form-field>
-      </div>
-      <div class="profile-form__field">
-        <mat-form-field class="bg-transparent" appearance="fill">
-          <mat-label>Facebook (Optional)</mat-label>
-          <img matSuffix src="assets/icons/ic_facebook.svg">
-          <input matInput placeholder="Paste your link here" type="text" [formControl]="externalLinksForm.controls.facebook_link">
-        </mat-form-field>
-      </div>
-      <div class="profile-form__field">
-        <mat-form-field class="bg-transparent" appearance="fill">
-          <mat-label>Google (Optional)</mat-label>
-          <img matSuffix src="assets/icons/ic_google.svg">
-          <input matInput placeholder="Paste your link here" type="text" [formControl]="externalLinksForm.controls.google_link">
-        </mat-form-field>
-      </div>
-      <div class="profile-form__field">
-        <mat-form-field class="bg-transparent" appearance="fill">
-          <mat-label>Linkedin (Optional)</mat-label>
-          <img matSuffix src="assets/icons/ic_linkedin.svg">
-          <input matInput placeholder="Paste your link here" type="text" [formControl]="externalLinksForm.controls.linkedin_link">
+          <mat-label>{{resource}}</mat-label>
+          <img matSuffix src="assets/icons/ic_{{resource}}.svg">
+          <input matInput placeholder="{{resource}} Link" type="text" [formControl]="externalResourcesForm.controls[resource]">
         </mat-form-field>
       </div>
     </div>

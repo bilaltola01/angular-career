@@ -22,7 +22,11 @@ import {
   Countries,
   Levels,
   Industry,
+  UserExternalResourcesItem,
+  UserExternalResourcesItemData,
+  ExternalResources
 } from 'src/app/models';
+import { count } from 'rxjs/operators';
 
 @Component({
   selector: 'app-create-profile',
@@ -119,7 +123,7 @@ export class CreateProfileComponent implements OnInit {
   skillsAndInterestsForm: FormGroup;
   projectsFormArray: FormArray;
   publicationsFormArray: FormArray;
-  externalLinksForm: FormGroup;
+  externalResourcesForm: FormGroup;
 
   // autocomplete lists
   autocomplete_cities: City[] = [];
@@ -146,9 +150,11 @@ export class CreateProfileComponent implements OnInit {
     'Actively Looking For Job'
   ];
 
+  externalResources = ExternalResources;
+
   profile_status = this.statuses[0];
 
-  selectedPageIndex = 7;
+  selectedPageIndex = 8;
 
   generalInfoResponse: UserGeneralInfo;
   generalInfoRequest: UserObject;
@@ -162,6 +168,8 @@ export class CreateProfileComponent implements OnInit {
   userProjectsDataList: UserProjectItemData[];
   userPublicationsList: UserPublicationItem[];
   userPublicationsDataList: UserPublicationItemData[];
+  externalResourcesList: UserExternalResourcesItem[];
+  externalResourcesDataList: UserExternalResourcesItemData[];
 
   constructor(private router: Router, private autoCompleteService: AutoCompleteService, private userService: UserService, private alertsService: AlertsService) { }
 
@@ -173,7 +181,7 @@ export class CreateProfileComponent implements OnInit {
     this.initSkillsAndInterestsForm();
     this.initProjectsFormArray();
     this.initPublicationsFormArray();
-    this.initExternalLinksForm();
+    this.initExternalResourcesForm();
 
     this.getGeneralInfo();
     this.getEducationList();
@@ -210,6 +218,9 @@ export class CreateProfileComponent implements OnInit {
         break;
       case 7:
         this.updateUserPublicationsData();
+        break;
+      case 8:
+        this.updateExternalResourceData();
         break;
       case 9:
         this.updateGeneralInfo();
@@ -1411,14 +1422,107 @@ export class CreateProfileComponent implements OnInit {
     );
   }
 
-  // External Links Form
+  /**
+   * External Resource Information Form
+   */
 
-  initExternalLinksForm() {
-    this.externalLinksForm = new FormGroup({
-      twitter_link: new FormControl(''),
-      facebook_link: new FormControl(''),
-      google_link: new FormControl(''),
-      linkedin_link: new FormControl('')
+  initExternalResourcesForm() {
+    this.externalResourcesForm = new FormGroup({});
+    this.externalResourcesList = [];
+    this.externalResourcesDataList = [];
+
+    this.externalResources.forEach((resource, index) => {
+      this.externalResourcesForm.addControl(resource, new FormControl(''));
+      this.externalResourcesForm.controls[resource].valueChanges.subscribe(
+        (link) => {
+          this.onExternalResourceValueChange(resource, index, link);
+        }
+      );
+      this.externalResourcesDataList.push({
+        link: null,
+        description: resource
+      });
+    });
+  }
+  onExternalResourceValueChange(resource: string, arrIndex: number, link: string) {
+    if (this.externalResourcesDataList[arrIndex].description === resource) {
+      this.externalResourcesDataList[arrIndex] .link = link ? link : null;
+    }
+  }
+  updateExternalResourceFormGroup() {
+    this.externalResourcesList.forEach((resource) => {
+      this.externalResourcesForm.controls[resource.description].setValue(resource.link);
+    });
+  }
+
+  getExternalResourceList() {
+    this.userService.getExternalResourcesInfo().subscribe(
+      dataJson => {
+        this.externalResourcesList = dataJson['data'];
+        this.updateExternalResourceFormGroup();
+        console.log('ExternalResource_List', this.externalResourcesList);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+        this.externalResourcesList = [];
+      }
+    );
+  }
+
+  updateExternalResourceData() {
+    let counts = 0;
+    const temp = [];
+    this.externalResourcesDataList.forEach((resource) => {
+      const exteralResource = this.externalResourcesList.filter(value => value.description === resource.description);
+      if (exteralResource.length > 0) {
+        if (resource.link) {
+          this.userService.patchExternalResourcesById(resource, exteralResource[0].resources_id).subscribe(
+            dataJson => {
+              console.log(dataJson['data']);
+              temp.push(dataJson['data']);
+              counts++;
+              if (counts === this.externalResourcesDataList.length) {
+                this.externalResourcesList = temp;
+                this.selectedPageIndex++;
+              }
+            },
+            error => {
+              this.alertsService.show(error.message, AlertType.error);
+            }
+          );
+        } else {
+          this.userService.deleteExternalResourcesById(exteralResource[0].resources_id).subscribe(
+            dataJson => {
+              console.log(dataJson['data']);
+              counts++;
+              if (counts === this.externalResourcesDataList.length) {
+                this.externalResourcesList = temp;
+                this.selectedPageIndex++;
+              }
+            },
+            error => {
+              this.alertsService.show(error.message, AlertType.error);
+            }
+          );
+        }
+      } else {
+        if (resource.link) {
+          this.userService.postExternalResourcesInfo(resource).subscribe(
+            dataJson => {
+              console.log(dataJson['data']);
+              temp.push(dataJson['data']);
+              counts++;
+              if (counts === this.externalResourcesDataList.length) {
+                this.externalResourcesList = temp;
+                this.selectedPageIndex++;
+              }
+            },
+            error => {
+              this.alertsService.show(error.message, AlertType.error);
+            }
+          );
+        }
+      }
     });
   }
 

@@ -320,3 +320,10 @@ export const Levels = [
     education_level: 'Ph.D.'
   }
 ];
+
+export const ExternalResources = [
+  'Twitter',
+  'Facebook',
+  'Google',
+  'Linkedin'
+];
