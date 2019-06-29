@@ -26,7 +26,8 @@ import {
   UserExternalResourcesItemData,
   ExternalResources
 } from 'src/app/models';
-import { count } from 'rxjs/operators';
+import moment from 'moment';
+import { Moment } from 'moment';
 
 @Component({
   selector: 'app-create-profile',
@@ -154,7 +155,7 @@ export class CreateProfileComponent implements OnInit {
 
   profile_status = this.statuses[0];
 
-  selectedPageIndex = 8;
+  selectedPageIndex = 4;
 
   generalInfoResponse: UserGeneralInfo;
   generalInfoRequest: UserObject;
@@ -242,6 +243,13 @@ export class CreateProfileComponent implements OnInit {
 
   formattedDate(date: Date): string {
     return date.getFullYear() + '-' + (date.getMonth() + 1 < 10 ? '0' : '') + (date.getMonth() + 1) + '-' + (date.getDate() < 10 ? '0' : '') + date.getDate();
+  }
+
+  /**
+   *  Extract MM/YYYY string from Date type string
+   */
+  extractYearAndMonth(date: string): string {
+    return `${date.slice(5, 7)}/${date.slice(0, 4)}`;
   }
 
   setProfileStatus(is_looking: number) {
@@ -741,8 +749,8 @@ export class CreateProfileComponent implements OnInit {
     const experienceData = {
       company_id: experience ? experience.company_id : null,
       job: experience ? experience.job : null,
-      start_date: experience ? new Date(experience.start_date) : null,
-      end_date: experience && experience.end_date ? new Date(experience.end_date) : null,
+      start_date: experience && experience.start_date ? experience.start_date : null,
+      end_date: experience && experience.end_date ? experience.end_date : null,
       job_desc: experience ? experience.job_desc : null,
       user_specified_company_name: experience ? experience.user_specified_company_name : null,
       skill_ids_trained: (experience && experience.skills_trained && experience.skills_trained.length > 0) ? experience.skills_trained.map(x => x.skill_id) : null,
@@ -755,8 +763,8 @@ export class CreateProfileComponent implements OnInit {
 
     const workExperienceForm = new FormGroup({
       company_name: new FormControl(experience ? (experience.company_id ? experience.company_name : experience.user_specified_company_name) : '', [Validators.required]),
-      start_date: new FormControl(experience ? new Date(experience.start_date).getFullYear() : '', [Validators.required]),
-      end_date: new FormControl(experience && experience.end_date ? new Date(experience.end_date).getFullYear() : ''),
+      start_date: new FormControl(experience && experience.start_date ? this.extractYearAndMonth(experience.start_date) : '', [Validators.required]),
+      end_date: new FormControl(experience && experience.end_date ? this.extractYearAndMonth(experience.end_date) : ''),
       job: new FormControl(experience ? experience.job : '', [Validators.required]),
       description: new FormControl(experience ? experience.job_desc : ''),
       skills_trained: new FormControl(''),
@@ -771,6 +779,16 @@ export class CreateProfileComponent implements OnInit {
           this.autocomplete_companies[arrIndex] = [];
           this.onSelectSpecificCompany(arrIndex, null);
         }
+      }
+    );
+    workExperienceForm.controls.start_date.valueChanges.subscribe(
+      (start_date) => {
+        this.experienceDataList[arrIndex].start_date = start_date ? moment(start_date, 'MM/YYYY') : null ;
+      }
+    );
+    workExperienceForm.controls.end_date.valueChanges.subscribe(
+      (end_date) => {
+        this.experienceDataList[arrIndex].end_date = end_date ? moment(end_date, 'MM/YYYY') : null ;
       }
     );
     workExperienceForm.controls.job.valueChanges.subscribe(
@@ -826,11 +844,16 @@ export class CreateProfileComponent implements OnInit {
       this.onSelectSpecificCompany(index, this.workExperienceFormArray.controls[index]['controls'].company.value);
     }
   }
-  onExperienceYearSelect(date: any, index: number, isStartDate: boolean = true, datePicker: MatDatepicker<any>) {
+  onExperienceYearSelect(date: any, index: number, isStartDate: boolean = true) {
+    // const dateValue = new Date(date);
+    // this.workExperienceFormArray.controls[index]['controls'][isStartDate ? 'start_date' : 'end_date'].setValue(moment(dateValue).format('MM/YYYY'));
+    // this.experienceDataList[index][isStartDate ? 'start_date' : 'end_date'] = dateValue;
+  }
+  onExperienceMonthSelect(date: any, index: number, isStartDate: boolean = true, datePicker: MatDatepicker<any>) {
     const dateValue = new Date(date);
     datePicker.close();
-    this.workExperienceFormArray.controls[index]['controls'][isStartDate ? 'start_date' : 'end_date'].setValue(dateValue.getFullYear());
-    this.experienceDataList[index][isStartDate ? 'start_date' : 'end_date'] = dateValue;
+    this.workExperienceFormArray.controls[index]['controls'][isStartDate ? 'start_date' : 'end_date'].setValue(moment(dateValue).format('MM/YYYY'));
+    // this.experienceDataList[index][isStartDate ? 'start_date' : 'end_date'] = dateValue;
   }
   isExperienceStartDate(index: number): boolean {
     if (this.workExperienceFormArray.controls[index]['controls']['start_date'].value) {
@@ -838,9 +861,6 @@ export class CreateProfileComponent implements OnInit {
     } else {
       return false;
     }
-  }
-  maxExperienceStartDate(): Date {
-    return new Date();
   }
   minExperienceEndDate(index: number): Date {
     return this.experienceDataList[index].start_date;

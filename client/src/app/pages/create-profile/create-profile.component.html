@@ -290,14 +290,15 @@
         <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>Start Date</mat-label>
-            <input matInput placeholder="YYYY" type="text" [formControl]="workExperienceFormArray.controls[i].controls.start_date" readonly>
-            <input class="hide" [matDatepicker]="experience_start_date" [max]="maxExperienceStartDate()">
+            <input matInput placeholder="MM/YYYY" type="text" [formControl]="workExperienceFormArray.controls[i].controls.start_date" pattern="\d{1,2}/\d{4}">
+            <input class="hide" [matDatepicker]="experience_start_date" [max]="maxDate">
             <mat-datepicker-toggle matSuffix [for]="experience_start_date"></mat-datepicker-toggle>
             <mat-datepicker
               touchUi
               #experience_start_date
               startView="multi-year"
-              (yearSelected)="onExperienceYearSelect($event, i, true, experience_start_date)"
+              (yearSelected)="onExperienceYearSelect($event, i, true)"
+              (monthSelected)="onExperienceMonthSelect($event, i, true, experience_start_date)"
             >
             </mat-datepicker>
           </mat-form-field>
@@ -305,14 +306,15 @@
         <div class="profile-form__field" *ngIf="isExperienceStartDate(i)">
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>End Date</mat-label>
-            <input matInput placeholder="YYYY" type="text" [formControl]="workExperienceFormArray.controls[i].controls.end_date" readonly>
-            <input class="hide" [matDatepicker]="experience_end_date" [min]="minExperienceEndDate(i)" [max]="maxExperienceStartDate()">
+            <input matInput placeholder="MM/YYYY" type="text" [formControl]="workExperienceFormArray.controls[i].controls.end_date" pattern="\d{1,2}/\d{4}">
+            <input class="hide" [matDatepicker]="experience_end_date" [min]="minExperienceEndDate(i)" [max]="maxDate">
             <mat-datepicker-toggle matSuffix [for]="experience_end_date"></mat-datepicker-toggle>
             <mat-datepicker
               touchUi
               #experience_end_date
               startView="multi-year"
-              (yearSelected)="onExperienceYearSelect($event, i, false, experience_end_date)"
+              (yearSelected)="onExperienceYearSelect($event, i, false)"
+              (monthSelected)="onExperienceMonthSelect($event, i, false, experience_end_date)"
             >
             </mat-datepicker>
           </mat-form-field>
@@ -444,7 +446,7 @@
         <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>Date of Completion</mat-label>
-            <input matInput placeholder="Year of Completion" type="text" [formControl]="projectsFormArray.controls[i].controls.date_finished" [matDatepicker]="project_finished_date" [max]="maxDate">
+            <input matInput placeholder="MM/DD/YYYY" type="text" [formControl]="projectsFormArray.controls[i].controls.date_finished" [matDatepicker]="project_finished_date" [max]="maxDate">
             <mat-datepicker-toggle matSuffix [for]="project_finished_date"></mat-datepicker-toggle>
             <mat-datepicker
               touchUi
@@ -500,7 +502,7 @@
         <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>Date Published</mat-label>
-            <input matInput placeholder="Year of Completion" type="text" [formControl]="publicationsFormArray.controls[i].controls.date_published" [matDatepicker]="publication_date_published" [max]="maxDate">
+            <input matInput placeholder="MM/DD/YYYY" type="text" [formControl]="publicationsFormArray.controls[i].controls.date_published" [matDatepicker]="publication_date_published" [max]="maxDate">
             <mat-datepicker-toggle matSuffix [for]="publication_date_published"></mat-datepicker-toggle>
             <mat-datepicker
               touchUi
