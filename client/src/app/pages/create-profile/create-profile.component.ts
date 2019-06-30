@@ -1192,7 +1192,7 @@ export class CreateProfileComponent implements OnInit {
     const projectItem = {
       project_name: project ? project.project_name : null,
       description: project ? project.description : null,
-      date_finished: (project && project.date_finished) ? new Date(project.date_finished) : null,
+      date_finished: (project && project.date_finished) ? project.date_finished : null,
       href: project ? project.href : null
     };
     this.userProjectsDataList.push(projectItem);
@@ -1201,7 +1201,7 @@ export class CreateProfileComponent implements OnInit {
 
     const projectFormGroup = new FormGroup({
       project_name: new FormControl(project ? project.project_name : '', [Validators.required]),
-      date_finished: new FormControl((project && project.date_finished) ? new Date(project.date_finished) : ''),
+      date_finished: new FormControl((project && project.date_finished) ? this.extractDate(project.date_finished) : ''),
       description: new FormControl(project ? project.description : ''),
       href: new FormControl(project ? project.href : '')
     });
@@ -1243,17 +1243,25 @@ export class CreateProfileComponent implements OnInit {
     this.userProjectsDataList[arrIndex].description = description;
   }
   onProjectDateFinishedValueChange(arrIndex: number, date_finished: string) {
-    this.userProjectsDataList[arrIndex].date_finished = date_finished ?  new Date(date_finished) : null;
+    this.userProjectsDataList[arrIndex].date_finished = date_finished ? date_finished : null;
   }
   onProjectHrefValueChange(arrIndex: number, href: string) {
     this.userProjectsDataList[arrIndex].href = href;
+  }
+  onChangeProjectFinishedDate(event: any, arrIndex: number) {
+    if (event.value) {
+      const dateValue = new Date(event.value);
+      this.projectsFormArray.controls[arrIndex]['controls']['date_finished'].setValue(moment(dateValue).format('MM/DD/YYYY'));
+    } else {
+      this.projectsFormArray.controls[arrIndex]['controls']['date_finished'].setValue('');
+    }
   }
   getUserProjectsList() {
     this.userService.getProjectsInfo().subscribe(
       dataJson => {
         this.userProjectsList = dataJson['data']['data'];
         this.updateProjectsFormArray();
-        console.log('UserProjects_List', this.userInterestsList);
+        console.log('UserProjects_List', this.userProjectsList);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -1342,7 +1350,7 @@ export class CreateProfileComponent implements OnInit {
     const publicationItem = {
       publication_title: publication ? publication.publication_title : null,
       description: publication ? publication.description : null,
-      date_published: publication && publication.date_published ? new Date(publication.date_published) : null,
+      date_published: publication && publication.date_published ? publication.date_published : null,
       href: publication ? publication.href : null,
       publisher: publication ? publication.publisher : null
     };
@@ -1352,7 +1360,7 @@ export class CreateProfileComponent implements OnInit {
 
     const publicationFormGroup = new FormGroup({
       publication_name: new FormControl(publication ? publication.publication_title : '', [Validators.required]),
-      date_published: new FormControl(publication && publication.date_published ? new Date(publication.date_published) : ''),
+      date_published: new FormControl(publication && publication.date_published ? this.extractDate(publication.date_published) : ''),
       description: new FormControl(publication ? publication.description : ''),
       href: new FormControl(publication ? publication.href : '')
     });
@@ -1394,13 +1402,21 @@ export class CreateProfileComponent implements OnInit {
     this.userPublicationsDataList[arrIndex].description = description;
   }
   onPublicationDatePublishedValueChange(arrIndex: number, date_published: string) {
-    this.userPublicationsDataList[arrIndex].date_published = date_published ? new Date(date_published) : null;
+    this.userPublicationsDataList[arrIndex].date_published = date_published ? date_published : null;
   }
   onPublicationHrefValueChange(arrIndex: number, href: string) {
     this.userPublicationsDataList[arrIndex].href = href;
   }
   onPublicationPublisherValueChange(arrIndex: number, publisher: string) {
     this.userPublicationsDataList[arrIndex].publisher = publisher;
+  }
+  onChangeDatePublished(event: any, arrIndex: number) {
+    if (event.value) {
+      const dateValue = new Date(event.value);
+      this.publicationsFormArray.controls[arrIndex]['controls']['date_published'].setValue(moment(dateValue).format('MM/DD/YYYY'));
+    } else {
+      this.publicationsFormArray.controls[arrIndex]['controls']['date_published'].setValue('');
+    }
   }
   getUserPublicationsList() {
     this.userService.getPublicationsInfo().subscribe(

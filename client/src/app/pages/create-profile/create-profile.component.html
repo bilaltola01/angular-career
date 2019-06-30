@@ -447,7 +447,8 @@
         <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>Date of Completion</mat-label>
-            <input matInput placeholder="MM/DD/YYYY" type="text" [formControl]="projectsFormArray.controls[i].controls.date_finished" [matDatepicker]="project_finished_date" [max]="maxDate">
+            <input matInput placeholder="MM/DD/YYYY" type="text" [formControl]="projectsFormArray.controls[i].controls.date_finished" pattern="\d{1,2}/\d{1,2}/\d{4}">
+            <input class="hide" [matDatepicker]="project_finished_date" [max]="maxDate" (dateChange)="onChangeProjectFinishedDate($event, i)">
             <mat-datepicker-toggle matSuffix [for]="project_finished_date"></mat-datepicker-toggle>
             <mat-datepicker
               touchUi
@@ -503,7 +504,8 @@
         <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>Date Published</mat-label>
-            <input matInput placeholder="MM/DD/YYYY" type="text" [formControl]="publicationsFormArray.controls[i].controls.date_published" [matDatepicker]="publication_date_published" [max]="maxDate">
+            <input matInput placeholder="MM/DD/YYYY" type="text" [formControl]="publicationsFormArray.controls[i].controls.date_published" pattern="\d{1,2}/\d{1,2}/\d{4}">
+            <input class="hide" [matDatepicker]="publication_date_published" [max]="maxDate" (dateChange)="onChangeDatePublished($event, i)">
             <mat-datepicker-toggle matSuffix [for]="publication_date_published"></mat-datepicker-toggle>
             <mat-datepicker
               touchUi

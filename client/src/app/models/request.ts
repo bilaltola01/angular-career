@@ -43,14 +43,14 @@ export interface UserExperienceItemData {
 export interface UserProjectItemData {
   project_name:	string;
   description: string;
-  date_finished: Date;
+  date_finished: any;
   href: string;
 }
 
 export interface UserPublicationItemData {
   publication_title: string;
   description: string;
-  date_published: Date;
+  date_published: any;
   href: string;
   publisher: string;
 }
