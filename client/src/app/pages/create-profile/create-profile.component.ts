@@ -27,7 +27,6 @@ import {
   ExternalResources
 } from 'src/app/models';
 import moment from 'moment';
-import { Moment } from 'moment';
 
 @Component({
   selector: 'app-create-profile',
@@ -155,7 +154,7 @@ export class CreateProfileComponent implements OnInit {
 
   profile_status = this.statuses[0];
 
-  selectedPageIndex = 4;
+  selectedPageIndex = 0;
 
   generalInfoResponse: UserGeneralInfo;
   generalInfoRequest: UserObject;
@@ -191,6 +190,7 @@ export class CreateProfileComponent implements OnInit {
     this.getUserInterestsList();
     this.getUserProjectsList();
     this.getUserPublicationsList();
+    this.getExternalResourceList();
   }
 
   goToCreatProfilePage() {
@@ -241,15 +241,25 @@ export class CreateProfileComponent implements OnInit {
     this.selectedPageIndex = index;
   }
 
-  formattedDate(date: Date): string {
-    return date.getFullYear() + '-' + (date.getMonth() + 1 < 10 ? '0' : '') + (date.getMonth() + 1) + '-' + (date.getDate() < 10 ? '0' : '') + date.getDate();
+  /**
+   * extractDate
+   * @param date
+   */
+  extractDate(date: string): string {
+    return `${date.slice(5, 7)}/${date.slice(8, 10)}/${date.slice(0, 4)}`;
   }
-
   /**
    *  Extract MM/YYYY string from Date type string
    */
   extractYearAndMonth(date: string): string {
     return `${date.slice(5, 7)}/${date.slice(0, 4)}`;
+  }
+  /**
+   * Extract YYYY string from Date
+   * @param date: string
+   */
+  extractYear(date: string): string {
+    return date.slice(0, 4);
   }
 
   setProfileStatus(is_looking: number) {
@@ -318,7 +328,7 @@ export class CreateProfileComponent implements OnInit {
     );
     this.basicInfoForm.controls.basicInfoBirth.valueChanges.subscribe(
       (date) => {
-        this.generalInfoRequest.birthdate = new Date(date);
+        this.generalInfoRequest.birthdate = date ? date : null;
       }
     );
     this.basicInfoForm.controls.basicInfoEthnicity.valueChanges.subscribe(
@@ -334,7 +344,7 @@ export class CreateProfileComponent implements OnInit {
     this.basicInfoForm.controls.basicInfoState.setValue(this.generalInfoResponse.state);
     this.basicInfoForm.controls.basicInfoCountry.setValue(this.generalInfoResponse.country);
     this.basicInfoForm.controls.basicInfoGender.setValue(this.generalInfoResponse.gender);
-    this.basicInfoForm.controls.basicInfoBirth.setValue(this.generalInfoResponse.birthdate ? new Date(this.generalInfoResponse.birthdate) : '');
+    this.basicInfoForm.controls.basicInfoBirth.setValue(this.generalInfoResponse.birthdate ? this.extractDate(this.generalInfoResponse.birthdate) : '');
     this.basicInfoForm.controls.basicInfoEthnicity.setValue(this.generalInfoResponse.ethnicity);
     this.aboutMeForm.controls.aboutMe.setValue(this.generalInfoResponse.user_intro);
   }
@@ -358,7 +368,14 @@ export class CreateProfileComponent implements OnInit {
       ethnicity: this.generalInfoResponse.ethnicity
     };
   }
-
+  onChangeBirthDate(date: any) {
+    if (date.value) {
+      const dateValue = new Date(date.value);
+      this.basicInfoForm.controls.basicInfoBirth.setValue(moment(dateValue).format('MM/DD/YYYY'));
+    } else {
+      this.basicInfoForm.controls.basicInfoBirth.setValue('');
+    }
+  }
   onEthnicityValueChanges(ethnicity: string) {
     this.generalInfoRequest.ethnicity = ethnicity;
   }
@@ -503,8 +520,8 @@ export class CreateProfileComponent implements OnInit {
       school_id: education ? education.school_id : null,
       major_id: education ? education.major_id : null,
       focus_major: education ? education.focus_major : null,
-      start_date: education ? new Date(education.start_date) : null,
-      graduation_date: education ? new Date(education.graduation_date) : null,
+      start_date: education && education.start_date ? education.start_date : null,
+      graduation_date: education && education.graduation_date ? education.graduation_date : null,
       gpa: education ? education.gpa : null,
       edu_desc: education ? education.edu_desc : null,
       user_specified_school_name: education ? education.user_specified_school_name : null,
@@ -517,8 +534,8 @@ export class CreateProfileComponent implements OnInit {
       degree: new FormControl(education ? education.education_level : '', [Validators.required]),
       major: new FormControl(education ? education.major_name : ''),
       focus_major: new FormControl(education ? education.focus_major_name : ''),
-      start_date: new FormControl(education ? new Date(education.start_date).getFullYear() : '', [Validators.required]),
-      graduation_date: new FormControl(education ? new Date(education.graduation_date).getFullYear() : '', [Validators.required]),
+      start_date: new FormControl(education && education.start_date ? this.extractYear(education.start_date) : '', [Validators.required]),
+      graduation_date: new FormControl(education && education.graduation_date ? this.extractYear(education.graduation_date) : '', [Validators.required]),
       description: new FormControl(education ? education.edu_desc : '')
     });
 
@@ -539,6 +556,16 @@ export class CreateProfileComponent implements OnInit {
     educationForm.controls.degree.valueChanges.subscribe(
       (degree) => {
         this.onDegreeValueChanges(degree, arrIndex);
+      }
+    );
+    educationForm.controls.start_date.valueChanges.subscribe(
+      (start_date) => {
+        this.educationDataList[arrIndex].start_date = start_date ? moment(start_date, 'YYYY') : null ;
+      }
+    );
+    educationForm.controls.graduation_date.valueChanges.subscribe(
+      (graduation_date) => {
+        this.educationDataList[arrIndex].graduation_date = graduation_date ? moment(graduation_date, 'YYYY') : null ;
       }
     );
     educationForm.controls.major.valueChanges.subscribe(
@@ -676,8 +703,7 @@ export class CreateProfileComponent implements OnInit {
   onEducationYearSelect(date: any, index: number, isStartDate: boolean = true, datePicker: MatDatepicker<any>) {
     const dateValue = new Date(date);
     datePicker.close();
-    this.educationFormArray.controls[index]['controls'][isStartDate ? 'start_date' : 'graduation_date'].setValue(dateValue.getFullYear());
-    this.educationDataList[index][isStartDate ? 'start_date' : 'graduation_date'] = dateValue;
+    this.educationFormArray.controls[index]['controls'][isStartDate ? 'start_date' : 'graduation_date'].setValue(moment(dateValue).format('YYYY'));
   }
   isExistStartDate(index: number): boolean {
     if (this.educationFormArray.controls[index]['controls']['start_date'].value) {
@@ -685,9 +711,6 @@ export class CreateProfileComponent implements OnInit {
     } else {
       return false;
     }
-  }
-  maxEduStartDate(): Date {
-    return new Date();
   }
   minEduGraduationDate(index: number): Date {
     return this.educationDataList[index].start_date;
@@ -1492,6 +1515,7 @@ export class CreateProfileComponent implements OnInit {
   updateExternalResourceData() {
     let counts = 0;
     const temp = [];
+    const newDataList = [];
     this.externalResourcesDataList.forEach((resource) => {
       const exteralResource = this.externalResourcesList.filter(value => value.description === resource.description);
       if (exteralResource.length > 0) {
@@ -1527,23 +1551,32 @@ export class CreateProfileComponent implements OnInit {
         }
       } else {
         if (resource.link) {
-          this.userService.postExternalResourcesInfo(resource).subscribe(
-            dataJson => {
-              console.log(dataJson['data']);
-              temp.push(dataJson['data']);
-              counts++;
-              if (counts === this.externalResourcesDataList.length) {
-                this.externalResourcesList = temp;
-                this.selectedPageIndex++;
-              }
-            },
-            error => {
-              this.alertsService.show(error.message, AlertType.error);
-            }
-          );
+          newDataList.push(resource);
+        } else {
+          counts++;
+          if (counts === this.externalResourcesDataList.length) {
+            this.externalResourcesList = temp;
+            this.selectedPageIndex++;
+          }
         }
       }
     });
+    if (newDataList.length > 0) {
+      this.userService.postExternalResourcesInfo(newDataList).subscribe(
+        dataJson => {
+          console.log(dataJson['data']);
+          temp.concat(dataJson['data']);
+          counts = counts + newDataList.length;
+          if (counts === this.externalResourcesDataList.length) {
+            this.externalResourcesList = temp;
+            this.selectedPageIndex++;
+          }
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    }
   }
 
   // Get AutoComplete lists

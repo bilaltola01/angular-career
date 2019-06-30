@@ -1,7 +1,7 @@
 export interface UserObject {
   first_name: string;
   last_name: string;
-  birthdate: Date;
+  birthdate: any;
   gender: string;
   phone_num: string;
   recruiter: number;
@@ -20,8 +20,8 @@ export interface UserEducationItemData {
   school_id: number;
   major_id: number;
   focus_major: number;
-  start_date: Date;
-  graduation_date: Date;
+  start_date: any;
+  graduation_date: any;
   gpa: number;
   edu_desc: string;
   user_specified_school_name: string;

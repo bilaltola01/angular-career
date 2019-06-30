@@ -104,7 +104,8 @@
       <div class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
           <mat-label>Date Of Birth</mat-label>
-          <input matInput placeholder="Date Of Birth" type="text" [formControl]="basicInfoForm.controls.basicInfoBirth" readonly [matDatepicker]="birthdate">
+          <input matInput placeholder="MM/DD/YYYY" type="text" [formControl]="basicInfoForm.controls.basicInfoBirth" pattern="\d{1,2}/\d{1,2}/\d{4}">
+          <input class="hide" [matDatepicker]="birthdate" [max]="maxDate" (dateChange)="onChangeBirthDate($event)">
           <mat-datepicker-toggle matSuffix [for]="birthdate"></mat-datepicker-toggle>
           <mat-datepicker
             touchUi
@@ -217,8 +218,8 @@
         <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>Start Date</mat-label>
-            <input matInput placeholder="YYYY" type="text" [formControl]="educationFormArray.controls[i].controls.start_date" readonly>
-            <input class="hide" [matDatepicker]="start_date" [max]="maxEduStartDate()">
+            <input matInput placeholder="YYYY" type="text" [formControl]="educationFormArray.controls[i].controls.start_date" pattern="\d{4}">
+            <input class="hide" [matDatepicker]="start_date" [max]="maxDate">
             <mat-datepicker-toggle matSuffix [for]="start_date"></mat-datepicker-toggle>
             <mat-datepicker
               touchUi
@@ -232,7 +233,7 @@
         <div class="profile-form__field" *ngIf="isExistStartDate(i)">
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>Graduation Date</mat-label>
-            <input matInput placeholder="YYYY" type="text" [formControl]="educationFormArray.controls[i].controls.graduation_date" readonly>
+            <input matInput placeholder="YYYY" type="text" [formControl]="educationFormArray.controls[i].controls.graduation_date" pattern="\d{4}">
             <input class="hide" [matDatepicker]="graduation_date" [min]="minEduGraduationDate(i)">
             <mat-datepicker-toggle matSuffix [for]="graduation_date"></mat-datepicker-toggle>
             <mat-datepicker
