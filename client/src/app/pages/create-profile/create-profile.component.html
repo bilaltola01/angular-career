@@ -149,7 +149,7 @@
       </h3>
       <div class="profile-form__field textarea">
         <mat-form-field>
-          <textarea matInput placeholder="Explain Brief About Yourself" rows="15" [formControl]="aboutMeForm.controls.aboutMe"></textarea>
+          <textarea matInput placeholder="Briefly introduce yourself" rows="15" [formControl]="aboutMeForm.controls.aboutMe"></textarea>
         </mat-form-field>
       </div>
     </div>
@@ -554,7 +554,7 @@
       <div *ngFor="let resource of externalResources" class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
           <mat-label>{{resource}}</mat-label>
-          <img matSuffix src="assets/icons/ic_{{resource}}.svg">
+          <img matSuffix src="assets/icons/ic_{{resource.toLowerCase()}}.svg">
           <input matInput placeholder="{{resource}} Link" type="text" [formControl]="externalResourcesForm.controls[resource]">
         </mat-form-field>
       </div>

@@ -267,33 +267,10 @@ export class CreateProfileComponent implements OnInit {
     this.generalInfoRequest.is_looking = is_looking;
   }
 
-  blurSkillSearchField(type: string, index: number) {
-    switch (type) {
-      case 'skill_trained':
-        this.workExperienceFormArray.controls[index]['controls']['skills_trained'].setValue('');
-        this.autocomplete_skills = [];
-        break;
-      case 'additional_exposure':
-        this.workExperienceFormArray.controls[index]['controls']['additional_exposure'].setValue('');
-        this.autocomplete_skills = [];
-        break;
-      case 'skills':
-        this.skillsAndInterestsForm.controls.skills.setValue('');
-        this.autocomplete_skills = [];
-        break;
-      case 'interests':
-        this.skillsAndInterestsForm.controls.interests.setValue('');
-        this.autocomplete_interests = [];
-        break;
-      default:
-        break;
-    }
-  }
 
-
-
-
-  // Basic Information Form
+  /**
+   * General Information Form
+   */
   initBasicInfoForm() {
     this.autocomplete_cities = [];
     this.autocomplete_states = [];
@@ -346,15 +323,13 @@ export class CreateProfileComponent implements OnInit {
     this.basicInfoForm.controls.basicInfoGender.setValue(this.generalInfoResponse.gender);
     this.basicInfoForm.controls.basicInfoBirth.setValue(this.generalInfoResponse.birthdate ? this.extractDate(this.generalInfoResponse.birthdate) : '');
     this.basicInfoForm.controls.basicInfoEthnicity.setValue(this.generalInfoResponse.ethnicity);
-    this.aboutMeForm.controls.aboutMe.setValue(this.generalInfoResponse.user_intro);
   }
-
   updateGeneralInfoRequest() {
     this.generalInfoRequest = {
       photo: this.generalInfoResponse.photo ? this.generalInfoResponse.photo : null,
       first_name: this.generalInfoResponse.first_name,
       last_name: this.generalInfoResponse.last_name,
-      birthdate: this.generalInfoResponse.birthdate ? new Date(this.generalInfoResponse.birthdate) : null,
+      birthdate: this.generalInfoResponse.birthdate ? this.generalInfoResponse.birthdate : null,
       gender: this.generalInfoResponse.gender,
       phone_num: this.generalInfoResponse.phone_num,
       recruiter: this.generalInfoResponse.recruiter,
@@ -448,13 +423,86 @@ export class CreateProfileComponent implements OnInit {
   clearState() {
     this.generalInfoRequest.state_id = null;
   }
+  onCityValueChanges(city: string) {
+    this.autoCompleteService.autoComplete(city, 'cities').subscribe(
+      dataJson => {
+        if (dataJson['success']) {
+          this.autocomplete_cities = dataJson['data'];
+          if (this.autocomplete_cities.length === 0) {
+            this.clearCity();
+          }
+        }
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+        this.autocomplete_cities = [];
+        this.clearCity();
+      }
+    );
+  }
+  onStateValueChanges(state: string) {
+    this.autoCompleteService.autoComplete(state, 'states').subscribe(
+      dataJson => {
+        if (dataJson['success']) {
+          this.autocomplete_states = dataJson['data'];
+          if (this.autocomplete_states.length === 0) {
+            this.clearState();
+          }
+        }
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+        this.autocomplete_states = [];
+        this.clearState();
+      }
+    );
+  }
+  getGeneralInfo() {
+    this.userService.getGeneralInfo().subscribe(
+      dataJson => {
+        console.log('Gernal_Information', dataJson['data']);
+        this.generalInfoResponse = dataJson['data'];
+        this.updateBasicInformationForm();
+        this.updateAboutMeForm();
+        this.setProfileStatus(this.generalInfoResponse.is_looking);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+  updateGeneralInfo() {
+    if ((this.selectedPageIndex === 1 && this.basicInfoForm.valid && this.onCheckCityValidation() && this.onCheckStateValidation()) || (this.selectedPageIndex === 2 && this.aboutMeForm.valid)) {
+      this.userService.updateGeneralInfo(this.generalInfoRequest).subscribe(
+        dataJson => {
+          this.generalInfoResponse = dataJson['data'];
+          switch (this.selectedPageIndex) {
+            case 1:
+              this.updateBasicInformationForm();
+              this.alertsService.show('General information has been updated Successfully!', AlertType.success);
+              break;
+            case 2:
+              this.updateAboutMeForm();
+              this.alertsService.show('Introduction information has been updated Successfully!', AlertType.success);
+              break;
+            default:
+              break;
+          }
+          this.selectedPageIndex++;
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    }
+  }
 
 
 
   // About Me Form
   initAboutMeForm() {
     this.aboutMeForm = new FormGroup({
-      aboutMe: new FormControl('', [Validators.required])
+      aboutMe: new FormControl('')
     });
   }
   updateAboutMeForm() {
@@ -466,7 +514,7 @@ export class CreateProfileComponent implements OnInit {
     );
   }
   onAboutMeValueChanges(aboutMe: string) {
-    this.generalInfoRequest.user_intro = aboutMe;
+    this.generalInfoRequest.user_intro = aboutMe ? aboutMe : null;
   }
 
 
@@ -484,7 +532,6 @@ export class CreateProfileComponent implements OnInit {
     this.prevent_skills_autocomplete = false;
     this.prevent_interets_autocomplete = false;
   }
-
   onRemoveEducationData(index: number) {
     if (index > this.educationList.length - 1) {
       this.removeEducationFormGroup(index);
@@ -586,7 +633,6 @@ export class CreateProfileComponent implements OnInit {
 
     this.educationFormArray.push(educationForm);
   }
-
   updateEducationForm() {
     if (this.educationList.length === 0) {
       this.addEducationFormGroup(null);
@@ -716,10 +762,88 @@ export class CreateProfileComponent implements OnInit {
     return this.educationDataList[index].start_date;
   }
   onDescriptionValueChange(index: number, description: string) {
-    this.educationDataList[index].edu_desc = description;
+    this.educationDataList[index].edu_desc = description ? description : null;
   }
-
-
+  onUniversityValueChanges(school: string, arrIndex: number) {
+    this.autoCompleteService.autoComplete(school, 'schools').subscribe(
+      dataJson => {
+        if (dataJson['success']) {
+          this.autocomplete_universities[arrIndex] = dataJson['data'];
+          if (this.autocomplete_universities[arrIndex].length === 0) {
+            this.onSelectSpecificUniversity(arrIndex, school);
+          }
+        }
+      },
+      error => {
+        this.autocomplete_universities[arrIndex] = [];
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+  getEducationList() {
+    this.userService.getEducationInfo().subscribe(
+      dataJson => {
+        this.educationList = dataJson['data'];
+        console.log('Education_List', this.educationList);
+        this.updateEducationForm();
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+        this.educationList = [];
+        this.updateEducationForm();
+      }
+    );
+  }
+  updateEducationData() {
+    if (this.educationDataList.length !== 0) {
+      if (this.educationFormArray.valid) {
+        let counts = 0;
+        this.educationDataList.forEach((education, index) => {
+          if (index < this.educationList.length) {
+            this.userService.patchEducationInfoById(education, this.educationList[index].education_id).subscribe(
+              dataJson => {
+                this.educationList[index] = dataJson['data'];
+                counts++;
+                if (counts === this.educationDataList.length) {
+                  this.selectedPageIndex++;
+                }
+              },
+              error => {
+                this.alertsService.show(error.message, AlertType.error);
+              }
+            );
+          } else {
+            this.userService.postEducationInfo(education).subscribe(
+              dataJson => {
+                this.educationList[index] = dataJson['data'];
+                counts++;
+                if (counts === this.educationDataList.length) {
+                  this.selectedPageIndex++;
+                }
+              },
+              error => {
+                this.alertsService.show(error.message, AlertType.error);
+              }
+            );
+          }
+        });
+      }
+    } else {
+      this.selectedPageIndex++;
+    }
+  }
+  deleteEducationData(index: number) {
+    this.userService.deleteEducationInfoById(this.educationList[index].education_id).subscribe(
+      dataJson => {
+        console.log('Delete Education_List', dataJson);
+        this.educationList.splice(index, 1);
+        this.removeEducationFormGroup(index);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
 
   /**
    * Work Experience Form
@@ -890,11 +1014,11 @@ export class CreateProfileComponent implements OnInit {
   }
 
   onPositionValueChange(index: number, job: string) {
-    this.experienceDataList[index].job = job;
+    this.experienceDataList[index].job = job ? job : null;
   }
 
   onExpDescValueChange(index: number, job_desc: string) {
-    this.experienceDataList[index].job_desc = job_desc;
+    this.experienceDataList[index].job_desc = job_desc ? job_desc : null;
   }
 
   addSkillsTrained(index: number, skill: Skill) {
@@ -985,8 +1109,70 @@ export class CreateProfileComponent implements OnInit {
       }
     );
   }
-
-
+  getExperienceList() {
+    this.userService.getExperienceInfo().subscribe(
+      dataJson => {
+        this.experienceList = dataJson['data'];
+        console.log('Experience_List', this.experienceList);
+        this.updateExperienceForm();
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+        this.experienceList = [];
+        this.updateExperienceForm();
+      }
+    );
+  }
+  updateExperienceData() {
+    if (this.experienceDataList.length !== 0) {
+      if (this.workExperienceFormArray.valid) {
+        let counts = 0;
+        this.experienceDataList.forEach((experience, index) => {
+          if (index < this.experienceList.length) {
+            this.userService.patchExperienceInfoById(experience, this.experienceList[index].work_hist_id).subscribe(
+              dataJson => {
+                this.experienceList[index] = dataJson['data'];
+                counts++;
+                if (counts === this.experienceDataList.length) {
+                  this.selectedPageIndex++;
+                }
+              },
+              error => {
+                this.alertsService.show(error.message, AlertType.error);
+              }
+            );
+          } else {
+            this.userService.postExperienceInfo(experience).subscribe(
+              dataJson => {
+                this.experienceList[index] = dataJson['data'];
+                counts++;
+                if (counts === this.experienceDataList.length) {
+                  this.selectedPageIndex++;
+                }
+              },
+              error => {
+                this.alertsService.show(error.message, AlertType.error);
+              }
+            );
+          }
+        });
+      }
+    } else {
+      this.selectedPageIndex++;
+    }
+  }
+  deleteExperienceData(index: number) {
+    this.userService.deleteExperienceInfoById(this.experienceList[index].work_hist_id).subscribe(
+      dataJson => {
+        console.log('Delete Education_List', dataJson);
+        this.experienceList.splice(index, 1);
+        this.removeExperienceFormGroup(index);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
 
 
   // Skills And Interests Form
@@ -1161,7 +1347,6 @@ export class CreateProfileComponent implements OnInit {
   }
 
 
-
   /**
    *  Projects Information From
    *  Projects FormGroup Array Initialization
@@ -1240,13 +1425,13 @@ export class CreateProfileComponent implements OnInit {
     this.userProjectsDataList[arrIndex].project_name = project_name;
   }
   onProjectDescriptionValueChange(arrIndex: number, description: string) {
-    this.userProjectsDataList[arrIndex].description = description;
+    this.userProjectsDataList[arrIndex].description = description ? description : null;
   }
   onProjectDateFinishedValueChange(arrIndex: number, date_finished: string) {
     this.userProjectsDataList[arrIndex].date_finished = date_finished ? date_finished : null;
   }
   onProjectHrefValueChange(arrIndex: number, href: string) {
-    this.userProjectsDataList[arrIndex].href = href;
+    this.userProjectsDataList[arrIndex].href = href ? href : null;
   }
   onChangeProjectFinishedDate(event: any, arrIndex: number) {
     if (event.value) {
@@ -1399,16 +1584,16 @@ export class CreateProfileComponent implements OnInit {
     this.userPublicationsDataList[arrIndex].publication_title = publication_title;
   }
   onPublicationDescriptionValueChange(arrIndex: number, description: string) {
-    this.userPublicationsDataList[arrIndex].description = description;
+    this.userPublicationsDataList[arrIndex].description = description ? description : null;
   }
   onPublicationDatePublishedValueChange(arrIndex: number, date_published: string) {
     this.userPublicationsDataList[arrIndex].date_published = date_published ? date_published : null;
   }
   onPublicationHrefValueChange(arrIndex: number, href: string) {
-    this.userPublicationsDataList[arrIndex].href = href;
+    this.userPublicationsDataList[arrIndex].href = href ? href : null;
   }
   onPublicationPublisherValueChange(arrIndex: number, publisher: string) {
-    this.userPublicationsDataList[arrIndex].publisher = publisher;
+    this.userPublicationsDataList[arrIndex].publisher = publisher ? publisher : null;
   }
   onChangeDatePublished(event: any, arrIndex: number) {
     if (event.value) {
@@ -1597,59 +1782,6 @@ export class CreateProfileComponent implements OnInit {
 
   // Get AutoComplete lists
 
-  onCityValueChanges(city: string) {
-    this.autoCompleteService.autoComplete(city, 'cities').subscribe(
-      dataJson => {
-        if (dataJson['success']) {
-          this.autocomplete_cities = dataJson['data'];
-          if (this.autocomplete_cities.length === 0) {
-            this.clearCity();
-          }
-        }
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-        this.autocomplete_cities = [];
-        this.clearCity();
-      }
-    );
-  }
-
-  onStateValueChanges(state: string) {
-    this.autoCompleteService.autoComplete(state, 'states').subscribe(
-      dataJson => {
-        if (dataJson['success']) {
-          this.autocomplete_states = dataJson['data'];
-          if (this.autocomplete_states.length === 0) {
-            this.clearState();
-          }
-        }
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-        this.autocomplete_states = [];
-        this.clearState();
-      }
-    );
-  }
-
-  onUniversityValueChanges(school: string, arrIndex: number) {
-    this.autoCompleteService.autoComplete(school, 'schools').subscribe(
-      dataJson => {
-        if (dataJson['success']) {
-          this.autocomplete_universities[arrIndex] = dataJson['data'];
-          if (this.autocomplete_universities[arrIndex].length === 0) {
-            this.onSelectSpecificUniversity(arrIndex, school);
-          }
-        }
-      },
-      error => {
-        this.autocomplete_universities[arrIndex] = [];
-        this.alertsService.show(error.message, AlertType.error);
-      }
-    );
-  }
-
   onMajorValueChanges(major: string, index: number, isFocusMajor: boolean = false) {
     this.autoCompleteService.autoComplete(major, 'majors').subscribe(
       dataJson => {
@@ -1722,191 +1854,4 @@ export class CreateProfileComponent implements OnInit {
       }
     );
   }
-
-
-  // General Information
-
-  getGeneralInfo() {
-    this.userService.getGeneralInfo().subscribe(
-      dataJson => {
-        console.log('Gernal_Information', dataJson['data']);
-        this.generalInfoResponse = dataJson['data'];
-        this.updateBasicInformationForm();
-        this.updateAboutMeForm();
-        this.setProfileStatus(this.generalInfoResponse.is_looking);
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-      }
-    );
-  }
-
-  updateGeneralInfo() {
-    if ((this.selectedPageIndex === 1 && this.basicInfoForm.valid && this.onCheckCityValidation() && this.onCheckStateValidation()) || (this.selectedPageIndex === 2 && this.aboutMeForm.valid)) {
-      this.userService.updateGeneralInfo(this.generalInfoRequest).subscribe(
-        dataJson => {
-          this.generalInfoResponse = dataJson['data'];
-          switch (this.selectedPageIndex) {
-            case 1:
-              this.updateBasicInformationForm();
-              this.alertsService.show('General information has been updated Successfully!', AlertType.success);
-              break;
-            case 2:
-              this.updateAboutMeForm();
-              this.alertsService.show('Introduction information has been updated Successfully!', AlertType.success);
-              break;
-            default:
-              break;
-          }
-          this.selectedPageIndex++;
-        },
-        error => {
-          this.alertsService.show(error.message, AlertType.error);
-        }
-      );
-    }
-  }
-
-  // Education Information
-
-  getEducationList() {
-    this.userService.getEducationInfo().subscribe(
-      dataJson => {
-        this.educationList = dataJson['data'];
-        console.log('Education_List', this.educationList);
-        this.updateEducationForm();
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-        this.educationList = [];
-        this.updateEducationForm();
-      }
-    );
-  }
-
-  updateEducationData() {
-    if (this.educationDataList.length !== 0) {
-      if (this.educationFormArray.valid) {
-        let counts = 0;
-        this.educationDataList.forEach((education, index) => {
-          if (index < this.educationList.length) {
-            this.userService.patchEducationInfoById(education, this.educationList[index].education_id).subscribe(
-              dataJson => {
-                this.educationList[index] = dataJson['data'];
-                counts++;
-                if (counts === this.educationDataList.length) {
-                  this.selectedPageIndex++;
-                }
-              },
-              error => {
-                this.alertsService.show(error.message, AlertType.error);
-              }
-            );
-          } else {
-            this.userService.postEducationInfo(education).subscribe(
-              dataJson => {
-                this.educationList[index] = dataJson['data'];
-                counts++;
-                if (counts === this.educationDataList.length) {
-                  this.selectedPageIndex++;
-                }
-              },
-              error => {
-                this.alertsService.show(error.message, AlertType.error);
-              }
-            );
-          }
-        });
-      }
-    } else {
-      this.selectedPageIndex++;
-    }
-  }
-
-  deleteEducationData(index: number) {
-    this.userService.deleteEducationInfoById(this.educationList[index].education_id).subscribe(
-      dataJson => {
-        console.log('Delete Education_List', dataJson);
-        this.educationList.splice(index, 1);
-        this.removeEducationFormGroup(index);
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-      }
-    );
-  }
-
-  /**
-   *
-   * Services for Work Experinece Information
-   * getExperienceList()
-   * updateExperienceData()
-   * deleteExperienceData()
-   *
-   */
-  getExperienceList() {
-    this.userService.getExperienceInfo().subscribe(
-      dataJson => {
-        this.experienceList = dataJson['data'];
-        console.log('Experience_List', this.experienceList);
-        this.updateExperienceForm();
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-        this.experienceList = [];
-        this.updateExperienceForm();
-      }
-    );
-  }
-  updateExperienceData() {
-    if (this.experienceDataList.length !== 0) {
-      if (this.workExperienceFormArray.valid) {
-        let counts = 0;
-        this.experienceDataList.forEach((experience, index) => {
-          if (index < this.experienceList.length) {
-            this.userService.patchExperienceInfoById(experience, this.experienceList[index].work_hist_id).subscribe(
-              dataJson => {
-                this.experienceList[index] = dataJson['data'];
-                counts++;
-                if (counts === this.experienceDataList.length) {
-                  this.selectedPageIndex++;
-                }
-              },
-              error => {
-                this.alertsService.show(error.message, AlertType.error);
-              }
-            );
-          } else {
-            this.userService.postExperienceInfo(experience).subscribe(
-              dataJson => {
-                this.experienceList[index] = dataJson['data'];
-                counts++;
-                if (counts === this.experienceDataList.length) {
-                  this.selectedPageIndex++;
-                }
-              },
-              error => {
-                this.alertsService.show(error.message, AlertType.error);
-              }
-            );
-          }
-        });
-      }
-    } else {
-      this.selectedPageIndex++;
-    }
-  }
-  deleteExperienceData(index: number) {
-    this.userService.deleteExperienceInfoById(this.experienceList[index].work_hist_id).subscribe(
-      dataJson => {
-        console.log('Delete Education_List', dataJson);
-        this.experienceList.splice(index, 1);
-        this.removeExperienceFormGroup(index);
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-      }
-    );
-  }
-
 }
