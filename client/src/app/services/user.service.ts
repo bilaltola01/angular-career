@@ -672,7 +672,7 @@ export class UserService {
   }
 
   public patchExternalResourcesById(resourceInfo: any, resourceId: number): Observable<any> {
-    return this.http.patch(this.user_service_url + `user/${this.user_id}/external-resources/${resourceId}`, resourceInfo, this.authHttpOptions())
+    return this.http.patch(this.user_service_url + `user/${this.user_id}/external-resource/${resourceId}`, resourceInfo, this.authHttpOptions())
     .pipe(
       map(data => {
         return {success: true, message: 'Success!', data: data};
@@ -681,7 +681,7 @@ export class UserService {
     );
   }
   public deleteExternalResourcesById(resourceId: number): Observable<any> {
-    return this.http.delete(this.user_service_url + `user/${this.user_id}/external-resources/${resourceId}`, this.authHttpOptions())
+    return this.http.delete(this.user_service_url + `user/${this.user_id}/external-resource/${resourceId}`, this.authHttpOptions())
     .pipe(
       map(data => {
         return {success: true, message: 'Success!', data: data};
