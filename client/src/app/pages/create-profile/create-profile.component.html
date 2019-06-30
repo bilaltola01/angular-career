@@ -349,7 +349,7 @@
         </div>
 
         <div class="profile-form__field search">
-          <h3>Additional Industry Exposure <span *ngIf="additional_industries[i].length > 0" class="count">{{additional_industries.length}}</span></h3>
+          <h3>Additional Industry Exposure <span *ngIf="additional_industries[i].length > 0" class="count">{{additional_industries[i].length}}</span></h3>
           <mat-form-field appearance="standard" class="search">
             <mat-icon matSuffix>search</mat-icon>
             <input matInput placeholder="Search Industries" type="text" [matAutocomplete]="autocompleteAdditionalIndustry" [formControl]="workExperienceFormArray.controls[i].controls.additional_industries">
