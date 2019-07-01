@@ -327,3 +327,8 @@ export const ExternalResources = [
   'Google',
   'Linkedin'
 ];
+
+export const ProfileStatuses = [
+  'Actively Looking For Job',
+  'Passively Looking For Job'
+];

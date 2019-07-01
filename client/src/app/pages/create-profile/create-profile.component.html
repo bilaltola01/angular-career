@@ -576,7 +576,7 @@
           SET YOUR STATUS
         </h3>
         <div class="profile-form__field simple-tag">
-          <simple-tag *ngFor="let status of statuses; let i = index" class="status" title="{{statuses[i]}}" onlineTag="true" [active]="profile_status === statuses[i]" (click)="setProfileStatus(i)"></simple-tag>
+          <simple-tag *ngFor="let status of statuses; let i = index" class="status" title="{{statuses[i]}}" onlineTag="true" [active]="profile_status === i" (click)="setProfileStatus(i)"></simple-tag>
         </div>
       </div>
     </div>

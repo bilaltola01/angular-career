@@ -24,7 +24,8 @@ import {
   Industry,
   UserExternalResourcesItem,
   UserExternalResourcesItemData,
-  ExternalResources
+  ExternalResources,
+  ProfileStatuses
 } from 'src/app/models';
 import moment from 'moment';
 
@@ -145,14 +146,11 @@ export class CreateProfileComponent implements OnInit {
   prevent_skills_autocomplete: boolean;
   prevent_interets_autocomplete: boolean;
 
-  statuses = [
-    'Exploring Opportunities',
-    'Actively Looking For Job'
-  ];
+  statuses: string[] = ProfileStatuses;
 
   externalResources = ExternalResources;
 
-  profile_status = this.statuses[0];
+  profile_status: number;
 
   selectedPageIndex = 0;
 
@@ -182,6 +180,7 @@ export class CreateProfileComponent implements OnInit {
     this.initProjectsFormArray();
     this.initPublicationsFormArray();
     this.initExternalResourcesForm();
+    this.initProfileStatus();
 
     this.getGeneralInfo();
     this.getEducationList();
@@ -261,12 +260,6 @@ export class CreateProfileComponent implements OnInit {
   extractYear(date: string): string {
     return date.slice(0, 4);
   }
-
-  setProfileStatus(is_looking: number) {
-    this.profile_status = this.statuses[is_looking];
-    this.generalInfoRequest.is_looking = is_looking;
-  }
-
 
   /**
    * General Information Form
@@ -464,7 +457,7 @@ export class CreateProfileComponent implements OnInit {
         this.generalInfoResponse = dataJson['data'];
         this.updateBasicInformationForm();
         this.updateAboutMeForm();
-        this.setProfileStatus(this.generalInfoResponse.is_looking);
+        this.updateProfileStatus();
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -472,7 +465,7 @@ export class CreateProfileComponent implements OnInit {
     );
   }
   updateGeneralInfo() {
-    if ((this.selectedPageIndex === 1 && this.basicInfoForm.valid && this.onCheckCityValidation() && this.onCheckStateValidation()) || (this.selectedPageIndex === 2 && this.aboutMeForm.valid)) {
+    if ((this.selectedPageIndex === 1 && this.basicInfoForm.valid && this.onCheckCityValidation() && this.onCheckStateValidation()) || (this.selectedPageIndex === 2 && this.aboutMeForm.valid) || this.selectedPageIndex === 9) {
       this.userService.updateGeneralInfo(this.generalInfoRequest).subscribe(
         dataJson => {
           this.generalInfoResponse = dataJson['data'];
@@ -480,15 +473,20 @@ export class CreateProfileComponent implements OnInit {
             case 1:
               this.updateBasicInformationForm();
               this.alertsService.show('General information has been updated Successfully!', AlertType.success);
+              this.selectedPageIndex++;
               break;
             case 2:
               this.updateAboutMeForm();
               this.alertsService.show('Introduction information has been updated Successfully!', AlertType.success);
+              this.selectedPageIndex++;
+              break;
+            case 9:
+              this.updateProfileStatus();
+              this.alertsService.show('Profile status has been updated Successfully!', AlertType.success);
               break;
             default:
               break;
           }
-          this.selectedPageIndex++;
         },
         error => {
           this.alertsService.show(error.message, AlertType.error);
@@ -1850,4 +1848,20 @@ export class CreateProfileComponent implements OnInit {
       );
     }
   }
+
+
+  /**
+   * Profile Status Page
+   */
+  initProfileStatus() {
+    this.profile_status = 0;
+  }
+  updateProfileStatus() {
+    this.profile_status = this.generalInfoResponse.is_looking;
+  }
+  setProfileStatus(is_looking: number) {
+    this.generalInfoRequest.is_looking = is_looking;
+    this.updateGeneralInfo();
+  }
+
 }
