@@ -13,6 +13,8 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 
 export class UserService {
 
+  max_limit = 100;
+
   helper = new JwtHelperService();
 
   // store the URL so we can redirect after logging in
@@ -99,7 +101,7 @@ export class UserService {
 
   public loadUsers(params: string): Observable<any> {
 
-    return this.http.get(this.user_service_url + `users?${params}`, this.authHttpOptions())
+    return this.http.get(this.user_service_url + `users?limit=${this.max_limit}&${params}`, this.authHttpOptions())
     .pipe(
       map(data => {
         return {success: true, message: 'Success!', data: data};
@@ -157,7 +159,7 @@ export class UserService {
   // Education Information Services
 
   public getEducationInfo(): Observable<any> {
-    return this.http.get(this.user_service_url + `user/${this.user_id}/education`, this.authHttpOptions())
+    return this.http.get(this.user_service_url + `user/${this.user_id}/education?limit=${this.max_limit}`, this.authHttpOptions())
     .pipe(
       map(data => {
         return {success: true, message: 'Success!', data: data};
@@ -209,7 +211,7 @@ export class UserService {
   // Work Experience Services
 
   public getExperienceInfo(): Observable<any> {
-    return this.http.get(this.user_service_url + `user/${this.user_id}/experience`, this.authHttpOptions())
+    return this.http.get(this.user_service_url + `user/${this.user_id}/experience?limit=${this.max_limit}`, this.authHttpOptions())
     .pipe(
       map(data => {
         return {success: true, message: 'Success!', data: data};
@@ -259,7 +261,7 @@ export class UserService {
   }
 
   public getAdditionalIndustries(experienceId: number): Observable<any> {
-    return this.http.get(this.user_service_url + `user/${this.user_id}/experience/${experienceId}/additional-industries`, this.authHttpOptions())
+    return this.http.get(this.user_service_url + `user/${this.user_id}/experience/${experienceId}/additional-industries?limit=${this.max_limit}`, this.authHttpOptions())
     .pipe(
       map(data => {
         return {success: true, message: 'Success!', data: data};
@@ -299,7 +301,7 @@ export class UserService {
   }
 
   public getSkillsTrained(experienceId: number): Observable<any> {
-    return this.http.get(this.user_service_url + `user/${this.user_id}/experience/${experienceId}/skills-trained`, this.authHttpOptions())
+    return this.http.get(this.user_service_url + `user/${this.user_id}/experience/${experienceId}/skills-trained?limit=${this.max_limit}`, this.authHttpOptions())
     .pipe(
       map(data => {
         return {success: true, message: 'Success!', data: data};
@@ -339,7 +341,7 @@ export class UserService {
   }
 
   public getSkillsInfo(): Observable<any> {
-    return this.http.get(this.user_service_url + `user/${this.user_id}/skills`, this.authHttpOptions())
+    return this.http.get(this.user_service_url + `user/${this.user_id}/skills?limit=${this.max_limit}`, this.authHttpOptions())
     .pipe(
       map(data => {
         return {success: true, message: 'Success!', data: data};
@@ -390,7 +392,7 @@ export class UserService {
 
   // Publications Information Services
   public getPublicationsInfo(): Observable<any> {
-    return this.http.get(this.user_service_url + `user/${this.user_id}/publications`, this.authHttpOptions())
+    return this.http.get(this.user_service_url + `user/${this.user_id}/publications?limit=${this.max_limit}`, this.authHttpOptions())
     .pipe(
       map(data => {
         return {success: true, message: 'Success!', data: data};
@@ -440,7 +442,7 @@ export class UserService {
 
   // User Interests Services
   public getUserInterestsInfo(): Observable<any> {
-    return this.http.get(this.user_service_url + `user/${this.user_id}/interests`, this.authHttpOptions())
+    return this.http.get(this.user_service_url + `user/${this.user_id}/interests?limit=${this.max_limit}`, this.authHttpOptions())
     .pipe(
       map(data => {
         return {success: true, message: 'Success!', data: data};
@@ -615,7 +617,7 @@ export class UserService {
 
   // Projects Information Services
   public getProjectsInfo(): Observable<any> {
-    return this.http.get(this.user_service_url + `user/${this.user_id}/projects`, this.authHttpOptions())
+    return this.http.get(this.user_service_url + `user/${this.user_id}/projects?limit=${this.max_limit}`, this.authHttpOptions())
     .pipe(
       map(data => {
         return {success: true, message: 'Success!', data: data};
