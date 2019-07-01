@@ -7,6 +7,7 @@ import { RegistrationComponent } from './pages/registration/registration.compone
 import { VerificationComponent } from './pages/verification/verification.component';
 import { EmailSentComponent } from './pages/email-sent/email-sent.component';
 import { CreateProfileComponent } from './pages/create-profile/create-profile.component';
+import { UserProfileComponent } from './pages/user-profile/user-profile.component';
 
 const routes: Routes = [
   {
@@ -33,6 +34,11 @@ const routes: Routes = [
   {
     path: 'create-profile',
     component: CreateProfileComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'my-profile',
+    component: UserProfileComponent,
     canActivate: [AuthGuard]
   }
 ];
