@@ -1,584 +1,599 @@
 <div *ngIf="selectedPageIndex>0" class="profile-completion">
-  <div class="container">
-    <ng-container *ngFor="let page_title of page_titles; let i = index">
-      <action-button *ngIf="page_title" class="link-btn" type="text" title="{{page_title}}" (click)="goToPage(i)" [done]="selectedPageIndex > i" [disabled]="selectedPageIndex < i"></action-button>
-    </ng-container>
-    <span class="progress-label" [class.done]="selectedPageIndex===9">{{progressWidth[selectedPageIndex].label}}%</span>
-    <div class="progress-bar" [style.width.%]="progressWidth[selectedPageIndex].width"></div>
+    <div class="container">
+      <ng-container *ngFor="let page_title of page_titles; let i = index">
+        <action-button *ngIf="page_title" class="link-btn" type="text" title="{{page_title}}" (click)="goToPage(i)" [done]="selectedPageIndex > i" [disabled]="selectedPageIndex < i"></action-button>
+      </ng-container>
+      <span class="progress-label" [class.done]="selectedPageIndex===9">{{progressWidth[selectedPageIndex].label}}%</span>
+      <div class="progress-bar" [style.width.%]="progressWidth[selectedPageIndex].width"></div>
+    </div>
   </div>
-</div>
-
-<!-- Create_Profile_Choose start -->
-
-<div *ngIf="selectedPageIndex===0" class="container {{profileCreationPages[0]}}">
-  <div class="container__full">
-    <h1>Choose To Create Profile</h1>
-  </div>
-  <div class="container__left">
-    <div class="option-box">
-      <div class="option-box__content">
-        <div class="option-box__title">
-          <img class="icon-cv" src="assets/icons/ic_cv.svg">
-          <h2 class="title">Drop Your Resume Here</h2>
+  
+  <!-- Create_Profile_Choose start -->
+  
+  <div *ngIf="selectedPageIndex===0" class="container {{profileCreationPages[0]}}">
+    <div class="container__full">
+      <h1>Choose To Create Profile</h1>
+    </div>
+    <div class="container__left">
+      <div class="option-box">
+        <div class="option-box__content">
+          <div class="option-box__title">
+            <img class="icon-cv" src="assets/icons/ic_cv.svg">
+            <h2 class="title">Drop Your Resume Here</h2>
+          </div>
+          <div class="option-box__description">
+            <p>Formats Allowed</p>
+            <h3>.PDF, .XML, .TEXT</h3>
+          </div>
         </div>
-        <div class="option-box__description">
-          <p>Formats Allowed</p>
-          <h3>.PDF, .XML, .TEXT</h3>
+      </div>
+      <div class="option-title">
+        <h2>Save Your Time</h2>
+        <p>By Spending just $2 Per Page</p>
+      </div>
+      <div class="option-description">
+        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+      </div>
+    </div>
+    <div class="option-text desktop">
+      <h1>OR</h1>
+    </div>
+    <div class="container__right">
+      <div class="option-box">
+        <div class="option-box__content">
+          <action-button type="flat" title="Create Profile" color="primary" (click)="goToCreatProfilePage()"></action-button>
         </div>
       </div>
-    </div>
-    <div class="option-title">
-      <h2>Save Your Time</h2>
-      <p>By Spending just $2 Per Page</p>
-    </div>
-    <div class="option-description">
-      <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
-    </div>
-  </div>
-  <div class="option-text desktop">
-    <h1>OR</h1>
-  </div>
-  <div class="container__right">
-    <div class="option-box">
-      <div class="option-box__content">
-        <action-button type="flat" title="Create Profile" color="primary" (click)="goToCreatProfilePage()"></action-button>
+      <div class="option-title">
+        <h2>Save Money</h2>
+        <p>Absolutely FREE. It will take few minutes.</p>
       </div>
-    </div>
-    <div class="option-title">
-      <h2>Save Money</h2>
-      <p>Absolutely FREE. It will take few minutes.</p>
-    </div>
-    <div class="option-description">
-      <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
-    </div>
-  </div>
-</div>
-
-<!-- Create_Profile_Choose end -->
-
-<!-- Create_Profile_Basic start -->
-
-<div *ngIf="selectedPageIndex===1" class="container {{profileCreationPages[1]}}">
-  <div class="container__full">
-    <div class="profile-form" [formGroup]="basicInfoForm">
-      <h3 class="profile-form__title">
-        BASIC INFORMATION
-      </h3>
-      <div class="profile-form__image">
-        <img alt="Profile Image" src="assets/icons/profile-image.svg">
-      </div>
-      <div class="profile-form__field">
-        <mat-form-field class="bg-transparent" appearance="fill">
-          <mat-label>City</mat-label>
-          <input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity" [formControl]="basicInfoForm.controls.basicInfoCity">
-          <mat-icon matSuffix *ngIf="basicInfoForm.controls.basicInfoCity.valid && onCheckCityValidation()">done</mat-icon>
-          <mat-icon matSuffix class="error-field" *ngIf="(!basicInfoForm.controls.basicInfoCity.valid || !onCheckCityValidation()) && basicInfoForm.controls.basicInfoCity.touched">close</mat-icon>
-          <mat-autocomplete #autocompleteCity="matAutocomplete" (closed)="onBlurCity()">
-            <mat-option *ngFor="let city of autocomplete_cities" [value]="getCityNameFromAutoComplete(city.city)" (onSelectionChange)="onSelectCity(city)">
-              <span>{{city.city}}</span>
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
-      </div>
-      <div class="profile-form__field">
-        <mat-form-field class="bg-transparent" appearance="fill">
-          <mat-label>State</mat-label>
-          <input matInput placeholder="State" type="text" [matAutocomplete]="autocompleteState" [formControl]="basicInfoForm.controls.basicInfoState">
-          <mat-icon matSuffix *ngIf="basicInfoForm.controls.basicInfoState.valid && onCheckStateValidation()">done</mat-icon>
-          <mat-icon matSuffix class="error-field" *ngIf="(!basicInfoForm.controls.basicInfoState.valid || !onCheckStateValidation()) && basicInfoForm.controls.basicInfoState.touched">close</mat-icon>
-          <mat-autocomplete #autocompleteState="matAutocomplete" (closed)="onBlurState()">
-            <mat-option *ngFor="let state of autocomplete_states" [value]="state.state" (onSelectionChange)="onSelectState(state)">
-              <span>{{state.state}}</span>
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
-      </div>
-      <div class="profile-form__field">
-        <mat-form-field class="bg-transparent" appearance="fill">
-          <mat-label>Country</mat-label>
-          <mat-select [formControl]="basicInfoForm.controls.basicInfoCountry">
-            <mat-option *ngFor="let country of countries" value="{{country}}">{{country}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <div class="profile-form__field">
-        <mat-form-field class="bg-transparent" appearance="fill">
-          <mat-label>Date Of Birth</mat-label>
-          <input matInput placeholder="Date Of Birth" type="text" [formControl]="basicInfoForm.controls.basicInfoBirth" readonly [matDatepicker]="birthdate">
-          <mat-datepicker-toggle matSuffix [for]="birthdate"></mat-datepicker-toggle>
-          <mat-datepicker
-            touchUi
-            #birthdate
-          >
-          </mat-datepicker>
-        </mat-form-field>
-      </div>
-      <div class="profile-form__field">
-        <mat-form-field class="bg-transparent" appearance="fill">
-          <mat-label>Gender</mat-label>
-          <mat-select [formControl]="basicInfoForm.controls.basicInfoGender">
-            <mat-option *ngFor="let gender of genders" value="{{gender}}">{{gender}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <div class="profile-form__field">
-        <mat-form-field class="bg-transparent" appearance="fill">
-          <mat-label>Ethnicity</mat-label>
-          <mat-select [formControl]="basicInfoForm.controls.basicInfoEthnicity">
-            <mat-option *ngFor="let ethnicityType of ethnicityTypes" value="{{ethnicityType}}">{{ethnicityType}}</mat-option>
-          </mat-select>
-        </mat-form-field>
+      <div class="option-description">
+        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
       </div>
     </div>
   </div>
-  <div class="container__full">
-    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!(basicInfoForm.valid && onCheckCityValidation() && onCheckStateValidation())"></action-button>
-  </div>
-</div>
-
-<!-- Create_Profile_Basic end -->
-
-<!-- Create_Profile_About start -->
-
-<div *ngIf="selectedPageIndex===2" class="container {{profileCreationPages[2]}}">
-  <div class="container__full">
-    <div class="profile-form" [formGroup]="aboutMeForm">
-      <h3 class="profile-form__title">
-        ABOUT ME
-      </h3>
-      <div class="profile-form__field textarea">
-        <mat-form-field>
-          <textarea matInput placeholder="Explain Brief About Yourself" rows="15" [formControl]="aboutMeForm.controls.aboutMe"></textarea>
-        </mat-form-field>
-      </div>
-    </div>
-  </div>
-  <div class="container__full">
-    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!aboutMeForm.valid"></action-button>
-  </div>
-</div>
-
-<!-- Create_Profile_About end -->
-
-<!-- Create_Profile_Education start -->
-
-<div *ngIf="selectedPageIndex===3" class="container {{profileCreationPages[3]}}">
-  <div class="container__full">
-    <div class="profile-form">
-      <h3 class="profile-form__title">
-        EDUCATION
-      </h3>
-      <ng-container *ngFor="let eductionForm of educationFormArray.controls; let i = index" [formGroup]="educationFormArray.controls[i]">
+  
+  <!-- Create_Profile_Choose end -->
+  
+  <!-- Create_Profile_Basic start -->
+  
+  <div *ngIf="selectedPageIndex===1" class="container {{profileCreationPages[1]}}">
+    <div class="container__full">
+      <div class="profile-form" [formGroup]="basicInfoForm">
+        <div class="profile-form__image">
+          <img alt="Profile Image" src="assets/icons/profile-image.svg">
+        </div>
+        <h3 class="profile-form__title">
+          BASIC INFORMATION
+        </h3>
         <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
-            <mat-label>School</mat-label>
-            <input matInput placeholder="School" type="text" [matAutocomplete]="autocompleteUniversity" [formControl]="educationFormArray.controls[i].controls.university">
-            <mat-autocomplete #autocompleteUniversity="matAutocomplete" (closed)="onBlurUniversity(i)">
-              <mat-option *ngFor="let autocomplete_university of autocomplete_universities[i]" [value]="autocomplete_university.school_name" (onSelectionChange)="onSelectUniversity(i, autocomplete_university)">
-                <span>{{autocomplete_university.school_name}}</span>
+            <mat-label>City</mat-label>
+            <input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity" formControlName="basicInfoCity">
+            <mat-icon matSuffix *ngIf="basicInfoForm.get('basicInfoCity').valid && onCheckCityValidation()">done</mat-icon>
+            <mat-icon matSuffix class="error-field" *ngIf="(!basicInfoForm.get('basicInfoCity').valid || !onCheckCityValidation()) && basicInfoForm.get('basicInfoCity').touched">close</mat-icon>
+            <mat-autocomplete #autocompleteCity="matAutocomplete" (closed)="onBlurCity()">
+              <mat-option *ngFor="let city of autocomplete_cities" [value]="getCityNameFromAutoComplete(city.city)" (onSelectionChange)="onSelectCity(city)">
+                <span>{{city.city}}</span>
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
         </div>
         <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
-            <mat-label>Degree</mat-label>
-            <mat-select [formControl]="educationFormArray.controls[i].controls.degree">
-              <mat-option *ngFor="let degree of degrees" value="{{degree.education_level}}">{{degree.education_level}}</mat-option>
+            <mat-label>State</mat-label>
+            <input matInput placeholder="State" type="text" [matAutocomplete]="autocompleteState" formControlName="basicInfoState">
+            <mat-icon matSuffix *ngIf="basicInfoForm.get('basicInfoState').valid && onCheckStateValidation()">done</mat-icon>
+            <mat-icon matSuffix class="error-field" *ngIf="(!basicInfoForm.get('basicInfoState').valid || !onCheckStateValidation()) && basicInfoForm.get('basicInfoState').touched">close</mat-icon>
+            <mat-autocomplete #autocompleteState="matAutocomplete" (closed)="onBlurState()">
+              <mat-option *ngFor="let state of autocomplete_states" [value]="state.state" (onSelectionChange)="onSelectState(state)">
+                <span>{{state.state}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="profile-form__field">
+          <mat-form-field class="bg-transparent" appearance="fill">
+            <mat-label>Country</mat-label>
+            <mat-select formControlName="basicInfoCountry">
+              <mat-option *ngFor="let country of countries" value="{{country}}">{{country}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="profile-form__field"> 
+          <mat-form-field class="bg-transparent" appearance="fill">
+            <mat-label>Date Of Birth</mat-label>
+            <input matInput placeholder="MM/DD/YYYY" formControlName="basicInfoBirth" pattern="\d{1,2}/\d{1,2}/\d{4}">
+            <input class="hide" [matDatepicker]="birthdate" [max]="maxDate" (dateChange)="onChangeBirthDate($event)">
+            <mat-datepicker-toggle matSuffix [for]="birthdate"></mat-datepicker-toggle>
+            <mat-datepicker
+              touchUi
+              #birthdate
+            >
+            </mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="profile-form__field">
+          <mat-form-field class="bg-transparent" appearance="fill">
+            <mat-label>Gender</mat-label>
+            <mat-select formControlName="basicInfoGender">
+              <mat-option *ngFor="let gender of genders" value="{{gender}}">{{gender}}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
         <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
-            <mat-label>Major</mat-label>
-            <input matInput placeholder="Major" type="text" [matAutocomplete]="autocompleteMajor" [formControl]="educationFormArray.controls[i].controls.major">
-            <mat-icon matSuffix *ngIf="educationFormArray.controls[i].controls.major.value && checkMajorValidation(i, false)">done</mat-icon>
-            <mat-icon matSuffix class="error-field" *ngIf="educationFormArray.controls[i].controls.major.value && !checkMajorValidation(i, false) && educationFormArray.controls[i].controls.major.touched">close</mat-icon>
-            <mat-autocomplete #autocompleteMajor="matAutocomplete" (closed)="onBlurMajor(i)">
-              <mat-option *ngFor="let autocomplete_major of autocomplete_majors[i]" [value]="autocomplete_major.major_name" (onSelectionChange)="onSelectMajor(i, autocomplete_major)">
-                <span>{{autocomplete_major.major_name}}</span>
-              </mat-option>
-            </mat-autocomplete>
+            <mat-label>Ethnicity</mat-label>
+            <mat-select formControlName="basicInfoEthnicity">
+              <mat-option *ngFor="let ethnicityType of ethnicityTypes" value="{{ethnicityType}}">{{ethnicityType}}</mat-option>
+            </mat-select>
           </mat-form-field>
         </div>
-        <div class="profile-form__field">
-          <mat-form-field class="bg-transparent" appearance="fill">
-            <mat-label>Focus</mat-label>
-            <input matInput placeholder="Focus Major" type="text" [matAutocomplete]="autocompleteFocusMajor" [formControl]="educationFormArray.controls[i].controls.focus_major">
-            <mat-icon matSuffix *ngIf="educationFormArray.controls[i].controls.focus_major.value && checkMajorValidation(i, true)">done</mat-icon>
-            <mat-icon matSuffix class="error-field" *ngIf="educationFormArray.controls[i].controls.focus_major.value && !checkMajorValidation(i, true) && educationFormArray.controls[i].controls.focus_major.touched">close</mat-icon>
-            <mat-autocomplete #autocompleteFocusMajor="matAutocomplete" (closed)="onBlurFocusMajor(i)">
-              <mat-option *ngFor="let autocomplete_focus_major of autocomplete_focus_majors[i]" [value]="autocomplete_focus_major.major_name" (onSelectionChange)="onSelectFocusMajor(i, autocomplete_focus_major)">
-                <span>{{autocomplete_focus_major.major_name}}</span>
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-        </div>
-        <div class="profile-form__field">
-          <mat-form-field class="bg-transparent" appearance="fill">
-            <mat-label>Start Date</mat-label>
-            <input matInput placeholder="YYYY" type="text" [formControl]="educationFormArray.controls[i].controls.start_date" readonly>
-            <input class="hide" [matDatepicker]="start_date" [max]="maxEduStartDate()">
-            <mat-datepicker-toggle matSuffix [for]="start_date"></mat-datepicker-toggle>
-            <mat-datepicker
-              touchUi
-              #start_date
-              startView="multi-year"
-              (yearSelected)="onEducationYearSelect($event, i, true, start_date)"
-            >
-            </mat-datepicker>
-          </mat-form-field>
-        </div>
-        <div class="profile-form__field" *ngIf="isExistStartDate(i)">
-          <mat-form-field class="bg-transparent" appearance="fill">
-            <mat-label>Graduation Date</mat-label>
-            <input matInput placeholder="YYYY" type="text" [formControl]="educationFormArray.controls[i].controls.graduation_date" readonly>
-            <input class="hide" [matDatepicker]="graduation_date" [min]="minEduGraduationDate(i)">
-            <mat-datepicker-toggle matSuffix [for]="graduation_date"></mat-datepicker-toggle>
-            <mat-datepicker
-              touchUi
-              #graduation_date
-              startView="multi-year"
-              (yearSelected)="onEducationYearSelect($event, i, false, graduation_date)"
-            >
-            </mat-datepicker>
-          </mat-form-field>
-        </div>
-        <div class="profile-form__field textarea">
-          <mat-form-field>
-            <textarea matInput placeholder="Description (Optional)" rows="3" [formControl]="educationFormArray.controls[i].controls.description"></textarea>
-          </mat-form-field>
-        </div>
-        <div class="profile-form__field btn">
-          <action-button title="Remove" color="warn" (click)="onRemoveEducationData(i)"></action-button>
-        </div>
-        <div class="profile-form__field border">
-        </div>
-      </ng-container>
-      <div class="profile-form__field btn">
-        <action-button type="stroked" title="Add Education Info" (click)="onAddEducationData()" [disabled]="!(educationFormArray.valid && checkAllMajorValidation())"></action-button>
       </div>
     </div>
+    <div class="container__full">
+      <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!(basicInfoForm.valid && onCheckCityValidation() && onCheckStateValidation())"></action-button>
+    </div>
   </div>
-  <div class="container__full">
-    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!(educationFormArray.valid && checkAllMajorValidation())"></action-button>
-  </div>
-</div>
-
-<!-- Create_Profile_Education end -->
-
-<!-- Create_Profile_Work start -->
-
-<div *ngIf="selectedPageIndex===4" class="container {{profileCreationPages[4]}}">
-  <div class="container__full">
-    <div class="profile-form">
-      <h3 class="profile-form__title">
-        WORK EXPERIENCE
-      </h3>
-      <ng-container *ngFor="let workExperienceForm of workExperienceFormArray.controls; let i = index" [formGroup]="workExperienceFormArray.controls[i]">
-        <div class="profile-form__field">
-          <mat-form-field class="bg-transparent" appearance="fill">
-            <mat-label>Company Name</mat-label>
-            <input matInput placeholder="Company Name" type="text" [matAutocomplete]="autocompleteCompany" [formControl]="workExperienceFormArray.controls[i].controls.company_name">
-            <mat-autocomplete #autocompleteCompany="matAutocomplete" (closed)="onBlurCompany(i)">
-              <mat-option *ngFor="let autocomplete_company of autocomplete_companies[i]" [value]="autocomplete_company.company_name" (onSelectionChange)="onSelectCompany(i, autocomplete_company)">
-                <span>{{autocomplete_company.company_name}}</span>
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-        </div>
-        <div class="profile-form__field">
-          <mat-form-field class="bg-transparent" appearance="fill">
-            <mat-label>Start Date</mat-label>
-            <input matInput placeholder="YYYY" type="text" [formControl]="workExperienceFormArray.controls[i].controls.start_date" readonly>
-            <input class="hide" [matDatepicker]="experience_start_date" [max]="maxExperienceStartDate()">
-            <mat-datepicker-toggle matSuffix [for]="experience_start_date"></mat-datepicker-toggle>
-            <mat-datepicker
-              touchUi
-              #experience_start_date
-              startView="multi-year"
-              (yearSelected)="onExperienceYearSelect($event, i, true, experience_start_date)"
-            >
-            </mat-datepicker>
-          </mat-form-field>
-        </div>
-        <div class="profile-form__field" *ngIf="isExperienceStartDate(i)">
-          <mat-form-field class="bg-transparent" appearance="fill">
-            <mat-label>End Date</mat-label>
-            <input matInput placeholder="YYYY" type="text" [formControl]="workExperienceFormArray.controls[i].controls.end_date" readonly>
-            <input class="hide" [matDatepicker]="experience_end_date" [min]="minExperienceEndDate(i)" [max]="maxExperienceStartDate()">
-            <mat-datepicker-toggle matSuffix [for]="experience_end_date"></mat-datepicker-toggle>
-            <mat-datepicker
-              touchUi
-              #experience_end_date
-              startView="multi-year"
-              (yearSelected)="onExperienceYearSelect($event, i, false, experience_end_date)"
-            >
-            </mat-datepicker>
-          </mat-form-field>
-        </div>
-        <div class="profile-form__field">
-          <mat-form-field class="bg-transparent" appearance="fill">
-            <mat-label>Designation</mat-label>
-            <input matInput placeholder="Designation" type="text" [formControl]="workExperienceFormArray.controls[i].controls.job">
-          </mat-form-field>
-        </div>
+  
+  <!-- Create_Profile_Basic end -->
+  
+  <!-- Create_Profile_About start -->
+  
+  <div *ngIf="selectedPageIndex===2" class="container {{profileCreationPages[2]}}">
+    <div class="container__full">
+      <div class="profile-form" [formGroup]="aboutMeForm">
+        <h3 class="profile-form__title">
+          ABOUT ME
+        </h3>
         <div class="profile-form__field textarea">
           <mat-form-field>
-            <textarea matInput placeholder="Description (Optional)" rows="3" [formControl]="workExperienceFormArray.controls[i].controls.description"></textarea>
+            <textarea matInput placeholder="Briefly introduce yourself" rows="15" formControlName="aboutMe"></textarea>
           </mat-form-field>
         </div>
-
+      </div>
+    </div>
+    <div class="container__full">
+      <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!aboutMeForm.valid"></action-button>
+    </div>
+  </div>
+  
+  <!-- Create_Profile_About end -->
+  
+  <!-- Create_Profile_Education start -->
+  
+  <div *ngIf="selectedPageIndex===3" class="container {{profileCreationPages[3]}}">
+    <div class="container__full">
+      <div class="profile-form">
+        <h3 class="profile-form__title">
+          EDUCATION
+        </h3>
+        <ng-container *ngFor="let eductionForm of educationFormArray.controls; let i = index" [formGroup]="educationFormArray.controls[i]">
+          <div class="profile-form__field">
+            <mat-form-field class="bg-transparent" appearance="fill">
+              <mat-label>School</mat-label>
+              <input matInput placeholder="School" type="text" [matAutocomplete]="autocompleteUniversity" formControlName="university">
+              <mat-autocomplete #autocompleteUniversity="matAutocomplete" (closed)="onBlurUniversity(i)">
+                <mat-option *ngFor="let autocomplete_university of autocomplete_universities[i]" [value]="autocomplete_university.school_name" (onSelectionChange)="onSelectUniversity(i, autocomplete_university)">
+                  <span>{{autocomplete_university.school_name}}</span>
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+          <div class="profile-form__field">
+            <mat-form-field class="bg-transparent" appearance="fill">
+              <mat-label>Degree</mat-label>
+              <mat-select formControlName="degree">
+                <mat-option *ngFor="let degree of degrees" value="{{degree.education_level}}">{{degree.education_level}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="profile-form__field">
+            <mat-form-field class="bg-transparent" appearance="fill">
+              <mat-label>Major</mat-label>
+              <input matInput placeholder="Major" type="text" [matAutocomplete]="autocompleteMajor" formControlName="major">
+              <mat-icon matSuffix *ngIf="educationFormArray.controls[i].controls.major.value && checkMajorValidation(i, false)">done</mat-icon>
+              <mat-icon matSuffix class="error-field" *ngIf="educationFormArray.controls[i].controls.major.value && !checkMajorValidation(i, false) && educationFormArray.controls[i].controls.major.touched">close</mat-icon>
+              <mat-autocomplete #autocompleteMajor="matAutocomplete" (closed)="onBlurMajor(i)">
+                <mat-option *ngFor="let autocomplete_major of autocomplete_majors[i]" [value]="autocomplete_major.major_name" (onSelectionChange)="onSelectMajor(i, autocomplete_major)">
+                  <span>{{autocomplete_major.major_name}}</span>
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+          <div class="profile-form__field">
+            <mat-form-field class="bg-transparent" appearance="fill">
+              <mat-label>Focus</mat-label>
+              <input matInput placeholder="Focus Major" type="text" [matAutocomplete]="autocompleteFocusMajor" formControlName="focus_major">
+              <mat-icon matSuffix *ngIf="educationFormArray.controls[i].controls.focus_major.value && checkMajorValidation(i, true)">done</mat-icon>
+              <mat-icon matSuffix class="error-field" *ngIf="educationFormArray.controls[i].controls.focus_major.value && !checkMajorValidation(i, true) && educationFormArray.controls[i].controls.focus_major.touched">close</mat-icon>
+              <mat-autocomplete #autocompleteFocusMajor="matAutocomplete" (closed)="onBlurFocusMajor(i)">
+                <mat-option *ngFor="let autocomplete_focus_major of autocomplete_focus_majors[i]" [value]="autocomplete_focus_major.major_name" (onSelectionChange)="onSelectFocusMajor(i, autocomplete_focus_major)">
+                  <span>{{autocomplete_focus_major.major_name}}</span>
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+          <div class="profile-form__field">
+            <mat-form-field class="bg-transparent" appearance="fill">
+              <mat-label>Start Date</mat-label>
+              <input matInput placeholder="YYYY" type="text" formControlName="start_date" pattern="\d{4}">
+              <input class="hide" [matDatepicker]="start_date" [max]="maxDate">
+              <mat-datepicker-toggle matSuffix [for]="start_date"></mat-datepicker-toggle>
+              <mat-datepicker
+                touchUi
+                #start_date
+                startView="multi-year"
+                (yearSelected)="onEducationYearSelect($event, i, true, start_date)"
+              >
+              </mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="profile-form__field" *ngIf="isExistStartDate(i)">
+            <mat-form-field class="bg-transparent" appearance="fill">
+              <mat-label>Graduation Date</mat-label>
+              <input matInput placeholder="YYYY" type="text" formControlName="graduation_date" pattern="\d{4}">
+              <input class="hide" [matDatepicker]="graduation_date" [min]="minEduGraduationDate(i)">
+              <mat-datepicker-toggle matSuffix [for]="graduation_date"></mat-datepicker-toggle>
+              <mat-datepicker
+                touchUi
+                #graduation_date
+                startView="multi-year"
+                (yearSelected)="onEducationYearSelect($event, i, false, graduation_date)"
+              >
+              </mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="profile-form__field textarea">
+            <mat-form-field>
+              <textarea matInput placeholder="Description (Optional)" rows="3" formControlName="description"></textarea>
+            </mat-form-field>
+          </div>
+          <div class="profile-form__field btn">
+            <action-button title="Remove" color="warn" (click)="onRemoveEducationData(i)"></action-button>
+          </div>
+          <div class="profile-form__field border">
+          </div>
+        </ng-container>
+        <div class="profile-form__field btn">
+          <action-button type="stroked" title="Add Education Info" (click)="onAddEducationData()" [disabled]="!(educationFormArray.valid && checkAllMajorValidation())"></action-button>
+        </div>
+      </div>
+    </div>
+    <div class="container__full">
+      <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!(educationFormArray.valid && checkAllMajorValidation())"></action-button>
+    </div>
+  </div>
+  
+  <!-- Create_Profile_Education end -->
+  
+  <!-- Create_Profile_Work start -->
+  
+  <div *ngIf="selectedPageIndex===4" class="container {{profileCreationPages[4]}}">
+    <div class="container__full">
+      <div class="profile-form">
+        <h3 class="profile-form__title">
+          WORK EXPERIENCE
+        </h3>
+        <ng-container *ngFor="let workExperienceForm of workExperienceFormArray.controls; let i = index" [formGroup]="workExperienceFormArray.controls[i]">
+          <div class="profile-form__field">
+            <mat-form-field class="bg-transparent" appearance="fill">
+              <mat-label>Company Name</mat-label>
+              <input matInput placeholder="Company Name" type="text" [matAutocomplete]="autocompleteCompany" formControlName="company_name">
+              <mat-autocomplete #autocompleteCompany="matAutocomplete" (closed)="onBlurCompany(i)">
+                <mat-option *ngFor="let autocomplete_company of autocomplete_companies[i]" [value]="autocomplete_company.company_name" (onSelectionChange)="onSelectCompany(i, autocomplete_company)">
+                  <span>{{autocomplete_company.company_name}}</span>
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+          <div class="profile-form__field">
+            <mat-form-field class="bg-transparent" appearance="fill">
+              <mat-label>Start Date</mat-label>
+              <input matInput placeholder="MM/YYYY" type="text" formControlName="start_date" pattern="\d{1,2}/\d{4}">
+              <input class="hide" [matDatepicker]="experience_start_date" [max]="maxDate">
+              <mat-datepicker-toggle matSuffix [for]="experience_start_date"></mat-datepicker-toggle>
+              <mat-datepicker
+                touchUi
+                #experience_start_date
+                startView="multi-year"
+                (yearSelected)="onExperienceYearSelect($event, i, true)"
+                (monthSelected)="onExperienceMonthSelect($event, i, true, experience_start_date)"
+              >
+              </mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="profile-form__field" *ngIf="isExperienceStartDate(i)">
+            <mat-form-field class="bg-transparent" appearance="fill">
+              <mat-label>End Date</mat-label>
+              <input matInput placeholder="MM/YYYY" type="text" formControlName="end_date" pattern="\d{1,2}/\d{4}">
+              <input class="hide" [matDatepicker]="experience_end_date" [min]="minExperienceEndDate(i)" [max]="maxDate">
+              <mat-datepicker-toggle matSuffix [for]="experience_end_date"></mat-datepicker-toggle>
+              <mat-datepicker
+                touchUi
+                #experience_end_date
+                startView="multi-year"
+                (yearSelected)="onExperienceYearSelect($event, i, false)"
+                (monthSelected)="onExperienceMonthSelect($event, i, false, experience_end_date)"
+              >
+              </mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="profile-form__field">
+            <mat-form-field class="bg-transparent" appearance="fill">
+              <mat-label>Designation</mat-label>
+              <input matInput placeholder="Designation" type="text" formControlName="job">
+            </mat-form-field>
+          </div>
+          <div class="profile-form__field textarea">
+            <mat-form-field>
+              <textarea matInput placeholder="Description (Optional)" rows="3" formControlName="description"></textarea>
+            </mat-form-field>
+          </div>
+  
+          <div class="profile-form__field search">
+            <h3>Skills Trained <span *ngIf="skills_trained[i].length > 0" class="count">{{skills_trained[i].length}}</span></h3>
+            <mat-form-field appearance="standard" class="search">
+              <mat-icon matSuffix>search</mat-icon>
+              <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompleteSkillsTrained" formControlName="skills_trained">
+              <mat-autocomplete #autocompleteSkillsTrained="matAutocomplete">
+                <mat-option *ngFor="let autocomplete_skill_trained of autocomplete_skills_trained[i]" [value]="autocomplete_skill_trained.skill" (onSelectionChange)="addSkillsTrained(i, autocomplete_skill_trained)">
+                  <span>{{autocomplete_skill_trained.skill}}</span>
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+            <div class="skills" *ngIf="skills_trained[i].length > 0">
+              <simple-tag *ngFor="let skill of skills_trained[i]; let j = index" type="gray" title="{{skill.skill}}" removeTag="true" (click)="onRemoveSkillsTrained(i, j, skill)"></simple-tag>
+            </div>
+          </div>
+  
+          <div class="profile-form__field search">
+            <h3>Additional Industry Exposure <span *ngIf="additional_industries[i].length > 0" class="count">{{additional_industries[i].length}}</span></h3>
+            <mat-form-field appearance="standard" class="search">
+              <mat-icon matSuffix>search</mat-icon>
+              <input matInput placeholder="Search Industries" type="text" [matAutocomplete]="autocompleteAdditionalIndustry" formControlName="additional_industries">
+              <mat-autocomplete #autocompleteAdditionalIndustry="matAutocomplete">
+                <mat-option *ngFor="let autocomplete_additional_industry of autocomplete_additional_industries[i]" [value]="autocomplete_additional_industry.industry_name" (onSelectionChange)="addAdditionalIndustry(i, autocomplete_additional_industry)">
+                  <span>{{autocomplete_additional_industry.industry_name}}</span>
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+            <div class="skills" *ngIf="additional_industries[i].length > 0">
+              <simple-tag *ngFor="let industry of additional_industries[i]; let j = index" type="gray" title="{{industry.industry_name}}" removeTag="true" (click)="onRemoveAdditionalIndustry(i, j, industry)"></simple-tag>
+            </div>
+          </div>
+          <div class="profile-form__field btn">
+            <action-button title="Remove" color="warn" (click)="onRemoveExperienceData(i)"></action-button>
+          </div>
+          <div class="profile-form__field border">
+          </div>
+        </ng-container>
+        <div class="profile-form__field btn">
+          <action-button type="stroked" title="Add Another" (click)="onAddExperienceData()" [disabled]="!workExperienceFormArray.valid"></action-button>
+        </div>
+      </div>
+    </div>
+    <div class="container__full">
+      <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!workExperienceFormArray.valid"></action-button>
+    </div>
+  </div>
+  
+  <!-- Create_Profile_Work end -->
+  
+  <!-- Create_Profile_Skills start -->
+  
+  <div *ngIf="selectedPageIndex===5" class="container {{profileCreationPages[5]}}">
+    <div class="container__full">
+      <div class="profile-form" [formGroup]="skillsAndInterestsForm">
+        <h3 class="profile-form__title">
+          SKILLS & INTERESTS
+        </h3>
         <div class="profile-form__field search">
-          <h3>Skills Trained <span *ngIf="skills_trained[i].length > 0" class="count">{{skills_trained[i].length}}</span></h3>
+          <h3>Skills <span *ngIf="userSkillsList.length > 0" class="count">{{userSkillsList.length}}</span></h3>
           <mat-form-field appearance="standard" class="search">
             <mat-icon matSuffix>search</mat-icon>
-            <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompleteSkillsTrained" [formControl]="workExperienceFormArray.controls[i].controls.skills_trained">
-            <mat-autocomplete #autocompleteSkillsTrained="matAutocomplete">
-              <mat-option *ngFor="let autocomplete_skill_trained of autocomplete_skills_trained[i]" [value]="autocomplete_skill_trained.skill" (onSelectionChange)="addSkillsTrained(i, autocomplete_skill_trained)">
-                <span>{{autocomplete_skill_trained.skill}}</span>
+            <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompleteSkills" formControlName="skills">
+            <mat-autocomplete #autocompleteSkills="matAutocomplete">
+              <mat-option *ngFor="let autocomplete_skill of autocomplete_skills" [value]="autocomplete_skill.skill" (onSelectionChange)="addSkills(autocomplete_skill)">
+                <span>{{autocomplete_skill.skill}}</span>
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
-          <div class="skills" *ngIf="skills_trained[i].length > 0">
-            <simple-tag *ngFor="let skill of skills_trained[i]; let j = index" type="gray" title="{{skill.skill}}" removeTag="true" (click)="onRemoveSkillsTrained(i, j, skill)"></simple-tag>
+          <div *ngIf="userSkillsList.length > 0" class="skills">
+            <!-- <simple-tag *ngFor="let skillData of userSkillsList; let i = index" type="gray" title="{{skillData.skill}}" ellipseTag="true" value="{{skillData.skill_level}}" (click)="removeUserSkillsData(i, skillData)"></simple-tag> -->
+            <simple-tag *ngFor="let skillData of userSkillsList; let i = index" type="gray" title="{{skillData.skill}}" ellipseTag="true" isControl='true' value="{{skillData.skill_level}}" (levelChanged)="onLevelChanged($event, i)" (removeClick)="removeUserSkillsData(i, skillData)"></simple-tag>
           </div>
         </div>
-
         <div class="profile-form__field search">
-          <h3>Additional Industry Exposure <span *ngIf="additional_industries[i].length > 0" class="count">{{additional_industries.length}}</span></h3>
+          <h3>Interests <span *ngIf="userInterestsList.length > 0" class="count">{{userInterestsList.length}}</span></h3>
           <mat-form-field appearance="standard" class="search">
             <mat-icon matSuffix>search</mat-icon>
-            <input matInput placeholder="Search Industries" type="text" [matAutocomplete]="autocompleteAdditionalIndustry" [formControl]="workExperienceFormArray.controls[i].controls.additional_industries">
-            <mat-autocomplete #autocompleteAdditionalIndustry="matAutocomplete">
-              <mat-option *ngFor="let autocomplete_additional_industry of autocomplete_additional_industries[i]" [value]="autocomplete_additional_industry.industry_name" (onSelectionChange)="addAdditionalIndustry(i, autocomplete_additional_industry)">
-                <span>{{autocomplete_additional_industry.industry_name}}</span>
+            <input matInput placeholder="Search Interests" type="text" [matAutocomplete]="autocompleteInterests" formControlName="interests">
+            <mat-autocomplete #autocompleteInterests="matAutocomplete">
+              <mat-option *ngFor="let autocomplete_interest of autocomplete_interests" [value]="autocomplete_interest.interest" (onSelectionChange)="addInterests(autocomplete_interest)">
+                <span>{{autocomplete_interest.interest}}</span>
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
-          <div class="skills" *ngIf="additional_industries[i].length > 0">
-            <simple-tag *ngFor="let industry of additional_industries[i]; let j = index" type="gray" title="{{industry.industry_name}}" removeTag="true" (click)="onRemoveAdditionalIndustry(i, j, industry)"></simple-tag>
+          <div *ngIf="userInterestsList.length > 0" class="skills">
+            <simple-tag *ngFor="let interestData of userInterestsList; let i = index" type="gray" removeTag="true" title="{{interestData.interest}}" (click)="removeUserInteretsData(i, interestData)"></simple-tag>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="container__full">
+      <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
+    </div>
+  </div>
+  
+  <!-- Create_Profile_Skills end -->
+  
+  <!-- Create_Profile_Project start -->
+  
+  <div *ngIf="selectedPageIndex===6" class="container {{profileCreationPages[6]}}">
+    <div class="container__full">
+      <div class="profile-form">
+        <h3 class="profile-form__title">
+          PROJECTS
+        </h3>
+        <ng-container *ngFor="let projectForm of projectsFormArray.controls; let i = index" [formGroup]="projectsFormArray.controls[i]">
+          <div class="profile-form__field">
+            <mat-form-field class="bg-transparent" appearance="fill">
+              <mat-label>Project Name</mat-label>
+              <input matInput placeholder="Project Name" type="text" formControlName="project_name">
+            </mat-form-field>
+          </div>
+          <div class="profile-form__field">
+            <mat-form-field class="bg-transparent" appearance="fill">
+              <mat-label>Date of Completion</mat-label>
+              <input matInput placeholder="MM/DD/YYYY" type="text" formControlName="date_finished" pattern="\d{1,2}/\d{1,2}/\d{4}">
+              <input class="hide" [matDatepicker]="project_finished_date" [max]="maxDate" (dateChange)="onChangeProjectFinishedDate($event, i)">
+              <mat-datepicker-toggle matSuffix [for]="project_finished_date"></mat-datepicker-toggle>
+              <mat-datepicker
+                touchUi
+                #project_finished_date
+              >
+              </mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="profile-form__field">
+            <mat-form-field class="bg-transparent" appearance="fill">
+              <mat-label>Link</mat-label>
+              <input matInput placeholder="Link" type="text" formControlName="href">
+            </mat-form-field>
+          </div>
+          <div class="profile-form__field textarea">
+            <mat-form-field>
+              <textarea matInput placeholder="Description" rows="3" formControlName="description"></textarea>
+            </mat-form-field>
+          </div>
+          <div class="profile-form__field btn">
+            <action-button title="Remove" color="warn" (click)="onRemoveProjectData(i)"></action-button>
+          </div>
+          <div class="profile-form__field border">
+          </div>
+        </ng-container>
         <div class="profile-form__field btn">
-          <action-button title="Remove" color="warn" (click)="onRemoveExperienceData(i)"></action-button>
-        </div>
-        <div class="profile-form__field border">
-        </div>
-      </ng-container>
-      <div class="profile-form__field btn">
-        <action-button type="stroked" title="Add Another" (click)="onAddExperienceData()" [disabled]="!workExperienceFormArray.valid"></action-button>
-      </div>
-    </div>
-  </div>
-  <div class="container__full">
-    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!workExperienceFormArray.valid"></action-button>
-  </div>
-</div>
-
-<!-- Create_Profile_Work end -->
-
-<!-- Create_Profile_Skills start -->
-
-<div *ngIf="selectedPageIndex===5" class="container {{profileCreationPages[5]}}">
-  <div class="container__full">
-    <div class="profile-form" [formGroup]="skillsAndInterestsForm">
-      <h3 class="profile-form__title">
-        SKILLS & INTERESTS
-      </h3>
-      <div class="profile-form__field search">
-        <h3>Skills <span *ngIf="userSkillsList.length > 0" class="count">{{userSkillsList.length}}</span></h3>
-        <mat-form-field appearance="standard" class="search">
-          <mat-icon matSuffix>search</mat-icon>
-          <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompleteSkills" [formControl]="skillsAndInterestsForm.controls.skills">
-          <mat-autocomplete #autocompleteSkills="matAutocomplete">
-            <mat-option *ngFor="let autocomplete_skill of autocomplete_skills" [value]="autocomplete_skill.skill" (onSelectionChange)="addSkills(autocomplete_skill)">
-              <span>{{autocomplete_skill.skill}}</span>
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
-        <div *ngIf="userSkillsList.length > 0" class="skills">
-          <!-- <simple-tag *ngFor="let skillData of userSkillsList; let i = index" type="gray" title="{{skillData.skill}}" ellipseTag="true" value="{{skillData.skill_level}}" (click)="removeUserSkillsData(i, skillData)"></simple-tag> -->
-          <simple-tag *ngFor="let skillData of userSkillsList; let i = index" type="gray" title="{{skillData.skill}}" ellipseTag="true" isControl='true' value="{{skillData.skill_level}}" (levelChanged)="onLevelChanged($event, i)" (removeClick)="removeUserSkillsData(i, skillData)"></simple-tag>
-        </div>
-      </div>
-      <div class="profile-form__field search">
-        <h3>Interests <span *ngIf="userInterestsList.length > 0" class="count">{{userInterestsList.length}}</span></h3>
-        <mat-form-field appearance="standard" class="search">
-          <mat-icon matSuffix>search</mat-icon>
-          <input matInput placeholder="Search Interests" type="text" [matAutocomplete]="autocompleteInterests" [formControl]="skillsAndInterestsForm.controls.interests">
-          <mat-autocomplete #autocompleteInterests="matAutocomplete">
-            <mat-option *ngFor="let autocomplete_interest of autocomplete_interests" [value]="autocomplete_interest.interest" (onSelectionChange)="addInterests(autocomplete_interest)">
-              <span>{{autocomplete_interest.interest}}</span>
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
-        <div *ngIf="userInterestsList.length > 0" class="skills">
-          <simple-tag *ngFor="let interestData of userInterestsList; let i = index" type="gray" removeTag="true" title="{{interestData.interest}}" (click)="removeUserInteretsData(i, interestData)"></simple-tag>
+          <action-button type="stroked" title="Add Another" (click)="onAddProjectData()" [disabled]="!projectsFormArray.valid"></action-button>
         </div>
       </div>
     </div>
+    <div class="container__full">
+      <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!projectsFormArray.valid"></action-button>
+    </div>
   </div>
-  <div class="container__full">
-    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
+  
+  <!-- Create_Profile_Project end -->
+  
+  <!-- Create_Profile_Publication start -->
+  
+  <div *ngIf="selectedPageIndex===7" class="container {{profileCreationPages[7]}}">
+    <div class="container__full">
+      <div class="profile-form">
+        <h3 class="profile-form__title">
+          PUBLICATIONS
+        </h3>
+        <ng-container *ngFor="let publicationsForm of publicationsFormArray.controls; let i = index" [formGroup]="publicationsFormArray.controls[i]">
+          <div class="profile-form__field">
+            <mat-form-field class="bg-transparent" appearance="fill">
+              <mat-label>Publication Name</mat-label>
+              <input matInput placeholder="Publication Name" type="text" formControlName="publication_name">
+            </mat-form-field>
+          </div>
+          <div class="profile-form__field">
+            <mat-form-field class="bg-transparent" appearance="fill">
+              <mat-label>Date Published</mat-label>
+              <input matInput placeholder="MM/DD/YYYY" type="text" formControlName="date_published" pattern="\d{1,2}/\d{1,2}/\d{4}">
+              <input class="hide" [matDatepicker]="publication_date_published" [max]="maxDate" (dateChange)="onChangeDatePublished($event, i)">
+              <mat-datepicker-toggle matSuffix [for]="publication_date_published"></mat-datepicker-toggle>
+              <mat-datepicker
+                touchUi
+                #publication_date_published
+              >
+              </mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="profile-form__field">
+            <mat-form-field class="bg-transparent" appearance="fill">
+              <mat-label>Link</mat-label>
+              <input matInput placeholder="Link" type="text" formControlName="href">
+            </mat-form-field>
+          </div>
+          <div class="profile-form__field textarea">
+            <mat-form-field>
+              <textarea matInput placeholder="Description" rows="3" formControlName="description"></textarea>
+            </mat-form-field>
+          </div>
+          <div class="profile-form__field btn">
+            <action-button title="Remove" color="warn" (click)="onRemovePublicationData(i)"></action-button>
+          </div>
+          <div class="profile-form__field border">
+          </div>
+        </ng-container>
+        <div class="profile-form__field btn">
+          <action-button type="stroked" title="Add Another" (click)="onAddPublicationData()" [disabled]="!publicationsFormArray.valid"></action-button>
+        </div>
+      </div>
+    </div>
+    <div class="container__full">
+      <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!publicationsFormArray.valid"></action-button>
+    </div>
   </div>
-</div>
-
-<!-- Create_Profile_Skills end -->
-
-<!-- Create_Profile_Project start -->
-
-<div *ngIf="selectedPageIndex===6" class="container {{profileCreationPages[6]}}">
-  <div class="container__full">
-    <div class="profile-form">
-      <h3 class="profile-form__title">
-        PROJECTS
-      </h3>
-      <ng-container *ngFor="let projectForm of projectsFormArray.controls; let i = index" [formGroup]="projectsFormArray.controls[i]">
-        <div class="profile-form__field">
+  
+  <!-- Create_Profile_Publication end -->
+  
+  <!-- Create_Profile_Links start -->
+  
+  <div *ngIf="selectedPageIndex===8" class="container {{profileCreationPages[8]}}">
+    <div class="container__full">
+      <div class="profile-form" [formGroup]="externalResourcesForm">
+        <h3 class="profile-form__title">
+          EXTERNAL LINKS
+        </h3>
+        <div *ngFor="let resource of externalResources" class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
-            <mat-label>Project Name</mat-label>
-            <input matInput placeholder="Project Name" type="text" [formControl]="projectsFormArray.controls[i].controls.project_name">
+            <mat-label>{{resource}}</mat-label>
+            <img matSuffix src="assets/icons/ic_{{resource.toLowerCase()}}.svg">
+            <input matInput placeholder="{{resource}} Link" type="text" [formControl]="externalResourcesForm.controls[resource]">
           </mat-form-field>
         </div>
-        <div class="profile-form__field">
-          <mat-form-field class="bg-transparent" appearance="fill">
-            <mat-label>Year of Completion</mat-label>
-            <input matInput placeholder="Year of Completion" type="text" [formControl]="projectsFormArray.controls[i].controls.years">
-          </mat-form-field>
-        </div>
-        <div class="profile-form__field textarea">
-          <mat-form-field>
-            <textarea matInput placeholder="Description (Optional)" rows="3" [formControl]="projectsFormArray.controls[i].controls.description"></textarea>
-          </mat-form-field>
-        </div>
-        <div class="profile-form__field border">
-        </div>
-      </ng-container>
-      <div class="profile-form__field btn">
-        <action-button type="stroked" title="Add Another" (click)="addProjectsForm()"></action-button>
       </div>
     </div>
-  </div>
-  <div class="container__full">
-    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
-  </div>
-</div>
-
-<!-- Create_Profile_Project end -->
-
-<!-- Create_Profile_Publication start -->
-
-<div *ngIf="selectedPageIndex===7" class="container {{profileCreationPages[7]}}">
-  <div class="container__full">
-    <div class="profile-form">
-      <h3 class="profile-form__title">
-        PUBLICATIONS
-      </h3>
-      <ng-container *ngFor="let publicationsForm of publicationsFormArray.controls; let i = index" [formGroup]="publicationsFormArray.controls[i]">
-        <div class="profile-form__field">
-          <mat-form-field class="bg-transparent" appearance="fill">
-            <mat-label>Publication Name</mat-label>
-            <input matInput placeholder="Publication Name" type="text" [formControl]="publicationsFormArray.controls[i].controls.publication_name">
-          </mat-form-field>
-        </div>
-        <div class="profile-form__field">
-          <mat-form-field class="bg-transparent" appearance="fill">
-            <mat-label>Year of Completion</mat-label>
-            <input matInput placeholder="Year of Completion" type="text" [formControl]="publicationsFormArray.controls[i].controls.years">
-          </mat-form-field>
-        </div>
-        <div class="profile-form__field textarea">
-          <mat-form-field>
-            <textarea matInput placeholder="Description (Optional)" rows="3" [formControl]="publicationsFormArray.controls[i].controls.description"></textarea>
-          </mat-form-field>
-        </div>
-        <div class="profile-form__field border">
-        </div>
-      </ng-container>
-      <div class="profile-form__field btn">
-        <action-button type="stroked" title="Add Another" (click)="addPublicationsForm()"></action-button>
-      </div>
+    <div class="container__full">
+      <action-button class="btn-next" type="flat" title="Finish" color="primary" (click)="goToNextPage()"></action-button>
     </div>
   </div>
-  <div class="container__full">
-    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
-  </div>
-</div>
-
-<!-- Create_Profile_Publication end -->
-
-<!-- Create_Profile_Links start -->
-
-<div *ngIf="selectedPageIndex===8" class="container {{profileCreationPages[8]}}">
-  <div class="container__full">
-    <div class="profile-form" [formGroup]="externalLinksForm">
-      <h3 class="profile-form__title">
-        EXTERNAL LINKS
-      </h3>
-      <div class="profile-form__field">
-        <mat-form-field class="bg-transparent" appearance="fill">
-          <mat-label>Twitter (Optional)</mat-label>
-          <img matSuffix src="assets/icons/ic_twitter.svg">
-          <input matInput placeholder="Paste your link here" type="text" [formControl]="externalLinksForm.controls.twitter_link">
-        </mat-form-field>
-      </div>
-      <div class="profile-form__field">
-        <mat-form-field class="bg-transparent" appearance="fill">
-          <mat-label>Facebook (Optional)</mat-label>
-          <img matSuffix src="assets/icons/ic_facebook.svg">
-          <input matInput placeholder="Paste your link here" type="text" [formControl]="externalLinksForm.controls.facebook_link">
-        </mat-form-field>
-      </div>
-      <div class="profile-form__field">
-        <mat-form-field class="bg-transparent" appearance="fill">
-          <mat-label>Google (Optional)</mat-label>
-          <img matSuffix src="assets/icons/ic_google.svg">
-          <input matInput placeholder="Paste your link here" type="text" [formControl]="externalLinksForm.controls.google_link">
-        </mat-form-field>
-      </div>
-      <div class="profile-form__field">
-        <mat-form-field class="bg-transparent" appearance="fill">
-          <mat-label>Linkedin (Optional)</mat-label>
-          <img matSuffix src="assets/icons/ic_linkedin.svg">
-          <input matInput placeholder="Paste your link here" type="text" [formControl]="externalLinksForm.controls.linkedin_link">
-        </mat-form-field>
+  
+  <!-- Create_Profile_Links end -->
+  
+  <!-- Create_Profile_Status start -->
+  
+  <div *ngIf="selectedPageIndex===9" class="container {{profileCreationPages[9]}}">
+    <div class="container__full">
+      <div class="profile-form">
+        <h3 class="status__title">
+          SET YOUR STATUS
+        </h3>
+        <div class="profile-form__field simple-tag">
+          <simple-tag *ngFor="let status of statuses; let i = index" class="status" title="{{statuses[i]}}" onlineTag="true" [active]="profile_status === i" (click)="setProfileStatus(i)"></simple-tag>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="container__full">
-    <action-button class="btn-next" type="flat" title="Finish" color="primary" (click)="goToNextPage()"></action-button>
-  </div>
-</div>
-
-<!-- Create_Profile_Links end -->
-
-<!-- Create_Profile_Status start -->
-
-<div *ngIf="selectedPageIndex===9" class="container {{profileCreationPages[9]}}">
-  <div class="container__full">
-    <div class="profile-form">
-      <h3 class="status__title">
-        SET YOUR STATUS
-      </h3>
-      <div class="profile-form__field simple-tag">
-        <simple-tag *ngFor="let status of statuses; let i = index" class="status" title="{{statuses[i]}}" onlineTag="true" [active]="profile_status === statuses[i]" (click)="setProfileStatus(i)"></simple-tag>
-      </div>
+    <div class="container__full">
+      <action-button class="view-profile" type="flat" title="View Profile" color="primary" (click)="goToNextPage()"></action-button>
     </div>
   </div>
-  <div class="container__full">
-    <action-button class="view-profile" type="flat" title="View Profile" color="primary" (click)="goToNextPage()"></action-button>
-  </div>
-</div>
-
-<!-- <mat-datepicker
-  touchUi
-  #graduation_date
-  startView="multi-year"
-  (yearSelected)="onEducationYearSelect($event, i, false, graduation_date)"
->
-</mat-datepicker> -->
-
-<!-- Create_Profile_Status end -->
-
-
+  
+  <!-- <mat-datepicker
+    touchUi
+    #graduation_date
+    startView="multi-year"
+    (yearSelected)="onEducationYearSelect($event, i, false, graduation_date)"
+  >
+  </mat-datepicker> -->
+  
+  <!-- Create_Profile_Status end -->
+  
+  
+  

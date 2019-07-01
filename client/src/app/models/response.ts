@@ -86,3 +86,10 @@ export interface UserPublicationItem {
   href: string;
   publisher: string;
 }
+
+export interface UserExternalResourcesItem {
+  resource_id: number;
+  user_id: number;
+  link: string;
+  description: string;
+}

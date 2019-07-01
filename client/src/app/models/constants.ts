@@ -29,7 +29,7 @@ export const Countries = [
   'Liberia',
   'Maldives',
   'Tanzania',
-  'CuraÃƒÂ§ao',
+  'Curaçao',
   'Isle of Man',
   'Monaco',
   'Wallis and Futuna',
@@ -107,13 +107,13 @@ export const Countries = [
   'Israel',
   'Senegal',
   'Papua New Guinea',
-  'SÃƒÂ£o TomÃƒÂ© and PrÃƒÂ­ncipe',
+  'São Tomé and Príncipe',
   'Zimbabwe',
   'British Indian Ocean Territory',
   'Martinique',
   'Mauritania',
   'Trinidad and Tobago',
-  'RÃƒÂ©union',
+  'Réunion',
   'Latvia',
   'Japan',
   'Hashemite Kingdom of Jordan',
@@ -129,7 +129,7 @@ export const Countries = [
   'Botswana',
   'Cambodia',
   'Aruba',
-  'Saint-BarthÃƒÂ©lemy',
+  'Saint-Barthélemy',
   'Argentina',
   'Bolivia',
   'Bahrain',
@@ -259,7 +259,7 @@ export const Countries = [
   'Antarctica',
   'Sri Lanka',
   'Namibia',
-  'Ãƒâ€¦land',
+  'Åland',
   'Comoros'
 ];
 
@@ -319,4 +319,16 @@ export const Levels = [
     level: 9,
     education_level: 'Ph.D.'
   }
+];
+
+export const ExternalResources = [
+  'Twitter',
+  'Facebook',
+  'Google',
+  'Linkedin'
+];
+
+export const ProfileStatuses = [
+  'Passively Looking For Job',
+  'Actively Looking For Job'
 ];
