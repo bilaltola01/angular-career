@@ -472,17 +472,14 @@ export class CreateProfileComponent implements OnInit {
           switch (this.selectedPageIndex) {
             case 1:
               this.updateBasicInformationForm();
-              this.alertsService.show('General information has been updated Successfully!', AlertType.success);
               this.selectedPageIndex++;
               break;
             case 2:
               this.updateAboutMeForm();
-              this.alertsService.show('Introduction information has been updated Successfully!', AlertType.success);
               this.selectedPageIndex++;
               break;
             case 9:
               this.updateProfileStatus();
-              this.alertsService.show('Profile status has been updated Successfully!', AlertType.success);
               break;
             default:
               break;
