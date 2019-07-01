@@ -33,6 +33,7 @@ $profile-form-field-mt: 30px;
     width: 100%;
     height: 70px;
     background-color: $white;
+    z-index: 1;
     @include flex(row, center, center);
     .container {
       padding: 0;
@@ -48,6 +49,18 @@ $profile-form-field-mt: 30px;
         &.done {
           color: map-get($md-cdgreen, 500);
         }
+        &.tablet,
+        &.mobile {
+          display:  none;
+        }
+      }
+      &__header {
+        &.tablet {
+          display: none;
+        }
+      }
+      & > mat-icon {
+        display: none;
       }
     }
     .progress-bar {
@@ -312,6 +325,56 @@ p {
 @media only screen and (max-width: $tablet-breakpoint) {
   :host {
     padding-bottom: 50px;
+    .profile-completion {
+      position: relative;
+      .container {
+        & > * {
+          width: calc(100% / 3);
+        }
+        .link-btn.desktop {
+          display: none;
+        }
+        .progress-label {
+          @include flex(row, center, center);
+          &.desktop,
+          &.mobile {
+            display:  none;
+          }
+          &.tablet {
+            display: inherit;
+          }
+        }
+        & > mat-icon {
+          display: block;
+          text-align: center;
+          @include disable-select();
+          &:hover {
+            color: map-get($md-cfprimary, 500);
+          }
+        }
+        &__header {
+          &.tablet {
+            position: absolute;
+            width: 100%;
+            top: -1000%;
+            left: 0;
+            box-shadow: 0 3px 10px rgba($black, .07);
+            @include flex(column, center, center);
+            background-color: $white;
+            padding-top: $profile-form-field-mt;
+            padding-bottom: $profile-form-field-mt;
+            box-sizing: border-box;
+            transition: top 1s;
+            transition-timing-function: ease;
+            &.open {
+              top: calc(100% + 5px);
+              transition: top 1s;
+              transition-timing-function: ease;
+            }
+          }
+        }
+      }
+    }
   }
   .option-text {
     position: relative;
