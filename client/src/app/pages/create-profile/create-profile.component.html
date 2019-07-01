@@ -61,12 +61,12 @@
   <div *ngIf="selectedPageIndex===1" class="container {{profileCreationPages[1]}}">
     <div class="container__full">
       <div class="profile-form" [formGroup]="basicInfoForm">
-        <h3 class="profile-form__title">
-          BASIC INFORMATION
-        </h3>
         <div class="profile-form__image">
           <img alt="Profile Image" src="assets/icons/profile-image.svg">
         </div>
+        <h3 class="profile-form__title">
+          BASIC INFORMATION
+        </h3>
         <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>City</mat-label>

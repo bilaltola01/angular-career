@@ -88,7 +88,7 @@ export interface UserPublicationItem {
 }
 
 export interface UserExternalResourcesItem {
-  resources_id: number;
+  resource_id: number;
   user_id: number;
   link: string;
   description: string;

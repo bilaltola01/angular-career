@@ -780,6 +780,35 @@ export class CreateProfileComponent implements OnInit {
       }
     );
   }
+  onMajorValueChanges(major: string, index: number, isFocusMajor: boolean = false) {
+    this.autoCompleteService.autoComplete(major, 'majors').subscribe(
+      dataJson => {
+        if (dataJson['success']) {
+          if (isFocusMajor) {
+            this.autocomplete_focus_majors[index] = dataJson['data'];
+            if (this.autocomplete_focus_majors[index].length === 0) {
+              this.clearFocusMajor(index);
+            }
+          } else {
+            this.autocomplete_majors[index] = dataJson['data'];
+            if (this.autocomplete_majors[index].length === 0) {
+              this.clearMajor(index);
+            }
+          }
+        }
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+        if (isFocusMajor) {
+          this.autocomplete_focus_majors[index] = [];
+          this.clearFocusMajor(index);
+        } else {
+          this.autocomplete_majors[index] = [];
+          this.clearMajor(index);
+        }
+      }
+    );
+  }
   getEducationList() {
     this.userService.getEducationInfo().subscribe(
       dataJson => {
@@ -1105,6 +1134,48 @@ export class CreateProfileComponent implements OnInit {
         this.removeAdditionalIndustry(formArrIndex, arrIndex, industry);
       },
       error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+  onCompanyValueChanges(company: string, arrIndex: number) {
+    this.autoCompleteService.autoComplete(company, 'companies').subscribe(
+      dataJson => {
+        if (dataJson['success']) {
+          this.autocomplete_companies[arrIndex] = dataJson['data'];
+          if (this.autocomplete_companies[arrIndex].length === 0) {
+            this.onSelectSpecificCompany(arrIndex, company);
+          }
+        }
+      },
+      error => {
+        this.autocomplete_universities[arrIndex] = [];
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+  onSkillTrainedValueChanges(skill: string, arrIndex: number) {
+    this.autoCompleteService.autoComplete(skill, 'skills').subscribe(
+      dataJson => {
+        if (dataJson['success']) {
+          this.autocomplete_skills_trained[arrIndex] = dataJson['data'];
+        }
+      },
+      error => {
+        this.autocomplete_skills_trained[arrIndex] = [];
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+  onAdditionalIndustryValueChanges(industry: string, arrIndex: number) {
+    this.autoCompleteService.autoComplete(industry, 'industries').subscribe(
+      dataJson => {
+        if (dataJson['success']) {
+          this.autocomplete_additional_industries[arrIndex] = dataJson['data'];
+        }
+      },
+      error => {
+        this.autocomplete_additional_industries[arrIndex] = [];
         this.alertsService.show(error.message, AlertType.error);
       }
     );
@@ -1721,7 +1792,7 @@ export class CreateProfileComponent implements OnInit {
       const exteralResource = this.externalResourcesList.filter(value => value.description === resource.description);
       if (exteralResource.length > 0) {
         if (resource.link) {
-          this.userService.patchExternalResourcesById(resource, exteralResource[0].resources_id).subscribe(
+          this.userService.patchExternalResourcesById(resource, exteralResource[0].resource_id).subscribe(
             dataJson => {
               console.log(dataJson['data']);
               temp.push(dataJson['data']);
@@ -1736,7 +1807,7 @@ export class CreateProfileComponent implements OnInit {
             }
           );
         } else {
-          this.userService.deleteExternalResourcesById(exteralResource[0].resources_id).subscribe(
+          this.userService.deleteExternalResourcesById(exteralResource[0].resource_id).subscribe(
             dataJson => {
               console.log(dataJson['data']);
               counts++;
@@ -1778,80 +1849,5 @@ export class CreateProfileComponent implements OnInit {
         }
       );
     }
-  }
-
-  // Get AutoComplete lists
-
-  onMajorValueChanges(major: string, index: number, isFocusMajor: boolean = false) {
-    this.autoCompleteService.autoComplete(major, 'majors').subscribe(
-      dataJson => {
-        if (dataJson['success']) {
-          if (isFocusMajor) {
-            this.autocomplete_focus_majors[index] = dataJson['data'];
-            if (this.autocomplete_focus_majors[index].length === 0) {
-              this.clearFocusMajor(index);
-            }
-          } else {
-            this.autocomplete_majors[index] = dataJson['data'];
-            if (this.autocomplete_majors[index].length === 0) {
-              this.clearMajor(index);
-            }
-          }
-        }
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-        if (isFocusMajor) {
-          this.autocomplete_focus_majors[index] = [];
-          this.clearFocusMajor(index);
-        } else {
-          this.autocomplete_majors[index] = [];
-          this.clearMajor(index);
-        }
-      }
-    );
-  }
-
-  onCompanyValueChanges(company: string, arrIndex: number) {
-    this.autoCompleteService.autoComplete(company, 'companies').subscribe(
-      dataJson => {
-        if (dataJson['success']) {
-          this.autocomplete_companies[arrIndex] = dataJson['data'];
-          if (this.autocomplete_companies[arrIndex].length === 0) {
-            this.onSelectSpecificCompany(arrIndex, company);
-          }
-        }
-      },
-      error => {
-        this.autocomplete_universities[arrIndex] = [];
-        this.alertsService.show(error.message, AlertType.error);
-      }
-    );
-  }
-  onSkillTrainedValueChanges(skill: string, arrIndex: number) {
-    this.autoCompleteService.autoComplete(skill, 'skills').subscribe(
-      dataJson => {
-        if (dataJson['success']) {
-          this.autocomplete_skills_trained[arrIndex] = dataJson['data'];
-        }
-      },
-      error => {
-        this.autocomplete_skills_trained[arrIndex] = [];
-        this.alertsService.show(error.message, AlertType.error);
-      }
-    );
-  }
-  onAdditionalIndustryValueChanges(industry: string, arrIndex: number) {
-    this.autoCompleteService.autoComplete(industry, 'industries').subscribe(
-      dataJson => {
-        if (dataJson['success']) {
-          this.autocomplete_additional_industries[arrIndex] = dataJson['data'];
-        }
-      },
-      error => {
-        this.autocomplete_additional_industries[arrIndex] = [];
-        this.alertsService.show(error.message, AlertType.error);
-      }
-    );
   }
 }

@@ -223,7 +223,6 @@ p {
         box-shadow: 0 3px 10px rgba($black, .07);
         @include flex(column, center, flex-start);
         &__image {
-          margin-top: $profile-form-field-mt;
           width: 20%;
           max-width: 125px;
           img {
@@ -298,6 +297,13 @@ p {
             }
           }
         }
+      }
+    }
+  }
+  &.profile-basic {
+    .profile-form {
+      &__title {
+        margin-top: $profile-form-field-mt;
       }
     }
   }
