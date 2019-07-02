@@ -240,6 +240,11 @@ export class CreateProfileComponent implements OnInit {
     this.selectedPageIndex = index;
   }
 
+  goToMyProfilePage() {
+    this.router.navigate(['/my-profile']);
+  }
+
+
   /**
    * extractDate
    * @param date

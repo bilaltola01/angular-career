@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AlertsService, AlertType } from 'src/app/services/alerts.service';
+import { UserGeneralInfo } from 'src/app/models';
 
 @Component({
   selector: 'app-login',
@@ -55,6 +56,34 @@ export class LoginComponent implements OnInit {
     this.router.navigate(['/registration']);
   }
 
+  navigateToProfilePage(isProfileCreated: boolean) {
+    if (isProfileCreated) {
+      this.router.navigate(['/my-profile']);
+    } else {
+      this.router.navigate(['/create-profile']);
+    }
+  }
+
+  checkProfileCreation(userInfo: UserGeneralInfo) {
+    let isProfileCreated = false;
+    if (userInfo.applicant === 1 || userInfo.recruiter === 1) {
+      isProfileCreated = true;
+    }
+    this.navigateToProfilePage(isProfileCreated);
+  }
+
+  getGeneralInformation() {
+    this.userService.getGeneralInfo().subscribe(
+      dataJson => {
+        const userInfo = dataJson['data'];
+        this.checkProfileCreation(userInfo);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
   login() {
     if (this.loginForm.valid) {
       const user = {
@@ -64,10 +93,7 @@ export class LoginComponent implements OnInit {
       this.userService.login(user, this.isRememberMe).subscribe(
         data => {
           if (data['success']) {
-            console.log(data['message']);
-            this.router.navigate(['/create-profile']);
-          } else {
-            console.log(data['message']);
+           this.getGeneralInformation();
           }
         },
         error => {
