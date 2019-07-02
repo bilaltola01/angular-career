@@ -29,14 +29,12 @@ describe('LoginComponent', () => {
   });
 
   it('should switchRole to applicant', () => {
-    component.switchRole('applicant');
+    component.switchRole(0);
     expect(component.currentRole).toEqual(0);
-    expect(component.checkUserRole('applicant')).toBeTruthy();
   });
 
   it('should switchRole to recruiter', () => {
-    component.switchRole('recruiter');
-    expect(component.checkUserRole('recruiter')).toBeTruthy();
+    component.switchRole(1);
     expect(component.currentRole).toEqual(1);
   });
 });

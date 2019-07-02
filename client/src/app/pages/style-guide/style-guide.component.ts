@@ -3,7 +3,7 @@ import { UserService } from 'src/app/services/user.service';
 import { AlertsService, AlertType } from 'src/app/services/alerts.service';
 
 @Component({
-  selector: 'app-style-guide',
+  selector: 'style-guide',
   templateUrl: './style-guide.component.html',
   styleUrls: ['./style-guide.component.scss']
 })

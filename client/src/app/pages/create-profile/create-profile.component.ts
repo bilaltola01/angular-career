@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import {MatDatepicker} from '@angular/material/datepicker';
 import { AutoCompleteService } from 'src/app/services/auto-complete.service';
@@ -25,12 +25,13 @@ import {
   UserExternalResourcesItem,
   UserExternalResourcesItemData,
   ExternalResources,
-  ProfileStatuses
+  ProfileStatuses,
+  UserRoles
 } from 'src/app/models';
 import moment from 'moment';
 
 @Component({
-  selector: 'app-create-profile',
+  selector: 'create-profile',
   templateUrl: './create-profile.component.html',
   styleUrls: ['./create-profile.component.scss']
 })
@@ -169,9 +170,15 @@ export class CreateProfileComponent implements OnInit {
   externalResourcesList: UserExternalResourcesItem[];
   externalResourcesDataList: UserExternalResourcesItemData[];
 
-  constructor(private router: Router, private autoCompleteService: AutoCompleteService, private userService: UserService, private alertsService: AlertsService) { }
+  userRole: string;
+
+  constructor(private route: ActivatedRoute, private router: Router, private autoCompleteService: AutoCompleteService, private userService: UserService, private alertsService: AlertsService) { }
 
   ngOnInit() {
+    if (this.route.snapshot.queryParams.role) {
+      // this.userRole = this.route.snapshot.queryParams.role;
+      this.userRole = UserRoles[0];
+    }
     this.initBasicInfoForm();
     this.initEducationFormArray();
     this.initAboutMeForm();
@@ -240,6 +247,11 @@ export class CreateProfileComponent implements OnInit {
     this.selectedPageIndex = index;
   }
 
+  goToMyProfilePage() {
+    this.router.navigate(['/my-profile']);
+  }
+
+
   /**
    * extractDate
    * @param date
@@ -280,28 +292,28 @@ export class CreateProfileComponent implements OnInit {
       basicInfoEthnicity: new FormControl('', [Validators.required])
     });
 
-    this.basicInfoForm.controls.basicInfoCity.valueChanges.subscribe((city) => {
+    this.basicInfoForm.get('basicInfoCity').valueChanges.subscribe((city) => {
       city ? this.onCityValueChanges(city) : this.autocomplete_cities = [];
     });
-    this.basicInfoForm.controls.basicInfoState.valueChanges.subscribe((state) => {
+    this.basicInfoForm.get('basicInfoState').valueChanges.subscribe((state) => {
       state ? this.onStateValueChanges(state) : this.autocomplete_states = [];
     });
-    this.basicInfoForm.controls.basicInfoCountry.valueChanges.subscribe(
+    this.basicInfoForm.get('basicInfoCountry').valueChanges.subscribe(
       (country) => {
         this.onCountryValueChanges(country);
       }
     );
-    this.basicInfoForm.controls.basicInfoGender.valueChanges.subscribe(
+    this.basicInfoForm.get('basicInfoGender').valueChanges.subscribe(
       (gender) => {
         this.onGenderValueChanges(gender);
       }
     );
-    this.basicInfoForm.controls.basicInfoBirth.valueChanges.subscribe(
+    this.basicInfoForm.get('basicInfoBirth').valueChanges.subscribe(
       (date) => {
         this.generalInfoRequest.birthdate = date ? date : null;
       }
     );
-    this.basicInfoForm.controls.basicInfoEthnicity.valueChanges.subscribe(
+    this.basicInfoForm.get('basicInfoEthnicity').valueChanges.subscribe(
       (ethnicity) => {
         this.onEthnicityValueChanges(ethnicity);
       }
@@ -310,12 +322,12 @@ export class CreateProfileComponent implements OnInit {
 
   updateBasicInformationForm() {
     this.updateGeneralInfoRequest();
-    this.basicInfoForm.controls.basicInfoCity.setValue(this.generalInfoResponse.city);
-    this.basicInfoForm.controls.basicInfoState.setValue(this.generalInfoResponse.state);
-    this.basicInfoForm.controls.basicInfoCountry.setValue(this.generalInfoResponse.country);
-    this.basicInfoForm.controls.basicInfoGender.setValue(this.generalInfoResponse.gender);
-    this.basicInfoForm.controls.basicInfoBirth.setValue(this.generalInfoResponse.birthdate ? this.extractDate(this.generalInfoResponse.birthdate) : '');
-    this.basicInfoForm.controls.basicInfoEthnicity.setValue(this.generalInfoResponse.ethnicity);
+    this.basicInfoForm.get('basicInfoCity').setValue(this.generalInfoResponse.city);
+    this.basicInfoForm.get('basicInfoState').setValue(this.generalInfoResponse.state);
+    this.basicInfoForm.get('basicInfoCountry').setValue(this.generalInfoResponse.country);
+    this.basicInfoForm.get('basicInfoGender').setValue(this.generalInfoResponse.gender);
+    this.basicInfoForm.get('basicInfoBirth').setValue(this.generalInfoResponse.birthdate ? this.extractDate(this.generalInfoResponse.birthdate) : '');
+    this.basicInfoForm.get('basicInfoEthnicity').setValue(this.generalInfoResponse.ethnicity);
   }
   updateGeneralInfoRequest() {
     this.generalInfoRequest = {
@@ -339,9 +351,9 @@ export class CreateProfileComponent implements OnInit {
   onChangeBirthDate(date: any) {
     if (date.value) {
       const dateValue = new Date(date.value);
-      this.basicInfoForm.controls.basicInfoBirth.setValue(moment(dateValue).format('MM/DD/YYYY'));
+      this.basicInfoForm.get('basicInfoBirth').setValue(moment(dateValue).format('MM/DD/YYYY'));
     } else {
-      this.basicInfoForm.controls.basicInfoBirth.setValue('');
+      this.basicInfoForm.get('basicInfoBirth').setValue('');
     }
   }
   onEthnicityValueChanges(ethnicity: string) {
@@ -359,12 +371,12 @@ export class CreateProfileComponent implements OnInit {
   }
   onBlurCity() {
     if (this.temp_city) {
-      if (this.basicInfoForm.controls.basicInfoCity.value !== this.getCityNameFromAutoComplete(this.temp_city.city)) {
+      if (this.basicInfoForm.get('basicInfoCity').value !== this.getCityNameFromAutoComplete(this.temp_city.city)) {
         this.clearCity();
         this.temp_city = null;
       }
     } else {
-      if (this.basicInfoForm.controls.basicInfoCity.value !== this.generalInfoResponse.city) {
+      if (this.basicInfoForm.get('basicInfoCity').value !== this.generalInfoResponse.city) {
         this.clearCity();
       }
     }
@@ -372,9 +384,9 @@ export class CreateProfileComponent implements OnInit {
   onCheckCityValidation(): boolean {
     let valid = false;
     if (this.temp_city) {
-      valid = this.basicInfoForm.controls.basicInfoCity.value === this.getCityNameFromAutoComplete(this.temp_city.city);
+      valid = this.basicInfoForm.get('basicInfoCity').value === this.getCityNameFromAutoComplete(this.temp_city.city);
     } else {
-      valid = this.basicInfoForm.controls.basicInfoCity.value === this.generalInfoResponse.city;
+      valid = this.basicInfoForm.get('basicInfoCity').value === this.generalInfoResponse.city;
     }
     return valid;
   }
@@ -394,12 +406,12 @@ export class CreateProfileComponent implements OnInit {
   }
   onBlurState() {
     if (this.temp_state) {
-      if (this.basicInfoForm.controls.basicInfoState.value !== this.temp_state.state) {
+      if (this.basicInfoForm.get('basicInfoState').value !== this.temp_state.state) {
         this.clearState();
         this.temp_state = null;
       }
     } else {
-      if (this.basicInfoForm.controls.basicInfoState.value !== this.generalInfoResponse.state) {
+      if (this.basicInfoForm.get('basicInfoState').value !== this.generalInfoResponse.state) {
         this.clearState();
       }
     }
@@ -407,9 +419,9 @@ export class CreateProfileComponent implements OnInit {
   onCheckStateValidation(): boolean {
     let valid = false;
     if (this.temp_state) {
-      valid = this.basicInfoForm.controls.basicInfoState.value === this.temp_state.state;
+      valid = this.basicInfoForm.get('basicInfoState').value === this.temp_state.state;
     } else {
-      valid = this.basicInfoForm.controls.basicInfoState.value === this.generalInfoResponse.state;
+      valid = this.basicInfoForm.get('basicInfoState').value === this.generalInfoResponse.state;
     }
     return valid;
   }
@@ -466,6 +478,9 @@ export class CreateProfileComponent implements OnInit {
   }
   updateGeneralInfo() {
     if ((this.selectedPageIndex === 1 && this.basicInfoForm.valid && this.onCheckCityValidation() && this.onCheckStateValidation()) || (this.selectedPageIndex === 2 && this.aboutMeForm.valid) || this.selectedPageIndex === 9) {
+      if (this.userRole) {
+        this.generalInfoRequest[this.userRole] = 1;
+      }
       this.userService.updateGeneralInfo(this.generalInfoRequest).subscribe(
         dataJson => {
           this.generalInfoResponse = dataJson['data'];
@@ -501,8 +516,8 @@ export class CreateProfileComponent implements OnInit {
     });
   }
   updateAboutMeForm() {
-    this.aboutMeForm.controls.aboutMe.setValue(this.generalInfoResponse.user_intro ? this.generalInfoResponse.user_intro : '');
-    this.aboutMeForm.controls.aboutMe.valueChanges.subscribe(
+    this.aboutMeForm.get('aboutMe').setValue(this.generalInfoResponse.user_intro ? this.generalInfoResponse.user_intro : '');
+    this.aboutMeForm.get('aboutMe').valueChanges.subscribe(
       (aboutMe) => {
         this.onAboutMeValueChanges(aboutMe);
       }
@@ -585,7 +600,7 @@ export class CreateProfileComponent implements OnInit {
 
     const arrIndex = this.educationDataList.length - 1;
 
-    educationForm.controls.university.valueChanges.subscribe(
+    educationForm.get('university').valueChanges.subscribe(
       (university) => {
         if (university) {
           this.onUniversityValueChanges(university, arrIndex);
@@ -595,32 +610,32 @@ export class CreateProfileComponent implements OnInit {
         }
       }
     );
-    educationForm.controls.degree.valueChanges.subscribe(
+    educationForm.get('degree').valueChanges.subscribe(
       (degree) => {
         this.onDegreeValueChanges(degree, arrIndex);
       }
     );
-    educationForm.controls.start_date.valueChanges.subscribe(
+    educationForm.get('start_date').valueChanges.subscribe(
       (start_date) => {
         this.educationDataList[arrIndex].start_date = start_date ? moment(start_date, 'YYYY') : null ;
       }
     );
-    educationForm.controls.graduation_date.valueChanges.subscribe(
+    educationForm.get('graduation_date').valueChanges.subscribe(
       (graduation_date) => {
         this.educationDataList[arrIndex].graduation_date = graduation_date ? moment(graduation_date, 'YYYY') : null ;
       }
     );
-    educationForm.controls.major.valueChanges.subscribe(
+    educationForm.get('major').valueChanges.subscribe(
       (major) => {
         major ? this.onMajorValueChanges(major, arrIndex) : this.autocomplete_majors[arrIndex] = [];
       }
     );
-    educationForm.controls.focus_major.valueChanges.subscribe(
+    educationForm.get('focus_major').valueChanges.subscribe(
       (focus_major) => {
         focus_major ? this.onMajorValueChanges(focus_major, arrIndex, true) : this.autocomplete_focus_majors[arrIndex] = [];
       }
     );
-    educationForm.controls.description.valueChanges.subscribe(
+    educationForm.get('description').valueChanges.subscribe(
       (description) => {
         this.onDescriptionValueChange(arrIndex, description);
       }
@@ -654,12 +669,12 @@ export class CreateProfileComponent implements OnInit {
   }
   onBlurUniversity(index: number) {
     if (this.temp_university[index]) {
-      if (this.educationFormArray.controls[index]['controls'].university.value !== this.temp_university[index].school_name) {
-        this.onSelectSpecificUniversity(index, this.educationFormArray.controls[index]['controls'].university.value);
+      if (this.educationFormArray.at(index).get('university').value !== this.temp_university[index].school_name) {
+        this.onSelectSpecificUniversity(index, this.educationFormArray.at(index).get('university').value);
         this.temp_university[index] = null;
       }
     } else {
-      this.onSelectSpecificUniversity(index, this.educationFormArray.controls[index]['controls'].university.value);
+      this.onSelectSpecificUniversity(index, this.educationFormArray.at(index).get('university').value);
     }
   }
 
@@ -669,12 +684,12 @@ export class CreateProfileComponent implements OnInit {
   }
   onBlurMajor(index: number) {
     if (this.temp_major[index]) {
-      if (this.educationFormArray.controls[index]['controls'].major.value !== this.temp_major[index].major_name) {
+      if (this.educationFormArray.at(index).get('major').value !== this.temp_major[index].major_name) {
         this.temp_major[index] = null;
         this.clearMajor(index);
       }
     } else {
-      if (!this.educationList[index] || (this.educationList[index] && this.educationFormArray.controls[index]['controls'].major.value !== this.educationList[index].major_name)) {
+      if (!this.educationList[index] || (this.educationList[index] && this.educationFormArray.at(index).get('major').value !== this.educationList[index].major_name)) {
         this.clearMajor(index);
       }
     }
@@ -689,20 +704,20 @@ export class CreateProfileComponent implements OnInit {
   checkMajorValidation(arrIndex: number, isFocusMajor: boolean): boolean {
     if (isFocusMajor) {
       if (this.temp_focus_major[arrIndex]) {
-        return (this.educationFormArray.controls[arrIndex]['controls'].focus_major.value === this.temp_focus_major[arrIndex].major_name) ? true : false;
+        return (this.educationFormArray.at(arrIndex).get('focus_major').value === this.temp_focus_major[arrIndex].major_name) ? true : false;
       } else {
-        if (this.educationFormArray.controls[arrIndex]['controls'].focus_major.value) {
-          return (this.educationList[arrIndex] && this.educationFormArray.controls[arrIndex]['controls'].focus_major.value === this.educationList[arrIndex].focus_major_name) ? true : false;
+        if (this.educationFormArray.at(arrIndex).get('focus_major').value) {
+          return (this.educationList[arrIndex] && this.educationFormArray.at(arrIndex).get('focus_major').value === this.educationList[arrIndex].focus_major_name) ? true : false;
         } else {
           return true;
         }
       }
     } else {
       if (this.temp_major[arrIndex]) {
-        return (this.educationFormArray.controls[arrIndex]['controls'].major.value === this.temp_major[arrIndex].major_name) ? true : false;
+        return (this.educationFormArray.at(arrIndex).get('major').value === this.temp_major[arrIndex].major_name) ? true : false;
       } else {
-        if (this.educationFormArray.controls[arrIndex]['controls'].major.value) {
-          return (this.educationList[arrIndex] && this.educationFormArray.controls[arrIndex]['controls'].major.value === this.educationList[arrIndex].major_name) ? true : false;
+        if (this.educationFormArray.at(arrIndex).get('major').value) {
+          return (this.educationList[arrIndex] && this.educationFormArray.at(arrIndex).get('major').value === this.educationList[arrIndex].major_name) ? true : false;
         } else {
           return true;
         }
@@ -728,12 +743,12 @@ export class CreateProfileComponent implements OnInit {
   }
   onBlurFocusMajor(index: number) {
     if (this.temp_focus_major[index]) {
-      if (this.educationFormArray.controls[index]['controls'].focus_major.value !== this.temp_focus_major[index].major_name) {
+      if (this.educationFormArray.at(index).get('focus_major').value !== this.temp_focus_major[index].major_name) {
         this.temp_focus_major[index] = null;
         this.clearFocusMajor(index);
       }
     } else {
-      if (!this.educationList[index] || (this.educationList[index] && this.educationFormArray.controls[index]['controls'].focus_major.value !== this.educationList[index].focus_major_name)) {
+      if (!this.educationList[index] || (this.educationList[index] && this.educationFormArray.at(index).get('focus_major').value !== this.educationList[index].focus_major_name)) {
         this.clearFocusMajor(index);
       }
     }
@@ -744,10 +759,10 @@ export class CreateProfileComponent implements OnInit {
   onEducationYearSelect(date: any, index: number, isStartDate: boolean = true, datePicker: MatDatepicker<any>) {
     const dateValue = new Date(date);
     datePicker.close();
-    this.educationFormArray.controls[index]['controls'][isStartDate ? 'start_date' : 'graduation_date'].setValue(moment(dateValue).format('YYYY'));
+    this.educationFormArray.at(index).get(isStartDate ? 'start_date' : 'graduation_date').setValue(moment(dateValue).format('YYYY'));
   }
   isExistStartDate(index: number): boolean {
-    if (this.educationFormArray.controls[index]['controls']['start_date'].value) {
+    if (this.educationFormArray.at(index).get('start_date').value) {
       return true;
     } else {
       return false;
@@ -942,7 +957,7 @@ export class CreateProfileComponent implements OnInit {
       additional_industries: new FormControl('')
     });
 
-    workExperienceForm.controls.company_name.valueChanges.subscribe(
+    workExperienceForm.get('company_name').valueChanges.subscribe(
       (company_name) => {
         if (company_name) {
           this.onCompanyValueChanges(company_name, arrIndex);
@@ -952,33 +967,33 @@ export class CreateProfileComponent implements OnInit {
         }
       }
     );
-    workExperienceForm.controls.start_date.valueChanges.subscribe(
+    workExperienceForm.get('start_date').valueChanges.subscribe(
       (start_date) => {
         this.experienceDataList[arrIndex].start_date = start_date ? moment(start_date, 'MM/YYYY') : null ;
       }
     );
-    workExperienceForm.controls.end_date.valueChanges.subscribe(
+    workExperienceForm.get('end_date').valueChanges.subscribe(
       (end_date) => {
         this.experienceDataList[arrIndex].end_date = end_date ? moment(end_date, 'MM/YYYY') : null ;
       }
     );
-    workExperienceForm.controls.job.valueChanges.subscribe(
+    workExperienceForm.get('job').valueChanges.subscribe(
       (position) => {
         this.onPositionValueChange(arrIndex, position);
       }
     );
-    workExperienceForm.controls.description.valueChanges.subscribe(
+    workExperienceForm.get('description').valueChanges.subscribe(
       (description) => {
         this.onExpDescValueChange(arrIndex, description);
       }
     );
 
-    workExperienceForm.controls.skills_trained.valueChanges.subscribe(
+    workExperienceForm.get('skills_trained').valueChanges.subscribe(
       (skill) => {
         skill ? this.onSkillTrainedValueChanges(skill, arrIndex) : this.autocomplete_skills_trained[arrIndex] = [];
       }
     );
-    workExperienceForm.controls.additional_industries.valueChanges.subscribe(
+    workExperienceForm.get('additional_industries').valueChanges.subscribe(
       (industry) => {
         industry ? this.onAdditionalIndustryValueChanges(industry, arrIndex) : this.autocomplete_additional_industries[arrIndex] = [];
       }
@@ -1007,12 +1022,12 @@ export class CreateProfileComponent implements OnInit {
   }
   onBlurCompany(index: number) {
     if (this.temp_company[index]) {
-      if (this.workExperienceFormArray.controls[index]['controls'].company_name.value !== this.temp_company[index].company_name) {
-        this.onSelectSpecificCompany(index, this.workExperienceFormArray.controls[index]['controls'].company_name.value);
+      if (this.workExperienceFormArray.at(index).get('company_name').value !== this.temp_company[index].company_name) {
+        this.onSelectSpecificCompany(index, this.workExperienceFormArray.at(index).get('company_name').value);
         this.temp_company[index] = null;
       }
     } else {
-      this.onSelectSpecificCompany(index, this.workExperienceFormArray.controls[index]['controls'].company.value);
+      this.onSelectSpecificCompany(index, this.workExperienceFormArray.at(index).get('company').value);
     }
   }
   onExperienceYearSelect(date: any, index: number, isStartDate: boolean = true) {
@@ -1023,11 +1038,11 @@ export class CreateProfileComponent implements OnInit {
   onExperienceMonthSelect(date: any, index: number, isStartDate: boolean = true, datePicker: MatDatepicker<any>) {
     const dateValue = new Date(date);
     datePicker.close();
-    this.workExperienceFormArray.controls[index]['controls'][isStartDate ? 'start_date' : 'end_date'].setValue(moment(dateValue).format('MM/YYYY'));
+    this.workExperienceFormArray.at(index).get(isStartDate ? 'start_date' : 'end_date').setValue(moment(dateValue).format('MM/YYYY'));
     // this.experienceDataList[index][isStartDate ? 'start_date' : 'end_date'] = dateValue;
   }
   isExperienceStartDate(index: number): boolean {
-    if (this.workExperienceFormArray.controls[index]['controls']['start_date'].value) {
+    if (this.workExperienceFormArray.at(index).get('start_date').value) {
       return true;
     } else {
       return false;
@@ -1055,7 +1070,7 @@ export class CreateProfileComponent implements OnInit {
           this.experienceDataList[index].skill_ids_trained = [skill.skill_id];
         }
       }
-      this.workExperienceFormArray.controls[index]['controls']['skills_trained'].setValue('');
+      this.workExperienceFormArray.at(index).get('skills_trained').setValue('');
     }
   }
   onRemoveSkillsTrained(formArrIndex: number, arrIndex: number, skill: Skill) {
@@ -1099,7 +1114,7 @@ export class CreateProfileComponent implements OnInit {
           this.experienceDataList[index].add_industry_ids = [industry.industry_id];
         }
       }
-      this.workExperienceFormArray.controls[index]['controls']['additional_industries'].setValue('');
+      this.workExperienceFormArray.at(index).get('additional_industries').setValue('');
     }
   }
   onRemoveAdditionalIndustry(formArrIndex: number, arrIndex: number, industry: Industry) {
@@ -1253,13 +1268,13 @@ export class CreateProfileComponent implements OnInit {
       interests: new FormControl('')
     });
 
-    this.skillsAndInterestsForm.controls.skills.valueChanges.subscribe(
+    this.skillsAndInterestsForm.get('skills').valueChanges.subscribe(
       (skill) => {
         skill ? this.onSkillValueChanges(skill) : this.autocomplete_skills = [];
       }
     );
 
-    this.skillsAndInterestsForm.controls.interests.valueChanges.subscribe(
+    this.skillsAndInterestsForm.get('interests').valueChanges.subscribe(
       (interest) => {
         interest ? this.onInterestValueChanges(interest) : this.autocomplete_interests = [];
       }
@@ -1310,7 +1325,7 @@ export class CreateProfileComponent implements OnInit {
     if (this.userSkillsList.filter(value => value.skill_id === skillItemData.skill_id).length === 0) {
       this.addUserSkillsData(skillItemData);
     }
-    this.skillsAndInterestsForm.controls.skills.setValue('');
+    this.skillsAndInterestsForm.get('skills').setValue('');
     this.prevent_skills_autocomplete = true;
   }
   onLevelChanged(level: number, index: number) {
@@ -1374,7 +1389,7 @@ export class CreateProfileComponent implements OnInit {
     if (this.userInterestsList.filter(value => value.interest === interestItem.interest).length === 0) {
       this.addUserInteretsData(interestItemData);
     }
-    this.skillsAndInterestsForm.controls.interests.setValue('');
+    this.skillsAndInterestsForm.get('interests').setValue('');
     this.prevent_interets_autocomplete = true;
   }
   getUserInterestsList() {
@@ -1456,22 +1471,22 @@ export class CreateProfileComponent implements OnInit {
       description: new FormControl(project ? project.description : ''),
       href: new FormControl(project ? project.href : '')
     });
-    projectFormGroup.controls.project_name.valueChanges.subscribe(
+    projectFormGroup.get('project_name').valueChanges.subscribe(
       (project_name) => {
         this.onProjectNameValueChange(arrIndex, project_name);
       }
     );
-    projectFormGroup.controls.description.valueChanges.subscribe(
+    projectFormGroup.get('description').valueChanges.subscribe(
       (description) => {
         this.onProjectDescriptionValueChange(arrIndex, description);
       }
     );
-    projectFormGroup.controls.date_finished.valueChanges.subscribe(
+    projectFormGroup.get('date_finished').valueChanges.subscribe(
       (date_finished) => {
         this.onProjectDateFinishedValueChange(arrIndex, date_finished);
       }
     );
-    projectFormGroup.controls.href.valueChanges.subscribe(
+    projectFormGroup.get('href').valueChanges.subscribe(
       (href) => {
         this.onProjectHrefValueChange(arrIndex, href);
       }
@@ -1502,9 +1517,9 @@ export class CreateProfileComponent implements OnInit {
   onChangeProjectFinishedDate(event: any, arrIndex: number) {
     if (event.value) {
       const dateValue = new Date(event.value);
-      this.projectsFormArray.controls[arrIndex]['controls']['date_finished'].setValue(moment(dateValue).format('MM/DD/YYYY'));
+      this.projectsFormArray.at(arrIndex).get('date_finished').setValue(moment(dateValue).format('MM/DD/YYYY'));
     } else {
-      this.projectsFormArray.controls[arrIndex]['controls']['date_finished'].setValue('');
+      this.projectsFormArray.at(arrIndex).get('date_finished').setValue('');
     }
   }
   getUserProjectsList() {
@@ -1615,22 +1630,22 @@ export class CreateProfileComponent implements OnInit {
       description: new FormControl(publication ? publication.description : ''),
       href: new FormControl(publication ? publication.href : '')
     });
-    publicationFormGroup.controls.publication_name.valueChanges.subscribe(
+    publicationFormGroup.get('publication_name').valueChanges.subscribe(
       (publication_title) => {
         this.onPublicationNameValueChange(arrIndex, publication_title);
       }
     );
-    publicationFormGroup.controls.description.valueChanges.subscribe(
+    publicationFormGroup.get('description').valueChanges.subscribe(
       (description) => {
         this.onPublicationDescriptionValueChange(arrIndex, description);
       }
     );
-    publicationFormGroup.controls.date_published.valueChanges.subscribe(
+    publicationFormGroup.get('date_published').valueChanges.subscribe(
       (date_published) => {
         this.onPublicationDatePublishedValueChange(arrIndex, date_published);
       }
     );
-    publicationFormGroup.controls.href.valueChanges.subscribe(
+    publicationFormGroup.get('href').valueChanges.subscribe(
       (href) => {
         this.onPublicationHrefValueChange(arrIndex, href);
       }
@@ -1664,9 +1679,9 @@ export class CreateProfileComponent implements OnInit {
   onChangeDatePublished(event: any, arrIndex: number) {
     if (event.value) {
       const dateValue = new Date(event.value);
-      this.publicationsFormArray.controls[arrIndex]['controls']['date_published'].setValue(moment(dateValue).format('MM/DD/YYYY'));
+      this.publicationsFormArray.at(arrIndex).get('date_published').setValue(moment(dateValue).format('MM/DD/YYYY'));
     } else {
-      this.publicationsFormArray.controls[arrIndex]['controls']['date_published'].setValue('');
+      this.publicationsFormArray.at(arrIndex).get('date_published').setValue('');
     }
   }
   getUserPublicationsList() {
@@ -1743,7 +1758,7 @@ export class CreateProfileComponent implements OnInit {
 
     this.externalResources.forEach((resource, index) => {
       this.externalResourcesForm.addControl(resource, new FormControl(''));
-      this.externalResourcesForm.controls[resource].valueChanges.subscribe(
+      this.externalResourcesForm.get(resource).valueChanges.subscribe(
         (link) => {
           this.onExternalResourceValueChange(resource, index, link);
         }
@@ -1761,7 +1776,7 @@ export class CreateProfileComponent implements OnInit {
   }
   updateExternalResourceFormGroup() {
     this.externalResourcesList.forEach((resource) => {
-      this.externalResourcesForm.controls[resource.description].setValue(resource.link);
+      this.externalResourcesForm.get(resource.description).setValue(resource.link);
     });
   }
 

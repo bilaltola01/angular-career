@@ -3,18 +3,14 @@ import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AlertsService, AlertType } from 'src/app/services/alerts.service';
+import { UserGeneralInfo, UserRoles } from 'src/app/models';
 
 @Component({
-  selector: 'app-login',
+  selector: 'login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-
-  userRoles: object = {
-    'applicant': 0,
-    'recruiter': 1
-  };
 
   loginForm: FormGroup;
   currentRole: number;
@@ -43,16 +39,40 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  switchRole(role: string) {
-    this.currentRole = this.userRoles[role];
-  }
-
-  checkUserRole(role: string) {
-    return this.currentRole === this.userRoles[role];
+  switchRole(role: number) {
+    this.currentRole = role;
   }
 
   navigateToSignUp() {
     this.router.navigate(['/registration']);
+  }
+
+  navigateToProfilePage(isProfileCreated: boolean) {
+    if (isProfileCreated) {
+      this.router.navigate(['/my-profile']);
+    } else {
+      this.router.navigate(['/create-profile'], {queryParams: {role: UserRoles[this.currentRole]}});
+    }
+  }
+
+  checkProfileCreation(userInfo: UserGeneralInfo) {
+    let isProfileCreated = false;
+    if (userInfo.applicant === 1 || userInfo.recruiter === 1) {
+      isProfileCreated = true;
+    }
+    this.navigateToProfilePage(isProfileCreated);
+  }
+
+  getGeneralInformation() {
+    this.userService.getGeneralInfo().subscribe(
+      dataJson => {
+        const userInfo = dataJson['data'];
+        this.checkProfileCreation(userInfo);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
   }
 
   login() {
@@ -64,10 +84,7 @@ export class LoginComponent implements OnInit {
       this.userService.login(user, this.isRememberMe).subscribe(
         data => {
           if (data['success']) {
-            console.log(data['message']);
-            this.router.navigate(['/create-profile']);
-          } else {
-            console.log(data['message']);
+           this.getGeneralInformation();
           }
         },
         error => {

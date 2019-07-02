@@ -332,3 +332,8 @@ export const ProfileStatuses = [
   'Passively Looking For Job',
   'Actively Looking For Job'
 ];
+
+export const UserRoles = [
+  'applicant',
+  'recruiter'
+];

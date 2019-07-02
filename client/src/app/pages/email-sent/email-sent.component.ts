@@ -5,7 +5,7 @@ import { UserService } from 'src/app/services/user.service';
 import { AlertsService, AlertType } from 'src/app/services/alerts.service';
 
 @Component({
-  selector: 'app-email-sent',
+  selector: 'email-sent',
   templateUrl: './email-sent.component.html',
   styleUrls: ['./email-sent.component.scss']
 })

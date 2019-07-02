@@ -5,7 +5,6 @@ import { AlertsService, AlertType } from 'src/app/services/alerts.service';
 import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
-  // tslint:disable-next-line: component-selector
   selector: 'alert-bar',
   templateUrl: './alert-bar.component.html',
   styleUrls: ['./alert-bar.component.scss'],
