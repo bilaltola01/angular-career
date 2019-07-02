@@ -3,7 +3,7 @@ import { Router, UrlTree, UrlSegmentGroup, UrlSegment } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
-  selector: 'app-verification',
+  selector: 'verification',
   templateUrl: './verification.component.html',
   styleUrls: ['./verification.component.scss']
 })

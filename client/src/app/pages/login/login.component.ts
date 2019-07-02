@@ -6,7 +6,7 @@ import { AlertsService, AlertType } from 'src/app/services/alerts.service';
 import { UserGeneralInfo, UserRoles } from 'src/app/models';
 
 @Component({
-  selector: 'app-login',
+  selector: 'login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })

@@ -1,8 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
-  // TODO: Fix lint rules
-  // tslint:disable-next-line: component-selector
   selector: 'round-checkbox',
   templateUrl: './round-checkbox.component.html',
   styleUrls: ['./round-checkbox.component.scss']

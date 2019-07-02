@@ -31,7 +31,7 @@ import {
 import moment from 'moment';
 
 @Component({
-  selector: 'app-create-profile',
+  selector: 'create-profile',
   templateUrl: './create-profile.component.html',
   styleUrls: ['./create-profile.component.scss']
 })
