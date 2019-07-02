@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AlertsService, AlertType } from 'src/app/services/alerts.service';
-import { UserGeneralInfo } from 'src/app/models';
+import { UserGeneralInfo, UserRoles } from 'src/app/models';
 
 @Component({
   selector: 'app-login',
@@ -11,11 +11,6 @@ import { UserGeneralInfo } from 'src/app/models';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-
-  userRoles: object = {
-    'applicant': 0,
-    'recruiter': 1
-  };
 
   loginForm: FormGroup;
   currentRole: number;
@@ -44,12 +39,8 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  switchRole(role: string) {
-    this.currentRole = this.userRoles[role];
-  }
-
-  checkUserRole(role: string) {
-    return this.currentRole === this.userRoles[role];
+  switchRole(role: number) {
+    this.currentRole = role;
   }
 
   navigateToSignUp() {
@@ -60,7 +51,7 @@ export class LoginComponent implements OnInit {
     if (isProfileCreated) {
       this.router.navigate(['/my-profile']);
     } else {
-      this.router.navigate(['/create-profile']);
+      this.router.navigate(['/create-profile'], {queryParams: {role: UserRoles[this.currentRole]}});
     }
   }
 

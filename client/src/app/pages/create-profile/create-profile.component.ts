@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import {MatDatepicker} from '@angular/material/datepicker';
 import { AutoCompleteService } from 'src/app/services/auto-complete.service';
@@ -25,7 +25,8 @@ import {
   UserExternalResourcesItem,
   UserExternalResourcesItemData,
   ExternalResources,
-  ProfileStatuses
+  ProfileStatuses,
+  UserRoles
 } from 'src/app/models';
 import moment from 'moment';
 
@@ -169,9 +170,15 @@ export class CreateProfileComponent implements OnInit {
   externalResourcesList: UserExternalResourcesItem[];
   externalResourcesDataList: UserExternalResourcesItemData[];
 
-  constructor(private router: Router, private autoCompleteService: AutoCompleteService, private userService: UserService, private alertsService: AlertsService) { }
+  userRole: string;
+
+  constructor(private route: ActivatedRoute, private router: Router, private autoCompleteService: AutoCompleteService, private userService: UserService, private alertsService: AlertsService) { }
 
   ngOnInit() {
+    if (this.route.snapshot.queryParams.role) {
+      // this.userRole = this.route.snapshot.queryParams.role;
+      this.userRole = UserRoles[0];
+    }
     this.initBasicInfoForm();
     this.initEducationFormArray();
     this.initAboutMeForm();
@@ -471,6 +478,9 @@ export class CreateProfileComponent implements OnInit {
   }
   updateGeneralInfo() {
     if ((this.selectedPageIndex === 1 && this.basicInfoForm.valid && this.onCheckCityValidation() && this.onCheckStateValidation()) || (this.selectedPageIndex === 2 && this.aboutMeForm.valid) || this.selectedPageIndex === 9) {
+      if (this.userRole) {
+        this.generalInfoRequest[this.userRole] = 1;
+      }
       this.userService.updateGeneralInfo(this.generalInfoRequest).subscribe(
         dataJson => {
           this.generalInfoResponse = dataJson['data'];

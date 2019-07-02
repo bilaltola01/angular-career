@@ -13,8 +13,8 @@
   </div>
   <div class="container__right" [formGroup]="loginForm">
     <div class="row__user_roles">
-      <span class="user_role" [class.active]="checkUserRole('applicant')" (click)="switchRole('applicant')">I’M AN APPLICANT<div class="active-border"></div></span>
-      <span class="user_role" [class.active]="checkUserRole('recruiter')" (click)="switchRole('recruiter')">I’M A RECRUITER<div class="active-border"></div></span>
+      <span class="user_role" [class.active]="currentRole === 0" (click)="switchRole(0)">I’M AN APPLICANT<div class="active-border"></div></span>
+      <span class="user_role" [class.active]="currentRole === 1" (click)="switchRole(1)">I’M A RECRUITER<div class="active-border"></div></span>
     </div>
     <div class="row__form first">
       <mat-form-field appearance="fill">
