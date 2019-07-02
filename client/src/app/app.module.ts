@@ -20,6 +20,7 @@ import { AlertBarComponent } from './components/alert-bar/alert-bar.component';
 import { EmailSentComponent } from './pages/email-sent/email-sent.component';
 import { CreateProfileComponent } from './pages/create-profile/create-profile.component';
 import { UserProfileComponent } from './pages/user-profile/user-profile.component';
+import { ProfileHeaderComponent } from './components/profile-header/profile-header.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { UserProfileComponent } from './pages/user-profile/user-profile.componen
     EmailSentComponent,
     CreateProfileComponent,
     UserProfileComponent,
+    ProfileHeaderComponent,
   ],
   imports: [
     BrowserModule,
