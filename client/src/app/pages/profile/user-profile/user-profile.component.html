@@ -1,3 +1,12 @@
-<p>
+<div *ngIf="!isProfileLoading" class="profile-header">
+  <profile-header [userGeneralInfo]="userGeneralInfo"></profile-header>
+</div>
+
+<div *ngIf="!isProfileLoading" class="profile-content">
   user-profile works!
-</p>
+</div>
+
+<div *ngIf="isProfileLoading">
+  <mat-spinner></mat-spinner>
+  <h4>Loading...</h4>
+</div>

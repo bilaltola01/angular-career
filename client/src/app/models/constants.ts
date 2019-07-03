@@ -338,3 +338,39 @@ export const UserRoles = [
   'applicant',
   'recruiter'
 ];
+
+export const NavMenus = {
+  profile: [
+    {
+      title: 'My Profile',
+      items: [
+        'About Me',
+        'Education',
+        'Work Experience',
+        'Publications',
+        'Projects',
+        'Skills',
+        'Interets',
+        'Activities',
+        'Recommendations',
+        'External Resources'
+      ]
+    },
+    {
+      title: 'Contacts',
+      items: []
+    },
+    {
+      title: 'Application Template',
+      items: []
+    },
+    {
+      title: 'Managing Positions',
+      items: []
+    },
+    {
+      title: 'Permissions',
+      items: []
+    }
+  ]
+};
