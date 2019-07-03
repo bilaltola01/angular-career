@@ -2,11 +2,11 @@ import { Component, OnInit, Input } from '@angular/core';
 import { UserGeneralInfo } from 'src/app/models';
 
 @Component({
-  selector: 'profile-header',
-  templateUrl: './profile-header.component.html',
-  styleUrls: ['./profile-header.component.scss']
+  selector: 'header-section',
+  templateUrl: './header-section.component.html',
+  styleUrls: ['./header-section.component.scss']
 })
-export class ProfileHeaderComponent implements OnInit {
+export class HeaderSectionComponent implements OnInit {
 
   @Input() userGeneralInfo: UserGeneralInfo;
 

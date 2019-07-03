@@ -1,0 +1,21 @@
+@import './../../../styles/variables.scss';
+
+:host {
+  grid-area: left;
+  margin-left: 40px;
+  padding: 15px;
+  height: fit-content;
+  background: white;
+  border-radius: 5px;
+  h3 {
+    margin-top: 0;
+    font-family: 'Poppins', sans-serif;
+  }
+  ol {
+    color: gray;
+    font-size: 0.8em;
+    li {
+      margin-bottom: 10px;
+    }
+  }
+}

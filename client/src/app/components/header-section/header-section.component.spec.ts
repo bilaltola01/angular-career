@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProfileSidemenuComponent } from './profile-sidemenu.component';
+import { HeaderSectionComponent } from './header-section.component';
 
-describe('ProfileSidemenuComponent', () => {
-  let component: ProfileSidemenuComponent;
-  let fixture: ComponentFixture<ProfileSidemenuComponent>;
+describe('HeaderSectionComponent', () => {
+  let component: HeaderSectionComponent;
+  let fixture: ComponentFixture<HeaderSectionComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProfileSidemenuComponent ]
+      declarations: [ HeaderSectionComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProfileSidemenuComponent);
+    fixture = TestBed.createComponent(HeaderSectionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

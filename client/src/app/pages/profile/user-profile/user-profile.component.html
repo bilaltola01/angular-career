@@ -1,10 +1,14 @@
-<div *ngIf="!isProfileLoading" class="profile-header">
-  <profile-header [userGeneralInfo]="userGeneralInfo"></profile-header>
-</div>
+<ng-container *ngIf="!isProfileLoading" class="profile-header">
+  <header-section [userGeneralInfo]="userGeneralInfo"></header-section>
+</ng-container>
 
-<div *ngIf="!isProfileLoading" class="profile-content">
-  user-profile works!
-</div>
+<ng-container *ngIf="!isProfileLoading">
+  <legend>
+    <h3 class="section-title">About</h3>
+  </legend>
+  <nav-section></nav-section>
+  <main-section></main-section> 
+</ng-container>
 
 <div *ngIf="isProfileLoading">
   <mat-spinner></mat-spinner>

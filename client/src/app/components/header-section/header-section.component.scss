@@ -1,0 +1,108 @@
+@import './../../../styles/variables.scss';
+:host {
+  grid-area: hero;
+  background-color: white;
+  box-shadow: 0px 5px 15px 0px rgba(0,0,0,0.125);
+  .back-row {
+    // width: 100%;
+    height: 60px;
+    padding-left: 40px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid map-get($md-cfaccent, 50);
+  }
+  button.back { // TODO: Make more like the designs
+    width: 80px;
+    height: 30px;
+    background-color: rgba(map-get($md-cfaccent, 500), 0.05);
+    border-color: rgba(map-get($md-cfaccent, 500), 0.05);
+    color: rgba(map-get($md-cfaccent, 500), 0.84);
+    padding: 3px 13px;
+    margin-right: 5px;
+    border-radius: 500px;
+    cursor: pointer;
+    &:focus {
+      outline:0;
+    }
+  }
+  .company-row {
+    display: inline-flex;
+    padding: 20px 40px;
+    border-bottom: 1px solid map-get($md-cfaccent, 50);
+    .company-logo {
+      width: 125px;
+      height: 125px;
+      margin-right: 15px;
+    }
+    .company-undertitle {
+      display: inline-flex;
+      width: 100%;
+    }
+  }
+  .tabs-row {
+    height: 60px;
+    width: 500px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    h3 {
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      text-transform: uppercase;
+      color: map-get($md-cfaccent, 300);
+      display: inline;
+      &:hover {
+        color: map-get($md-cfprimary, 500);
+      }
+      &.active {
+        color: map-get($md-cfprimary, 500);
+      }
+    }
+  }
+}
+
+.icon-title {
+  display: inline-grid;
+  grid-template:
+  "image title" 28px
+  "image info" 28px
+  / 56px auto
+  ;
+  grid-gap: 0 10px;
+  width: 240px;
+  img {
+    grid-area: image;
+    width: 56px;
+  }
+  label {
+    grid-area: title;
+    font-size: 14px;
+    color: rgba(map-get($md-cfaccent, 500), .44);
+    line-height: 28px;
+  }
+  p {
+    grid-area: info;
+    margin: 0;
+  }
+  a {
+    grid-area: info;
+    text-decoration: none;
+    color: #263f5d;
+  }
+}
+
+h1 {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  margin-bottom: 5px;
+}
+
+small {
+  display: block;
+  min-width: 240px;
+  margin-bottom: 15px;
+  img {
+    width: 10px;
+  }
+}
+
