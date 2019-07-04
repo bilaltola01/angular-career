@@ -8,10 +8,16 @@ import { Component, OnInit, Input } from '@angular/core';
 export class NavSectionComponent implements OnInit {
 
   @Input() navMenu: any[];
+  navIndex: number;
 
   constructor() { }
 
   ngOnInit() {
+    this.navIndex = 0;
+  }
+
+  onSelectNavMenu(navIndex: number) {
+    this.navIndex = navIndex;
   }
 
 }

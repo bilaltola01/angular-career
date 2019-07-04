@@ -1,9 +1,10 @@
 
 <ng-container *ngIf="navMenu && navMenu.length > 0">
-  <ng-container *ngFor="let menu of navMenu">
-    <h3>{{menu.title}}</h3>
+  <nav *ngFor="let menu of navMenu; let i = index;" [class.active]="i === navIndex">
+    <h3 (click)="onSelectNavMenu(i)">{{menu.title}}</h3>
+    <mat-icon>keyboard_arrow_right</mat-icon>
     <ol *ngIf="menu.items.length > 0">
       <li *ngFor="let item of menu.items">{{item}}</li>
     </ol>
-  </ng-container>
+  </nav>
 </ng-container>
