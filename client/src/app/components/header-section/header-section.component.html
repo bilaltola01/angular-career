@@ -2,7 +2,7 @@
   <!-- <div class="back-row">
     <button class="back">Back</button>
   </div> -->
-  <div class="user-row">
+  <div *ngIf="userGeneralInfo" class="user-row">
     <div>
       <img class="user-photo" src="{{userGeneralInfo.photo ? userGeneralInfo.photo : 'assets/icons/no_photo.png'}}">
     </div>
