@@ -9,10 +9,14 @@ import { UserGeneralInfo } from 'src/app/models';
 export class HeaderSectionComponent implements OnInit {
 
   @Input() userGeneralInfo: UserGeneralInfo;
+  birthdate: Date;
 
   constructor() { }
 
   ngOnInit() {
+    if (this.userGeneralInfo && this.userGeneralInfo.birthdate) {
+      this.birthdate = new Date(this.userGeneralInfo.birthdate);
+    }
   }
 
 }

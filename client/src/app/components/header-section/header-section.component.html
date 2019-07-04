@@ -1,45 +1,90 @@
 <ng-container>
-  <div class="back-row">
+  <!-- <div class="back-row">
     <button class="back">Back</button>
-  </div>
-  <div class="company-row">
+  </div> -->
+  <div class="user-row">
     <div>
-      <img class="company-logo" src="assets/icons/ic_google.svg">
+      <img class="user-photo" src="{{userGeneralInfo.photo ? userGeneralInfo.photo : 'assets/icons/no_photo.png'}}">
     </div>
-    <div>
-      <h1> Google Earth & Maps</h1>
-      <div class="company-undertitle">
-        <small>
-          <img src="assets/icons/ic_location.svg">
-            Los Angeles, California, USA
-        </small>
-        <small>
-          <img src="assets/icons/ic_mountain.svg">
-            Since 2017
-        </small>
+    <div class="user-detail">
+      <div>
+        <h1>{{userGeneralInfo.first_name}} {{userGeneralInfo.last_name}}</h1>
+        <h4>Sr. SoftWare Engineer</h4>
       </div>
-      <div class="icon-title">
-        <img src="assets/icons/ic_employees.svg">
-        <label>Company Size</label>
-        <p>Large (100-200)</p>
+      <div class="user-info">
+        <div>
+          <small>
+            <img src="assets/icons/ic_location.svg">
+            {{userGeneralInfo.city}}, {{userGeneralInfo.state}}, {{userGeneralInfo.country}}
+          </small>
+          <small>
+            <img src="assets/icons/ic_birthday-cake.svg">
+            {{birthdate | date: 'mediumDate'}}
+          </small>
+          <small>
+            <img src="{{userGeneralInfo.gender === 'Male' ? 'assets/icons/ic_male.svg' : 'assets/icons/ic_female.svg'}}">
+            {{userGeneralInfo.gender}}
+          </small>
+        </div>
+        <div>
+          <small>
+            <label>Ethnicity</label>
+            American
+          </small>
+          <small>
+            <label>Validated</label>
+            True
+          </small>
+        </div>
       </div>
-      <div class="icon-title">
-        <img src="assets/icons/ic_website.svg">
-        <label>Website</label>
-        <a href="https://google.com" target="_blank">www.google.com</a>
-      </div>
-      <div class="icon-title">
-        <img src="assets/icons/ic_checked.svg">
-        <label>Validation Status</label>
-        <p>Validated</p>
-      </div>
-      <div class="icon-title">
-        <img src="assets/icons/ic_permissions_inactive.svg">
-        <label>Permission Level</label>
-        <p>N/A</p>
-      </div>
+    </div>
+    <div class="user-status">
+      <simple-tag  title="Actively Looking For Job" onlineTag="true" [active]="true"></simple-tag>
+      <img src="assets/icons/ic_mail.svg">
     </div>
   </div>
+
+
+  <!-- <div class="company-row">
+      <div>
+          <img class="company-logo" src="assets/icons/ic_google.svg">
+      </div>
+
+      <div>
+          <h1> Google Earth & Maps</h1>
+          <div class="company-undertitle">
+              <small>
+                  <img src="assets/icons/ic_location.svg">
+                  Los Angeles, California, USA
+              </small>
+              <small>
+                  <img src="assets/icons/ic_mountain.svg">
+                  Since 2017
+              </small>
+          </div>
+          <div class="icon-title">
+              <img src="assets/icons/ic_employees.svg">
+              <label>Company Size</label>
+              <p>Large (100-200)</p>
+          </div>
+          <div class="icon-title">
+              <img src="assets/icons/ic_website.svg">
+              <label>Website</label>
+              <a href="https://google.com" target="_blank">www.google.com</a>
+          </div>
+          <div class="icon-title">
+              <img src="assets/icons/ic_checked.svg">
+              <label>Validation Status</label>
+              <p>Validated</p>
+          </div>
+          <div class="icon-title">
+              <img src="assets/icons/ic_permissions_inactive.svg">
+              <label>Permission Level</label>
+              <p>N/A</p>
+          </div>
+      </div>
+  </div> -->
+
 
   <!-- <div class="tabs-row">
     <h3 [ngClass]="{'active' : selectedTab === 1}" (click)="selectedTab = 1;"> About </h3>
