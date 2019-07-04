@@ -332,6 +332,7 @@ export class CreateProfileComponent implements OnInit {
     this.generalInfoRequest = null;
 
     this.basicInfoForm = new FormGroup({
+      photo: new FormControl(''),
       basicInfoCity: new FormControl(''),
       basicInfoState: new FormControl(''),
       basicInfoCountry: new FormControl(''),
@@ -445,6 +446,25 @@ export class CreateProfileComponent implements OnInit {
       ethnicity: this.generalInfoResponse.ethnicity
     };
   }
+
+  onPhotoFileSelected(event) {
+    if (event.target.files && event.target.files[0]) {
+      if (event.target.files[0].size > 1830020 ) {
+        this.alertsService.show('Image size too big.', AlertType.error);
+        return null;
+      }
+
+      const reader = new FileReader();
+
+      reader.onload = (e: any) => {
+        this.basicInfoForm.patchValue({
+          photo: e.target.result
+        });
+      };
+
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  }
   onChangeBirthDate(date: any) {
     if (date.value) {
       this.basicInfoForm.get('basicInfoBirth').setValue(this.helperService.convertToFormattedString(date.value, 'L'));
@@ -528,7 +548,8 @@ export class CreateProfileComponent implements OnInit {
     );
   }
   updateGeneralInfo() {
-    if ((this.selectedPageIndex === 1 && this.basicInfoForm.valid && this.onCheckCityValidation() && this.onCheckStateValidation()) || (this.selectedPageIndex === 2 && this.aboutMeForm.valid) || this.selectedPageIndex === 9) {
+    if ((this.selectedPageIndex === 1 && this.basicInfoForm.valid && this.onCheckCityValidation() && this.onCheckStateValidation()) ||
+        (this.selectedPageIndex === 2 && this.aboutMeForm.valid) || this.selectedPageIndex === 9) {
       if (this.userRole) {
         this.generalInfoRequest[this.userRole] = 1;
       }
