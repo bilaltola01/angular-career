@@ -4,13 +4,25 @@
 
 <ng-container *ngIf="!isProfileLoading">
   <legend>
-    <h3 class="section-title">About</h3>
+    <h3 class="section-title">Profile</h3>
   </legend>
-  <nav-section></nav-section>
-  <main-section></main-section> 
+  <nav-section [navMenu]="navMenu"></nav-section>
+  <main-section
+    [selectedNavMenu]="'profile'"
+    [userGeneralInfo]="userGeneralInfo"
+    [educationList]="educationList"
+    [experienceList]="experienceList"
+    [userSkillsList]="userSkillsList"
+    [userInterestsList]="userInterestsList"
+    [userProjectsList]="userProjectsList"
+    [userPublicationsList]="userPublicationsList"
+    [externalResourcesList]="externalResourcesList"
+  ></main-section> 
 </ng-container>
 
-<div *ngIf="isProfileLoading">
-  <mat-spinner></mat-spinner>
-  <h4>Loading...</h4>
-</div>
+<ng-container *ngIf="isProfileLoading">
+  <div class="loading">
+    <mat-spinner></mat-spinner>
+    <h4>Loading...</h4>
+  </div>
+</ng-container>

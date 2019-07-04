@@ -24,6 +24,8 @@ export class UserProfileComponent implements OnInit {
   isEditProfile: boolean;
   counts: number;
 
+  navMenu = NavMenus.profile;
+
   userGeneralInfo: UserGeneralInfo;
   educationList: UserEducationItem[];
   experienceList: UserExperienceItem[];

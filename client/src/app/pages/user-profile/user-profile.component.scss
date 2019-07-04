@@ -11,6 +11,14 @@
   grid-column-gap: 40px;
   padding-bottom: 80px;
   background-color: map-get($md-cfprimary, 50);
+  min-height: calc(100vh - 70px - 80px);
+}
+
+.loading {
+  position: absolute;
+  width: 100%;
+  height: calc(100% - 70px);
+  @include flex(column, center, center);
 }
 
 legend {

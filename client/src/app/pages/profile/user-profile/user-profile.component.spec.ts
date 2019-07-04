@@ -4,6 +4,9 @@ import { TestingModule } from 'src/app/modules/testing.module';
 import { MaterialModule } from 'src/app/modules/material.module';
 
 import { UserProfileComponent } from './user-profile.component';
+import { HeaderSectionComponent } from 'src/app/components/header-section/header-section.component';
+import { NavSectionComponent } from 'src/app/components/nav-section/nav-section.component';
+import { MainSectionComponent } from 'src/app/components/main-section/main-section.component';
 
 describe('UserProfileComponent', () => {
   let component: UserProfileComponent;
@@ -12,7 +15,7 @@ describe('UserProfileComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports : [ MaterialModule, TestingModule ],
-      declarations: [ UserProfileComponent ]
+      declarations: [ UserProfileComponent, HeaderSectionComponent, NavSectionComponent, MainSectionComponent ]
     })
     .compileComponents();
   }));
