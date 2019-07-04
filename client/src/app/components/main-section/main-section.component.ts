@@ -1,4 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import {
+  UserGeneralInfo,
+  UserEducationItem,
+  UserExperienceItem,
+  UserSkillItem,
+  UserInterestItem,
+  UserProjectItem,
+  UserPublicationItem,
+  UserExternalResourcesItem
+} from 'src/app/models';
 
 @Component({
   selector: 'main-section',
@@ -6,6 +16,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./main-section.component.scss']
 })
 export class MainSectionComponent implements OnInit {
+
+  @Input() selectedNavMenu: string;
+  @Input() userGeneralInfo: UserGeneralInfo;
+  @Input() educationList: UserEducationItem[];
+  @Input() experienceList: UserExperienceItem[];
+  @Input() userSkillsList: UserSkillItem[];
+  @Input() userInterestsList: UserInterestItem[];
+  @Input() userProjectsList: UserProjectItem[];
+  @Input() userPublicationsList: UserPublicationItem[];
+  @Input() externalResourcesList: UserExternalResourcesItem[];
 
   constructor() { }
 
