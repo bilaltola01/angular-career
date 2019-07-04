@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'nav-section',
@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./nav-section.component.scss']
 })
 export class NavSectionComponent implements OnInit {
+
+  @Input() navMenu: any[];
 
   constructor() { }
 

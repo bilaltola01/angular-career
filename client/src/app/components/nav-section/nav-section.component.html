@@ -1,11 +1,9 @@
 
-<ng-container>
-  <h3> Table of Content </h3>
-  <!-- TODO: Add href sections -->
-  <ol> 
-    <li>About Company</li>
-    <li>Company Industry</li>
-    <li>External Resources</li>
-    <li>Terms and Conditions</li>
-  </ol> 
+<ng-container *ngIf="navMenu && navMenu.length > 0">
+  <ng-container *ngFor="let menu of navMenu">
+    <h3>{{menu.title}}</h3>
+    <ol *ngIf="menu.items.length > 0">
+      <li *ngFor="let item of menu.items">{{item}}</li>
+    </ol>
+  </ng-container>
 </ng-container>
