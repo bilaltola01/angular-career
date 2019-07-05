@@ -350,7 +350,7 @@ export const NavMenus = {
         'Publications',
         'Projects',
         'Skills',
-        'Interets',
+        'Interests',
         'Activities',
         'Recommendations',
         'External Resources'
