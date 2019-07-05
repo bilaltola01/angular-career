@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { MaterialModule } from 'src/app/modules/material.module';
+
 import { MainSectionComponent } from './main-section.component';
+import { SimpleTagComponent } from './../simple-tag/simple-tag.component';
 
 describe('MainSectionComponent', () => {
   let component: MainSectionComponent;
@@ -8,7 +11,8 @@ describe('MainSectionComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MainSectionComponent ]
+      imports : [ MaterialModule ],
+      declarations: [ MainSectionComponent, SimpleTagComponent ]
     })
     .compileComponents();
   }));
