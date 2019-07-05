@@ -24,6 +24,8 @@
   a {
     font-size: 14px;
     color: map-get($md-cfprimary, 500);
+    text-decoration: none;
+    cursor: pointer;
   }
   h3 {
     margin-top: 0;
@@ -51,8 +53,8 @@
     }
   }
   .img-tag {
-    background-color: #F5F8FA;
-    border: solid 3px #F5F8FA;
+    background-color: $secondary-bg-color;
+    border: solid 3px $secondary-bg-color;
     border-radius: 38px;
     display: inline-grid;
     grid-template: 
@@ -76,6 +78,7 @@
     a {
       grid-area: info;
       text-decoration: none;
+      cursor: pointer;
     }
   }
 }

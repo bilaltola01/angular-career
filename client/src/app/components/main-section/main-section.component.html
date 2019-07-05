@@ -13,7 +13,7 @@
     <ng-container *ngIf="educationList.length > 0">
       <ng-container *ngFor="let education of educationList; let i = index">
         <mat-divider *ngIf="i > 0"></mat-divider>
-        <a>{{education.user_specified_school_name ? education.user_specified_school_name : education.school_name}}</a>
+        <a href="/my-profile">{{education.user_specified_school_name ? education.user_specified_school_name : education.school_name}}</a>
         <h4>{{education.education_level}} - {{education.major_name}}</h4>
         <small>{{extractYear(education.start_date)}} - {{extractYear(education.graduation_date)}}</small>
         <ng-container *ngIf="true; let short_desc">
@@ -31,7 +31,7 @@
     <ng-container *ngIf="experienceList.length > 0">
       <ng-container *ngFor="let experience of experienceList; let i = inde;">
         <mat-divider *ngIf="i > 0"></mat-divider>
-        <a>{{experience.user_specified_company_name ? experience.user_specified_company_name : experience.company_name}}</a>
+        <a href="/my-profile">{{experience.user_specified_company_name ? experience.user_specified_company_name : experience.company_name}}</a>
         <h4>{{experience.job}}</h4>
         <small>{{extractYearAndMonth(experience.start_date)}} - {{(experience.end_date ? extractYearAndMonth(experience.end_date) : 'Present')}}</small>
         <ng-container *ngIf="true; let short_desc">
@@ -126,7 +126,7 @@
       <div class="img-tag" *ngFor="let resource of externalResourcesList">
         <img src="assets/icons/ic_{{resource.description.toLowerCase()}}_white.svg">
         <label>{{resource.description}}</label>
-        <a>{{resource.link}}</a>
+        <a href="/my-profile">{{resource.link}}</a>
       </div>
     </div>
   </div>
