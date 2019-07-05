@@ -3,7 +3,7 @@
   grid-area: main;
   margin: 0 40px 0 0;
   // padding: 15px;
-  min-height: 100%;
+  // min-height: 100%;
   background: white;
   border-radius: 5px;
   box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.15);
@@ -17,9 +17,65 @@
   action-button {
     display: inline-flex;
     margin-right: 20px;
+    &.read-more {
+      margin-right: 0;
+    }
+  }
+  a {
+    font-size: 14px;
+    color: map-get($md-cfprimary, 500);
   }
   h3 {
     margin-top: 0;
     font-family: 'Poppins', sans-serif;
+  }
+  h4 {
+    margin-bottom: 0;
+    font-family: 'Poppins', sans-serif;
+  }
+  h5 {
+    margin: 10px 0;
+    color: rgba(map-get($md-cfaccent, 500), .34);
+  }
+  small {
+    font-size: 14px;
+    color: rgba(map-get($md-cfaccent, 500), .84);
+  }
+  mat-divider {
+    margin: 10px 0;
+  }
+  p {
+    color: rgba(map-get($md-cfaccent, 500), .54);
+    &.short-desc {
+      color: rgba(map-get($md-cfaccent, 500), .34);
+    }
+  }
+  .img-tag {
+    background-color: #F5F8FA;
+    border: solid 3px #F5F8FA;
+    border-radius: 38px;
+    display: inline-grid;
+    grid-template: 
+      "image title" 35px
+      "image info" 35px
+      / 70px auto;
+    grid-gap: 0 10px;
+    width: 350px;
+    margin-right: 20px;
+    margin-top: 10px;
+    img {
+      grid-area: image;
+      width: 70px;
+    }
+    label {
+      grid-area: title;
+      font-size: 16px;
+      display: flex;
+      align-items: flex-end;
+    }
+    a {
+      grid-area: info;
+      text-decoration: none;
+    }
   }
 }

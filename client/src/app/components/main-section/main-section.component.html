@@ -2,63 +2,133 @@
 
   <div *ngIf="userGeneralInfo && userGeneralInfo.user_intro" class="row">
     <h3> About Me </h3>
-    <p>{{userGeneralInfo.user_intro}}</p>
+    <ng-container *ngIf="true; let short_desc">
+      <p *ngIf="userGeneralInfo.user_intro" [class.short-desc]="short_desc && userGeneralInfo.user_intro.length > 150">{{short_desc ? shortDescription(userGeneralInfo.user_intro) : userGeneralInfo.user_intro}}</p>
+      <a *ngIf="short_desc && userGeneralInfo.user_intro && userGeneralInfo.user_intro.length > 150" (click)="short_desc = false">Read More</a>
+    </ng-container>
   </div>
+
   <div *ngIf="educationList" class="row">
     <h3> Education </h3>
     <ng-container *ngIf="educationList.length > 0">
-      <ng-container *ngFor="let education of educationList"></ng-container>
-
+      <ng-container *ngFor="let education of educationList; let i = index">
+        <mat-divider *ngIf="i > 0"></mat-divider>
+        <a>{{education.user_specified_school_name ? education.user_specified_school_name : education.school_name}}</a>
+        <h4>{{education.education_level}} - {{education.major_name}}</h4>
+        <small>{{extractYear(education.start_date)}} - {{extractYear(education.graduation_date)}}</small>
+        <ng-container *ngIf="true; let short_desc">
+          <p *ngIf="education.edu_desc" [class.short-desc]="short_desc && education.edu_desc.length > 150">
+            {{short_desc ? shortDescription(education.edu_desc) : education.edu_desc}}
+          </p>
+          <a *ngIf="short_desc && education.edu_desc && short_desc && education.edu_desc.length > 150" (click)="short_desc = false">Read More</a>
+        </ng-container>
+      </ng-container>
     </ng-container>
   </div>
 
   <div *ngIf="experienceList" class="row">
     <h3> Work Experience </h3>
     <ng-container *ngIf="experienceList.length > 0">
-      <ng-container *ngFor="let experience of experienceList"></ng-container>
-      
+      <ng-container *ngFor="let experience of experienceList; let i = inde;">
+        <mat-divider *ngIf="i > 0"></mat-divider>
+        <a>{{experience.user_specified_company_name ? experience.user_specified_company_name : experience.company_name}}</a>
+        <h4>{{experience.job}}</h4>
+        <small>{{extractYearAndMonth(experience.start_date)}} - {{(experience.end_date ? extractYearAndMonth(experience.end_date) : 'Present')}}</small>
+        <ng-container *ngIf="true; let short_desc">
+          <p *ngIf="experience.job_desc" [class.short-desc]="short_desc && experience.job_desc.length > 150">
+            {{short_desc ? shortDescription(experience.job_desc ) : experience.job_desc }}
+          </p>
+          <a *ngIf="short_desc && experience.job_desc && experience.job_desc.length > 150" (click)="short_desc = false">Read More</a>
+        </ng-container>
+        <ng-container *ngIf="experience.skills_trained && experience.skills_trained.length > 0">
+          <h5>Skills Trained {{experience.skills_trained.length}}</h5>
+          <simple-tag *ngFor="let skill_trained of experience.skills_trained" type="gray" title="{{skill_trained.skill}}"></simple-tag>
+        </ng-container>
+        <ng-container *ngIf="experience.industries && experience.industries.length > 0">
+          <h5>Company Industries {{experience.industries.length}}</h5>
+          <simple-tag *ngFor="let industry of experience.industries" type="gray" title="{{industry.industry_name}}"></simple-tag>
+        </ng-container>
+        <ng-container *ngIf="experience.add_industries && experience.add_industries.length > 0">
+          <h5>Additional Industry Exposure {{experience.add_industries.length}}</h5>
+          <simple-tag *ngFor="let add_industry of experience.add_industries" type="gray" title="{{add_industry.industry_name}}"></simple-tag>
+        </ng-container>
+      </ng-container>
     </ng-container>
   </div>
+
   <div *ngIf="userPublicationsList" class="row">
     <h3> Publications </h3>
     <ng-container *ngIf="userPublicationsList.length > 0">
-      <ng-container *ngFor="let publication of userPublicationsList"></ng-container>
-      
+      <ng-container *ngFor="let publication of userPublicationsList; let i = index">
+        <mat-divider *ngIf="i > 0"></mat-divider>
+        <h4>{{publication.publication_title}}</h4>
+        <small *ngIf="publication.date_published">Published on {{extractDate(publication.date_published)}}</small>
+        <ng-container *ngIf="true; let short_desc">
+          <p *ngIf="publication.description" [class.short-desc]="short_desc && publication.description.length > 150">
+            {{short_desc ? shortDescription(publication.description) : publication.description}}
+          </p>
+          <a *ngIf="short_desc && publication.description && publication.description.length > 150" (click)="short_desc = false">Read More</a>
+        </ng-container>
+      </ng-container>
     </ng-container>
   </div>
+
   <div *ngIf="userProjectsList" class="row">
     <h3> Projects </h3>
     <ng-container *ngIf="userProjectsList.length > 0">
-      <ng-container *ngFor="let roject of userProjectsList"></ng-container>
-      
+      <ng-container *ngFor="let project of userProjectsList">
+        <mat-divider *ngIf="i > 0"></mat-divider>
+        <h4>{{project.project_name}}</h4>
+        <small *ngIf="project.date_finished">Completed on {{extractDate(project.date_finished)}}</small>
+        <ng-container *ngIf="true; let short_desc">
+          <p *ngIf="project.description" [class.short-desc]="short_desc && project.description.length > 150">
+            {{short_desc ? shortDescription(project.description) : project.description}}
+          </p>
+          <a *ngIf="short_desc && project.description && project.description.length > 150" (click)="short_desc = false">Read More</a>
+        </ng-container>
+      </ng-container>
     </ng-container>
   </div>
+
   <div *ngIf="userSkillsList" class="row">
     <h3> Skills </h3>
     <ng-container *ngIf="userSkillsList.length > 0">
-      <ng-container *ngFor="let skill of userSkillsList"></ng-container>
-      
+      <h5>Skills {{userSkillsList.length}}</h5>
+      <simple-tag *ngFor="let skill of userSkillsList" type="gray" title="{{skill.skill}}" ellipseTag="true" value="{{skill.skill_level}}"></simple-tag>
     </ng-container>
   </div>
+
   <div *ngIf="userInterestsList" class="row">
     <h3> Interests </h3>
     <ng-container *ngIf="userInterestsList.length > 0">
-      <ng-container *ngFor="let interest of userInterestsList"></ng-container>
-      
+      <h5>Skills {{userInterestsList.length}}</h5>
+      <simple-tag *ngFor="let interest of userInterestsList" type="gray" title="{{interest.interest}}"></simple-tag>
     </ng-container>
   </div>
   <div class="row">
     <h3> Activities </h3>
+    <h5>Activities 3</h5>
+    <simple-tag type="gray" title="Weightlifting"></simple-tag>
+    <simple-tag type="gray" title="Reading"></simple-tag>
+    <simple-tag type="gray" title="Writing"></simple-tag>
   </div>
+
   <div class="row">
     <h3> Recommendation </h3>
+    <h4>Ryan Sandoval</h4>
+    <small>Association: Coworker</small>
+    <p>Worked with a team of five other people, three designers, and one other programmer, to design and create a functional web application for STEM Kids NY that distributed educational materials to underprivileged individuals interested in STEM.</p>
   </div>
+
   <div *ngIf="externalResourcesList" class="row">
     <h3> External Resources </h3>
-    <ng-container *ngIf="externalResourcesList.length > 0">
-      <ng-container *ngFor="let resource of externalResourcesList"></ng-container>
-      
-    </ng-container>
+    <div *ngIf="externalResourcesList.length > 0">
+      <div class="img-tag" *ngFor="let resource of externalResourcesList">
+        <img src="assets/icons/ic_{{resource.description.toLowerCase()}}_white.svg">
+        <label>{{resource.description}}</label>
+        <a>{{resource.link}}</a>
+      </div>
+    </div>
   </div>
 </ng-container>
 

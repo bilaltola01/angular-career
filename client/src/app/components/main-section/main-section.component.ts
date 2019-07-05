@@ -9,6 +9,7 @@ import {
   UserPublicationItem,
   UserExternalResourcesItem
 } from 'src/app/models';
+import moment from 'moment';
 
 @Component({
   selector: 'main-section',
@@ -30,6 +31,24 @@ export class MainSectionComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+  }
+
+  extractDate(date: string): string {
+    return moment.utc(new Date(date)).format('ll');
+  }
+  extractYearAndMonth(date: string): string {
+    return moment.utc(new Date(date)).format('MMM, YYYY');
+  }
+  extractYear(date: string): string {
+    return moment.utc(new Date(date)).format('YYYY');
+  }
+
+  shortDescription(description: string): string {
+    if (description && description.length > 150) {
+      return description.slice(0, 150) + '...';
+    } else {
+      return description;
+    }
   }
 
 }
