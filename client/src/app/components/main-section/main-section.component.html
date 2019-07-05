@@ -3,8 +3,8 @@
   <div *ngIf="userGeneralInfo && userGeneralInfo.user_intro" class="row">
     <h3> About Me </h3>
     <ng-container *ngIf="true; let short_desc">
-      <p *ngIf="userGeneralInfo.user_intro" [class.short-desc]="short_desc && userGeneralInfo.user_intro.length > 150">{{short_desc ? shortDescription(userGeneralInfo.user_intro) : userGeneralInfo.user_intro}}</p>
-      <a *ngIf="short_desc && userGeneralInfo.user_intro && userGeneralInfo.user_intro.length > 150" (click)="short_desc = false">Read More</a>
+      <p *ngIf="userGeneralInfo.user_intro" [class.short-desc]="short_desc && userGeneralInfo.user_intro.length > helperService.shortDescLength">{{short_desc ? helperService.shortDescription(userGeneralInfo.user_intro) : userGeneralInfo.user_intro}}</p>
+      <a *ngIf="short_desc && userGeneralInfo.user_intro && userGeneralInfo.user_intro.length > helperService.shortDescLength" (click)="short_desc = false">Read More</a>
     </ng-container>
   </div>
 
@@ -15,12 +15,12 @@
         <mat-divider *ngIf="i > 0"></mat-divider>
         <a href="/my-profile">{{education.user_specified_school_name ? education.user_specified_school_name : education.school_name}}</a>
         <h4>{{education.education_level}} - {{education.major_name}}</h4>
-        <small>{{extractYear(education.start_date)}} - {{extractYear(education.graduation_date)}}</small>
+        <small>{{helperService.convertToFormattedString(education.start_date, 'YYYY')}} - {{helperService.convertToFormattedString(education.graduation_date, 'YYYY')}}</small>
         <ng-container *ngIf="true; let short_desc">
-          <p *ngIf="education.edu_desc" [class.short-desc]="short_desc && education.edu_desc.length > 150">
-            {{short_desc ? shortDescription(education.edu_desc) : education.edu_desc}}
+          <p *ngIf="education.edu_desc" [class.short-desc]="short_desc && education.edu_desc.length > helperService.shortDescLength">
+            {{short_desc ? helperService.shortDescription(education.edu_desc) : education.edu_desc}}
           </p>
-          <a *ngIf="short_desc && education.edu_desc && short_desc && education.edu_desc.length > 150" (click)="short_desc = false">Read More</a>
+          <a *ngIf="short_desc && education.edu_desc && short_desc && education.edu_desc.length > helperService.shortDescLength" (click)="short_desc = false">Read More</a>
         </ng-container>
       </ng-container>
     </ng-container>
@@ -33,12 +33,12 @@
         <mat-divider *ngIf="i > 0"></mat-divider>
         <a href="/my-profile">{{experience.user_specified_company_name ? experience.user_specified_company_name : experience.company_name}}</a>
         <h4>{{experience.job}}</h4>
-        <small>{{extractYearAndMonth(experience.start_date)}} - {{(experience.end_date ? extractYearAndMonth(experience.end_date) : 'Present')}}</small>
+        <small>{{helperService.convertToFormattedString(experience.start_date, 'MMM, YYYY')}} - {{(experience.end_date ? helperService.convertToFormattedString(experience.end_date, 'MMM, YYYY') : 'Present')}}</small>
         <ng-container *ngIf="true; let short_desc">
-          <p *ngIf="experience.job_desc" [class.short-desc]="short_desc && experience.job_desc.length > 150">
-            {{short_desc ? shortDescription(experience.job_desc ) : experience.job_desc }}
+          <p *ngIf="experience.job_desc" [class.short-desc]="short_desc && experience.job_desc.length > helperService.shortDescLength">
+            {{short_desc ? helperService.shortDescription(experience.job_desc ) : experience.job_desc }}
           </p>
-          <a *ngIf="short_desc && experience.job_desc && experience.job_desc.length > 150" (click)="short_desc = false">Read More</a>
+          <a *ngIf="short_desc && experience.job_desc && experience.job_desc.length > helperService.shortDescLength" (click)="short_desc = false">Read More</a>
         </ng-container>
         <ng-container *ngIf="experience.skills_trained && experience.skills_trained.length > 0">
           <h5>Skills Trained {{experience.skills_trained.length}}</h5>
@@ -62,12 +62,12 @@
       <ng-container *ngFor="let publication of userPublicationsList; let i = index">
         <mat-divider *ngIf="i > 0"></mat-divider>
         <h4>{{publication.publication_title}}</h4>
-        <small *ngIf="publication.date_published">Published on {{extractDate(publication.date_published)}}</small>
+        <small *ngIf="publication.date_published">Published on {{helperService.convertToFormattedString(publication.date_published, 'll')}}</small>
         <ng-container *ngIf="true; let short_desc">
-          <p *ngIf="publication.description" [class.short-desc]="short_desc && publication.description.length > 150">
-            {{short_desc ? shortDescription(publication.description) : publication.description}}
+          <p *ngIf="publication.description" [class.short-desc]="short_desc && publication.description.length > helperService.shortDescLength">
+            {{short_desc ? helperService.shortDescription(publication.description) : publication.description}}
           </p>
-          <a *ngIf="short_desc && publication.description && publication.description.length > 150" (click)="short_desc = false">Read More</a>
+          <a *ngIf="short_desc && publication.description && publication.description.length > helperService.shortDescLength" (click)="short_desc = false">Read More</a>
         </ng-container>
       </ng-container>
     </ng-container>
@@ -79,12 +79,12 @@
       <ng-container *ngFor="let project of userProjectsList">
         <mat-divider *ngIf="i > 0"></mat-divider>
         <h4>{{project.project_name}}</h4>
-        <small *ngIf="project.date_finished">Completed on {{extractDate(project.date_finished)}}</small>
+        <small *ngIf="project.date_finished">Completed on {{helperService.convertToFormattedString(project.date_finished, 'll')}}</small>
         <ng-container *ngIf="true; let short_desc">
-          <p *ngIf="project.description" [class.short-desc]="short_desc && project.description.length > 150">
-            {{short_desc ? shortDescription(project.description) : project.description}}
+          <p *ngIf="project.description" [class.short-desc]="short_desc && project.description.length > helperService.shortDescLength">
+            {{short_desc ? helperService.shortDescription(project.description) : project.description}}
           </p>
-          <a *ngIf="short_desc && project.description && project.description.length > 150" (click)="short_desc = false">Read More</a>
+          <a *ngIf="short_desc && project.description && project.description.length > helperService.shortDescLength" (click)="short_desc = false">Read More</a>
         </ng-container>
       </ng-container>
     </ng-container>

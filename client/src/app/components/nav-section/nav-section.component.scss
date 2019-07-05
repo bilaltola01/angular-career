@@ -20,6 +20,10 @@
       display: none;
       li {
         margin-bottom: 10px;
+        &:hover {
+          color: map-get($md-cfprimary, 500);
+          cursor: pointer;
+        }
       }
     }
     mat-icon {

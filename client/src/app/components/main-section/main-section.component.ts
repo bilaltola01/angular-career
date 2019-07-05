@@ -9,7 +9,7 @@ import {
   UserPublicationItem,
   UserExternalResourcesItem
 } from 'src/app/models';
-import moment from 'moment';
+import { HelperService } from 'src/app/services';
 
 @Component({
   selector: 'main-section',
@@ -28,27 +28,9 @@ export class MainSectionComponent implements OnInit {
   @Input() userPublicationsList: UserPublicationItem[];
   @Input() externalResourcesList: UserExternalResourcesItem[];
 
-  constructor() { }
+  constructor(private helperService: HelperService) { }
 
   ngOnInit() {
-  }
-
-  extractDate(date: string): string {
-    return moment.utc(new Date(date)).format('ll');
-  }
-  extractYearAndMonth(date: string): string {
-    return moment.utc(new Date(date)).format('MMM, YYYY');
-  }
-  extractYear(date: string): string {
-    return moment.utc(new Date(date)).format('YYYY');
-  }
-
-  shortDescription(description: string): string {
-    if (description && description.length > 150) {
-      return description.slice(0, 150) + '...';
-    } else {
-      return description;
-    }
   }
 
 }

@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MaterialModule } from './../../modules/material.module';
+import { MaterialModule } from './../../modules';
 
 import { HeaderSectionComponent } from './header-section.component';
 import { SimpleTagComponent } from './../simple-tag/simple-tag.component';

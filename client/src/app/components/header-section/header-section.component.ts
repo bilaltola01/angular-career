@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UserGeneralInfo } from 'src/app/models';
-import moment from 'moment';
+import { HelperService } from 'src/app/services';
 
 @Component({
   selector: 'header-section',
@@ -11,12 +11,8 @@ export class HeaderSectionComponent implements OnInit {
 
   @Input() userGeneralInfo: UserGeneralInfo;
 
-  constructor() { }
+  constructor(private helperService: HelperService) { }
 
   ngOnInit() { }
-
-  extractDate(date: string): string {
-    return moment.utc(new Date(date)).format('ll');
-  }
 
 }

@@ -19,7 +19,7 @@
           </small>
           <small *ngIf="userGeneralInfo.birthdate">
             <img src="assets/icons/ic_birthday-cake.svg">
-            {{extractDate(userGeneralInfo.birthdate)}}
+            {{helperService.convertToFormattedString(userGeneralInfo.birthdate, 'll')}}
           </small>
           <small *ngIf="userGeneralInfo.gender">
             <img src="{{userGeneralInfo.gender === 'Male' ? 'assets/icons/ic_male.svg' : 'assets/icons/ic_female.svg'}}">
