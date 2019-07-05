@@ -593,6 +593,7 @@ export class CreateProfileComponent implements OnInit {
       focus_major: new FormControl(education ? education.focus_major_name : ''),
       start_date: new FormControl(education && education.start_date ? this.extractYear(education.start_date) : '', [Validators.required]),
       graduation_date: new FormControl(education && education.graduation_date ? this.extractYear(education.graduation_date) : '', [Validators.required]),
+      gpa: new FormControl(education.gpa ? education.gpa : ''),
       description: new FormControl(education ? education.edu_desc : '')
     });
 
@@ -640,6 +641,11 @@ export class CreateProfileComponent implements OnInit {
         this.onDescriptionValueChange(arrIndex, description);
       }
     );
+    educationForm.get('gpa').valueChanges.subscribe(
+      (gpa) => {
+        this.onGpaValueChange(arrIndex, gpa);
+      }
+    );
 
     this.educationFormArray.push(educationForm);
   }
@@ -651,6 +657,9 @@ export class CreateProfileComponent implements OnInit {
         this.addEducationFormGroup(education);
       });
     }
+  }
+  onGpaValueChange(arrIndex: number, gpa: string) {
+    this.educationDataList[arrIndex].gpa = gpa ? parseFloat(gpa) : null;
   }
   onDegreeValueChanges(degree: string, index: number) {
     const filter = this.degrees.filter(value => value.education_level === degree);
