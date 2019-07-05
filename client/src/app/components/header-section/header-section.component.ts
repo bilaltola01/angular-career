@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UserGeneralInfo } from 'src/app/models';
+import moment from 'moment';
 
 @Component({
   selector: 'header-section',
@@ -9,14 +10,13 @@ import { UserGeneralInfo } from 'src/app/models';
 export class HeaderSectionComponent implements OnInit {
 
   @Input() userGeneralInfo: UserGeneralInfo;
-  birthdate: Date;
 
   constructor() { }
 
-  ngOnInit() {
-    if (this.userGeneralInfo && this.userGeneralInfo.birthdate) {
-      this.birthdate = new Date(this.userGeneralInfo.birthdate);
-    }
+  ngOnInit() { }
+
+  extractDate(date: string): string {
+    return moment.utc(new Date(date)).format('ll');
   }
 
 }

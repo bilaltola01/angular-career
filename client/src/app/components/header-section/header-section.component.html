@@ -13,27 +13,31 @@
       </div>
       <div class="user-info">
         <div>
-          <small>
+          <small *ngIf="userGeneralInfo.city && userGeneralInfo.state && userGeneralInfo.country">
             <img src="assets/icons/ic_location.svg">
             {{userGeneralInfo.city}}, {{userGeneralInfo.state}}, {{userGeneralInfo.country}}
           </small>
-          <small>
+          <small *ngIf="userGeneralInfo.birthdate">
             <img src="assets/icons/ic_birthday-cake.svg">
-            {{birthdate | date: 'mediumDate'}}
+            {{extractDate(userGeneralInfo.birthdate)}}
           </small>
-          <small>
+          <small *ngIf="userGeneralInfo.gender">
             <img src="{{userGeneralInfo.gender === 'Male' ? 'assets/icons/ic_male.svg' : 'assets/icons/ic_female.svg'}}">
             {{userGeneralInfo.gender}}
           </small>
         </div>
         <div>
-          <small>
+          <small *ngIf="userGeneralInfo.ethnicity">
             <label>Ethnicity</label>
-            American
+            {{userGeneralInfo.ethnicity}}
           </small>
           <small>
-            <label>Validated</label>
-            True
+            <label>Email Verified</label>
+            <img class="valid" src="assets/icons/ic_checkbox_checked.svg">
+          </small>
+          <small>
+            <label>Verified</label>
+            <img class="valid" src="assets/icons/ic_checkbox_checked.svg">
           </small>
         </div>
       </div>

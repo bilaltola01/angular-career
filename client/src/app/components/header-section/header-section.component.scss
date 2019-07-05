@@ -116,6 +116,10 @@ small {
   img {
     width: 10px;
     margin-right: 5px;
+    &.valid {
+      width: 15px;
+      margin: 0;
+    }
   }
 }
 
