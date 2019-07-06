@@ -10,7 +10,8 @@ export const EthnicityTypes = [
 
 export const Genders = [
   'Male',
-  'Female'
+  'Female',
+  'Other'
 ];
 
 export const Countries = [
