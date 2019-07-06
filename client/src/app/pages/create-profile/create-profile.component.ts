@@ -153,7 +153,11 @@ export class CreateProfileComponent implements OnInit {
 
   profile_status: number;
 
-  selectedPageIndex = 0;
+  /**
+   * "Drop Resume Here" feature won't be available at launch.
+   * if need to display this page, set selectedPageIndex to 0.
+   */
+  selectedPageIndex = 1;
 
   generalInfoResponse: UserGeneralInfo;
   generalInfoRequest: UserObject;
