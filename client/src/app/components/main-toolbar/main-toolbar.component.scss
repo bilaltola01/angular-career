@@ -1,0 +1,123 @@
+@import './../../../styles/variables.scss';
+
+.sidenav-container {
+  height: 100%;
+  // background: // TODO: Set pages background here!
+}
+
+.sidenav {
+  width: 200px;
+}
+
+.sidenav .mat-toolbar {
+  background: inherit;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.links-container {
+  display: contents;
+}
+
+.mat-toolbar.mat-primary {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: linear-gradient(90deg, #00A3D5, #0067CE);
+  height: 70px;
+}
+
+a:not(.logo-href):not(.dropdown-href) {
+  color: rgba($white, 0.90);
+  margin-right: 10px; 
+  text-decoration: none;
+  padding: 0 15px;
+  border-radius: 500px;
+  transition: background-color 100ms linear;
+  font-size: 15px;
+  font-weight: 400;
+  font-family: 'Poppins', sans-serif;
+  &:hover {
+      background-color: white;
+      color: map-get($md-cfprimary, 500);
+  }
+  &.active-link {
+      background-color: white;
+      color: map-get($md-cfprimary, 500);
+  }
+}
+
+mat-nav-list {
+  a {
+    display: block;
+    padding: 18px !important;
+    color: map-get($md-cfaccent, 500) !important;
+    &:hover {
+      color: map-get($md-cfprimary, 500) !important;
+    }
+    &.active-link {
+      color: map-get($md-cfprimary, 500) !important;
+    }
+  }
+}
+
+.dropdown-href {
+  display: block;
+  color: map-get($md-cfaccent, 500);
+  text-decoration: none;
+  padding: 10px 20px;
+  &:hover {
+    color: map-get($md-cfprimary, 500);
+  }
+  &.active-link {
+    color: map-get($md-cfprimary, 500);
+  }
+}
+
+.logo-href {
+  height: 35px;
+}
+
+.userinfo-container {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 400;
+  font-family: 'Poppins', sans-serif;
+  img {
+    margin-left: 10px;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    // border: 2px solid rgba($white, 0.90);
+    object-fit: cover;
+  }
+}
+
+button.mat-icon-button {
+  color: $white;
+  margin-right: 10px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+@media only screen and (max-width: $mobile-breakpoint) {
+  button.mat-icon-button {
+    margin-right: 0px;
+    margin-left: -15px;
+  }
+  .logo-href {
+    height: 26px;
+    img {
+      max-width: 100px
+    }
+  }
+  .user-dropdown {
+    font-size: 10px
+  }
+}

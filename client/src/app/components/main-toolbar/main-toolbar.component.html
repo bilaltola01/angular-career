@@ -1,0 +1,147 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav 
+      #drawer 
+      class="sidenav" 
+      fixedInViewport = "false"
+      [ngClass]="{hidden: !(isHandset$ | async)}"
+      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+      [mode]="(isHandset$ | async) ? 'over' : 'side'"
+      [opened]="(isHandset$ | async) === false">
+    <mat-toolbar>Menu</mat-toolbar>
+    <mat-nav-list>
+      <ng-container *ngIf="isLoggedIn()">
+          <span class="spacer"></span>
+          <a routerLink='career-fairs' routerLinkActive="active-link">
+            Career Fairs
+          </a>
+          <a routerLink='search' routerLinkActive="active-link">
+            General Search
+          </a>
+          <a routerLink='positions' routerLinkActive="active-link">
+            Positions
+          </a>
+          <a routerLink='companies' routerLinkActive="active-link">
+            Companies
+          </a>
+          <a routerLink='people' routerLinkActive="active-link">
+            People
+          </a>
+          <a routerLink='applications' routerLinkActive="active-link">
+            Applications
+          </a>
+          <a routerLink='saved-jobs' routerLinkActive="active-link">
+            Saved Jobs
+          </a>
+          <a routerLink='style-guide' routerLinkActive="active-link" *ngIf="isDevelopmentEnv()">
+            Style Guide
+          </a>
+        </ng-container>
+
+        <ng-container *ngIf="!isLoggedIn()">
+          <span class="spacer"></span>
+          <a routerLink='' routerLinkActive="active-link">
+            Home
+          </a>
+          <a routerLink='search' routerLinkActive="active-link">
+            About Us
+          </a>
+          <a routerLink='positions' routerLinkActive="active-link">
+            Contact Us
+          </a>
+          <a routerLink='companies' routerLinkActive="active-link">
+            My Account
+          </a>
+        </ng-container>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="drawer.toggle()"
+        *ngIf="isHandset$ | async">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+
+      <a routerLink="" class="logo-href">
+        <img src="assets/icons/ic_cf_logo.svg">
+      </a>
+
+      <!-- Shows Only in Desktop Mode -->
+      <div [ngClass]="{hidden: (isHandset$ | async)}" class="links-container">
+        <ng-container *ngIf="isLoggedIn()">
+          <span class="spacer"></span>
+          <a routerLink='career-fairs' routerLinkActive="active-link">
+            Career Fairs
+          </a>
+          <a routerLink='search' routerLinkActive="active-link">
+            General Search
+          </a>
+          <a routerLink='positions' routerLinkActive="active-link">
+            Positions
+          </a>
+          <a routerLink='companies' routerLinkActive="active-link">
+            Companies
+          </a>
+          <a routerLink='people' routerLinkActive="active-link">
+            People
+          </a>
+          <a routerLink='applications' routerLinkActive="active-link">
+            Applications
+          </a>
+          <a routerLink='saved-jobs' routerLinkActive="active-link">
+            Saved Jobs
+          </a>
+          <a routerLink='style-guide' routerLinkActive="active-link" *ngIf="isDevelopmentEnv()">
+            Style Guide
+          </a>
+        </ng-container>
+
+        <ng-container *ngIf="!isLoggedIn()">
+            <span class="spacer"></span>
+            <a routerLink='' routerLinkActive="active-link">
+              Home
+            </a>
+            <a routerLink='about-us' routerLinkActive="active-link">
+              About Us
+            </a>
+            <a routerLink='contact-us' routerLinkActive="active-link">
+              Contact Us
+            </a>
+            <a routerLink='account' routerLinkActive="active-link">
+              My Account
+            </a>
+        </ng-container>
+      </div>
+
+      <span class="spacer" *ngIf="isLoggedIn()"></span>
+      <span [matMenuTriggerFor]="menu" class="userinfo-container" *ngIf="isLoggedIn()">
+        <!-- Clips the first and last names at 10 charecters and puts a '.' -->
+        {{ (userGeneralInfo?.first_name.length>10)? (userGeneralInfo?.first_name | slice:0:10)+'.':(userGeneralInfo?.first_name) }}
+        {{ (userGeneralInfo?.last_name.length>10)? (userGeneralInfo?.last_name | slice:0:10)+'.':(userGeneralInfo?.last_name) }}
+        <img class="user-photo" src="{{userGeneralInfo?.photo ? userGeneralInfo.photo : 'assets/icons/no_photo.png'}}">
+      </span>
+      <mat-menu #menu class="dropdown">
+        <a routerLink='my-profile' routerLinkActive="active-link" class="dropdown-href">
+          My Profile
+        </a>
+        <a routerLink='messages' routerLinkActive="active-link" class="dropdown-href">
+          Messages
+        </a>
+        <a routerLink='settings' routerLinkActive="active-link" class="dropdown-href">
+          App Settings
+        </a>        
+        <a routerLink='switch' routerLinkActive="active-link" class="dropdown-href">
+            Switch Profile
+        </a>
+        <a routerLink='login' (click)="logOut()" routerLinkActive="active-link" class="dropdown-href">
+          Logout
+        </a>
+      </mat-menu>
+    </mat-toolbar>
+
+    <ng-content></ng-content>
+  </mat-sidenav-content>
+</mat-sidenav-container>
