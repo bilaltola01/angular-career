@@ -597,7 +597,7 @@ export class CreateProfileComponent implements OnInit {
       focus_major: new FormControl(education ? education.focus_major_name : ''),
       start_date: new FormControl(education && education.start_date ? this.extractYear(education.start_date) : '', [Validators.required]),
       graduation_date: new FormControl(education && education.graduation_date ? this.extractYear(education.graduation_date) : '', [Validators.required]),
-      gpa: new FormControl(education.gpa ? education.gpa : ''),
+      gpa: new FormControl(education ? education.gpa : ''),
       description: new FormControl(education ? education.edu_desc : '')
     });
 
