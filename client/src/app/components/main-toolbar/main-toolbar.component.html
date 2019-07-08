@@ -56,21 +56,23 @@
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar color="primary">
-      <button
-        type="button"
-        aria-label="Toggle sidenav"
-        mat-icon-button
-        (click)="drawer.toggle()"
-        *ngIf="isHandset$ | async">
-        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-      </button>
+      <ng-container *ngIf="!isCreatingProfile()">
+        <button
+          type="button"
+          aria-label="Toggle sidenav"
+          mat-icon-button
+          (click)="drawer.toggle()"
+          *ngIf="(isHandset$ | async)">
+          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+        </button>
+      </ng-container>
 
       <a routerLink="" class="logo-href">
         <img src="assets/icons/ic_cf_logo.svg">
       </a>
 
       <!-- Shows Only in Desktop Mode -->
-      <div [ngClass]="{hidden: (isHandset$ | async)}" class="links-container">
+      <div [ngClass]="{hidden: (isHandset$ | async)}" class="links-container" *ngIf="!isCreatingProfile()">
         <ng-container *ngIf="isLoggedIn()">
           <span class="spacer"></span>
           <a routerLink='career-fairs' routerLinkActive="active-link">

@@ -6,6 +6,7 @@ import { UserService } from 'src/app/services/user.service';
 import { isDevMode } from '@angular/core';
 import { UserGeneralInfo } from 'src/app/models';
 import { AlertsService, AlertType } from 'src/app/services/alerts.service';
+import { LocationStrategy } from '@angular/common';
 
 @Component({
 // tslint:disable-next-line: component-selector
@@ -22,7 +23,10 @@ export class MainToolbarComponent implements OnInit {
       map(result => result.matches)
     );
 
-  constructor(private breakpointObserver: BreakpointObserver, private userService: UserService, private alertsService: AlertsService) {}
+  constructor(private breakpointObserver: BreakpointObserver,
+    private userService: UserService,
+    private alertsService: AlertsService,
+    private url: LocationStrategy) {}
 
   ngOnInit() {
     // TODO: This get should be called only once and stored in browser storage in the user service
@@ -46,6 +50,10 @@ export class MainToolbarComponent implements OnInit {
 
   public isDevelopmentEnv(): boolean {
     return isDevMode();
+  }
+
+  isCreatingProfile() {
+    return this.url.path() === '/create-profile';
   }
 
   logOut() {

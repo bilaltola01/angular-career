@@ -364,11 +364,12 @@ p {
             padding-top: $profile-form-field-mt;
             padding-bottom: $profile-form-field-mt;
             box-sizing: border-box;
-            transition: top 1s;
+            transition: top 0.5s;
             transition-timing-function: ease;
+            z-index: 1;
             &.open {
               top: calc(100% + 5px);
-              transition: top 1s;
+              transition: top 0.5s;
               transition-timing-function: ease;
             }
           }
