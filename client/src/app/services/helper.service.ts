@@ -22,4 +22,12 @@ export class HelperService {
     }
   }
 
+  cityNameFromAutoComplete(cityValue: string): string {
+    let city;
+    if (cityValue.includes(', ')) {
+      city = cityValue.split(', ')[0];
+    }
+    return city;
+  }
+
 }

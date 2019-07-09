@@ -1,11 +1,13 @@
 <ng-container *ngIf="!isProfileLoading" class="profile-header">
-  <header-section [userGeneralInfo]="userGeneralInfo"></header-section>
+  <header-section [editMode]="isEditProfile" [generalInfo]="userGeneralInfo"></header-section>
 </ng-container>
 
 <ng-container *ngIf="!isProfileLoading">
   <legend>
     <h3 class="section-title">Profile</h3>
+    <a (click)="onClickEdit()">Edit Profile</a>
   </legend>
+  <div class="edit-button"><a (click)="onClickEdit()">Edit Profile</a></div>
   <nav-section [navMenu]="navMenu"></nav-section>
   <main-section
     [selectedNavMenu]="'profile'"

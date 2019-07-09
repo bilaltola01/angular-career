@@ -47,12 +47,12 @@ export class UserProfileComponent implements OnInit {
     this.getUserProjectsList();
     this.getUserPublicationsList();
     this.getExternalResourceList();
-    this.isEditProfile = false;
+    this.isEditProfile = true;
     this.isProfileLoading = true;
     this.counts = 0;
   }
 
-  onClickEditProfile() {
+  onClickEdit() {
     this.isEditProfile = true;
   }
 
