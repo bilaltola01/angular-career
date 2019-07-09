@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { EmailSentComponent } from './email-sent.component';
 import { TestingModule } from 'src/app/modules/testing.module';
 import { MaterialModule } from 'src/app/modules/material.module';
-import { ActionButtonComponent } from './../../components/action-button/action-button.component';
+import { ActionButtonComponent } from '../../../components/action-button/action-button.component';
 
 describe('EmailSentComponent', () => {
   let component: EmailSentComponent;
