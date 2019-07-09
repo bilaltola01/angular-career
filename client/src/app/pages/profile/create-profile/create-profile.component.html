@@ -70,7 +70,7 @@
     <div class="container__full">
       <div class="profile-form" [formGroup]="basicInfoForm">
         <div class="profile-form__image">
-          <img alt="Profile Image" src="../../../../assets/icons/people-default.svg">
+          <img alt="Profile Image" src="{{ (generalInfoRequest && generalInfoRequest.photo) ? generalInfoRequest.photo : 'assets/icons/no_photo.png'}}">
         </div>
         <h3 class="profile-form__title">
           BASIC INFORMATION
@@ -120,6 +120,12 @@
               #birthdate
             >
             </mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="profile-form__field">
+          <mat-form-field class="bg-transparent" appearance="fill">
+            <mat-label>Title</mat-label>
+            <input matInput placeholder="Title" type="text" formControlName="basicInfoTitle">
           </mat-form-field>
         </div>
         <div class="profile-form__field">

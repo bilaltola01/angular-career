@@ -24,7 +24,7 @@ export class UserProfileComponent implements OnInit {
   isEditProfile: boolean;
   counts: number;
 
-  navMenu = NavMenus.profile;
+  navMenu: any[];
 
   userGeneralInfo: UserGeneralInfo;
   educationList: UserEducationItem[];
@@ -38,6 +38,7 @@ export class UserProfileComponent implements OnInit {
   constructor(private userService: UserService, private alertsService: AlertsService) { }
 
   ngOnInit() {
+    this.navMenu = NavMenus.profile;
     this.getGeneralInfo();
     this.getEducationList();
     this.getExperienceList();
@@ -66,6 +67,7 @@ export class UserProfileComponent implements OnInit {
     this.userService.getGeneralInfo().subscribe(
       dataJson => {
         this.userGeneralInfo = dataJson['data'];
+        this.navMenu[0].items[0].visible = this.userGeneralInfo.user_intro ?  true : false;
         this.counts++;
         this.checkProfileLoading();
       },
@@ -78,6 +80,7 @@ export class UserProfileComponent implements OnInit {
     this.userService.getEducationInfo().subscribe(
       dataJson => {
         this.educationList = dataJson['data'];
+        this.navMenu[0].items[1].visible = this.educationList && this.educationList.length > 0 ?  true : false;
         this.counts++;
         this.checkProfileLoading();
       },
@@ -91,6 +94,7 @@ export class UserProfileComponent implements OnInit {
     this.userService.getExperienceInfo().subscribe(
       dataJson => {
         this.experienceList = dataJson['data'];
+        this.navMenu[0].items[2].visible = this.experienceList && this.experienceList.length > 0 ? true : false;
         this.counts++;
         this.checkProfileLoading();
       },
@@ -100,10 +104,39 @@ export class UserProfileComponent implements OnInit {
       }
     );
   }
+  getUserPublicationsList() {
+    this.userService.getPublicationsInfo().subscribe(
+      dataJson => {
+        this.userPublicationsList = dataJson['data'];
+        this.navMenu[0].items[3].visible  = this.userPublicationsList && this.userPublicationsList.length > 0 ? true : false;
+        this.counts++;
+        this.checkProfileLoading();
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+        this.userPublicationsList = [];
+      }
+    );
+  }
+  getUserProjectsList() {
+    this.userService.getProjectsInfo().subscribe(
+      dataJson => {
+        this.userProjectsList = dataJson['data']['data'];
+        this.navMenu[0].items[4].visible = this.userProjectsList && this.userProjectsList.length > 0 ? true : false;
+        this.counts++;
+        this.checkProfileLoading();
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+        this.userProjectsList = [];
+      }
+    );
+  }
   getUserSkillsList() {
     this.userService.getSkillsInfo().subscribe(
       dataJson => {
         this.userSkillsList = dataJson['data'];
+        this.navMenu[0].items[5].visible = this.userSkillsList && this.userSkillsList.length > 0 ? true : false;
         this.counts++;
         this.checkProfileLoading();
       },
@@ -117,6 +150,7 @@ export class UserProfileComponent implements OnInit {
     this.userService.getUserInterestsInfo().subscribe(
       dataJson => {
         this.userInterestsList = dataJson['data'];
+        this.navMenu[0].items[6].visible = this.userInterestsList && this.userInterestsList.length > 0 ? true : false;
         this.counts++;
         this.checkProfileLoading();
       },
@@ -126,36 +160,11 @@ export class UserProfileComponent implements OnInit {
       }
     );
   }
-  getUserProjectsList() {
-    this.userService.getProjectsInfo().subscribe(
-      dataJson => {
-        this.userProjectsList = dataJson['data']['data'];
-        this.counts++;
-        this.checkProfileLoading();
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-        this.userProjectsList = [];
-      }
-    );
-  }
-  getUserPublicationsList() {
-    this.userService.getPublicationsInfo().subscribe(
-      dataJson => {
-        this.userPublicationsList = dataJson['data'];
-        this.counts++;
-        this.checkProfileLoading();
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-        this.userPublicationsList = [];
-      }
-    );
-  }
   getExternalResourceList() {
     this.userService.getExternalResourcesInfo().subscribe(
       dataJson => {
         this.externalResourcesList = dataJson['data'];
+        this.navMenu[0].items[9].visible = this.externalResourcesList && this.externalResourcesList.length > 0 ? true : false;
         this.counts++;
         this.checkProfileLoading();
       },

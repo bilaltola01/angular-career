@@ -342,33 +342,70 @@ export const UserRoles = [
 export const NavMenus = {
   profile: [
     {
+      id: 'profile',
       title: 'My Profile',
       items: [
-        'About Me',
-        'Education',
-        'Work Experience',
-        'Publications',
-        'Projects',
-        'Skills',
-        'Interests',
-        'Activities',
-        'Recommendations',
-        'External Resources'
+        {
+          id: 'about-me',
+          title: 'About Me',
+        },
+        {
+          id: 'education',
+          title: 'Education',
+        },
+        {
+          id: 'experience',
+          title: 'Work Experience',
+        },
+        {
+          id: 'publications',
+          title: 'Publications',
+        },
+        {
+          id: 'projects',
+          title: 'Projects',
+        },
+        {
+          id: 'skills',
+          title: 'Skills',
+        },
+        {
+          id: 'interests',
+          title: 'Interests',
+        },
+        {
+          id: 'activities',
+          title: 'Activities',
+          visible: true
+        },
+        {
+          id: 'recommendations',
+          title: 'Recommendations',
+          visible: true
+        },
+        {
+          id: 'external-resources',
+          title: 'External Resources',
+        }
       ]
     },
     {
+      id: 'contacts',
       title: 'Contacts',
       items: []
     },
     {
+      id: 'application-template',
       title: 'Application Template',
       items: []
     },
     {
+      id: 'managing-positions',
       title: 'Managing Positions',
       items: []
     },
     {
+      id: 'permissions',
       title: 'Permissions',
       items: []
     }

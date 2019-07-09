@@ -4,7 +4,9 @@
     <h3 (click)="onSelectNavMenu(i)">{{menu.title}}</h3>
     <mat-icon>keyboard_arrow_right</mat-icon>
     <ol *ngIf="menu.items.length > 0">
-      <li *ngFor="let item of menu.items">{{item}}</li>
+      <ng-container *ngFor="let item of menu.items">
+        <li *ngIf="item.visible">{{item.title}}</li>
+      </ng-container>
     </ol>
   </nav>
 </ng-container>

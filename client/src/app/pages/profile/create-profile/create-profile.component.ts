@@ -299,6 +299,7 @@ export class CreateProfileComponent implements OnInit {
       basicInfoState: new FormControl('', [Validators.required]),
       basicInfoCountry: new FormControl('', [Validators.required]),
       basicInfoBirth: new FormControl(''),
+      basicInfoTitle: new FormControl('', [Validators.required]),
       basicInfoGender: new FormControl('', [Validators.required]),
       basicInfoEthnicity: new FormControl('', [Validators.required])
     });
@@ -324,6 +325,11 @@ export class CreateProfileComponent implements OnInit {
         this.generalInfoRequest.birthdate = date ? date : null;
       }
     );
+    this.basicInfoForm.get('basicInfoTitle').valueChanges.subscribe(
+      (title) => {
+        this.onTitleValueChanges(title);
+      }
+    );
     this.basicInfoForm.get('basicInfoEthnicity').valueChanges.subscribe(
       (ethnicity) => {
         this.onEthnicityValueChanges(ethnicity);
@@ -337,6 +343,7 @@ export class CreateProfileComponent implements OnInit {
     this.basicInfoForm.get('basicInfoState').setValue(this.generalInfoResponse.state);
     this.basicInfoForm.get('basicInfoCountry').setValue(this.generalInfoResponse.country);
     this.basicInfoForm.get('basicInfoGender').setValue(this.generalInfoResponse.gender);
+    this.basicInfoForm.get('basicInfoTitle').setValue(this.generalInfoResponse.title);
     this.basicInfoForm.get('basicInfoBirth').setValue(this.generalInfoResponse.birthdate ? this.extractDate(this.generalInfoResponse.birthdate) : '');
     this.basicInfoForm.get('basicInfoEthnicity').setValue(this.generalInfoResponse.ethnicity);
   }
@@ -369,6 +376,9 @@ export class CreateProfileComponent implements OnInit {
   }
   onEthnicityValueChanges(ethnicity: string) {
     this.generalInfoRequest.ethnicity = ethnicity;
+  }
+  onTitleValueChanges(title: string) {
+    this.generalInfoRequest.title = title;
   }
   onGenderValueChanges(gender: string) {
     this.generalInfoRequest.gender = gender;
