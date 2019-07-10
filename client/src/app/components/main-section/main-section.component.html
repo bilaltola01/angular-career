@@ -1,17 +1,19 @@
 <ng-container *ngIf="selectedNavMenu === 'profile'">
 
-  <div *ngIf="userGeneralInfo && userGeneralInfo.user_intro" class="row">
+  <div *ngIf="(userGeneralInfo && userGeneralInfo.user_intro) || editMode" class="row">
     <h3> About Me </h3>
     <ng-container *ngIf="true; let short_desc">
-      <p *ngIf="userGeneralInfo.user_intro" [class.short-desc]="short_desc && userGeneralInfo.user_intro.length > helperService.shortDescLength">{{short_desc ? helperService.shortDescription(userGeneralInfo.user_intro) : userGeneralInfo.user_intro}}</p>
-      <a *ngIf="short_desc && userGeneralInfo.user_intro && userGeneralInfo.user_intro.length > helperService.shortDescLength" (click)="short_desc = false">Read More</a>
+      <p *ngIf="userGeneralInfo.user_intro" [class.short-desc]="short_desc && userGeneralInfo.user_intro.length > helperService.shortDescLength">{{short_desc && !editMode ? helperService.shortDescription(userGeneralInfo.user_intro) : userGeneralInfo.user_intro}}</p>
+      <a *ngIf="short_desc && userGeneralInfo.user_intro && userGeneralInfo.user_intro.length > helperService.shortDescLength && !editMode" (click)="short_desc = false">Read More</a>
     </ng-container>
+    <div class="btn-container">
+      <action-button class="edit-btn" type="stroked" color="primary" title="edit"></action-button>
+    </div>
   </div>
 
-  <div *ngIf="educationList && educationList.length > 0" class="row">
+  <div *ngIf="(educationList && educationList.length > 0) || editMode" class="row">
     <h3> Education </h3>
     <ng-container *ngFor="let education of educationList; let i = index">
-      <mat-divider *ngIf="i > 0"></mat-divider>
       <a href="/my-profile">{{education.user_specified_school_name ? education.user_specified_school_name : education.school_name}}</a>
       <h4>{{education.education_level}} - {{education.major_name}}</h4>
       <small>{{helperService.convertToFormattedString(education.start_date, 'YYYY')}} - {{helperService.convertToFormattedString(education.graduation_date, 'YYYY')}}</small>
@@ -20,11 +22,12 @@
           {{short_desc ? helperService.shortDescription(education.edu_desc) : education.edu_desc}}
         </p>
         <a *ngIf="short_desc && education.edu_desc && short_desc && education.edu_desc.length > helperService.shortDescLength" (click)="short_desc = false">Read More</a>
+        <mat-divider *ngIf="(i < educationList.length - 1) || editMode"></mat-divider>
       </ng-container>
     </ng-container>
   </div>
 
-  <div *ngIf="experienceList && experienceList.length > 0" class="row">
+  <div *ngIf="(experienceList && experienceList.length > 0) || editMode" class="row">
     <h3> Work Experience </h3>
     <ng-container *ngFor="let experience of experienceList; let i = inde;">
       <mat-divider *ngIf="i > 0"></mat-divider>
@@ -52,7 +55,7 @@
     </ng-container>
   </div>
 
-  <div *ngIf="userPublicationsList && userPublicationsList.length > 0" class="row">
+  <div *ngIf="(userPublicationsList && userPublicationsList.length > 0) || editMode" class="row">
     <h3> Publications </h3>
     <ng-container *ngFor="let publication of userPublicationsList; let i = index">
       <mat-divider *ngIf="i > 0"></mat-divider>
@@ -67,7 +70,7 @@
     </ng-container>
   </div>
 
-  <div *ngIf="userProjectsList && userProjectsList.length > 0" class="row">
+  <div *ngIf="(userProjectsList && userProjectsList.length > 0) || editMode" class="row">
     <h3> Projects </h3>
     <ng-container *ngFor="let project of userProjectsList">
       <mat-divider *ngIf="i > 0"></mat-divider>
@@ -82,15 +85,15 @@
     </ng-container>
   </div>
 
-  <div *ngIf="userSkillsList && userSkillsList.length > 0" class="row">
+  <div *ngIf="(userSkillsList && userSkillsList.length > 0) || editMode" class="row">
     <h3> Skills </h3>
     <h5>Skills {{userSkillsList.length}}</h5>
     <simple-tag *ngFor="let skill of userSkillsList" type="gray" title="{{skill.skill}}" ellipseTag="true" value="{{skill.skill_level}}"></simple-tag>
   </div>
 
-  <div *ngIf="userInterestsList && userInterestsList.length > 0" class="row">
+  <div *ngIf="(userInterestsList && userInterestsList.length > 0) || editMode" class="row">
     <h3> Interests </h3>
-    <h5>Skills {{userInterestsList.length}}</h5>
+    <h5>Interests {{userInterestsList.length}}</h5>
     <simple-tag *ngFor="let interest of userInterestsList" type="gray" title="{{interest.interest}}"></simple-tag>
   </div>
   <div class="row">
@@ -108,7 +111,7 @@
     <p>Worked with a team of five other people, three designers, and one other programmer, to design and create a functional web application for STEM Kids NY that distributed educational materials to underprivileged individuals interested in STEM.</p>
   </div>
 
-  <div *ngIf="externalResourcesList && externalResourcesList.length > 0" class="row">
+  <div *ngIf="(externalResourcesList && externalResourcesList.length > 0) editMode" class="row">
     <h3> External Resources </h3>
     <div>
       <div class="img-tag" *ngFor="let resource of externalResourcesList">

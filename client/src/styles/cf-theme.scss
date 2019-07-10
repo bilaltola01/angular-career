@@ -424,6 +424,12 @@ action-button {
       padding: 0 !important;
     }
   }
+  &.nav-btn {
+    & > button {
+      max-width: 170px;
+      padding: 10px 0 !important;
+    }
+  }
 }
 
 .container {

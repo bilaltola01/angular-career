@@ -27,6 +27,7 @@ export class MainSectionComponent implements OnInit {
   @Input() userProjectsList: UserProjectItem[];
   @Input() userPublicationsList: UserPublicationItem[];
   @Input() externalResourcesList: UserExternalResourcesItem[];
+  @Input() editMode: boolean;
 
   constructor(private helperService: HelperService) { }
 

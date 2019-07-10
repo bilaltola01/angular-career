@@ -8,7 +8,7 @@
     <a (click)="onClickEdit()">Edit Profile</a>
   </legend>
   <div class="edit-button"><a (click)="onClickEdit()">Edit Profile</a></div>
-  <nav-section [navMenu]="navMenu"></nav-section>
+  <nav-section [navMenu]="navMenu" [editMode]="isEditProfile"></nav-section>
   <main-section
     [selectedNavMenu]="'profile'"
     [userGeneralInfo]="userGeneralInfo"
@@ -19,6 +19,7 @@
     [userProjectsList]="userProjectsList"
     [userPublicationsList]="userPublicationsList"
     [externalResourcesList]="externalResourcesList"
+    [editMode]="isEditProfile"
   ></main-section> 
 </ng-container>
 

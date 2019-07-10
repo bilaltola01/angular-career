@@ -8,6 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class NavSectionComponent implements OnInit {
 
   @Input() navMenu: any[];
+  @Input() editMode: boolean;
   navIndex: number;
 
   constructor() { }

@@ -1,12 +1,15 @@
 
-<ng-container *ngIf="navMenu && navMenu.length > 0">
-  <nav *ngFor="let menu of navMenu; let i = index;" [class.active]="i === navIndex">
+<nav *ngIf="navMenu && navMenu.length > 0">
+  <div class="nav-section" *ngFor="let menu of navMenu; let i = index;" [class.active]="i === navIndex">
     <h3 (click)="onSelectNavMenu(i)">{{menu.title}}</h3>
     <mat-icon>keyboard_arrow_right</mat-icon>
     <ol *ngIf="menu.items.length > 0">
       <ng-container *ngFor="let item of menu.items">
-        <li *ngIf="item.visible">{{item.title}}</li>
+        <li *ngIf="item.visible || editMode">{{item.title}}</li>
       </ng-container>
     </ol>
-  </nav>
-</ng-container>
+  </div>
+  <div class="btn-section">
+    <action-button class="nav-btn" type="flat" title="Update Changes" color="primary"></action-button>
+  </div>  
+</nav>
