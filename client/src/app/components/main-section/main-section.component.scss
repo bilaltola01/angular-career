@@ -86,4 +86,21 @@
       cursor: pointer;
     }
   }
+  .form-field {
+    width: 80%;
+    max-width: 615px;
+    min-width: 280px;
+    border: solid 1px $mat-form-border-color;
+    border-radius: 5px;
+    padding: 0;
+    &.search {
+      border: none;
+      padding: 0;
+      mat-form-field {
+        width: 100%;
+        background-color: $third-bg-color;
+        border-radius: 25px;
+      }
+    }
+  }
 }

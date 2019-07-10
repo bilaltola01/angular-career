@@ -7,7 +7,7 @@
       <a *ngIf="short_desc && userGeneralInfo.user_intro && userGeneralInfo.user_intro.length > helperService.shortDescLength && !editMode" (click)="short_desc = false">Read More</a>
     </ng-container>
     <div class="btn-container">
-      <action-button class="edit-btn" type="stroked" color="primary" title="edit"></action-button>
+      <action-button class="edit-btn" type="stroked" color="primary" title="Edit"></action-button>
     </div>
   </div>
 
@@ -15,7 +15,7 @@
     <h3> Education </h3>
     <ng-container *ngFor="let education of educationList; let i = index">
       <a href="/my-profile">{{education.user_specified_school_name ? education.user_specified_school_name : education.school_name}}</a>
-      <h4>{{education.education_level}} - {{education.major_name}}</h4>
+      <h4>{{education.education_level}}{{education.major_name ? ' - ' + education.major_name : ''}}</h4>
       <small>{{helperService.convertToFormattedString(education.start_date, 'YYYY')}} - {{helperService.convertToFormattedString(education.graduation_date, 'YYYY')}}</small>
       <ng-container *ngIf="true; let short_desc">
         <p *ngIf="education.edu_desc" [class.short-desc]="short_desc && education.edu_desc.length > helperService.shortDescLength">
@@ -25,12 +25,14 @@
         <mat-divider *ngIf="(i < educationList.length - 1) || editMode"></mat-divider>
       </ng-container>
     </ng-container>
+    <div class="btn-container">
+      <action-button class="edit-btn" type="stroked" color="primary" title="Add More"></action-button>
+    </div>
   </div>
 
   <div *ngIf="(experienceList && experienceList.length > 0) || editMode" class="row">
     <h3> Work Experience </h3>
     <ng-container *ngFor="let experience of experienceList; let i = inde;">
-      <mat-divider *ngIf="i > 0"></mat-divider>
       <a href="/my-profile">{{experience.user_specified_company_name ? experience.user_specified_company_name : experience.company_name}}</a>
       <h4>{{experience.job}}</h4>
       <small>{{helperService.convertToFormattedString(experience.start_date, 'MMM, YYYY')}} - {{(experience.end_date ? helperService.convertToFormattedString(experience.end_date, 'MMM, YYYY') : 'Present')}}</small>
@@ -52,13 +54,16 @@
         <h5>Additional Industry Exposure {{experience.add_industries.length}}</h5>
         <simple-tag *ngFor="let add_industry of experience.add_industries" type="gray" title="{{add_industry.industry_name}}"></simple-tag>
       </ng-container>
+      <mat-divider *ngIf="(i < experienceList.length - 1) || editMode"></mat-divider>
     </ng-container>
+    <div class="btn-container">
+      <action-button class="edit-btn" type="stroked" color="primary" title="Add More"></action-button>
+    </div>
   </div>
 
   <div *ngIf="(userPublicationsList && userPublicationsList.length > 0) || editMode" class="row">
     <h3> Publications </h3>
     <ng-container *ngFor="let publication of userPublicationsList; let i = index">
-      <mat-divider *ngIf="i > 0"></mat-divider>
       <h4>{{publication.publication_title}}</h4>
       <small *ngIf="publication.date_published">Published on {{helperService.convertToFormattedString(publication.date_published, 'll')}}</small>
       <ng-container *ngIf="true; let short_desc">
@@ -67,13 +72,16 @@
         </p>
         <a *ngIf="short_desc && publication.description && publication.description.length > helperService.shortDescLength" (click)="short_desc = false">Read More</a>
       </ng-container>
+      <mat-divider *ngIf="(i < userPublicationsList.length - 1) || editMode"></mat-divider>
     </ng-container>
+    <div class="btn-container">
+      <action-button class="edit-btn" type="stroked" color="primary" title="Add More"></action-button>
+    </div>
   </div>
 
   <div *ngIf="(userProjectsList && userProjectsList.length > 0) || editMode" class="row">
     <h3> Projects </h3>
     <ng-container *ngFor="let project of userProjectsList">
-      <mat-divider *ngIf="i > 0"></mat-divider>
       <h4>{{project.project_name}}</h4>
       <small *ngIf="project.date_finished">Completed on {{helperService.convertToFormattedString(project.date_finished, 'll')}}</small>
       <ng-container *ngIf="true; let short_desc">
@@ -82,19 +90,45 @@
         </p>
         <a *ngIf="short_desc && project.description && project.description.length > helperService.shortDescLength" (click)="short_desc = false">Read More</a>
       </ng-container>
+      <mat-divider *ngIf="(i < userProjectsList.length - 1) || editMode"></mat-divider>
     </ng-container>
+    <div class="btn-container">
+      <action-button class="edit-btn" type="stroked" color="primary" title="Add More"></action-button>
+    </div>
   </div>
 
   <div *ngIf="(userSkillsList && userSkillsList.length > 0) || editMode" class="row">
     <h3> Skills </h3>
+    <div *ngIf="editMode" class="form-field search" [formGroup]="skillsSearchForm">
+      <mat-form-field appearance="standard" class="search">
+        <mat-icon matSuffix>search</mat-icon>
+        <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompleteSkills" formControlName="skills">
+        <mat-autocomplete #autocompleteSkills="matAutocomplete">
+          <mat-option *ngFor="let autocomplete_skill of autocomplete_skills" [value]="autocomplete_skill.skill" (onSelectionChange)="addSkills(autocomplete_skill)">
+            <span>{{autocomplete_skill.skill}}</span>
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
     <h5>Skills {{userSkillsList.length}}</h5>
-    <simple-tag *ngFor="let skill of userSkillsList" type="gray" title="{{skill.skill}}" ellipseTag="true" value="{{skill.skill_level}}"></simple-tag>
+    <simple-tag *ngFor="let skill of userSkillsList; let i = index" type="gray" title="{{skill.skill}}" ellipseTag="true" value="{{skill.skill_level}}" (levelChanged)="onLevelChanged($event, i)" (removeClick)="removeUserSkillsData(i, skill)" [isControl]="editMode"></simple-tag>
   </div>
 
   <div *ngIf="(userInterestsList && userInterestsList.length > 0) || editMode" class="row">
     <h3> Interests </h3>
+    <div *ngIf="editMode" class="form-field search" [formGroup]="interestsSearchForm">
+      <mat-form-field appearance="standard" class="search">
+        <mat-icon matSuffix>search</mat-icon>
+        <input matInput placeholder="Search Interests" type="text" [matAutocomplete]="autocompleteInterests" formControlName="interests">
+        <mat-autocomplete #autocompleteInterests="matAutocomplete">
+          <mat-option *ngFor="let autocomplete_interest of autocomplete_interests" [value]="autocomplete_interest.interest" (onSelectionChange)="addInterests(autocomplete_interest)">
+            <span>{{autocomplete_interest.interest}}</span>
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
     <h5>Interests {{userInterestsList.length}}</h5>
-    <simple-tag *ngFor="let interest of userInterestsList" type="gray" title="{{interest.interest}}"></simple-tag>
+    <simple-tag *ngFor="let interest of userInterestsList; let i = index" type="gray" title="{{interest.interest}}" [removeTag]="editMode" (click)="removeUserInteretsData(i, interest)"></simple-tag>
   </div>
   <div class="row">
     <h3> Activities </h3>

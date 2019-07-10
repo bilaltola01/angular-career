@@ -560,8 +560,6 @@ export class CreateProfileComponent implements OnInit {
     this.autocomplete_universities = [];
     this.autocomplete_majors = [];
     this.autocomplete_focus_majors = [];
-    this.prevent_skills_autocomplete = false;
-    this.prevent_interets_autocomplete = false;
   }
   onRemoveEducationData(index: number) {
     if (index > this.educationList.length - 1) {
@@ -1290,6 +1288,8 @@ export class CreateProfileComponent implements OnInit {
   initSkillsAndInterestsForm() {
     this.autocomplete_skills = [];
     this.autocomplete_interests = [];
+    this.prevent_skills_autocomplete = false;
+    this.prevent_interets_autocomplete = false;
     this.userSkillsList = [];
     this.userInterestsList = [];
 
