@@ -8,6 +8,7 @@ import { HeaderSectionComponent } from 'src/app/components/header-section/header
 import { NavSectionComponent } from 'src/app/components/nav-section/nav-section.component';
 import { MainSectionComponent } from 'src/app/components/main-section/main-section.component';
 import { SimpleTagComponent } from 'src/app/components/simple-tag/simple-tag.component';
+import { ActionButtonComponent } from 'src/app/components/action-button/action-button.component';
 
 describe('UserProfileComponent', () => {
   let component: UserProfileComponent;
@@ -16,7 +17,7 @@ describe('UserProfileComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports : [ MaterialModule, TestingModule ],
-      declarations: [ UserProfileComponent, HeaderSectionComponent, NavSectionComponent, MainSectionComponent, SimpleTagComponent ]
+      declarations: [ UserProfileComponent, HeaderSectionComponent, NavSectionComponent, MainSectionComponent, SimpleTagComponent, ActionButtonComponent ]
     })
     .compileComponents();
   }));

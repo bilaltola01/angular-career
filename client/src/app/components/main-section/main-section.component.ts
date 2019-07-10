@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Inject } from '@angular/core';
 import {
   UserGeneralInfo,
   UserEducationItem,
@@ -19,6 +19,15 @@ import {
   UserService
 } from 'src/app/services';
 import { FormGroup, FormControl } from '@angular/forms';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA
+} from '@angular/material/dialog';
+
+export interface DialogData {
+  category: 'About Me' | 'Education' | 'Experience';
+}
 
 @Component({
   selector: 'main-section',
@@ -51,12 +60,25 @@ export class MainSectionComponent implements OnInit {
     private helperService: HelperService,
     private autoCompleteService: AutoCompleteService,
     private alertsService: AlertsService,
-    private userService: UserService
+    private userService: UserService,
+    public dialog: MatDialog
   ) { }
 
   ngOnInit() {
     this.initSkillsSearchForm();
     this.initInterestsSearchForm();
+  }
+
+  openDialog(category: string, data: any) {
+    const dialgoRef = this.dialog.open(ProfileDialogContentComponent, {
+      data: {
+        category: category,
+        data: data
+      }
+    });
+    dialgoRef.afterClosed().subscribe(result => {
+      console.log('Dialog result: $(result)');
+    });
   }
 
   initSkillsSearchForm() {
@@ -211,4 +233,23 @@ export class MainSectionComponent implements OnInit {
     );
   }
 
+}
+
+@Component({
+  selector: 'dialog-content',
+  templateUrl: './dialog-content.component.html',
+  styleUrls: ['./dialog-content.component.scss']
+})
+
+export class ProfileDialogContentComponent {
+  constructor(
+    public dialogRef: MatDialogRef<ProfileDialogContentComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData
+  ) {
+    console.log(data);
+  }
+
+  onClose(): void {
+    this.dialogRef.close();
+  }
 }

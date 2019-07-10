@@ -21,7 +21,10 @@ import { SharedModule } from './components/shared.module';
     ReactiveFormsModule,
     SharedModule
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+    ProfileDialogContentComponent
+  ]
 })
 
 export class AppModule {

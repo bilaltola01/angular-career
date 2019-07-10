@@ -6,8 +6,8 @@
       <p *ngIf="userGeneralInfo.user_intro" [class.short-desc]="short_desc && userGeneralInfo.user_intro.length > helperService.shortDescLength">{{short_desc && !editMode ? helperService.shortDescription(userGeneralInfo.user_intro) : userGeneralInfo.user_intro}}</p>
       <a *ngIf="short_desc && userGeneralInfo.user_intro && userGeneralInfo.user_intro.length > helperService.shortDescLength && !editMode" (click)="short_desc = false">Read More</a>
     </ng-container>
-    <div class="btn-container">
-      <action-button class="edit-btn" type="stroked" color="primary" title="Edit"></action-button>
+    <div *ngIf="editMode" class="btn-container">
+      <action-button class="edit-btn" type="stroked" color="primary" title="Edit" (click)="openDialog('About Me', userGeneralInfo)"></action-button>
     </div>
   </div>
 
@@ -25,8 +25,8 @@
         <mat-divider *ngIf="(i < educationList.length - 1) || editMode"></mat-divider>
       </ng-container>
     </ng-container>
-    <div class="btn-container">
-      <action-button class="edit-btn" type="stroked" color="primary" title="Add More"></action-button>
+    <div *ngIf="editMode" class="btn-container">
+      <action-button class="edit-btn" type="stroked" color="primary" title="Add More" (click)="openDialog('Education', educationList)"></action-button>
     </div>
   </div>
 
@@ -56,8 +56,8 @@
       </ng-container>
       <mat-divider *ngIf="(i < experienceList.length - 1) || editMode"></mat-divider>
     </ng-container>
-    <div class="btn-container">
-      <action-button class="edit-btn" type="stroked" color="primary" title="Add More"></action-button>
+    <div *ngIf="editMode" class="btn-container">
+      <action-button class="edit-btn" type="stroked" color="primary" title="Add More" (click)="openDialog('Work Experience', experienceList)"></action-button>
     </div>
   </div>
 
@@ -74,8 +74,8 @@
       </ng-container>
       <mat-divider *ngIf="(i < userPublicationsList.length - 1) || editMode"></mat-divider>
     </ng-container>
-    <div class="btn-container">
-      <action-button class="edit-btn" type="stroked" color="primary" title="Add More"></action-button>
+    <div *ngIf="editMode" class="btn-container">
+      <action-button class="edit-btn" type="stroked" color="primary" title="Add More" (click)="openDialog('Publication', userPublicationsList)"></action-button>
     </div>
   </div>
 
@@ -92,8 +92,8 @@
       </ng-container>
       <mat-divider *ngIf="(i < userProjectsList.length - 1) || editMode"></mat-divider>
     </ng-container>
-    <div class="btn-container">
-      <action-button class="edit-btn" type="stroked" color="primary" title="Add More"></action-button>
+    <div *ngIf="editMode" class="btn-container">
+      <action-button class="edit-btn" type="stroked" color="primary" title="Add More" (click)="openDialog('Education', educationList)"></action-button>
     </div>
   </div>
 

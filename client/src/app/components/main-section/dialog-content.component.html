@@ -1,0 +1,10 @@
+<mat-icon class="cancel" (click)="onClose()">cancel</mat-icon>
+<h3 mat-dialog-title>{{data.category}}</h3>
+<ng-container *ngIf="data.category === 'About Me'">
+  <div class="form-field textarea">
+    <mat-form-field>
+      <textarea matInput placeholder="Briefly introduce yourself" rows="15" [value]="data.data.user_intro"></textarea>
+    </mat-form-field>
+  </div>
+  <action-button class="update-btn" type="flat" title="Update" color="primary"></action-button>
+</ng-container>
