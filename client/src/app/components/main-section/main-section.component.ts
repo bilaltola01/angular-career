@@ -456,12 +456,12 @@ export class ProfileDialogContentComponent {
     );
     this.educationForm.get('start_date').valueChanges.subscribe(
       (start_date) => {
-        this.request_education.start_date = start_date ? this.helperService.convertToFormattedString(start_date, 'L') : null ;
+        this.request_education.start_date = start_date ? this.helperService.convertStringToFormattedDateString(start_date, 'YYYY', 'L') : null ;
       }
     );
     this.educationForm.get('graduation_date').valueChanges.subscribe(
       (graduation_date) => {
-        this.request_education.graduation_date = graduation_date ? this.helperService.convertToFormattedString(graduation_date, 'L') : null ;
+        this.request_education.graduation_date = graduation_date ? this.helperService.convertStringToFormattedDateString(graduation_date, 'YYYY', 'L') : null ;
       }
     );
     this.educationForm.get('major').valueChanges.subscribe(
@@ -599,7 +599,9 @@ export class ProfileDialogContentComponent {
     }
   }
   onEducationYearSelect(date: any, isStartDate: boolean = true, datePicker: MatDatepicker<any>) {
-    this.minDate = new Date(date);
+    if (isStartDate) {
+      this.minDate = new Date(date);
+    }
     datePicker.close();
     this.educationForm.get(isStartDate ? 'start_date' : 'graduation_date').setValue(this.helperService.convertToFormattedString(date, 'YYYY'));
   }
@@ -671,12 +673,12 @@ export class ProfileDialogContentComponent {
     );
     this.experienceForm.get('start_date').valueChanges.subscribe(
       (start_date) => {
-        this.request_experience.start_date = start_date ? this.helperService.convertToFormattedString(start_date, 'L') : null;
+        this.request_experience.start_date = start_date ? this.helperService.convertStringToFormattedDateString(start_date, 'MM/YYYY', 'L') : null;
       }
     );
     this.experienceForm.get('end_date').valueChanges.subscribe(
       (end_date) => {
-        this.request_experience.end_date = end_date ? this.helperService.convertToFormattedString(end_date, 'L') : null;
+        this.request_experience.end_date = end_date ? this.helperService.convertStringToFormattedDateString(end_date, 'MM/YYYY', 'L') : null;
       }
     );
     this.experienceForm.get('job').valueChanges.subscribe(
@@ -750,7 +752,9 @@ export class ProfileDialogContentComponent {
     }
   }
   onExperienceMonthSelect(date: any, isStartDate: boolean = true, datePicker: MatDatepicker<any>) {
-    this.minDate = new Date(date);
+    if (isStartDate) {
+      this.minDate = new Date(date);
+    }
     datePicker.close();
     this.experienceForm.get(isStartDate ? 'start_date' : 'end_date').setValue(this.helperService.convertToFormattedString(date, 'MM/YYYY'));
   }

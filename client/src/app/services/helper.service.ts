@@ -14,6 +14,10 @@ export class HelperService {
     return moment.utc(new Date(date)).format(format);
   }
 
+  convertStringToFormattedDateString(date: string, origin_format: string, format: string): string {
+    return moment.utc(date, origin_format).format(format);
+  }
+
   shortDescription(description: string): string {
     if (description && description.length > this.shortDescLength) {
       return description.slice(0, this.shortDescLength) + '...';

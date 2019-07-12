@@ -14,6 +14,13 @@
       text-align: center;
       padding: 10px 0;
     }
+    h4 {
+      margin-top: 10px;
+    }
+    p {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
   }
   simple-tag {
     display: inline-flex;
@@ -49,12 +56,31 @@
     color: rgba(map-get($md-cfaccent, 500), .84);
   }
   mat-divider {
-    margin: 10px 0;
+    margin: 20px 0;
   }
   p {
     color: rgba(map-get($md-cfaccent, 500), .54);
     &.short-desc {
       color: rgba(map-get($md-cfaccent, 500), .34);
+    }
+  }
+  .detail-info {
+    width: 100%;
+    display: inline-grid;
+    grid-template: 
+      "left-top right-all" auto
+      "left-bottom right-all" auto
+      / auto 70px;
+    grid-gap: 0 10px;
+    &__left-top {
+      grid-area: left-top;
+    }
+    &__left-bottom {
+      grid-area: left-bottom;
+    }
+    &__right_all {
+      grid-area: right-all;
+      text-align: right;
     }
   }
   .img-tag {
