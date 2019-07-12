@@ -8,22 +8,38 @@
   border-radius: 5px;
   box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.15);
   .row {
-    padding: 15px;
+    padding: 25px 20px;
     border-bottom: 1px solid map-get($md-cfaccent, 50);
     .btn-container {
       text-align: center;
       padding: 10px 0;
     }
+    h3 {
+      font-weight: 600;
+      font-size: 20px;
+      line-height: 30px;
+      margin-bottom: 20px
+    }
     h4 {
       margin-top: 10px;
+    }
+    h5 {
+      margin-top: 15px;
+      margin-bottom: 0;
+      font-size: 14px;
+      line-height: 21px;
     }
     p {
       margin-top: 10px;
       margin-bottom: 10px;
+      font-size: 16px;
+      line-height: 24px;
     }
   }
   simple-tag {
     display: inline-flex;
+    margin-top: 10px;
+    margin-right: 10px;
   }
   action-button {
     display: inline-flex;
@@ -35,6 +51,7 @@
   }
   a {
     font-size: 14px;
+    line-height: 21px;
     color: map-get($md-cfprimary, 500);
     text-decoration: none;
     cursor: pointer;
@@ -57,6 +74,7 @@
   }
   mat-divider {
     margin: 20px 0;
+    border-color: rgba(#707070, 0.1);
   }
   p {
     color: rgba(map-get($md-cfaccent, 500), .54);
