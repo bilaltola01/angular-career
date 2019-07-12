@@ -20,7 +20,9 @@ import {
   Level,
   Levels,
   Company,
-  Industry
+  Industry,
+  ExternalResources,
+  UserExternalResourcesItemData
 } from 'src/app/models';
 import {
   HelperService,
@@ -38,7 +40,7 @@ import {
 import {MatDatepicker} from '@angular/material/datepicker';
 
 export interface DialogData {
-  category: 'About Me' | 'Education' | 'Work Experience' | 'Project' | 'Publication';
+  category: 'About Me' | 'Education' | 'Work Experience' | 'Project' | 'Publication' | 'External Resources';
   data: any;
 }
 
@@ -106,6 +108,9 @@ export class MainSectionComponent implements OnInit {
             break;
           case 'Publication':
             this.userPublicationsList = result;
+            break;
+          case 'External Resources':
+            this.externalResourcesList = result;
             break;
           default:
             break;
@@ -281,12 +286,14 @@ export class ProfileDialogContentComponent {
   experienceForm: FormGroup;
   projectForm: FormGroup;
   publicationForm: FormGroup;
+  externalResourcesForm: FormGroup;
 
   request_general: UserObject;
   request_education: UserEducationItemData;
   request_experience: UserExperienceItemData;
   request_project: UserProjectItemData;
   request_publication: UserPublicationItemData;
+  externalResourcesDataList: UserExternalResourcesItemData[];
 
   autocomplete_universities: School[];
   autocomplete_majors: Major[];
@@ -306,6 +313,7 @@ export class ProfileDialogContentComponent {
   additional_industries: Industry[];
 
   degrees: Level[] = Levels;
+  externalResources = ExternalResources;
 
   minDate: Date;
   maxDate = new Date();
@@ -334,6 +342,9 @@ export class ProfileDialogContentComponent {
         break;
       case 'Publication':
         this.initPublicationForm();
+        break;
+      case 'External Resources':
+        this.initExternalResourcesForm();
         break;
       default:
         break;
@@ -913,6 +924,102 @@ export class ProfileDialogContentComponent {
         }
       );
     }
+  }
+
+  initExternalResourcesForm() {
+    this.externalResourcesForm = new FormGroup({});
+    this.externalResourcesDataList = [];
+
+    this.externalResources.forEach((resource, index) => {
+      this.externalResourcesForm.addControl(resource, new FormControl(''));
+      this.externalResourcesForm.get(resource).valueChanges.subscribe(
+        (link) => {
+          this.onExternalResourceValueChange(resource, index, link);
+        }
+      );
+      this.externalResourcesDataList.push({
+        link: null,
+        description: resource
+      });
+    });
+    this.updateExternalResourceFormGroup();
+  }
+  onExternalResourceValueChange(resource: string, arrIndex: number, link: string) {
+    if (this.externalResourcesDataList[arrIndex].description === resource) {
+      this.externalResourcesDataList[arrIndex] .link = link ? link : null;
+    }
+  }
+  updateExternalResourceFormGroup() {
+    const externalResourcesList = this.data.data;
+    externalResourcesList.forEach((resource) => {
+      this.externalResourcesForm.get(resource.description).setValue(resource.link);
+    });
+  }
+  updateExternalResourceData() {
+    let counts = 0;
+    const newDataList = [];
+    this.externalResourcesDataList.forEach((resource) => {
+      const exteralResource = this.data.data.filter(value => value.description === resource.description);
+      if (exteralResource.length > 0) {
+        if (resource.link) {
+          this.userService.patchExternalResourcesById(resource, exteralResource[0].resource_id).subscribe(
+            dataJson => {
+              counts++;
+              if (counts === this.externalResourcesDataList.length) {
+                this.getExternalResourceList();
+              }
+            },
+            error => {
+              this.alertsService.show(error.message, AlertType.error);
+            }
+          );
+        } else {
+          this.userService.deleteExternalResourcesById(exteralResource[0].resource_id).subscribe(
+            dataJson => {
+              counts++;
+              if (counts === this.externalResourcesDataList.length) {
+                this.getExternalResourceList();
+              }
+            },
+            error => {
+              this.alertsService.show(error.message, AlertType.error);
+            }
+          );
+        }
+      } else {
+        if (resource.link) {
+          newDataList.push(resource);
+        } else {
+          counts++;
+          if (counts === this.externalResourcesDataList.length) {
+            this.getExternalResourceList();
+          }
+        }
+      }
+    });
+    if (newDataList.length > 0) {
+      this.userService.postExternalResourcesInfo(newDataList).subscribe(
+        dataJson => {
+          counts = counts + newDataList.length;
+          if (counts === this.externalResourcesDataList.length) {
+            this.getExternalResourceList();
+          }
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    }
+  }
+  getExternalResourceList() {
+    this.userService.getExternalResourcesInfo().subscribe(
+      dataJson => {
+        this.dialogRef.close(dataJson['data']);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
   }
 
   onClose(): void {

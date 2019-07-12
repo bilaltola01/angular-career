@@ -182,7 +182,7 @@ export class UserProfileComponent implements OnInit {
     this.userService.getExternalResourcesInfo().subscribe(
       dataJson => {
         this.externalResourcesList = dataJson['data'];
-        this.navMenu[0].items[9].visible = this.externalResourcesList && this.externalResourcesList.length > 0 ? true : false;
+        this.navMenu[0].items[7].visible = this.externalResourcesList && this.externalResourcesList.length > 0 ? true : false;
         this.counts++;
         this.checkProfileLoading();
       },

@@ -374,16 +374,6 @@ export const NavMenus = {
           title: 'Interests',
         },
         {
-          id: 'activities',
-          title: 'Activities',
-          visible: true
-        },
-        {
-          id: 'recommendations',
-          title: 'Recommendations',
-          visible: true
-        },
-        {
           id: 'external-resources',
           title: 'External Resources',
         }

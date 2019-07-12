@@ -278,3 +278,18 @@
       <action-button class="update-btn" type="flat" title="Add" color="primary" [disabled]="!publicationForm.valid" (click)="addPublication()"></action-button>
     </mat-dialog-actions>
   </ng-container>
+
+  <ng-container *ngIf="data.category === 'External Resources'" [formGroup]="externalResourcesForm">
+    <mat-dialog-content>
+      <div *ngFor="let resource of externalResources" class="form-field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>{{resource}}</mat-label>
+          <img matSuffix src="assets/icons/ic_{{resource.toLowerCase()}}.svg">
+          <input matInput placeholder="{{resource}} Link" type="text" [formControl]="externalResourcesForm.get(resource)">
+        </mat-form-field>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+      <action-button class="update-btn" type="flat" title="Update" color="primary" [disabled]="!externalResourcesForm.valid" (click)="updateExternalResourceData()"></action-button>
+    </mat-dialog-actions>
+  </ng-container>

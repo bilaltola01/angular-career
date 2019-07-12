@@ -130,22 +130,8 @@
     <h5>Interests {{userInterestsList.length}}</h5>
     <simple-tag *ngFor="let interest of userInterestsList; let i = index" type="gray" title="{{interest.interest}}" [removeTag]="editMode" (click)="removeUserInteretsData(i, interest)"></simple-tag>
   </div>
-  <div class="row">
-    <h3> Activities </h3>
-    <h5>Activities 3</h5>
-    <simple-tag type="gray" title="Weightlifting"></simple-tag>
-    <simple-tag type="gray" title="Reading"></simple-tag>
-    <simple-tag type="gray" title="Writing"></simple-tag>
-  </div>
 
-  <div class="row">
-    <h3> Recommendation </h3>
-    <h4>Ryan Sandoval</h4>
-    <small>Association: Coworker</small>
-    <p>Worked with a team of five other people, three designers, and one other programmer, to design and create a functional web application for STEM Kids NY that distributed educational materials to underprivileged individuals interested in STEM.</p>
-  </div>
-
-  <div *ngIf="(externalResourcesList && externalResourcesList.length > 0) editMode" class="row">
+  <div *ngIf="(externalResourcesList && externalResourcesList.length > 0) || editMode" class="row">
     <h3> External Resources </h3>
     <div>
       <div class="img-tag" *ngFor="let resource of externalResourcesList">
@@ -153,6 +139,9 @@
         <label>{{resource.description}}</label>
         <a href="/my-profile">{{resource.link}}</a>
       </div>
+    </div>
+    <div *ngIf="editMode" class="btn-container">
+      <action-button class="edit-btn" type="stroked" color="primary" title="Edit" (click)="openDialog('External Resources', externalResourcesList)"></action-button>
     </div>
   </div>
 </ng-container>
