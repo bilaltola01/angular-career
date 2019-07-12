@@ -93,7 +93,7 @@
       <mat-divider *ngIf="(i < userProjectsList.length - 1) || editMode"></mat-divider>
     </ng-container>
     <div *ngIf="editMode" class="btn-container">
-      <action-button class="edit-btn" type="stroked" color="primary" title="Add More" (click)="openDialog('Education', educationList)"></action-button>
+      <action-button class="edit-btn" type="stroked" color="primary" title="Add More" (click)="openDialog('Project', userProjectsList)"></action-button>
     </div>
   </div>
 

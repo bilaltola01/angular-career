@@ -1187,7 +1187,7 @@ export class CreateProfileComponent implements OnInit {
         }
       },
       error => {
-        this.autocomplete_universities[arrIndex] = [];
+        this.autocomplete_companies[arrIndex] = [];
         this.alertsService.show(error.message, AlertType.error);
       }
     );

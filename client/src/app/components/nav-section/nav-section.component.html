@@ -9,7 +9,7 @@
       </ng-container>
     </ol>
   </div>
-  <div class="btn-section">
-    <action-button class="nav-btn" type="flat" title="Update Changes" color="primary"></action-button>
+  <div *ngIf="editMode" class="btn-section">
+    <action-button class="nav-btn" type="flat" title="Update Changes" color="primary" (click)="onClickUpdate()"></action-button>
   </div>  
 </nav>

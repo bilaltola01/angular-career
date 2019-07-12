@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {
   UserGeneralInfo,
@@ -14,7 +14,6 @@ import {
   AlertsService,
   AlertType,
   AutoCompleteService,
-  UserService
 } from 'src/app/services';
 
 
@@ -27,6 +26,7 @@ export class HeaderSectionComponent implements OnInit {
 
   @Input() generalInfo: UserGeneralInfo;
   @Input() editMode: boolean;
+  @Output() updatedGeneralInfoData = new EventEmitter();
 
   maxDate = new Date();
 
@@ -74,24 +74,31 @@ export class HeaderSectionComponent implements OnInit {
 
     this.generalInfoForm.get('first_name').valueChanges.subscribe((first_name) => {
       this.generalInfoData.first_name = first_name;
+      this.updatedGeneralInfoData.emit(this.generalInfoData);
     });
     this.generalInfoForm.get('last_name').valueChanges.subscribe((last_name) => {
       this.generalInfoData.last_name = last_name;
+      this.updatedGeneralInfoData.emit(this.generalInfoData);
     });
     this.generalInfoForm.get('title').valueChanges.subscribe((title) => {
       this.generalInfoData.title = title;
+      this.updatedGeneralInfoData.emit(this.generalInfoData);
     });
     this.generalInfoForm.get('ethnicity').valueChanges.subscribe((ethnicity) => {
       this.generalInfoData.ethnicity = ethnicity;
+      this.updatedGeneralInfoData.emit(this.generalInfoData);
     });
     this.generalInfoForm.get('gender').valueChanges.subscribe((gender) => {
       this.generalInfoData.gender = gender;
+      this.updatedGeneralInfoData.emit(this.generalInfoData);
     });
     this.generalInfoForm.get('birthdate').valueChanges.subscribe((date) => {
       this.generalInfoData.birthdate = date ? date : null;
+      this.updatedGeneralInfoData.emit(this.generalInfoData);
     });
     this.generalInfoForm.get('country').valueChanges.subscribe((country) => {
       this.generalInfoData.country_id = Countries.indexOf(country) + 1;
+      this.updatedGeneralInfoData.emit(this.generalInfoData);
     });
     this.generalInfoForm.get('city').valueChanges.subscribe((city) => {
       if (city) {
@@ -153,6 +160,7 @@ export class HeaderSectionComponent implements OnInit {
       user_intro: this.generalInfo.user_intro,
       ethnicity: this.generalInfo.ethnicity
     };
+    this.updatedGeneralInfoData.emit(this.generalInfoData);
   }
 
   onChangeBirthDate(date: any) {
@@ -165,11 +173,13 @@ export class HeaderSectionComponent implements OnInit {
 
   onCountryValueChanges(country: string) {
     this.generalInfoData.country_id = Countries.indexOf(country) + 1;
+    this.updatedGeneralInfoData.emit(this.generalInfoData);
   }
 
   onSelectCity(city: City) {
     this.generalInfoData.city_id = city.city_id;
     this.temp_city = city;
+    this.updatedGeneralInfoData.emit(this.generalInfoData);
   }
   onBlurCity() {
     if (this.temp_city) {
@@ -194,10 +204,12 @@ export class HeaderSectionComponent implements OnInit {
   }
   clearCity() {
     this.generalInfoData.city_id = null;
+    this.updatedGeneralInfoData.emit(this.generalInfoData);
   }
   onSelectState(state: State) {
     this.generalInfoData.state_id = state.state_id;
     this.temp_state = state;
+    this.updatedGeneralInfoData.emit(this.generalInfoData);
   }
   onBlurState() {
     if (this.temp_state) {
@@ -222,6 +234,7 @@ export class HeaderSectionComponent implements OnInit {
   }
   clearState() {
     this.generalInfoData.state_id = null;
+    this.updatedGeneralInfoData.emit(this.generalInfoData);
   }
 
 }

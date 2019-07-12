@@ -10,7 +10,8 @@ import {
   UserInterestItem,
   UserProjectItem,
   UserPublicationItem,
-  UserExternalResourcesItem
+  UserExternalResourcesItem,
+  UserObject
 } from 'src/app/models';
 
 @Component({
@@ -27,6 +28,7 @@ export class UserProfileComponent implements OnInit {
   navMenu: any[];
 
   userGeneralInfo: UserGeneralInfo;
+  generalInfoData: UserObject;
   educationList: UserEducationItem[];
   experienceList: UserExperienceItem[];
   userSkillsList: UserSkillItem[];
@@ -47,13 +49,29 @@ export class UserProfileComponent implements OnInit {
     this.getUserProjectsList();
     this.getUserPublicationsList();
     this.getExternalResourceList();
-    this.isEditProfile = true;
+    this.isEditProfile = false;
     this.isProfileLoading = true;
     this.counts = 0;
   }
 
   onClickEdit() {
     this.isEditProfile = true;
+  }
+
+  onChangedGeneralInfoData(generalInfoData: UserObject) {
+    this.generalInfoData = generalInfoData;
+  }
+
+  onClickUpdate() {
+    this.userService.updateGeneralInfo(this.generalInfoData).subscribe(
+      dataJson => {
+        this.userGeneralInfo = dataJson['data'];
+        this.isEditProfile = false;
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
   }
 
   checkProfileLoading() {

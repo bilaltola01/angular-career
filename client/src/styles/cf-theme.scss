@@ -431,7 +431,7 @@ action-button {
     }
   }
   &.update-btn {
-    margin-top: 30px;
+    margin-top: 20px;
     min-width: 150px;
   }
 }
@@ -460,6 +460,14 @@ mat-dialog-container {
       top: 10px;
       right: 10px;
       color: map-get($md-cfprimary, 500);
+    }
+    mat-dialog-content {
+      width: 75%;
+      max-width: 615px;
+      min-width: 280px;
+    }
+    mat-dialog-actions {
+      margin-bottom: 0 !important;
     }
   }
 }

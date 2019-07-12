@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'nav-section',
@@ -9,6 +9,8 @@ export class NavSectionComponent implements OnInit {
 
   @Input() navMenu: any[];
   @Input() editMode: boolean;
+  @Output() clickUpdate = new EventEmitter();
+
   navIndex: number;
 
   constructor() { }
@@ -19,6 +21,10 @@ export class NavSectionComponent implements OnInit {
 
   onSelectNavMenu(navIndex: number) {
     this.navIndex = navIndex;
+  }
+
+  onClickUpdate() {
+    this.clickUpdate.emit();
   }
 
 }
