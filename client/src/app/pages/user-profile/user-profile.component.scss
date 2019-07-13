@@ -24,8 +24,18 @@
 legend {
   grid-area: lege;
   margin-left: 40px;
+  @include flex(row, center, flex-start);
   h3 {
-    color: map-get($md-cfaccent, 300);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    margin: 0;
+    line-height: 30px;
+    color: rgba(map-get($md-cfaccent, 500), .24);
+  }
+  mat-icon {
+    color: map-get($md-cfprimary, 500);
+    display: none;
   }
 }
 
@@ -43,6 +53,28 @@ legend {
 
 .section-title {
   text-transform: uppercase;
+}
+
+@media only screen and (max-width: 991px) {
+  :host {
+    display: grid;
+    grid-template:
+    " hero hero " auto 
+    " lege edit " 60px
+    " left main " auto
+    / 0 auto
+    ;
+    grid-column-gap: 0;
+  }
+  legend {
+    grid-area: edit;
+    h3 {
+      color: map-get($md-cfprimary, 500);
+    }
+    mat-icon {
+      display: block;
+    }
+  }
 }
 
 //TODO: On mobile view get the search panel to open and close...

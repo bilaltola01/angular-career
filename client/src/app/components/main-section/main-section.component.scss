@@ -145,12 +145,16 @@
       grid-area: info;
       text-decoration: none;
       cursor: pointer;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding-right: 20px;
     }
   }
   .form-field {
     width: 80%;
     max-width: 615px;
-    min-width: 280px;
+    min-width: 240px;
     border: solid 1px $mat-form-border-color;
     border-radius: 5px;
     padding: 0;
@@ -165,6 +169,25 @@
     }
     &.textarea {
       padding: 10px 20px 5px 20px;
+    }
+  }
+}
+
+@media only screen and (max-width: 991px) {
+  :host {
+    margin: 0 40px;
+  }
+  .img-tag {
+    width: 330px;
+  }
+  
+}
+@media only screen and (max-width: 480px) {
+  :host {
+    margin: 0 20px;
+    .img-tag {
+      width: 230px;
+      margin-right: 0;
     }
   }
 }

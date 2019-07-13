@@ -5,7 +5,7 @@
 <ng-container *ngIf="!isProfileLoading">
   <legend>
     <h3 class="section-title">Profile</h3>
-    <a (click)="onClickEdit()">Edit Profile</a>
+    <mat-icon>keyboard_arrow_right</mat-icon>
   </legend>
   <div class="edit-button"><a (click)="onClickEdit()">Edit Profile</a></div>
   <nav-section [navMenu]="navMenu" [editMode]="isEditProfile" (clickUpdate)="onClickUpdate()"></nav-section>
