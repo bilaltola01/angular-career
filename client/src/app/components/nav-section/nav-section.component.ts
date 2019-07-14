@@ -10,6 +10,7 @@ export class NavSectionComponent implements OnInit {
   @Input() navMenu: any[];
   @Input() editMode: boolean;
   @Output() clickUpdate = new EventEmitter();
+  @Input() isOpened: boolean;
 
   navIndex: number;
 

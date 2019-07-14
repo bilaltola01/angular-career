@@ -89,7 +89,11 @@ export class MainSectionComponent implements OnInit {
       data: {
         category: category,
         data: data
-      }
+      },
+      width: '100vw',
+      maxWidth: '880px',
+      minWidth: '280px',
+      panelClass: ['edit-dialog-container']
     });
     dialgoRef.afterClosed().subscribe(result => {
       if (result) {
@@ -276,7 +280,7 @@ export class MainSectionComponent implements OnInit {
 @Component({
   selector: 'dialog-content',
   templateUrl: './dialog-content.component.html',
-  styleUrls: ['./dialog-content.component.scss']
+  styleUrls: ['./dialog-content.component.scss'],
 })
 
 export class ProfileDialogContentComponent {

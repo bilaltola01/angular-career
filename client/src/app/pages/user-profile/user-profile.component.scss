@@ -5,6 +5,7 @@
   grid-template:
   " hero hero " auto 
   " lege edit " 60px
+  " left main-nav " 0
   " left main " auto
   / 300px auto
   ;
@@ -12,6 +13,10 @@
   padding-bottom: 80px;
   background-color: $secondary-bg-color;
   min-height: calc(100vh - 70px - 80px);
+}
+
+.hidden {
+  display: none !important;
 }
 
 .loading {
@@ -61,6 +66,7 @@ legend {
     grid-template:
     " hero hero " auto 
     " lege edit " 60px
+    " left main-nav " auto
     " left main " auto
     / 0 auto
     ;
@@ -74,6 +80,16 @@ legend {
     mat-icon {
       display: block;
     }
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  legend {
+    grid-area: edit;
+    margin-left: 20px;
+  }
+  .edit-button {
+    margin-right: 20px;
   }
 }
 

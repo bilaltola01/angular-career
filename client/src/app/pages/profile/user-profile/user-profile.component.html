@@ -3,12 +3,11 @@
 </ng-container>
 
 <ng-container *ngIf="!isProfileLoading">
-  <legend>
+  <legend (click)="onClickTogggle()">
     <h3 class="section-title">Profile</h3>
     <mat-icon>keyboard_arrow_right</mat-icon>
   </legend>
   <div class="edit-button"><a (click)="onClickEdit()">Edit Profile</a></div>
-  <nav-section [navMenu]="navMenu" [editMode]="isEditProfile" (clickUpdate)="onClickUpdate()"></nav-section>
   <main-section
     [selectedNavMenu]="'profile'"
     [userGeneralInfo]="userGeneralInfo"
@@ -21,7 +20,8 @@
     [externalResourcesList]="externalResourcesList"
     [editMode]="isEditProfile"
     [class.edit-mode]="isEditProfile"
-  ></main-section> 
+  ></main-section>
+  <nav-section [navMenu]="navMenu" [editMode]="isEditProfile" (clickUpdate)="onClickUpdate()" [isOpened]="isNavMenuOpened" [class.hidden]="!(((isHandset$ | async) && isNavMenuOpened) || !(isHandset$ | async))"></nav-section>
 </ng-container>
 
 <ng-container *ngIf="isProfileLoading">

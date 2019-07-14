@@ -13,6 +13,9 @@ import {
   UserExternalResourcesItem,
   UserObject
 } from 'src/app/models';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'user-profile',
@@ -26,6 +29,7 @@ export class UserProfileComponent implements OnInit {
   counts: number;
 
   navMenu: any[];
+  isNavMenuOpened: boolean;
 
   userGeneralInfo: UserGeneralInfo;
   generalInfoData: UserObject;
@@ -37,9 +41,20 @@ export class UserProfileComponent implements OnInit {
   userPublicationsList: UserPublicationItem[];
   externalResourcesList: UserExternalResourcesItem[];
 
-  constructor(private userService: UserService, private alertsService: AlertsService) { }
+  constructor(
+    private userService: UserService,
+    private alertsService: AlertsService,
+    private breakpointObserver: BreakpointObserver
+  ) { }
+
+  isHandset$: Observable<boolean> = this.breakpointObserver
+    .observe(['(max-width: 991px)'])
+    .pipe(
+      map(result => result.matches)
+    );
 
   ngOnInit() {
+    this.isNavMenuOpened = false;
     this.navMenu = NavMenus.profile;
     this.getGeneralInfo();
     this.getEducationList();
@@ -52,6 +67,10 @@ export class UserProfileComponent implements OnInit {
     this.isEditProfile = false;
     this.isProfileLoading = true;
     this.counts = 0;
+  }
+
+  onClickTogggle() {
+    this.isNavMenuOpened = !this.isNavMenuOpened;
   }
 
   onClickEdit() {
