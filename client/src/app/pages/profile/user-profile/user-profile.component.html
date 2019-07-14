@@ -4,10 +4,12 @@
 
 <ng-container *ngIf="!isProfileLoading">
   <legend (click)="onClickTogggle()">
-    <h3 class="section-title">Profile</h3>
-    <mat-icon>keyboard_arrow_right</mat-icon>
+    <div class="nav-title">
+      <h3 class="section-title">Profile</h3>
+      <mat-icon>menu</mat-icon>
+    </div>
+    <a (click)="onClickEdit()">Edit Profile</a>
   </legend>
-  <div class="edit-button"><a (click)="onClickEdit()">Edit Profile</a></div>
   <main-section
     [selectedNavMenu]="'profile'"
     [userGeneralInfo]="userGeneralInfo"
