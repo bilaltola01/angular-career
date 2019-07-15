@@ -2,9 +2,9 @@ import { TestBed, async } from '@angular/core/testing';
 import { TestingModule } from './modules/testing.module';
 import { MaterialModule } from './modules/material.module';
 import { AppComponent } from './app.component';
-import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { ActionButtonComponent } from './components/action-button/action-button.component';
 import { AlertBarComponent } from './components/alert-bar/alert-bar.component';
+import { MainToolbarComponent } from './components/main-toolbar/main-toolbar.component';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -15,7 +15,7 @@ describe('AppComponent', () => {
       ],
       declarations: [
         AppComponent,
-        ToolbarComponent,
+        MainToolbarComponent,
         ActionButtonComponent,
         AlertBarComponent
       ],

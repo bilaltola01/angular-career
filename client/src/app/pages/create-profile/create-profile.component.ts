@@ -63,6 +63,8 @@ export class CreateProfileComponent implements OnInit {
     'profile-status'
   ];
 
+  isTabMenuOpen: boolean;
+
   progressWidth = [
     {
       label: 0,
@@ -183,6 +185,7 @@ export class CreateProfileComponent implements OnInit {
       // this.userRole = this.route.snapshot.queryParams.role;
       this.userRole = UserRoles[0];
     }
+    this.isTabMenuOpen = false;
     this.initBasicInfoForm();
     this.initEducationFormArray();
     this.initAboutMeForm();
@@ -201,6 +204,10 @@ export class CreateProfileComponent implements OnInit {
     this.getUserProjectsList();
     this.getUserPublicationsList();
     this.getExternalResourceList();
+  }
+
+  toggleTabMenuOpen() {
+    this.isTabMenuOpen = !this.isTabMenuOpen;
   }
 
   goToCreatProfilePage() {
