@@ -69,24 +69,24 @@
 
 @media only screen and (max-width: 991px) {
   :host {
-    grid-area: main-nav;
-    padding: 0 40px 30px 40px;
-    &.nav-absolute {
-      position: absolute;
-      padding-top: 10px;
-      left: 0;
-      width: 100%;
-      box-shadow: 0px 3px 10px rgba(map-get($md-cfaccent, 500), 0.5);
-      background-color: rgba(0, 0, 0, .32);
-    }
+    position: absolute;
+    padding: 10px 40px 30px 40px;
+    top: 130px;
+    left: 0;
+    width: 100%;
+    box-shadow: 0px 3px 10px rgba(map-get($md-cfaccent, 500), 0.5);
+    background-color: rgba(0, 0, 0, .32);
+    min-height: calc(100vh - 130px);
+   
     &.nav-hidden {
-      visibility: hidden;
+      // visibility: hidden;
+      display: none;
     }
   }
 }
 
 @media only screen and (max-width: 480px) {
   :host {
-    padding: 0 20px 30px 20px;
+    padding: 10px 20px 30px 20px;
   }
 }

@@ -41,7 +41,7 @@ export class UserProfileComponent implements OnInit {
   userPublicationsList: UserPublicationItem[];
   externalResourcesList: UserExternalResourcesItem[];
 
-  legendElementYPosition: number;
+  containerScrollPosition: number;
 
   constructor(
     private userService: UserService,
@@ -55,29 +55,22 @@ export class UserProfileComponent implements OnInit {
       map(result => result.matches)
     );
 
-  @HostListener('window:scroll', ['$event'])
   onWindowsScroll() {
-    const legendYPosition = document.getElementById('legend').offsetTop;
-    if (!this.legendElementYPosition) {
-      this.legendElementYPosition = legendYPosition;
-    } else {
-      if (legendYPosition !== 0 && this.legendElementYPosition !== legendYPosition) {
-        this.legendElementYPosition = legendYPosition;
+    if (!document.getElementById('nav-section').classList.contains('nav-hidden')) {
+      if (!this.containerScrollPosition) {
+        this.containerScrollPosition = 0;
       }
-    }
+      const scrollHeight = document.getElementById('nav-section').offsetHeight - document.body.scrollHeight + 130;
+      const scrollPosition = document.getElementById('sidenav-content').scrollTop;
 
-    const scrollPosition = document.documentElement.scrollTop || document.body.scrollTop;
-
-    if (scrollPosition >= this.legendElementYPosition) {
-      if (!document.getElementById('legend').classList.contains('legend-fixed')) {
-        document.getElementById('legend').classList.add('legend-fixed');
+      if (scrollPosition - this.containerScrollPosition > scrollHeight) {
+        document.getElementById('sidenav-content').scrollTop = this.containerScrollPosition + scrollHeight;
+      } else if (scrollPosition - this.containerScrollPosition < 0) {
+        document.getElementById('sidenav-content').scrollTop = this.containerScrollPosition;
       }
-      document.getElementById('nav-section').style.top = `${scrollPosition + 60}px`;
     } else {
-      if (document.getElementById('legend').classList.contains('legend-fixed')) {
-        document.getElementById('legend').classList.remove('legend-fixed');
-      }
-      document.getElementById('nav-section').style.top = `${this.legendElementYPosition + 60}px`;
+      this.containerScrollPosition = document.getElementById('sidenav-content').scrollTop;
+      document.getElementById('nav-section').style.top = `${this.containerScrollPosition + 130}px`;
     }
   }
 
@@ -95,6 +88,10 @@ export class UserProfileComponent implements OnInit {
     this.isEditProfile = false;
     this.isProfileLoading = true;
     this.counts = 0;
+    window.addEventListener('scroll', this.onWindowsScroll, true);
+  }
+  ngOnDestory() {
+    window.removeEventListener('scroll', this.onWindowsScroll, true);
   }
 
   onClickTogggle() {

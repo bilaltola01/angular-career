@@ -56,17 +56,6 @@ legend {
     @include disable-select();
     cursor: pointer;
   }
-  // &.legend-fixed {
-  //   position: fixed;
-  //   margin: 0;
-  //   height: 60px;
-  //   top: 0;
-  //   left: 0;
-  //   width: 100%;
-  //   background-color: $secondary-bg-color;
-  //   box-shadow: 0px 5px 15px 0px rgba(0,0,0,0.125);
-  //   z-index: 100;
-  // }
 }
 
 .section-title {
@@ -86,6 +75,15 @@ legend {
     grid-column-gap: 0;
   }
   legend {
+      position: fixed;
+      margin: 0;
+      height: 60px;
+      top: 70px;
+      left: 0;
+      width: 100%;
+      background-color: $secondary-bg-color;
+      box-shadow: 0px 5px 15px 0px rgba(0,0,0,0.125);
+      z-index: 100;
     .nav-title {
       cursor: pointer;
       h3 {
@@ -94,17 +92,6 @@ legend {
       mat-icon {
         display: block;
       }
-    }
-    &.legend-fixed {
-      position: fixed;
-      margin: 0;
-      height: 60px;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background-color: $secondary-bg-color;
-      box-shadow: 0px 5px 15px 0px rgba(0,0,0,0.125);
-      z-index: 100;
     }
   }
 }
