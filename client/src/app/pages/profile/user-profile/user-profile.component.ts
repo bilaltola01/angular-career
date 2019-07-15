@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { AlertsService, AlertType } from 'src/app/services/alerts.service';
 import {
@@ -41,6 +41,8 @@ export class UserProfileComponent implements OnInit {
   userPublicationsList: UserPublicationItem[];
   externalResourcesList: UserExternalResourcesItem[];
 
+  legendElementYPosition: number;
+
   constructor(
     private userService: UserService,
     private alertsService: AlertsService,
@@ -52,6 +54,30 @@ export class UserProfileComponent implements OnInit {
     .pipe(
       map(result => result.matches)
     );
+
+  @HostListener('window:scroll', ['$event'])
+  onWindowsScroll() {
+    const legendYPosition = document.getElementById('legend').offsetTop;
+    if (!this.legendElementYPosition) {
+      this.legendElementYPosition = legendYPosition;
+    } else {
+      if (legendYPosition !== 0 && this.legendElementYPosition !== legendYPosition) {
+        this.legendElementYPosition = legendYPosition;
+      }
+    }
+
+    const scrollPosition = document.documentElement.scrollTop || document.body.scrollTop;
+
+    if (scrollPosition >= this.legendElementYPosition) {
+      if (!document.getElementById('legend').classList.contains('legend-fixed')) {
+        document.getElementById('legend').classList.add('legend-fixed');
+      }
+    } else {
+      if (document.getElementById('legend').classList.contains('legend-fixed')) {
+        document.getElementById('legend').classList.remove('legend-fixed');
+      }
+    }
+  }
 
   ngOnInit() {
     this.isNavMenuOpened = false;

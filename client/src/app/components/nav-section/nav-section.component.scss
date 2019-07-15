@@ -2,7 +2,8 @@
 
 :host {
   grid-area: left;
-  margin-left: 40px;
+  padding-left: 40px;
+  box-sizing: border-box;
   nav {
     .nav-section {
       position: relative;
@@ -68,12 +69,12 @@
 @media only screen and (max-width: 991px) {
   :host {
     grid-area: main-nav;
-    margin: 0 40px 30px 40px;
+    padding: 0 40px 30px 40px;
   }
 }
 
 @media only screen and (max-width: 480px) {
   :host {
-    margin: 0 20px 30px 20px;
+    padding: 0 20px 30px 20px;
   }
 }
