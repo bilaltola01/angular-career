@@ -4,6 +4,7 @@
   grid-area: left;
   padding-left: 40px;
   box-sizing: border-box;
+  background-color: $secondary-bg-color;
   nav {
     .nav-section {
       position: relative;
@@ -70,6 +71,17 @@
   :host {
     grid-area: main-nav;
     padding: 0 40px 30px 40px;
+    &.nav-absolute {
+      position: absolute;
+      padding-top: 10px;
+      left: 0;
+      width: 100%;
+      box-shadow: 0px 3px 10px rgba(map-get($md-cfaccent, 500), 0.5);
+      background-color: rgba(0, 0, 0, .32);
+    }
+    &.nav-hidden {
+      visibility: hidden;
+    }
   }
 }
 

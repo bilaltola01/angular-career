@@ -23,7 +23,7 @@
     [editMode]="isEditProfile"
     [class.edit-mode]="isEditProfile"
   ></main-section>
-  <nav-section [navMenu]="navMenu" [editMode]="isEditProfile" (clickUpdate)="onClickUpdate()" [isOpened]="isNavMenuOpened" [class.hidden]="!(((isHandset$ | async) && isNavMenuOpened) || !(isHandset$ | async))"></nav-section>
+  <nav-section [navMenu]="navMenu" [editMode]="isEditProfile" (clickUpdate)="onClickUpdate()" [isOpened]="isNavMenuOpened" [class.nav-hidden]="!((isHandset$ | async) && isNavMenuOpened)" [class.nav-absolute]="(isHandset$ | async)" id="nav-section"></nav-section>
 </ng-container>
 
 <ng-container *ngIf="isProfileLoading">

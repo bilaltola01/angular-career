@@ -72,10 +72,12 @@ export class UserProfileComponent implements OnInit {
       if (!document.getElementById('legend').classList.contains('legend-fixed')) {
         document.getElementById('legend').classList.add('legend-fixed');
       }
+      document.getElementById('nav-section').style.top = `${scrollPosition + 60}px`;
     } else {
       if (document.getElementById('legend').classList.contains('legend-fixed')) {
         document.getElementById('legend').classList.remove('legend-fixed');
       }
+      document.getElementById('nav-section').style.top = `${this.legendElementYPosition + 60}px`;
     }
   }
 
