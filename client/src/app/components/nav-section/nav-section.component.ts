@@ -9,19 +9,17 @@ export class NavSectionComponent implements OnInit {
 
   @Input() navMenu: any[];
   @Input() editMode: boolean;
-  @Output() clickUpdate = new EventEmitter();
   @Input() isOpened: boolean;
-
-  navIndex: number;
+  @Input() navIndex: number;
+  @Output() clickUpdate = new EventEmitter();
+  @Output() selectNavMenu = new EventEmitter();
 
   constructor() { }
 
-  ngOnInit() {
-    this.navIndex = 0;
-  }
+  ngOnInit() { }
 
   onSelectNavMenu(navIndex: number) {
-    this.navIndex = navIndex;
+    this.selectNavMenu.emit(navIndex);
   }
 
   onClickUpdate() {

@@ -1,5 +1,5 @@
 <ng-container *ngIf="!isProfileLoading" class="profile-header">
-  <header-section [editMode]="isEditProfile" [generalInfo]="userGeneralInfo" (updatedGeneralInfoData)="onChangedGeneralInfoData($event)" id="header-section"></header-section>
+  <header-section [editMode]="editMode" [generalInfo]="userGeneralInfo" (updatedGeneralInfoData)="onChangedGeneralInfoData($event)" id="header-section"></header-section>
 </ng-container>
 
 <ng-container *ngIf="!isProfileLoading">
@@ -8,10 +8,11 @@
       <h3 class="section-title">Profile</h3>
       <mat-icon>menu</mat-icon>
     </div>
-    <a (click)="onClickEdit()">Edit Profile</a>
+    <a *ngIf="!editMode" (click)="onClickEdit()">Edit Profile</a>
+    <a *ngIf="editMode" (click)="onClickUpdate()">Update Changes</a>
   </legend>
   <main-section
-    [selectedNavMenu]="'profile'"
+    [selectedNavMenu]="navMenu[selectedNavMenuIndex].id"
     [userGeneralInfo]="userGeneralInfo"
     [educationList]="educationList"
     [experienceList]="experienceList"
@@ -20,10 +21,10 @@
     [userProjectsList]="userProjectsList"
     [userPublicationsList]="userPublicationsList"
     [externalResourcesList]="externalResourcesList"
-    [editMode]="isEditProfile"
-    [class.edit-mode]="isEditProfile"
+    [editMode]="editMode"
+    [class.edit-mode]="editMode"
   ></main-section>
-  <nav-section [navMenu]="navMenu" [editMode]="isEditProfile" (clickUpdate)="onClickUpdate()" [isOpened]="isNavMenuOpened" [class.nav-hidden]="!((isHandset$ | async) && isNavMenuOpened)" id="nav-section"></nav-section>
+  <nav-section [navMenu]="navMenu" [editMode]="editMode" [navIndex]="selectedNavMenuIndex" (clickUpdate)="onClickUpdate()" (selectNavMenu)="onSelectNavMenu($event)" [isOpened]="isNavMenuOpened" [class.nav-hidden]="!((isHandset$ | async) && isNavMenuOpened)" id="nav-section"></nav-section>
 </ng-container>
 
 <ng-container *ngIf="isProfileLoading">

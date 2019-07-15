@@ -25,11 +25,12 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 export class UserProfileComponent implements OnInit {
 
   isProfileLoading: boolean;
-  isEditProfile: boolean;
+  editMode: boolean;
   counts: number;
 
   navMenu: any[];
   isNavMenuOpened: boolean;
+  selectedNavMenuIndex: number;
 
   userGeneralInfo: UserGeneralInfo;
   generalInfoData: UserObject;
@@ -75,6 +76,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.selectedNavMenuIndex = 0;
     this.isNavMenuOpened = false;
     this.navMenu = NavMenus.profile;
     this.getGeneralInfo();
@@ -85,7 +87,7 @@ export class UserProfileComponent implements OnInit {
     this.getUserProjectsList();
     this.getUserPublicationsList();
     this.getExternalResourceList();
-    this.isEditProfile = false;
+    this.editMode = false;
     this.isProfileLoading = true;
     this.counts = 0;
     window.addEventListener('scroll', this.onWindowsScroll, true);
@@ -99,7 +101,12 @@ export class UserProfileComponent implements OnInit {
   }
 
   onClickEdit() {
-    this.isEditProfile = true;
+    this.editMode = true;
+    this.isNavMenuOpened = true;
+  }
+
+  onSelectNavMenu(navIndex: number) {
+    this.selectedNavMenuIndex = navIndex;
   }
 
   onChangedGeneralInfoData(generalInfoData: UserObject) {
@@ -110,7 +117,8 @@ export class UserProfileComponent implements OnInit {
     this.userService.updateGeneralInfo(this.generalInfoData).subscribe(
       dataJson => {
         this.userGeneralInfo = dataJson['data'];
-        this.isEditProfile = false;
+        this.editMode = false;
+        this.isNavMenuOpened = false;
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
