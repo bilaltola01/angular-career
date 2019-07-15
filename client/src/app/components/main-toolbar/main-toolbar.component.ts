@@ -18,7 +18,7 @@ export class MainToolbarComponent implements OnInit {
 
   userGeneralInfo: UserGeneralInfo;
 
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(['(max-width: 1350px)'])
+  isHandset$: Observable<boolean> = this.breakpointObserver.observe(['(max-width: 1250px)'])
     .pipe(
       map(result => result.matches)
     );

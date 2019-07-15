@@ -11,7 +11,6 @@ import { MaterialModule } from './modules/material.module';
 
 import { StyleGuideComponent } from './pages/style-guide/style-guide.component';
 import { SimpleTagComponent } from './components/simple-tag/simple-tag.component';
-import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { ActionButtonComponent } from './components/action-button/action-button.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegistrationComponent } from './pages/registration/registration.component';
@@ -29,7 +28,6 @@ import { MainToolbarComponent } from './components/main-toolbar/main-toolbar.com
     AppComponent,
     StyleGuideComponent,
     SimpleTagComponent,
-    ToolbarComponent,
     ActionButtonComponent,
     LoginComponent,
     RegistrationComponent,
