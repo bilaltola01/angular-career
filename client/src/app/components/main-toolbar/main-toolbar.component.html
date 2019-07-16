@@ -1,7 +1,7 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav 
-      #drawer 
-      class="sidenav" 
+  <mat-sidenav
+      #drawer
+      class="sidenav"
       fixedInViewport = "false"
       [ngClass]="{hidden: !(isHandset$ | async)}"
       [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
@@ -44,9 +44,6 @@
           </a>
           <a routerLink='positions' routerLinkActive="active-link">
             Contact Us
-          </a>
-          <a routerLink='companies' routerLinkActive="active-link">
-            My Account
           </a>
         </ng-container>
     </mat-nav-list>
@@ -106,9 +103,6 @@
             <a routerLink='contact-us' routerLinkActive="active-link">
               Contact Us
             </a>
-            <a routerLink='account' routerLinkActive="active-link">
-              My Account
-            </a>
         </ng-container>
       </div>
 
@@ -128,9 +122,9 @@
         </a>
         <a routerLink='settings' routerLinkActive="active-link" class="dropdown-href">
           App Settings
-        </a>        
+        </a>
         <a routerLink='switch' routerLinkActive="active-link" class="dropdown-href">
-            Switch Profile
+          Switch Profile
         </a>
         <a routerLink='login' (click)="logOut()" routerLinkActive="active-link" class="dropdown-href">
           Logout
