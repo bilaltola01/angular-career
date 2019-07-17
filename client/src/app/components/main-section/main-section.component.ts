@@ -42,6 +42,7 @@ import {MatDatepicker} from '@angular/material/datepicker';
 export interface DialogData {
   category: 'About Me' | 'Education' | 'Work Experience' | 'Project' | 'Publication' | 'External Resources';
   data: any;
+  editIndex: number;
 }
 
 @Component({
@@ -92,11 +93,12 @@ export class MainSectionComponent implements OnInit {
     });
   }
 
-  openDialog(category: string, data: any) {
+  openDialog(category: string, data: any, arrIndex: number = -1) {
     const dialgoRef = this.dialog.open(ProfileDialogContentComponent, {
       data: {
         category: category,
-        data: data
+        data: data,
+        editIndex: arrIndex
       },
       width: '100vw',
       maxWidth: '880px',
@@ -136,6 +138,18 @@ export class MainSectionComponent implements OnInit {
         }
       }
     });
+  }
+
+  deleteEducationData(arrIndex: number) {
+    this.userService.deleteEducationInfoById(this.educationList[arrIndex].education_id).subscribe(
+      dataJson => {
+        this.educationList.splice(arrIndex, 1);
+        this.onChangeNavMenuVisibility(1, this.educationList && this.educationList.length > 0 ? true : false);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
   }
 
   initSkillsSearchForm() {
@@ -424,28 +438,30 @@ export class ProfileDialogContentComponent {
     this.temp_major = null;
     this.temp_focus_major = null;
 
+    const educationData: UserEducationItem = this.data.editIndex !== -1 ? this.data.data[this.data.editIndex] : null;
+
     this.request_education = {
-      school_id: null,
-      major_id: null,
-      focus_major: null,
-      start_date: null,
-      graduation_date: null,
-      gpa: null,
-      edu_desc: null,
-      user_specified_school_name: null,
-      level_id: null,
-      focus_major_name: null
+      school_id: educationData ? educationData.school_id : null,
+      major_id: educationData ? educationData.major_id : null,
+      focus_major: educationData ? educationData.focus_major : null,
+      start_date: educationData ? educationData.start_date : null,
+      graduation_date: educationData ? educationData.graduation_date : null,
+      gpa: educationData ? educationData.gpa : null,
+      edu_desc: educationData ? educationData.edu_desc : null,
+      user_specified_school_name: educationData ? educationData.user_specified_school_name : null,
+      level_id: educationData ? educationData.level_id : null,
+      focus_major_name: educationData ? educationData.focus_major_name : null
     };
 
     this.educationForm = new FormGroup({
-      university: new FormControl('', [Validators.required]),
-      degree: new FormControl('', [Validators.required]),
-      major: new FormControl(''),
-      focus_major: new FormControl(''),
-      start_date: new FormControl('', [Validators.required]),
-      graduation_date: new FormControl('', [Validators.required]),
-      gpa: new FormControl(''),
-      description: new FormControl('')
+      university: new FormControl(educationData ? educationData.school_name : '', [Validators.required]),
+      degree: new FormControl(educationData ? educationData.education_level : '', [Validators.required]),
+      major: new FormControl(educationData ? educationData.major_name : ''),
+      focus_major: new FormControl(educationData ? educationData.focus_major_name : ''),
+      start_date: new FormControl(educationData && educationData.start_date ? this.helperService.convertToFormattedString(educationData.start_date, 'YYYY') : '', [Validators.required]),
+      graduation_date: new FormControl(educationData && educationData.graduation_date ? this.helperService.convertToFormattedString(educationData.graduation_date, 'YYYY') : '', [Validators.required]),
+      gpa: new FormControl(educationData ? educationData.gpa : ''),
+      description: new FormControl(educationData ? educationData.edu_desc : '')
     });
 
     this.educationForm.get('university').valueChanges.subscribe((university) => {
@@ -566,7 +582,11 @@ export class ProfileDialogContentComponent {
         return (this.educationForm.get('focus_major').value === this.temp_focus_major.major_name) ? true : false;
       } else {
         if (this.educationForm.get('focus_major').value) {
-          return false;
+          if (this.data.editIndex === -1) {
+            return false;
+          } else {
+            return this.educationForm.get('focus_major').value === this.data.data[this.data.editIndex].focus_major_name ? true : false;
+          }
         } else {
           return true;
         }
@@ -576,7 +596,11 @@ export class ProfileDialogContentComponent {
         return (this.educationForm.get('major').value === this.temp_major.major_name) ? true : false;
       } else {
         if (this.educationForm.get('major').value) {
-          return false;
+          if (this.data.editIndex === -1) {
+            return false;
+          } else {
+            return this.educationForm.get('major').value === this.data.data[this.data.editIndex].major_name ? true : false;
+          }
         } else {
           return true;
         }
@@ -601,7 +625,15 @@ export class ProfileDialogContentComponent {
           this.clearMajor(isFocusMajor);
         }
       } else {
-        this.clearMajor(isFocusMajor);
+        if (this.data.editIndex !== -1) {
+          if (this.educationForm.get('focus_major').value !== this.data.data[this.data.editIndex].focus_major_name) {
+            this.clearMajor(isFocusMajor);
+          } else {
+            this.request_education.focus_major = this.data.data[this.data.editIndex].focus_major;
+          }
+        } else {
+          this.clearMajor(isFocusMajor);
+        }
       }
     } else {
       if (this.temp_major) {
@@ -610,7 +642,15 @@ export class ProfileDialogContentComponent {
           this.clearMajor(isFocusMajor);
         }
       } else {
-        this.clearMajor(isFocusMajor);
+        if (this.data.editIndex !== -1) {
+          if (this.educationForm.get('major').value !== this.data.data[this.data.editIndex].major_name) {
+            this.clearMajor(isFocusMajor);
+          } else {
+            this.request_education.major_id = this.data.data[this.data.editIndex].major_id;
+          }
+        } else {
+          this.clearMajor(isFocusMajor);
+        }
       }
     }
   }
@@ -633,6 +673,20 @@ export class ProfileDialogContentComponent {
       this.userService.postEducationInfo(this.request_education).subscribe(
         dataJson => {
           this.data.data.push(dataJson['data']);
+          this.dialogRef.close(this.data.data);
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    }
+  }
+
+  updateEducation() {
+    if (this.educationForm.valid && this.checkMajorValidation(true) && this.checkMajorValidation(false)) {
+      this.userService.patchEducationInfoById(this.request_education, this.data.data[this.data.editIndex].education_id).subscribe(
+        dataJson => {
+          this.data.data[this.data.editIndex] = dataJson['data'];
           this.dialogRef.close(this.data.data);
         },
         error => {

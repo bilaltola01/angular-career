@@ -106,7 +106,7 @@
     </div>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <action-button class="update-btn" type="flat" title="Add" color="primary" [disabled]="!(educationForm.valid && checkMajorValidation(true) && checkMajorValidation(false))" (click)="addEducation()"></action-button>
+    <action-button class="update-btn" type="flat" title="{{data.editIndex === -1 ? 'Add' : 'Update'}}" color="primary" [disabled]="!(educationForm.valid && checkMajorValidation(true) && checkMajorValidation(false))" (click)="data.editIndex === -1 ? addEducation() : updateEducation()"></action-button>
   </mat-dialog-actions>
 </ng-container>
 

@@ -14,7 +14,12 @@
   <div *ngIf="(educationList && educationList.length > 0) || editMode" class="row" [class.edit-mode]="editMode">
     <h3> Education </h3>
     <ng-container *ngFor="let education of educationList; let i = index">
-      <a href="/my-profile">{{education.user_specified_school_name ? education.user_specified_school_name : education.school_name}}</a>
+      <div class="editor-container">
+        <a *ngIf="education.website" class="name-field" [href]="'//' + education.website" target="_blank">{{education.user_specified_school_name ? education.user_specified_school_name : education.school_name}}</a>
+        <a *ngIf="!education.website" class="name-field">{{education.user_specified_school_name ? education.user_specified_school_name : education.school_name}}</a>
+        <mat-icon *ngIf="editMode" class="btn-edit" (click)="openDialog('Education', educationList, i)">edit</mat-icon>
+        <mat-icon *ngIf="editMode" class="btn-delete" (click)="deleteEducationData(i)">delete</mat-icon>
+      </div>
       <div class="detail-info">
         <h4 class="detail-info__left-top">{{education.education_level}}{{education.major_name ? ' - ' + education.major_name : ''}}</h4>
         <small *ngIf="education.focus_major" class="detail-info__left-middle">Focused on {{education.focus_major_name}}</small>
@@ -26,8 +31,8 @@
           {{short_desc ? helperService.shortDescription(education.edu_desc) : education.edu_desc}}
         </p>
         <a *ngIf="short_desc && education.edu_desc && short_desc && education.edu_desc.length > helperService.shortDescLength" (click)="short_desc = false">Read More</a>
-        <mat-divider *ngIf="(i < educationList.length - 1) || editMode"></mat-divider>
       </ng-container>
+      <mat-divider *ngIf="(i < educationList.length - 1) || editMode"></mat-divider>
     </ng-container>
     <div *ngIf="editMode" class="btn-container">
       <action-button class="edit-btn" type="stroked" color="primary" title="Add More" (click)="openDialog('Education', educationList)"></action-button>

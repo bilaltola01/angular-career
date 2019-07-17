@@ -122,6 +122,25 @@
       text-align: right;
     }
   }
+  .editor-container {
+    width: 100%;
+    display: inline-grid;
+    grid-template: 
+      " name-field btn-edit btn-delete " auto
+      / auto 24px 24px;
+      grid-gap: 0 10px;
+    .name-field {
+      grid-area: name-field;
+    }
+    .btn-edit {
+      grid-area: btn-edit;
+      color: map-get($md-cfprimary, 300);
+    }
+    .btn-delete {
+      grid-area: btn-delete;
+      color: map-get($md-cfred, 400);
+    }
+  }
   .img-tag {
     background-color: $secondary-bg-color;
     border: solid 3px $secondary-bg-color;
