@@ -236,7 +236,7 @@
       </div>
     </mat-dialog-content>
     <mat-dialog-actions>
-      <action-button class="update-btn" type="flat" title="Add" color="primary" [disabled]="!projectForm.valid" (click)="addProject()"></action-button>
+      <action-button class="update-btn" type="flat" [title]="data.editIndex === -1 ? 'Add' : 'Update'" color="primary" [disabled]="!projectForm.valid" (click)="data.editIndex === -1 ? addProject() : updateProject()"></action-button>
     </mat-dialog-actions>
   </ng-container>
 
@@ -275,7 +275,7 @@
       </div>
     </mat-dialog-content>
     <mat-dialog-actions>
-      <action-button class="update-btn" type="flat" title="Add" color="primary" [disabled]="!publicationForm.valid" (click)="addPublication()"></action-button>
+      <action-button class="update-btn" type="flat" [title]="data.editIndex === -1 ? 'Add' : 'Update'" color="primary" [disabled]="!publicationForm.valid" (click)="data.editIndex === -1 ? addPublication() : updatePublication()"></action-button>
     </mat-dialog-actions>
   </ng-container>
 

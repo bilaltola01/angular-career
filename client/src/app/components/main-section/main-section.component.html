@@ -42,7 +42,11 @@
   <div *ngIf="(experienceList && experienceList.length > 0) || editMode" class="row" [class.edit-mode]="editMode">
     <h3> Work Experience </h3>
     <ng-container *ngFor="let experience of experienceList; let i = index;">
-      <a href="/my-profile">{{experience.user_specified_company_name ? experience.user_specified_company_name : experience.company_name}}</a>
+      <div class="editor-container">
+        <a class="name-field" href="/my-profile">{{experience.user_specified_company_name ? experience.user_specified_company_name : experience.company_name}}</a>
+        <mat-icon *ngIf="editMode" class="btn-edit" (click)="openDialog('Work Experience', experienceList, i)">edit</mat-icon>
+        <mat-icon *ngIf="editMode" class="btn-delete" (click)="deleteExperienceData(i)">delete</mat-icon>
+      </div>
       <h4>{{experience.job}}</h4>
       <small>{{helperService.convertToFormattedString(experience.start_date, 'MMM, YYYY')}} - {{(experience.end_date ? helperService.convertToFormattedString(experience.end_date, 'MMM, YYYY') : 'Present')}}</small>
       <ng-container *ngIf="true; let short_desc">
@@ -73,7 +77,11 @@
   <div *ngIf="(userPublicationsList && userPublicationsList.length > 0) || editMode" class="row" [class.edit-mode]="editMode">
     <h3> Publications </h3>
     <ng-container *ngFor="let publication of userPublicationsList; let i = index;">
-      <h4>{{publication.publication_title}}</h4>
+      <div class="editor-container">
+        <h4 class="name-field">{{publication.publication_title}}</h4>
+        <mat-icon *ngIf="editMode" class="btn-edit" (click)="openDialog('Publication', userPublicationsList, i)">edit</mat-icon>
+        <mat-icon *ngIf="editMode" class="btn-delete" (click)="deletePublicationData(i)">delete</mat-icon>
+      </div>
       <small *ngIf="publication.date_published">Published on {{helperService.convertToFormattedString(publication.date_published, 'll')}}</small>
       <ng-container *ngIf="true; let short_desc">
         <p *ngIf="publication.description" [class.short-desc]="short_desc && publication.description.length > helperService.shortDescLength">
@@ -91,7 +99,11 @@
   <div *ngIf="(userProjectsList && userProjectsList.length > 0) || editMode" class="row" [class.edit-mode]="editMode">
     <h3> Projects </h3>
     <ng-container *ngFor="let project of userProjectsList; let i = index;">
-      <h4>{{project.project_name}}</h4>
+      <div class="editor-container">
+        <h4 class="name-field">{{project.project_name}}</h4>
+        <mat-icon *ngIf="editMode" class="btn-edit" (click)="openDialog('Project', userProjectsList, i)">edit</mat-icon>
+        <mat-icon *ngIf="editMode" class="btn-delete" (click)="deleteProjectData(i)">delete</mat-icon>
+      </div>
       <small *ngIf="project.date_finished">Completed on {{helperService.convertToFormattedString(project.date_finished, 'll')}}</small>
       <ng-container *ngIf="true; let short_desc">
         <p *ngIf="project.description" [class.short-desc]="short_desc && project.description.length > helperService.shortDescLength">

@@ -152,6 +152,42 @@ export class MainSectionComponent implements OnInit {
     );
   }
 
+  deleteExperienceData(arrIndex: number) {
+    this.userService.deleteExperienceInfoById(this.experienceList[arrIndex].work_hist_id).subscribe(
+      dataJson => {
+        this.experienceList.splice(arrIndex, 1);
+        this.onChangeNavMenuVisibility(1, this.educationList && this.educationList.length > 0 ? true : false);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  deletePublicationData(arrIndex: number) {
+    this.userService.deletePublicationsInfoById(this.userPublicationsList[arrIndex].publication_id).subscribe(
+      dataJson => {
+        this.userPublicationsList.splice(arrIndex, 1);
+        this.onChangeNavMenuVisibility(3, this.userPublicationsList && this.userPublicationsList.length > 0 ? true : false);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  deleteProjectData(arrIndex: number) {
+    this.userService.deleteProjectInfoById(this.userProjectsList[arrIndex].project_id).subscribe(
+      dataJson => {
+        this.userProjectsList.splice(arrIndex, 1);
+        this.onChangeNavMenuVisibility(4, this.userProjectsList && this.userProjectsList.length > 0 ? true : false);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
   initSkillsSearchForm() {
     this.autocomplete_skills = [];
     this.prevent_skills_autocomplete = false;
@@ -895,18 +931,21 @@ export class ProfileDialogContentComponent {
   }
 
   initProjectForm() {
+
+    const projectData: UserProjectItem = this.data.editIndex !== -1 ? this.data.data[this.data.editIndex] : null;
+
     this.request_project = {
-      project_name: null,
-      description: null,
-      date_finished: null,
-      href: null
+      project_name: projectData ? projectData.project_name : null,
+      description: projectData ? projectData.description : null,
+      date_finished: projectData ? projectData.date_finished : null,
+      href: projectData ? projectData.href : null
     };
 
     this.projectForm = new FormGroup({
-      project_name: new FormControl('', [Validators.required]),
-      date_finished: new FormControl(''),
-      description: new FormControl(''),
-      href: new FormControl('')
+      project_name: new FormControl(projectData ? projectData.project_name : '', [Validators.required]),
+      date_finished: new FormControl(projectData && projectData.date_finished ? this.helperService.convertToFormattedString(projectData.date_finished, 'L') : ''),
+      description: new FormControl(projectData ? projectData.description : ''),
+      href: new FormControl(projectData ? projectData.href : '')
     });
 
     this.projectForm.get('project_name').valueChanges.subscribe(
@@ -950,20 +989,36 @@ export class ProfileDialogContentComponent {
       );
     }
   }
+  updateProject() {
+    if (this.projectForm.valid) {
+      this.userService.patchProjectInfoById(this.request_project, this.data.data[this.data.editIndex].project_id).subscribe(
+        dataJson => {
+          this.data.data[this.data.editIndex] = dataJson['data'];
+          this.dialogRef.close(this.data.data);
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    }
+  }
 
   initPublicationForm() {
+
+    const publicationData: UserPublicationItem = this.data.editIndex !== -1 ? this.data.data[this.data.editIndex] : null;
+
     this.request_publication = {
-      publication_title: null,
-      description: null,
-      date_published: null,
-      href: null,
-      publisher: null
+      publication_title: publicationData ? publicationData.publication_title : null,
+      description: publicationData ? publicationData.description : null,
+      date_published: publicationData ? publicationData.date_published : null,
+      href: publicationData ? publicationData.href : null,
+      publisher: publicationData ? publicationData.publisher : null
     };
     this.publicationForm = new FormGroup({
-      publication_name: new FormControl('', [Validators.required]),
-      date_published: new FormControl(''),
-      description: new FormControl(''),
-      href: new FormControl('')
+      publication_name: new FormControl(publicationData ? publicationData.publication_title : '', [Validators.required]),
+      date_published: new FormControl(publicationData && publicationData.date_published ? this.helperService.convertToFormattedString(publicationData.date_published, 'L') : ''),
+      description: new FormControl(publicationData ? publicationData.description : ''),
+      href: new FormControl(publicationData ? publicationData.href : '')
     });
     this.publicationForm.get('publication_name').valueChanges.subscribe(
       (publication_title) => {
@@ -998,6 +1053,19 @@ export class ProfileDialogContentComponent {
       this.userService.postPublicationsInfo(this.request_publication).subscribe(
         dataJson => {
           this.data.data.push(dataJson['data']);
+          this.dialogRef.close(this.data.data);
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    }
+  }
+  updatePublication() {
+    if (this.publicationForm.valid) {
+      this.userService.patchPublicationsInfoById(this.request_publication, this.data.data[this.data.editIndex].publication_id).subscribe(
+        dataJson => {
+          this.data.data[this.data.editIndex] = dataJson['data'];
           this.dialogRef.close(this.data.data);
         },
         error => {
