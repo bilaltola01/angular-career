@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, Inject } from '@angular/core';
 import {
   UserGeneralInfo,
   UserEducationItem,
@@ -61,6 +61,7 @@ export class MainSectionComponent implements OnInit {
   @Input() userPublicationsList: UserPublicationItem[];
   @Input() externalResourcesList: UserExternalResourcesItem[];
   @Input() editMode: boolean;
+  @Output() navMenuVisibilityChanged = new EventEmitter();
 
   autocomplete_skills: Skill[] = [];
   autocomplete_interests: Interest[] = [];
@@ -84,6 +85,13 @@ export class MainSectionComponent implements OnInit {
     this.initInterestsSearchForm();
   }
 
+  onChangeNavMenuVisibility(navItemIndex: number, visible: boolean) {
+    this.navMenuVisibilityChanged.emit({
+      navItemIndex: navItemIndex,
+      visible: visible
+    });
+  }
+
   openDialog(category: string, data: any) {
     const dialgoRef = this.dialog.open(ProfileDialogContentComponent, {
       data: {
@@ -100,21 +108,28 @@ export class MainSectionComponent implements OnInit {
         switch (category) {
           case 'About Me':
             this.userGeneralInfo = result;
+            this.onChangeNavMenuVisibility(0, this.userGeneralInfo.user_intro ? true : false);
             break;
           case 'Education':
             this.educationList = result;
+            this.onChangeNavMenuVisibility(1, this.educationList && this.educationList.length > 0 ? true : false);
             break;
           case 'Work Experience':
             this.experienceList = result;
+            this.educationList = result;
+            this.onChangeNavMenuVisibility(2, this.experienceList && this.experienceList.length > 0 ? true : false);
             break;
           case 'Project':
             this.userProjectsList = result;
+            this.onChangeNavMenuVisibility(4, this.userProjectsList && this.userProjectsList.length > 0 ? true : false);
             break;
           case 'Publication':
             this.userPublicationsList = result;
+            this.onChangeNavMenuVisibility(3, this.userPublicationsList && this.userPublicationsList.length > 0 ? true : false);
             break;
           case 'External Resources':
             this.externalResourcesList = result;
+            this.onChangeNavMenuVisibility(7, this.externalResourcesList && this.externalResourcesList.length > 0 ? true : false);
             break;
           default:
             break;
@@ -191,6 +206,7 @@ export class MainSectionComponent implements OnInit {
     this.userService.postSkillInfo(userSkillItem).subscribe(
       dataJson => {
         this.userSkillsList.push(dataJson['data']);
+        this.onChangeNavMenuVisibility(5, this.userSkillsList && this.userSkillsList.length > 0 ? true : false);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -201,6 +217,7 @@ export class MainSectionComponent implements OnInit {
     this.userService.deleteSkillInfoById(userSkillItem.skill_id).subscribe(
       dataJson => {
         this.userSkillsList.splice(index, 1);
+        this.onChangeNavMenuVisibility(5, this.userSkillsList && this.userSkillsList.length > 0 ? true : false);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -258,6 +275,7 @@ export class MainSectionComponent implements OnInit {
     this.userService.postUserInterestsInfo(userInterestItem).subscribe(
       dataJson => {
         this.userInterestsList.push(dataJson['data']);
+        this.onChangeNavMenuVisibility(6, this.userInterestsList && this.userInterestsList.length > 0 ? true : false);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -268,6 +286,7 @@ export class MainSectionComponent implements OnInit {
     this.userService.deleteUserInterestsInfoById(userInterestItem.interest_id).subscribe(
       dataJson => {
         this.userInterestsList.splice(index, 1);
+        this.onChangeNavMenuVisibility(6, this.userInterestsList && this.userInterestsList.length > 0 ? true : false);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);

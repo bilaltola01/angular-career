@@ -113,6 +113,10 @@ export class UserProfileComponent implements OnInit {
     this.generalInfoData = generalInfoData;
   }
 
+  onChangeNavMenuVisibility($event: any) {
+    this.navMenu[this.selectedNavMenuIndex].items[$event.navItemIndex].visible = $event.visible;
+  }
+
   onClickUpdate() {
     this.userService.updateGeneralInfo(this.generalInfoData).subscribe(
       dataJson => {
