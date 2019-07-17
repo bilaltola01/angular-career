@@ -737,26 +737,29 @@ export class ProfileDialogContentComponent {
     this.autocomplete_companies = [];
     this.autocomplete_skills_trained = [];
     this.autocomplete_additional_industries = [];
-    this.skills_trained = [];
-    this.additional_industries = [];
+
+    const experienceData: UserExperienceItem = this.data.editIndex !== -1 ? this.data.data[this.data.editIndex] : null;
+
+    this.skills_trained = experienceData && experienceData.skills_trained ? experienceData.skills_trained : [];
+    this.additional_industries = experienceData && experienceData.add_industries ? experienceData.add_industries : [];
 
     this.request_experience = {
-      company_id: null,
-      job: null,
-      start_date: null,
-      end_date: null,
-      job_desc: null,
-      user_specified_company_name: null,
-      skill_ids_trained: null,
-      add_industry_ids: null
+      company_id: experienceData ? experienceData.company_id : null,
+      job: experienceData ? experienceData.job : null,
+      start_date: experienceData ? experienceData.start_date : null,
+      end_date: experienceData ? experienceData.end_date : null,
+      job_desc: experienceData ? experienceData.job_desc : null,
+      user_specified_company_name: experienceData ? experienceData.user_specified_company_name : null,
+      skill_ids_trained: experienceData && experienceData.skills_trained && experienceData.skills_trained.length > 0 ? experienceData.skills_trained.map(x => x.skill_id) : null,
+      add_industry_ids: experienceData && experienceData.add_industries && experienceData.add_industries.length > 0 ? experienceData.add_industries.map(x => x.industry_id) : null
     };
 
     this.experienceForm = new FormGroup({
-      company_name: new FormControl('', [Validators.required]),
-      start_date: new FormControl('', [Validators.required]),
-      end_date: new FormControl(''),
-      job: new FormControl('', [Validators.required]),
-      description: new FormControl(''),
+      company_name: new FormControl(experienceData ? (experienceData.company_id ?  experienceData.company_name : experienceData.user_specified_company_name) : '', [Validators.required]),
+      start_date: new FormControl(experienceData && experienceData.start_date ? this.helperService.convertToFormattedString(experienceData.start_date, 'MM/YYYY') : '', [Validators.required]),
+      end_date: new FormControl(experienceData && experienceData.end_date ? this.helperService.convertToFormattedString(experienceData.end_date, 'MM/YYYY') : ''),
+      job: new FormControl(experienceData ? experienceData.job : '', [Validators.required]),
+      description: new FormControl(experienceData ? experienceData.job_desc : ''),
       skills_trained: new FormControl(''),
       additional_industries: new FormControl('')
     });
@@ -886,6 +889,24 @@ export class ProfileDialogContentComponent {
     }
   }
   removeSkillsTrained(arrIndex: number, skill: Skill) {
+    if (this.data.editIndex === -1) {
+      this.removeSkillsTrainedData(arrIndex, skill);
+    } else {
+      if (this.data.data[this.data.editIndex].skills_trained.filter(skill_trained => skill_trained.skill_id === skill.skill_id).length > 0) {
+        this.userService.DeleteSkillTrainedById(this.data.data[this.data.editIndex].work_hist_id, skill.skill_id).subscribe(
+          dataJson => {
+            this.removeSkillsTrainedData(arrIndex, skill);
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+          }
+        );
+      } else {
+        this.removeSkillsTrainedData(arrIndex, skill);
+      }
+    }
+  }
+  removeSkillsTrainedData(arrIndex: number, skill: Skill) {
     if (this.skills_trained[arrIndex].skill_id === skill.skill_id) {
       this.skills_trained.splice(arrIndex, 1);
       this.request_experience.skill_ids_trained.splice(arrIndex, 1);
@@ -908,6 +929,24 @@ export class ProfileDialogContentComponent {
     }
   }
   removeAdditionalIndustry(arrIndex: number, industry: Industry) {
+    if (this.data.editIndex === -1) {
+      this.removeAdditionalIndustryData(arrIndex, industry);
+    } else {
+      if (this.data.data[this.data.editIndex].add_industries.filter(add_industry => add_industry.industry_id === industry.industry_id).length > 0) {
+        this.userService.DeleteAdditionalIndustryById(this.data.data[this.data.editIndex].work_hist_id, industry.industry_id).subscribe(
+          dataJson => {
+            this.removeAdditionalIndustryData(arrIndex, industry);
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+          }
+        );
+      } else {
+        this.removeAdditionalIndustryData(arrIndex, industry);
+      }
+    }
+  }
+  removeAdditionalIndustryData(arrIndex: number, industry: Industry) {
     if (this.additional_industries[arrIndex].industry_id === industry.industry_id) {
       this.additional_industries.splice(arrIndex, 1);
       this.request_experience.add_industry_ids.splice(arrIndex, 1);
@@ -929,9 +968,21 @@ export class ProfileDialogContentComponent {
       );
     }
   }
+  updateExperience() {
+    if (this.experienceForm.valid) {
+      this.userService.patchExperienceInfoById(this.request_experience, this.data.data[this.data.editIndex].work_hist_id).subscribe(
+        dataJson => {
+          this.data.data[this.data.editIndex] = dataJson['data'];
+          this.dialogRef.close(this.data.data);
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    }
+  }
 
   initProjectForm() {
-
     const projectData: UserProjectItem = this.data.editIndex !== -1 ? this.data.data[this.data.editIndex] : null;
 
     this.request_project = {
@@ -1004,7 +1055,6 @@ export class ProfileDialogContentComponent {
   }
 
   initPublicationForm() {
-
     const publicationData: UserPublicationItem = this.data.editIndex !== -1 ? this.data.data[this.data.editIndex] : null;
 
     this.request_publication = {

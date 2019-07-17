@@ -197,7 +197,7 @@
       </div>
     </mat-dialog-content>
     <mat-dialog-actions>
-      <action-button class="update-btn" type="flat" title="Add" color="primary" [disabled]="!experienceForm.valid" (click)="addExperience()"></action-button>
+      <action-button class="update-btn" type="flat" [title]="data.editIndex === -1 ? 'Add' : 'Update'" color="primary" [disabled]="!experienceForm.valid" (click)="data.editIndex === -1 ? addExperience() : updateExperience()"></action-button>
     </mat-dialog-actions>
   </ng-container>
 
