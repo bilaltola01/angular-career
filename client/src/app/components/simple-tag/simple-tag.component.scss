@@ -86,11 +86,11 @@ $status-bg-color: #f4f5f8;
         }
         mat-icon.remove-icon {
             position: absolute;
-            top: 4px;
-            right: 5px;
-            font-size: 16px;
-            width: 16px;
-            height: 16px;
+            top: 5px;
+            right: 10px;
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
             color: rgba(#000000, 0.2);
             cursor: pointer;
             &:hover {
@@ -99,7 +99,15 @@ $status-bg-color: #f4f5f8;
         }
     }
     &.tag-control {
-        padding: 5px 25px 5px 15px;
+        padding: 10px 30px 10px 20px;
+        border-radius: 25px;
+        .ellipse-container {
+            height: 16px;
+            mat-icon {
+                font-size: 12px;
+                margin-right: 3px;
+            }
+        }
     }
     .tag-remove {
         display: none;
