@@ -102,7 +102,6 @@ export class UserProfileComponent implements OnInit {
 
   onClickEdit() {
     this.editMode = true;
-    this.isNavMenuOpened = true;
   }
 
   onSelectNavMenu(navIndex: number) {

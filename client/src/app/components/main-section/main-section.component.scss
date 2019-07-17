@@ -104,11 +104,15 @@
     display: inline-grid;
     grid-template: 
       "left-top right-all" auto
+      "left-middle right-all" auto
       "left-bottom right-all" auto
       / auto 70px;
     grid-gap: 0 10px;
     &__left-top {
       grid-area: left-top;
+    }
+    &__left-middle {
+      grid-area: left-middle;
     }
     &__left-bottom {
       grid-area: left-bottom;

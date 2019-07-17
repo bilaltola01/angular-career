@@ -17,6 +17,7 @@
       <a href="/my-profile">{{education.user_specified_school_name ? education.user_specified_school_name : education.school_name}}</a>
       <div class="detail-info">
         <h4 class="detail-info__left-top">{{education.education_level}}{{education.major_name ? ' - ' + education.major_name : ''}}</h4>
+        <small *ngIf="education.focus_major" class="detail-info__left-middle">Focused on {{education.major_name}}</small>
         <small class="detail-info__left-bottom">{{helperService.convertToFormattedString(education.start_date, 'YYYY')}} - {{helperService.convertToFormattedString(education.graduation_date, 'YYYY')}}</small>
         <h4 *ngIf="education.gpa" class="detail-info__right_all">{{education.gpa}} GPA</h4>
       </div>
@@ -140,7 +141,7 @@
       <div class="img-tag" *ngFor="let resource of externalResourcesList">
         <img src="assets/icons/ic_{{resource.description.toLowerCase()}}_white.svg">
         <label>{{resource.description}}</label>
-        <a href="/my-profile">{{resource.link}}</a>
+        <a href="//{{resource.link}}" target="_blank">{{resource.link}}</a>
       </div>
     </div>
     <div *ngIf="editMode" class="btn-container">
