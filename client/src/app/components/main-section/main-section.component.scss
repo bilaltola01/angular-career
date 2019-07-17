@@ -55,8 +55,7 @@
   }
   simple-tag {
     display: inline-flex;
-    margin-top: 10px;
-    margin-right: 10px;
+    margin: 10px 10px 5px 0;
   }
   action-button {
     display: inline-flex;
@@ -152,8 +151,7 @@
       / 70px auto;
     grid-gap: 0 10px;
     width: 350px;
-    margin-right: 20px;
-    margin-top: 10px;
+    margin: 10px 20px 5px 0;
     img {
       grid-area: image;
       width: 70px;
