@@ -71,7 +71,6 @@ export class LoginComponent implements OnInit {
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
-        console.log("TCL: LoginComponent -> getGeneralInformation -> error", error)
       }
     );
   }
