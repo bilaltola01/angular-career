@@ -25,7 +25,7 @@
     [class.edit-mode]="editMode"
     (navMenuVisibilityChanged)="onChangeNavMenuVisibility($event)"
   ></main-section>
-  <nav-section [navMenu]="navMenu" [editMode]="editMode" [navIndex]="selectedNavMenuIndex" (clickUpdate)="onClickUpdate()" (selectNavMenu)="onSelectNavMenu($event)" [isOpened]="isNavMenuOpened" [class.nav-hidden]="!((isHandset$ | async) && isNavMenuOpened)" id="nav-section"></nav-section>
+  <nav-section [navMenu]="navMenu" [editMode]="editMode" [navIndex]="selectedNavMenuIndex" (clickUpdate)="onClickUpdate()" (selectNavMenu)="onSelectNavMenu($event)" (selectedNavItem)="onSelectNavItem($event)" [isOpened]="isNavMenuOpened" [class.nav-hidden]="!((isHandset$ | async) && isNavMenuOpened)" id="nav-section"></nav-section>
 </ng-container>
 
 <ng-container *ngIf="isProfileLoading">

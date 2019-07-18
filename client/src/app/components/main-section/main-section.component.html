@@ -1,6 +1,6 @@
 <ng-container *ngIf="selectedNavMenu === 'profile'">
 
-  <div *ngIf="(userGeneralInfo && userGeneralInfo.user_intro) || editMode" class="row" [class.edit-mode]="editMode">
+  <div *ngIf="(userGeneralInfo && userGeneralInfo.user_intro) || editMode" class="row" [class.edit-mode]="editMode" id="about-me">
     <h3> About Me </h3>
     <ng-container *ngIf="true; let short_desc">
       <p *ngIf="userGeneralInfo.user_intro" [class.short-desc]="short_desc && userGeneralInfo.user_intro.length > helperService.shortDescLength">{{short_desc && !editMode ? helperService.shortDescription(userGeneralInfo.user_intro) : userGeneralInfo.user_intro}}</p>
@@ -11,7 +11,7 @@
     </div>
   </div>
 
-  <div *ngIf="(educationList && educationList.length > 0) || editMode" class="row" [class.edit-mode]="editMode">
+  <div *ngIf="(educationList && educationList.length > 0) || editMode" class="row" [class.edit-mode]="editMode" id="education">
     <h3> Education </h3>
     <ng-container *ngFor="let education of educationList; let i = index">
       <div class="editor-container">
@@ -39,7 +39,7 @@
     </div>
   </div>
 
-  <div *ngIf="(experienceList && experienceList.length > 0) || editMode" class="row" [class.edit-mode]="editMode">
+  <div *ngIf="(experienceList && experienceList.length > 0) || editMode" class="row" [class.edit-mode]="editMode" id="experience">
     <h3> Work Experience </h3>
     <ng-container *ngFor="let experience of experienceList; let i = index;">
       <div class="editor-container">
@@ -74,7 +74,7 @@
     </div>
   </div>
 
-  <div *ngIf="(userPublicationsList && userPublicationsList.length > 0) || editMode" class="row" [class.edit-mode]="editMode">
+  <div *ngIf="(userPublicationsList && userPublicationsList.length > 0) || editMode" class="row" [class.edit-mode]="editMode" id="publications">
     <h3> Publications </h3>
     <ng-container *ngFor="let publication of userPublicationsList; let i = index;">
       <div class="editor-container">
@@ -99,7 +99,7 @@
     </div>
   </div>
 
-  <div *ngIf="(userProjectsList && userProjectsList.length > 0) || editMode" class="row" [class.edit-mode]="editMode">
+  <div *ngIf="(userProjectsList && userProjectsList.length > 0) || editMode" class="row" [class.edit-mode]="editMode" id="projects">
     <h3> Projects </h3>
     <ng-container *ngFor="let project of userProjectsList; let i = index;">
       <div class="editor-container">
@@ -124,7 +124,7 @@
     </div>
   </div>
 
-  <div *ngIf="(userSkillsList && userSkillsList.length > 0) || editMode" class="row" [class.edit-mode]="editMode">
+  <div *ngIf="(userSkillsList && userSkillsList.length > 0) || editMode" class="row" [class.edit-mode]="editMode" id="skills">
     <h3> Skills </h3>
     <div *ngIf="editMode" class="form-field search" [formGroup]="skillsSearchForm">
       <mat-form-field appearance="standard" class="search">
@@ -141,7 +141,7 @@
     <simple-tag *ngFor="let skill of userSkillsList; let i = index" type="gray" title="{{skill.skill}}" ellipseTag="true" value="{{skill.skill_level}}" (levelChanged)="onLevelChanged($event, i)" (removeClick)="removeUserSkillsData(i, skill)" [isControl]="editMode"></simple-tag>
   </div>
 
-  <div *ngIf="(userInterestsList && userInterestsList.length > 0) || editMode" class="row" [class.edit-mode]="editMode">
+  <div *ngIf="(userInterestsList && userInterestsList.length > 0) || editMode" class="row" [class.edit-mode]="editMode" id="interests">
     <h3> Interests </h3>
     <div *ngIf="editMode" class="form-field search" [formGroup]="interestsSearchForm">
       <mat-form-field appearance="standard" class="search">
@@ -158,7 +158,7 @@
     <simple-tag *ngFor="let interest of userInterestsList; let i = index" type="gray" title="{{interest.interest}}" [removeTag]="editMode" (click)="removeUserInteretsData(i, interest)"></simple-tag>
   </div>
 
-  <div *ngIf="(externalResourcesList && externalResourcesList.length > 0) || editMode" class="row" [class.edit-mode]="editMode">
+  <div *ngIf="(externalResourcesList && externalResourcesList.length > 0) || editMode" class="row" [class.edit-mode]="editMode" id="external-resources">
     <h3> External Resources </h3>
     <div>
       <div class="img-tag" *ngFor="let resource of externalResourcesList">

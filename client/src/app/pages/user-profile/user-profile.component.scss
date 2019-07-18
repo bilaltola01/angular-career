@@ -10,9 +10,8 @@
   / 300px auto
   ;
   grid-column-gap: 40px;
-  padding-bottom: 80px;
   background-color: $bg-color-1;
-  min-height: calc(100vh - 70px - 80px);
+  min-height: calc(100vh - 70px);
 }
 
 .hidden {

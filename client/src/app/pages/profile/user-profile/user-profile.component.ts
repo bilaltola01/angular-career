@@ -56,25 +56,6 @@ export class UserProfileComponent implements OnInit {
       map(result => result.matches)
     );
 
-  onWindowsScroll() {
-    // if (!document.getElementById('nav-section').classList.contains('nav-hidden')) {
-    //   if (!this.containerScrollPosition) {
-    //     this.containerScrollPosition = 0;
-    //   }
-    //   const scrollHeight = document.getElementById('nav-section').offsetHeight - document.body.scrollHeight + 130;
-    //   const scrollPosition = document.getElementById('sidenav-content').scrollTop;
-
-    //   if (scrollPosition - this.containerScrollPosition > scrollHeight) {
-    //     document.getElementById('sidenav-content').scrollTop = this.containerScrollPosition + scrollHeight;
-    //   } else if (scrollPosition - this.containerScrollPosition < 0) {
-    //     document.getElementById('sidenav-content').scrollTop = this.containerScrollPosition;
-    //   }
-    // } else {
-    //   this.containerScrollPosition = document.getElementById('sidenav-content').scrollTop;
-    //   // document.getElementById('nav-section').style.top = `${this.containerScrollPosition + 130}px`;
-    // }
-  }
-
   ngOnInit() {
     this.selectedNavMenuIndex = 0;
     this.isNavMenuOpened = false;
@@ -90,10 +71,11 @@ export class UserProfileComponent implements OnInit {
     this.editMode = false;
     this.isProfileLoading = true;
     this.counts = 0;
-    window.addEventListener('scroll', this.onWindowsScroll, true);
   }
-  ngOnDestory() {
-    window.removeEventListener('scroll', this.onWindowsScroll, true);
+
+  onSelectNavItem(id: string) {
+    document.getElementById('sidenav-content').scrollTop = document.getElementById(id).offsetTop - 150;
+    this.isNavMenuOpened = false;
   }
 
   onClickTogggle() {

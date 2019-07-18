@@ -6,7 +6,7 @@
       <mat-icon>keyboard_arrow_right</mat-icon>
       <ol *ngIf="menu.items.length > 0">
         <ng-container *ngFor="let item of menu.items">
-          <li *ngIf="item.visible || editMode">{{item.title}}</li>
+          <li *ngIf="item.visible || editMode" (click)="onSelectNavItem(item.id)">{{item.title}}</li>
         </ng-container>
       </ol>
     </div>

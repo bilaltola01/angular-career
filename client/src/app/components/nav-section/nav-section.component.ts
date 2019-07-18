@@ -13,10 +13,15 @@ export class NavSectionComponent implements OnInit {
   @Input() navIndex: number;
   @Output() clickUpdate = new EventEmitter();
   @Output() selectNavMenu = new EventEmitter();
+  @Output() selectedNavItem = new EventEmitter();
 
   constructor() { }
 
   ngOnInit() { }
+
+  onSelectNavItem(id: string) {
+    this.selectedNavItem.emit(id);
+  }
 
   onSelectNavMenu(navIndex: number) {
     this.selectNavMenu.emit(navIndex);
