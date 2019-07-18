@@ -7,7 +7,9 @@
       [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
       [mode]="(isHandset$ | async) ? 'over' : 'side'"
       [opened]="(isHandset$ | async) === false">
-    <mat-toolbar>Menu</mat-toolbar>
+    <mat-toolbar>
+      <h3>yourCareerFair</h3>
+    </mat-toolbar>
     <mat-nav-list>
       <ng-container *ngIf="isLoggedIn()">
           <span class="spacer"></span>
