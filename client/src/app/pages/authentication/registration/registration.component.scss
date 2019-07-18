@@ -4,12 +4,10 @@ $primary-font-color: map-get($md-cfaccent, 500);
 
 :host {
   @include flex(row, center, center);
+  align-items: unset;
+  padding-top: 15%;
   min-height: calc(100vh - 70px);
-  padding: 70px 0;
   box-sizing: border-box;
-  @media only screen and (max-width: $tablet-breakpoint) {
-    padding: 40px 0;
-  }
 }
 .container {
   &__left {
