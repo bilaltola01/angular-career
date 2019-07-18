@@ -2,9 +2,15 @@
 
 :host {
   grid-area: left;
+  padding-top: 20px;
   padding-left: 40px;
   box-sizing: border-box;
   background-color: $bg-color-1;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 130px;
+  height: calc(100vh - 130px);
+  overflow-y: scroll;
   nav {
     .nav-section {
       position: relative;
@@ -69,17 +75,13 @@
 
 @media only screen and (max-width: 991px) {
   :host {
-    position: absolute;
+    position: fixed;
     padding: 10px 40px 30px 40px;
-    top: 130px;
     left: 0;
     width: 100%;
-    box-shadow: 0px 3px 10px rgba(map-get($md-cfaccent, 500), 0.5);
     background-color: rgba(0, 0, 0, .32);
-    min-height: calc(100vh - 130px);
    
     &.nav-hidden {
-      // visibility: hidden;
       display: none;
     }
   }

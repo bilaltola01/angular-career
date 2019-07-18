@@ -31,6 +31,12 @@ legend {
   padding:0 40px;
   box-sizing: border-box;
   @include flex(row, center, space-between);
+  position: -webkit-sticky;
+  position: sticky;
+  top: 70px;
+  background-color: $bg-color-1;
+  border-bottom: 1px solid map-get($md-cfaccent, 50);
+  z-index: 100;
   .nav-title {
     @include flex(row, center, flex-start);
     h3 {
@@ -67,7 +73,7 @@ legend {
     display: grid;
     grid-template:
     " hero hero " auto 
-    " lege lege " 60px
+    " lege lege " 0
     " left main-nav " auto
     " left main " auto
     / 0 auto

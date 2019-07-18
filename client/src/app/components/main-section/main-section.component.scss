@@ -2,10 +2,8 @@
 :host {
   grid-area: main;
   margin: 0 40px 0 0;
-  // padding: 15px;
-  // min-height: 100%;
+  padding-top: 20px;
   border-radius: 5px;
-  // box-shadow: 0px 3px 10px rgba(0,0,0,0.1);
   background-color: transparent;
   &.edit-mode {
     box-shadow: none;
@@ -52,7 +50,6 @@
       line-height: 24px;
     }
     &.edit-mode {
-      // box-shadow: 0px 3px 10px rgba(0,0,0,0.1);
       border-bottom: none;
       margin-bottom: 10px;
     }

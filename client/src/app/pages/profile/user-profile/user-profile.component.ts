@@ -57,22 +57,22 @@ export class UserProfileComponent implements OnInit {
     );
 
   onWindowsScroll() {
-    if (!document.getElementById('nav-section').classList.contains('nav-hidden')) {
-      if (!this.containerScrollPosition) {
-        this.containerScrollPosition = 0;
-      }
-      const scrollHeight = document.getElementById('nav-section').offsetHeight - document.body.scrollHeight + 130;
-      const scrollPosition = document.getElementById('sidenav-content').scrollTop;
+    // if (!document.getElementById('nav-section').classList.contains('nav-hidden')) {
+    //   if (!this.containerScrollPosition) {
+    //     this.containerScrollPosition = 0;
+    //   }
+    //   const scrollHeight = document.getElementById('nav-section').offsetHeight - document.body.scrollHeight + 130;
+    //   const scrollPosition = document.getElementById('sidenav-content').scrollTop;
 
-      if (scrollPosition - this.containerScrollPosition > scrollHeight) {
-        document.getElementById('sidenav-content').scrollTop = this.containerScrollPosition + scrollHeight;
-      } else if (scrollPosition - this.containerScrollPosition < 0) {
-        document.getElementById('sidenav-content').scrollTop = this.containerScrollPosition;
-      }
-    } else {
-      this.containerScrollPosition = document.getElementById('sidenav-content').scrollTop;
-      document.getElementById('nav-section').style.top = `${this.containerScrollPosition + 130}px`;
-    }
+    //   if (scrollPosition - this.containerScrollPosition > scrollHeight) {
+    //     document.getElementById('sidenav-content').scrollTop = this.containerScrollPosition + scrollHeight;
+    //   } else if (scrollPosition - this.containerScrollPosition < 0) {
+    //     document.getElementById('sidenav-content').scrollTop = this.containerScrollPosition;
+    //   }
+    // } else {
+    //   this.containerScrollPosition = document.getElementById('sidenav-content').scrollTop;
+    //   // document.getElementById('nav-section').style.top = `${this.containerScrollPosition + 130}px`;
+    // }
   }
 
   ngOnInit() {
