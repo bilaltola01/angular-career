@@ -94,9 +94,9 @@
     border-color: rgba(#707070, 0.1);
   }
   p {
-    color: rgba(map-get($md-cfaccent, 500), .54);
+    color: rgba(map-get($md-cfaccent, 500), .74);
     &.short-desc {
-      color: rgba(map-get($md-cfaccent, 500), .34);
+      color: rgba(map-get($md-cfaccent, 500), .74);
     }
   }
   .detail-info {

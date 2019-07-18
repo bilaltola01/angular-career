@@ -6,7 +6,7 @@ import moment from 'moment';
 })
 export class HelperService {
 
-  shortDescLength = 150;
+  shortDescLength = 500;
 
   constructor() { }
 
