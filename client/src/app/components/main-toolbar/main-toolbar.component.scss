@@ -54,12 +54,20 @@ mat-nav-list {
     display: block;
     padding: 18px !important;
     color: map-get($md-cfaccent, 500) !important;
+    text-align: center;
     &:hover {
       color: map-get($md-cfprimary, 500) !important;
     }
     &.active-link {
       color: map-get($md-cfprimary, 500) !important;
     }
+  }
+}
+
+mat-toolbar{
+  h3 {
+    text-align: center;
+    width: 100%;
   }
 }
 
