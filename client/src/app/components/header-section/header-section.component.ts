@@ -7,7 +7,8 @@ import {
   City,
   State,
   Genders,
-  EthnicityTypes
+  EthnicityTypes,
+  ProfileStatuses
 } from 'src/app/models';
 import {
   HelperService,
@@ -27,6 +28,7 @@ export class HeaderSectionComponent implements OnInit {
   @Input() generalInfo: UserGeneralInfo;
   @Input() editMode: boolean;
   @Output() updatedGeneralInfoData = new EventEmitter();
+  @Output() updatedProfileStatus = new EventEmitter();
 
   maxDate = new Date();
 
@@ -42,6 +44,8 @@ export class HeaderSectionComponent implements OnInit {
   autocomplete_states: State[] = [];
   temp_state: State;
 
+  profileStatuses = ProfileStatuses;
+
   constructor(
     private helperService: HelperService,
     private autoCompleteService: AutoCompleteService,
@@ -52,6 +56,11 @@ export class HeaderSectionComponent implements OnInit {
     if (this.generalInfo) {
       this.initGeneralInfoForm();
     }
+  }
+
+  onChangeProfileStatus(active: boolean) {
+    this.generalInfoData.is_looking = active ? 0 : 1;
+    this.updatedProfileStatus.emit(this.generalInfoData);
   }
 
   initGeneralInfoForm() {
@@ -160,7 +169,7 @@ export class HeaderSectionComponent implements OnInit {
       user_intro: this.generalInfo.user_intro,
       ethnicity: this.generalInfo.ethnicity
     };
-    this.updatedGeneralInfoData.emit(this.generalInfoData);
+    // this.updatedGeneralInfoData.emit(this.generalInfoData);
   }
 
   onChangeBirthDate(date: any) {
