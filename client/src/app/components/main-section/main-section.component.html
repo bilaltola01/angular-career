@@ -78,7 +78,10 @@
     <h3> Publications </h3>
     <ng-container *ngFor="let publication of userPublicationsList; let i = index;">
       <div class="editor-container">
-        <h4 class="name-field">{{publication.publication_title}}</h4>
+        <h4 class="name-field">
+          <a *ngIf="publication.href" target="_blank" class="title" href="//{{publication.href}}">{{publication.publication_title}}</a>
+          <ng-container *ngIf="!publication.href">{{publication.publication_title}}</ng-container>
+        </h4>
         <mat-icon *ngIf="editMode" class="btn-edit" (click)="openDialog('Publication', userPublicationsList, i)">edit</mat-icon>
         <mat-icon *ngIf="editMode" class="btn-delete" (click)="deletePublicationData(i)">delete</mat-icon>
       </div>
@@ -100,7 +103,10 @@
     <h3> Projects </h3>
     <ng-container *ngFor="let project of userProjectsList; let i = index;">
       <div class="editor-container">
-        <h4 class="name-field">{{project.project_name}}</h4>
+        <h4 class="name-field">
+          <a *ngIf="project.href" target="_blank" class="title" href="//{{project.href}}">{{project.project_name}}</a>
+          <ng-container *ngIf="!project.href">{{project.project_name}}</ng-container>
+        </h4>
         <mat-icon *ngIf="editMode" class="btn-edit" (click)="openDialog('Project', userProjectsList, i)">edit</mat-icon>
         <mat-icon *ngIf="editMode" class="btn-delete" (click)="deleteProjectData(i)">delete</mat-icon>
       </div>

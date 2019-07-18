@@ -35,6 +35,9 @@
     }
     h4 {
       margin-top: 10px;
+      &.name-field {
+        margin-top: 0;
+      }
     }
     h5 {
       margin-top: 15px;
@@ -72,6 +75,11 @@
     color: map-get($md-cfprimary, 500);
     text-decoration: none;
     cursor: pointer;
+    &.title {
+      color: map-get($md-cfaccent, 500);
+      font-size: inherit;
+      line-height: inherit;
+    }
   }
   h3 {
     margin-top: 0;

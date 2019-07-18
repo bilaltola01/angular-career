@@ -169,7 +169,7 @@ export class HeaderSectionComponent implements OnInit {
       user_intro: this.generalInfo.user_intro,
       ethnicity: this.generalInfo.ethnicity
     };
-    // this.updatedGeneralInfoData.emit(this.generalInfoData);
+    this.updatedGeneralInfoData.emit(this.generalInfoData);
   }
 
   onChangeBirthDate(date: any) {
