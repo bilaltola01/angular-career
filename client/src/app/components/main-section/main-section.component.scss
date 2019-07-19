@@ -6,9 +6,6 @@
   padding-bottom: 80px;
   border-radius: 5px;
   background-color: transparent;
-  &.edit-mode {
-    box-shadow: none;
-  }
   :first-child {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
@@ -21,7 +18,6 @@
   .row {
     background: white;
     padding: 25px 20px;
-    border-bottom: 1px solid map-get($md-cfaccent, 50);
     .btn-container {
       text-align: center;
       padding: 10px 0;
