@@ -330,7 +330,7 @@ export const ExternalResources = [
 ];
 
 export const ProfileStatuses = [
-  'Passively Looking For Job',
+  'Not Actively Looking',
   'Actively Looking For Job'
 ];
 
