@@ -2,7 +2,7 @@
 :host {
   grid-area: main;
   margin: 0 40px 0 0;
-  padding-top: 20px;
+  padding-top: 0;
   padding-bottom: 80px;
   border-radius: 5px;
   background-color: transparent;
@@ -13,6 +13,17 @@
   :last-child {
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
+  }
+
+  .edit-title {
+    height: 60px;
+    @include flex(row, center, flex-end);
+    a {
+      font-size: 12px;
+      color: map-get($md-cfprimary, 500);
+      @include disable-select();
+      cursor: pointer;
+    }
   }
   
   .row {
@@ -202,6 +213,9 @@
     margin: 0 40px;
     padding-top: 40px;
     padding-bottom: 40px;
+    .edit-title {
+      display: none;
+    }
     .img-tag {
       width: 330px;
     }

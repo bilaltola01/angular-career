@@ -74,7 +74,11 @@ export class UserProfileComponent implements OnInit {
   }
 
   onSelectNavItem(id: string) {
-    document.getElementById('sidenav-content').scrollTop = document.getElementById(id).offsetTop - 130;
+    let height = 130;
+    if (document.getElementById('legend').clientHeight === 0) {
+      height = 70;
+    }
+    document.getElementById('sidenav-content').scrollTop = document.getElementById(id).offsetTop - height;
     this.isNavMenuOpened = false;
   }
 

@@ -1,5 +1,9 @@
 <ng-container *ngIf="selectedNavMenu === 'profile'">
 
+  <div class="edit-title">
+    <a *ngIf="!editMode" (click)="onClickEdit()">Edit Profile</a>
+  </div>
+
   <div *ngIf="(userGeneralInfo && userGeneralInfo.user_intro) || editMode" class="row" [class.edit-mode]="editMode" id="about-me">
     <h3> About Me </h3>
     <ng-container *ngIf="true; let short_desc">

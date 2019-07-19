@@ -2,14 +2,27 @@
 
 :host {
   grid-area: left;
-  padding: 20px 0 80px 40px;
+  padding: 0 0 80px 40px;
   box-sizing: border-box;
   background-color: $bg-color-1;
   position: -webkit-sticky;
   position: sticky;
-  top: 130px;
-  height: calc(100vh - 130px);
+  top: 70px;
+  height: calc(100vh - 70px);
   overflow-y: scroll;
+  .nav-title {
+    height: 60px;
+    @include flex(row, center, flex-start);
+    h3 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      margin: 0;
+      line-height: 30px;
+      color: rgba(map-get($md-cfaccent, 500), .24);
+      text-transform: uppercase;
+    }
+  }
   nav {
     .nav-section {
       position: relative;
@@ -83,6 +96,11 @@
     left: 0;
     width: 100%;
     background-color: rgba(0, 0, 0, .32);
+    top: 130px;
+    height: calc(100vh - 130px);
+    .nav-title {
+      display: none;
+    }
    
     &.nav-hidden {
       display: none;

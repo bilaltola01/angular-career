@@ -64,6 +64,7 @@ export class MainSectionComponent implements OnInit {
   @Input() editMode: boolean;
   @Output() navMenuVisibilityChanged = new EventEmitter();
   @Output() userIntroUpdated = new EventEmitter();
+  @Output() clickEdit = new EventEmitter();
 
   autocomplete_skills: Skill[] = [];
   autocomplete_interests: Interest[] = [];
@@ -92,6 +93,10 @@ export class MainSectionComponent implements OnInit {
       navItemIndex: navItemIndex,
       visible: visible
     });
+  }
+
+  onClickEdit() {
+    this.clickEdit.emit();
   }
 
   openDialog(category: string, data: any, arrIndex: number = -1) {
