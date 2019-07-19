@@ -74,7 +74,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   onSelectNavItem(id: string) {
-    document.getElementById('sidenav-content').scrollTop = document.getElementById(id).offsetTop - 150;
+    document.getElementById('sidenav-content').scrollTop = document.getElementById(id).offsetTop - 130;
     this.isNavMenuOpened = false;
   }
 
