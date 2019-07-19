@@ -63,6 +63,7 @@ export class MainSectionComponent implements OnInit {
   @Input() externalResourcesList: UserExternalResourcesItem[];
   @Input() editMode: boolean;
   @Output() navMenuVisibilityChanged = new EventEmitter();
+  @Output() userIntroUpdated = new EventEmitter();
 
   autocomplete_skills: Skill[] = [];
   autocomplete_interests: Interest[] = [];
@@ -110,6 +111,7 @@ export class MainSectionComponent implements OnInit {
         switch (category) {
           case 'About Me':
             this.userGeneralInfo = result;
+            this.userIntroUpdated.emit(this.userGeneralInfo.user_intro);
             this.onChangeNavMenuVisibility(0, this.userGeneralInfo.user_intro ? true : false);
             break;
           case 'Education':

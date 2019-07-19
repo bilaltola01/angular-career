@@ -91,12 +91,25 @@ export class UserProfileComponent implements OnInit {
   }
 
   onChangedGeneralInfoData(generalInfoData: UserObject) {
-    this.generalInfoData = generalInfoData;
+    this.generalInfoData.first_name = generalInfoData.first_name;
+    this.generalInfoData.last_name = generalInfoData.last_name;
+    this.generalInfoData.birthdate = generalInfoData.birthdate;
+    this.generalInfoData.gender = generalInfoData.gender;
+    this.generalInfoData.city_id = generalInfoData.city_id;
+    this.generalInfoData.country_id = generalInfoData.country_id;
+    this.generalInfoData.state_id = generalInfoData.state_id;
+    this.generalInfoData.title = generalInfoData.title;
+    this.generalInfoData.ethnicity = generalInfoData.ethnicity;
   }
 
   onChangeProfileStatus(generalInfoData: UserObject) {
-    this.generalInfoData = generalInfoData;
+    this.generalInfoData.is_looking = generalInfoData.is_looking;
     this.onClickUpdate();
+  }
+
+  onChangeUserIntro(user_intro: string) {
+    this.userGeneralInfo.user_intro = user_intro;
+    this.generalInfoData.user_intro = user_intro;
   }
 
   onChangeNavMenuVisibility($event: any) {
@@ -109,6 +122,7 @@ export class UserProfileComponent implements OnInit {
         this.userGeneralInfo = dataJson['data'];
         this.editMode = false;
         this.isNavMenuOpened = false;
+        this.generateGeneralInfoData();
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -123,12 +137,33 @@ export class UserProfileComponent implements OnInit {
     }
   }
 
+  generateGeneralInfoData() {
+    this.generalInfoData = {
+      photo: this.userGeneralInfo.photo ? this.userGeneralInfo.photo : null,
+      first_name: this.userGeneralInfo.first_name,
+      last_name: this.userGeneralInfo.last_name,
+      birthdate: this.userGeneralInfo.birthdate ? this.userGeneralInfo.birthdate : null,
+      gender: this.userGeneralInfo.gender,
+      phone_num: this.userGeneralInfo.phone_num,
+      recruiter: this.userGeneralInfo.recruiter,
+      applicant: this.userGeneralInfo.applicant,
+      city_id: this.userGeneralInfo.city_id,
+      country_id: this.userGeneralInfo.country_id,
+      state_id: this.userGeneralInfo.state_id,
+      is_looking: this.userGeneralInfo.is_looking,
+      title: this.userGeneralInfo.title,
+      user_intro: this.userGeneralInfo.user_intro,
+      ethnicity: this.userGeneralInfo.ethnicity
+    };
+  }
+
   getGeneralInfo() {
     this.userService.getGeneralInfo().subscribe(
       dataJson => {
         this.userGeneralInfo = dataJson['data'];
         this.navMenu[0].items[0].visible = this.userGeneralInfo.user_intro ?  true : false;
         this.counts++;
+        this.generateGeneralInfoData();
         this.checkProfileLoading();
       },
       error => {
