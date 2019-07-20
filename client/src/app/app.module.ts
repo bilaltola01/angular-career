@@ -22,9 +22,6 @@ import { SharedModule } from './components/shared.module';
     SharedModule
   ],
   bootstrap: [AppComponent],
-  entryComponents: [
-    ProfileDialogContentComponent
-  ]
 })
 
 export class AppModule {
