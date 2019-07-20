@@ -125,7 +125,6 @@ export class MainSectionComponent implements OnInit {
             break;
           case 'Work Experience':
             this.experienceList = result;
-            this.educationList = result;
             this.onChangeNavMenuVisibility(2, this.experienceList && this.experienceList.length > 0 ? true : false);
             break;
           case 'Project':
