@@ -34,4 +34,14 @@ export class HelperService {
     return city;
   }
 
+  extractLinkString(link: string): string {
+    if (link.includes('http://')) {
+      return link.replace('http://', '');
+    } else if (link.includes('https://')) {
+      return link.replace('https://', '');
+    } else {
+      return link;
+    }
+  }
+
 }

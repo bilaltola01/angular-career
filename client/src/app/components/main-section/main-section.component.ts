@@ -1023,7 +1023,7 @@ export class ProfileDialogContentComponent {
     );
     this.projectForm.get('href').valueChanges.subscribe(
       (href) => {
-        this.request_project.href = href;
+        this.request_project.href = this.helperService.extractLinkString(href) ? this.helperService.extractLinkString(href) : null;
       }
     );
   }
@@ -1094,7 +1094,7 @@ export class ProfileDialogContentComponent {
     );
     this.publicationForm.get('href').valueChanges.subscribe(
       (href) => {
-        this.request_publication.href = href;
+        this.request_publication.href = this.helperService.extractLinkString(href) ? this.helperService.extractLinkString(href) : null;
       }
     );
   }
@@ -1152,7 +1152,7 @@ export class ProfileDialogContentComponent {
   }
   onExternalResourceValueChange(resource: string, arrIndex: number, link: string) {
     if (this.externalResourcesDataList[arrIndex].description === resource) {
-      this.externalResourcesDataList[arrIndex] .link = link ? link : null;
+      this.externalResourcesDataList[arrIndex].link = this.helperService.extractLinkString(link) ? this.helperService.extractLinkString(link) : null;
     }
   }
   updateExternalResourceFormGroup() {
