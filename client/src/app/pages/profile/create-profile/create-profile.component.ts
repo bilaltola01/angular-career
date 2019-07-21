@@ -299,6 +299,7 @@ export class CreateProfileComponent implements OnInit {
       basicInfoState: new FormControl('', [Validators.required]),
       basicInfoCountry: new FormControl('', [Validators.required]),
       basicInfoBirth: new FormControl(''),
+      basicInfoTitle: new FormControl('', [Validators.required]),
       basicInfoGender: new FormControl('', [Validators.required]),
       basicInfoEthnicity: new FormControl('', [Validators.required])
     });
@@ -324,6 +325,11 @@ export class CreateProfileComponent implements OnInit {
         this.generalInfoRequest.birthdate = date ? date : null;
       }
     );
+    this.basicInfoForm.get('basicInfoTitle').valueChanges.subscribe(
+      (title) => {
+        this.onTitleValueChanges(title);
+      }
+    );
     this.basicInfoForm.get('basicInfoEthnicity').valueChanges.subscribe(
       (ethnicity) => {
         this.onEthnicityValueChanges(ethnicity);
@@ -337,6 +343,7 @@ export class CreateProfileComponent implements OnInit {
     this.basicInfoForm.get('basicInfoState').setValue(this.generalInfoResponse.state);
     this.basicInfoForm.get('basicInfoCountry').setValue(this.generalInfoResponse.country);
     this.basicInfoForm.get('basicInfoGender').setValue(this.generalInfoResponse.gender);
+    this.basicInfoForm.get('basicInfoTitle').setValue(this.generalInfoResponse.title);
     this.basicInfoForm.get('basicInfoBirth').setValue(this.generalInfoResponse.birthdate ? this.extractDate(this.generalInfoResponse.birthdate) : '');
     this.basicInfoForm.get('basicInfoEthnicity').setValue(this.generalInfoResponse.ethnicity);
   }
@@ -369,6 +376,9 @@ export class CreateProfileComponent implements OnInit {
   }
   onEthnicityValueChanges(ethnicity: string) {
     this.generalInfoRequest.ethnicity = ethnicity;
+  }
+  onTitleValueChanges(title: string) {
+    this.generalInfoRequest.title = title;
   }
   onGenderValueChanges(gender: string) {
     this.generalInfoRequest.gender = gender;
@@ -550,8 +560,6 @@ export class CreateProfileComponent implements OnInit {
     this.autocomplete_universities = [];
     this.autocomplete_majors = [];
     this.autocomplete_focus_majors = [];
-    this.prevent_skills_autocomplete = false;
-    this.prevent_interets_autocomplete = false;
   }
   onRemoveEducationData(index: number) {
     if (index > this.educationList.length - 1) {
@@ -1179,7 +1187,7 @@ export class CreateProfileComponent implements OnInit {
         }
       },
       error => {
-        this.autocomplete_universities[arrIndex] = [];
+        this.autocomplete_companies[arrIndex] = [];
         this.alertsService.show(error.message, AlertType.error);
       }
     );
@@ -1280,6 +1288,8 @@ export class CreateProfileComponent implements OnInit {
   initSkillsAndInterestsForm() {
     this.autocomplete_skills = [];
     this.autocomplete_interests = [];
+    this.prevent_skills_autocomplete = false;
+    this.prevent_interets_autocomplete = false;
     this.userSkillsList = [];
     this.userInterestsList = [];
 

@@ -21,12 +21,12 @@ $status-bg-color: #f4f5f8;
     position: relative;
     background-color: transparent;
     color: rgba($tag-normal-color, 0.84);
-    padding: 3px 13px;
-    margin-right: 5px;
+    padding: 6px 15px;
     border-radius: 500px;
     text-transform: capitalize;
     font-family: 'Poppins', sans-serif;
-    font-size: 0.8em;
+    font-size: 14px;
+    line-height: 16px;
     border: solid 1px rgba($tag-normal-color, 0.1);
     background-clip: padding-box;
     &.tag-green {
@@ -65,8 +65,7 @@ $status-bg-color: #f4f5f8;
         flex-direction: column;
         justify-content: center;
         align-content: flex-start;
-        padding: 10px 15px;
-        font-size: 0.9em;
+        padding: 5px 15px;
         border-radius: 18px;
         .ellipse-container {
             display: flex;
@@ -74,28 +73,24 @@ $status-bg-color: #f4f5f8;
             justify-content: flex-start;
             height: 12px;
             mat-icon {
-                font-size: 0.8em;
+                font-size: 8px;
                 color: rgba(#000000, 0.2);
                 width: initial;
                 height: initial;
-                margin: 0 2px;
+                margin-right: 2px;
                 cursor: pointer;
                 &.active {
                     color: $tag-green-color;
                 }
             }
-            :first-child,
-            :last-child {
-                margin: 0;
-            }
         }
         mat-icon.remove-icon {
             position: absolute;
-            top: 10px;
-            right: 5px;
-            font-size: 20px;
-            width: 20px;
-            height: 20px;
+            top: 5px;
+            right: 10px;
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
             color: rgba(#000000, 0.2);
             cursor: pointer;
             &:hover {
@@ -104,7 +99,15 @@ $status-bg-color: #f4f5f8;
         }
     }
     &.tag-control {
-        padding: 10px 30px 10px 15px;
+        padding: 10px 30px 10px 20px;
+        border-radius: 25px;
+        .ellipse-container {
+            height: 16px;
+            mat-icon {
+                font-size: 12px;
+                margin-right: 3px;
+            }
+        }
     }
     .tag-remove {
         display: none;

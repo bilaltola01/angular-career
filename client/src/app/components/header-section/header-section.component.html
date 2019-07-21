@@ -1,0 +1,143 @@
+<ng-container>
+  <!-- <div class="back-row">
+    <button class="back">Back</button>
+  </div> -->
+  <div *ngIf="generalInfo" class="user-row">
+    <div>
+      <img class="user-photo" src="{{generalInfo.photo ? generalInfo.photo : 'assets/icons/no_photo.png'}}">
+    </div>
+    <ng-container *ngIf="!editMode">
+      <div class="user-detail">
+        <div>
+          <h1>{{generalInfo.first_name}} {{generalInfo.last_name}}</h1>
+          <h4>{{generalInfo.title}}</h4>
+        </div>
+        <div class="user-info">
+          <div>
+            <small *ngIf="generalInfo.city && generalInfo.state && generalInfo.country">
+              <img src="assets/icons/ic_location.svg">
+              {{generalInfo.city}}, {{generalInfo.state}}, {{generalInfo.country}}
+            </small>
+            <small *ngIf="generalInfo.birthdate">
+              <img src="assets/icons/ic_birthday-cake.svg">
+              {{helperService.convertToFormattedString(generalInfo.birthdate, 'll')}}
+            </small>
+            <small *ngIf="generalInfo.gender">
+              <img src="{{generalInfo.gender === 'Male' ? 'assets/icons/ic_male.svg' : 'assets/icons/ic_female.svg'}}">
+              {{generalInfo.gender}}
+            </small>
+          </div>
+          <div>
+            <small *ngIf="generalInfo.ethnicity">
+              <label>Ethnicity</label>
+              {{generalInfo.ethnicity}}
+            </small>
+            <small>
+              <label>Email Verified</label>
+              <img class="valid" src="assets/icons/ic_checkbox_checked.svg">
+            </small>
+          </div>
+        </div>
+      </div>
+      <div class="user-status">
+        <simple-tag  [title]="profileStatuses[generalInfo.is_looking]" onlineTag="true" [active]="generalInfo.is_looking === 1" (click)="onChangeProfileStatus(generalInfo.is_looking === 1)"></simple-tag>
+        <img src="assets/icons/ic_mail.svg">
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="editMode" [formGroup]="generalInfoForm">
+      <div class="edit-form">
+
+        <div class="form-field name-field">
+          <mat-form-field class="bg-transparent first-name" appearance="fill">
+            <mat-label>First Name</mat-label>
+            <input matInput placeholder="First Name" type="text" formControlName="first_name">
+          </mat-form-field>
+          <mat-form-field class="bg-transparent last-name" appearance="fill">
+            <mat-label>Last Name</mat-label>
+            <input matInput placeholder="Last Name" type="text" formControlName="last_name">
+            <mat-icon matSuffix *ngIf="generalInfoForm.get('first_name').valid && generalInfoForm.get('last_name').valid">done</mat-icon>
+            <mat-icon matSuffix class="error-field" *ngIf="(!generalInfoForm.get('first_name').valid || !generalInfoForm.get('last_name').valid) && (generalInfoForm.get('first_name').touched || generalInfoForm.get('last_name').touched)">close</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <mat-form-field class="bg-transparent" appearance="fill">
+            <mat-label>City</mat-label>
+            <input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity" formControlName="city">
+            <mat-icon matSuffix *ngIf="generalInfoForm.get('city').valid && checkCityValidation()">done</mat-icon>
+            <mat-icon matSuffix class="error-field" *ngIf="(!generalInfoForm.get('city').valid || !checkCityValidation()) && generalInfoForm.get('city').touched">close</mat-icon>
+            <mat-autocomplete #autocompleteCity="matAutocomplete" (closed)="onBlurCity()">
+              <mat-option *ngFor="let city of autocomplete_cities" [value]="helperService.cityNameFromAutoComplete(city.city)" (onSelectionChange)="onSelectCity(city)">
+                <span>{{city.city}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <mat-form-field class="bg-transparent" appearance="fill">
+            <mat-label>State</mat-label>
+            <input matInput placeholder="State" type="text" [matAutocomplete]="autocompleteState" formControlName="state">
+            <mat-icon matSuffix *ngIf="generalInfoForm.get('state').valid && checkStateValidation()">done</mat-icon>
+            <mat-icon matSuffix class="error-field" *ngIf="(!generalInfoForm.get('state').valid || !checkStateValidation()) && generalInfoForm.get('state').touched">close</mat-icon>
+            <mat-autocomplete #autocompleteState="matAutocomplete" (closed)="onBlurState()">
+              <mat-option *ngFor="let state of autocomplete_states" [value]="state.state" (onSelectionChange)="onSelectState(state)">
+                <span>{{state.state}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <mat-form-field class="bg-transparent" appearance="fill">
+            <mat-label>Country</mat-label>
+            <mat-select formControlName="country">
+              <mat-option *ngFor="let country of countries" value="{{country}}">{{country}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="form-field"> 
+          <mat-form-field class="bg-transparent" appearance="fill">
+            <mat-label>Date Of Birth</mat-label>
+            <input matInput placeholder="MM/DD/YYYY" formControlName="birthdate" pattern="\d{1,2}/\d{1,2}/\d{4}">
+            <input class="hide" [matDatepicker]="birthdate" [max]="maxDate" (dateChange)="onChangeBirthDate($event)">
+            <mat-datepicker-toggle matSuffix [for]="birthdate"></mat-datepicker-toggle>
+            <mat-datepicker
+              touchUi
+              #birthdate
+            >
+            </mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <mat-form-field class="bg-transparent" appearance="fill">
+            <mat-label>Title</mat-label>
+            <input matInput placeholder="Title" type="text" formControlName="title">
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <mat-form-field class="bg-transparent" appearance="fill">
+            <mat-label>Ethnicity</mat-label>
+            <mat-select formControlName="ethnicity">
+              <mat-option *ngFor="let ethnicityType of ethnicityTypes" value="{{ethnicityType}}">{{ethnicityType}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <mat-form-field class="bg-transparent" appearance="fill">
+            <mat-label>Gender</mat-label>
+            <mat-select formControlName="gender">
+              <mat-option *ngFor="let gender of genders" value="{{gender}}">{{gender}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+      </div>
+    </ng-container>
+  </div>
+</ng-container>

@@ -1,7 +1,6 @@
 @import '../../../../styles/variables';
 
 $primary-font-color: map-get($md-cfaccent, 500);
-$host-bg-color: #f4f5f8;
 
 $container-mt-desktop: 70px;
 $container-mt-tablet: 50px;
@@ -27,7 +26,7 @@ $profile-form-field-mt: 30px;
   padding: 0 0 70px 0;
   box-sizing: border-box;
   color: rgba($primary-font-color, .84);
-  background-color: $host-bg-color;
+  background-color: $third-bg-color;
   .profile-completion {
     position: relative;
     width: 100%;
@@ -278,7 +277,7 @@ p {
             }
             mat-form-field {
               margin-top: 10px;
-              background-color: $host-bg-color;
+              background-color: $third-bg-color;
               border-radius: 25px;
             }
             .skills {

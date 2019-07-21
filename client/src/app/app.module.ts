@@ -21,7 +21,7 @@ import { SharedModule } from './components/shared.module';
     ReactiveFormsModule,
     SharedModule
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 
 export class AppModule {

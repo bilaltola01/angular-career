@@ -424,6 +424,16 @@ action-button {
       padding: 0 !important;
     }
   }
+  &.nav-btn {
+    & > button {
+      max-width: 170px;
+      padding: 10px 0 !important;
+    }
+  }
+  &.update-btn {
+    margin-top: 20px;
+    min-width: 150px;
+  }
 }
 
 .container {
@@ -434,4 +444,39 @@ action-button {
   width: 100%;
   max-width: $container-max-width;
   box-sizing: border-box;
+}
+
+.edit-dialog-container {
+  mat-dialog-container {
+    position: relative;
+    border-radius: 20px;
+    margin: 0 40px;
+    dialog-content {
+      width: 100%;
+      @include flex(column, center, flex-start);
+      mat-icon.cancel {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        color: map-get($md-cfprimary, 500);
+      }
+      mat-dialog-content {
+        width: 75%;
+        max-width: 615px;
+        min-width: 280px;
+        box-sizing: border-box;
+      }
+      mat-dialog-actions {
+        margin-bottom: 0 !important;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .edit-dialog-container {
+    mat-dialog-container {
+      margin: 0 20px;
+    }
+  }
 }
