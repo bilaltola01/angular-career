@@ -339,15 +339,17 @@ export class MainSectionComponent implements OnInit {
     );
   }
   removeUserInteretsData(index: number, userInterestItem: UserInterestItem) {
-    this.userService.deleteUserInterestsInfoById(userInterestItem.interest_id).subscribe(
-      dataJson => {
-        this.userInterestsList.splice(index, 1);
-        this.onChangeNavMenuVisibility(6, this.userInterestsList && this.userInterestsList.length > 0 ? true : false);
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-      }
-    );
+    if (this.editMode) {
+      this.userService.deleteUserInterestsInfoById(userInterestItem.interest_id).subscribe(
+        dataJson => {
+          this.userInterestsList.splice(index, 1);
+          this.onChangeNavMenuVisibility(6, this.userInterestsList && this.userInterestsList.length > 0 ? true : false);
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    }
   }
 
 }
