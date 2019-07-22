@@ -270,6 +270,10 @@ export class CreateProfileComponent implements OnInit {
         this.initEducationFormArray();
         this.getEducationList();
         break;
+      case 4:
+        this.initExperienceFormArray();
+        this.getExperienceList();
+        break;
       case 9:
         this.getGeneralInfo();
         break;
@@ -911,7 +915,6 @@ export class CreateProfileComponent implements OnInit {
   deleteEducationData(index: number) {
     this.userService.deleteEducationInfoById(this.educationList[index].education_id).subscribe(
       dataJson => {
-        console.log('Delete Education_List', dataJson);
         this.educationList.splice(index, 1);
         this.removeEducationFormGroup(index);
       },
@@ -1231,7 +1234,6 @@ export class CreateProfileComponent implements OnInit {
     this.userService.getExperienceInfo().subscribe(
       dataJson => {
         this.experienceList = dataJson['data'];
-        console.log('Experience_List', this.experienceList);
         this.updateExperienceForm();
       },
       error => {
@@ -1253,6 +1255,7 @@ export class CreateProfileComponent implements OnInit {
                 counts++;
                 if (counts === this.experienceDataList.length) {
                   this.selectedPageIndex++;
+                  this.initializeFormsByPageIndex();
                 }
               },
               error => {
@@ -1266,6 +1269,7 @@ export class CreateProfileComponent implements OnInit {
                 counts++;
                 if (counts === this.experienceDataList.length) {
                   this.selectedPageIndex++;
+                  this.initializeFormsByPageIndex();
                 }
               },
               error => {
@@ -1277,12 +1281,12 @@ export class CreateProfileComponent implements OnInit {
       }
     } else {
       this.selectedPageIndex++;
+      this.initializeFormsByPageIndex();
     }
   }
   deleteExperienceData(index: number) {
     this.userService.deleteExperienceInfoById(this.experienceList[index].work_hist_id).subscribe(
       dataJson => {
-        console.log('Delete Education_List', dataJson);
         this.experienceList.splice(index, 1);
         this.removeExperienceFormGroup(index);
       },
