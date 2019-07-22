@@ -195,7 +195,7 @@ export class CreateProfileComponent implements OnInit {
     // this.initProjectsFormArray();
     // this.initPublicationsFormArray();
     // this.initExternalResourcesForm();
-    // this.initProfileStatus();
+    this.initProfileStatus();
 
     this.getGeneralInfo();
     // this.getEducationList();
@@ -261,13 +261,13 @@ export class CreateProfileComponent implements OnInit {
   initializeFormsByPageIndex() {
     switch (this.selectedPageIndex) {
       case 1:
-        this.updateBasicInformationForm();
+        this.getGeneralInfo();
         break;
       case 2:
-        this.updateAboutMeForm();
+        this.getGeneralInfo();
         break;
       case 9:
-        this.updateProfileStatus();
+        this.getGeneralInfo();
         break;
       default:
         break;
@@ -500,6 +500,8 @@ export class CreateProfileComponent implements OnInit {
       dataJson => {
         this.generalInfoResponse = dataJson['data'];
         this.updateBasicInformationForm();
+        this.updateAboutMeForm();
+        this.updateProfileStatus();
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -514,20 +516,14 @@ export class CreateProfileComponent implements OnInit {
       this.userService.updateGeneralInfo(this.generalInfoRequest).subscribe(
         dataJson => {
           this.generalInfoResponse = dataJson['data'];
-          switch (this.selectedPageIndex) {
-            case 1:
-              this.selectedPageIndex++;
+          this.updateBasicInformationForm();
+          this.updateAboutMeForm();
+          this.updateProfileStatus();
+          if (this.selectedPageIndex !== 9) {
+            this.selectedPageIndex++;
+            if (this.selectedPageIndex === 3) {
               this.initializeFormsByPageIndex();
-              break;
-            case 2:
-              this.selectedPageIndex++;
-              this.initializeFormsByPageIndex();
-              break;
-            case 9:
-              this.updateProfileStatus();
-              break;
-            default:
-              break;
+            }
           }
         },
         error => {
@@ -858,7 +854,6 @@ export class CreateProfileComponent implements OnInit {
     this.userService.getEducationInfo().subscribe(
       dataJson => {
         this.educationList = dataJson['data'];
-        console.log('Education_List', this.educationList);
         this.updateEducationForm();
       },
       error => {
