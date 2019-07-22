@@ -189,22 +189,10 @@ export class CreateProfileComponent implements OnInit {
 
     this.initBasicInfoForm();
     this.initAboutMeForm();
-    // this.initEducationFormArray();
-    // this.initExperienceFormArray();
-    // this.initSkillsAndInterestsForm();
-    // this.initProjectsFormArray();
-    // this.initPublicationsFormArray();
-    // this.initExternalResourcesForm();
+    this.initExternalResourcesForm();
     this.initProfileStatus();
 
     this.getGeneralInfo();
-    // this.getEducationList();
-    // this.getExperienceList();
-    // this.getUserSkillsList();
-    // this.getUserInterestsList();
-    // this.getUserProjectsList();
-    // this.getUserPublicationsList();
-    // this.getExternalResourceList();
   }
 
   toggleTabMenuOpen() {
@@ -287,6 +275,9 @@ export class CreateProfileComponent implements OnInit {
       case 7:
         this.initPublicationsFormArray();
         this.getUserPublicationsList();
+        break;
+      case 8:
+        this.getExternalResourceList();
         break;
       case 9:
         this.getGeneralInfo();
@@ -1837,7 +1828,6 @@ export class CreateProfileComponent implements OnInit {
       dataJson => {
         this.externalResourcesList = dataJson['data'];
         this.updateExternalResourceFormGroup();
-        console.log('ExternalResource_List', this.externalResourcesList);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -1856,12 +1846,12 @@ export class CreateProfileComponent implements OnInit {
         if (resource.link) {
           this.userService.patchExternalResourcesById(resource, exteralResource[0].resource_id).subscribe(
             dataJson => {
-              console.log(dataJson['data']);
               temp.push(dataJson['data']);
               counts++;
               if (counts === this.externalResourcesDataList.length) {
                 this.externalResourcesList = temp;
                 this.selectedPageIndex++;
+                this.initializeFormsByPageIndex();
               }
             },
             error => {
@@ -1871,11 +1861,11 @@ export class CreateProfileComponent implements OnInit {
         } else {
           this.userService.deleteExternalResourcesById(exteralResource[0].resource_id).subscribe(
             dataJson => {
-              console.log(dataJson['data']);
               counts++;
               if (counts === this.externalResourcesDataList.length) {
                 this.externalResourcesList = temp;
                 this.selectedPageIndex++;
+                this.initializeFormsByPageIndex();
               }
             },
             error => {
@@ -1891,6 +1881,7 @@ export class CreateProfileComponent implements OnInit {
           if (counts === this.externalResourcesDataList.length) {
             this.externalResourcesList = temp;
             this.selectedPageIndex++;
+            this.initializeFormsByPageIndex();
           }
         }
       }
@@ -1898,12 +1889,12 @@ export class CreateProfileComponent implements OnInit {
     if (newDataList.length > 0) {
       this.userService.postExternalResourcesInfo(newDataList).subscribe(
         dataJson => {
-          console.log(dataJson['data']);
           temp.concat(dataJson['data']);
           counts = counts + newDataList.length;
           if (counts === this.externalResourcesDataList.length) {
             this.externalResourcesList = temp;
             this.selectedPageIndex++;
+            this.initializeFormsByPageIndex();
           }
         },
         error => {
