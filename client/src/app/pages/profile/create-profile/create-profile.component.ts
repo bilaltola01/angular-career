@@ -280,6 +280,14 @@ export class CreateProfileComponent implements OnInit {
         this.getUserSkillsList();
         this.getUserInterestsList();
         break;
+      case 6:
+        this.initProjectsFormArray();
+        this.getUserProjectsList();
+        break;
+      case 7:
+        this.initPublicationsFormArray();
+        this.getUserPublicationsList();
+        break;
       case 9:
         this.getGeneralInfo();
         break;
@@ -1569,7 +1577,6 @@ export class CreateProfileComponent implements OnInit {
       dataJson => {
         this.userProjectsList = dataJson['data']['data'];
         this.updateProjectsFormArray();
-        console.log('UserProjects_List', this.userProjectsList);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -1589,6 +1596,7 @@ export class CreateProfileComponent implements OnInit {
               counts++;
               if (counts === this.userProjectsDataList.length) {
                 this.selectedPageIndex++;
+                this.initializeFormsByPageIndex();
               }
             },
             error => {
@@ -1602,6 +1610,7 @@ export class CreateProfileComponent implements OnInit {
               counts++;
               if (counts === this.userProjectsDataList.length) {
                 this.selectedPageIndex++;
+                this.initializeFormsByPageIndex();
               }
             },
             error => {
@@ -1612,12 +1621,12 @@ export class CreateProfileComponent implements OnInit {
       });
     } else {
       this.selectedPageIndex++;
+      this.initializeFormsByPageIndex();
     }
   }
   deleteUserProjectData(arrIndex: number) {
     this.userService.deleteProjectInfoById(this.userProjectsList[arrIndex].project_id).subscribe(
       dataJson => {
-        console.log('Delete Education_List', dataJson);
         this.userProjectsList.splice(arrIndex, 1);
         this.removeProjectFormGroup(arrIndex);
       },
@@ -1731,7 +1740,6 @@ export class CreateProfileComponent implements OnInit {
       dataJson => {
         this.userPublicationsList = dataJson['data'];
         this.updatePublicationsFormArray();
-        console.log('uesrPublications_list', this.userPublicationsList);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -1751,6 +1759,7 @@ export class CreateProfileComponent implements OnInit {
               counts++;
               if (counts === this.userPublicationsDataList.length) {
                 this.selectedPageIndex++;
+                this.initializeFormsByPageIndex();
               }
             },
             error => {
@@ -1764,6 +1773,7 @@ export class CreateProfileComponent implements OnInit {
               counts++;
               if (counts === this.userPublicationsDataList.length) {
                 this.selectedPageIndex++;
+                this.initializeFormsByPageIndex();
               }
             },
             error => {
@@ -1774,12 +1784,12 @@ export class CreateProfileComponent implements OnInit {
       });
     } else {
       this.selectedPageIndex++;
+      this.initializeFormsByPageIndex();
     }
   }
   deleteUserPublicationData(arrIndex: number) {
     this.userService.deletePublicationsInfoById(this.userPublicationsList[arrIndex].publication_id).subscribe(
       dataJson => {
-        console.log('Delete Education_List', dataJson);
         this.userPublicationsList.splice(arrIndex, 1);
         this.removePublicationFormGroup(arrIndex);
       },
