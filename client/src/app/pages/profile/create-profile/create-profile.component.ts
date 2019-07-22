@@ -154,12 +154,7 @@ export class CreateProfileComponent implements OnInit {
   externalResources = ExternalResources;
 
   profile_status: number;
-
-  /**
-   * "Drop Resume Here" feature won't be available at launch.
-   * if need to display this page, set selectedPageIndex to 0.
-   */
-  selectedPageIndex = 1;
+  selectedPageIndex: number;
 
   generalInfoResponse: UserGeneralInfo;
   generalInfoRequest: UserObject;
@@ -186,24 +181,30 @@ export class CreateProfileComponent implements OnInit {
       this.userRole = UserRoles[0];
     }
     this.isTabMenuOpen = false;
+    /**
+     * "Drop Resume Here" feature won't be available at launch.
+     * if need to display this page, set selectedPageIndex to 0.
+     */
+    this.selectedPageIndex = 1;
+
     this.initBasicInfoForm();
-    this.initEducationFormArray();
     this.initAboutMeForm();
-    this.initExperienceFormArray();
-    this.initSkillsAndInterestsForm();
-    this.initProjectsFormArray();
-    this.initPublicationsFormArray();
-    this.initExternalResourcesForm();
-    this.initProfileStatus();
+    // this.initEducationFormArray();
+    // this.initExperienceFormArray();
+    // this.initSkillsAndInterestsForm();
+    // this.initProjectsFormArray();
+    // this.initPublicationsFormArray();
+    // this.initExternalResourcesForm();
+    // this.initProfileStatus();
 
     this.getGeneralInfo();
-    this.getEducationList();
-    this.getExperienceList();
-    this.getUserSkillsList();
-    this.getUserInterestsList();
-    this.getUserProjectsList();
-    this.getUserPublicationsList();
-    this.getExternalResourceList();
+    // this.getEducationList();
+    // this.getExperienceList();
+    // this.getUserSkillsList();
+    // this.getUserInterestsList();
+    // this.getUserProjectsList();
+    // this.getUserPublicationsList();
+    // this.getExternalResourceList();
   }
 
   toggleTabMenuOpen() {
@@ -246,20 +247,31 @@ export class CreateProfileComponent implements OnInit {
       default:
         break;
     }
-
-    // if (this.selectedPageIndex < this.profileCreationPages.length - 1) {
-    //   this.selectedPageIndex++;
-    // } else {
-    //   this.selectedPageIndex = 0;
-    // }
   }
 
   goToPage(index: number) {
     this.selectedPageIndex = index;
+    this.initializeFormsByPageIndex();
   }
 
   goToMyProfilePage() {
     this.router.navigate(['/my-profile']);
+  }
+
+  initializeFormsByPageIndex() {
+    switch (this.selectedPageIndex) {
+      case 1:
+        this.updateBasicInformationForm();
+        break;
+      case 2:
+        this.updateAboutMeForm();
+        break;
+      case 9:
+        this.updateProfileStatus();
+        break;
+      default:
+        break;
+    }
   }
 
 
@@ -486,11 +498,8 @@ export class CreateProfileComponent implements OnInit {
   getGeneralInfo() {
     this.userService.getGeneralInfo().subscribe(
       dataJson => {
-        console.log('Gernal_Information', dataJson['data']);
         this.generalInfoResponse = dataJson['data'];
         this.updateBasicInformationForm();
-        this.updateAboutMeForm();
-        this.updateProfileStatus();
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -507,12 +516,12 @@ export class CreateProfileComponent implements OnInit {
           this.generalInfoResponse = dataJson['data'];
           switch (this.selectedPageIndex) {
             case 1:
-              this.updateBasicInformationForm();
               this.selectedPageIndex++;
+              this.initializeFormsByPageIndex();
               break;
             case 2:
-              this.updateAboutMeForm();
               this.selectedPageIndex++;
+              this.initializeFormsByPageIndex();
               break;
             case 9:
               this.updateProfileStatus();
@@ -527,8 +536,6 @@ export class CreateProfileComponent implements OnInit {
       );
     }
   }
-
-
 
   // About Me Form
   initAboutMeForm() {
