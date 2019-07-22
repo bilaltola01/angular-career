@@ -232,7 +232,6 @@ p {
         padding: $profile-form-padding-desktop;
         box-sizing: border-box;
         background-color: $white;
-        box-shadow: 0 3px 10px rgba($black, .07);
         @include flex(column, center, flex-start);
         &__image {
           width: 20%;
@@ -357,7 +356,7 @@ p {
             width: 100%;
             top: -1000%;
             left: 0;
-            box-shadow: 0 3px 10px rgba($black, .07);
+            border-bottom: 1px solid map-get($md-cfaccent, 50);
             @include flex(column, center, center);
             background-color: $white;
             padding-top: $profile-form-field-mt;
