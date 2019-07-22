@@ -231,6 +231,7 @@ export class CreateProfileComponent implements OnInit {
         break;
       case 5:
         this.selectedPageIndex++;
+        this.initializeFormsByPageIndex();
         break;
       case 6:
         this.updateUserProjectsData();
@@ -273,6 +274,11 @@ export class CreateProfileComponent implements OnInit {
       case 4:
         this.initExperienceFormArray();
         this.getExperienceList();
+        break;
+      case 5:
+        this.initSkillsAndInterestsForm();
+        this.getUserSkillsList();
+        this.getUserInterestsList();
         break;
       case 9:
         this.getGeneralInfo();
@@ -1382,7 +1388,6 @@ export class CreateProfileComponent implements OnInit {
   getUserSkillsList() {
     this.userService.getSkillsInfo().subscribe(
       dataJson => {
-        console.log('userSkills_List', this.userSkillsList);
         this.userSkillsList = dataJson['data'];
       },
       error => {
@@ -1394,7 +1399,6 @@ export class CreateProfileComponent implements OnInit {
   updateUserSkillsData(arrIndex: number, userSkillItem: UserSkillItem) {
     this.userService.patchSkillInfoById(userSkillItem.skill_id, userSkillItem).subscribe(
       dataJson => {
-        console.log(dataJson['data']);
         this.userSkillsList[arrIndex] = dataJson['data'];
       },
       error => {
@@ -1405,7 +1409,6 @@ export class CreateProfileComponent implements OnInit {
   addUserSkillsData(userSkillItem: UserSkillItem) {
     this.userService.postSkillInfo(userSkillItem).subscribe(
       dataJson => {
-        console.log(dataJson['data']);
         this.userSkillsList.push(dataJson['data']);
       },
       error => {
@@ -1416,7 +1419,6 @@ export class CreateProfileComponent implements OnInit {
   removeUserSkillsData(index: number, userSkillItem: UserSkillItem) {
     this.userService.deleteSkillInfoById(userSkillItem.skill_id).subscribe(
       dataJson => {
-        console.log(dataJson['data']);
         this.userSkillsList.splice(index, 1);
       },
       error => {
@@ -1438,7 +1440,6 @@ export class CreateProfileComponent implements OnInit {
   getUserInterestsList() {
     this.userService.getUserInterestsInfo().subscribe(
       dataJson => {
-        console.log('userInterests_List', this.userInterestsList);
         this.userInterestsList = dataJson['data'];
       },
       error => {
@@ -1450,7 +1451,6 @@ export class CreateProfileComponent implements OnInit {
   addUserInteretsData(userInterestItem: UserInterestItem) {
     this.userService.postUserInterestsInfo(userInterestItem).subscribe(
       dataJson => {
-        console.log(dataJson['data']);
         this.userInterestsList.push(dataJson['data']);
       },
       error => {
@@ -1461,7 +1461,6 @@ export class CreateProfileComponent implements OnInit {
   removeUserInteretsData(index: number, userInterestItem: UserInterestItem) {
     this.userService.deleteUserInterestsInfoById(userInterestItem.interest_id).subscribe(
       dataJson => {
-        console.log(dataJson['data']);
         this.userInterestsList.splice(index, 1);
       },
       error => {
