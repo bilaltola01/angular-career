@@ -266,6 +266,10 @@ export class CreateProfileComponent implements OnInit {
       case 2:
         this.getGeneralInfo();
         break;
+      case 3:
+        this.initEducationFormArray();
+        this.getEducationList();
+        break;
       case 9:
         this.getGeneralInfo();
         break;
@@ -875,6 +879,7 @@ export class CreateProfileComponent implements OnInit {
                 counts++;
                 if (counts === this.educationDataList.length) {
                   this.selectedPageIndex++;
+                  this.initializeFormsByPageIndex();
                 }
               },
               error => {
@@ -888,6 +893,7 @@ export class CreateProfileComponent implements OnInit {
                 counts++;
                 if (counts === this.educationDataList.length) {
                   this.selectedPageIndex++;
+                  this.initializeFormsByPageIndex();
                 }
               },
               error => {
@@ -899,6 +905,7 @@ export class CreateProfileComponent implements OnInit {
       }
     } else {
       this.selectedPageIndex++;
+      this.initializeFormsByPageIndex();
     }
   }
   deleteEducationData(index: number) {
