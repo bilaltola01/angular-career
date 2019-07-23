@@ -20,6 +20,10 @@
     display: flex;
     align-items: center;
     margin-bottom: 20px;
+    @media only screen and (max-width: $mobile-breakpoint) {
+        display: block;
+        text-align: center;
+    }
     img {
         width: 84px;
         height: 84px;

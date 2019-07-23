@@ -82,8 +82,12 @@ $primary-font-color: map-get($md-cfaccent, 500);
         }
       }
       &__checkbox {
-        @include flex(row, center, space-between);
+        @include flex(row, center, flex-start);
         padding: 15px 20px;
+        a {
+          font-size: 14px;
+          color: rgba(0, 29, 64, 0.44);
+        }
       }
       &__buttons {
         padding: 20px 0;
@@ -203,7 +207,7 @@ $primary-font-color: map-get($md-cfaccent, 500);
       grid-column-end: 13;
       .row {
         &__checkbox {
-          padding: 20px 10px;
+          padding: 20px 0;
         }
         &__buttons {
           margin-bottom: 50px;
