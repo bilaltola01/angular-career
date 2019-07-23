@@ -9,7 +9,7 @@ import { SharedModule } from './components/shared.module';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserAnimationsModule,

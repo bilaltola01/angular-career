@@ -26,7 +26,7 @@ export class MainToolbarComponent implements OnInit {
   constructor(private breakpointObserver: BreakpointObserver,
     private userService: UserService,
     private alertsService: AlertsService,
-    private url: LocationStrategy) {}
+    public url: LocationStrategy) {}
 
   ngOnInit() {
     // TODO: This get should be called only once and stored in browser storage in the user service

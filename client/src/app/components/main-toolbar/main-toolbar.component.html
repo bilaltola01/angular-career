@@ -38,7 +38,7 @@
 
         <ng-container *ngIf="!isLoggedIn()">
           <span class="spacer"></span>
-          <a routerLink='' routerLinkActive="active-link">
+          <a routerLink='' routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}">
             Home
           </a>
           <a routerLink='search' routerLinkActive="active-link">
@@ -96,10 +96,10 @@
 
         <ng-container *ngIf="!isLoggedIn()">
             <span class="spacer"></span>
-            <a routerLink='' routerLinkActive="active-link">
+            <a routerLink='' [class.active-link]="url.path() === '/login' || url.path() === '/registration' || url.path() === '/'">
               Home
             </a>
-            <a routerLink='about-us' routerLinkActive="active-link">
+            <a routerLink='read-more' routerLinkActive="active-link">
               About Us
             </a>
             <a routerLink='contact-us' routerLinkActive="active-link">
