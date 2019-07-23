@@ -100,6 +100,7 @@ export class MainSectionComponent implements OnInit {
   }
 
   openDialog(category: string, data: any, arrIndex: number = -1) {
+    // tslint:disable-next-line: no-use-before-declare
     const dialgoRef = this.dialog.open(ProfileDialogContentComponent, {
       data: {
         category: category,

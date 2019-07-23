@@ -13,6 +13,10 @@ export const routes: Routes = [
   {
     path: 'style-guide', loadChildren: () => import('./pages/style-guide/style-guide.module')
       .then(module => module.StyleGuideModule)
+  },
+  {
+    path: 'read-more', loadChildren: () => import('./pages/read-more/read-more.module')
+      .then(module => module.ReadMoreModule)
   }
 ];
 
