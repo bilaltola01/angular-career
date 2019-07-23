@@ -36,7 +36,11 @@ export class AutoCompleteService {
     if (error.error instanceof ErrorEvent) {
       errorMessage = error.message;
     } else {
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.error.message}`;
+      if (!environment.production) {
+        console.error(`UserService -> handleError -> error. Error Code: ${error.status}. Message: ${error.error.message}. Details:`, error);
+      }
+
+      errorMessage = error.error.message;
     }
     return throwError({success: false, message: errorMessage});
   }
