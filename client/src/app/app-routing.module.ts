@@ -17,6 +17,10 @@ export const routes: Routes = [
   {
     path: 'read-more', loadChildren: () => import('./pages/read-more/read-more.module')
       .then(module => module.ReadMoreModule)
+  },
+  {
+    path: 'legal', loadChildren: () => import('./pages/legal-terms/legal-terms.module')
+      .then(module => module.LegalTermsModule)
   }
 ];
 

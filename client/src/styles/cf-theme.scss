@@ -411,6 +411,10 @@ p {
   font-family: 'Roboto', sans-serif;
   color: map-get($md-cfaccent, 400);
 }
+li {
+  font-family: 'Roboto', sans-serif;
+  color: map-get($md-cfaccent, 400);
+}
 
 action-button {
   & > button {

@@ -8,7 +8,7 @@
       <a mat-button disableRipple="true" routerLink="/read-more">Read More</a>
     </div>
     <div class="row__copyright">
-      <span>©2019 <a href="#">yourcareerfair.com</a> | Cookies, Privacy and Terms</span>
+      <span>©2019 <a href="#">yourcareerfair.com</a> | <a routerLink="/legal">Cookies, Privacy and Terms</a></span>
     </div>
   </div>
   <div class="container__right" [formGroup]="registrationForm">
@@ -56,7 +56,7 @@
       <action-button type="flat" title="Create Account" color="primary" (click)="signUp()" [disabled]="!(registrationForm.valid && isAgreeTerm)"></action-button>
     </div>
     <div class="row__copyright">
-      <span>©2019 <a href="#">yourcareerfair.com</a> | Cookies, Privacy and Terms</span>
+      <span>©2019 <a href="#">yourcareerfair.com</a> | <a routerLink="/legal">Cookies, Privacy and Terms</a></span>
     </div>
   </div>
 </div>
