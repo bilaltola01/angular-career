@@ -40,8 +40,6 @@ import {
   UserRoles
 } from 'src/app/models';
 import moment from 'moment';
-import { environment } from '../../../environments/environment';
-import { JwtHelperService } from '@auth0/angular-jwt';
 
 export interface EditSkillItem {
   index: number;
