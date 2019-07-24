@@ -141,6 +141,10 @@
         </mat-autocomplete>
       </mat-form-field>
     </div>
+    <div *ngIf="editMode && temp_skill" class="temp-skill">
+      <simple-tag type="gray" title="{{temp_skill.skillItem.skill}}" ellipseTag="true" isControl="true" value="{{temp_skill.skillItem.skill_level}}" (levelChanged)="onLevelChanged($event, temp_skill.index)" (removeClick)="removeUserSkillsData(temp_skill.index, temp_skill.skillItem)"></simple-tag>
+      <mat-icon (click)="editSkillDone()">cancel</mat-icon>
+    </div>
     <h5>Skills {{userSkillsList.length}}</h5>
     <simple-tag *ngFor="let skill of userSkillsList; let i = index" type="gray" title="{{skill.skill}}" ellipseTag="true" value="{{skill.skill_level}}" (levelChanged)="onLevelChanged($event, i)" (removeClick)="removeUserSkillsData(i, skill)" [isControl]="editMode"></simple-tag>
   </div>
