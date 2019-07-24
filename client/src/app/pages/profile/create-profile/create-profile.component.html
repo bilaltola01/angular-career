@@ -425,7 +425,7 @@
             <mat-icon (click)="editSkillDone()">cancel</mat-icon>
           </div>
           <div *ngIf="!temp_skill && userSkillsList.length > 0" class="skills">
-            <simple-tag *ngFor="let skillData of userSkillsList; let i = index" type="gray" title="{{skillData.skill}}" ellipseTag="true" value="{{skillData.skill_level}}" (levelChanged)="onLevelChanged($event, i)"></simple-tag>
+            <simple-tag *ngFor="let skillData of userSkillsList; let i = index" type="gray" title="{{skillData.skill}}" ellipseTag="true" value="{{skillData.skill_level}}" isControl="true" (levelChanged)="onLevelChanged($event, i)" (removeClick)="removeUserSkillsData(i, skillData)"></simple-tag>
           </div>
         </div>
         <div class="profile-form__field search">

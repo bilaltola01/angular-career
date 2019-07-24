@@ -1416,7 +1416,9 @@ export class CreateProfileComponent implements OnInit {
     this.userService.patchSkillInfoById(userSkillItem.skill_id, userSkillItem).subscribe(
       dataJson => {
         this.userSkillsList[arrIndex] = dataJson['data'];
-        this.temp_skill.skillItem = dataJson['data'];
+        if (this.temp_skill) {
+          this.temp_skill.skillItem = dataJson['data'];
+        }
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
