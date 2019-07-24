@@ -68,7 +68,7 @@
         <simple-tag *ngFor="let industry of experience.industries" type="gray" title="{{industry.industry_name}}"></simple-tag>
       </ng-container>
       <ng-container *ngIf="experience.add_industries && experience.add_industries.length > 0">
-        <h5>Additional Industry Exposure {{experience.add_industries.length}}</h5>
+        <h5>Industry Exposure {{experience.add_industries.length}}</h5>
         <simple-tag *ngFor="let add_industry of experience.add_industries" type="gray" title="{{add_industry.industry_name}}"></simple-tag>
       </ng-container>
       <mat-divider *ngIf="(i < experienceList.length - 1) || editMode"></mat-divider>
