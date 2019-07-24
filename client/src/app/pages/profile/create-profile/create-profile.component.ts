@@ -327,9 +327,9 @@ export class CreateProfileComponent implements OnInit {
     this.generalInfoRequest = null;
 
     this.basicInfoForm = new FormGroup({
-      basicInfoCity: new FormControl('', [Validators.required]),
-      basicInfoState: new FormControl('', [Validators.required]),
-      basicInfoCountry: new FormControl('', [Validators.required]),
+      basicInfoCity: new FormControl(''),
+      basicInfoState: new FormControl(''),
+      basicInfoCountry: new FormControl(''),
       basicInfoBirth: new FormControl(''),
       basicInfoTitle: new FormControl('', [Validators.required]),
       basicInfoGender: new FormControl('', [Validators.required]),
@@ -337,7 +337,12 @@ export class CreateProfileComponent implements OnInit {
     });
 
     this.basicInfoForm.get('basicInfoCity').valueChanges.subscribe((city) => {
-      city ? this.onCityValueChanges(city) : this.autocomplete_cities = [];
+      if (city) {
+        this.onCityValueChanges(city);
+      } else {
+        this.autocomplete_cities = [];
+        this.generalInfoRequest.city_id = null;
+      }
     });
     this.basicInfoForm.get('basicInfoState').valueChanges.subscribe((state) => {
       state ? this.onStateValueChanges(state) : this.autocomplete_states = [];
@@ -439,7 +444,11 @@ export class CreateProfileComponent implements OnInit {
     if (this.temp_city) {
       valid = this.basicInfoForm.get('basicInfoCity').value === this.getCityNameFromAutoComplete(this.temp_city.city);
     } else {
-      valid = this.basicInfoForm.get('basicInfoCity').value === this.generalInfoResponse.city;
+      if (!this.basicInfoForm.get('basicInfoCity').value) {
+        valid = true;
+      } else {
+        valid = this.basicInfoForm.get('basicInfoCity').value === this.generalInfoResponse.city;
+      }
     }
     return valid;
   }
