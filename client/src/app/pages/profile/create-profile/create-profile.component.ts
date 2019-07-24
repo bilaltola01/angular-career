@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
+<<<<<<< HEAD
 import {MatDatepicker} from '@angular/material/datepicker';
 import {
   AutoCompleteService,
@@ -9,6 +10,12 @@ import {
   AlertType,
   HelperService
 } from 'src/app/services';
+=======
+import { MatDatepicker } from '@angular/material/datepicker';
+import { AutoCompleteService } from 'src/app/services/auto-complete.service';
+import { UserService } from 'src/app/services/user.service';
+import { AlertsService, AlertType } from 'src/app/services/alerts.service';
+>>>>>>> Signing profile picture and uploading it to S3 bucket
 import {
   City, School, Major, Skill, Interest, Level, Company,
   UserGeneralInfo, UserObject,
@@ -33,6 +40,8 @@ import {
   UserRoles
 } from 'src/app/models';
 import moment from 'moment';
+import { environment } from '../../../environments/environment';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 export interface EditSkillItem {
   index: number;
@@ -184,7 +193,16 @@ export class CreateProfileComponent implements OnInit {
 
   userRole: string;
 
+<<<<<<< HEAD
   constructor(private route: ActivatedRoute, private router: Router, private autoCompleteService: AutoCompleteService, private userService: UserService, private alertsService: AlertsService, private helperService: HelperService) { }
+=======
+  constructor(private route: ActivatedRoute,
+              private router: Router,
+              private autoCompleteService: AutoCompleteService,
+              private userService: UserService,
+              private alertsService: AlertsService) {
+  }
+>>>>>>> Signing profile picture and uploading it to S3 bucket
 
   ngOnInit() {
     if (this.route.snapshot.queryParams.role) {
@@ -307,12 +325,14 @@ export class CreateProfileComponent implements OnInit {
   extractDate(date: string): string {
     return `${date.slice(5, 7)}/${date.slice(8, 10)}/${date.slice(0, 4)}`;
   }
+
   /**
    *  Extract MM/YYYY string from Date type string
    */
   extractYearAndMonth(date: string): string {
     return `${date.slice(5, 7)}/${date.slice(0, 4)}`;
   }
+
   /**
    * Extract YYYY string from Date
    * @param date: string
@@ -415,6 +435,11 @@ export class CreateProfileComponent implements OnInit {
         this.generalInfoRequest.ethnicity = ethnicity;
       }
     );
+
+    this.basicInfoForm.get('photo').valueChanges
+      .subscribe((photoUrl: string) => {
+        this.generalInfoRequest.photo = photoUrl ? photoUrl : null;
+      });
   }
 
   updateBasicInformationForm() {
@@ -427,6 +452,7 @@ export class CreateProfileComponent implements OnInit {
     this.basicInfoForm.get('basicInfoBirth').setValue(this.generalInfoResponse.birthdate ? this.helperService.convertToFormattedString(this.generalInfoResponse.birthdate, 'L') : '');
     this.basicInfoForm.get('basicInfoEthnicity').setValue(this.generalInfoResponse.ethnicity);
   }
+
   updateGeneralInfoRequest() {
     this.generalInfoRequest = {
       photo: this.generalInfoResponse.photo ? this.generalInfoResponse.photo : null,
@@ -447,24 +473,32 @@ export class CreateProfileComponent implements OnInit {
     };
   }
 
-  onPhotoFileSelected(event) {
+  public onPhotoFileSelected(event): void {
     if (event.target.files && event.target.files[0]) {
-      if (event.target.files[0].size > 1830020 ) {
+      if (event.target.files[0].size > 1830020) {
         this.alertsService.show('Image size too big.', AlertType.error);
         return null;
       }
 
-      const reader = new FileReader();
+      const file = event.target.files[0];
 
-      reader.onload = (e: any) => {
-        this.basicInfoForm.patchValue({
-          photo: e.target.result
-        });
-      };
-
-      reader.readAsDataURL(event.target.files[0]);
+      this.userService.getSignedPhotoUrl(file)
+        .subscribe((signedPhoto) => {
+            this.userService.uploadPhotoToS3(file, signedPhoto.data.signedUrl, signedPhoto.data.url)
+              .subscribe((response) => {
+                this.basicInfoForm.patchValue({
+                  photo: response.data
+                });
+              }, err => {
+                this.alertsService.show(err.message, AlertType.error);
+              });
+          }, err => {
+            this.alertsService.show(err.message, AlertType.error);
+          }
+        );
     }
   }
+
   onChangeBirthDate(date: any) {
     if (date.value) {
       this.basicInfoForm.get('basicInfoBirth').setValue(this.helperService.convertToFormattedString(date.value, 'L'));
@@ -472,10 +506,12 @@ export class CreateProfileComponent implements OnInit {
       this.basicInfoForm.get('basicInfoBirth').setValue('');
     }
   }
+
   onSelectCity(city: City) {
     this.generalInfoRequest.city_id = city.city_id;
     this.temp_city = city;
   }
+
   onBlurCity() {
     if (this.temp_city) {
       if (this.basicInfoForm.get('basicInfoCity').value !== this.helperService.cityNameFromAutoComplete(this.temp_city.city)) {
@@ -488,6 +524,7 @@ export class CreateProfileComponent implements OnInit {
       }
     }
   }
+
   onCheckCityValidation(): boolean {
     const value = this.basicInfoForm.get('basicInfoCity').value;
     if (value && this.helperService.checkSpacesString(value)) {
@@ -500,13 +537,16 @@ export class CreateProfileComponent implements OnInit {
       return true;
     }
   }
+
   clearCity() {
     this.generalInfoRequest.city_id = null;
   }
+
   onSelectState(state: State) {
     this.generalInfoRequest.state_id = state.state_id;
     this.temp_state = state;
   }
+
   onBlurState() {
     if (this.temp_state) {
       if (this.basicInfoForm.get('basicInfoState').value !== this.temp_state.state) {
@@ -519,6 +559,7 @@ export class CreateProfileComponent implements OnInit {
       }
     }
   }
+
   onCheckStateValidation(): boolean {
     const value = this.basicInfoForm.get('basicInfoState').value;
     if (value && this.helperService.checkSpacesString(value)) {
@@ -531,9 +572,11 @@ export class CreateProfileComponent implements OnInit {
       return true;
     }
   }
+
   clearState() {
     this.generalInfoRequest.state_id = null;
   }
+
   getGeneralInfo() {
     this.userService.getGeneralInfo().subscribe(
       dataJson => {
@@ -547,12 +590,14 @@ export class CreateProfileComponent implements OnInit {
       }
     );
   }
+
   updateGeneralInfo() {
     if ((this.selectedPageIndex === 1 && this.basicInfoForm.valid && this.onCheckCityValidation() && this.onCheckStateValidation()) ||
-        (this.selectedPageIndex === 2 && this.aboutMeForm.valid) || this.selectedPageIndex === 9) {
+      (this.selectedPageIndex === 2 && this.aboutMeForm.valid) || this.selectedPageIndex === 9) {
       if (this.userRole) {
         this.generalInfoRequest[this.userRole] = 1;
       }
+
       this.userService.updateGeneralInfo(this.generalInfoRequest).subscribe(
         dataJson => {
           this.generalInfoResponse = dataJson['data'];
@@ -579,6 +624,7 @@ export class CreateProfileComponent implements OnInit {
       aboutMe: new FormControl('')
     });
   }
+
   updateAboutMeForm() {
     this.aboutMeForm.get('aboutMe').setValue(this.generalInfoResponse.user_intro ? this.generalInfoResponse.user_intro : '');
     this.aboutMeForm.get('aboutMe').valueChanges.subscribe(
@@ -587,7 +633,6 @@ export class CreateProfileComponent implements OnInit {
       }
     );
   }
-
 
   /**
    * Education Information Form
@@ -601,6 +646,7 @@ export class CreateProfileComponent implements OnInit {
     this.autocomplete_majors = [];
     this.autocomplete_focus_majors = [];
   }
+
   onRemoveEducationData(index: number) {
     if (index > this.educationList.length - 1) {
       this.removeEducationFormGroup(index);
@@ -608,6 +654,7 @@ export class CreateProfileComponent implements OnInit {
       this.deleteEducationData(index);
     }
   }
+
   removeEducationFormGroup(index: number) {
     this.educationDataList.splice(index, 1);
     this.educationFormArray.removeAt(index);
@@ -615,11 +662,13 @@ export class CreateProfileComponent implements OnInit {
     this.autocomplete_majors.splice(index, 1);
     this.autocomplete_focus_majors.splice(index, 1);
   }
+
   onAddEducationData() {
     if (this.educationFormArray.valid && this.checkAllEducationInfoValidation()) {
       this.addEducationFormGroup(null);
     }
   }
+
   /**
    * Add Education FormGroup
    * @param education
@@ -658,7 +707,7 @@ export class CreateProfileComponent implements OnInit {
 
     this.educationDataList.push(eduactionData);
 
-    const arrIndex = this.educationDataList.length - 1;
+    const arrIndex = this.educationDataList.length - 1;
 
     educationForm.get('university').valueChanges.subscribe(
       (university) => {
@@ -734,6 +783,7 @@ export class CreateProfileComponent implements OnInit {
 
     this.educationFormArray.push(educationForm);
   }
+
   updateEducationForm() {
     if (this.educationList.length === 0) {
       this.addEducationFormGroup(null);
@@ -743,15 +793,18 @@ export class CreateProfileComponent implements OnInit {
       });
     }
   }
+
   onSelectSpecificUniversity(index: number, university: string) {
     this.educationDataList[index].user_specified_school_name = university;
     this.educationDataList[index].school_id = null;
   }
+
   onSelectUniversity(index: number, university: School) {
     this.educationDataList[index].school_id = university.school_id;
     this.educationDataList[index].user_specified_school_name = null;
     this.temp_university[index] = university;
   }
+
   onBlurUniversity(index: number) {
     if (this.temp_university[index]) {
       if (this.educationFormArray.at(index).get('university').value !== this.temp_university[index].school_name) {
@@ -767,6 +820,7 @@ export class CreateProfileComponent implements OnInit {
     this.educationDataList[index].major_id = major.major_id;
     this.temp_major[index] = major;
   }
+
   onBlurMajor(index: number) {
     if (this.temp_major[index]) {
       if (this.educationFormArray.at(index).get('major').value !== this.temp_major[index].major_name) {
@@ -779,6 +833,7 @@ export class CreateProfileComponent implements OnInit {
       }
     }
   }
+
   /**
    *
    * Check Input of Major/Focus Major if these values selected from autocomplete list.
@@ -811,6 +866,7 @@ export class CreateProfileComponent implements OnInit {
       }
     }
   }
+
   checkSchoolNameValidation(arrIndex: number): boolean {
     const value = this.educationFormArray.at(arrIndex).get('university').value;
     return value && this.helperService.checkSpacesString(value) ? true : false;
@@ -825,6 +881,7 @@ export class CreateProfileComponent implements OnInit {
     });
     return valid;
   }
+
   checkAllMajorValidation(): boolean {
     let valid = true;
     this.educationDataList.forEach((value, index) => {
@@ -835,13 +892,16 @@ export class CreateProfileComponent implements OnInit {
     });
     return valid;
   }
+
   clearMajor(index: number) {
     this.educationDataList[index].major_id = null;
   }
+
   onSelectFocusMajor(index: number, major: Major) {
     this.educationDataList[index].focus_major = major.major_id;
     this.temp_focus_major[index] = major;
   }
+
   onBlurFocusMajor(index: number) {
     if (this.temp_focus_major[index]) {
       if (this.educationFormArray.at(index).get('focus_major').value !== this.temp_focus_major[index].major_name) {
@@ -854,14 +914,17 @@ export class CreateProfileComponent implements OnInit {
       }
     }
   }
+
   clearFocusMajor(index: number) {
     this.educationDataList[index].focus_major = null;
   }
+
   onEducationYearSelect(date: any, index: number, isStartDate: boolean = true, datePicker: MatDatepicker<any>) {
     const dateValue = new Date(date);
     datePicker.close();
     this.educationFormArray.at(index).get(isStartDate ? 'start_date' : 'graduation_date').setValue(moment(dateValue).format('YYYY'));
   }
+
   isExistStartDate(index: number): boolean {
     if (this.educationFormArray.at(index).get('start_date').value) {
       return true;
@@ -869,9 +932,11 @@ export class CreateProfileComponent implements OnInit {
       return false;
     }
   }
+
   minEduGraduationDate(index: number): Date {
     return this.educationDataList[index].start_date;
   }
+
   onMajorValueChanges(major: string, index: number, isFocusMajor: boolean = false) {
     this.autoCompleteService.autoComplete(major, 'majors').subscribe(
       dataJson => {
@@ -901,6 +966,7 @@ export class CreateProfileComponent implements OnInit {
       }
     );
   }
+
   getEducationList() {
     this.userService.getEducationInfo().subscribe(
       dataJson => {
@@ -914,6 +980,7 @@ export class CreateProfileComponent implements OnInit {
       }
     );
   }
+
   updateEducationData() {
     if (this.educationDataList.length !== 0) {
       if (this.educationFormArray.valid && this.checkAllEducationInfoValidation()) {
@@ -957,6 +1024,7 @@ export class CreateProfileComponent implements OnInit {
       this.initializeFormsByPageIndex();
     }
   }
+
   deleteEducationData(index: number) {
     this.userService.deleteEducationInfoById(this.educationList[index].education_id).subscribe(
       dataJson => {
@@ -983,6 +1051,7 @@ export class CreateProfileComponent implements OnInit {
     this.skills_trained = [];
     this.additional_industries = [];
   }
+
   onRemoveExperienceData(index: number) {
     if (index > this.experienceList.length - 1) {
       this.removeExperienceFormGroup(index);
@@ -990,6 +1059,7 @@ export class CreateProfileComponent implements OnInit {
       this.deleteExperienceData(index);
     }
   }
+
   removeExperienceFormGroup(index: number) {
     this.experienceDataList.splice(index, 1);
     this.skills_trained.splice(index, 1);
@@ -999,6 +1069,7 @@ export class CreateProfileComponent implements OnInit {
     this.autocomplete_skills_trained.splice(index, 1);
     this.autocomplete_additional_industries.splice(index, 1);
   }
+
   onAddExperienceData() {
     if (this.workExperienceFormArray.valid) {
       this.addExperienceFormGroup(null);
@@ -1030,7 +1101,7 @@ export class CreateProfileComponent implements OnInit {
 
     this.experienceDataList.push(experienceData);
 
-    const arrIndex = this.experienceDataList.length - 1;
+    const arrIndex = this.experienceDataList.length - 1;
 
     const workExperienceForm = new FormGroup({
       company_name: new FormControl(experience ? (experience.company_id ? experience.company_name : experience.user_specified_company_name) : '', [Validators.required]),
@@ -1152,15 +1223,18 @@ export class CreateProfileComponent implements OnInit {
       });
     }
   }
+
   onSelectSpecificCompany(index: number, company: string) {
     this.experienceDataList[index].user_specified_company_name = company;
     this.experienceDataList[index].company_id = null;
   }
+
   onSelectCompany(index: number, company: Company) {
     this.experienceDataList[index].company_id = company.company_id;
     this.experienceDataList[index].user_specified_company_name = null;
     this.temp_company[index] = company;
   }
+
   onBlurCompany(index: number) {
     if (this.temp_company[index]) {
       if (this.workExperienceFormArray.at(index).get('company_name').value !== this.temp_company[index].company_name) {
@@ -1171,10 +1245,12 @@ export class CreateProfileComponent implements OnInit {
       this.onSelectSpecificCompany(index, this.workExperienceFormArray.at(index).get('company').value);
     }
   }
+
   onExperienceMonthSelect(date: any, index: number, isStartDate: boolean = true, datePicker: MatDatepicker<any>) {
     datePicker.close();
     this.workExperienceFormArray.at(index).get(isStartDate ? 'start_date' : 'end_date').setValue(this.helperService.convertToFormattedString(date, 'MM/YYYY'));
   }
+
   isExperienceStartDate(index: number): boolean {
     if (this.workExperienceFormArray.at(index).get('start_date').value) {
       return true;
@@ -1182,6 +1258,7 @@ export class CreateProfileComponent implements OnInit {
       return false;
     }
   }
+
   minExperienceEndDate(index: number): Date {
     return this.experienceDataList[index].start_date;
   }
@@ -1199,6 +1276,7 @@ export class CreateProfileComponent implements OnInit {
       this.workExperienceFormArray.at(index).get('skills_trained').setValue('');
     }
   }
+
   onRemoveSkillsTrained(formArrIndex: number, arrIndex: number, skill: Skill) {
     if (formArrIndex < this.experienceList.length) {
       if (this.experienceList[formArrIndex].skills_trained.filter(skill_trained => skill_trained.skill_id === skill.skill_id).length > 0) {
@@ -1210,6 +1288,7 @@ export class CreateProfileComponent implements OnInit {
       this.removeSkillsTrained(formArrIndex, arrIndex, skill);
     }
   }
+
   removeSkillsTrained(formArrIndex: number, arrIndex: number, skill: Skill) {
     if (this.skills_trained[formArrIndex][arrIndex].skill_id === skill.skill_id) {
       this.skills_trained[formArrIndex].splice(arrIndex, 1);
@@ -1219,6 +1298,7 @@ export class CreateProfileComponent implements OnInit {
       }
     }
   }
+
   removeExperienceSkillTrainedData(formArrIndex: number, arrIndex: number, skill: Skill) {
     this.userService.DeleteSkillTrainedById(this.experienceList[formArrIndex].work_hist_id, skill.skill_id).subscribe(
       dataJson => {
@@ -1230,6 +1310,7 @@ export class CreateProfileComponent implements OnInit {
       }
     );
   }
+
   addAdditionalIndustry(index: number, industry: Industry) {
     if (industry) {
       if (this.additional_industries[index].filter(additional_industry => additional_industry.industry_id === industry.industry_id).length === 0) {
@@ -1243,6 +1324,7 @@ export class CreateProfileComponent implements OnInit {
       this.workExperienceFormArray.at(index).get('additional_industries').setValue('');
     }
   }
+
   onRemoveAdditionalIndustry(formArrIndex: number, arrIndex: number, industry: Industry) {
     if (formArrIndex < this.experienceList.length) {
       if (this.experienceList[formArrIndex].add_industries.filter(add_industry => add_industry.industry_id === industry.industry_id).length > 0) {
@@ -1254,6 +1336,7 @@ export class CreateProfileComponent implements OnInit {
       this.removeAdditionalIndustry(formArrIndex, arrIndex, industry);
     }
   }
+
   removeAdditionalIndustry(formArrIndex: number, arrIndex: number, industry: Industry) {
     if (this.additional_industries[formArrIndex][arrIndex].industry_id === industry.industry_id) {
       this.additional_industries[formArrIndex].splice(arrIndex, 1);
@@ -1263,6 +1346,7 @@ export class CreateProfileComponent implements OnInit {
       }
     }
   }
+
   removeAdditionalIndustryData(formArrIndex: number, arrIndex: number, industry: Industry) {
     this.userService.DeleteAdditionalIndustryById(this.experienceList[formArrIndex].work_hist_id, industry.industry_id).subscribe(
       dataJson => {
@@ -1274,6 +1358,7 @@ export class CreateProfileComponent implements OnInit {
       }
     );
   }
+
   getExperienceList() {
     this.userService.getExperienceInfo().subscribe(
       dataJson => {
@@ -1287,6 +1372,7 @@ export class CreateProfileComponent implements OnInit {
       }
     );
   }
+
   updateExperienceData() {
     if (this.experienceDataList.length !== 0) {
       if (this.workExperienceFormArray.valid && this.checkAllWorkExperienceInfoValidation()) {
@@ -1330,6 +1416,7 @@ export class CreateProfileComponent implements OnInit {
       this.initializeFormsByPageIndex();
     }
   }
+
   deleteExperienceData(index: number) {
     this.userService.deleteExperienceInfoById(this.experienceList[index].work_hist_id).subscribe(
       dataJson => {
@@ -1408,6 +1495,7 @@ export class CreateProfileComponent implements OnInit {
       }
     );
   }
+
   addSkills(skillItem: Skill) {
     const skillItemData = {
       skill_id: skillItem.skill_id,
@@ -1426,6 +1514,7 @@ export class CreateProfileComponent implements OnInit {
     this.skillsAndInterestsForm.get('skills').setValue('');
     this.prevent_skills_autocomplete = true;
   }
+
   onLevelChanged(level: number, index: number) {
     const skillItemData = {
       skill_id: this.userSkillsList[index].skill_id,
@@ -1434,9 +1523,11 @@ export class CreateProfileComponent implements OnInit {
     };
     this.updateUserSkillsData(index, skillItemData);
   }
+
   editSkillDone() {
     this.temp_skill = null;
   }
+
   getUserSkillsList() {
     this.userService.getSkillsInfo().subscribe(
       dataJson => {
@@ -1448,6 +1539,7 @@ export class CreateProfileComponent implements OnInit {
       }
     );
   }
+
   updateUserSkillsData(arrIndex: number, userSkillItem: UserSkillItem) {
     this.userService.patchSkillInfoById(userSkillItem.skill_id, userSkillItem).subscribe(
       dataJson => {
@@ -1461,6 +1553,7 @@ export class CreateProfileComponent implements OnInit {
       }
     );
   }
+
   addUserSkillsData(userSkillItem: UserSkillItem) {
     this.userService.postSkillInfo(userSkillItem).subscribe(
       dataJson => {
@@ -1475,6 +1568,7 @@ export class CreateProfileComponent implements OnInit {
       }
     );
   }
+
   removeUserSkillsData(index: number, userSkillItem: UserSkillItem) {
     this.userService.deleteSkillInfoById(userSkillItem.skill_id).subscribe(
       dataJson => {
@@ -1486,6 +1580,7 @@ export class CreateProfileComponent implements OnInit {
       }
     );
   }
+
   addInterests(interestItem: Interest) {
     const interestItemData = {
       interest_id: interestItem.interest_id,
@@ -1497,6 +1592,7 @@ export class CreateProfileComponent implements OnInit {
     this.skillsAndInterestsForm.get('interests').setValue('');
     this.prevent_interets_autocomplete = true;
   }
+
   getUserInterestsList() {
     this.userService.getUserInterestsInfo().subscribe(
       dataJson => {
@@ -1508,6 +1604,7 @@ export class CreateProfileComponent implements OnInit {
       }
     );
   }
+
   addUserInteretsData(userInterestItem: UserInterestItem) {
     this.userService.postUserInterestsInfo(userInterestItem).subscribe(
       dataJson => {
@@ -1518,6 +1615,7 @@ export class CreateProfileComponent implements OnInit {
       }
     );
   }
+
   removeUserInteretsData(index: number, userInterestItem: UserInterestItem) {
     this.userService.deleteUserInterestsInfoById(userInterestItem.interest_id).subscribe(
       dataJson => {
@@ -1540,6 +1638,7 @@ export class CreateProfileComponent implements OnInit {
     this.userProjectsList = [];
     this.userProjectsDataList = [];
   }
+
   onRemoveProjectData(arrIndex: number) {
     if (arrIndex > this.userProjectsList.length - 1) {
       this.removeProjectFormGroup(arrIndex);
@@ -1547,15 +1646,18 @@ export class CreateProfileComponent implements OnInit {
       this.deleteUserProjectData(arrIndex);
     }
   }
+
   removeProjectFormGroup(arrIndex: number) {
     this.projectsFormArray.removeAt(arrIndex);
     this.userProjectsDataList.splice(arrIndex, 1);
   }
+
   onAddProjectData() {
     if (this.projectsFormArray.valid) {
       this.addProjectFormGroup(null);
     }
   }
+
   addProjectFormGroup(project: UserProjectItem) {
     const projectItem = {
       project_name: project ? project.project_name : null,
@@ -1595,6 +1697,7 @@ export class CreateProfileComponent implements OnInit {
     );
     this.projectsFormArray.push(projectFormGroup);
   }
+
   checkProjectNameValidation(arrIndex: number): boolean {
     const value = this.projectsFormArray.at(arrIndex).get('project_name').value;
     return value && this.helperService.checkSpacesString(value) ? true : false;
@@ -1608,6 +1711,7 @@ export class CreateProfileComponent implements OnInit {
     });
     return valid;
   }
+
   updateProjectsFormArray() {
     if (this.userProjectsList.length === 0) {
       this.addProjectFormGroup(null);
@@ -1617,6 +1721,7 @@ export class CreateProfileComponent implements OnInit {
       });
     }
   }
+
   onChangeProjectFinishedDate(event: any, arrIndex: number) {
     if (event.value) {
       this.projectsFormArray.at(arrIndex).get('date_finished').setValue(this.helperService.convertToFormattedString(event.value, 'L'));
@@ -1624,6 +1729,7 @@ export class CreateProfileComponent implements OnInit {
       this.projectsFormArray.at(arrIndex).get('date_finished').setValue('');
     }
   }
+
   getUserProjectsList() {
     this.userService.getProjectsInfo().subscribe(
       dataJson => {
@@ -1637,6 +1743,7 @@ export class CreateProfileComponent implements OnInit {
       }
     );
   }
+
   updateUserProjectsData() {
     if (this.userProjectsDataList.length !== 0) {
       if (this.projectsFormArray.valid && this.checkAllProjectsInfoValidation()) {
@@ -1678,6 +1785,7 @@ export class CreateProfileComponent implements OnInit {
       this.initializeFormsByPageIndex();
     }
   }
+
   deleteUserProjectData(arrIndex: number) {
     this.userService.deleteProjectInfoById(this.userProjectsList[arrIndex].project_id).subscribe(
       dataJson => {
@@ -1700,6 +1808,7 @@ export class CreateProfileComponent implements OnInit {
     this.userPublicationsList = [];
     this.userPublicationsDataList = [];
   }
+
   onRemovePublicationData(arrIndex: number) {
     if (arrIndex > this.userPublicationsList.length - 1) {
       this.removePublicationFormGroup(arrIndex);
@@ -1707,10 +1816,12 @@ export class CreateProfileComponent implements OnInit {
       this.deleteUserPublicationData(arrIndex);
     }
   }
+
   removePublicationFormGroup(arrIndex: number) {
     this.publicationsFormArray.removeAt(arrIndex);
     this.userPublicationsDataList.splice(arrIndex, 1);
   }
+
   onAddPublicationData() {
     if (this.publicationsFormArray.valid) {
       this.addPublicationFormGroup(null);
@@ -1757,6 +1868,7 @@ export class CreateProfileComponent implements OnInit {
     );
     this.publicationsFormArray.push(publicationFormGroup);
   }
+
   checkPublicationNameValidation(arrIndex: number): boolean {
     const value = this.publicationsFormArray.at(arrIndex).get('publication_name').value;
     return value && this.helperService.checkSpacesString(value) ? true : false;
@@ -1770,6 +1882,7 @@ export class CreateProfileComponent implements OnInit {
     });
     return valid;
   }
+
   updatePublicationsFormArray() {
     if (this.userPublicationsList.length === 0) {
       this.addPublicationFormGroup(null);
@@ -1779,9 +1892,11 @@ export class CreateProfileComponent implements OnInit {
       });
     }
   }
+
   onPublicationPublisherValueChange(arrIndex: number, publisher: string) {
     this.userPublicationsDataList[arrIndex].publisher = publisher ? publisher : null;
   }
+
   onChangeDatePublished(event: any, arrIndex: number) {
     if (event.value) {
       this.publicationsFormArray.at(arrIndex).get('date_published').setValue(this.helperService.convertToFormattedString(event.value, 'L'));
@@ -1789,6 +1904,7 @@ export class CreateProfileComponent implements OnInit {
       this.publicationsFormArray.at(arrIndex).get('date_published').setValue('');
     }
   }
+
   getUserPublicationsList() {
     this.userService.getPublicationsInfo().subscribe(
       dataJson => {
@@ -1802,6 +1918,7 @@ export class CreateProfileComponent implements OnInit {
       }
     );
   }
+
   updateUserPublicationsData() {
     if (this.userPublicationsDataList.length !== 0) {
       let counts = 0;
@@ -1841,6 +1958,7 @@ export class CreateProfileComponent implements OnInit {
       this.initializeFormsByPageIndex();
     }
   }
+
   deleteUserPublicationData(arrIndex: number) {
     this.userService.deletePublicationsInfoById(this.userPublicationsList[arrIndex].publication_id).subscribe(
       dataJson => {
@@ -1875,11 +1993,13 @@ export class CreateProfileComponent implements OnInit {
       });
     });
   }
+
   onExternalResourceValueChange(resource: string, arrIndex: number, link: string) {
     if (this.externalResourcesDataList[arrIndex].description === resource) {
       this.externalResourcesDataList[arrIndex] .link = link ? this.helperService.checkSpacesString(link) : null;
     }
   }
+
   updateExternalResourceFormGroup() {
     this.externalResourcesList.forEach((resource) => {
       this.externalResourcesForm.get(resource.description).setValue(resource.link);
@@ -1974,9 +2094,11 @@ export class CreateProfileComponent implements OnInit {
   initProfileStatus() {
     this.profile_status = 0;
   }
+
   updateProfileStatus() {
     this.profile_status = this.generalInfoResponse.is_looking;
   }
+
   setProfileStatus(is_looking: number) {
     this.generalInfoRequest.is_looking = is_looking;
     this.updateGeneralInfo();
