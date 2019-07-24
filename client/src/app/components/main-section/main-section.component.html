@@ -7,7 +7,7 @@
   <div *ngIf="(userGeneralInfo && userGeneralInfo.user_intro) || editMode" class="row" [class.edit-mode]="editMode" id="about-me">
     <h3> About Me </h3>
     <ng-container *ngIf="true; let short_desc">
-      <p *ngIf="userGeneralInfo.user_intro" [class.short-desc]="short_desc && userGeneralInfo.user_intro.length > helperService.shortDescLength">{{short_desc && !editMode ? helperService.shortDescription(userGeneralInfo.user_intro) : userGeneralInfo.user_intro}}</p>
+      <p *ngIf="userGeneralInfo.user_intro" class="description" [class.short-desc]="short_desc && userGeneralInfo.user_intro.length > helperService.shortDescLength">{{short_desc && !editMode ? helperService.shortDescription(userGeneralInfo.user_intro) : userGeneralInfo.user_intro}}</p>
       <a *ngIf="short_desc && userGeneralInfo.user_intro && userGeneralInfo.user_intro.length > helperService.shortDescLength && !editMode" (click)="short_desc = false">Read More</a>
     </ng-container>
     <div *ngIf="editMode" class="btn-container">
@@ -31,7 +31,7 @@
         <h4 *ngIf="education.gpa" class="detail-info__right_all">{{education.gpa}} GPA</h4>
       </div>
       <ng-container *ngIf="true; let short_desc">
-        <p *ngIf="education.edu_desc" [class.short-desc]="short_desc && education.edu_desc.length > helperService.shortDescLength">
+        <p *ngIf="education.edu_desc" class="description"  [class.short-desc]="short_desc && education.edu_desc.length > helperService.shortDescLength">
           {{short_desc ? helperService.shortDescription(education.edu_desc) : education.edu_desc}}
         </p>
         <a *ngIf="short_desc && education.edu_desc && short_desc && education.edu_desc.length > helperService.shortDescLength" (click)="short_desc = false">Read More</a>
@@ -54,7 +54,7 @@
       <h4>{{experience.job}}</h4>
       <small>{{helperService.convertToFormattedString(experience.start_date, 'MMM, YYYY')}} - {{(experience.end_date ? helperService.convertToFormattedString(experience.end_date, 'MMM, YYYY') : 'Present')}}</small>
       <ng-container *ngIf="true; let short_desc">
-        <p *ngIf="experience.job_desc" [class.short-desc]="short_desc && experience.job_desc.length > helperService.shortDescLength">
+        <p *ngIf="experience.job_desc" class="description"  [class.short-desc]="short_desc && experience.job_desc.length > helperService.shortDescLength">
           {{short_desc ? helperService.shortDescription(experience.job_desc ) : experience.job_desc }}
         </p>
         <a *ngIf="short_desc && experience.job_desc && experience.job_desc.length > helperService.shortDescLength" (click)="short_desc = false">Read More</a>
@@ -91,7 +91,7 @@
       </div>
       <small *ngIf="publication.date_published">Published on {{helperService.convertToFormattedString(publication.date_published, 'll')}}</small>
       <ng-container *ngIf="true; let short_desc">
-        <p *ngIf="publication.description" [class.short-desc]="short_desc && publication.description.length > helperService.shortDescLength">
+        <p *ngIf="publication.description" class="description"  [class.short-desc]="short_desc && publication.description.length > helperService.shortDescLength">
           {{short_desc ? helperService.shortDescription(publication.description) : publication.description}}
         </p>
         <a *ngIf="short_desc && publication.description && publication.description.length > helperService.shortDescLength" (click)="short_desc = false">Read More</a>
@@ -116,7 +116,7 @@
       </div>
       <small *ngIf="project.date_finished">Completed on {{helperService.convertToFormattedString(project.date_finished, 'll')}}</small>
       <ng-container *ngIf="true; let short_desc">
-        <p *ngIf="project.description" [class.short-desc]="short_desc && project.description.length > helperService.shortDescLength">
+        <p *ngIf="project.description" class="description"  [class.short-desc]="short_desc && project.description.length > helperService.shortDescLength">
           {{short_desc ? helperService.shortDescription(project.description) : project.description}}
         </p>
         <a *ngIf="short_desc && project.description && project.description.length > helperService.shortDescLength" (click)="short_desc = false">Read More</a>
