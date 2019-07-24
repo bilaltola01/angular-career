@@ -8,7 +8,7 @@
     <h3> About Me </h3>
     <ng-container *ngIf="true; let short_desc">
       <p *ngIf="userGeneralInfo.user_intro" class="description" [class.short-desc]="short_desc && userGeneralInfo.user_intro.length > helperService.shortDescLength">{{short_desc && !editMode ? helperService.shortDescription(userGeneralInfo.user_intro) : userGeneralInfo.user_intro}}</p>
-      <a *ngIf="short_desc && userGeneralInfo.user_intro && userGeneralInfo.user_intro.length > helperService.shortDescLength && !editMode" (click)="short_desc = false">Read More</a>
+      <a *ngIf="userGeneralInfo.user_intro && userGeneralInfo.user_intro.length > helperService.shortDescLength && !editMode" (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
     </ng-container>
     <div *ngIf="editMode" class="btn-container">
       <action-button class="edit-btn" type="stroked" color="primary" title="Edit" (click)="openDialog('About Me', userGeneralInfo)"></action-button>
@@ -34,7 +34,7 @@
         <p *ngIf="education.edu_desc" class="description"  [class.short-desc]="short_desc && education.edu_desc.length > helperService.shortDescLength">
           {{short_desc ? helperService.shortDescription(education.edu_desc) : education.edu_desc}}
         </p>
-        <a *ngIf="short_desc && education.edu_desc && short_desc && education.edu_desc.length > helperService.shortDescLength" (click)="short_desc = false">Read More</a>
+        <a *ngIf="education.edu_desc && education.edu_desc.length > helperService.shortDescLength" (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
       </ng-container>
       <mat-divider *ngIf="(i < educationList.length - 1) || editMode"></mat-divider>
     </ng-container>
@@ -57,7 +57,7 @@
         <p *ngIf="experience.job_desc" class="description"  [class.short-desc]="short_desc && experience.job_desc.length > helperService.shortDescLength">
           {{short_desc ? helperService.shortDescription(experience.job_desc ) : experience.job_desc }}
         </p>
-        <a *ngIf="short_desc && experience.job_desc && experience.job_desc.length > helperService.shortDescLength" (click)="short_desc = false">Read More</a>
+        <a *ngIf="experience.job_desc && experience.job_desc.length > helperService.shortDescLength" (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
       </ng-container>
       <ng-container *ngIf="experience.skills_trained && experience.skills_trained.length > 0">
         <h5>Skills Trained {{experience.skills_trained.length}}</h5>
@@ -94,7 +94,7 @@
         <p *ngIf="publication.description" class="description"  [class.short-desc]="short_desc && publication.description.length > helperService.shortDescLength">
           {{short_desc ? helperService.shortDescription(publication.description) : publication.description}}
         </p>
-        <a *ngIf="short_desc && publication.description && publication.description.length > helperService.shortDescLength" (click)="short_desc = false">Read More</a>
+        <a *ngIf="publication.description && publication.description.length > helperService.shortDescLength" (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
       </ng-container>
       <mat-divider *ngIf="(i < userPublicationsList.length - 1) || editMode"></mat-divider>
     </ng-container>
@@ -119,7 +119,7 @@
         <p *ngIf="project.description" class="description"  [class.short-desc]="short_desc && project.description.length > helperService.shortDescLength">
           {{short_desc ? helperService.shortDescription(project.description) : project.description}}
         </p>
-        <a *ngIf="short_desc && project.description && project.description.length > helperService.shortDescLength" (click)="short_desc = false">Read More</a>
+        <a *ngIf="short_desc && project.description && project.description.length > helperService.shortDescLength" (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
       </ng-container>
       <mat-divider *ngIf="(i < userProjectsList.length - 1) || editMode"></mat-divider>
     </ng-container>
