@@ -72,9 +72,9 @@ export class HeaderSectionComponent implements OnInit {
     this.generalInfoForm = new FormGroup({
       first_name: new FormControl(this.generalInfo.first_name ? this.generalInfo.first_name : '', [Validators.required]),
       last_name: new FormControl(this.generalInfo.last_name ? this.generalInfo.last_name : '', [Validators.required]),
-      city: new FormControl(this.generalInfo.city ? this.generalInfo.city : '', [Validators.required]),
-      state: new FormControl(this.generalInfo.state ? this.generalInfo.state : '', [Validators.required]),
-      country: new FormControl(this.generalInfo.country ? this.generalInfo.country : '', [Validators.required]),
+      city: new FormControl(this.generalInfo.city ? this.generalInfo.city : ''),
+      state: new FormControl(this.generalInfo.state ? this.generalInfo.state : ''),
+      country: new FormControl(this.generalInfo.country ? this.generalInfo.country : ''),
       birthdate: new FormControl(this.generalInfo.birthdate ? this.helperService.convertToFormattedString(this.generalInfo.birthdate, 'L') : ''),
       title: new FormControl(this.generalInfo.title ? this.generalInfo.title : '', [Validators.required]),
       ethnicity: new FormControl(this.generalInfo.ethnicity ? this.generalInfo.ethnicity : '', [Validators.required]),
@@ -106,7 +106,11 @@ export class HeaderSectionComponent implements OnInit {
       this.updatedGeneralInfoData.emit(this.generalInfoData);
     });
     this.generalInfoForm.get('country').valueChanges.subscribe((country) => {
-      this.generalInfoData.country_id = Countries.indexOf(country) + 1;
+      if (country) {
+        this.generalInfoData.country_id = Countries.indexOf(country) + 1;
+      } else {
+        this.generalInfoData.country_id = null;
+      }
       this.updatedGeneralInfoData.emit(this.generalInfoData);
     });
     this.generalInfoForm.get('city').valueChanges.subscribe((city) => {
@@ -128,6 +132,7 @@ export class HeaderSectionComponent implements OnInit {
         );
       } else {
         this.autocomplete_cities = [];
+        this.clearCity();
       }
     });
     this.generalInfoForm.get('state').valueChanges.subscribe((state) =>  {
@@ -149,6 +154,7 @@ export class HeaderSectionComponent implements OnInit {
         );
       } else {
         this.autocomplete_states = [];
+        this.clearState();
       }
     });
 
@@ -207,7 +213,11 @@ export class HeaderSectionComponent implements OnInit {
     if (this.temp_city) {
       valid = this.generalInfoForm.get('city').value === this.helperService.cityNameFromAutoComplete(this.temp_city.city);
     } else {
-      valid = this.generalInfoForm.get('city').value === this.generalInfo.city;
+      if (!this.generalInfoForm.get('city').value) {
+        valid = true;
+      } else {
+        valid = this.generalInfoForm.get('city').value === this.generalInfo.city;
+      }
     }
     return valid;
   }
@@ -237,7 +247,11 @@ export class HeaderSectionComponent implements OnInit {
     if (this.temp_state) {
       valid = this.generalInfoForm.get('state').value === this.temp_state.state;
     } else {
-      valid = this.generalInfoForm.get('state').value === this.generalInfo.state;
+      if (!this.generalInfoForm.get('state').value) {
+        valid = true;
+      } else {
+        valid = this.generalInfoForm.get('state').value === this.generalInfo.state;
+      }
     }
     return valid;
   }
