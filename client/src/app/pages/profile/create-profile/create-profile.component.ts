@@ -154,12 +154,7 @@ export class CreateProfileComponent implements OnInit {
   externalResources = ExternalResources;
 
   profile_status: number;
-
-  /**
-   * "Drop Resume Here" feature won't be available at launch.
-   * if need to display this page, set selectedPageIndex to 0.
-   */
-  selectedPageIndex = 1;
+  selectedPageIndex: number;
 
   generalInfoResponse: UserGeneralInfo;
   generalInfoRequest: UserObject;
@@ -186,24 +181,18 @@ export class CreateProfileComponent implements OnInit {
       this.userRole = UserRoles[0];
     }
     this.isTabMenuOpen = false;
+    /**
+     * "Drop Resume Here" feature won't be available at launch.
+     * if need to display this page, set selectedPageIndex to 0.
+     */
+    this.selectedPageIndex = 1;
+
     this.initBasicInfoForm();
-    this.initEducationFormArray();
     this.initAboutMeForm();
-    this.initExperienceFormArray();
-    this.initSkillsAndInterestsForm();
-    this.initProjectsFormArray();
-    this.initPublicationsFormArray();
     this.initExternalResourcesForm();
     this.initProfileStatus();
 
     this.getGeneralInfo();
-    this.getEducationList();
-    this.getExperienceList();
-    this.getUserSkillsList();
-    this.getUserInterestsList();
-    this.getUserProjectsList();
-    this.getUserPublicationsList();
-    this.getExternalResourceList();
   }
 
   toggleTabMenuOpen() {
@@ -230,6 +219,7 @@ export class CreateProfileComponent implements OnInit {
         break;
       case 5:
         this.selectedPageIndex++;
+        this.initializeFormsByPageIndex();
         break;
       case 6:
         this.updateUserProjectsData();
@@ -246,20 +236,55 @@ export class CreateProfileComponent implements OnInit {
       default:
         break;
     }
-
-    // if (this.selectedPageIndex < this.profileCreationPages.length - 1) {
-    //   this.selectedPageIndex++;
-    // } else {
-    //   this.selectedPageIndex = 0;
-    // }
   }
 
   goToPage(index: number) {
     this.selectedPageIndex = index;
+    this.initializeFormsByPageIndex();
   }
 
   goToMyProfilePage() {
     this.router.navigate(['/my-profile']);
+  }
+
+  initializeFormsByPageIndex() {
+    switch (this.selectedPageIndex) {
+      case 1:
+        this.getGeneralInfo();
+        break;
+      case 2:
+        this.getGeneralInfo();
+        break;
+      case 3:
+        this.initEducationFormArray();
+        this.getEducationList();
+        break;
+      case 4:
+        this.initExperienceFormArray();
+        this.getExperienceList();
+        break;
+      case 5:
+        this.initSkillsAndInterestsForm();
+        this.getUserSkillsList();
+        this.getUserInterestsList();
+        break;
+      case 6:
+        this.initProjectsFormArray();
+        this.getUserProjectsList();
+        break;
+      case 7:
+        this.initPublicationsFormArray();
+        this.getUserPublicationsList();
+        break;
+      case 8:
+        this.getExternalResourceList();
+        break;
+      case 9:
+        this.getGeneralInfo();
+        break;
+      default:
+        break;
+    }
   }
 
 
@@ -486,7 +511,6 @@ export class CreateProfileComponent implements OnInit {
   getGeneralInfo() {
     this.userService.getGeneralInfo().subscribe(
       dataJson => {
-        console.log('Gernal_Information', dataJson['data']);
         this.generalInfoResponse = dataJson['data'];
         this.updateBasicInformationForm();
         this.updateAboutMeForm();
@@ -505,20 +529,14 @@ export class CreateProfileComponent implements OnInit {
       this.userService.updateGeneralInfo(this.generalInfoRequest).subscribe(
         dataJson => {
           this.generalInfoResponse = dataJson['data'];
-          switch (this.selectedPageIndex) {
-            case 1:
-              this.updateBasicInformationForm();
-              this.selectedPageIndex++;
-              break;
-            case 2:
-              this.updateAboutMeForm();
-              this.selectedPageIndex++;
-              break;
-            case 9:
-              this.updateProfileStatus();
-              break;
-            default:
-              break;
+          this.updateBasicInformationForm();
+          this.updateAboutMeForm();
+          this.updateProfileStatus();
+          if (this.selectedPageIndex !== 9) {
+            this.selectedPageIndex++;
+            if (this.selectedPageIndex === 3) {
+              this.initializeFormsByPageIndex();
+            }
           }
         },
         error => {
@@ -527,8 +545,6 @@ export class CreateProfileComponent implements OnInit {
       );
     }
   }
-
-
 
   // About Me Form
   initAboutMeForm() {
@@ -851,7 +867,6 @@ export class CreateProfileComponent implements OnInit {
     this.userService.getEducationInfo().subscribe(
       dataJson => {
         this.educationList = dataJson['data'];
-        console.log('Education_List', this.educationList);
         this.updateEducationForm();
       },
       error => {
@@ -873,6 +888,7 @@ export class CreateProfileComponent implements OnInit {
                 counts++;
                 if (counts === this.educationDataList.length) {
                   this.selectedPageIndex++;
+                  this.initializeFormsByPageIndex();
                 }
               },
               error => {
@@ -886,6 +902,7 @@ export class CreateProfileComponent implements OnInit {
                 counts++;
                 if (counts === this.educationDataList.length) {
                   this.selectedPageIndex++;
+                  this.initializeFormsByPageIndex();
                 }
               },
               error => {
@@ -897,12 +914,12 @@ export class CreateProfileComponent implements OnInit {
       }
     } else {
       this.selectedPageIndex++;
+      this.initializeFormsByPageIndex();
     }
   }
   deleteEducationData(index: number) {
     this.userService.deleteEducationInfoById(this.educationList[index].education_id).subscribe(
       dataJson => {
-        console.log('Delete Education_List', dataJson);
         this.educationList.splice(index, 1);
         this.removeEducationFormGroup(index);
       },
@@ -1222,7 +1239,6 @@ export class CreateProfileComponent implements OnInit {
     this.userService.getExperienceInfo().subscribe(
       dataJson => {
         this.experienceList = dataJson['data'];
-        console.log('Experience_List', this.experienceList);
         this.updateExperienceForm();
       },
       error => {
@@ -1244,6 +1260,7 @@ export class CreateProfileComponent implements OnInit {
                 counts++;
                 if (counts === this.experienceDataList.length) {
                   this.selectedPageIndex++;
+                  this.initializeFormsByPageIndex();
                 }
               },
               error => {
@@ -1257,6 +1274,7 @@ export class CreateProfileComponent implements OnInit {
                 counts++;
                 if (counts === this.experienceDataList.length) {
                   this.selectedPageIndex++;
+                  this.initializeFormsByPageIndex();
                 }
               },
               error => {
@@ -1268,12 +1286,12 @@ export class CreateProfileComponent implements OnInit {
       }
     } else {
       this.selectedPageIndex++;
+      this.initializeFormsByPageIndex();
     }
   }
   deleteExperienceData(index: number) {
     this.userService.deleteExperienceInfoById(this.experienceList[index].work_hist_id).subscribe(
       dataJson => {
-        console.log('Delete Education_List', dataJson);
         this.experienceList.splice(index, 1);
         this.removeExperienceFormGroup(index);
       },
@@ -1369,7 +1387,6 @@ export class CreateProfileComponent implements OnInit {
   getUserSkillsList() {
     this.userService.getSkillsInfo().subscribe(
       dataJson => {
-        console.log('userSkills_List', this.userSkillsList);
         this.userSkillsList = dataJson['data'];
       },
       error => {
@@ -1381,7 +1398,6 @@ export class CreateProfileComponent implements OnInit {
   updateUserSkillsData(arrIndex: number, userSkillItem: UserSkillItem) {
     this.userService.patchSkillInfoById(userSkillItem.skill_id, userSkillItem).subscribe(
       dataJson => {
-        console.log(dataJson['data']);
         this.userSkillsList[arrIndex] = dataJson['data'];
       },
       error => {
@@ -1392,7 +1408,6 @@ export class CreateProfileComponent implements OnInit {
   addUserSkillsData(userSkillItem: UserSkillItem) {
     this.userService.postSkillInfo(userSkillItem).subscribe(
       dataJson => {
-        console.log(dataJson['data']);
         this.userSkillsList.push(dataJson['data']);
       },
       error => {
@@ -1403,7 +1418,6 @@ export class CreateProfileComponent implements OnInit {
   removeUserSkillsData(index: number, userSkillItem: UserSkillItem) {
     this.userService.deleteSkillInfoById(userSkillItem.skill_id).subscribe(
       dataJson => {
-        console.log(dataJson['data']);
         this.userSkillsList.splice(index, 1);
       },
       error => {
@@ -1425,7 +1439,6 @@ export class CreateProfileComponent implements OnInit {
   getUserInterestsList() {
     this.userService.getUserInterestsInfo().subscribe(
       dataJson => {
-        console.log('userInterests_List', this.userInterestsList);
         this.userInterestsList = dataJson['data'];
       },
       error => {
@@ -1437,7 +1450,6 @@ export class CreateProfileComponent implements OnInit {
   addUserInteretsData(userInterestItem: UserInterestItem) {
     this.userService.postUserInterestsInfo(userInterestItem).subscribe(
       dataJson => {
-        console.log(dataJson['data']);
         this.userInterestsList.push(dataJson['data']);
       },
       error => {
@@ -1448,7 +1460,6 @@ export class CreateProfileComponent implements OnInit {
   removeUserInteretsData(index: number, userInterestItem: UserInterestItem) {
     this.userService.deleteUserInterestsInfoById(userInterestItem.interest_id).subscribe(
       dataJson => {
-        console.log(dataJson['data']);
         this.userInterestsList.splice(index, 1);
       },
       error => {
@@ -1557,7 +1568,6 @@ export class CreateProfileComponent implements OnInit {
       dataJson => {
         this.userProjectsList = dataJson['data']['data'];
         this.updateProjectsFormArray();
-        console.log('UserProjects_List', this.userProjectsList);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -1577,6 +1587,7 @@ export class CreateProfileComponent implements OnInit {
               counts++;
               if (counts === this.userProjectsDataList.length) {
                 this.selectedPageIndex++;
+                this.initializeFormsByPageIndex();
               }
             },
             error => {
@@ -1590,6 +1601,7 @@ export class CreateProfileComponent implements OnInit {
               counts++;
               if (counts === this.userProjectsDataList.length) {
                 this.selectedPageIndex++;
+                this.initializeFormsByPageIndex();
               }
             },
             error => {
@@ -1600,12 +1612,12 @@ export class CreateProfileComponent implements OnInit {
       });
     } else {
       this.selectedPageIndex++;
+      this.initializeFormsByPageIndex();
     }
   }
   deleteUserProjectData(arrIndex: number) {
     this.userService.deleteProjectInfoById(this.userProjectsList[arrIndex].project_id).subscribe(
       dataJson => {
-        console.log('Delete Education_List', dataJson);
         this.userProjectsList.splice(arrIndex, 1);
         this.removeProjectFormGroup(arrIndex);
       },
@@ -1719,7 +1731,6 @@ export class CreateProfileComponent implements OnInit {
       dataJson => {
         this.userPublicationsList = dataJson['data'];
         this.updatePublicationsFormArray();
-        console.log('uesrPublications_list', this.userPublicationsList);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -1739,6 +1750,7 @@ export class CreateProfileComponent implements OnInit {
               counts++;
               if (counts === this.userPublicationsDataList.length) {
                 this.selectedPageIndex++;
+                this.initializeFormsByPageIndex();
               }
             },
             error => {
@@ -1752,6 +1764,7 @@ export class CreateProfileComponent implements OnInit {
               counts++;
               if (counts === this.userPublicationsDataList.length) {
                 this.selectedPageIndex++;
+                this.initializeFormsByPageIndex();
               }
             },
             error => {
@@ -1762,12 +1775,12 @@ export class CreateProfileComponent implements OnInit {
       });
     } else {
       this.selectedPageIndex++;
+      this.initializeFormsByPageIndex();
     }
   }
   deleteUserPublicationData(arrIndex: number) {
     this.userService.deletePublicationsInfoById(this.userPublicationsList[arrIndex].publication_id).subscribe(
       dataJson => {
-        console.log('Delete Education_List', dataJson);
         this.userPublicationsList.splice(arrIndex, 1);
         this.removePublicationFormGroup(arrIndex);
       },
@@ -1815,7 +1828,6 @@ export class CreateProfileComponent implements OnInit {
       dataJson => {
         this.externalResourcesList = dataJson['data'];
         this.updateExternalResourceFormGroup();
-        console.log('ExternalResource_List', this.externalResourcesList);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -1834,12 +1846,12 @@ export class CreateProfileComponent implements OnInit {
         if (resource.link) {
           this.userService.patchExternalResourcesById(resource, exteralResource[0].resource_id).subscribe(
             dataJson => {
-              console.log(dataJson['data']);
               temp.push(dataJson['data']);
               counts++;
               if (counts === this.externalResourcesDataList.length) {
                 this.externalResourcesList = temp;
                 this.selectedPageIndex++;
+                this.initializeFormsByPageIndex();
               }
             },
             error => {
@@ -1849,11 +1861,11 @@ export class CreateProfileComponent implements OnInit {
         } else {
           this.userService.deleteExternalResourcesById(exteralResource[0].resource_id).subscribe(
             dataJson => {
-              console.log(dataJson['data']);
               counts++;
               if (counts === this.externalResourcesDataList.length) {
                 this.externalResourcesList = temp;
                 this.selectedPageIndex++;
+                this.initializeFormsByPageIndex();
               }
             },
             error => {
@@ -1869,6 +1881,7 @@ export class CreateProfileComponent implements OnInit {
           if (counts === this.externalResourcesDataList.length) {
             this.externalResourcesList = temp;
             this.selectedPageIndex++;
+            this.initializeFormsByPageIndex();
           }
         }
       }
@@ -1876,12 +1889,12 @@ export class CreateProfileComponent implements OnInit {
     if (newDataList.length > 0) {
       this.userService.postExternalResourcesInfo(newDataList).subscribe(
         dataJson => {
-          console.log(dataJson['data']);
           temp.concat(dataJson['data']);
           counts = counts + newDataList.length;
           if (counts === this.externalResourcesDataList.length) {
             this.externalResourcesList = temp;
             this.selectedPageIndex++;
+            this.initializeFormsByPageIndex();
           }
         },
         error => {

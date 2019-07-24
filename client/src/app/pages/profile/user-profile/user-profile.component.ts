@@ -118,6 +118,9 @@ export class UserProfileComponent implements OnInit {
 
   onChangeNavMenuVisibility($event: any) {
     this.navMenu[this.selectedNavMenuIndex].items[$event.navItemIndex].visible = $event.visible;
+    if ($event.navItemIndex === 2 && $event.visible) {
+      this.getUserSkillsList();
+    }
   }
 
   onClickUpdate() {
