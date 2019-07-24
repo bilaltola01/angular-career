@@ -354,7 +354,11 @@ export class CreateProfileComponent implements OnInit {
     });
     this.basicInfoForm.get('basicInfoCountry').valueChanges.subscribe(
       (country) => {
-        this.onCountryValueChanges(country);
+        if (country) {
+          this.onCountryValueChanges(country);
+        } else {
+          this.generalInfoRequest.country_id = null;
+        }
       }
     );
     this.basicInfoForm.get('basicInfoGender').valueChanges.subscribe(
