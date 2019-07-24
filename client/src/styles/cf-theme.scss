@@ -414,6 +414,10 @@ h5, h6 {
 p {
   font-family: 'Roboto', sans-serif;
   color: map-get($md-cfaccent, 400);
+  &.description {
+    word-break: break-all;
+    white-space: pre-wrap;
+  }
 }
 li {
   font-family: 'Roboto', sans-serif;
