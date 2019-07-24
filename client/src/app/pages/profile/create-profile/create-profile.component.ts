@@ -345,7 +345,12 @@ export class CreateProfileComponent implements OnInit {
       }
     });
     this.basicInfoForm.get('basicInfoState').valueChanges.subscribe((state) => {
-      state ? this.onStateValueChanges(state) : this.autocomplete_states = [];
+      if (state) {
+        this.onStateValueChanges(state);
+      } else {
+        this.autocomplete_states = [];
+        this.generalInfoRequest.state_id = null;
+      }
     });
     this.basicInfoForm.get('basicInfoCountry').valueChanges.subscribe(
       (country) => {
@@ -483,7 +488,11 @@ export class CreateProfileComponent implements OnInit {
     if (this.temp_state) {
       valid = this.basicInfoForm.get('basicInfoState').value === this.temp_state.state;
     } else {
-      valid = this.basicInfoForm.get('basicInfoState').value === this.generalInfoResponse.state;
+      if (!this.basicInfoForm.get('basicInfoState').value) {
+        valid = true;
+      } else {
+        valid = this.basicInfoForm.get('basicInfoState').value === this.generalInfoResponse.state;
+      }
     }
     return valid;
   }
