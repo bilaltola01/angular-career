@@ -7,6 +7,7 @@ $primary-font-color: map-get($md-cfaccent, 500);
   min-height: calc(100vh - 70px);
   padding: 100px 0 70px 0;
   box-sizing: border-box;
+  background-color: $bg-color-1;
   h2, p {
     color: rgba($primary-font-color, .84);
   }

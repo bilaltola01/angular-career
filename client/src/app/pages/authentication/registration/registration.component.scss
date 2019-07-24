@@ -8,6 +8,7 @@ $primary-font-color: map-get($md-cfaccent, 500);
   padding-top: 15%;
   min-height: calc(100vh - 70px);
   box-sizing: border-box;
+  background-color: $bg-color-1;
 }
 .container {
   &__left {

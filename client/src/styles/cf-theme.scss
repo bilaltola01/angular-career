@@ -394,7 +394,11 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
 @import url('//fonts.googleapis.com/icon?family=Material+Icons');
 
 html, body { height: 100%; }
-body { margin: 0; font-family: 'Roboto', sans-serif; }
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background-color: $bg-color-1;
+}
 
 /*
   Text Styles
