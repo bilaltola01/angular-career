@@ -45,6 +45,11 @@ export interface DialogData {
   editIndex: number;
 }
 
+export interface EditSkillItem {
+  index: number;
+  skillItem: UserSkillItem;
+}
+
 @Component({
   selector: 'main-section',
   templateUrl: './main-section.component.html',
@@ -75,6 +80,8 @@ export class MainSectionComponent implements OnInit {
   skillsSearchForm: FormGroup;
   interestsSearchForm: FormGroup;
 
+  temp_skill: EditSkillItem;
+
   constructor(
     private helperService: HelperService,
     private autoCompleteService: AutoCompleteService,
@@ -97,6 +104,8 @@ export class MainSectionComponent implements OnInit {
 
   onClickEdit() {
     this.clickEdit.emit();
+    this.initSkillsSearchForm();
+    this.initInterestsSearchForm();
   }
 
   openDialog(category: string, data: any, arrIndex: number = -1) {
@@ -199,6 +208,8 @@ export class MainSectionComponent implements OnInit {
     this.autocomplete_skills = [];
     this.prevent_skills_autocomplete = false;
 
+    this.temp_skill = null;
+
     this.skillsSearchForm = new FormGroup({
       skills: new FormControl('')
     });
@@ -235,8 +246,14 @@ export class MainSectionComponent implements OnInit {
       skill: skillItem.skill,
       skill_level: 1
     };
-    if (this.userSkillsList.filter(value => value.skill_id === skillItemData.skill_id).length === 0) {
+    const filterList = this.userSkillsList.filter(value => value.skill_id === skillItemData.skill_id);
+    if (filterList.length === 0) {
       this.addUserSkillsData(skillItemData);
+    } else {
+      this.temp_skill = {
+        index: this.userSkillsList.indexOf(filterList[0]),
+        skillItem: filterList[0]
+      };
     }
     this.skillsSearchForm.get('skills').setValue('');
     this.prevent_skills_autocomplete = true;
@@ -249,10 +266,16 @@ export class MainSectionComponent implements OnInit {
     };
     this.updateUserSkillsData(index, skillItemData);
   }
+  editSkillDone() {
+    this.temp_skill = null;
+  }
   updateUserSkillsData(arrIndex: number, userSkillItem: UserSkillItem) {
     this.userService.patchSkillInfoById(userSkillItem.skill_id, userSkillItem).subscribe(
       dataJson => {
         this.userSkillsList[arrIndex] = dataJson['data'];
+        if (this.temp_skill) {
+          this.temp_skill.skillItem = dataJson['data'];
+        }
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -263,6 +286,10 @@ export class MainSectionComponent implements OnInit {
     this.userService.postSkillInfo(userSkillItem).subscribe(
       dataJson => {
         this.userSkillsList.push(dataJson['data']);
+        this.temp_skill = {
+          index: this.userSkillsList.length - 1,
+          skillItem: dataJson['data']
+        };
         this.onChangeNavMenuVisibility(5, this.userSkillsList && this.userSkillsList.length > 0 ? true : false);
       },
       error => {
@@ -274,6 +301,7 @@ export class MainSectionComponent implements OnInit {
     this.userService.deleteSkillInfoById(userSkillItem.skill_id).subscribe(
       dataJson => {
         this.userSkillsList.splice(index, 1);
+        this.temp_skill = null;
         this.onChangeNavMenuVisibility(5, this.userSkillsList && this.userSkillsList.length > 0 ? true : false);
       },
       error => {

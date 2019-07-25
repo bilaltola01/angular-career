@@ -30,6 +30,11 @@ import {
 } from 'src/app/models';
 import moment from 'moment';
 
+export interface EditSkillItem {
+  index: number;
+  skillItem: UserSkillItem;
+}
+
 @Component({
   selector: 'create-profile',
   templateUrl: './create-profile.component.html',
@@ -148,6 +153,8 @@ export class CreateProfileComponent implements OnInit {
   autocomplete_interests: Interest[] = [];
   prevent_skills_autocomplete: boolean;
   prevent_interets_autocomplete: boolean;
+
+  temp_skill: EditSkillItem;
 
   statuses: string[] = ProfileStatuses;
 
@@ -1310,6 +1317,7 @@ export class CreateProfileComponent implements OnInit {
     this.prevent_interets_autocomplete = false;
     this.userSkillsList = [];
     this.userInterestsList = [];
+    this.temp_skill = null;
 
     this.skillsAndInterestsForm = new FormGroup({
       skills: new FormControl(''),
@@ -1370,8 +1378,14 @@ export class CreateProfileComponent implements OnInit {
       skill: skillItem.skill,
       skill_level: 1
     };
-    if (this.userSkillsList.filter(value => value.skill_id === skillItemData.skill_id).length === 0) {
+    const filterList = this.userSkillsList.filter(value => value.skill_id === skillItemData.skill_id);
+    if (filterList.length === 0) {
       this.addUserSkillsData(skillItemData);
+    } else {
+      this.temp_skill = {
+        index: this.userSkillsList.indexOf(filterList[0]),
+        skillItem: filterList[0]
+      };
     }
     this.skillsAndInterestsForm.get('skills').setValue('');
     this.prevent_skills_autocomplete = true;
@@ -1383,6 +1397,9 @@ export class CreateProfileComponent implements OnInit {
       skill_level: level
     };
     this.updateUserSkillsData(index, skillItemData);
+  }
+  editSkillDone() {
+    this.temp_skill = null;
   }
   getUserSkillsList() {
     this.userService.getSkillsInfo().subscribe(
@@ -1399,6 +1416,9 @@ export class CreateProfileComponent implements OnInit {
     this.userService.patchSkillInfoById(userSkillItem.skill_id, userSkillItem).subscribe(
       dataJson => {
         this.userSkillsList[arrIndex] = dataJson['data'];
+        if (this.temp_skill) {
+          this.temp_skill.skillItem = dataJson['data'];
+        }
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -1409,6 +1429,10 @@ export class CreateProfileComponent implements OnInit {
     this.userService.postSkillInfo(userSkillItem).subscribe(
       dataJson => {
         this.userSkillsList.push(dataJson['data']);
+        this.temp_skill = {
+          index: this.userSkillsList.length - 1,
+          skillItem: dataJson['data']
+        };
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -1419,6 +1443,7 @@ export class CreateProfileComponent implements OnInit {
     this.userService.deleteSkillInfoById(userSkillItem.skill_id).subscribe(
       dataJson => {
         this.userSkillsList.splice(index, 1);
+        this.temp_skill = null;
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);

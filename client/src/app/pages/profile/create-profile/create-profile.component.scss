@@ -281,9 +281,13 @@ p {
             }
             .skills {
               margin-top: 10px;
-              @include flex(row, flex-start, flex-start);
-              simple-tag {
-                margin: 5px;
+              @include flex(row, center, flex-start);
+              & > *  {
+                margin-top: 20px;
+                margin-right: 15px;
+              }
+              mat-icon {
+                color: map-get($md-cfaccent, 100);
               }
             }
           }
