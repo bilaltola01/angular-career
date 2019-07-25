@@ -210,20 +210,12 @@ export class HeaderSectionComponent implements OnInit {
     }
   }
 
-  onCountryValueChanges(country: string) {
-    this.generalInfoData.country_id = Countries.indexOf(country) + 1;
-    this.updatedGeneralInfoData.emit({
-      data: this.generalInfoData,
-      valid: this.checkFormValidation()
-    });
-  }
-
   onSelectCity(city: City) {
     this.generalInfoData.city_id = city.city_id;
     this.temp_city = city;
     this.updatedGeneralInfoData.emit({
       data: this.generalInfoData,
-      valid: this.checkFormValidation()
+      valid: true
     });
   }
   onBlurCity() {
@@ -239,17 +231,16 @@ export class HeaderSectionComponent implements OnInit {
     }
   }
   checkCityValidation(): boolean {
-    let valid = false;
-    if (this.temp_city) {
-      valid = this.generalInfoForm.get('city').value === this.helperService.cityNameFromAutoComplete(this.temp_city.city);
-    } else {
-      if (!this.generalInfoForm.get('city').value) {
-        valid = true;
+    const value = this.generalInfoForm.get('city').value;
+    if (value) {
+      if (this.temp_city) {
+        return value === this.helperService.cityNameFromAutoComplete(this.temp_city.city) ? true : false;
       } else {
-        valid = this.generalInfoForm.get('city').value === this.generalInfo.city;
+        return value === this.generalInfo.city ? true : false;
       }
+    } else {
+      return true;
     }
-    return valid;
   }
   clearCity() {
     this.generalInfoData.city_id = null;
@@ -264,7 +255,7 @@ export class HeaderSectionComponent implements OnInit {
     this.temp_state = state;
     this.updatedGeneralInfoData.emit({
       data: this.generalInfoData,
-      valid: this.checkFormValidation()
+      valid: true
     });
   }
   onBlurState() {
@@ -280,17 +271,16 @@ export class HeaderSectionComponent implements OnInit {
     }
   }
   checkStateValidation(): boolean {
-    let valid = false;
-    if (this.temp_state) {
-      valid = this.generalInfoForm.get('state').value === this.temp_state.state;
-    } else {
-      if (!this.generalInfoForm.get('state').value) {
-        valid = true;
+    const value = this.generalInfoForm.get('state').value;
+    if (value) {
+      if (this.temp_state) {
+        return value === this.temp_state.state ? true : false;
       } else {
-        valid = this.generalInfoForm.get('state').value === this.generalInfo.state;
+        return value === this.generalInfo.state ? true : false;
       }
+    } else {
+      return true;
     }
-    return valid;
   }
   clearState() {
     this.generalInfoData.state_id = null;

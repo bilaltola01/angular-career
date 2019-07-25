@@ -14,9 +14,9 @@
         </div>
         <div class="user-info">
           <div>
-            <small *ngIf="generalInfo.city && generalInfo.state && generalInfo.country">
+            <small *ngIf="generalInfo.city || generalInfo.state || generalInfo.country">
               <img src="assets/icons/ic_location.svg">
-              {{generalInfo.city}}, {{generalInfo.state}}, {{generalInfo.country}}
+              {{(generalInfo.city ? generalInfo.city : '') + (generalInfo.city && (generalInfo.state || generalInfo.country) ? ', ' : '') + (generalInfo.state ? generalInfo.state : '') + (generalInfo.state && generalInfo.country ? ', ' : '') + (generalInfo.country ? generalInfo.country : '')}}
             </small>
             <small *ngIf="generalInfo.birthdate">
               <img src="assets/icons/ic_birthday-cake.svg">

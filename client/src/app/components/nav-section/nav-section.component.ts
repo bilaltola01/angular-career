@@ -14,6 +14,7 @@ export class NavSectionComponent implements OnInit {
   @Output() clickUpdate = new EventEmitter();
   @Output() selectNavMenu = new EventEmitter();
   @Output() selectedNavItem = new EventEmitter();
+  @Input() headerFormValid: boolean;
 
   constructor() { }
 

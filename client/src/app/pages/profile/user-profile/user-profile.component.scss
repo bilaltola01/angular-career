@@ -52,6 +52,9 @@ legend {
     color: map-get($md-cfprimary, 500);
     @include disable-select();
     cursor: pointer;
+    &.disabled {
+      color: map-get($md-cfaccent, 100);
+    }
   }
 }
 
