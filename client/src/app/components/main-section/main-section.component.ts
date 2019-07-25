@@ -82,7 +82,7 @@ export class MainSectionComponent implements OnInit {
 
   temp_skill: EditSkillItem;
 
-  displayItemsLimit = 2;
+  displayItemsLimit = 7;
 
   constructor(
     private helperService: HelperService,
