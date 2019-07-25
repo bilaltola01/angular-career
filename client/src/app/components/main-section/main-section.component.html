@@ -19,8 +19,8 @@
     <h3> Education </h3>
     <ng-container *ngFor="let education of educationList; let i = index">
       <div class="editor-container">
-        <a *ngIf="education.website" class="name-field" [href]="'//' + education.website" target="_blank">{{education.user_specified_school_name ? education.user_specified_school_name : education.school_name}}</a>
-        <a *ngIf="!education.website" class="name-field">{{education.user_specified_school_name ? education.user_specified_school_name : education.school_name}}</a>
+        <a *ngIf="education.website" class="name-field" [href]="'//' + education.website" target="_blank">{{education.school_id ? education.school_name : education.user_specified_school_name}}</a>
+        <a *ngIf="!education.website" class="name-field">{{education.school_id ? education.school_name : education.user_specified_school_name}}</a>
         <mat-icon *ngIf="editMode" class="btn-edit" (click)="openDialog('Education', educationList, i)">edit</mat-icon>
         <mat-icon *ngIf="editMode" class="btn-delete" (click)="deleteEducationData(i)">delete</mat-icon>
       </div>
@@ -47,7 +47,7 @@
     <h3> Work Experience </h3>
     <ng-container *ngFor="let experience of experienceList; let i = index;">
       <div class="editor-container">
-        <a class="name-field" href="/my-profile">{{experience.user_specified_company_name ? experience.user_specified_company_name : experience.company_name}}</a>
+        <a class="name-field" href="/my-profile">{{experience.company_id ? experience.company_name : experience.user_specified_company_name}}</a>
         <mat-icon *ngIf="editMode" class="btn-edit" (click)="openDialog('Work Experience', experienceList, i)">edit</mat-icon>
         <mat-icon *ngIf="editMode" class="btn-delete" (click)="deleteExperienceData(i)">delete</mat-icon>
       </div>

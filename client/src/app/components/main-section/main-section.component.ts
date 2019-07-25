@@ -527,7 +527,7 @@ export class ProfileDialogContentComponent {
     };
 
     this.educationForm = new FormGroup({
-      university: new FormControl(educationData ? educationData.school_name : '', [Validators.required]),
+      university: new FormControl(educationData ? (educationData.school_id ? educationData.school_name : educationData.user_specified_school_name) : '', [Validators.required]),
       degree: new FormControl(educationData ? educationData.education_level : '', [Validators.required]),
       major: new FormControl(educationData ? educationData.major_name : ''),
       focus_major: new FormControl(educationData ? educationData.focus_major_name : ''),
