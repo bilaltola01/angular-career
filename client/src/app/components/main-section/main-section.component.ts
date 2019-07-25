@@ -82,6 +82,8 @@ export class MainSectionComponent implements OnInit {
 
   temp_skill: EditSkillItem;
 
+  displayItemsLimit = 2;
+
   constructor(
     private helperService: HelperService,
     private autoCompleteService: AutoCompleteService,
