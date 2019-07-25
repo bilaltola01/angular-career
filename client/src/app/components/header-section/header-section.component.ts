@@ -21,7 +21,7 @@ import {
   HelperService,
   AlertsService,
   AlertType,
-  AutoCompleteService,
+  AutoCompleteService, UserService,
 } from 'src/app/services';
 
 
@@ -57,6 +57,7 @@ export class HeaderSectionComponent implements OnChanges, OnInit {
     private helperService: HelperService,
     private autoCompleteService: AutoCompleteService,
     private alertsService: AlertsService,
+    private userService: UserService
   ) { }
 
   ngOnInit() {
@@ -84,6 +85,7 @@ export class HeaderSectionComponent implements OnChanges, OnInit {
     this.temp_state = null;
 
     this.generalInfoForm = new FormGroup({
+      photo: new FormControl(this.generalInfo.photo ? this.generalInfo.photo : ''),
       first_name: new FormControl(this.generalInfo.first_name ? this.generalInfo.first_name : '', [Validators.required]),
       last_name: new FormControl(this.generalInfo.last_name ? this.generalInfo.last_name : '', [Validators.required]),
       city: new FormControl(this.generalInfo.city ? this.generalInfo.city : ''),
@@ -101,6 +103,10 @@ export class HeaderSectionComponent implements OnChanges, OnInit {
         data: this.generalInfoData,
         valid: this.checkFormValidation()
       });
+    });
+    this.generalInfoForm.get('photo').valueChanges.subscribe((photo) => {
+      this.generalInfoData.photo = photo;
+      this.updatedGeneralInfoData.emit(this.generalInfoData);
     });
     this.generalInfoForm.get('last_name').valueChanges.subscribe((last_name) => {
       this.generalInfoData.last_name = last_name ? this.helperService.checkSpacesString(last_name) : null;
@@ -309,4 +315,29 @@ export class HeaderSectionComponent implements OnChanges, OnInit {
     return this.generalInfoForm.valid && this.checkCityValidation() && this.checkStateValidation();
   }
 
+  public onPhotoFileSelected(event): void {
+    if (event.target.files && event.target.files[0]) {
+      if (event.target.files[0].size > 1830020) {
+        this.alertsService.show('Image size too big.', AlertType.error);
+        return null;
+      }
+
+      const file = event.target.files[0];
+
+      this.userService.getSignedPhotoUrl(file)
+        .subscribe((signedPhoto) => {
+            this.userService.uploadPhotoToS3(file, signedPhoto.data.signedUrl, signedPhoto.data.url)
+              .subscribe((response) => {
+                this.generalInfoForm.patchValue({
+                  photo: response.data
+                });
+              }, err => {
+                this.alertsService.show(err.message, AlertType.error);
+              });
+          }, err => {
+            this.alertsService.show(err.message, AlertType.error);
+          }
+        );
+    }
+  }
 }
