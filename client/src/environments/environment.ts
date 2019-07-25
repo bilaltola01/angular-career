@@ -9,7 +9,11 @@ export const environment = {
   auth_service: 'auth-service',
   user_service: 'user-service',
   autocomplete_service: 'autocomplete-service',
+<<<<<<< HEAD
   application_service: 'application-service',
+=======
+  position_service: 'position-service',
+>>>>>>> Implemented postion-search functionality partially.
   api_version: 'v1'
 };
 

@@ -1,0 +1,213 @@
+@import '../../../../styles/variables';
+
+.mat-card-title {
+    display: inline;
+}
+
+.img-style {
+    width: 16px;
+}
+
+.right-align {
+    float: right;
+    border-radius: 50px;
+}
+
+.mat-card-content {
+    margin-top: 2%;
+}
+
+span.image {
+    position: relative;
+    top: -6px;
+}
+
+.arrow {
+    width: 200%;
+}
+
+.arrow-pos {
+    width: 200%;
+    margin-top: -10px
+}
+
+.icon-style {
+    margin-left: 55%;
+    margin-top: 1%
+}
+
+.btn-a {
+    width: 1%
+}
+
+.card-size {
+    width: 85%
+}
+
+.card-size-height {
+    width: 85%;
+    height: 7%
+}
+
+.position-filter {
+    height: 6%;
+    margin-bottom: 2%;
+}
+
+.select-style {
+    height: 6%
+}
+
+.selectall {
+    width: 60%;
+    display: inline-block
+}
+
+.reload-btn {
+    margin-left: 5%
+}
+
+.sort-item {
+    width: 40%;
+    display: inline-block;
+}
+
+.qualification-grid {
+    margin-top: 2%;
+}
+
+round-checkbox {
+    position: relative;
+    display: inline-block;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.skill-label {
+    margin-top: 10%;
+    margin-left: 41%
+}
+
+.skill-chips {
+    width: 50%;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.main-card ul {
+    padding: 0;
+    margin: 0
+}
+
+.main-card h5 {
+    margin: 1px;
+}
+
+.pos-card {
+    margin-top: 2%
+}
+
+.card-item {
+    width: 70%
+}
+
+.show-button {
+    text-align: center
+}
+
+.mat-flat-button {
+    min-height: 70%;
+    height: 1%;
+    width: 20%;
+    transition: box-shadow 280ms cubic-bezier(.4, 0, .2, 1);
+    display: inline-flex;
+    border-radius: 50px;
+    align-items: center;
+    cursor: default;
+}
+
+.clear-btn {
+    width: 20%;
+}
+
+.mat-card-subtitle {
+    display: inline;
+}
+
+.mat-card-subtitle {
+    margin-right: 8%;
+}
+
+.filter-container {
+    width: 30%;
+    height: 100%;
+    margin-left: 2%;
+    float: left;
+    margin-top: 25px;
+
+    mat-card {
+        margin-bottom: 2px;
+    }
+
+}
+
+.postion-search-header {
+    position: relative;
+    width: 100%;
+    height: 70px;
+    background-color: $white;
+    z-index: 1;
+
+    .container {
+        padding: 0;
+        position: relative;
+        height: 100%;
+    }
+
+    .tag-style {
+        padding: 4% 15%;
+        margin: 7%;
+    }
+
+    .search {
+        border: none;
+        padding: 0;
+
+        h3 {
+            color: rgba(map-get($md-cfaccent, 500), 0.84);
+        }
+
+        .count {
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        mat-form-field {
+            margin-top: 10px;
+            background-color: $mat-form-bg-color;
+            border-radius: 25px;
+            width: 60%;
+            text-align: center;
+            margin-left: 20%;
+            font-style: italic;
+        }
+    }
+}
+
+.position-list-container {
+    width: 65%;
+    float: left;
+    margin-left: 2%;
+}
+
+button {
+    width: 0;
+}
+
+.skills-preferred-m {
+    display: inline-block;
+}
+
+

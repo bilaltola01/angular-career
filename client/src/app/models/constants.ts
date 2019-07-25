@@ -391,7 +391,6 @@ export const NavMenus = {
     }
   ]
 };
-
 export const ITEMS_LIMIT = 100;
 
 
@@ -407,6 +406,7 @@ export const MILITARY_STATUS_OPTIONS = [
   'I do not wish to self-identify'
 ];
 
+
 export const SkillLevelDescription = {
   0: 'No proficiency: no training and no experience',
   1: 'Limited proficiency: some training or some experience',
@@ -415,5 +415,44 @@ export const SkillLevelDescription = {
   4: 'Highly proficient: substantial training or experience (if someone were to hire you based on this skill, you would need minimal training/assistance)',
   5: 'Extremely proficient: substantial training and experience in the subject, familiarity with industry standards, and some understanding of abstract or esoteric subject matter',
   6: 'Specialized: extensive training, possible research experience, and substantial work experience. This level is usually reserved for people with at least 5 years of academic or industry experience or with MS or Ph.D levels of understanding'
+};
+
+
+export const PositionLevel = [
+  'Enter Level',
+  'Senior Level',
+  'Management',
+  'Senior Management',
+  'Executive Level'
+];
+export const EducationLevel = [
+  'No Education',
+  'High School',
+  'Bachelor of Arts',
+  'Bachelor of Science',
+  'Master of Business',
+  'Master of Arts',
+  'Master of Science',
+  'Master of Engineering',
+  'Doctor of Medicine',
+  'J.D.',
+  'Ph.D.'
+];
+
+export const SortBy = [
+  'post-date',
+  'employee-count',
+  'location',
+  'available-positions',
+  'qualification',
+  'popularity',
+  'application-deadline'
+];
+
+export const positionListLimit = 7;
+
+export const positionSearchMessages = {
+  'APPLICATION_SAVE_SUCCESS': 'Application submission successful.',
+  'POSITION_APPLY_SUCCESS': 'Position saves successful.'
 };
 

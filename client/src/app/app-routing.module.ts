@@ -25,8 +25,13 @@ export const routes: Routes = [
   },
   // Use this route to redirect to /404 if we want to pop error page to the user
   // We cannot redirect to '**' so we shall use 404 instead
-  {path: 'error/:status-code', component: ErrorPageComponent},
-  {path: '**', component: ErrorPageComponent}
+  { path: 'error/:status-code', component: ErrorPageComponent },
+  { path: '**', component: ErrorPageComponent },
+
+  {
+    path: 'positions', loadChildren: () => import('./pages/positions/positions.module')
+      .then(module => module.PositionModule)
+  }
 ];
 
 @NgModule({
