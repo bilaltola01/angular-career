@@ -327,24 +327,38 @@ export class CreateProfileComponent implements OnInit {
     this.generalInfoRequest = null;
 
     this.basicInfoForm = new FormGroup({
-      basicInfoCity: new FormControl('', [Validators.required]),
-      basicInfoState: new FormControl('', [Validators.required]),
-      basicInfoCountry: new FormControl('', [Validators.required]),
+      basicInfoCity: new FormControl(''),
+      basicInfoState: new FormControl(''),
+      basicInfoCountry: new FormControl(''),
       basicInfoBirth: new FormControl(''),
-      basicInfoTitle: new FormControl('', [Validators.required]),
+      basicInfoTitle: new FormControl(''),
       basicInfoGender: new FormControl('', [Validators.required]),
       basicInfoEthnicity: new FormControl('', [Validators.required])
     });
 
     this.basicInfoForm.get('basicInfoCity').valueChanges.subscribe((city) => {
-      city ? this.onCityValueChanges(city) : this.autocomplete_cities = [];
+      if (city) {
+        this.onCityValueChanges(city);
+      } else {
+        this.autocomplete_cities = [];
+        this.generalInfoRequest.city_id = null;
+      }
     });
     this.basicInfoForm.get('basicInfoState').valueChanges.subscribe((state) => {
-      state ? this.onStateValueChanges(state) : this.autocomplete_states = [];
+      if (state) {
+        this.onStateValueChanges(state);
+      } else {
+        this.autocomplete_states = [];
+        this.generalInfoRequest.state_id = null;
+      }
     });
     this.basicInfoForm.get('basicInfoCountry').valueChanges.subscribe(
       (country) => {
-        this.onCountryValueChanges(country);
+        if (country) {
+          this.onCountryValueChanges(country);
+        } else {
+          this.generalInfoRequest.country_id = null;
+        }
       }
     );
     this.basicInfoForm.get('basicInfoGender').valueChanges.subscribe(
@@ -410,7 +424,7 @@ export class CreateProfileComponent implements OnInit {
     this.generalInfoRequest.ethnicity = ethnicity;
   }
   onTitleValueChanges(title: string) {
-    this.generalInfoRequest.title = title;
+    this.generalInfoRequest.title = title ? title : null;
   }
   onGenderValueChanges(gender: string) {
     this.generalInfoRequest.gender = gender;
@@ -439,7 +453,11 @@ export class CreateProfileComponent implements OnInit {
     if (this.temp_city) {
       valid = this.basicInfoForm.get('basicInfoCity').value === this.getCityNameFromAutoComplete(this.temp_city.city);
     } else {
-      valid = this.basicInfoForm.get('basicInfoCity').value === this.generalInfoResponse.city;
+      if (!this.basicInfoForm.get('basicInfoCity').value) {
+        valid = true;
+      } else {
+        valid = this.basicInfoForm.get('basicInfoCity').value === this.generalInfoResponse.city;
+      }
     }
     return valid;
   }
@@ -474,7 +492,11 @@ export class CreateProfileComponent implements OnInit {
     if (this.temp_state) {
       valid = this.basicInfoForm.get('basicInfoState').value === this.temp_state.state;
     } else {
-      valid = this.basicInfoForm.get('basicInfoState').value === this.generalInfoResponse.state;
+      if (!this.basicInfoForm.get('basicInfoState').value) {
+        valid = true;
+      } else {
+        valid = this.basicInfoForm.get('basicInfoState').value === this.generalInfoResponse.state;
+      }
     }
     return valid;
   }

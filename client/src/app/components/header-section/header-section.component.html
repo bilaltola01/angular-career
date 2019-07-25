@@ -10,13 +10,13 @@
       <div class="user-detail">
         <div>
           <h1>{{generalInfo.first_name}} {{generalInfo.last_name}}</h1>
-          <h4>{{generalInfo.title}}</h4>
+          <h4>{{generalInfo.title ? generalInfo.title : ''}}</h4>
         </div>
         <div class="user-info">
           <div>
-            <small *ngIf="generalInfo.city && generalInfo.state && generalInfo.country">
+            <small *ngIf="generalInfo.city || generalInfo.state || generalInfo.country">
               <img src="assets/icons/ic_location.svg">
-              {{generalInfo.city}}, {{generalInfo.state}}, {{generalInfo.country}}
+              {{(generalInfo.city ? generalInfo.city : '') + (generalInfo.city && (generalInfo.state || generalInfo.country) ? ', ' : '') + (generalInfo.state ? generalInfo.state : '') + (generalInfo.state && generalInfo.country ? ', ' : '') + (generalInfo.country ? generalInfo.country : '')}}
             </small>
             <small *ngIf="generalInfo.birthdate">
               <img src="assets/icons/ic_birthday-cake.svg">
@@ -41,7 +41,6 @@
       </div>
       <div class="user-status">
         <simple-tag  [title]="profileStatuses[generalInfo.is_looking]" onlineTag="true" [active]="generalInfo.is_looking === 1" (click)="onChangeProfileStatus(generalInfo.is_looking === 1)"></simple-tag>
-        <img src="assets/icons/ic_mail.svg">
       </div>
     </ng-container>
 
@@ -65,8 +64,8 @@
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>City</mat-label>
             <input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity" formControlName="city">
-            <mat-icon matSuffix *ngIf="generalInfoForm.get('city').valid && checkCityValidation()">done</mat-icon>
-            <mat-icon matSuffix class="error-field" *ngIf="(!generalInfoForm.get('city').valid || !checkCityValidation()) && generalInfoForm.get('city').touched">close</mat-icon>
+            <mat-icon matSuffix *ngIf="generalInfoForm.get('city').value && generalInfoForm.get('city').valid && checkCityValidation()">done</mat-icon>
+            <mat-icon matSuffix class="error-field" *ngIf="generalInfoForm.get('city').value && !checkCityValidation() && generalInfoForm.get('city').touched">close</mat-icon>
             <mat-autocomplete #autocompleteCity="matAutocomplete" (closed)="onBlurCity()">
               <mat-option *ngFor="let city of autocomplete_cities" [value]="helperService.cityNameFromAutoComplete(city.city)" (onSelectionChange)="onSelectCity(city)">
                 <span>{{city.city}}</span>
@@ -79,8 +78,8 @@
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>State</mat-label>
             <input matInput placeholder="State" type="text" [matAutocomplete]="autocompleteState" formControlName="state">
-            <mat-icon matSuffix *ngIf="generalInfoForm.get('state').valid && checkStateValidation()">done</mat-icon>
-            <mat-icon matSuffix class="error-field" *ngIf="(!generalInfoForm.get('state').valid || !checkStateValidation()) && generalInfoForm.get('state').touched">close</mat-icon>
+            <mat-icon matSuffix *ngIf="generalInfoForm.get('state').value && generalInfoForm.get('state').valid && checkStateValidation()">done</mat-icon>
+            <mat-icon matSuffix class="error-field" *ngIf="generalInfoForm.get('state').value && !checkStateValidation() && generalInfoForm.get('state').touched">close</mat-icon>
             <mat-autocomplete #autocompleteState="matAutocomplete" (closed)="onBlurState()">
               <mat-option *ngFor="let state of autocomplete_states" [value]="state.state" (onSelectionChange)="onSelectState(state)">
                 <span>{{state.state}}</span>
@@ -93,6 +92,7 @@
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>Country</mat-label>
             <mat-select formControlName="country">
+              <mat-option value="{{null}}">{{null}}</mat-option>
               <mat-option *ngFor="let country of countries" value="{{country}}">{{country}}</mat-option>
             </mat-select>
           </mat-form-field>

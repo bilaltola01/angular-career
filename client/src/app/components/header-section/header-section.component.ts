@@ -72,42 +72,67 @@ export class HeaderSectionComponent implements OnInit {
     this.generalInfoForm = new FormGroup({
       first_name: new FormControl(this.generalInfo.first_name ? this.generalInfo.first_name : '', [Validators.required]),
       last_name: new FormControl(this.generalInfo.last_name ? this.generalInfo.last_name : '', [Validators.required]),
-      city: new FormControl(this.generalInfo.city ? this.generalInfo.city : '', [Validators.required]),
-      state: new FormControl(this.generalInfo.state ? this.generalInfo.state : '', [Validators.required]),
-      country: new FormControl(this.generalInfo.country ? this.generalInfo.country : '', [Validators.required]),
+      city: new FormControl(this.generalInfo.city ? this.generalInfo.city : ''),
+      state: new FormControl(this.generalInfo.state ? this.generalInfo.state : ''),
+      country: new FormControl(this.generalInfo.country ? this.generalInfo.country : ''),
       birthdate: new FormControl(this.generalInfo.birthdate ? this.helperService.convertToFormattedString(this.generalInfo.birthdate, 'L') : ''),
-      title: new FormControl(this.generalInfo.title ? this.generalInfo.title : '', [Validators.required]),
+      title: new FormControl(this.generalInfo.title ? this.generalInfo.title : ''),
       ethnicity: new FormControl(this.generalInfo.ethnicity ? this.generalInfo.ethnicity : '', [Validators.required]),
       gender: new FormControl(this.generalInfo.gender ? this.generalInfo.gender : '', [Validators.required])
     });
 
     this.generalInfoForm.get('first_name').valueChanges.subscribe((first_name) => {
       this.generalInfoData.first_name = first_name;
-      this.updatedGeneralInfoData.emit(this.generalInfoData);
+      this.updatedGeneralInfoData.emit({
+        data: this.generalInfoData,
+        valid: this.checkFormValidation()
+      });
     });
     this.generalInfoForm.get('last_name').valueChanges.subscribe((last_name) => {
       this.generalInfoData.last_name = last_name;
-      this.updatedGeneralInfoData.emit(this.generalInfoData);
+      this.updatedGeneralInfoData.emit({
+        data: this.generalInfoData,
+        valid: this.checkFormValidation()
+      });
     });
     this.generalInfoForm.get('title').valueChanges.subscribe((title) => {
       this.generalInfoData.title = title;
-      this.updatedGeneralInfoData.emit(this.generalInfoData);
+      this.updatedGeneralInfoData.emit({
+        data: this.generalInfoData,
+        valid: this.checkFormValidation()
+      });
     });
     this.generalInfoForm.get('ethnicity').valueChanges.subscribe((ethnicity) => {
       this.generalInfoData.ethnicity = ethnicity;
-      this.updatedGeneralInfoData.emit(this.generalInfoData);
+      this.updatedGeneralInfoData.emit({
+        data: this.generalInfoData,
+        valid: this.checkFormValidation()
+      });
     });
     this.generalInfoForm.get('gender').valueChanges.subscribe((gender) => {
       this.generalInfoData.gender = gender;
-      this.updatedGeneralInfoData.emit(this.generalInfoData);
+      this.updatedGeneralInfoData.emit({
+        data: this.generalInfoData,
+        valid: this.checkFormValidation()
+      });
     });
     this.generalInfoForm.get('birthdate').valueChanges.subscribe((date) => {
       this.generalInfoData.birthdate = date ? date : null;
-      this.updatedGeneralInfoData.emit(this.generalInfoData);
+      this.updatedGeneralInfoData.emit({
+        data: this.generalInfoData,
+        valid: this.checkFormValidation()
+      });
     });
     this.generalInfoForm.get('country').valueChanges.subscribe((country) => {
-      this.generalInfoData.country_id = Countries.indexOf(country) + 1;
-      this.updatedGeneralInfoData.emit(this.generalInfoData);
+      if (country) {
+        this.generalInfoData.country_id = Countries.indexOf(country) + 1;
+      } else {
+        this.generalInfoData.country_id = null;
+      }
+      this.updatedGeneralInfoData.emit({
+        data: this.generalInfoData,
+        valid: this.checkFormValidation()
+      });
     });
     this.generalInfoForm.get('city').valueChanges.subscribe((city) => {
       if (city) {
@@ -128,6 +153,7 @@ export class HeaderSectionComponent implements OnInit {
         );
       } else {
         this.autocomplete_cities = [];
+        this.clearCity();
       }
     });
     this.generalInfoForm.get('state').valueChanges.subscribe((state) =>  {
@@ -149,6 +175,7 @@ export class HeaderSectionComponent implements OnInit {
         );
       } else {
         this.autocomplete_states = [];
+        this.clearState();
       }
     });
 
@@ -169,7 +196,10 @@ export class HeaderSectionComponent implements OnInit {
       user_intro: this.generalInfo.user_intro,
       ethnicity: this.generalInfo.ethnicity
     };
-    this.updatedGeneralInfoData.emit(this.generalInfoData);
+    this.updatedGeneralInfoData.emit({
+      data: this.generalInfoData,
+      valid: this.checkFormValidation()
+    });
   }
 
   onChangeBirthDate(date: any) {
@@ -180,15 +210,13 @@ export class HeaderSectionComponent implements OnInit {
     }
   }
 
-  onCountryValueChanges(country: string) {
-    this.generalInfoData.country_id = Countries.indexOf(country) + 1;
-    this.updatedGeneralInfoData.emit(this.generalInfoData);
-  }
-
   onSelectCity(city: City) {
     this.generalInfoData.city_id = city.city_id;
     this.temp_city = city;
-    this.updatedGeneralInfoData.emit(this.generalInfoData);
+    this.updatedGeneralInfoData.emit({
+      data: this.generalInfoData,
+      valid: true
+    });
   }
   onBlurCity() {
     if (this.temp_city) {
@@ -203,22 +231,32 @@ export class HeaderSectionComponent implements OnInit {
     }
   }
   checkCityValidation(): boolean {
-    let valid = false;
-    if (this.temp_city) {
-      valid = this.generalInfoForm.get('city').value === this.helperService.cityNameFromAutoComplete(this.temp_city.city);
+    const value = this.generalInfoForm.get('city').value;
+    if (value) {
+      if (this.temp_city) {
+        return value === this.helperService.cityNameFromAutoComplete(this.temp_city.city) ? true : false;
+      } else {
+        return value === this.generalInfo.city ? true : false;
+      }
     } else {
-      valid = this.generalInfoForm.get('city').value === this.generalInfo.city;
+      return true;
     }
-    return valid;
   }
   clearCity() {
     this.generalInfoData.city_id = null;
-    this.updatedGeneralInfoData.emit(this.generalInfoData);
+    this.temp_city = null;
+    this.updatedGeneralInfoData.emit({
+      data: this.generalInfoData,
+      valid: this.checkFormValidation()
+    });
   }
   onSelectState(state: State) {
     this.generalInfoData.state_id = state.state_id;
     this.temp_state = state;
-    this.updatedGeneralInfoData.emit(this.generalInfoData);
+    this.updatedGeneralInfoData.emit({
+      data: this.generalInfoData,
+      valid: true
+    });
   }
   onBlurState() {
     if (this.temp_state) {
@@ -233,17 +271,28 @@ export class HeaderSectionComponent implements OnInit {
     }
   }
   checkStateValidation(): boolean {
-    let valid = false;
-    if (this.temp_state) {
-      valid = this.generalInfoForm.get('state').value === this.temp_state.state;
+    const value = this.generalInfoForm.get('state').value;
+    if (value) {
+      if (this.temp_state) {
+        return value === this.temp_state.state ? true : false;
+      } else {
+        return value === this.generalInfo.state ? true : false;
+      }
     } else {
-      valid = this.generalInfoForm.get('state').value === this.generalInfo.state;
+      return true;
     }
-    return valid;
   }
   clearState() {
     this.generalInfoData.state_id = null;
-    this.updatedGeneralInfoData.emit(this.generalInfoData);
+    this.temp_state = null;
+    this.updatedGeneralInfoData.emit({
+      data: this.generalInfoData,
+      valid: this.checkFormValidation()
+    });
+  }
+
+  checkFormValidation(): boolean {
+    return this.generalInfoForm.valid && this.checkCityValidation() && this.checkStateValidation();
   }
 
 }

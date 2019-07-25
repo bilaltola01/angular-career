@@ -415,7 +415,7 @@ p {
   font-family: 'Roboto', sans-serif;
   color: map-get($md-cfaccent, 400);
   &.description {
-    word-break: break-all;
+    word-break: break-word;
     white-space: pre-wrap;
   }
 }
@@ -477,6 +477,10 @@ action-button {
         max-width: 615px;
         min-width: 280px;
         box-sizing: border-box;
+        &::-webkit-scrollbar {
+          width: 0;
+          background-color: transparent;
+        }
       }
       mat-dialog-actions {
         margin-bottom: 0 !important;
