@@ -331,7 +331,7 @@ export class CreateProfileComponent implements OnInit {
       basicInfoState: new FormControl(''),
       basicInfoCountry: new FormControl(''),
       basicInfoBirth: new FormControl(''),
-      basicInfoTitle: new FormControl('', [Validators.required]),
+      basicInfoTitle: new FormControl(''),
       basicInfoGender: new FormControl('', [Validators.required]),
       basicInfoEthnicity: new FormControl('', [Validators.required])
     });
@@ -424,7 +424,7 @@ export class CreateProfileComponent implements OnInit {
     this.generalInfoRequest.ethnicity = ethnicity;
   }
   onTitleValueChanges(title: string) {
-    this.generalInfoRequest.title = title;
+    this.generalInfoRequest.title = title ? title : null;
   }
   onGenderValueChanges(gender: string) {
     this.generalInfoRequest.gender = gender;

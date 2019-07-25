@@ -76,7 +76,7 @@ export class HeaderSectionComponent implements OnInit {
       state: new FormControl(this.generalInfo.state ? this.generalInfo.state : ''),
       country: new FormControl(this.generalInfo.country ? this.generalInfo.country : ''),
       birthdate: new FormControl(this.generalInfo.birthdate ? this.helperService.convertToFormattedString(this.generalInfo.birthdate, 'L') : ''),
-      title: new FormControl(this.generalInfo.title ? this.generalInfo.title : '', [Validators.required]),
+      title: new FormControl(this.generalInfo.title ? this.generalInfo.title : ''),
       ethnicity: new FormControl(this.generalInfo.ethnicity ? this.generalInfo.ethnicity : '', [Validators.required]),
       gender: new FormControl(this.generalInfo.gender ? this.generalInfo.gender : '', [Validators.required])
     });
