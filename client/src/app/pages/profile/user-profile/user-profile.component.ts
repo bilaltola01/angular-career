@@ -42,7 +42,7 @@ export class UserProfileComponent implements OnInit {
   userPublicationsList: UserPublicationItem[];
   externalResourcesList: UserExternalResourcesItem[];
 
-  containerScrollPosition: number;
+  headerFormValid: Boolean;
 
   constructor(
     private userService: UserService,
@@ -71,6 +71,7 @@ export class UserProfileComponent implements OnInit {
     this.editMode = false;
     this.isProfileLoading = true;
     this.counts = 0;
+    this.headerFormValid = false;
   }
 
   onSelectNavItem(id: string) {
@@ -94,16 +95,17 @@ export class UserProfileComponent implements OnInit {
     this.selectedNavMenuIndex = navIndex;
   }
 
-  onChangedGeneralInfoData(generalInfoData: UserObject) {
-    this.generalInfoData.first_name = generalInfoData.first_name;
-    this.generalInfoData.last_name = generalInfoData.last_name;
-    this.generalInfoData.birthdate = generalInfoData.birthdate;
-    this.generalInfoData.gender = generalInfoData.gender;
-    this.generalInfoData.city_id = generalInfoData.city_id;
-    this.generalInfoData.country_id = generalInfoData.country_id;
-    this.generalInfoData.state_id = generalInfoData.state_id;
-    this.generalInfoData.title = generalInfoData.title;
-    this.generalInfoData.ethnicity = generalInfoData.ethnicity;
+  onChangedGeneralInfoData($event: any) {
+    this.generalInfoData.first_name = $event.data.first_name;
+    this.generalInfoData.last_name = $event.data.last_name;
+    this.generalInfoData.birthdate = $event.data.birthdate;
+    this.generalInfoData.gender = $event.data.gender;
+    this.generalInfoData.city_id = $event.data.city_id;
+    this.generalInfoData.country_id = $event.data.country_id;
+    this.generalInfoData.state_id = $event.data.state_id;
+    this.generalInfoData.title = $event.data.title;
+    this.generalInfoData.ethnicity = $event.data.ethnicity;
+    this.headerFormValid = $event.valid;
   }
 
   onChangeProfileStatus(generalInfoData: UserObject) {
@@ -124,17 +126,19 @@ export class UserProfileComponent implements OnInit {
   }
 
   onClickUpdate() {
-    this.userService.updateGeneralInfo(this.generalInfoData).subscribe(
-      dataJson => {
-        this.userGeneralInfo = dataJson['data'];
-        this.editMode = false;
-        this.isNavMenuOpened = false;
-        this.generateGeneralInfoData();
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-      }
-    );
+    if (this.headerFormValid) {
+      this.userService.updateGeneralInfo(this.generalInfoData).subscribe(
+        dataJson => {
+          this.userGeneralInfo = dataJson['data'];
+          this.editMode = false;
+          this.isNavMenuOpened = false;
+          this.generateGeneralInfoData();
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    }
   }
 
   checkProfileLoading() {
