@@ -477,6 +477,10 @@ action-button {
         max-width: 615px;
         min-width: 280px;
         box-sizing: border-box;
+        &::-webkit-scrollbar {
+          width: 0;
+          background-color: transparent;
+        }
       }
       mat-dialog-actions {
         margin-bottom: 0 !important;
