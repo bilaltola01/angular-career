@@ -2,9 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import {MatDatepicker} from '@angular/material/datepicker';
-import { AutoCompleteService } from 'src/app/services/auto-complete.service';
-import { UserService } from 'src/app/services/user.service';
-import { AlertsService, AlertType } from 'src/app/services/alerts.service';
+import {
+  AutoCompleteService,
+  UserService,
+  AlertsService,
+  AlertType,
+  HelperService
+} from 'src/app/services';
 import {
   City, School, Major, Skill, Interest, Level, Company,
   UserGeneralInfo, UserObject,
@@ -180,7 +184,7 @@ export class CreateProfileComponent implements OnInit {
 
   userRole: string;
 
-  constructor(private route: ActivatedRoute, private router: Router, private autoCompleteService: AutoCompleteService, private userService: UserService, private alertsService: AlertsService) { }
+  constructor(private route: ActivatedRoute, private router: Router, private autoCompleteService: AutoCompleteService, private userService: UserService, private alertsService: AlertsService, private helperService: HelperService) { }
 
   ngOnInit() {
     if (this.route.snapshot.queryParams.role) {
@@ -424,7 +428,7 @@ export class CreateProfileComponent implements OnInit {
     this.generalInfoRequest.ethnicity = ethnicity;
   }
   onTitleValueChanges(title: string) {
-    this.generalInfoRequest.title = title ? title : null;
+    this.generalInfoRequest.title = title ? this.helperService.checkSpacesString(title) : null;
   }
   onGenderValueChanges(gender: string) {
     this.generalInfoRequest.gender = gender;
@@ -590,7 +594,7 @@ export class CreateProfileComponent implements OnInit {
     );
   }
   onAboutMeValueChanges(aboutMe: string) {
-    this.generalInfoRequest.user_intro = aboutMe ? aboutMe : null;
+    this.generalInfoRequest.user_intro = aboutMe ? this.helperService.checkSpacesString(aboutMe) : null;
   }
 
 
