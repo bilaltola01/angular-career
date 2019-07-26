@@ -561,12 +561,9 @@ export class CreateProfileComponent implements OnInit {
     this.aboutMeForm.get('aboutMe').setValue(this.generalInfoResponse.user_intro ? this.generalInfoResponse.user_intro : '');
     this.aboutMeForm.get('aboutMe').valueChanges.subscribe(
       (aboutMe) => {
-        this.onAboutMeValueChanges(aboutMe);
+        this.generalInfoRequest.user_intro = aboutMe ? this.helperService.checkSpacesString(aboutMe) : null;
       }
     );
-  }
-  onAboutMeValueChanges(aboutMe: string) {
-    this.generalInfoRequest.user_intro = aboutMe ? this.helperService.checkSpacesString(aboutMe) : null;
   }
 
 
