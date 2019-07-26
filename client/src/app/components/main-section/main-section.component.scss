@@ -218,6 +218,18 @@
       color: map-get($md-cfaccent, 100);
     }
   }
+  .skills {
+    @include flex(row, center, flex-start);
+    mat-icon {
+      color: rgba(map-get($md-cfaccent, 500), .3);
+      font-size: 30px;
+      width: 30px;
+      height: 30px;
+      margin: 10px 0 5px 10px;
+      @include disable-select();
+      cursor: pointer;
+    }
+  }
 }
 
 @media only screen and (max-width: 991px) {

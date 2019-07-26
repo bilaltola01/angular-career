@@ -61,7 +61,13 @@
       </ng-container>
       <ng-container *ngIf="experience.skills_trained && experience.skills_trained.length > 0">
         <h5>Skills Trained {{experience.skills_trained.length}}</h5>
-        <simple-tag *ngFor="let skill_trained of experience.skills_trained" type="gray" title="{{skill_trained.skill}}"></simple-tag>
+        <div class="skills" *ngIf="displayItemsLimit; let limit">
+          <ng-container *ngFor="let skill_trained of experience.skills_trained; let i = index;">
+            <simple-tag *ngIf="(!editMode && i < limit) || editMode" type="gray" title="{{skill_trained.skill}}"></simple-tag>
+          </ng-container>
+          <mat-icon *ngIf="!editMode && limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit">remove_circle_outline</mat-icon>
+          <mat-icon *ngIf="!editMode && limit < experience.skills_trained.length" (click)="limit = limit + displayItemsLimit">add_circle_outline</mat-icon>
+        </div>
       </ng-container>
       <ng-container *ngIf="experience.industries && experience.industries.length > 0">
         <h5>Company Industries {{experience.industries.length}}</h5>
@@ -69,7 +75,13 @@
       </ng-container>
       <ng-container *ngIf="experience.add_industries && experience.add_industries.length > 0">
         <h5>Industry Exposure {{experience.add_industries.length}}</h5>
-        <simple-tag *ngFor="let add_industry of experience.add_industries" type="gray" title="{{add_industry.industry_name}}"></simple-tag>
+        <div class="skills" *ngIf="displayItemsLimit; let limit">
+          <ng-container *ngFor="let add_industry of experience.add_industries; let i = index;">
+            <simple-tag *ngIf="(!editMode && i < limit) || editMode" type="gray" title="{{add_industry.industry_name}}"></simple-tag>
+          </ng-container>
+          <mat-icon *ngIf="!editMode && limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit">remove_circle_outline</mat-icon>
+          <mat-icon *ngIf="!editMode && limit < experience.add_industries.length" (click)="limit = limit + displayItemsLimit">add_circle_outline</mat-icon>
+        </div>
       </ng-container>
       <mat-divider *ngIf="(i < experienceList.length - 1) || editMode"></mat-divider>
     </ng-container>
@@ -147,7 +159,13 @@
     </div>
     <ng-container *ngIf="!editMode || !temp_skill">
       <h5>Skills {{userSkillsList.length}}</h5>
-      <simple-tag *ngFor="let skill of userSkillsList; let i = index" type="gray" title="{{skill.skill}}" ellipseTag="true" value="{{skill.skill_level}}" (levelChanged)="onLevelChanged($event, i)" (removeClick)="removeUserSkillsData(i, skill)" [isControl]="editMode"></simple-tag>
+      <div class="skills" *ngIf="displayItemsLimit; let limit">
+        <ng-container *ngFor="let skill of userSkillsList; let i = index">
+          <simple-tag *ngIf="(!editMode && i < limit) || editMode" type="gray" title="{{skill.skill}}" ellipseTag="true" value="{{skill.skill_level}}" (levelChanged)="onLevelChanged($event, i)" (removeClick)="removeUserSkillsData(i, skill)" [isControl]="editMode"></simple-tag>
+        </ng-container>
+        <mat-icon *ngIf="!editMode && limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit">remove_circle_outline</mat-icon>
+        <mat-icon *ngIf="!editMode && limit < userSkillsList.length" (click)="limit = limit + displayItemsLimit">add_circle_outline</mat-icon>
+      </div>
     </ng-container>
   </div>
 
@@ -165,7 +183,13 @@
       </mat-form-field>
     </div>
     <h5>Interests {{userInterestsList.length}}</h5>
-    <simple-tag *ngFor="let interest of userInterestsList; let i = index" type="gray" title="{{interest.interest}}" [removeTag]="editMode" (click)="removeUserInteretsData(i, interest)"></simple-tag>
+    <div class="skills" *ngIf="displayItemsLimit; let limit">
+      <ng-container *ngFor="let interest of userInterestsList; let i = index">
+        <simple-tag *ngIf="(!editMode && i < limit) || editMode" type="gray" title="{{interest.interest}}" [removeTag]="editMode" (click)="removeUserInteretsData(i, interest)"></simple-tag>
+      </ng-container>
+      <mat-icon *ngIf="!editMode && limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit">remove_circle_outline</mat-icon>
+      <mat-icon *ngIf="!editMode && limit < userInterestsList.length" (click)="limit = limit + displayItemsLimit">add_circle_outline</mat-icon>
+    </div>
   </div>
 
   <div *ngIf="(externalResourcesList && externalResourcesList.length > 0) || editMode" class="row" [class.edit-mode]="editMode" id="external-resources">
