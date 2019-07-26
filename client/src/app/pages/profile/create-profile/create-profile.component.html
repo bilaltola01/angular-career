@@ -79,10 +79,10 @@
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>City</mat-label>
             <input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity" formControlName="basicInfoCity">
-            <mat-icon matSuffix *ngIf="basicInfoForm.get('basicInfoCity').value && basicInfoForm.get('basicInfoCity').valid && onCheckCityValidation()">done</mat-icon>
-            <mat-icon matSuffix class="error-field" *ngIf="basicInfoForm.get('basicInfoCity').value && !onCheckCityValidation() && basicInfoForm.get('basicInfoCity').touched">close</mat-icon>
+            <mat-icon matSuffix *ngIf="basicInfoForm.get('basicInfoCity').value && helperService.checkSpacesString(basicInfoForm.get('basicInfoCity').value) && basicInfoForm.get('basicInfoCity').valid && onCheckCityValidation()">done</mat-icon>
+            <mat-icon matSuffix class="error-field" *ngIf="basicInfoForm.get('basicInfoCity').value && helperService.checkSpacesString(basicInfoForm.get('basicInfoCity').value) && !onCheckCityValidation() && basicInfoForm.get('basicInfoCity').touched">close</mat-icon>
             <mat-autocomplete #autocompleteCity="matAutocomplete" (closed)="onBlurCity()">
-              <mat-option *ngFor="let city of autocomplete_cities" [value]="getCityNameFromAutoComplete(city.city)" (onSelectionChange)="onSelectCity(city)">
+              <mat-option *ngFor="let city of autocomplete_cities" [value]="helperService.cityNameFromAutoComplete(city.city)" (onSelectionChange)="onSelectCity(city)">
                 <span>{{city.city}}</span>
               </mat-option>
             </mat-autocomplete>
@@ -92,8 +92,8 @@
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>State</mat-label>
             <input matInput placeholder="State" type="text" [matAutocomplete]="autocompleteState" formControlName="basicInfoState">
-            <mat-icon matSuffix *ngIf="basicInfoForm.get('basicInfoState').value && basicInfoForm.get('basicInfoState').valid && onCheckStateValidation()">done</mat-icon>
-            <mat-icon matSuffix class="error-field" *ngIf="basicInfoForm.get('basicInfoState').value && !onCheckStateValidation() && basicInfoForm.get('basicInfoState').touched">close</mat-icon>
+            <mat-icon matSuffix *ngIf="basicInfoForm.get('basicInfoState').value && helperService.checkSpacesString(basicInfoForm.get('basicInfoState').value) && basicInfoForm.get('basicInfoState').valid && onCheckStateValidation()">done</mat-icon>
+            <mat-icon matSuffix class="error-field" *ngIf="basicInfoForm.get('basicInfoState').value && helperService.checkSpacesString(basicInfoForm.get('basicInfoState').value) && !onCheckStateValidation() && basicInfoForm.get('basicInfoState').touched">close</mat-icon>
             <mat-autocomplete #autocompleteState="matAutocomplete" (closed)="onBlurState()">
               <mat-option *ngFor="let state of autocomplete_states" [value]="state.state" (onSelectionChange)="onSelectState(state)">
                 <span>{{state.state}}</span>

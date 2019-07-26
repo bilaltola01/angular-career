@@ -341,16 +341,44 @@ export class CreateProfileComponent implements OnInit {
     });
 
     this.basicInfoForm.get('basicInfoCity').valueChanges.subscribe((city) => {
-      if (city) {
-        this.onCityValueChanges(city);
+      if (city && this.helperService.checkSpacesString(city)) {
+        this.autoCompleteService.autoComplete(city, 'cities').subscribe(
+          dataJson => {
+            if (dataJson['success']) {
+              this.autocomplete_cities = dataJson['data'];
+              if (this.autocomplete_cities.length === 0) {
+                this.clearCity();
+              }
+            }
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+            this.autocomplete_cities = [];
+            this.clearCity();
+          }
+        );
       } else {
         this.autocomplete_cities = [];
         this.generalInfoRequest.city_id = null;
       }
     });
     this.basicInfoForm.get('basicInfoState').valueChanges.subscribe((state) => {
-      if (state) {
-        this.onStateValueChanges(state);
+      if (state && this.helperService.checkSpacesString(state)) {
+        this.autoCompleteService.autoComplete(state, 'states').subscribe(
+          dataJson => {
+            if (dataJson['success']) {
+              this.autocomplete_states = dataJson['data'];
+              if (this.autocomplete_states.length === 0) {
+                this.clearState();
+              }
+            }
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+            this.autocomplete_states = [];
+            this.clearState();
+          }
+        );
       } else {
         this.autocomplete_states = [];
         this.generalInfoRequest.state_id = null;
@@ -359,7 +387,7 @@ export class CreateProfileComponent implements OnInit {
     this.basicInfoForm.get('basicInfoCountry').valueChanges.subscribe(
       (country) => {
         if (country) {
-          this.onCountryValueChanges(country);
+          this.generalInfoRequest.country_id = Countries.indexOf(country) + 1;
         } else {
           this.generalInfoRequest.country_id = null;
         }
@@ -367,22 +395,22 @@ export class CreateProfileComponent implements OnInit {
     );
     this.basicInfoForm.get('basicInfoGender').valueChanges.subscribe(
       (gender) => {
-        this.onGenderValueChanges(gender);
+        this.generalInfoRequest.gender = gender;
       }
     );
     this.basicInfoForm.get('basicInfoBirth').valueChanges.subscribe(
       (date) => {
-        this.generalInfoRequest.birthdate = date ? date : null;
+        this.generalInfoRequest.birthdate = date ? this.helperService.checkSpacesString(date) : null;
       }
     );
     this.basicInfoForm.get('basicInfoTitle').valueChanges.subscribe(
       (title) => {
-        this.onTitleValueChanges(title);
+        this.generalInfoRequest.title = title ? this.helperService.checkSpacesString(title) : null;
       }
     );
     this.basicInfoForm.get('basicInfoEthnicity').valueChanges.subscribe(
       (ethnicity) => {
-        this.onEthnicityValueChanges(ethnicity);
+        this.generalInfoRequest.ethnicity = ethnicity;
       }
     );
   }
@@ -394,7 +422,7 @@ export class CreateProfileComponent implements OnInit {
     this.basicInfoForm.get('basicInfoCountry').setValue(this.generalInfoResponse.country);
     this.basicInfoForm.get('basicInfoGender').setValue(this.generalInfoResponse.gender);
     this.basicInfoForm.get('basicInfoTitle').setValue(this.generalInfoResponse.title);
-    this.basicInfoForm.get('basicInfoBirth').setValue(this.generalInfoResponse.birthdate ? this.extractDate(this.generalInfoResponse.birthdate) : '');
+    this.basicInfoForm.get('basicInfoBirth').setValue(this.generalInfoResponse.birthdate ? this.helperService.convertToFormattedString(this.generalInfoResponse.birthdate, 'L') : '');
     this.basicInfoForm.get('basicInfoEthnicity').setValue(this.generalInfoResponse.ethnicity);
   }
   updateGeneralInfoRequest() {
@@ -418,23 +446,10 @@ export class CreateProfileComponent implements OnInit {
   }
   onChangeBirthDate(date: any) {
     if (date.value) {
-      const dateValue = new Date(date.value);
-      this.basicInfoForm.get('basicInfoBirth').setValue(moment(dateValue).format('MM/DD/YYYY'));
+      this.basicInfoForm.get('basicInfoBirth').setValue(this.helperService.convertToFormattedString(date.value, 'L'));
     } else {
       this.basicInfoForm.get('basicInfoBirth').setValue('');
     }
-  }
-  onEthnicityValueChanges(ethnicity: string) {
-    this.generalInfoRequest.ethnicity = ethnicity;
-  }
-  onTitleValueChanges(title: string) {
-    this.generalInfoRequest.title = title ? this.helperService.checkSpacesString(title) : null;
-  }
-  onGenderValueChanges(gender: string) {
-    this.generalInfoRequest.gender = gender;
-  }
-  onCountryValueChanges(country: string) {
-    this.generalInfoRequest.country_id = Countries.indexOf(country) + 1;
   }
   onSelectCity(city: City) {
     this.generalInfoRequest.city_id = city.city_id;
@@ -442,7 +457,7 @@ export class CreateProfileComponent implements OnInit {
   }
   onBlurCity() {
     if (this.temp_city) {
-      if (this.basicInfoForm.get('basicInfoCity').value !== this.getCityNameFromAutoComplete(this.temp_city.city)) {
+      if (this.basicInfoForm.get('basicInfoCity').value !== this.helperService.cityNameFromAutoComplete(this.temp_city.city)) {
         this.clearCity();
         this.temp_city = null;
       }
@@ -453,24 +468,16 @@ export class CreateProfileComponent implements OnInit {
     }
   }
   onCheckCityValidation(): boolean {
-    let valid = false;
-    if (this.temp_city) {
-      valid = this.basicInfoForm.get('basicInfoCity').value === this.getCityNameFromAutoComplete(this.temp_city.city);
-    } else {
-      if (!this.basicInfoForm.get('basicInfoCity').value) {
-        valid = true;
+    const value = this.basicInfoForm.get('basicInfoCity').value;
+    if (value && this.helperService.checkSpacesString(value)) {
+      if (this.temp_city) {
+        return value === this.helperService.cityNameFromAutoComplete(this.temp_city.city) ? true : false;
       } else {
-        valid = this.basicInfoForm.get('basicInfoCity').value === this.generalInfoResponse.city;
+        return value === this.generalInfoResponse.city ? true : false;
       }
+    } else {
+      return true;
     }
-    return valid;
-  }
-  getCityNameFromAutoComplete(cityValue: string) {
-    let city;
-    if (cityValue.includes(', ')) {
-      city = cityValue.split(', ')[0];
-    }
-    return city;
   }
   clearCity() {
     this.generalInfoRequest.city_id = null;
@@ -492,54 +499,19 @@ export class CreateProfileComponent implements OnInit {
     }
   }
   onCheckStateValidation(): boolean {
-    let valid = false;
-    if (this.temp_state) {
-      valid = this.basicInfoForm.get('basicInfoState').value === this.temp_state.state;
-    } else {
-      if (!this.basicInfoForm.get('basicInfoState').value) {
-        valid = true;
+    const value = this.basicInfoForm.get('basicInfoState').value;
+    if (value && this.helperService.checkSpacesString(value)) {
+      if (this.temp_state) {
+        return value === this.temp_state.state ? true : false;
       } else {
-        valid = this.basicInfoForm.get('basicInfoState').value === this.generalInfoResponse.state;
+        return value === this.generalInfoResponse.state ? true : false;
       }
+    } else {
+      return true;
     }
-    return valid;
   }
   clearState() {
     this.generalInfoRequest.state_id = null;
-  }
-  onCityValueChanges(city: string) {
-    this.autoCompleteService.autoComplete(city, 'cities').subscribe(
-      dataJson => {
-        if (dataJson['success']) {
-          this.autocomplete_cities = dataJson['data'];
-          if (this.autocomplete_cities.length === 0) {
-            this.clearCity();
-          }
-        }
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-        this.autocomplete_cities = [];
-        this.clearCity();
-      }
-    );
-  }
-  onStateValueChanges(state: string) {
-    this.autoCompleteService.autoComplete(state, 'states').subscribe(
-      dataJson => {
-        if (dataJson['success']) {
-          this.autocomplete_states = dataJson['data'];
-          if (this.autocomplete_states.length === 0) {
-            this.clearState();
-          }
-        }
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-        this.autocomplete_states = [];
-        this.clearState();
-      }
-    );
   }
   getGeneralInfo() {
     this.userService.getGeneralInfo().subscribe(
