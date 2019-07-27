@@ -65,8 +65,8 @@
           <ng-container *ngFor="let skill_trained of experience.skills_trained; let i = index;">
             <simple-tag *ngIf="(!editMode && i < limit) || editMode" type="gray" title="{{skill_trained.skill}}"></simple-tag>
           </ng-container>
-          <mat-icon *ngIf="!editMode && limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit">remove_circle_outline</mat-icon>
-          <mat-icon *ngIf="!editMode && limit < experience.skills_trained.length" (click)="limit = limit + displayItemsLimit">add_circle_outline</mat-icon>
+          <img *ngIf="!editMode && limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
+          <img *ngIf="!editMode && limit < experience.skills_trained.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
         </div>
       </ng-container>
       <ng-container *ngIf="experience.industries && experience.industries.length > 0">
@@ -79,8 +79,8 @@
           <ng-container *ngFor="let add_industry of experience.add_industries; let i = index;">
             <simple-tag *ngIf="(!editMode && i < limit) || editMode" type="gray" title="{{add_industry.industry_name}}"></simple-tag>
           </ng-container>
-          <mat-icon *ngIf="!editMode && limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit">remove_circle_outline</mat-icon>
-          <mat-icon *ngIf="!editMode && limit < experience.add_industries.length" (click)="limit = limit + displayItemsLimit">add_circle_outline</mat-icon>
+          <img *ngIf="!editMode && limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
+          <img *ngIf="!editMode && limit < experience.add_industries.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
         </div>
       </ng-container>
       <mat-divider *ngIf="(i < experienceList.length - 1) || editMode"></mat-divider>
@@ -163,8 +163,8 @@
         <ng-container *ngFor="let skill of userSkillsList; let i = index">
           <simple-tag *ngIf="(!editMode && i < limit) || editMode" type="gray" title="{{skill.skill}}" ellipseTag="true" value="{{skill.skill_level}}" (levelChanged)="onLevelChanged($event, i)" (removeClick)="removeUserSkillsData(i, skill)" [isControl]="editMode"></simple-tag>
         </ng-container>
-        <mat-icon *ngIf="!editMode && limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit">remove_circle_outline</mat-icon>
-        <mat-icon *ngIf="!editMode && limit < userSkillsList.length" (click)="limit = limit + displayItemsLimit">add_circle_outline</mat-icon>
+        <img *ngIf="!editMode && limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
+        <img *ngIf="!editMode && limit < userSkillsList.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
       </div>
     </ng-container>
   </div>
@@ -187,8 +187,8 @@
       <ng-container *ngFor="let interest of userInterestsList; let i = index">
         <simple-tag *ngIf="(!editMode && i < limit) || editMode" type="gray" title="{{interest.interest}}" [removeTag]="editMode" (click)="removeUserInteretsData(i, interest)"></simple-tag>
       </ng-container>
-      <mat-icon *ngIf="!editMode && limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit">remove_circle_outline</mat-icon>
-      <mat-icon *ngIf="!editMode && limit < userInterestsList.length" (click)="limit = limit + displayItemsLimit">add_circle_outline</mat-icon>
+      <img *ngIf="!editMode && limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
+      <img *ngIf="!editMode && limit < userInterestsList.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
     </div>
   </div>
 
