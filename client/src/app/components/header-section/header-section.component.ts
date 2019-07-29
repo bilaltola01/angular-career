@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  OnChanges, SimpleChanges, SimpleChange
+} from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {
   UserGeneralInfo,
@@ -23,7 +30,7 @@ import {
   templateUrl: './header-section.component.html',
   styleUrls: ['./header-section.component.scss']
 })
-export class HeaderSectionComponent implements OnInit {
+export class HeaderSectionComponent implements OnChanges, OnInit {
 
   @Input() generalInfo: UserGeneralInfo;
   @Input() editMode: boolean;
@@ -58,6 +65,13 @@ export class HeaderSectionComponent implements OnInit {
     }
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    const editMode: SimpleChange = changes.editMode;
+    if (!editMode.previousValue && editMode.currentValue) {
+      this.initGeneralInfoForm();
+    }
+  }
+
   onChangeProfileStatus(active: boolean) {
     this.generalInfoData.is_looking = active ? 0 : 1;
     this.updatedProfileStatus.emit(this.generalInfoData);
@@ -82,21 +96,21 @@ export class HeaderSectionComponent implements OnInit {
     });
 
     this.generalInfoForm.get('first_name').valueChanges.subscribe((first_name) => {
-      this.generalInfoData.first_name = first_name;
+      this.generalInfoData.first_name = first_name ? this.helperService.checkSpacesString(first_name) : null;
       this.updatedGeneralInfoData.emit({
         data: this.generalInfoData,
         valid: this.checkFormValidation()
       });
     });
     this.generalInfoForm.get('last_name').valueChanges.subscribe((last_name) => {
-      this.generalInfoData.last_name = last_name;
+      this.generalInfoData.last_name = last_name ? this.helperService.checkSpacesString(last_name) : null;
       this.updatedGeneralInfoData.emit({
         data: this.generalInfoData,
         valid: this.checkFormValidation()
       });
     });
     this.generalInfoForm.get('title').valueChanges.subscribe((title) => {
-      this.generalInfoData.title = title;
+      this.generalInfoData.title = title ? this.helperService.checkSpacesString(title) : null;
       this.updatedGeneralInfoData.emit({
         data: this.generalInfoData,
         valid: this.checkFormValidation()
@@ -135,7 +149,7 @@ export class HeaderSectionComponent implements OnInit {
       });
     });
     this.generalInfoForm.get('city').valueChanges.subscribe((city) => {
-      if (city) {
+      if (city && this.helperService.checkSpacesString(city)) {
         this.autoCompleteService.autoComplete(city, 'cities').subscribe(
           dataJson => {
             if (dataJson['success']) {
@@ -157,7 +171,7 @@ export class HeaderSectionComponent implements OnInit {
       }
     });
     this.generalInfoForm.get('state').valueChanges.subscribe((state) =>  {
-      if (state) {
+      if (state && this.helperService.checkSpacesString(state)) {
         this.autoCompleteService.autoComplete(state, 'states').subscribe(
           dataJson => {
             if (dataJson['success']) {
@@ -232,7 +246,7 @@ export class HeaderSectionComponent implements OnInit {
   }
   checkCityValidation(): boolean {
     const value = this.generalInfoForm.get('city').value;
-    if (value) {
+    if (value && this.helperService.checkSpacesString(value)) {
       if (this.temp_city) {
         return value === this.helperService.cityNameFromAutoComplete(this.temp_city.city) ? true : false;
       } else {
@@ -272,7 +286,7 @@ export class HeaderSectionComponent implements OnInit {
   }
   checkStateValidation(): boolean {
     const value = this.generalInfoForm.get('state').value;
-    if (value) {
+    if (value && this.helperService.checkSpacesString(value)) {
       if (this.temp_state) {
         return value === this.temp_state.state ? true : false;
       } else {
