@@ -1,12 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { AlertsService, AlertType } from '../../../services/alerts.service';
 import { AutoCompleteService } from '../../../services/auto-complete.service';
 import { PositionService } from '../../../services/position.service';
 
 import {
-  Levels, City,
-  Level,
+  City,
   MinimumSalary,
   PositionLevel,
   LatestDatePosted,
@@ -16,24 +15,26 @@ import {
   Company,
   Skill,
   School,
-  levelDesc
-} from '../../../models';
+  SkillLevelDescription,
+  QualificationLevel
+} from 'src/app/models';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-position-search',
   templateUrl: './position-search.component.html',
   styleUrls: ['./position-search.component.scss']
 })
-export class PositionSearchComponent implements OnInit {
+export class PositionSearchComponent implements OnInit, AfterViewInit {
   showMoreFlag = false;
   // Constants
-  qualificationLevel: Level[] = Levels;
-  minimumSalary: string[] = MinimumSalary;
+  qualificationLevel: object[] = QualificationLevel;
+  minimumSalary: number[] = MinimumSalary;
   positionLevel: string[] = PositionLevel;
   latestDatePosted: string[] = LatestDatePosted;
-  salary: string[] = Salary;
-  sortBy: string[] = SortBy;
-  levelDesc = levelDesc;
+  salary: number[] = Salary;
+  sortBy: object[] = SortBy;
+  SkillLevelDescription = SkillLevelDescription;
   // FormGroup
   positionForm: FormGroup;
   // Autocomplete list
@@ -48,8 +49,13 @@ export class PositionSearchComponent implements OnInit {
   filterAttributes = {
     city_id: null,
     industry_id: null,
-    school_id: null
+    school_id: null,
+    offset: 0,
+    limit: 20
   };
+
+  isJobLoading = true;
+  selectedAllFlag = false;
   constructor(private autoCompleteService: AutoCompleteService, private alertsService: AlertsService, private positionService: PositionService) { }
 
   ngOnInit() {
@@ -57,9 +63,15 @@ export class PositionSearchComponent implements OnInit {
     this.getJobData();
   }
 
-  reloadResult() {
-    this.getJobData();
+  ngAfterViewInit(): void {
+    this.positionForm.controls.searchPosition.valueChanges
+      .pipe(
+        debounceTime(1000)
+      ).subscribe(data => {
+        this.getJobData(true);
+      });
   }
+
   initPositionFilterForm() {
     this.positionForm = new FormGroup({
       'searchPosition': new FormControl(null),
@@ -74,10 +86,7 @@ export class PositionSearchComponent implements OnInit {
       'salary': new FormControl(null),
       'school': new FormControl(null),
       'recruiter': new FormControl(null),
-      'sortby': new FormControl('post-date')
-    });
-    this.positionForm.get('searchPosition').valueChanges.subscribe((searchposition) => {
-      searchposition ? this.onSearchPositionValueChanges(searchposition) : this.autocomplete_searchposition = [];
+      'sortBy': new FormControl('post-date')
     });
     this.positionForm.get('city').valueChanges.subscribe((city) => {
       city ? this.onCityValueChanges(city) : this.autocomplete_additional_industries = [];
@@ -109,32 +118,6 @@ export class PositionSearchComponent implements OnInit {
 
   onChangeSchool(school) {
     this.filterAttributes['school_id'] = school.school_id;
-  }
-
-  applyfilter() {
-    const skillArr = this.userSkillsList.map(skill => skill.skill_id);
-    let queryString;
-    queryString = this.positionForm.value.minQualificationLvl ? `${queryString ? queryString + '&' : ''}qualification=${this.positionForm.value.minQualificationLvl}` : queryString;
-    queryString = this.positionForm.value.city ? `${queryString ? queryString + '&' : ''}city=${this.filterAttributes.city_id}` : queryString;
-    queryString = this.positionForm.value.position ? `${queryString ? queryString + '&' : ''}level=${this.positionForm.value.position}` : queryString;
-    queryString = this.positionForm.value.industry ? `${queryString ? queryString + '&' : ''}industry=${this.filterAttributes.industry_id}` : queryString;
-    queryString = skillArr.length > 0 ? `${queryString ? queryString + '&' : ''}skill=${skillArr}` : queryString;
-    queryString = this.positionForm.value.company ? `${queryString ? queryString + '&' : ''}company=${this.positionForm.value.company}` : queryString;
-    queryString = this.positionForm.value.salary ? `${queryString ? queryString + '&' : ''}pay=${this.positionForm.value.salary}` : queryString;
-    this.getJobData(queryString);
-  }
-  onSearchPositionValueChanges(searchposition: string) {
-    this.autoCompleteService.autoComplete(searchposition, 'positions').subscribe(
-      dataJson => {
-        if (dataJson['success']) {
-          this.autocomplete_searchposition = dataJson['data'];
-        }
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-        this.autocomplete_searchposition = [];
-      }
-    );
   }
   onCityValueChanges(city: string) {
     this.autoCompleteService.autoComplete(city, 'cities').subscribe(
@@ -209,18 +192,58 @@ export class PositionSearchComponent implements OnInit {
   removeUserSkillsData(index: number) {
     this.userSkillsList.splice(index, 1);
   }
-  getJobData(queryParam?) {
-    this.positionService.getPositions(queryParam).subscribe(
+
+  generateQueryString(fromSearch): string {
+    let queryString;
+    if (!fromSearch) {
+      const skillArr = this.userSkillsList.map(skill => skill.skill_id);
+      queryString = this.positionForm.value.minQualificationLvl ? `${queryString ? queryString + '&' : ''}qualification=${this.positionForm.value.minQualificationLvl}` : queryString;
+      queryString = this.positionForm.value.city ? `${queryString ? queryString + '&' : ''}city=${this.filterAttributes.city_id}` : queryString;
+      queryString = this.positionForm.value.position ? `${queryString ? queryString + '&' : ''}level=${this.positionForm.value.position}` : queryString;
+      queryString = this.positionForm.value.industry ? `${queryString ? queryString + '&' : ''}industry=${this.filterAttributes.industry_id}` : queryString;
+      queryString = skillArr.length > 0 ? `${queryString ? queryString + '&' : ''}skill=${skillArr}` : queryString;
+      queryString = this.positionForm.value.company ? `${queryString ? queryString + '&' : ''}company=${this.positionForm.value.company}` : queryString;
+      queryString = this.positionForm.value.salary ? `${queryString ? queryString + '&' : ''}pay=${this.positionForm.value.salary}` : queryString;
+      queryString = this.positionForm.value.sortBy ? `${queryString ? queryString + '&' : ''}sort=${this.positionForm.value.sortBy}` : queryString;
+    } else {
+      queryString = this.positionForm.value.searchPosition ? `${queryString ? queryString + '&' : ''}position=${this.positionForm.value.searchPosition}` : queryString;
+    }
+
+    queryString = queryString ? `${queryString}&offset=${this.filterAttributes.offset}` : `offset=${this.filterAttributes.offset}`;
+    queryString = queryString ? `${queryString}&limit=${this.filterAttributes.limit}` : `offset=${this.filterAttributes.limit}`;
+    return queryString;
+  }
+  getJobData(fromSearch = false) {
+    this.isJobLoading = true;
+    this.selectedAllFlag = false;
+    const queryString = this.generateQueryString(fromSearch);
+    this.positionService.getPositions(queryString).subscribe(
       dataJson => {
+        this.isJobLoading = false;
         if (dataJson['success']) {
           this.positionList = dataJson.data.data;
         }
       },
       error => {
+        this.isJobLoading = false;
         this.alertsService.show(error.message, AlertType.error);
         this.positionList = [];
       }
     );
+  }
+
+  clearFilter() {
+    const sortValue = this.positionForm.value.sortBy;
+    this.positionForm.reset();
+    this.positionForm.patchValue({ 'sortBy': sortValue });
+  }
+
+  selectAll(isChecked) {
+    this.selectedAllFlag = isChecked;
+    this.positionList = this.positionList.map(job => {
+      job['selected'] = isChecked;
+      return job;
+    });
   }
 
 }

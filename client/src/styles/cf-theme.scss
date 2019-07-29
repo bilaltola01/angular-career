@@ -1,10 +1,9 @@
-
 // Custom Theming for Angular Material
 @import '~@angular/material/theming';
 @import './variables.scss';
 
 $btn-text-color: rgba(map-get($md-cfaccent, 500), 0.84);
-  
+
 @include mat-core(); // Mixin for the base package
 
 $client-primary: mat-palette($md-cfprimary);
@@ -25,16 +24,21 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
   &.mat-primary {
     #{$property}: mat-color($primary, $hue, $opacity);
   }
+
   &.mat-accent {
     #{$property}: mat-color($accent, $hue, $opacity);
   }
+
   &.mat-warn {
     #{$property}: mat-color($warn, $hue, $opacity);
   }
 
-  &.mat-primary, &.mat-accent, &.mat-warn, &[disabled] {
+  &.mat-primary,
+  &.mat-accent,
+  &.mat-warn,
+  &[disabled] {
     &[disabled] {
-      $palette: if($property == 'color', $foreground, $background);
+      $palette: if($property=='color', $foreground, $background);
       #{$property}: mat-color($palette, disabled-button);
     }
   }
@@ -85,7 +89,7 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
     color: $btn-text-color;
     background: transparent;
     outline-color: map-get($md-cfgray, 500);
-    
+
     @include _mat-button-theme-property($theme, 'color', default);
     @include _mat-button-focus-overlay-color($theme);
 
@@ -122,7 +126,9 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
     @include _mat-button-ripple-color($theme, default-contrast);
   }
 
-  .mat-flat-button, .mat-fab, .mat-mini-fab {
+  .mat-flat-button,
+  .mat-fab,
+  .mat-mini-fab {
     color: $btn-text-color;
     background-color: mat-color($background, raised-button);
 
@@ -131,7 +137,8 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
     @include _mat-button-ripple-color($theme, default-contrast);
   }
 
-  .mat-stroked-button, .mat-flat-button {
+  .mat-stroked-button,
+  .mat-flat-button {
     @include _mat-theme-overridable-elevation(0, $theme);
   }
 
@@ -147,7 +154,8 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
     }
   }
 
-  .mat-fab, .mat-mini-fab {
+  .mat-fab,
+  .mat-mini-fab {
     @include _mat-theme-overridable-elevation(6, $theme);
 
     &:not([disabled]):active {
@@ -161,6 +169,7 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
 
   .mat-raised-button,
   .mat-flat-button {
+
     &:not([disabled]):hover,
     &:not([disabled]):active {
       .mat-button-focus-overlay {
@@ -179,27 +188,34 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
   .mat-form-field-appearance-standard {
     &.search {
       color: $btn-text-color;
+
       .mat-form-field-wrapper {
         padding: 4px 20px;
+
         .mat-form-field-flex {
           padding-top: 0;
           display: flex;
           align-items: center;
+
           .mat-form-field-infix {
             border-top: none;
+
             label {
               color: rgba(map-get($md-cfaccent, 500), 0.44);
             }
           }
         }
+
         .mat-form-field-suffix {
           color: rgba(map-get($md-cfaccent, 500), .34);
         }
       }
+
       .mat-form-field-underline {
         display: none;
       }
     }
+
     .mat-form-field-underline {
       background-color: $underline-color;
     }
@@ -219,14 +235,17 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
 
   .mat-form-field-appearance-legacy {
     color: $btn-text-color;
+
     .mat-form-field-wrapper {
       padding-bottom: 0;
+
       .mat-form-field-infix {
         label {
           color: rgba(map-get($md-cfaccent, 500), 0.44);
         }
       }
     }
+
     .mat-form-field-label {
       color: $label-color;
     }
@@ -254,9 +273,10 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
   $fill-disabled-background: mat-color($foreground, base, if($is-dark-theme, 0.05, 0.02));
   $underline-color: mat-color($foreground, divider, if($is-dark-theme, 0.5, 0.42));
   $label-disabled-color: mat-color($foreground, disabled-text);
-  
+
   .mat-form-field-appearance-fill {
     color: $btn-text-color;
+
     &.mat-focused {
       .mat-form-field-wrapper {
         .mat-form-field-flex {
@@ -264,6 +284,7 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
         }
       }
     }
+
     &.bg-transparent {
       .mat-form-field-wrapper {
         .mat-form-field-flex {
@@ -273,32 +294,41 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
         }
       }
     }
+
     .mat-form-field-wrapper {
       padding-bottom: 0;
+
       .mat-form-field-flex {
         background-color: $mat-form-bg-color;
         border-radius: 0;
       }
+
       .mat-form-field-prefix {
         margin-right: 15px;
         color: rgba($mat-form-prefix-color, 0.3);
       }
+
       .mat-form-field-infix {
         label {
           color: rgba(map-get($md-cfaccent, 500), 0.44);
         }
+
         input {
           height: 25px;
         }
       }
+
       .mat-form-field-suffix {
         color: map-get($md-cdgreen, 500);
+
         .weak {
           color: map-get($md-cfred, 500);
         }
+
         .medium {
           color: map-get($md-cfyellow, 500);
         }
+
         .error-field {
           color: map-get($md-cfyellow, 500);
         }
@@ -312,7 +342,7 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
     .mat-form-field-underline {
       display: none;
     }
-  
+
     .mat-form-field-underline::before {
       background-color: $underline-color;
     }
@@ -393,7 +423,11 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
 @import url('https://fonts.googleapis.com/css?family=Poppins|Roboto&display=swap');
 @import url('//fonts.googleapis.com/icon?family=Material+Icons');
 
-html, body { height: 100%; }
+html,
+body {
+  height: 100%;
+}
+
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
@@ -403,45 +437,56 @@ body {
 /*
   Text Styles
 */
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
   font-family: 'Poppins-Bold', sans-serif;
   color: map-get($md-cfaccent, 500);
 }
-h5, h6 {
+
+h5,
+h6 {
   font-family: 'Poppins', sans-serif;
   color: map-get($md-cfaccent, 500);
 }
+
 p {
   font-family: 'Roboto', sans-serif;
   color: map-get($md-cfaccent, 400);
+
   &.description {
     word-break: break-word;
     white-space: pre-wrap;
   }
 }
+
 li {
   font-family: 'Roboto', sans-serif;
   color: map-get($md-cfaccent, 400);
 }
 
 action-button {
-  & > button {
+  &>button {
     border-radius: 500px !important;
     padding: 10px 40px !important;
   }
+
   &.link-btn {
-    & > button {
+    &>button {
       border-radius: 0 !important;
       border: none !important;
       padding: 0 !important;
     }
   }
+
   &.nav-btn {
-    & > button {
+    &>button {
       max-width: 170px;
       padding: 10px 0 !important;
     }
   }
+
   &.update-btn {
     margin-top: 20px;
     min-width: 150px;
@@ -463,26 +508,32 @@ action-button {
     position: relative;
     border-radius: 20px;
     margin: 0 40px;
+
+    template-dialog, skill-level-description-dialog,
     profile-dialog,
-    template-dialog, skill-level-description-dialog {
+    dialog-content {
       width: 100%;
       @include flex(column, center, flex-start);
+
       mat-icon.cancel {
         position: absolute;
         top: 10px;
         right: 10px;
         color: map-get($md-cfprimary, 500);
       }
+
       mat-dialog-content {
         width: 75%;
         max-width: 615px;
         min-width: 280px;
         box-sizing: border-box;
+
         &::-webkit-scrollbar {
           width: 0;
           background-color: transparent;
         }
       }
+
       mat-dialog-actions {
         margin-bottom: 0 !important;
       }

@@ -1,213 +1,416 @@
 @import '../../../../styles/variables';
 
-.mat-card-title {
-    display: inline;
-}
+:host {
+    .position-main-container {
+        background-color: $bg-color-1;
+        overflow: hidden;
 
-.img-style {
-    width: 16px;
-}
-
-.right-align {
-    float: right;
-    border-radius: 50px;
-}
-
-.mat-card-content {
-    margin-top: 2%;
-}
-
-span.image {
-    position: relative;
-    top: -6px;
-}
-
-.arrow {
-    width: 200%;
-}
-
-.arrow-pos {
-    width: 200%;
-    margin-top: -10px
-}
-
-.icon-style {
-    margin-left: 55%;
-    margin-top: 1%
-}
-
-.btn-a {
-    width: 1%
-}
-
-.card-size {
-    width: 85%
-}
-
-.card-size-height {
-    width: 85%;
-    height: 7%
-}
-
-.position-filter {
-    height: 6%;
-    margin-bottom: 2%;
-}
-
-.select-style {
-    height: 6%
-}
-
-.selectall {
-    width: 60%;
-    display: inline-block
-}
-
-.reload-btn {
-    margin-left: 5%
-}
-
-.sort-item {
-    width: 40%;
-    display: inline-block;
-}
-
-.qualification-grid {
-    margin-top: 2%;
-}
-
-round-checkbox {
-    position: relative;
-    display: inline-block;
-    flex-wrap: wrap;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-}
-
-.skill-label {
-    margin-top: 10%;
-    margin-left: 41%
-}
-
-.skill-chips {
-    width: 50%;
-    display: inline-block;
-    vertical-align: top;
-}
-
-.main-card ul {
-    padding: 0;
-    margin: 0
-}
-
-.main-card h5 {
-    margin: 1px;
-}
-
-.pos-card {
-    margin-top: 2%
-}
-
-.card-item {
-    width: 70%
-}
-
-.show-button {
-    text-align: center
-}
-
-.mat-flat-button {
-    min-height: 70%;
-    height: 1%;
-    width: 20%;
-    transition: box-shadow 280ms cubic-bezier(.4, 0, .2, 1);
-    display: inline-flex;
-    border-radius: 50px;
-    align-items: center;
-    cursor: default;
-}
-
-.clear-btn {
-    width: 20%;
-}
-
-.mat-card-subtitle {
-    display: inline;
-}
-
-.mat-card-subtitle {
-    margin-right: 8%;
-}
-
-.filter-container {
-    width: 30%;
-    height: 100%;
-    margin-left: 2%;
-    float: left;
-    margin-top: 25px;
-
-    mat-card {
-        margin-bottom: 2px;
-    }
-
-}
-
-.postion-search-header {
-    position: relative;
-    width: 100%;
-    height: 70px;
-    background-color: $white;
-    z-index: 1;
-
-    .container {
-        padding: 0;
-        position: relative;
-        height: 100%;
-    }
-
-    .tag-style {
-        padding: 4% 15%;
-        margin: 7%;
-    }
-
-    .search {
-        border: none;
-        padding: 0;
-
-        h3 {
-            color: rgba(map-get($md-cfaccent, 500), 0.84);
-        }
-
-        .count {
-            font-size: 14px;
-            font-weight: 400;
-        }
-
-        mat-form-field {
-            margin-top: 10px;
-            background-color: $mat-form-bg-color;
-            border-radius: 25px;
-            width: 60%;
+        .postion-search-header {
+            background-color: $white;
+            border: 1px solid #ddd;
+            padding: 15px 10px;
             text-align: center;
-            margin-left: 20%;
-            font-style: italic;
+            margin-bottom: 20px;
+
+            & mat-form-field {
+                width: 40%;
+                border-radius: 50px;
+                background-color: $bg-color-1;
+                font-style: italic;
+            }
+
+        }
+
+        .position-list-container {
+
+            float: right;
+            width: 65%;
+            margin-right: 40px;
+
+            & .select-style {
+                overflow: hidden;
+                margin-bottom: 5px;
+
+                & .selectall {
+                    float: left;
+                    width: 50%;
+
+                    & round-checkbox {
+                        display: inline;
+                        margin-right: 20px;
+                    }
+                }
+
+                & action-button {
+                    @include inline-block-btn;
+                }
+            }
+
+            & .sort-item {
+                float: right;
+            }
+
+            .row {
+                background: $white;
+                padding: 25px 20px;
+                border-bottom: 1px solid map-get($md-cfaccent, 50);
+                margin-bottom: 5px;
+                border-radius: 5px;
+
+                &.selected {
+                    background-color: $selected-bg-color;
+                }
+                &.no-job{
+                    @include btn-align-center;
+                }
+
+                & round-checkbox {
+                    @include inline-block-btn;
+                    margin-top: 5px;
+                }
+
+                h1 {
+                    @include inline-block-btn;
+                    margin-top: 0;
+                    vertical-align: top;
+                }
+
+                & .position-right {
+                    float: right;
+
+                    img {
+                        vertical-align: middle;
+                        margin-right: 5px;
+                    }
+                }
+
+                & .mat-icon {
+                    vertical-align: middle;
+                    margin-right: 20px;
+                }
+
+                h5 {
+                    margin-top: 15px;
+                    margin-bottom: 5px;
+                    font-size: 14px;
+                    line-height: 21px;
+                    color: $header-color;
+                    font-weight: 300;
+                }
+
+                p {
+                    margin-top: 10px;
+                    margin-bottom: 10px;
+                    font-size: 16px;
+                    line-height: 24px;
+                }
+
+                & .right-align {
+                    @include inline-block-btn;
+                }
+
+                & .job-top-list {
+                    ul {
+                        padding: 0;
+
+                        li {
+                            list-style: none;
+                            @include inline-block-btn;
+                            margin-right: 100px;
+                            font-size: 15px;
+
+                            img {
+                                margin-right: 4px;
+                            }
+                        }
+                    }
+                }
+
+                & .main-card {
+                    ul {
+                        padding: 0;
+
+                        li {
+                            list-style: none;
+                            @include inline-block-btn;
+                            width: 49%;
+                            vertical-align: top;
+
+                            .skills-preferred-m {
+                                @include inline-block-btn;
+                                margin: 0 5px 5px 0;
+                            }
+                        }
+                    }
+                }
+
+                & .show-button {
+                    text-align: center;
+                }
+
+                & .qualification-level-m {
+                    & simple-tag {
+                        @include inline-block-btn;
+                        margin: 0 5px 5px 0;
+                    }
+
+                }
+
+                & .card {
+                    & .card-item {
+                        @include inline-block-btn;
+                        border: 1px solid #ddd;
+                        width: 22%;
+                        padding: 10px;
+                        vertical-align: top;
+
+                        span {
+                            color: $header-color;
+                            font-size: 14px;
+                        }
+
+                        p {
+                            margin: 5px 0;
+                        }
+                    }
+                }
+
+
+            }
+
+            .pagination {
+                text-align: right;
+
+                ul {
+                    padding: 3px 10px;
+                    border-radius: 50px;
+                    background-color: map-get($md-cfgray, 500);;
+                    @include inline-block-btn;
+
+                    li {
+                        @include inline-block-btn;
+                        height: 12px;
+                        width: 12px;
+                        font-size: 14px;
+                        text-align: center;
+                        border-radius: 100%;
+                        padding: 8px;
+                        overflow: hidden;
+                        vertical-align: middle;
+                        color: $header-color;
+                        cursor: pointer;
+
+                        &.active{
+                            background-color:$white;
+                        }
+                        &:last-child{
+                            height: auto;
+                            width:auto;
+                            margin-top: 4px;
+                        }
+                        & span{
+                            vertical-align: middle;
+                            @include inline-block-btn;
+                        }
+
+                    }
+                }
+            }
+
+
+        }
+
+        .filter-container {
+            width: 25%;
+            float: left;
+            margin-left: 40px;
+
+            .nav-title {
+                height: 60px;
+                @include flex(row, center, flex-start);
+
+                h3 {
+                    font-family: 'Poppins', sans-serif;
+                    font-weight: 700;
+                    font-size: 20px;
+                    margin: 0;
+                    line-height: 30px;
+                    color: rgba(map-get($md-cfaccent, 500), .24);
+                    text-transform: uppercase;
+                }
+            }
+
+            .filter-card {
+                position: relative;
+                padding: 10px 15px;
+                height: fit-content;
+                background: white;
+                border-radius: 5px;
+                margin-bottom: 2px;
+
+                & mat-select {
+                    font-size: 17px;
+
+                }
+
+                & simple-tag {
+                    @include inline-block-btn;
+                    margin: 0 5px 5px 0;
+                }
+
+                & mat-form-field {
+                    font-size: 17px;
+                    display: block;
+                }
+            }
+
+            .side-filter-btn {
+                @include btn-align-center;
+
+                & action-button {
+                    @include inline-block-btn;
+                }
+            }
+        }
+    }
+
+    .loading {
+        position: absolute;
+        width: 100%;
+        height: calc(100% - 70px);
+        @include flex(column, center, center);
+    }
+}
+
+@media only screen and (min-width:$min-mini-desktop-breakpoint) and (max-width:$max-mini-desktop-breakpoint) {
+    :host {
+        .position-main-container {
+            .position-list-container {
+                & .row {
+                    & .job-top-list {
+                        ul {
+                            li {
+                                margin-right: 70px;
+                            }
+                        }
+                    }
+
+                    & .card {
+                        & .card-item {
+                            width: 20%;
+                        }
+                    }
+
+                }
+            }
+
         }
     }
 }
 
-.position-list-container {
-    width: 65%;
-    float: left;
-    margin-left: 2%;
+@media only screen and (min-width:$min-tablet-breakpoint) and (max-width:$max-tablet-breakpoint) {
+    :host {
+        .position-main-container {
+            .position-list-container {
+                float: none;
+                width: 95%;
+                margin: auto;
+                padding: 0 10px;
+
+                .row {
+                    .card {
+                        .card-item {
+                            width: 21%;
+                        }
+                    }
+                }
+            }
+
+            .filter-container {
+                width: 95%;
+                float: none;
+                margin-left: auto;
+                padding: 0 10px;
+            }
+        }
+    }
 }
 
-button {
-    width: 0;
+@media only screen and (min-width:$min-mobile-breakpoint) and (max-width:$max-mobile-breakpoint) {
+    :host {
+        .position-main-container {
+            .postion-search-header {
+                mat-form-field {
+                    width: 100%;
+                }
+            }
+
+            .position-list-container {
+                float: none;
+                width: 92%;
+                margin: auto;
+                padding: 0 10px;
+
+                & .select-style {
+                    & .selectall {
+                        float: none;
+                        width: 100%;
+                    }
+                }
+
+                & .sort-item {
+                    float: none;
+                }
+
+                h1 {
+                    font-size: 20px;
+                }
+
+                & .row {
+                    padding: 25px 10px;
+
+                    & .position-right {
+                        margin-left: 10px;
+                        float: none;
+                        display: inline;
+                    }
+
+                    & .job-top-list {
+                        ul {
+                            li {
+                                margin-right: 20px;
+                                font-size: 15px;
+                                margin-bottom: 6px;
+                            }
+                        }
+                    }
+
+                    & .card {
+                        & .card-item {
+                            width: 41%;
+                            min-height: 80px;
+                        }
+                    }
+
+                    .main-card {
+                        ul {
+                            li {
+                                width: 100%;
+                            }
+                        }
+                    }
+                }
+
+
+            }
+
+            .filter-container {
+                width: 92%;
+                float: none;
+                margin: 0 auto;
+                padding: 0 10px;
+            }
+
+        }
+    }
 }
-
-.skills-preferred-m {
-    display: inline-block;
-}
-
-

@@ -1,6 +1,18 @@
 // Screen Resolutions
 $tablet-breakpoint: 1120px;
 $mobile-breakpoint: 660px;
+$tablet-breakpoint: 1120px;
+$mobile-breakpoint: 660px;
+$min-mini-desktop-breakpoint: 1024px;
+$max-mini-desktop-breakpoint: 1300px;
+
+$min-tablet-breakpoint: 768px;
+$max-tablet-breakpoint: 1023px;
+
+$min-mobile-breakpoint: 310px;
+$max-mobile-breakpoint: 767px;
+
+
 
 // Official Colors
 // For more information: https://material.angular.io/guide/theming
@@ -216,10 +228,10 @@ $secondary-bg-color: #f5f8fa;
 $third-bg-color: #f4f5f8;
 $bg-color-1: #f2f2f4;
 $bg-color-2: #f2f3f7;
-
 $mat-form-border-color: #dae4f1;
 $mat-form-prefix-color: #525252;
-
+$header-color:grey;
+$selected-bg-color: #d6e8f7;
 @mixin flex($direction, $align, $justify) {
   display: flex;
   flex-wrap: wrap;
@@ -234,4 +246,11 @@ $mat-form-prefix-color: #525252;
   -khtml-user-select: none; /* Konqueror HTML */
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* Internet Explorer/Edge */
+}
+
+@mixin btn-align-center{
+  text-align:center;
+}
+@mixin inline-block-btn{
+  display:inline-block;
 }
