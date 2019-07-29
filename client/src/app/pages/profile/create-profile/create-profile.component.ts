@@ -288,6 +288,7 @@ export class CreateProfileComponent implements OnInit {
         this.getUserPublicationsList();
         break;
       case 8:
+        this.initExternalResourcesForm();
         this.getExternalResourceList();
         break;
       case 9:
@@ -594,7 +595,7 @@ export class CreateProfileComponent implements OnInit {
     this.autocomplete_focus_majors.splice(index, 1);
   }
   onAddEducationData() {
-    if (this.educationFormArray.valid && this.checkAllMajorValidation()) {
+    if (this.educationFormArray.valid && this.checkAllEducationInfoValidation()) {
       this.addEducationFormGroup(null);
     }
   }
@@ -640,7 +641,7 @@ export class CreateProfileComponent implements OnInit {
 
     educationForm.get('university').valueChanges.subscribe(
       (university) => {
-        if (university) {
+        if (university && this.helperService.checkSpacesString(university)) {
           this.autoCompleteService.autoComplete(university, 'schools').subscribe(
             dataJson => {
               if (dataJson['success']) {
@@ -681,12 +682,22 @@ export class CreateProfileComponent implements OnInit {
     );
     educationForm.get('major').valueChanges.subscribe(
       (major) => {
-        major ? this.onMajorValueChanges(major, arrIndex) : this.autocomplete_majors[arrIndex] = [];
+        if (major && this.helperService.checkSpacesString(major)) {
+          this.onMajorValueChanges(major, arrIndex, false);
+        } else {
+          this.autocomplete_majors[arrIndex] = [];
+          this.clearMajor(arrIndex);
+        }
       }
     );
     educationForm.get('focus_major').valueChanges.subscribe(
       (focus_major) => {
-        focus_major ? this.onMajorValueChanges(focus_major, arrIndex, true) : this.autocomplete_focus_majors[arrIndex] = [];
+        if (focus_major && this.helperService.checkSpacesString(focus_major)) {
+          this.onMajorValueChanges(focus_major, arrIndex, true);
+        } else {
+          this.autocomplete_focus_majors[arrIndex] = [];
+          this.clearFocusMajor(arrIndex);
+        }
       }
     );
     educationForm.get('description').valueChanges.subscribe(
@@ -756,26 +767,42 @@ export class CreateProfileComponent implements OnInit {
    */
   checkMajorValidation(arrIndex: number, isFocusMajor: boolean): boolean {
     if (isFocusMajor) {
-      if (this.temp_focus_major[arrIndex]) {
-        return (this.educationFormArray.at(arrIndex).get('focus_major').value === this.temp_focus_major[arrIndex].major_name) ? true : false;
-      } else {
-        if (this.educationFormArray.at(arrIndex).get('focus_major').value) {
-          return (this.educationList[arrIndex] && this.educationFormArray.at(arrIndex).get('focus_major').value === this.educationList[arrIndex].focus_major_name) ? true : false;
+      const value = this.educationFormArray.at(arrIndex).get('focus_major').value;
+      if (value && this.helperService.checkSpacesString(value)) {
+        if (this.temp_focus_major[arrIndex]) {
+          return value === this.temp_focus_major[arrIndex].major_name ? true : false;
         } else {
-          return true;
+          return this.educationList[arrIndex] && value === this.educationList[arrIndex].focus_major_name ?  true : false;
         }
+      } else {
+        return true;
       }
     } else {
-      if (this.temp_major[arrIndex]) {
-        return (this.educationFormArray.at(arrIndex).get('major').value === this.temp_major[arrIndex].major_name) ? true : false;
-      } else {
-        if (this.educationFormArray.at(arrIndex).get('major').value) {
-          return (this.educationList[arrIndex] && this.educationFormArray.at(arrIndex).get('major').value === this.educationList[arrIndex].major_name) ? true : false;
+      const value = this.educationFormArray.at(arrIndex).get('major').value;
+      if (value && this.helperService.checkSpacesString(value)) {
+        if (this.temp_major[arrIndex]) {
+          return value === this.temp_major[arrIndex].major_name ? true : false;
         } else {
-          return true;
+          return this.educationList[arrIndex] && value === this.educationList[arrIndex].major_name ? true : false;
         }
+      } else {
+        return true;
       }
     }
+  }
+  checkSchoolNameValidation(arrIndex: number): boolean {
+    const value = this.educationFormArray.at(arrIndex).get('university').value;
+    return value && this.helperService.checkSpacesString(value) ? true : false;
+  }
+  checkAllEducationInfoValidation(): boolean {
+    let valid = true;
+    this.educationDataList.forEach((value, index) => {
+      if (!this.checkMajorValidation(index, false) || !this.checkMajorValidation
+      (index, true) || !this.checkSchoolNameValidation(index)) {
+        valid = false;
+      }
+    });
+    return valid;
   }
   checkAllMajorValidation(): boolean {
     let valid = true;
@@ -868,39 +895,41 @@ export class CreateProfileComponent implements OnInit {
   }
   updateEducationData() {
     if (this.educationDataList.length !== 0) {
-      if (this.educationFormArray.valid) {
-        let counts = 0;
-        this.educationDataList.forEach((education, index) => {
-          if (index < this.educationList.length) {
-            this.userService.patchEducationInfoById(education, this.educationList[index].education_id).subscribe(
-              dataJson => {
-                this.educationList[index] = dataJson['data'];
-                counts++;
-                if (counts === this.educationDataList.length) {
-                  this.selectedPageIndex++;
-                  this.initializeFormsByPageIndex();
+      if (this.educationFormArray.valid && this.checkAllEducationInfoValidation()) {
+        if (this.educationFormArray.valid) {
+          let counts = 0;
+          this.educationDataList.forEach((education, index) => {
+            if (index < this.educationList.length) {
+              this.userService.patchEducationInfoById(education, this.educationList[index].education_id).subscribe(
+                dataJson => {
+                  this.educationList[index] = dataJson['data'];
+                  counts++;
+                  if (counts === this.educationDataList.length) {
+                    this.selectedPageIndex++;
+                    this.initializeFormsByPageIndex();
+                  }
+                },
+                error => {
+                  this.alertsService.show(error.message, AlertType.error);
                 }
-              },
-              error => {
-                this.alertsService.show(error.message, AlertType.error);
-              }
-            );
-          } else {
-            this.userService.postEducationInfo(education).subscribe(
-              dataJson => {
-                this.educationList[index] = dataJson['data'];
-                counts++;
-                if (counts === this.educationDataList.length) {
-                  this.selectedPageIndex++;
-                  this.initializeFormsByPageIndex();
+              );
+            } else {
+              this.userService.postEducationInfo(education).subscribe(
+                dataJson => {
+                  this.educationList[index] = dataJson['data'];
+                  counts++;
+                  if (counts === this.educationDataList.length) {
+                    this.selectedPageIndex++;
+                    this.initializeFormsByPageIndex();
+                  }
+                },
+                error => {
+                  this.alertsService.show(error.message, AlertType.error);
                 }
-              },
-              error => {
-                this.alertsService.show(error.message, AlertType.error);
-              }
-            );
-          }
-        });
+              );
+            }
+          });
+        }
       }
     } else {
       this.selectedPageIndex++;
@@ -984,8 +1013,8 @@ export class CreateProfileComponent implements OnInit {
 
     const workExperienceForm = new FormGroup({
       company_name: new FormControl(experience ? (experience.company_id ? experience.company_name : experience.user_specified_company_name) : '', [Validators.required]),
-      start_date: new FormControl(experience && experience.start_date ? this.extractYearAndMonth(experience.start_date) : '', [Validators.required]),
-      end_date: new FormControl(experience && experience.end_date ? this.extractYearAndMonth(experience.end_date) : ''),
+      start_date: new FormControl(experience && experience.start_date ? this.helperService.convertToFormattedString(experience.start_date, 'MM/YYYY') : '', [Validators.required]),
+      end_date: new FormControl(experience && experience.end_date ? this.helperService.convertToFormattedString(experience.end_date, 'MM/YYYY') : ''),
       job: new FormControl(experience ? experience.job : '', [Validators.required]),
       description: new FormControl(experience ? experience.job_desc : ''),
       skills_trained: new FormControl(''),
@@ -993,9 +1022,22 @@ export class CreateProfileComponent implements OnInit {
     });
 
     workExperienceForm.get('company_name').valueChanges.subscribe(
-      (company_name) => {
-        if (company_name) {
-          this.onCompanyValueChanges(company_name, arrIndex);
+      (company) => {
+        if (company && this.helperService.checkSpacesString(company)) {
+          this.autoCompleteService.autoComplete(company, 'companies').subscribe(
+            dataJson => {
+              if (dataJson['success']) {
+                this.autocomplete_companies[arrIndex] = dataJson['data'];
+                if (this.autocomplete_companies[arrIndex].length === 0) {
+                  this.onSelectSpecificCompany(arrIndex, company);
+                }
+              }
+            },
+            error => {
+              this.autocomplete_companies[arrIndex] = [];
+              this.alertsService.show(error.message, AlertType.error);
+            }
+          );
         } else {
           this.autocomplete_companies[arrIndex] = [];
           this.onSelectSpecificCompany(arrIndex, null);
@@ -1004,37 +1046,80 @@ export class CreateProfileComponent implements OnInit {
     );
     workExperienceForm.get('start_date').valueChanges.subscribe(
       (start_date) => {
-        this.experienceDataList[arrIndex].start_date = start_date ? moment(start_date, 'MM/YYYY') : null ;
+        this.experienceDataList[arrIndex].start_date = start_date ? this.helperService.convertStringToFormattedDateString(start_date, 'MM/YYYY', 'L') : null ;
       }
     );
     workExperienceForm.get('end_date').valueChanges.subscribe(
       (end_date) => {
-        this.experienceDataList[arrIndex].end_date = end_date ? moment(end_date, 'MM/YYYY') : null ;
+        this.experienceDataList[arrIndex].end_date = end_date ? this.helperService.convertStringToFormattedDateString(end_date, 'MM/YYYY', 'L') : null ;
       }
     );
     workExperienceForm.get('job').valueChanges.subscribe(
-      (position) => {
-        this.onPositionValueChange(arrIndex, position);
+      (job) => {
+        this.experienceDataList[arrIndex].job = job ? this.helperService.checkSpacesString(job) : null;
       }
     );
     workExperienceForm.get('description').valueChanges.subscribe(
       (description) => {
-        this.onExpDescValueChange(arrIndex, description);
+        this.experienceDataList[arrIndex].job_desc = description ? this.helperService.checkSpacesString(description) : null;
       }
     );
 
     workExperienceForm.get('skills_trained').valueChanges.subscribe(
       (skill) => {
-        skill ? this.onSkillTrainedValueChanges(skill, arrIndex) : this.autocomplete_skills_trained[arrIndex] = [];
+        if (skill && this.helperService.checkSpacesString(skill)) {
+          this.autoCompleteService.autoComplete(skill, 'skills').subscribe(
+            dataJson => {
+              if (dataJson['success']) {
+                this.autocomplete_skills_trained[arrIndex] = dataJson['data'];
+              }
+            },
+            error => {
+              this.autocomplete_skills_trained[arrIndex] = [];
+              this.alertsService.show(error.message, AlertType.error);
+            }
+          );
+        } else {
+          this.autocomplete_skills_trained[arrIndex] = [];
+        }
       }
     );
     workExperienceForm.get('additional_industries').valueChanges.subscribe(
       (industry) => {
-        industry ? this.onAdditionalIndustryValueChanges(industry, arrIndex) : this.autocomplete_additional_industries[arrIndex] = [];
+        if (industry && this.helperService.checkSpacesString(industry)) {
+          this.autoCompleteService.autoComplete(industry, 'industries').subscribe(
+            dataJson => {
+              if (dataJson['success']) {
+                this.autocomplete_additional_industries[arrIndex] = dataJson['data'];
+              }
+            },
+            error => {
+              this.autocomplete_additional_industries[arrIndex] = [];
+              this.alertsService.show(error.message, AlertType.error);
+            }
+          );
+        } else {
+          this.autocomplete_additional_industries[arrIndex] = [];
+        }
       }
     );
 
     this.workExperienceFormArray.push(workExperienceForm);
+  }
+
+  checkCompanyNameValidation(arrIndex: number): boolean {
+    const value = this.workExperienceFormArray.at(arrIndex).get('company_name').value;
+    return value && this.helperService.checkSpacesString(value) ? true : false;
+  }
+
+  checkAllWorkExperienceInfoValidation(): boolean {
+    let valid = true;
+    this.experienceDataList.forEach((val, index) => {
+      if (!this.checkCompanyNameValidation(index)) {
+        valid = false;
+      }
+    });
+    return valid;
   }
 
   updateExperienceForm() {
@@ -1065,16 +1150,9 @@ export class CreateProfileComponent implements OnInit {
       this.onSelectSpecificCompany(index, this.workExperienceFormArray.at(index).get('company').value);
     }
   }
-  onExperienceYearSelect(date: any, index: number, isStartDate: boolean = true) {
-    // const dateValue = new Date(date);
-    // this.workExperienceFormArray.controls[index]['controls'][isStartDate ? 'start_date' : 'end_date'].setValue(moment(dateValue).format('MM/YYYY'));
-    // this.experienceDataList[index][isStartDate ? 'start_date' : 'end_date'] = dateValue;
-  }
   onExperienceMonthSelect(date: any, index: number, isStartDate: boolean = true, datePicker: MatDatepicker<any>) {
-    const dateValue = new Date(date);
     datePicker.close();
-    this.workExperienceFormArray.at(index).get(isStartDate ? 'start_date' : 'end_date').setValue(moment(dateValue).format('MM/YYYY'));
-    // this.experienceDataList[index][isStartDate ? 'start_date' : 'end_date'] = dateValue;
+    this.workExperienceFormArray.at(index).get(isStartDate ? 'start_date' : 'end_date').setValue(this.helperService.convertToFormattedString(date, 'MM/YYYY'));
   }
   isExperienceStartDate(index: number): boolean {
     if (this.workExperienceFormArray.at(index).get('start_date').value) {
@@ -1085,14 +1163,6 @@ export class CreateProfileComponent implements OnInit {
   }
   minExperienceEndDate(index: number): Date {
     return this.experienceDataList[index].start_date;
-  }
-
-  onPositionValueChange(index: number, job: string) {
-    this.experienceDataList[index].job = job ? job : null;
-  }
-
-  onExpDescValueChange(index: number, job_desc: string) {
-    this.experienceDataList[index].job_desc = job_desc ? job_desc : null;
   }
 
   addSkillsTrained(index: number, skill: Skill) {
@@ -1183,48 +1253,6 @@ export class CreateProfileComponent implements OnInit {
       }
     );
   }
-  onCompanyValueChanges(company: string, arrIndex: number) {
-    this.autoCompleteService.autoComplete(company, 'companies').subscribe(
-      dataJson => {
-        if (dataJson['success']) {
-          this.autocomplete_companies[arrIndex] = dataJson['data'];
-          if (this.autocomplete_companies[arrIndex].length === 0) {
-            this.onSelectSpecificCompany(arrIndex, company);
-          }
-        }
-      },
-      error => {
-        this.autocomplete_companies[arrIndex] = [];
-        this.alertsService.show(error.message, AlertType.error);
-      }
-    );
-  }
-  onSkillTrainedValueChanges(skill: string, arrIndex: number) {
-    this.autoCompleteService.autoComplete(skill, 'skills').subscribe(
-      dataJson => {
-        if (dataJson['success']) {
-          this.autocomplete_skills_trained[arrIndex] = dataJson['data'];
-        }
-      },
-      error => {
-        this.autocomplete_skills_trained[arrIndex] = [];
-        this.alertsService.show(error.message, AlertType.error);
-      }
-    );
-  }
-  onAdditionalIndustryValueChanges(industry: string, arrIndex: number) {
-    this.autoCompleteService.autoComplete(industry, 'industries').subscribe(
-      dataJson => {
-        if (dataJson['success']) {
-          this.autocomplete_additional_industries[arrIndex] = dataJson['data'];
-        }
-      },
-      error => {
-        this.autocomplete_additional_industries[arrIndex] = [];
-        this.alertsService.show(error.message, AlertType.error);
-      }
-    );
-  }
   getExperienceList() {
     this.userService.getExperienceInfo().subscribe(
       dataJson => {
@@ -1240,39 +1268,41 @@ export class CreateProfileComponent implements OnInit {
   }
   updateExperienceData() {
     if (this.experienceDataList.length !== 0) {
-      if (this.workExperienceFormArray.valid) {
-        let counts = 0;
-        this.experienceDataList.forEach((experience, index) => {
-          if (index < this.experienceList.length) {
-            this.userService.patchExperienceInfoById(experience, this.experienceList[index].work_hist_id).subscribe(
-              dataJson => {
-                this.experienceList[index] = dataJson['data'];
-                counts++;
-                if (counts === this.experienceDataList.length) {
-                  this.selectedPageIndex++;
-                  this.initializeFormsByPageIndex();
+      if (this.workExperienceFormArray.valid && this.checkAllWorkExperienceInfoValidation()) {
+        if (this.workExperienceFormArray.valid) {
+          let counts = 0;
+          this.experienceDataList.forEach((experience, index) => {
+            if (index < this.experienceList.length) {
+              this.userService.patchExperienceInfoById(experience, this.experienceList[index].work_hist_id).subscribe(
+                dataJson => {
+                  this.experienceList[index] = dataJson['data'];
+                  counts++;
+                  if (counts === this.experienceDataList.length) {
+                    this.selectedPageIndex++;
+                    this.initializeFormsByPageIndex();
+                  }
+                },
+                error => {
+                  this.alertsService.show(error.message, AlertType.error);
                 }
-              },
-              error => {
-                this.alertsService.show(error.message, AlertType.error);
-              }
-            );
-          } else {
-            this.userService.postExperienceInfo(experience).subscribe(
-              dataJson => {
-                this.experienceList[index] = dataJson['data'];
-                counts++;
-                if (counts === this.experienceDataList.length) {
-                  this.selectedPageIndex++;
-                  this.initializeFormsByPageIndex();
+              );
+            } else {
+              this.userService.postExperienceInfo(experience).subscribe(
+                dataJson => {
+                  this.experienceList[index] = dataJson['data'];
+                  counts++;
+                  if (counts === this.experienceDataList.length) {
+                    this.selectedPageIndex++;
+                    this.initializeFormsByPageIndex();
+                  }
+                },
+                error => {
+                  this.alertsService.show(error.message, AlertType.error);
                 }
-              },
-              error => {
-                this.alertsService.show(error.message, AlertType.error);
-              }
-            );
-          }
-        });
+              );
+            }
+          });
+        }
       }
     } else {
       this.selectedPageIndex++;
@@ -1309,51 +1339,53 @@ export class CreateProfileComponent implements OnInit {
 
     this.skillsAndInterestsForm.get('skills').valueChanges.subscribe(
       (skill) => {
-        skill ? this.onSkillValueChanges(skill) : this.autocomplete_skills = [];
+        if (skill && this.helperService.checkSpacesString(skill)) {
+          if (!this.prevent_skills_autocomplete) {
+            this.autoCompleteService.autoComplete(skill, 'skills').subscribe(
+              dataJson => {
+                if (dataJson['success']) {
+                  this.autocomplete_skills = dataJson['data'];
+                }
+              },
+              error => {
+                this.alertsService.show(error.message, AlertType.error);
+                this.autocomplete_skills = [];
+              }
+            );
+          } else {
+            this.autocomplete_skills = [];
+            this.prevent_skills_autocomplete = false;
+          }
+        } else {
+          this.autocomplete_skills = [];
+        }
       }
     );
 
     this.skillsAndInterestsForm.get('interests').valueChanges.subscribe(
       (interest) => {
-        interest ? this.onInterestValueChanges(interest) : this.autocomplete_interests = [];
-      }
-    );
-  }
-  onSkillValueChanges(skill: string) {
-    if (!this.prevent_skills_autocomplete) {
-      this.autoCompleteService.autoComplete(skill, 'skills').subscribe(
-        dataJson => {
-          if (dataJson['success']) {
-            this.autocomplete_skills = dataJson['data'];
+        if (interest && this.helperService.checkSpacesString(interest)) {
+          if (!this.prevent_interets_autocomplete) {
+            this.autoCompleteService.autoComplete(interest, 'interests').subscribe(
+              dataJson => {
+                if (dataJson['success']) {
+                  this.autocomplete_interests = dataJson['data'];
+                }
+              },
+              error => {
+                this.alertsService.show(error.message, AlertType.error);
+                this.autocomplete_interests = [];
+              }
+            );
+          } else {
+            this.autocomplete_interests = [];
+            this.prevent_interets_autocomplete = false;
           }
-        },
-        error => {
-          this.alertsService.show(error.message, AlertType.error);
-          this.autocomplete_skills = [];
-        }
-      );
-    } else {
-      this.autocomplete_skills = [];
-      this.prevent_skills_autocomplete = false;
-    }
-  }
-  onInterestValueChanges(interest: string) {
-    if (!this.prevent_interets_autocomplete) {
-      this.autoCompleteService.autoComplete(interest, 'interests').subscribe(
-        dataJson => {
-          if (dataJson['success']) {
-            this.autocomplete_interests = dataJson['data'];
-          }
-        },
-        error => {
-          this.alertsService.show(error.message, AlertType.error);
+        } else {
           this.autocomplete_interests = [];
         }
-      );
-    } else {
-      this.autocomplete_interests = [];
-      this.prevent_interets_autocomplete = false;
-    }
+      }
+    );
   }
   addSkills(skillItem: Skill) {
     const skillItemData = {
@@ -1516,31 +1548,44 @@ export class CreateProfileComponent implements OnInit {
 
     const projectFormGroup = new FormGroup({
       project_name: new FormControl(project ? project.project_name : '', [Validators.required]),
-      date_finished: new FormControl((project && project.date_finished) ? this.extractDate(project.date_finished) : ''),
+      date_finished: new FormControl((project && project.date_finished) ? this.helperService.convertToFormattedString(project.date_finished, 'L') : ''),
       description: new FormControl(project ? project.description : ''),
       href: new FormControl(project ? project.href : '')
     });
     projectFormGroup.get('project_name').valueChanges.subscribe(
       (project_name) => {
-        this.onProjectNameValueChange(arrIndex, project_name);
+        this.userProjectsDataList[arrIndex].project_name = project_name ? this.helperService.checkSpacesString(project_name) : null;
       }
     );
     projectFormGroup.get('description').valueChanges.subscribe(
       (description) => {
-        this.onProjectDescriptionValueChange(arrIndex, description);
+        this.userProjectsDataList[arrIndex].description = description ? this.helperService.checkSpacesString(description) : null;
       }
     );
     projectFormGroup.get('date_finished').valueChanges.subscribe(
       (date_finished) => {
-        this.onProjectDateFinishedValueChange(arrIndex, date_finished);
+        this.userProjectsDataList[arrIndex].date_finished = date_finished ? this.helperService.checkSpacesString(date_finished) : null;
       }
     );
     projectFormGroup.get('href').valueChanges.subscribe(
       (href) => {
-        this.onProjectHrefValueChange(arrIndex, href);
+        this.userProjectsDataList[arrIndex].href = href ? this.helperService.checkSpacesString(href) : null;
       }
     );
     this.projectsFormArray.push(projectFormGroup);
+  }
+  checkProjectNameValidation(arrIndex: number): boolean {
+    const value = this.projectsFormArray.at(arrIndex).get('project_name').value;
+    return value && this.helperService.checkSpacesString(value) ? true : false;
+  }
+  checkAllProjectsInfoValidation(): boolean {
+    let valid = true;
+    this.userProjectsDataList.forEach((project, index) => {
+      if (!this.checkProjectNameValidation(index)) {
+        valid = false;
+      }
+    });
+    return valid;
   }
   updateProjectsFormArray() {
     if (this.userProjectsList.length === 0) {
@@ -1551,22 +1596,9 @@ export class CreateProfileComponent implements OnInit {
       });
     }
   }
-  onProjectNameValueChange(arrIndex: number, project_name: string) {
-    this.userProjectsDataList[arrIndex].project_name = project_name;
-  }
-  onProjectDescriptionValueChange(arrIndex: number, description: string) {
-    this.userProjectsDataList[arrIndex].description = description ? description : null;
-  }
-  onProjectDateFinishedValueChange(arrIndex: number, date_finished: string) {
-    this.userProjectsDataList[arrIndex].date_finished = date_finished ? date_finished : null;
-  }
-  onProjectHrefValueChange(arrIndex: number, href: string) {
-    this.userProjectsDataList[arrIndex].href = href ? href : null;
-  }
   onChangeProjectFinishedDate(event: any, arrIndex: number) {
     if (event.value) {
-      const dateValue = new Date(event.value);
-      this.projectsFormArray.at(arrIndex).get('date_finished').setValue(moment(dateValue).format('MM/DD/YYYY'));
+      this.projectsFormArray.at(arrIndex).get('date_finished').setValue(this.helperService.convertToFormattedString(event.value, 'L'));
     } else {
       this.projectsFormArray.at(arrIndex).get('date_finished').setValue('');
     }
@@ -1586,38 +1618,40 @@ export class CreateProfileComponent implements OnInit {
   }
   updateUserProjectsData() {
     if (this.userProjectsDataList.length !== 0) {
-      let counts = 0;
-      this.userProjectsDataList.forEach((project, index) => {
-        if (index < this.userProjectsList.length) {
-          this.userService.patchProjectInfoById(project, this.userProjectsList[index].project_id).subscribe(
-            dataJson => {
-              this.userProjectsList[index] = dataJson['data'];
-              counts++;
-              if (counts === this.userProjectsDataList.length) {
-                this.selectedPageIndex++;
-                this.initializeFormsByPageIndex();
+      if (this.projectsFormArray.valid && this.checkAllProjectsInfoValidation()) {
+        let counts = 0;
+        this.userProjectsDataList.forEach((project, index) => {
+          if (index < this.userProjectsList.length) {
+            this.userService.patchProjectInfoById(project, this.userProjectsList[index].project_id).subscribe(
+              dataJson => {
+                this.userProjectsList[index] = dataJson['data'];
+                counts++;
+                if (counts === this.userProjectsDataList.length) {
+                  this.selectedPageIndex++;
+                  this.initializeFormsByPageIndex();
+                }
+              },
+              error => {
+                this.alertsService.show(error.message, AlertType.error);
               }
-            },
-            error => {
-              this.alertsService.show(error.message, AlertType.error);
-            }
-          );
-        } else {
-          this.userService.postProjectInfo(project).subscribe(
-            dataJson => {
-              this.userProjectsList[index] = dataJson['data'];
-              counts++;
-              if (counts === this.userProjectsDataList.length) {
-                this.selectedPageIndex++;
-                this.initializeFormsByPageIndex();
+            );
+          } else {
+            this.userService.postProjectInfo(project).subscribe(
+              dataJson => {
+                this.userProjectsList[index] = dataJson['data'];
+                counts++;
+                if (counts === this.userProjectsDataList.length) {
+                  this.selectedPageIndex++;
+                  this.initializeFormsByPageIndex();
+                }
+              },
+              error => {
+                this.alertsService.show(error.message, AlertType.error);
               }
-            },
-            error => {
-              this.alertsService.show(error.message, AlertType.error);
-            }
-          );
-        }
-      });
+            );
+          }
+        });
+      }
     } else {
       this.selectedPageIndex++;
       this.initializeFormsByPageIndex();
@@ -1676,31 +1710,44 @@ export class CreateProfileComponent implements OnInit {
 
     const publicationFormGroup = new FormGroup({
       publication_name: new FormControl(publication ? publication.publication_title : '', [Validators.required]),
-      date_published: new FormControl(publication && publication.date_published ? this.extractDate(publication.date_published) : ''),
+      date_published: new FormControl(publication && publication.date_published ? this.helperService.convertToFormattedString(publication.date_published, 'L') : ''),
       description: new FormControl(publication ? publication.description : ''),
       href: new FormControl(publication ? publication.href : '')
     });
     publicationFormGroup.get('publication_name').valueChanges.subscribe(
       (publication_title) => {
-        this.onPublicationNameValueChange(arrIndex, publication_title);
+        this.userPublicationsDataList[arrIndex].publication_title = publication_title ? this.helperService.checkSpacesString(publication_title) : null;
       }
     );
     publicationFormGroup.get('description').valueChanges.subscribe(
       (description) => {
-        this.onPublicationDescriptionValueChange(arrIndex, description);
+        this.userPublicationsDataList[arrIndex].description = description ? this.helperService.checkSpacesString(description) : null;
       }
     );
     publicationFormGroup.get('date_published').valueChanges.subscribe(
       (date_published) => {
-        this.onPublicationDatePublishedValueChange(arrIndex, date_published);
+        this.userPublicationsDataList[arrIndex].date_published = date_published ? this.helperService.checkSpacesString(date_published) : null;
       }
     );
     publicationFormGroup.get('href').valueChanges.subscribe(
       (href) => {
-        this.onPublicationHrefValueChange(arrIndex, href);
+        this.userPublicationsDataList[arrIndex].href = href ? this.helperService.checkSpacesString(href) : null;
       }
     );
     this.publicationsFormArray.push(publicationFormGroup);
+  }
+  checkPublicationNameValidation(arrIndex: number): boolean {
+    const value = this.publicationsFormArray.at(arrIndex).get('publication_name').value;
+    return value && this.helperService.checkSpacesString(value) ? true : false;
+  }
+  checkAllPublicationInfoValidation(): boolean {
+    let valid = true;
+    this.userPublicationsDataList.forEach((val, index) => {
+      if (!this.checkPublicationNameValidation(index)) {
+        valid = false;
+      }
+    });
+    return valid;
   }
   updatePublicationsFormArray() {
     if (this.userPublicationsList.length === 0) {
@@ -1711,25 +1758,12 @@ export class CreateProfileComponent implements OnInit {
       });
     }
   }
-  onPublicationNameValueChange(arrIndex: number, publication_title: string) {
-    this.userPublicationsDataList[arrIndex].publication_title = publication_title;
-  }
-  onPublicationDescriptionValueChange(arrIndex: number, description: string) {
-    this.userPublicationsDataList[arrIndex].description = description ? description : null;
-  }
-  onPublicationDatePublishedValueChange(arrIndex: number, date_published: string) {
-    this.userPublicationsDataList[arrIndex].date_published = date_published ? date_published : null;
-  }
-  onPublicationHrefValueChange(arrIndex: number, href: string) {
-    this.userPublicationsDataList[arrIndex].href = href ? href : null;
-  }
   onPublicationPublisherValueChange(arrIndex: number, publisher: string) {
     this.userPublicationsDataList[arrIndex].publisher = publisher ? publisher : null;
   }
   onChangeDatePublished(event: any, arrIndex: number) {
     if (event.value) {
-      const dateValue = new Date(event.value);
-      this.publicationsFormArray.at(arrIndex).get('date_published').setValue(moment(dateValue).format('MM/DD/YYYY'));
+      this.publicationsFormArray.at(arrIndex).get('date_published').setValue(this.helperService.convertToFormattedString(event.value, 'L'));
     } else {
       this.publicationsFormArray.at(arrIndex).get('date_published').setValue('');
     }
@@ -1822,7 +1856,7 @@ export class CreateProfileComponent implements OnInit {
   }
   onExternalResourceValueChange(resource: string, arrIndex: number, link: string) {
     if (this.externalResourcesDataList[arrIndex].description === resource) {
-      this.externalResourcesDataList[arrIndex] .link = link ? link : null;
+      this.externalResourcesDataList[arrIndex] .link = link ? this.helperService.checkSpacesString(link) : null;
     }
   }
   updateExternalResourceFormGroup() {
