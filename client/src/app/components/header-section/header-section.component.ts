@@ -21,9 +21,8 @@ import {
   HelperService,
   AlertsService,
   AlertType,
-  AutoCompleteService, UserService,
+  AutoCompleteService, UserService, PhotoStateService,
 } from 'src/app/services';
-
 
 @Component({
   selector: 'header-section',
@@ -57,7 +56,8 @@ export class HeaderSectionComponent implements OnChanges, OnInit {
     private helperService: HelperService,
     private autoCompleteService: AutoCompleteService,
     private alertsService: AlertsService,
-    private userService: UserService
+    private userService: UserService,
+    private photoStateService: PhotoStateService
   ) { }
 
   ngOnInit() {
@@ -334,6 +334,8 @@ export class HeaderSectionComponent implements OnChanges, OnInit {
                 this.generalInfoForm.patchValue({
                     photo: response.data
                 });
+
+                this.photoStateService.setPhoto(response.data);
               }, err => {
                 this.alertsService.show(err.message, AlertType.error);
               });

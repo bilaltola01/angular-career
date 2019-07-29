@@ -1,4 +1,4 @@
-export interface UserGeneralInfo {
+export class UserGeneralInfo {
   user_id: number;
   recruiter: number;
   applicant: number;
