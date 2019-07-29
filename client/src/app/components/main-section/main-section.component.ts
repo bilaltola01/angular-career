@@ -218,7 +218,7 @@ export class MainSectionComponent implements OnInit {
 
     this.skillsSearchForm.get('skills').valueChanges.subscribe(
       (skill) => {
-        if (skill) {
+        if (skill && this.helperService.checkSpacesString(skill)) {
           if (!this.prevent_skills_autocomplete) {
             this.autoCompleteService.autoComplete(skill, 'skills').subscribe(
               dataJson => {
@@ -322,7 +322,7 @@ export class MainSectionComponent implements OnInit {
 
     this.interestsSearchForm.get('interests').valueChanges.subscribe(
       (interest) => {
-        if (interest) {
+        if (interest && this.helperService.checkSpacesString(interest)) {
           if (!this.prevent_interets_autocomplete) {
             this.autoCompleteService.autoComplete(interest, 'interests').subscribe(
               dataJson => {
@@ -490,7 +490,7 @@ export class ProfileDialogContentComponent {
     });
 
     this.aboutMeForm.get('aboutMe').valueChanges.subscribe((about) => {
-      this.request_general.user_intro = about;
+      this.request_general.user_intro = about ? this.helperService.checkSpacesString(about) : null;
     });
   }
   updateGeneralInfo() {
@@ -540,7 +540,7 @@ export class ProfileDialogContentComponent {
     });
 
     this.educationForm.get('university').valueChanges.subscribe((university) => {
-      if (university) {
+      if (university && this.helperService.checkSpacesString(university)) {
         this.autoCompleteService.autoComplete(university, 'schools').subscribe(
           dataJson => {
             if (dataJson['success']) {
@@ -580,22 +580,30 @@ export class ProfileDialogContentComponent {
     );
     this.educationForm.get('major').valueChanges.subscribe(
       (major) => {
-        major ? this.onMajorValueChanges(major) : this.autocomplete_majors = [];
+        if (major && this.helperService.checkSpacesString(major)) {
+          this.onMajorValueChanges(major);
+        } else {
+          this.autocomplete_majors = [];
+        }
       }
     );
     this.educationForm.get('focus_major').valueChanges.subscribe(
       (focus_major) => {
-        focus_major ? this.onMajorValueChanges(focus_major, true) : this.autocomplete_focus_majors = [];
+        if (focus_major && this.helperService.checkSpacesString(focus_major)) {
+          this.onMajorValueChanges(focus_major, true);
+        } else {
+          this.autocomplete_focus_majors = [];
+        }
       }
     );
     this.educationForm.get('description').valueChanges.subscribe(
       (description) => {
-        this.request_education.edu_desc = description;
+        this.request_education.edu_desc = description ? this.helperService.checkSpacesString(description) : null;
       }
     );
     this.educationForm.get('gpa').valueChanges.subscribe(
       (gpa) => {
-        this.request_education.gpa = gpa ? parseFloat(gpa) : null;
+        this.request_education.gpa = gpa && this.helperService.checkSpacesString(gpa) ? parseFloat(gpa) : null;
       }
     );
   }
@@ -805,7 +813,7 @@ export class ProfileDialogContentComponent {
 
     this.experienceForm.get('company_name').valueChanges.subscribe(
       (company_name) => {
-        if (company_name) {
+        if (company_name && this.helperService.checkSpacesString(company_name)) {
           this.autoCompleteService.autoComplete(company_name, 'companies').subscribe(
             dataJson => {
               if (dataJson['success']) {
@@ -838,18 +846,18 @@ export class ProfileDialogContentComponent {
     );
     this.experienceForm.get('job').valueChanges.subscribe(
       (job) => {
-        this.request_experience.job = job;
+        this.request_experience.job = job ? this.helperService.checkSpacesString(job) : null;
       }
     );
     this.experienceForm.get('description').valueChanges.subscribe(
       (description) => {
-        this.request_experience.job_desc = description;
+        this.request_experience.job_desc = description ? this.helperService.checkSpacesString(description) : null;
       }
     );
 
     this.experienceForm.get('skills_trained').valueChanges.subscribe(
       (skill) => {
-        if (skill) {
+        if (skill && this.helperService.checkSpacesString(skill)) {
           this.autoCompleteService.autoComplete(skill, 'skills').subscribe(
             dataJson => {
               if (dataJson['success']) {
@@ -868,7 +876,7 @@ export class ProfileDialogContentComponent {
     );
     this.experienceForm.get('additional_industries').valueChanges.subscribe(
       (industry) => {
-        if (industry) {
+        if (industry && this.helperService.checkSpacesString(industry)) {
           this.autoCompleteService.autoComplete(industry, 'industries').subscribe(
             dataJson => {
               if (dataJson['success']) {
@@ -1040,12 +1048,12 @@ export class ProfileDialogContentComponent {
 
     this.projectForm.get('project_name').valueChanges.subscribe(
       (project_name) => {
-        this.request_project.project_name = project_name;
+        this.request_project.project_name = project_name ? this.helperService.checkSpacesString('project_name') : null;
       }
     );
     this.projectForm.get('description').valueChanges.subscribe(
       (description) => {
-        this.request_project.description = description;
+        this.request_project.description = description ? this.helperService.checkSpacesString(description) : null;
       }
     );
     this.projectForm.get('date_finished').valueChanges.subscribe(
@@ -1055,7 +1063,7 @@ export class ProfileDialogContentComponent {
     );
     this.projectForm.get('href').valueChanges.subscribe(
       (href) => {
-        this.request_project.href = this.helperService.extractLinkString(href) ? this.helperService.extractLinkString(href) : null;
+        this.request_project.href = href && this.helperService.checkSpacesString(href) && this.helperService.extractLinkString(href) ? this.helperService.extractLinkString(href) : null;
       }
     );
   }
@@ -1111,12 +1119,12 @@ export class ProfileDialogContentComponent {
     });
     this.publicationForm.get('publication_name').valueChanges.subscribe(
       (publication_title) => {
-        this.request_publication.publication_title = publication_title;
+        this.request_publication.publication_title = publication_title ? this.helperService.checkSpacesString(publication_title) : null;
       }
     );
     this.publicationForm.get('description').valueChanges.subscribe(
       (description) => {
-        this.request_publication.description = description ? description : null;
+        this.request_publication.description = description ? this.helperService.checkSpacesString(description) : null;
       }
     );
     this.publicationForm.get('date_published').valueChanges.subscribe(
@@ -1126,7 +1134,7 @@ export class ProfileDialogContentComponent {
     );
     this.publicationForm.get('href').valueChanges.subscribe(
       (href) => {
-        this.request_publication.href = this.helperService.extractLinkString(href) ? this.helperService.extractLinkString(href) : null;
+        this.request_publication.href = href && this.helperService.checkSpacesString(href) && this.helperService.extractLinkString(href) ? this.helperService.extractLinkString(href) : null;
       }
     );
   }
@@ -1184,7 +1192,7 @@ export class ProfileDialogContentComponent {
   }
   onExternalResourceValueChange(resource: string, arrIndex: number, link: string) {
     if (this.externalResourcesDataList[arrIndex].description === resource) {
-      this.externalResourcesDataList[arrIndex].link = this.helperService.extractLinkString(link) ? this.helperService.extractLinkString(link) : null;
+      this.externalResourcesDataList[arrIndex].link = link && this.helperService.checkSpacesString(link) && this.helperService.extractLinkString(link) ? this.helperService.extractLinkString(link) : null;
     }
   }
   updateExternalResourceFormGroup() {
