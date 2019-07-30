@@ -105,8 +105,11 @@ export class HeaderSectionComponent implements OnChanges, OnInit {
       });
     });
     this.generalInfoForm.get('photo').valueChanges.subscribe((photo) => {
-      this.generalInfoData.photo = photo;
-      this.updatedGeneralInfoData.emit(this.generalInfoData);
+      this.generalInfoData.photo = photo.data;
+      this.updatedGeneralInfoData.emit({
+        data: this.generalInfoData,
+        valid: this.checkFormValidation()
+      });
     });
     this.generalInfoForm.get('last_name').valueChanges.subscribe((last_name) => {
       this.generalInfoData.last_name = last_name ? this.helperService.checkSpacesString(last_name) : null;
@@ -329,7 +332,7 @@ export class HeaderSectionComponent implements OnChanges, OnInit {
             this.userService.uploadPhotoToS3(file, signedPhoto.data.signedUrl, signedPhoto.data.url)
               .subscribe((response) => {
                 this.generalInfoForm.patchValue({
-                  photo: response.data
+                    photo: response.data
                 });
               }, err => {
                 this.alertsService.show(err.message, AlertType.error);
