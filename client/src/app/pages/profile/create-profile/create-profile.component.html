@@ -319,7 +319,6 @@
                 touchUi
                 #experience_start_date
                 startView="multi-year"
-                (yearSelected)="onExperienceYearSelect($event, i, true)"
                 (monthSelected)="onExperienceMonthSelect($event, i, true, experience_start_date)"
               >
               </mat-datepicker>
@@ -335,7 +334,6 @@
                 touchUi
                 #experience_end_date
                 startView="multi-year"
-                (yearSelected)="onExperienceYearSelect($event, i, false)"
                 (monthSelected)="onExperienceMonthSelect($event, i, false, experience_end_date)"
               >
               </mat-datepicker>
@@ -608,14 +606,6 @@
       <action-button class="view-profile" type="flat" title="View Profile" color="primary" (click)="goToMyProfilePage()"></action-button>
     </div>
   </div>
-  
-  <!-- <mat-datepicker
-    touchUi
-    #graduation_date
-    startView="multi-year"
-    (yearSelected)="onEducationYearSelect($event, i, false, graduation_date)"
-  >
-  </mat-datepicker> -->
   
   <!-- Create_Profile_Status end -->
   
