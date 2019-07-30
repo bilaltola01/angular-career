@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { AlertsService, AlertType } from '../../../services/alerts.service';
 import { AutoCompleteService } from '../../../services/auto-complete.service';
@@ -18,14 +18,13 @@ import {
   SkillLevelDescription,
   QualificationLevel
 } from 'src/app/models';
-import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-position-search',
   templateUrl: './position-search.component.html',
   styleUrls: ['./position-search.component.scss']
 })
-export class PositionSearchComponent implements OnInit, AfterViewInit {
+export class PositionSearchComponent implements OnInit {
   showMoreFlag = false;
   // Constants
   qualificationLevel: object[] = QualificationLevel;
@@ -63,14 +62,6 @@ export class PositionSearchComponent implements OnInit, AfterViewInit {
     this.getJobData();
   }
 
-  ngAfterViewInit(): void {
-    this.positionForm.controls.searchPosition.valueChanges
-      .pipe(
-        debounceTime(1000)
-      ).subscribe(data => {
-        this.getJobData(true);
-      });
-  }
 
   initPositionFilterForm() {
     this.positionForm = new FormGroup({
@@ -87,6 +78,9 @@ export class PositionSearchComponent implements OnInit, AfterViewInit {
       'school': new FormControl(null),
       'recruiter': new FormControl(null),
       'sortBy': new FormControl('post-date')
+    });
+    this.positionForm.get('searchPosition').valueChanges.subscribe((searchPosition) => {
+      searchPosition ? this.onSearchPositionValueChanges(searchPosition) : this.autocomplete_searchposition = [];
     });
     this.positionForm.get('city').valueChanges.subscribe((city) => {
       city ? this.onCityValueChanges(city) : this.autocomplete_additional_industries = [];
@@ -185,6 +179,20 @@ export class PositionSearchComponent implements OnInit, AfterViewInit {
     );
   }
 
+  onSearchPositionValueChanges(searchPosition: string) {
+    this.autoCompleteService.autoComplete(searchPosition, 'positions').subscribe(
+      dataJson => {
+        if (dataJson['success']) {
+          this.autocomplete_searchposition = dataJson['data'];
+        }
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+        this.autocomplete_searchposition = [];
+      }
+    );
+  }
+
   addSkills(skillItem: Skill) {
     this.positionForm.patchValue({ skill: '' });
     this.userSkillsList.push(skillItem);
@@ -244,6 +252,11 @@ export class PositionSearchComponent implements OnInit, AfterViewInit {
       job['selected'] = isChecked;
       return job;
     });
+  }
+
+  onSearchPosition(event) {
+    this.getJobData(true);
+    event.stopPropagation();
   }
 
 }

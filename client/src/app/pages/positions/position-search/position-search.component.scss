@@ -33,7 +33,7 @@
 
                 & .selectall {
                     float: left;
-                    width: 50%;
+                    width: 70%;
 
                     & round-checkbox {
                         display: inline;
@@ -43,6 +43,7 @@
 
                 & action-button {
                     @include inline-block-btn;
+                    margin-right: 2%;
                 }
             }
 
@@ -60,7 +61,8 @@
                 &.selected {
                     background-color: $selected-bg-color;
                 }
-                &.no-job{
+
+                &.no-job {
                     @include btn-align-center;
                 }
 
@@ -140,6 +142,17 @@
                                 @include inline-block-btn;
                                 margin: 0 5px 5px 0;
                             }
+
+                            & .skil-height-fix {
+                                overflow: hidden;
+                                max-height: 45px;
+
+                                &.skill-more-height {
+                                    max-height: 135px;
+                                }
+                            }
+
+
                         }
                     }
                 }
@@ -179,12 +192,13 @@
             }
 
             .pagination {
-                text-align: right;
+                float: right;
 
                 ul {
                     padding: 3px 10px;
                     border-radius: 50px;
-                    background-color: map-get($md-cfgray, 500);;
+                    background-color: map-get($md-cfgray, 500);
+                    ;
                     @include inline-block-btn;
 
                     li {
@@ -200,15 +214,17 @@
                         color: $header-color;
                         cursor: pointer;
 
-                        &.active{
-                            background-color:$white;
+                        &.active {
+                            background-color: $white;
                         }
-                        &:last-child{
+
+                        &:last-child {
                             height: auto;
-                            width:auto;
+                            width: auto;
                             margin-top: 4px;
                         }
-                        & span{
+
+                        & span {
                             vertical-align: middle;
                             @include inline-block-btn;
                         }
@@ -331,6 +347,7 @@
                 float: none;
                 margin-left: auto;
                 padding: 0 10px;
+                clear: both;
             }
         }
     }
@@ -342,6 +359,10 @@
             .postion-search-header {
                 mat-form-field {
                     width: 100%;
+
+                    mat-icon {
+                        cursor: pointer;
+                    }
                 }
             }
 
@@ -355,6 +376,10 @@
                     & .selectall {
                         float: none;
                         width: 100%;
+
+                        action-button {
+                            margin-bottom: 5px;
+                        }
                     }
                 }
 
@@ -409,6 +434,7 @@
                 float: none;
                 margin: 0 auto;
                 padding: 0 10px;
+                clear: both;
             }
 
         }

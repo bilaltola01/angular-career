@@ -6,3 +6,10 @@
     }
   }
 }
+:host-context(.position-search-reload-result) {
+  button{
+    line-height: 24px;
+    // margin-right: 1px;
+    padding: 6px 20px !important;
+  }
+}
