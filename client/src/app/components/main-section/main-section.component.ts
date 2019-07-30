@@ -218,7 +218,7 @@ export class MainSectionComponent implements OnInit {
 
     this.skillsSearchForm.get('skills').valueChanges.subscribe(
       (skill) => {
-        if (skill) {
+        if (skill && this.helperService.checkSpacesString(skill)) {
           if (!this.prevent_skills_autocomplete) {
             this.autoCompleteService.autoComplete(skill, 'skills').subscribe(
               dataJson => {
@@ -322,7 +322,7 @@ export class MainSectionComponent implements OnInit {
 
     this.interestsSearchForm.get('interests').valueChanges.subscribe(
       (interest) => {
-        if (interest) {
+        if (interest && this.helperService.checkSpacesString(interest)) {
           if (!this.prevent_interets_autocomplete) {
             this.autoCompleteService.autoComplete(interest, 'interests').subscribe(
               dataJson => {
@@ -490,7 +490,7 @@ export class ProfileDialogContentComponent {
     });
 
     this.aboutMeForm.get('aboutMe').valueChanges.subscribe((about) => {
-      this.request_general.user_intro = about;
+      this.request_general.user_intro = about ? this.helperService.checkSpacesString(about) : null;
     });
   }
   updateGeneralInfo() {
@@ -540,7 +540,7 @@ export class ProfileDialogContentComponent {
     });
 
     this.educationForm.get('university').valueChanges.subscribe((university) => {
-      if (university) {
+      if (university && this.helperService.checkSpacesString(university)) {
         this.autoCompleteService.autoComplete(university, 'schools').subscribe(
           dataJson => {
             if (dataJson['success']) {
@@ -580,24 +580,39 @@ export class ProfileDialogContentComponent {
     );
     this.educationForm.get('major').valueChanges.subscribe(
       (major) => {
-        major ? this.onMajorValueChanges(major) : this.autocomplete_majors = [];
+        if (major && this.helperService.checkSpacesString(major)) {
+          this.onMajorValueChanges(major);
+        } else {
+          this.autocomplete_majors = [];
+          this.clearMajor(false);
+        }
       }
     );
     this.educationForm.get('focus_major').valueChanges.subscribe(
       (focus_major) => {
-        focus_major ? this.onMajorValueChanges(focus_major, true) : this.autocomplete_focus_majors = [];
+        if (focus_major && this.helperService.checkSpacesString(focus_major)) {
+          this.onMajorValueChanges(focus_major, true);
+        } else {
+          this.autocomplete_focus_majors = [];
+          this.clearMajor(true);
+        }
       }
     );
     this.educationForm.get('description').valueChanges.subscribe(
       (description) => {
-        this.request_education.edu_desc = description;
+        this.request_education.edu_desc = description ? this.helperService.checkSpacesString(description) : null;
       }
     );
     this.educationForm.get('gpa').valueChanges.subscribe(
       (gpa) => {
-        this.request_education.gpa = gpa ? parseFloat(gpa) : null;
+        this.request_education.gpa = gpa && this.helperService.checkSpacesString(gpa) ? parseFloat(gpa) : null;
       }
     );
+  }
+
+  checkSchoolNameValidation(): boolean {
+    const value = this.educationForm.get('university').value;
+    return value && this.helperService.checkSpacesString(value) ? true : false;
   }
 
   onSelectSpecificUniversity(university: string) {
@@ -653,32 +668,34 @@ export class ProfileDialogContentComponent {
 
   checkMajorValidation(isFocusMajor: boolean): boolean {
     if (isFocusMajor) {
-      if (this.temp_focus_major) {
-        return (this.educationForm.get('focus_major').value === this.temp_focus_major.major_name) ? true : false;
-      } else {
-        if (this.educationForm.get('focus_major').value) {
+      const value = this.educationForm.get('focus_major').value;
+      if (value && this.helperService.checkSpacesString(value)) {
+        if (this.temp_focus_major) {
+          return (value === this.temp_focus_major.major_name) ? true : false;
+        } else {
           if (this.data.editIndex === -1) {
             return false;
           } else {
-            return this.educationForm.get('focus_major').value === this.data.data[this.data.editIndex].focus_major_name ? true : false;
+            return value === this.data.data[this.data.editIndex].focus_major_name ? true : false;
           }
-        } else {
-          return true;
         }
+      } else {
+        return true;
       }
     } else {
-      if (this.temp_major) {
-        return (this.educationForm.get('major').value === this.temp_major.major_name) ? true : false;
-      } else {
-        if (this.educationForm.get('major').value) {
+      const value = this.educationForm.get('major').value;
+      if (value && this.helperService.checkSpacesString(value)) {
+        if (this.temp_major) {
+          return value === this.temp_major.major_name ? true : false;
+        } else {
           if (this.data.editIndex === -1) {
             return false;
           } else {
-            return this.educationForm.get('major').value === this.data.data[this.data.editIndex].major_name ? true : false;
+            return value === this.data.data[this.data.editIndex].major_name ? true : false;
           }
-        } else {
-          return true;
         }
+      } else {
+        return true;
       }
     }
   }
@@ -744,7 +761,7 @@ export class ProfileDialogContentComponent {
     this.educationForm.get(isStartDate ? 'start_date' : 'graduation_date').setValue(this.helperService.convertToFormattedString(date, 'YYYY'));
   }
   addEducation() {
-    if (this.educationForm.valid && this.checkMajorValidation(true) && this.checkMajorValidation(false)) {
+    if (this.educationForm.valid && this.checkMajorValidation(true) && this.checkMajorValidation(false) && this.checkSchoolNameValidation()) {
       this.userService.postEducationInfo(this.request_education).subscribe(
         dataJson => {
           this.data.data.push(dataJson['data']);
@@ -758,7 +775,7 @@ export class ProfileDialogContentComponent {
   }
 
   updateEducation() {
-    if (this.educationForm.valid && this.checkMajorValidation(true) && this.checkMajorValidation(false)) {
+    if (this.educationForm.valid && this.checkMajorValidation(true) && this.checkMajorValidation(false) && this.checkSchoolNameValidation()) {
       this.userService.patchEducationInfoById(this.request_education, this.data.data[this.data.editIndex].education_id).subscribe(
         dataJson => {
           this.data.data[this.data.editIndex] = dataJson['data'];
@@ -797,7 +814,7 @@ export class ProfileDialogContentComponent {
       company_name: new FormControl(experienceData ? (experienceData.company_id ?  experienceData.company_name : experienceData.user_specified_company_name) : '', [Validators.required]),
       start_date: new FormControl(experienceData && experienceData.start_date ? this.helperService.convertToFormattedString(experienceData.start_date, 'MM/YYYY') : '', [Validators.required]),
       end_date: new FormControl(experienceData && experienceData.end_date ? this.helperService.convertToFormattedString(experienceData.end_date, 'MM/YYYY') : ''),
-      job: new FormControl(experienceData ? experienceData.job : '', [Validators.required]),
+      job: new FormControl(experienceData ? experienceData.job : ''),
       description: new FormControl(experienceData ? experienceData.job_desc : ''),
       skills_trained: new FormControl(''),
       additional_industries: new FormControl('')
@@ -805,7 +822,7 @@ export class ProfileDialogContentComponent {
 
     this.experienceForm.get('company_name').valueChanges.subscribe(
       (company_name) => {
-        if (company_name) {
+        if (company_name && this.helperService.checkSpacesString(company_name)) {
           this.autoCompleteService.autoComplete(company_name, 'companies').subscribe(
             dataJson => {
               if (dataJson['success']) {
@@ -838,18 +855,18 @@ export class ProfileDialogContentComponent {
     );
     this.experienceForm.get('job').valueChanges.subscribe(
       (job) => {
-        this.request_experience.job = job;
+        this.request_experience.job = job ? this.helperService.checkSpacesString(job) : null;
       }
     );
     this.experienceForm.get('description').valueChanges.subscribe(
       (description) => {
-        this.request_experience.job_desc = description;
+        this.request_experience.job_desc = description ? this.helperService.checkSpacesString(description) : null;
       }
     );
 
     this.experienceForm.get('skills_trained').valueChanges.subscribe(
       (skill) => {
-        if (skill) {
+        if (skill && this.helperService.checkSpacesString(skill)) {
           this.autoCompleteService.autoComplete(skill, 'skills').subscribe(
             dataJson => {
               if (dataJson['success']) {
@@ -868,7 +885,7 @@ export class ProfileDialogContentComponent {
     );
     this.experienceForm.get('additional_industries').valueChanges.subscribe(
       (industry) => {
-        if (industry) {
+        if (industry && this.helperService.checkSpacesString(industry)) {
           this.autoCompleteService.autoComplete(industry, 'industries').subscribe(
             dataJson => {
               if (dataJson['success']) {
@@ -903,8 +920,12 @@ export class ProfileDialogContentComponent {
         this.temp_company = null;
       }
     } else {
-      this.onSelectSpecificCompany(this.experienceForm.get('company').value);
+      this.onSelectSpecificCompany(this.experienceForm.get('company_name').value);
     }
+  }
+  checkCompanyNameValidation(): boolean {
+    const value = this.experienceForm.get('company_name').value;
+    return value && this.helperService.checkSpacesString(value) ? true : false;
   }
   onExperienceMonthSelect(date: any, isStartDate: boolean = true, datePicker: MatDatepicker<any>) {
     if (isStartDate) {
@@ -995,7 +1016,7 @@ export class ProfileDialogContentComponent {
     }
   }
   addExperience() {
-    if (this.experienceForm.valid) {
+    if (this.experienceForm.valid && this.checkCompanyNameValidation()) {
       this.userService.postExperienceInfo(this.request_experience).subscribe(
         dataJson => {
           this.data.data.push(dataJson['data']);
@@ -1008,7 +1029,7 @@ export class ProfileDialogContentComponent {
     }
   }
   updateExperience() {
-    if (this.experienceForm.valid) {
+    if (this.experienceForm.valid && this.checkCompanyNameValidation()) {
       this.userService.patchExperienceInfoById(this.request_experience, this.data.data[this.data.editIndex].work_hist_id).subscribe(
         dataJson => {
           this.data.data[this.data.editIndex] = dataJson['data'];
@@ -1040,12 +1061,12 @@ export class ProfileDialogContentComponent {
 
     this.projectForm.get('project_name').valueChanges.subscribe(
       (project_name) => {
-        this.request_project.project_name = project_name;
+        this.request_project.project_name = project_name ? this.helperService.checkSpacesString(project_name) : null;
       }
     );
     this.projectForm.get('description').valueChanges.subscribe(
       (description) => {
-        this.request_project.description = description;
+        this.request_project.description = description ? this.helperService.checkSpacesString(description) : null;
       }
     );
     this.projectForm.get('date_finished').valueChanges.subscribe(
@@ -1055,7 +1076,7 @@ export class ProfileDialogContentComponent {
     );
     this.projectForm.get('href').valueChanges.subscribe(
       (href) => {
-        this.request_project.href = this.helperService.extractLinkString(href) ? this.helperService.extractLinkString(href) : null;
+        this.request_project.href = href && this.helperService.checkSpacesString(href) && this.helperService.extractLinkString(href) ? this.helperService.extractLinkString(href) : null;
       }
     );
   }
@@ -1066,8 +1087,12 @@ export class ProfileDialogContentComponent {
       this.projectForm.get('date_finished').setValue('');
     }
   }
+  checkProjectNameValidation(): boolean {
+    const value = this.projectForm.get('project_name').value;
+    return value && this.helperService.checkSpacesString(value) ? true : false;
+  }
   addProject() {
-    if (this.projectForm.valid) {
+    if (this.projectForm.valid && this.checkProjectNameValidation()) {
       this.userService.postProjectInfo(this.request_project).subscribe(
         dataJson => {
           this.data.data.push(dataJson['data']);
@@ -1080,7 +1105,7 @@ export class ProfileDialogContentComponent {
     }
   }
   updateProject() {
-    if (this.projectForm.valid) {
+    if (this.projectForm.valid && this.checkProjectNameValidation()) {
       this.userService.patchProjectInfoById(this.request_project, this.data.data[this.data.editIndex].project_id).subscribe(
         dataJson => {
           this.data.data[this.data.editIndex] = dataJson['data'];
@@ -1111,12 +1136,12 @@ export class ProfileDialogContentComponent {
     });
     this.publicationForm.get('publication_name').valueChanges.subscribe(
       (publication_title) => {
-        this.request_publication.publication_title = publication_title;
+        this.request_publication.publication_title = publication_title ? this.helperService.checkSpacesString(publication_title) : null;
       }
     );
     this.publicationForm.get('description').valueChanges.subscribe(
       (description) => {
-        this.request_publication.description = description ? description : null;
+        this.request_publication.description = description ? this.helperService.checkSpacesString(description) : null;
       }
     );
     this.publicationForm.get('date_published').valueChanges.subscribe(
@@ -1126,7 +1151,7 @@ export class ProfileDialogContentComponent {
     );
     this.publicationForm.get('href').valueChanges.subscribe(
       (href) => {
-        this.request_publication.href = this.helperService.extractLinkString(href) ? this.helperService.extractLinkString(href) : null;
+        this.request_publication.href = href && this.helperService.checkSpacesString(href) && this.helperService.extractLinkString(href) ? this.helperService.extractLinkString(href) : null;
       }
     );
   }
@@ -1137,8 +1162,12 @@ export class ProfileDialogContentComponent {
       this.publicationForm.get('date_published').setValue('');
     }
   }
+  checkPublicationNameValidation(): boolean {
+    const value = this.publicationForm.get('publication_name').value;
+    return value && this.helperService.checkSpacesString(value) ? true : false;
+  }
   addPublication() {
-    if (this.publicationForm.valid) {
+    if (this.publicationForm.valid && this.checkPublicationNameValidation()) {
       this.userService.postPublicationsInfo(this.request_publication).subscribe(
         dataJson => {
           this.data.data.push(dataJson['data']);
@@ -1151,7 +1180,7 @@ export class ProfileDialogContentComponent {
     }
   }
   updatePublication() {
-    if (this.publicationForm.valid) {
+    if (this.publicationForm.valid && this.checkPublicationNameValidation()) {
       this.userService.patchPublicationsInfoById(this.request_publication, this.data.data[this.data.editIndex].publication_id).subscribe(
         dataJson => {
           this.data.data[this.data.editIndex] = dataJson['data'];
@@ -1184,7 +1213,7 @@ export class ProfileDialogContentComponent {
   }
   onExternalResourceValueChange(resource: string, arrIndex: number, link: string) {
     if (this.externalResourcesDataList[arrIndex].description === resource) {
-      this.externalResourcesDataList[arrIndex].link = this.helperService.extractLinkString(link) ? this.helperService.extractLinkString(link) : null;
+      this.externalResourcesDataList[arrIndex].link = link && this.helperService.checkSpacesString(link) && this.helperService.extractLinkString(link) ? this.helperService.extractLinkString(link) : null;
     }
   }
   updateExternalResourceFormGroup() {

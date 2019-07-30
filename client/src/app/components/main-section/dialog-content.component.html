@@ -41,8 +41,8 @@
       <mat-form-field class="bg-transparent" appearance="fill">
         <mat-label>Major</mat-label>
         <input matInput placeholder="Major" type="text" [matAutocomplete]="autocompleteMajor" formControlName="major">
-        <mat-icon matSuffix *ngIf="educationForm.get('major').value && checkMajorValidation(false)">done</mat-icon>
-        <mat-icon matSuffix class="error-field" *ngIf="educationForm.get('major').value && !checkMajorValidation(false) && educationForm.get('major').touched">close</mat-icon>
+        <mat-icon matSuffix *ngIf="educationForm.get('major').value && helperService.checkSpacesString(educationForm.get('major').value) && checkMajorValidation(false)">done</mat-icon>
+        <mat-icon matSuffix class="error-field" *ngIf="educationForm.get('major').value && helperService.checkSpacesString(educationForm.get('major').value) && !checkMajorValidation(false) && educationForm.get('major').touched">close</mat-icon>
         <mat-autocomplete #autocompleteMajor="matAutocomplete" (closed)="onBlurMajor(false)">
           <mat-option *ngFor="let autocomplete_major of autocomplete_majors" [value]="autocomplete_major.major_name" (onSelectionChange)="onSelectMajor(autocomplete_major, false)">
             <span>{{autocomplete_major.major_name}}</span>
@@ -54,8 +54,8 @@
       <mat-form-field class="bg-transparent" appearance="fill">
         <mat-label>Focus</mat-label>
         <input matInput placeholder="Focus Major" type="text" [matAutocomplete]="autocompleteFocusMajor" formControlName="focus_major">
-        <mat-icon matSuffix *ngIf="educationForm.get('focus_major').value && checkMajorValidation(true)">done</mat-icon>
-        <mat-icon matSuffix class="error-field" *ngIf="educationForm.get('focus_major').value && !checkMajorValidation(true) && educationForm.get('focus_major').touched">close</mat-icon>
+        <mat-icon matSuffix *ngIf="educationForm.get('focus_major').value &&helperService.checkSpacesString(educationForm.get('focus_major').value) && checkMajorValidation(true)">done</mat-icon>
+        <mat-icon matSuffix class="error-field" *ngIf="educationForm.get('focus_major').value && helperService.checkSpacesString(educationForm.get('focus_major').value) && !checkMajorValidation(true) && educationForm.get('focus_major').touched">close</mat-icon>
         <mat-autocomplete #autocompleteFocusMajor="matAutocomplete" (closed)="onBlurMajor(true)">
           <mat-option *ngFor="let autocomplete_focus_major of autocomplete_focus_majors" [value]="autocomplete_focus_major.major_name" (onSelectionChange)="onSelectMajor(autocomplete_focus_major, true)">
             <span>{{autocomplete_focus_major.major_name}}</span>
@@ -106,7 +106,7 @@
     </div>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <action-button class="update-btn" type="flat" title="{{data.editIndex === -1 ? 'Add' : 'Update'}}" color="primary" [disabled]="!(educationForm.valid && checkMajorValidation(true) && checkMajorValidation(false))" (click)="data.editIndex === -1 ? addEducation() : updateEducation()"></action-button>
+    <action-button class="update-btn" type="flat" title="{{data.editIndex === -1 ? 'Add' : 'Update'}}" color="primary" [disabled]="!(educationForm.valid && checkSchoolNameValidation() && checkMajorValidation(true) && checkMajorValidation(false))" (click)="data.editIndex === -1 ? addEducation() : updateEducation()"></action-button>
   </mat-dialog-actions>
 </ng-container>
 
@@ -197,7 +197,7 @@
       </div>
     </mat-dialog-content>
     <mat-dialog-actions>
-      <action-button class="update-btn" type="flat" [title]="data.editIndex === -1 ? 'Add' : 'Update'" color="primary" [disabled]="!experienceForm.valid" (click)="data.editIndex === -1 ? addExperience() : updateExperience()"></action-button>
+      <action-button class="update-btn" type="flat" [title]="data.editIndex === -1 ? 'Add' : 'Update'" color="primary" [disabled]="!(experienceForm.valid && checkCompanyNameValidation())" (click)="data.editIndex === -1 ? addExperience() : updateExperience()"></action-button>
     </mat-dialog-actions>
   </ng-container>
 
@@ -236,7 +236,7 @@
       </div>
     </mat-dialog-content>
     <mat-dialog-actions>
-      <action-button class="update-btn" type="flat" [title]="data.editIndex === -1 ? 'Add' : 'Update'" color="primary" [disabled]="!projectForm.valid" (click)="data.editIndex === -1 ? addProject() : updateProject()"></action-button>
+      <action-button class="update-btn" type="flat" [title]="data.editIndex === -1 ? 'Add' : 'Update'" color="primary" [disabled]="!(projectForm.valid && checkProjectNameValidation())" (click)="data.editIndex === -1 ? addProject() : updateProject()"></action-button>
     </mat-dialog-actions>
   </ng-container>
 
@@ -275,7 +275,7 @@
       </div>
     </mat-dialog-content>
     <mat-dialog-actions>
-      <action-button class="update-btn" type="flat" [title]="data.editIndex === -1 ? 'Add' : 'Update'" color="primary" [disabled]="!publicationForm.valid" (click)="data.editIndex === -1 ? addPublication() : updatePublication()"></action-button>
+      <action-button class="update-btn" type="flat" [title]="data.editIndex === -1 ? 'Add' : 'Update'" color="primary" [disabled]="!(publicationForm.valid && checkPublicationNameValidation())" (click)="data.editIndex === -1 ? addPublication() : updatePublication()"></action-button>
     </mat-dialog-actions>
   </ng-container>
 
