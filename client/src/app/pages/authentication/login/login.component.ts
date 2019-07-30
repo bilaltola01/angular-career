@@ -88,7 +88,6 @@ export class LoginComponent implements OnInit {
           }
         },
         error => {
-          console.log(error);
           this.alertsService.show(error.message, AlertType.error);
         }
       );

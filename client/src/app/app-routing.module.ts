@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { NotFoundComponent } from './components/not-found/not-found.component';
+import { ErrorPageComponent } from './components/error-page/error-page.component';
 
 export const routes: Routes = [
   {
@@ -25,8 +25,8 @@ export const routes: Routes = [
   },
   // Use this route to redirect to /404 if we want to pop error page to the user
   // We cannot redirect to '**' so we shall use 404 instead
-  {path: '404', component: NotFoundComponent},
-  {path: '**', component: NotFoundComponent}
+  {path: 'error/:status-code', component: ErrorPageComponent},
+  {path: '**', component: ErrorPageComponent}
 ];
 
 @NgModule({
