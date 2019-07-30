@@ -7,7 +7,6 @@ import { MainSectionComponent, ProfileDialogContentComponent } from './main-sect
 import { HeaderSectionComponent } from './header-section/header-section.component';
 import { NavSectionComponent } from './nav-section/nav-section.component';
 import { ErrorPageComponent } from './error-page/error-page.component';
-import { NotFoundComponent } from './not-found/not-found.component';
 
 export const sharedComponents = [
   ActionButtonComponent,
@@ -19,6 +18,5 @@ export const sharedComponents = [
   MainSectionComponent,
   ProfileDialogContentComponent,
   NavSectionComponent,
-  ErrorPageComponent,
-  NotFoundComponent
+  ErrorPageComponent
 ];
