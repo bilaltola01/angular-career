@@ -953,7 +953,7 @@ export class ProfileDialogContentComponent {
       this.removeSkillsTrainedData(arrIndex, skill);
     } else {
       if (this.data.data[this.data.editIndex].skills_trained.filter(skill_trained => skill_trained.skill_id === skill.skill_id).length > 0) {
-        this.userService.DeleteSkillTrainedById(this.data.data[this.data.editIndex].work_hist_id, skill.skill_id).subscribe(
+        this.userService.deleteSkillTrainedById(this.data.data[this.data.editIndex].work_hist_id, skill.skill_id).subscribe(
           dataJson => {
             this.removeSkillsTrainedData(arrIndex, skill);
           },

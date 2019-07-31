@@ -1078,8 +1078,8 @@ export class CreateProfileComponent implements OnInit {
     this.autocomplete_companies.push([]);
     this.autocomplete_skills_trained.push([]);
     this.autocomplete_additional_industries.push([]);
-    this.skills_trained.push(experience && experience.skills_trained ? experience.skills_trained : []);
-    this.additional_industries.push(experience && experience.add_industries ? experience.add_industries : []);
+    this.skills_trained.push([]);
+    this.additional_industries.push([]);
 
     const experienceData = {
       company_id: experience ? experience.company_id : null,
@@ -1088,8 +1088,8 @@ export class CreateProfileComponent implements OnInit {
       end_date: experience && experience.end_date ? experience.end_date : null,
       job_desc: experience ? experience.job_desc : null,
       user_specified_company_name: experience ? experience.user_specified_company_name : null,
-      skill_ids_trained: (experience && experience.skills_trained && experience.skills_trained.length > 0) ? experience.skills_trained.map(x => x.skill_id) : null,
-      add_industry_ids: (experience && experience.add_industries && experience.add_industries.length) > 0 ? experience.add_industries.map(x => x.industry_id) : null,
+      skill_ids_trained: null,
+      add_industry_ids: null,
     };
 
     this.experienceDataList.push(experienceData);
@@ -1211,8 +1211,14 @@ export class CreateProfileComponent implements OnInit {
     if (this.experienceList.length === 0) {
       this.addExperienceFormGroup(null);
     } else {
-      this.experienceList.forEach((experience) => {
+      this.experienceList.forEach((experience, arrIndex) => {
         this.addExperienceFormGroup(experience);
+        if (experience.skills_trained && experience.skills_trained.length > 0) {
+          this.getSkillsTrained(arrIndex);
+        }
+        if (experience.add_industries && experience.add_industries.length > 0) {
+          this.getAdditionalIndustries(arrIndex);
+        }
       });
     }
   }
@@ -1269,7 +1275,18 @@ export class CreateProfileComponent implements OnInit {
       this.workExperienceFormArray.at(index).get('skills_trained').setValue('');
     }
   }
-
+  getSkillsTrained(arrIndex: number) {
+    this.userService.getSkillsTrained(this.experienceList[arrIndex].work_hist_id).subscribe(
+      dataJson => {
+        this.experienceList[arrIndex].skills_trained = dataJson.data;
+        this.skills_trained[arrIndex] = this.experienceList[arrIndex].skills_trained;
+        this.experienceDataList[arrIndex].skill_ids_trained = (this.experienceList[arrIndex] && this.experienceList[arrIndex].skills_trained && this.experienceList[arrIndex].skills_trained.length > 0) ? this.experienceList[arrIndex].skills_trained.map(x => x.skill_id) : null;
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
   onRemoveSkillsTrained(formArrIndex: number, arrIndex: number, skill: Skill) {
     if (formArrIndex < this.experienceList.length) {
       if (this.experienceList[formArrIndex].skills_trained.filter(skill_trained => skill_trained.skill_id === skill.skill_id).length > 0) {
@@ -1293,9 +1310,8 @@ export class CreateProfileComponent implements OnInit {
   }
 
   removeExperienceSkillTrainedData(formArrIndex: number, arrIndex: number, skill: Skill) {
-    this.userService.DeleteSkillTrainedById(this.experienceList[formArrIndex].work_hist_id, skill.skill_id).subscribe(
+    this.userService.deleteSkillTrainedById(this.experienceList[formArrIndex].work_hist_id, skill.skill_id).subscribe(
       dataJson => {
-        console.log('Delete Education_List', dataJson);
         this.removeSkillsTrained(formArrIndex, arrIndex, skill);
       },
       error => {
@@ -1339,11 +1355,21 @@ export class CreateProfileComponent implements OnInit {
       }
     }
   }
-
+  getAdditionalIndustries(arrIndex: number) {
+    this.userService.getAdditionalIndustries(this.experienceList[arrIndex].work_hist_id).subscribe(
+      dataJson => {
+        this.experienceList[arrIndex].add_industries = dataJson.data;
+        this.additional_industries[arrIndex] = this.experienceList[arrIndex].add_industries;
+        this.experienceDataList[arrIndex].add_industry_ids = (this.experienceList[arrIndex] && this.experienceList[arrIndex].add_industries && this.experienceList[arrIndex].add_industries.length) > 0 ? this.experienceList[arrIndex].add_industries.map(x => x.industry_id) : null;
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
   removeAdditionalIndustryData(formArrIndex: number, arrIndex: number, industry: Industry) {
     this.userService.DeleteAdditionalIndustryById(this.experienceList[formArrIndex].work_hist_id, industry.industry_id).subscribe(
       dataJson => {
-        console.log('Delete Education_List', dataJson);
         this.removeAdditionalIndustry(formArrIndex, arrIndex, industry);
       },
       error => {
