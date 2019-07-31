@@ -67,7 +67,7 @@ export class HeaderSectionComponent implements OnChanges, OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     const editMode: SimpleChange = changes.editMode;
-    if (!editMode.previousValue && editMode.currentValue) {
+    if (editMode && !editMode.previousValue && editMode.currentValue) {
       this.initGeneralInfoForm();
     }
   }
