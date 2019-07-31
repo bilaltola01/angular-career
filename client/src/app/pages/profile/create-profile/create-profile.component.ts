@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
-<<<<<<< HEAD
 import {MatDatepicker} from '@angular/material/datepicker';
 import {
   AutoCompleteService,
@@ -10,12 +9,7 @@ import {
   AlertType,
   HelperService
 } from 'src/app/services';
-=======
-import { MatDatepicker } from '@angular/material/datepicker';
-import { AutoCompleteService } from 'src/app/services/auto-complete.service';
-import { UserService } from 'src/app/services/user.service';
-import { AlertsService, AlertType } from 'src/app/services/alerts.service';
->>>>>>> Signing profile picture and uploading it to S3 bucket
+
 import {
   City, School, Major, Skill, Interest, Level, Company,
   UserGeneralInfo, UserObject,
@@ -191,16 +185,7 @@ export class CreateProfileComponent implements OnInit {
 
   userRole: string;
 
-<<<<<<< HEAD
   constructor(private route: ActivatedRoute, private router: Router, private autoCompleteService: AutoCompleteService, private userService: UserService, private alertsService: AlertsService, private helperService: HelperService) { }
-=======
-  constructor(private route: ActivatedRoute,
-              private router: Router,
-              private autoCompleteService: AutoCompleteService,
-              private userService: UserService,
-              private alertsService: AlertsService) {
-  }
->>>>>>> Signing profile picture and uploading it to S3 bucket
 
   ngOnInit() {
     if (this.route.snapshot.queryParams.role) {
