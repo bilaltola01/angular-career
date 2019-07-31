@@ -105,6 +105,22 @@ mat-toolbar{
   }
 }
 
+.userinfo-container-no-click {
+  display: inline-flex;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 400;
+  font-family: 'Poppins', sans-serif;
+  img {
+    margin-left: 10px;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    // border: 2px solid rgba($white, 0.90);
+    object-fit: cover;
+  }
+}
+
 button.mat-icon-button {
   color: $white;
   margin-right: 10px;

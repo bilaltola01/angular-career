@@ -109,7 +109,15 @@
       </div>
 
       <span class="spacer" *ngIf="isLoggedIn()"></span>
-      <span [matMenuTriggerFor]="menu" class="userinfo-container" *ngIf="isLoggedIn()">
+      <!-- If user is creating profile don't show the dropdown -->
+      <span class="userinfo-container-no-click" *ngIf="isLoggedIn() && isCreatingProfile()">
+        <!-- Clips the first and last names at 10 charecters and puts a '.' -->
+        {{ (userGeneralInfo?.first_name?.length>10)? (userGeneralInfo?.first_name | slice:0:10)+'.':(userGeneralInfo?.first_name) }}
+        {{ (userGeneralInfo?.last_name?.length>10)? (userGeneralInfo?.last_name | slice:0:10)+'.':(userGeneralInfo?.last_name) }}
+        <img class="user-photo" src="{{userGeneralInfo?.photo ? userGeneralInfo.photo : 'assets/icons/no_photo.png'}}">
+      </span>
+      <!-- If user is not creating profile show the dropdown -->
+      <span [matMenuTriggerFor]="menu" class="userinfo-container" *ngIf="isLoggedIn() && !isCreatingProfile()">
         <!-- Clips the first and last names at 10 charecters and puts a '.' -->
         {{ (userGeneralInfo?.first_name?.length>10)? (userGeneralInfo?.first_name | slice:0:10)+'.':(userGeneralInfo?.first_name) }}
         {{ (userGeneralInfo?.last_name?.length>10)? (userGeneralInfo?.last_name | slice:0:10)+'.':(userGeneralInfo?.last_name) }}

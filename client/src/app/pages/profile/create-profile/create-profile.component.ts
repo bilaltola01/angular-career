@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import {MatDatepicker} from '@angular/material/datepicker';
@@ -7,7 +7,8 @@ import {
   UserService,
   AlertsService,
   AlertType,
-  HelperService
+  HelperService,
+  PhotoStateService,
 } from 'src/app/services';
 
 import {
@@ -46,6 +47,7 @@ export interface EditSkillItem {
   styleUrls: ['./create-profile.component.scss']
 })
 export class CreateProfileComponent implements OnInit {
+  @Output() updatedGeneralInfoData = new EventEmitter();
 
   page_titles = [
     '',
@@ -185,7 +187,13 @@ export class CreateProfileComponent implements OnInit {
 
   userRole: string;
 
-  constructor(private route: ActivatedRoute, private router: Router, private autoCompleteService: AutoCompleteService, private userService: UserService, private alertsService: AlertsService, private helperService: HelperService) { }
+  constructor(private route: ActivatedRoute,
+    private router: Router,
+    private autoCompleteService: AutoCompleteService,
+    private userService: UserService,
+    private alertsService: AlertsService,
+    private helperService: HelperService,
+    private photoStateService: PhotoStateService) { }
 
   ngOnInit() {
     if (this.route.snapshot.queryParams.role) {
@@ -427,6 +435,7 @@ export class CreateProfileComponent implements OnInit {
 
   updateBasicInformationForm() {
     this.updateGeneralInfoRequest();
+    this.basicInfoForm.get('photo').setValue(this.generalInfoResponse.photo);
     this.basicInfoForm.get('basicInfoCity').setValue(this.generalInfoResponse.city);
     this.basicInfoForm.get('basicInfoState').setValue(this.generalInfoResponse.state);
     this.basicInfoForm.get('basicInfoCountry').setValue(this.generalInfoResponse.country);
@@ -472,6 +481,7 @@ export class CreateProfileComponent implements OnInit {
                 this.basicInfoForm.patchValue({
                   photo: response.data
                 });
+                this.photoStateService.setPhoto(response.data);
               }, err => {
                 this.alertsService.show(err.message, AlertType.error);
               });
