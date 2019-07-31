@@ -70,7 +70,13 @@
     <div class="container__full">
       <div class="profile-form" [formGroup]="basicInfoForm">
         <div class="profile-form__image">
-          <img alt="Profile Image" src="{{ (generalInfoRequest && generalInfoRequest.photo) ? generalInfoRequest.photo : 'assets/icons/no_photo.png'}}">
+          <input 
+            style="display: none"
+            type="file"
+            (change)="onPhotoFileSelected($event)"
+            #fileInput>    
+          
+          <img alt="Profile Image" src="{{basicInfoForm.get('photo').value || 'assets/icons/profile-image.svg'}}" (click)="fileInput.click()" >
         </div>
         <h3 class="profile-form__title">
           BASIC INFORMATION

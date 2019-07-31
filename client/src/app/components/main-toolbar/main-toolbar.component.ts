@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UserService } from 'src/app/services/user.service';
 import { isDevMode } from '@angular/core';
 import { UserGeneralInfo } from 'src/app/models';
 import { AlertsService, AlertType } from 'src/app/services/alerts.service';
 import { LocationStrategy } from '@angular/common';
+import { PhotoStateService } from '../../services';
 
 @Component({
 // tslint:disable-next-line: component-selector
@@ -15,8 +16,7 @@ import { LocationStrategy } from '@angular/common';
   styleUrls: ['./main-toolbar.component.scss']
 })
 export class MainToolbarComponent implements OnInit {
-
-  userGeneralInfo: UserGeneralInfo;
+  userGeneralInfo: UserGeneralInfo = new UserGeneralInfo();
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(['(max-width: 1250px)'])
     .pipe(
@@ -26,11 +26,18 @@ export class MainToolbarComponent implements OnInit {
   constructor(private breakpointObserver: BreakpointObserver,
     private userService: UserService,
     private alertsService: AlertsService,
-    public url: LocationStrategy) {}
+    public url: LocationStrategy,
+    private photoStateService: PhotoStateService) {}
 
   ngOnInit() {
     // TODO: This get should be called only once and stored in browser storage in the user service
     this.getGeneralInfo();
+    this.photoStateService.getPhoto
+      .subscribe(photo => {
+        this.userGeneralInfo.photo = photo;
+      }, error => {
+          this.alertsService.show(error.message, AlertType.error);
+        });
   }
 
   getGeneralInfo() {

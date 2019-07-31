@@ -96,6 +96,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   onChangedGeneralInfoData($event: any) {
+    this.generalInfoData.photo = $event.data.photo;
     this.generalInfoData.first_name = $event.data.first_name;
     this.generalInfoData.last_name = $event.data.last_name;
     this.generalInfoData.birthdate = $event.data.birthdate;
