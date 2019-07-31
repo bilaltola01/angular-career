@@ -5,10 +5,13 @@ $primary-font-color: map-get($md-cfaccent, 500);
 :host {
   @include flex(row, center, center);
   align-items: unset;
-  padding-top: 15%;
+  padding-top: 20vh;
   min-height: calc(100vh - 70px);
   box-sizing: border-box;
   background-color: $bg-color-1;
+  @media only screen and (max-height: 750px) {
+    padding-top: 5vh;
+  }
 }
 .container {
   &__left {
