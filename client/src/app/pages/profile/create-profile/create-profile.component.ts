@@ -2253,6 +2253,7 @@ export class CreateProfileComponent implements OnInit {
   }
 
   updateProfileStatus() {
+    this.is_skip = false;
     this.profile_status = this.generalInfoResponse.is_looking;
   }
 
