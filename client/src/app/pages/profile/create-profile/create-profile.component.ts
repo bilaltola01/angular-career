@@ -1625,9 +1625,20 @@ export class CreateProfileComponent implements OnInit {
   }
 
   getUserInterestsList() {
-    this.userService.getUserInterestsInfo().subscribe(
+    this.getUserInterestsListByOffset(ITEMS_LIMIT, 0);
+  }
+
+  getUserInterestsListByOffset(limit: number, offset: number) {
+    this.userService.getUserInterestsInfo(limit, offset).subscribe(
       dataJson => {
-        this.userInterestsList = dataJson['data'];
+        if (offset === 0) {
+          this.userInterestsList = dataJson['data'];
+        } else {
+          this.userInterestsList = this.userInterestsList.slice().concat(dataJson['data']);
+        }
+        if (dataJson['data'].length === limit) {
+          this.getUserInterestsListByOffset(limit, offset + limit);
+        }
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);

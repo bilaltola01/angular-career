@@ -444,8 +444,8 @@ export class UserService {
   }
 
   // User Interests Services
-  public getUserInterestsInfo(): Observable<any> {
-    return this.http.get(this.user_service_url + `user/${this.user_id}/interests?limit=${this.max_limit}`, this.authHttpOptions())
+  public getUserInterestsInfo(limit: number, offset: number): Observable<any> {
+    return this.http.get(this.user_service_url + `user/${this.user_id}/interests?limit=${limit}&offset=${offset}`, this.authHttpOptions())
       .pipe(
         map(data => {
           return {success: true, message: 'Success!', data: data};

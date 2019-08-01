@@ -392,4 +392,4 @@ export const NavMenus = {
   ]
 };
 
-export const ITEMS_LIMIT = 10;
+export const ITEMS_LIMIT = 100;
