@@ -32,7 +32,8 @@ import {
   UserExternalResourcesItemData,
   ExternalResources,
   ProfileStatuses,
-  UserRoles
+  UserRoles,
+  ITEMS_LIMIT
 } from 'src/app/models';
 import moment from 'moment';
 
@@ -1548,9 +1549,20 @@ export class CreateProfileComponent implements OnInit {
   }
 
   getUserSkillsList() {
-    this.userService.getSkillsInfo().subscribe(
+    this.getUserSkillsListByOffset(ITEMS_LIMIT, 0);
+  }
+
+  getUserSkillsListByOffset(limit: number, offset: number) {
+    this.userService.getSkillsInfo(limit, offset).subscribe(
       dataJson => {
-        this.userSkillsList = dataJson['data'];
+        if (offset === 0) {
+          this.userSkillsList = dataJson['data'];
+        } else {
+          this.userSkillsList = this.userSkillsList.slice().concat(dataJson['data']);
+        }
+        if (dataJson['data'].length === limit) {
+          this.getUserSkillsListByOffset(limit, offset + limit);
+        }
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);

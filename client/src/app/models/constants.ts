@@ -391,3 +391,5 @@ export const NavMenus = {
     }
   ]
 };
+
+export const ITEMS_LIMIT = 10;

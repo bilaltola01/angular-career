@@ -11,7 +11,8 @@ import {
   UserProjectItem,
   UserPublicationItem,
   UserExternalResourcesItem,
-  UserObject
+  UserObject,
+  ITEMS_LIMIT
 } from 'src/app/models';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -268,12 +269,23 @@ export class UserProfileComponent implements OnInit {
     );
   }
   getUserSkillsList() {
-    this.userService.getSkillsInfo().subscribe(
+    this.getUserSkillsListByOffset(ITEMS_LIMIT, 0);
+  }
+  getUserSkillsListByOffset(limit: number, offset: number) {
+    this.userService.getSkillsInfo(limit, offset).subscribe(
       dataJson => {
-        this.userSkillsList = dataJson['data'];
-        this.navMenu[0].items[5].visible = this.userSkillsList && this.userSkillsList.length > 0 ? true : false;
-        this.counts++;
-        this.checkProfileLoading();
+        if (offset === 0) {
+          this.userSkillsList = dataJson['data'];
+        } else {
+          this.userSkillsList = this.userSkillsList.slice().concat(dataJson['data']);
+        }
+        if (dataJson['data'].length === limit) {
+          this.getUserSkillsListByOffset(limit, offset + limit);
+        } else {
+          this.navMenu[0].items[5].visible = this.userSkillsList && this.userSkillsList.length > 0 ? true : false;
+          this.counts++;
+          this.checkProfileLoading();
+        }
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
