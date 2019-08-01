@@ -204,10 +204,38 @@ export class UserProfileComponent implements OnInit {
         this.navMenu[0].items[2].visible = this.experienceList && this.experienceList.length > 0 ? true : false;
         this.counts++;
         this.checkProfileLoading();
+        this.experienceList.forEach((experience, arrIndex) => {
+          if (experience.skills_trained && experience.skills_trained.length > 0) {
+            this.getSkillsTrained(arrIndex);
+          }
+          if (experience.add_industries && experience.add_industries.length > 0) {
+            this.getAdditionalIndustries(arrIndex);
+          }
+        });
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
         this.experienceList = [];
+      }
+    );
+  }
+  getSkillsTrained(arrIndex: number) {
+    this.userService.getSkillsTrained(this.experienceList[arrIndex].work_hist_id).subscribe(
+      dataJson => {
+        this.experienceList[arrIndex].skills_trained = dataJson.data;
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+  getAdditionalIndustries(arrIndex: number) {
+    this.userService.getAdditionalIndustries(this.experienceList[arrIndex].work_hist_id).subscribe(
+      dataJson => {
+        this.experienceList[arrIndex].add_industries = dataJson.data;
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
       }
     );
   }

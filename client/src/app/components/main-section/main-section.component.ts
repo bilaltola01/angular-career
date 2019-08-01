@@ -430,6 +430,7 @@ export class ProfileDialogContentComponent {
   minDate: Date;
   maxDate = new Date();
 
+  items_count: number;
 
   constructor(
     public dialogRef: MatDialogRef<ProfileDialogContentComponent>,
@@ -1020,7 +1021,21 @@ export class ProfileDialogContentComponent {
       this.userService.postExperienceInfo(this.request_experience).subscribe(
         dataJson => {
           this.data.data.push(dataJson['data']);
-          this.dialogRef.close(this.data.data);
+          const experience = this.data.data[this.data.data.length - 1];
+          this.items_count = 0;
+          if (experience.skills_trained && experience.skills_trained.length > 0) {
+            this.getSkillsTrained(this.data.data.length - 1);
+          } else {
+            this.items_count++;
+          }
+          if (experience.add_industries && experience.add_industries.length > 0) {
+            this.getAdditionalIndustries(this.data.data.length - 1);
+          } else {
+            this.items_count++;
+          }
+          if (this.items_count === 2) {
+            this.dialogRef.close(this.data.data);
+          }
         },
         error => {
           this.alertsService.show(error.message, AlertType.error);
@@ -1033,13 +1048,55 @@ export class ProfileDialogContentComponent {
       this.userService.patchExperienceInfoById(this.request_experience, this.data.data[this.data.editIndex].work_hist_id).subscribe(
         dataJson => {
           this.data.data[this.data.editIndex] = dataJson['data'];
-          this.dialogRef.close(this.data.data);
+          const experience = dataJson['data'];
+          this.items_count = 0;
+          if (experience.skills_trained && experience.skills_trained.length > 0) {
+            this.getSkillsTrained(this.data.editIndex);
+          } else {
+            this.items_count++;
+          }
+          if (experience.add_industries && experience.add_industries.length > 0) {
+            this.getAdditionalIndustries(this.data.editIndex);
+          } else {
+            this.items_count++;
+          }
+          if (this.items_count === 2) {
+            this.dialogRef.close(this.data.data);
+          }
         },
         error => {
           this.alertsService.show(error.message, AlertType.error);
         }
       );
     }
+  }
+  getSkillsTrained(arrIndex: number) {
+    this.userService.getSkillsTrained(this.data.data[arrIndex].work_hist_id).subscribe(
+      dataJson => {
+        this.items_count++;
+        this.data.data[arrIndex].skills_trained = dataJson.data;
+        if (this.items_count === 2) {
+          this.dialogRef.close(this.data.data);
+        }
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+  getAdditionalIndustries(arrIndex: number) {
+    this.userService.getAdditionalIndustries(this.data.data[arrIndex].work_hist_id).subscribe(
+      dataJson => {
+        this.items_count++;
+        this.data.data[arrIndex].add_industries = dataJson.data;
+        if (this.items_count === 2) {
+          this.dialogRef.close(this.data.data);
+        }
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
   }
 
   initProjectForm() {
