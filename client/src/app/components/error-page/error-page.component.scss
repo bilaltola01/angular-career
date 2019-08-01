@@ -1,0 +1,28 @@
+@import '../../../styles/variables';
+
+$primary-font-color: map-get($md-cfaccent, 500);
+
+:host {
+  @include flex(row, flex-start, center);
+  min-height: calc(100vh - 70px);
+  padding: 100px 0 70px 0;
+  box-sizing: border-box;
+  background-color: $bg-color-1;
+  h2, p {
+    color: rgba($primary-font-color, .84);
+  }
+  @media only screen and (max-width: $tablet-breakpoint) {
+    padding: 60px 0 40px;
+  }
+}
+
+.container {
+  &__full {
+    grid-column-start: 1;
+    grid-column-end: 13;
+    @include flex(column, center, center);
+    .row {
+        text-align: center;
+      }
+    }
+  }

@@ -719,16 +719,10 @@ export class UserService {
   }
 
   private handleError(error) {
-    let errorMessage = '';
-    if (error.error instanceof ErrorEvent) {
-      errorMessage = error.message;
-    } else {
-      if (!environment.production) {
-        console.error(`UserService -> handleError -> error. Error Code: ${error.status}. Message: ${error.error.message}. Details:`, error);
-      }
-
-      errorMessage = error.error.message;
+    if (!environment.production) {
+      console.error(`UserService -> handleError -> error. Error Code: ${error.status}. Message: ${error.error.message ? error.error.message : error.statusText}. Details:`, error);
     }
-    return throwError({success: false, message: errorMessage});
+
+    return throwError({success: false, message: error.error.message ? error.error.message : error.statusText});
   }
 }
