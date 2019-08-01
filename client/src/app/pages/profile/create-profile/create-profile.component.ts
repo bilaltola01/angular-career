@@ -1750,6 +1750,7 @@ export class CreateProfileComponent implements OnInit {
    */
 
   initProjectsFormArray() {
+    this.is_skip = true;
     this.projectsFormArray = new FormArray([]);
     this.userProjectsList = [];
     this.userProjectsDataList = [];
@@ -1862,39 +1863,44 @@ export class CreateProfileComponent implements OnInit {
 
   updateUserProjectsData() {
     if (this.userProjectsDataList.length !== 0) {
-      if (this.projectsFormArray.valid && this.checkAllProjectsInfoValidation()) {
-        let counts = 0;
-        this.userProjectsDataList.forEach((project, index) => {
-          if (index < this.userProjectsList.length) {
-            this.userService.patchProjectInfoById(project, this.userProjectsList[index].project_id).subscribe(
-              dataJson => {
-                this.userProjectsList[index] = dataJson['data'];
-                counts++;
-                if (counts === this.userProjectsDataList.length) {
-                  this.selectedPageIndex++;
-                  this.initializeFormsByPageIndex();
+      if (!this.is_skip) {
+        if (this.projectsFormArray.valid && this.checkAllProjectsInfoValidation()) {
+          let counts = 0;
+          this.userProjectsDataList.forEach((project, index) => {
+            if (index < this.userProjectsList.length) {
+              this.userService.patchProjectInfoById(project, this.userProjectsList[index].project_id).subscribe(
+                dataJson => {
+                  this.userProjectsList[index] = dataJson['data'];
+                  counts++;
+                  if (counts === this.userProjectsDataList.length) {
+                    this.selectedPageIndex++;
+                    this.initializeFormsByPageIndex();
+                  }
+                },
+                error => {
+                  this.alertsService.show(error.message, AlertType.error);
                 }
-              },
-              error => {
-                this.alertsService.show(error.message, AlertType.error);
-              }
-            );
-          } else {
-            this.userService.postProjectInfo(project).subscribe(
-              dataJson => {
-                this.userProjectsList[index] = dataJson['data'];
-                counts++;
-                if (counts === this.userProjectsDataList.length) {
-                  this.selectedPageIndex++;
-                  this.initializeFormsByPageIndex();
+              );
+            } else {
+              this.userService.postProjectInfo(project).subscribe(
+                dataJson => {
+                  this.userProjectsList[index] = dataJson['data'];
+                  counts++;
+                  if (counts === this.userProjectsDataList.length) {
+                    this.selectedPageIndex++;
+                    this.initializeFormsByPageIndex();
+                  }
+                },
+                error => {
+                  this.alertsService.show(error.message, AlertType.error);
                 }
-              },
-              error => {
-                this.alertsService.show(error.message, AlertType.error);
-              }
-            );
-          }
-        });
+              );
+            }
+          });
+        }
+      } else {
+        this.selectedPageIndex++;
+        this.initializeFormsByPageIndex();
       }
     } else {
       this.selectedPageIndex++;
@@ -1912,6 +1918,22 @@ export class CreateProfileComponent implements OnInit {
         this.alertsService.show(error.message, AlertType.error);
       }
     );
+  }
+
+  checkProjectsFormSkip(): boolean {
+    if (
+      this.userProjectsList.length === 0
+      && this.projectsFormArray.length === 1
+      && !this.helperService.checkSpacesString(this.projectsFormArray.at(0).get('project_name').value)
+      && !this.helperService.checkSpacesString(this.projectsFormArray.at(0).get('description').value)
+      && !this.helperService.checkSpacesString(this.projectsFormArray.at(0).get('date_finished').value)
+      && !this.helperService.checkSpacesString(this.projectsFormArray.at(0).get('href').value)
+    ) {
+      this.is_skip = true;
+    } else {
+      this.is_skip = false;
+    }
+    return this.is_skip;
   }
 
 
