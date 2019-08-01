@@ -7,6 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { MaterialModule } from './modules/material.module';
 import { SharedModule } from './components/shared.module';
 import { ErrorInterceptor } from './services/error-interceptor';
+import { GuardsModule } from './guard/guards.module';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { ErrorInterceptor } from './services/error-interceptor';
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    GuardsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
