@@ -25,15 +25,10 @@ export class ErrorInterceptor implements HttpInterceptor {
 
   private determineActionBasedOnStatusCode(statusCode: number): void {
     switch (statusCode) {
-      case 401: {
-        this.userService.logOut();
+      case 404: {
         this.router.navigate(['/error'], {queryParams: {'status-code': statusCode}});
         break;
       }
-      // case 404: {
-      //   this.router.navigate(['/error'], {queryParams: {'status-code': statusCode}});
-      //   break;
-      // }
       // if status code is 0 that means we have server side problem ( wrong headers, token or server is down )
       case 0: {
         this.userService.logOut();
