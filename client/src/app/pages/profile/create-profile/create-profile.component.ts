@@ -187,6 +187,7 @@ export class CreateProfileComponent implements OnInit {
   externalResourcesDataList: UserExternalResourcesItemData[];
 
   userRole: string;
+  is_skip: boolean;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -309,30 +310,6 @@ export class CreateProfileComponent implements OnInit {
     }
   }
 
-
-  /**
-   * extractDate
-   * @param date
-   */
-  extractDate(date: string): string {
-    return `${date.slice(5, 7)}/${date.slice(8, 10)}/${date.slice(0, 4)}`;
-  }
-
-  /**
-   *  Extract MM/YYYY string from Date type string
-   */
-  extractYearAndMonth(date: string): string {
-    return `${date.slice(5, 7)}/${date.slice(0, 4)}`;
-  }
-
-  /**
-   * Extract YYYY string from Date
-   * @param date: string
-   */
-  extractYear(date: string): string {
-    return date.slice(0, 4);
-  }
-
   /**
    * General Information Form
    */
@@ -350,7 +327,7 @@ export class CreateProfileComponent implements OnInit {
       basicInfoCountry: new FormControl(''),
       basicInfoBirth: new FormControl(''),
       basicInfoTitle: new FormControl(''),
-      basicInfoGender: new FormControl('', [Validators.required]),
+      basicInfoGender: new FormControl(''),
       basicInfoEthnicity: new FormControl('', [Validators.required])
     });
 
@@ -435,6 +412,7 @@ export class CreateProfileComponent implements OnInit {
   }
 
   updateBasicInformationForm() {
+    this.is_skip = true;
     this.updateGeneralInfoRequest();
     this.basicInfoForm.get('photo').setValue(this.generalInfoResponse.photo);
     this.basicInfoForm.get('basicInfoCity').setValue(this.generalInfoResponse.city);
@@ -586,29 +564,65 @@ export class CreateProfileComponent implements OnInit {
   }
 
   updateGeneralInfo() {
-    if ((this.selectedPageIndex === 1 && this.basicInfoForm.valid && this.onCheckCityValidation() && this.onCheckStateValidation()) ||
-      (this.selectedPageIndex === 2 && this.aboutMeForm.valid) || this.selectedPageIndex === 9) {
-      if (this.userRole) {
-        this.generalInfoRequest[this.userRole] = 1;
-      }
-
-      this.userService.updateGeneralInfo(this.generalInfoRequest).subscribe(
-        dataJson => {
-          this.generalInfoResponse = dataJson['data'];
-          this.updateBasicInformationForm();
-          this.updateAboutMeForm();
-          this.updateProfileStatus();
-          if (this.selectedPageIndex !== 9) {
-            this.selectedPageIndex++;
-            if (this.selectedPageIndex === 3) {
-              this.initializeFormsByPageIndex();
-            }
-          }
-        },
-        error => {
-          this.alertsService.show(error.message, AlertType.error);
+    if (!this.is_skip) {
+      if ((this.selectedPageIndex === 1 && this.basicInfoForm.valid && this.onCheckCityValidation() && this.onCheckStateValidation()) ||
+        (this.selectedPageIndex === 2 && this.aboutMeForm.valid) || this.selectedPageIndex === 9) {
+        if (this.userRole) {
+          this.generalInfoRequest[this.userRole] = 1;
         }
-      );
+
+        this.userService.updateGeneralInfo(this.generalInfoRequest).subscribe(
+          dataJson => {
+            this.generalInfoResponse = dataJson['data'];
+            this.updateBasicInformationForm();
+            this.updateAboutMeForm();
+            this.updateProfileStatus();
+            if (this.selectedPageIndex !== 9) {
+              this.selectedPageIndex++;
+              if (this.selectedPageIndex === 3) {
+                this.initializeFormsByPageIndex();
+              }
+            }
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+          }
+        );
+      }
+    } else {
+      if (this.selectedPageIndex !== 9) {
+        this.selectedPageIndex++;
+        if (this.selectedPageIndex === 3) {
+          this.initializeFormsByPageIndex();
+        }
+      }
+    }
+  }
+
+  checkBasicInfoFormSkip(): boolean {
+    if (
+      !this.basicInfoForm.get('photo').value
+      && this.basicInfoForm.get('basicInfoEthnicity').value === 'Undisclosed'
+      && !this.helperService.checkSpacesString(this.basicInfoForm.get('basicInfoCity').value)
+      && !this.helperService.checkSpacesString(this.basicInfoForm.get('basicInfoState').value)
+      && !this.helperService.checkSpacesString(this.basicInfoForm.get('basicInfoCountry').value)
+      && !this.helperService.checkSpacesString(this.basicInfoForm.get('basicInfoGender').value)
+      && !this.helperService.checkSpacesString(this.basicInfoForm.get('basicInfoBirth').value)
+      && !this.helperService.checkSpacesString(this.basicInfoForm.get('basicInfoTitle').value)
+      && this.generalInfoResponse.photo === null
+      && this.generalInfoResponse.city_id === null
+      && this.generalInfoResponse.state_id === null
+      && this.generalInfoResponse.country_id === null
+      && this.generalInfoResponse.gender === null
+      && this.generalInfoResponse.birthdate === null
+      && this.generalInfoResponse.title === null
+      && this.generalInfoResponse.ethnicity === 'Undisclosed'
+    ) {
+      this.is_skip = true;
+      return true;
+    } else {
+      this.is_skip = false;
+      return false;
     }
   }
 
