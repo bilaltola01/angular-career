@@ -1085,6 +1085,7 @@ export class CreateProfileComponent implements OnInit {
    *  Work Experience FormGroup Array Initialization
    */
   initExperienceFormArray() {
+    this.is_skip = true;
     this.workExperienceFormArray = new FormArray([]);
     this.experienceList = [];
     this.experienceDataList = [];
@@ -1444,41 +1445,46 @@ export class CreateProfileComponent implements OnInit {
 
   updateExperienceData() {
     if (this.experienceDataList.length !== 0) {
-      if (this.workExperienceFormArray.valid && this.checkAllWorkExperienceInfoValidation()) {
-        if (this.workExperienceFormArray.valid) {
-          let counts = 0;
-          this.experienceDataList.forEach((experience, index) => {
-            if (index < this.experienceList.length) {
-              this.userService.patchExperienceInfoById(experience, this.experienceList[index].work_hist_id).subscribe(
-                dataJson => {
-                  this.experienceList[index] = dataJson['data'];
-                  counts++;
-                  if (counts === this.experienceDataList.length) {
-                    this.selectedPageIndex++;
-                    this.initializeFormsByPageIndex();
+      if (!this.is_skip) {
+        if (this.workExperienceFormArray.valid && this.checkAllWorkExperienceInfoValidation()) {
+          if (this.workExperienceFormArray.valid) {
+            let counts = 0;
+            this.experienceDataList.forEach((experience, index) => {
+              if (index < this.experienceList.length) {
+                this.userService.patchExperienceInfoById(experience, this.experienceList[index].work_hist_id).subscribe(
+                  dataJson => {
+                    this.experienceList[index] = dataJson['data'];
+                    counts++;
+                    if (counts === this.experienceDataList.length) {
+                      this.selectedPageIndex++;
+                      this.initializeFormsByPageIndex();
+                    }
+                  },
+                  error => {
+                    this.alertsService.show(error.message, AlertType.error);
                   }
-                },
-                error => {
-                  this.alertsService.show(error.message, AlertType.error);
-                }
-              );
-            } else {
-              this.userService.postExperienceInfo(experience).subscribe(
-                dataJson => {
-                  this.experienceList[index] = dataJson['data'];
-                  counts++;
-                  if (counts === this.experienceDataList.length) {
-                    this.selectedPageIndex++;
-                    this.initializeFormsByPageIndex();
+                );
+              } else {
+                this.userService.postExperienceInfo(experience).subscribe(
+                  dataJson => {
+                    this.experienceList[index] = dataJson['data'];
+                    counts++;
+                    if (counts === this.experienceDataList.length) {
+                      this.selectedPageIndex++;
+                      this.initializeFormsByPageIndex();
+                    }
+                  },
+                  error => {
+                    this.alertsService.show(error.message, AlertType.error);
                   }
-                },
-                error => {
-                  this.alertsService.show(error.message, AlertType.error);
-                }
-              );
-            }
-          });
+                );
+              }
+            });
+          }
         }
+      } else {
+        this.selectedPageIndex++;
+        this.initializeFormsByPageIndex();
       }
     } else {
       this.selectedPageIndex++;
@@ -1496,6 +1502,25 @@ export class CreateProfileComponent implements OnInit {
         this.alertsService.show(error.message, AlertType.error);
       }
     );
+  }
+
+  checkExperienceFormSkip(): boolean {
+    if (
+      this.experienceList.length === 0
+      && this.workExperienceFormArray.length === 1
+      && !this.helperService.checkSpacesString(this.workExperienceFormArray.at(0).get('company_name').value)
+      && !this.helperService.checkSpacesString(this.workExperienceFormArray.at(0).get('start_date').value)
+      && !this.helperService.checkSpacesString(this.workExperienceFormArray.at(0).get('end_date').value)
+      && !this.helperService.checkSpacesString(this.workExperienceFormArray.at(0).get('job').value)
+      && !this.helperService.checkSpacesString(this.workExperienceFormArray.at(0).get('description').value)
+      && !this.experienceDataList[0].skill_ids_trained
+      && !this.experienceDataList[0].add_industry_ids
+    ) {
+      this.is_skip = true;
+    } else {
+      this.is_skip = false;
+    }
+    return this.is_skip;
   }
 
 
