@@ -656,6 +656,7 @@ export class CreateProfileComponent implements OnInit {
    *  Education FormGroup Array Initialization
    */
   initEducationFormArray() {
+    this.is_skip = true;
     this.educationFormArray = new FormArray([]);
     this.educationList = [];
     this.educationDataList = [];
@@ -1000,41 +1001,46 @@ export class CreateProfileComponent implements OnInit {
 
   updateEducationData() {
     if (this.educationDataList.length !== 0) {
-      if (this.educationFormArray.valid && this.checkAllEducationInfoValidation()) {
-        if (this.educationFormArray.valid) {
-          let counts = 0;
-          this.educationDataList.forEach((education, index) => {
-            if (index < this.educationList.length) {
-              this.userService.patchEducationInfoById(education, this.educationList[index].education_id).subscribe(
-                dataJson => {
-                  this.educationList[index] = dataJson['data'];
-                  counts++;
-                  if (counts === this.educationDataList.length) {
-                    this.selectedPageIndex++;
-                    this.initializeFormsByPageIndex();
+      if (!this.is_skip) {
+        if (this.educationFormArray.valid && this.checkAllEducationInfoValidation()) {
+          if (this.educationFormArray.valid) {
+            let counts = 0;
+            this.educationDataList.forEach((education, index) => {
+              if (index < this.educationList.length) {
+                this.userService.patchEducationInfoById(education, this.educationList[index].education_id).subscribe(
+                  dataJson => {
+                    this.educationList[index] = dataJson['data'];
+                    counts++;
+                    if (counts === this.educationDataList.length) {
+                      this.selectedPageIndex++;
+                      this.initializeFormsByPageIndex();
+                    }
+                  },
+                  error => {
+                    this.alertsService.show(error.message, AlertType.error);
                   }
-                },
-                error => {
-                  this.alertsService.show(error.message, AlertType.error);
-                }
-              );
-            } else {
-              this.userService.postEducationInfo(education).subscribe(
-                dataJson => {
-                  this.educationList[index] = dataJson['data'];
-                  counts++;
-                  if (counts === this.educationDataList.length) {
-                    this.selectedPageIndex++;
-                    this.initializeFormsByPageIndex();
+                );
+              } else {
+                this.userService.postEducationInfo(education).subscribe(
+                  dataJson => {
+                    this.educationList[index] = dataJson['data'];
+                    counts++;
+                    if (counts === this.educationDataList.length) {
+                      this.selectedPageIndex++;
+                      this.initializeFormsByPageIndex();
+                    }
+                  },
+                  error => {
+                    this.alertsService.show(error.message, AlertType.error);
                   }
-                },
-                error => {
-                  this.alertsService.show(error.message, AlertType.error);
-                }
-              );
-            }
-          });
+                );
+              }
+            });
+          }
         }
+      } else {
+        this.selectedPageIndex++;
+        this.initializeFormsByPageIndex();
       }
     } else {
       this.selectedPageIndex++;
@@ -1052,6 +1058,26 @@ export class CreateProfileComponent implements OnInit {
         this.alertsService.show(error.message, AlertType.error);
       }
     );
+  }
+
+  checkEducationFormSkip(): boolean {
+    if (
+      this.educationList.length === 0
+      && this.educationFormArray.length === 1
+      && !this.helperService.checkSpacesString(this.educationFormArray.at(0).get('university').value)
+      && !this.helperService.checkSpacesString(this.educationFormArray.at(0).get('degree').value)
+      && !this.helperService.checkSpacesString(this.educationFormArray.at(0).get('start_date').value)
+      && !this.helperService.checkSpacesString(this.educationFormArray.at(0).get('graduation_date').value)
+      && !this.helperService.checkSpacesString(this.educationFormArray.at(0).get('major').value)
+      && !this.helperService.checkSpacesString(this.educationFormArray.at(0).get('focus_major').value)
+      && !this.helperService.checkSpacesString(this.educationFormArray.at(0).get('description').value)
+      && !this.helperService.checkSpacesString(this.educationFormArray.at(0).get('gpa').value)
+    ) {
+      this.is_skip = true;
+    } else {
+      this.is_skip = false;
+    }
+    return this.is_skip;
   }
 
   /**
