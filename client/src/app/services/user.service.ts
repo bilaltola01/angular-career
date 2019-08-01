@@ -263,13 +263,13 @@ export class UserService {
   }
 
   public getAdditionalIndustries(experienceId: number): Observable<any> {
-    return this.http.get(this.user_service_url + `user/${this.user_id}/experience/${experienceId}/additional-industries?limit=${this.max_limit}`, this.authHttpOptions())
-      .pipe(
-        map(data => {
-          return {success: true, message: 'Success!', data: data};
-        }),
-        catchError(this.handleError)
-      );
+    return this.http.get(this.user_service_url + `experience/${experienceId}/additional-industries`, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
   }
 
   public postAdditionalIndustry(additionalIndustryInfo: any): Observable<any> {
@@ -303,13 +303,13 @@ export class UserService {
   }
 
   public getSkillsTrained(experienceId: number): Observable<any> {
-    return this.http.get(this.user_service_url + `user/${this.user_id}/experience/${experienceId}/skills-trained?limit=${this.max_limit}`, this.authHttpOptions())
-      .pipe(
-        map(data => {
-          return {success: true, message: 'Success!', data: data};
-        }),
-        catchError(this.handleError)
-      );
+    return this.http.get(this.user_service_url + `experience/${experienceId}/skills-trained`, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
   }
 
   public postSkillTrained(skillInfo: any): Observable<any> {
@@ -332,7 +332,7 @@ export class UserService {
       );
   }
 
-  public DeleteSkillTrainedById(experienceId: number, skillId: number): Observable<any> {
+  public deleteSkillTrainedById(experienceId: number, skillId: number): Observable<any> {
     return this.http.delete(this.user_service_url + `user/${this.user_id}/experience/${experienceId}/skill-trained/${skillId}`, this.authHttpOptions())
       .pipe(
         map(data => {
@@ -342,8 +342,8 @@ export class UserService {
       );
   }
 
-  public getSkillsInfo(): Observable<any> {
-    return this.http.get(this.user_service_url + `user/${this.user_id}/skills?limit=${this.max_limit}`, this.authHttpOptions())
+  public getSkillsInfo(limit: number, offset: number): Observable<any> {
+    return this.http.get(this.user_service_url + `user/${this.user_id}/skills?limit=${limit}&offset=${offset}`, this.authHttpOptions())
       .pipe(
         map(data => {
           return {success: true, message: 'Success!', data: data};
@@ -444,8 +444,8 @@ export class UserService {
   }
 
   // User Interests Services
-  public getUserInterestsInfo(): Observable<any> {
-    return this.http.get(this.user_service_url + `user/${this.user_id}/interests?limit=${this.max_limit}`, this.authHttpOptions())
+  public getUserInterestsInfo(limit: number, offset: number): Observable<any> {
+    return this.http.get(this.user_service_url + `user/${this.user_id}/interests?limit=${limit}&offset=${offset}`, this.authHttpOptions())
       .pipe(
         map(data => {
           return {success: true, message: 'Success!', data: data};

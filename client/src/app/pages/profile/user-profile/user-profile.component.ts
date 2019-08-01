@@ -11,7 +11,8 @@ import {
   UserProjectItem,
   UserPublicationItem,
   UserExternalResourcesItem,
-  UserObject
+  UserObject,
+  ITEMS_LIMIT
 } from 'src/app/models';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -204,10 +205,38 @@ export class UserProfileComponent implements OnInit {
         this.navMenu[0].items[2].visible = this.experienceList && this.experienceList.length > 0 ? true : false;
         this.counts++;
         this.checkProfileLoading();
+        this.experienceList.forEach((experience, arrIndex) => {
+          if (experience.skills_trained && experience.skills_trained.length > 0) {
+            this.getSkillsTrained(arrIndex);
+          }
+          if (experience.add_industries && experience.add_industries.length > 0) {
+            this.getAdditionalIndustries(arrIndex);
+          }
+        });
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
         this.experienceList = [];
+      }
+    );
+  }
+  getSkillsTrained(arrIndex: number) {
+    this.userService.getSkillsTrained(this.experienceList[arrIndex].work_hist_id).subscribe(
+      dataJson => {
+        this.experienceList[arrIndex].skills_trained = dataJson.data;
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+  getAdditionalIndustries(arrIndex: number) {
+    this.userService.getAdditionalIndustries(this.experienceList[arrIndex].work_hist_id).subscribe(
+      dataJson => {
+        this.experienceList[arrIndex].add_industries = dataJson.data;
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
       }
     );
   }
@@ -240,12 +269,23 @@ export class UserProfileComponent implements OnInit {
     );
   }
   getUserSkillsList() {
-    this.userService.getSkillsInfo().subscribe(
+    this.getUserSkillsListByOffset(ITEMS_LIMIT, 0);
+  }
+  getUserSkillsListByOffset(limit: number, offset: number) {
+    this.userService.getSkillsInfo(limit, offset).subscribe(
       dataJson => {
-        this.userSkillsList = dataJson['data'];
-        this.navMenu[0].items[5].visible = this.userSkillsList && this.userSkillsList.length > 0 ? true : false;
-        this.counts++;
-        this.checkProfileLoading();
+        if (offset === 0) {
+          this.userSkillsList = dataJson['data'];
+        } else {
+          this.userSkillsList = this.userSkillsList.slice().concat(dataJson['data']);
+        }
+        if (dataJson['data'].length === limit) {
+          this.getUserSkillsListByOffset(limit, offset + limit);
+        } else {
+          this.navMenu[0].items[5].visible = this.userSkillsList && this.userSkillsList.length > 0 ? true : false;
+          this.counts++;
+          this.checkProfileLoading();
+        }
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -254,12 +294,23 @@ export class UserProfileComponent implements OnInit {
     );
   }
   getUserInterestsList() {
-    this.userService.getUserInterestsInfo().subscribe(
+    this.getUserInterestsListByOffset(ITEMS_LIMIT, 0);
+  }
+  getUserInterestsListByOffset(limit: number, offset: number) {
+    this.userService.getUserInterestsInfo(limit, offset).subscribe(
       dataJson => {
-        this.userInterestsList = dataJson['data'];
-        this.navMenu[0].items[6].visible = this.userInterestsList && this.userInterestsList.length > 0 ? true : false;
-        this.counts++;
-        this.checkProfileLoading();
+        if (offset === 0) {
+          this.userInterestsList = dataJson['data'];
+        } else {
+          this.userInterestsList = this.userInterestsList.slice().concat(dataJson['data']);
+        }
+        if (dataJson['data'].length === limit) {
+          this.getUserInterestsListByOffset(limit, offset + limit);
+        } else {
+          this.navMenu[0].items[6].visible = this.userInterestsList && this.userInterestsList.length > 0 ? true : false;
+          this.counts++;
+          this.checkProfileLoading();
+        }
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);

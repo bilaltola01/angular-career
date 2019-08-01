@@ -388,16 +388,8 @@ export const NavMenus = {
       id: 'application-template',
       title: 'Application Template',
       items: []
-    },
-    {
-      id: 'managing-positions',
-      title: 'Managing Positions',
-      items: []
-    },
-    {
-      id: 'permissions',
-      title: 'Permissions',
-      items: []
     }
   ]
 };
+
+export const ITEMS_LIMIT = 100;
