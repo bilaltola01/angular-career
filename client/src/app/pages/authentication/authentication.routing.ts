@@ -3,6 +3,7 @@ import { LoginComponent } from './login/login.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { VerificationComponent } from './verification/verification.component';
 import { EmailSentComponent } from './email-sent/email-sent.component';
+import { UnauthGuard } from '../../guard/unauth.guard';
 
 export const authenticationRoutes: Routes = [
   {
@@ -12,18 +13,23 @@ export const authenticationRoutes: Routes = [
   },
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
+    canActivate: [UnauthGuard]
   },
   {
     path: 'registration',
-    component: RegistrationComponent
+    component: RegistrationComponent,
+    canActivate: [UnauthGuard]
   },
   {
     path: 'verification/:user_id/:verify_str/:verify_key',
-    component: VerificationComponent
+    component: VerificationComponent,
+    canActivate: [UnauthGuard]
+
   },
   {
     path: 'email-sent',
-    component: EmailSentComponent
+    component: EmailSentComponent,
+    canActivate: [UnauthGuard]
   }
 ];

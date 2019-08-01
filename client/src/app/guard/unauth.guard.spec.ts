@@ -1,18 +1,17 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { UnauthGuard } from './unauth.guard';
 
-import { AuthGuard } from './auth.guard';
-
-describe('AuthGuardGuard', () => {
+describe('UnAuthGuard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports : [ HttpClientTestingModule, RouterTestingModule ],
-      providers: [AuthGuard]
+      providers: [UnauthGuard]
     });
   });
 
-  it('should redirect to /login if someone tries to access an authorized route', inject([AuthGuard], (guard: AuthGuard) => {
+  it('should redirect to route we specify as a default (my-profile) if someone tries to access it', inject([UnauthGuard], (guard: UnauthGuard) => {
     expect(guard).toBeTruthy();
   }));
 });
