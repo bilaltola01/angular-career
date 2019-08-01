@@ -176,7 +176,7 @@
       </div>
     </div>
     <div class="container__full">
-      <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!aboutMeForm.valid"></action-button>
+      <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!checkAboutMeFormSkip() && !aboutMeForm.valid"></action-button>
     </div>
   </div>
   

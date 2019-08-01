@@ -619,15 +619,15 @@ export class CreateProfileComponent implements OnInit {
       && this.generalInfoResponse.ethnicity === 'Undisclosed'
     ) {
       this.is_skip = true;
-      return true;
     } else {
       this.is_skip = false;
-      return false;
     }
+    return this.is_skip;
   }
 
   // About Me Form
   initAboutMeForm() {
+    this.is_skip = true;
     this.aboutMeForm = new FormGroup({
       aboutMe: new FormControl('')
     });
@@ -640,6 +640,15 @@ export class CreateProfileComponent implements OnInit {
         this.generalInfoRequest.user_intro = aboutMe ? this.helperService.checkSpacesString(aboutMe) : null;
       }
     );
+  }
+
+  checkAboutMeFormSkip(): boolean {
+    if (!this.helperService.checkSpacesString(this.aboutMeForm.get('aboutMe').value) && this.generalInfoResponse.user_intro === null) {
+      this.is_skip = true;
+    } else {
+      this.is_skip = false;
+    }
+    return this.is_skip;
   }
 
   /**
