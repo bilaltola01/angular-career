@@ -1003,40 +1003,38 @@ export class CreateProfileComponent implements OnInit {
     if (this.educationDataList.length !== 0) {
       if (!this.is_skip) {
         if (this.educationFormArray.valid && this.checkAllEducationInfoValidation()) {
-          if (this.educationFormArray.valid) {
-            let counts = 0;
-            this.educationDataList.forEach((education, index) => {
-              if (index < this.educationList.length) {
-                this.userService.patchEducationInfoById(education, this.educationList[index].education_id).subscribe(
-                  dataJson => {
-                    this.educationList[index] = dataJson['data'];
-                    counts++;
-                    if (counts === this.educationDataList.length) {
-                      this.selectedPageIndex++;
-                      this.initializeFormsByPageIndex();
-                    }
-                  },
-                  error => {
-                    this.alertsService.show(error.message, AlertType.error);
+          let counts = 0;
+          this.educationDataList.forEach((education, index) => {
+            if (index < this.educationList.length) {
+              this.userService.patchEducationInfoById(education, this.educationList[index].education_id).subscribe(
+                dataJson => {
+                  this.educationList[index] = dataJson['data'];
+                  counts++;
+                  if (counts === this.educationDataList.length) {
+                    this.selectedPageIndex++;
+                    this.initializeFormsByPageIndex();
                   }
-                );
-              } else {
-                this.userService.postEducationInfo(education).subscribe(
-                  dataJson => {
-                    this.educationList[index] = dataJson['data'];
-                    counts++;
-                    if (counts === this.educationDataList.length) {
-                      this.selectedPageIndex++;
-                      this.initializeFormsByPageIndex();
-                    }
-                  },
-                  error => {
-                    this.alertsService.show(error.message, AlertType.error);
+                },
+                error => {
+                  this.alertsService.show(error.message, AlertType.error);
+                }
+              );
+            } else {
+              this.userService.postEducationInfo(education).subscribe(
+                dataJson => {
+                  this.educationList[index] = dataJson['data'];
+                  counts++;
+                  if (counts === this.educationDataList.length) {
+                    this.selectedPageIndex++;
+                    this.initializeFormsByPageIndex();
                   }
-                );
-              }
-            });
-          }
+                },
+                error => {
+                  this.alertsService.show(error.message, AlertType.error);
+                }
+              );
+            }
+          });
         }
       } else {
         this.selectedPageIndex++;
@@ -1447,40 +1445,38 @@ export class CreateProfileComponent implements OnInit {
     if (this.experienceDataList.length !== 0) {
       if (!this.is_skip) {
         if (this.workExperienceFormArray.valid && this.checkAllWorkExperienceInfoValidation()) {
-          if (this.workExperienceFormArray.valid) {
-            let counts = 0;
-            this.experienceDataList.forEach((experience, index) => {
-              if (index < this.experienceList.length) {
-                this.userService.patchExperienceInfoById(experience, this.experienceList[index].work_hist_id).subscribe(
-                  dataJson => {
-                    this.experienceList[index] = dataJson['data'];
-                    counts++;
-                    if (counts === this.experienceDataList.length) {
-                      this.selectedPageIndex++;
-                      this.initializeFormsByPageIndex();
-                    }
-                  },
-                  error => {
-                    this.alertsService.show(error.message, AlertType.error);
+          let counts = 0;
+          this.experienceDataList.forEach((experience, index) => {
+            if (index < this.experienceList.length) {
+              this.userService.patchExperienceInfoById(experience, this.experienceList[index].work_hist_id).subscribe(
+                dataJson => {
+                  this.experienceList[index] = dataJson['data'];
+                  counts++;
+                  if (counts === this.experienceDataList.length) {
+                    this.selectedPageIndex++;
+                    this.initializeFormsByPageIndex();
                   }
-                );
-              } else {
-                this.userService.postExperienceInfo(experience).subscribe(
-                  dataJson => {
-                    this.experienceList[index] = dataJson['data'];
-                    counts++;
-                    if (counts === this.experienceDataList.length) {
-                      this.selectedPageIndex++;
-                      this.initializeFormsByPageIndex();
-                    }
-                  },
-                  error => {
-                    this.alertsService.show(error.message, AlertType.error);
+                },
+                error => {
+                  this.alertsService.show(error.message, AlertType.error);
+                }
+              );
+            } else {
+              this.userService.postExperienceInfo(experience).subscribe(
+                dataJson => {
+                  this.experienceList[index] = dataJson['data'];
+                  counts++;
+                  if (counts === this.experienceDataList.length) {
+                    this.selectedPageIndex++;
+                    this.initializeFormsByPageIndex();
                   }
-                );
-              }
-            });
-          }
+                },
+                error => {
+                  this.alertsService.show(error.message, AlertType.error);
+                }
+              );
+            }
+          });
         }
       } else {
         this.selectedPageIndex++;
@@ -2059,38 +2055,45 @@ export class CreateProfileComponent implements OnInit {
 
   updateUserPublicationsData() {
     if (this.userPublicationsDataList.length !== 0) {
-      let counts = 0;
-      this.userPublicationsDataList.forEach((publication, index) => {
-        if (index < this.userPublicationsList.length) {
-          this.userService.patchPublicationsInfoById(publication, this.userPublicationsList[index].publication_id).subscribe(
-            dataJson => {
-              this.userPublicationsList[index] = dataJson['data'];
-              counts++;
-              if (counts === this.userPublicationsDataList.length) {
-                this.selectedPageIndex++;
-                this.initializeFormsByPageIndex();
-              }
-            },
-            error => {
-              this.alertsService.show(error.message, AlertType.error);
+      if (!this.is_skip) {
+        if (this.publicationsFormArray.valid && this.checkAllPublicationInfoValidation()) {
+          let counts = 0;
+          this.userPublicationsDataList.forEach((publication, index) => {
+            if (index < this.userPublicationsList.length) {
+              this.userService.patchPublicationsInfoById(publication, this.userPublicationsList[index].publication_id).subscribe(
+                dataJson => {
+                  this.userPublicationsList[index] = dataJson['data'];
+                  counts++;
+                  if (counts === this.userPublicationsDataList.length) {
+                    this.selectedPageIndex++;
+                    this.initializeFormsByPageIndex();
+                  }
+                },
+                error => {
+                  this.alertsService.show(error.message, AlertType.error);
+                }
+              );
+            } else {
+              this.userService.postPublicationsInfo(publication).subscribe(
+                dataJson => {
+                  this.userPublicationsList[index] = dataJson['data'];
+                  counts++;
+                  if (counts === this.userPublicationsDataList.length) {
+                    this.selectedPageIndex++;
+                    this.initializeFormsByPageIndex();
+                  }
+                },
+                error => {
+                  this.alertsService.show(error.message, AlertType.error);
+                }
+              );
             }
-          );
-        } else {
-          this.userService.postPublicationsInfo(publication).subscribe(
-            dataJson => {
-              this.userPublicationsList[index] = dataJson['data'];
-              counts++;
-              if (counts === this.userPublicationsDataList.length) {
-                this.selectedPageIndex++;
-                this.initializeFormsByPageIndex();
-              }
-            },
-            error => {
-              this.alertsService.show(error.message, AlertType.error);
-            }
-          );
+          });
         }
-      });
+      } else {
+        this.selectedPageIndex++;
+        this.initializeFormsByPageIndex();
+      }
     } else {
       this.selectedPageIndex++;
       this.initializeFormsByPageIndex();
@@ -2107,6 +2110,22 @@ export class CreateProfileComponent implements OnInit {
         this.alertsService.show(error.message, AlertType.error);
       }
     );
+  }
+
+  checkPublicationsFormSkip(): boolean {
+    if (
+      this.userPublicationsList.length === 0
+      && this.publicationsFormArray.length === 1
+      && !this.helperService.checkSpacesString(this.publicationsFormArray.at(0).get('publication_name').value)
+      && !this.helperService.checkSpacesString(this.publicationsFormArray.at(0).get('description').value)
+      && !this.helperService.checkSpacesString(this.publicationsFormArray.at(0).get('date_published').value)
+      && !this.helperService.checkSpacesString(this.publicationsFormArray.at(0).get('href').value)
+    ) {
+      this.is_skip = true;
+    } else {
+      this.is_skip = false;
+    }
+    return this.is_skip;
   }
 
   /**
