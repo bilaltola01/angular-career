@@ -45,10 +45,14 @@ export class HelperService {
   }
 
   checkSpacesString(str: string): string {
-    if (!str.replace(/\s/g, '').length) {
-      return null;
+    if (str) {
+      if (!str.replace(/\s/g, '').length) {
+        return null;
+      } else {
+        return str;
+      }
     } else {
-      return str;
+      return null;
     }
   }
 

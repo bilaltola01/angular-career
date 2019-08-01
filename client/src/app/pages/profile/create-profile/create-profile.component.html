@@ -1,162 +1,162 @@
 <div *ngIf="selectedPageIndex>0" class="profile-completion">
-    <div class="container">
+  <div class="container">
+    <ng-container *ngFor="let page_title of page_titles; let i = index">
+      <action-button *ngIf="page_title" class="link-btn desktop" type="text" title="{{page_title}}" (click)="goToPage(i)" [done]="selectedPageIndex > i" [disabled]="selectedPageIndex < i"></action-button>
+    </ng-container>
+    <mat-icon (click)="toggleTabMenuOpen()">{{isTabMenuOpen ? 'close' : 'menu'}}</mat-icon>
+    <span class="progress-label tablet">{{page_titles[selectedPageIndex]}}</span>
+    <span class="progress-label" [class.done]="selectedPageIndex===9">{{progressWidth[selectedPageIndex].label}}%</span>
+    <div class="progress-bar" [style.width.%]="progressWidth[selectedPageIndex].width"></div>
+    <div class="container__header tablet" [class.open]="isTabMenuOpen">
       <ng-container *ngFor="let page_title of page_titles; let i = index">
-        <action-button *ngIf="page_title" class="link-btn desktop" type="text" title="{{page_title}}" (click)="goToPage(i)" [done]="selectedPageIndex > i" [disabled]="selectedPageIndex < i"></action-button>
+        <action-button *ngIf="page_title" class="link-btn" type="text" title="{{page_title}}" (click)="goToPage(i)" [done]="selectedPageIndex > i" [disabled]="selectedPageIndex < i"></action-button>
       </ng-container>
-      <mat-icon (click)="toggleTabMenuOpen()">{{isTabMenuOpen ? 'close' : 'menu'}}</mat-icon>
-      <span class="progress-label tablet">{{page_titles[selectedPageIndex]}}</span>
-      <span class="progress-label" [class.done]="selectedPageIndex===9">{{progressWidth[selectedPageIndex].label}}%</span>
-      <div class="progress-bar" [style.width.%]="progressWidth[selectedPageIndex].width"></div>
-      <div class="container__header tablet" [class.open]="isTabMenuOpen">
-        <ng-container *ngFor="let page_title of page_titles; let i = index">
-          <action-button *ngIf="page_title" class="link-btn" type="text" title="{{page_title}}" (click)="goToPage(i)" [done]="selectedPageIndex > i" [disabled]="selectedPageIndex < i"></action-button>
-        </ng-container>
-      </div>
     </div>
   </div>
+</div>
   
   <!-- Create_Profile_Choose start -->
   <!-- "Drop Resume Here" feature won't be available at launch. -->
   
-  <div *ngIf="selectedPageIndex===0" class="container {{profileCreationPages[0]}}">
-    <div class="container__full">
-      <h1>Choose To Create Profile</h1>
-    </div>
-    <div class="container__left">
-      <div class="option-box">
-        <div class="option-box__content">
-          <div class="option-box__title">
-            <img class="icon-cv" src="assets/icons/ic_cv.svg">
-            <h2 class="title">Drop Your Resume Here</h2>
-          </div>
-          <div class="option-box__description">
-            <p>Formats Allowed</p>
-            <h3>.PDF, .XML, .TEXT</h3>
-          </div>
+<div *ngIf="selectedPageIndex===0" class="container {{profileCreationPages[0]}}">
+  <div class="container__full">
+    <h1>Choose To Create Profile</h1>
+  </div>
+  <div class="container__left">
+    <div class="option-box">
+      <div class="option-box__content">
+        <div class="option-box__title">
+          <img class="icon-cv" src="assets/icons/ic_cv.svg">
+          <h2 class="title">Drop Your Resume Here</h2>
+        </div>
+        <div class="option-box__description">
+          <p>Formats Allowed</p>
+          <h3>.PDF, .XML, .TEXT</h3>
         </div>
       </div>
-      <div class="option-title">
-        <h2>Save Your Time</h2>
-        <p>By Spending just $2 Per Page</p>
-      </div>
-      <div class="option-description">
-        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
-      </div>
     </div>
-    <div class="option-text desktop">
-      <h1>OR</h1>
+    <div class="option-title">
+      <h2>Save Your Time</h2>
+      <p>By Spending just $2 Per Page</p>
     </div>
-    <div class="container__right">
-      <div class="option-box">
-        <div class="option-box__content">
-          <action-button type="flat" title="Create Profile" color="primary" (click)="goToCreatProfilePage()"></action-button>
-        </div>
-      </div>
-      <div class="option-title">
-        <h2>Save Money</h2>
-        <p>Absolutely FREE. It will take few minutes.</p>
-      </div>
-      <div class="option-description">
-        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
-      </div>
+    <div class="option-description">
+      <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
     </div>
   </div>
+  <div class="option-text desktop">
+    <h1>OR</h1>
+  </div>
+  <div class="container__right">
+    <div class="option-box">
+      <div class="option-box__content">
+        <action-button type="flat" title="Create Profile" color="primary" (click)="goToCreatProfilePage()"></action-button>
+      </div>
+    </div>
+    <div class="option-title">
+      <h2>Save Money</h2>
+      <p>Absolutely FREE. It will take few minutes.</p>
+    </div>
+    <div class="option-description">
+      <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+    </div>
+  </div>
+</div>
   
   <!-- Create_Profile_Choose end -->
   
   <!-- Create_Profile_Basic start -->
   
-  <div *ngIf="selectedPageIndex===1" class="container {{profileCreationPages[1]}}">
-    <div class="container__full">
-      <div class="profile-form" [formGroup]="basicInfoForm">
-        <div class="profile-form__image">
-          <input 
-            style="display: none"
-            type="file"
-            (change)="onPhotoFileSelected($event)"
-            #fileInput>    
-          
-          <img alt="Profile Image" src="{{basicInfoForm.get('photo').value || 'assets/icons/profile-image.svg'}}" (click)="fileInput.click()" >
-        </div>
-        <h3 class="profile-form__title">
-          BASIC INFORMATION
-        </h3>
-        <div class="profile-form__field">
-          <mat-form-field class="bg-transparent" appearance="fill">
-            <mat-label>City</mat-label>
-            <input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity" formControlName="basicInfoCity">
-            <mat-icon matSuffix *ngIf="basicInfoForm.get('basicInfoCity').value && helperService.checkSpacesString(basicInfoForm.get('basicInfoCity').value) && basicInfoForm.get('basicInfoCity').valid && onCheckCityValidation()">done</mat-icon>
-            <mat-icon matSuffix class="error-field" *ngIf="basicInfoForm.get('basicInfoCity').value && helperService.checkSpacesString(basicInfoForm.get('basicInfoCity').value) && !onCheckCityValidation() && basicInfoForm.get('basicInfoCity').touched">close</mat-icon>
-            <mat-autocomplete #autocompleteCity="matAutocomplete" (closed)="onBlurCity()">
-              <mat-option *ngFor="let city of autocomplete_cities" [value]="helperService.cityNameFromAutoComplete(city.city)" (onSelectionChange)="onSelectCity(city)">
-                <span>{{city.city}}</span>
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-        </div>
-        <div class="profile-form__field">
-          <mat-form-field class="bg-transparent" appearance="fill">
-            <mat-label>State</mat-label>
-            <input matInput placeholder="State" type="text" [matAutocomplete]="autocompleteState" formControlName="basicInfoState">
-            <mat-icon matSuffix *ngIf="basicInfoForm.get('basicInfoState').value && helperService.checkSpacesString(basicInfoForm.get('basicInfoState').value) && basicInfoForm.get('basicInfoState').valid && onCheckStateValidation()">done</mat-icon>
-            <mat-icon matSuffix class="error-field" *ngIf="basicInfoForm.get('basicInfoState').value && helperService.checkSpacesString(basicInfoForm.get('basicInfoState').value) && !onCheckStateValidation() && basicInfoForm.get('basicInfoState').touched">close</mat-icon>
-            <mat-autocomplete #autocompleteState="matAutocomplete" (closed)="onBlurState()">
-              <mat-option *ngFor="let state of autocomplete_states" [value]="state.state" (onSelectionChange)="onSelectState(state)">
-                <span>{{state.state}}</span>
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-        </div>
-        <div class="profile-form__field">
-          <mat-form-field class="bg-transparent" appearance="fill">
-            <mat-label>Country</mat-label>
-            <mat-select formControlName="basicInfoCountry">
-              <mat-option value="{{null}}">{{null}}</mat-option>
-              <mat-option *ngFor="let country of countries" value="{{country}}">{{country}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="profile-form__field"> 
-          <mat-form-field class="bg-transparent" appearance="fill">
-            <mat-label>Date Of Birth</mat-label>
-            <input matInput placeholder="MM/DD/YYYY" formControlName="basicInfoBirth" pattern="\d{1,2}/\d{1,2}/\d{4}">
-            <input class="hide" [matDatepicker]="birthdate" [max]="maxDate" (dateChange)="onChangeBirthDate($event)">
-            <mat-datepicker-toggle matSuffix [for]="birthdate"></mat-datepicker-toggle>
-            <mat-datepicker
-              touchUi
-              #birthdate
-            >
-            </mat-datepicker>
-          </mat-form-field>
-        </div>
-        <div class="profile-form__field">
-          <mat-form-field class="bg-transparent" appearance="fill">
-            <mat-label>Title</mat-label>
-            <input matInput placeholder="Title" type="text" formControlName="basicInfoTitle">
-          </mat-form-field>
-        </div>
-        <div class="profile-form__field">
-          <mat-form-field class="bg-transparent" appearance="fill">
-            <mat-label>Gender</mat-label>
-            <mat-select formControlName="basicInfoGender">
-              <mat-option *ngFor="let gender of genders" value="{{gender}}">{{gender}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="profile-form__field">
-          <mat-form-field class="bg-transparent" appearance="fill">
-            <mat-label>Ethnicity</mat-label>
-            <mat-select formControlName="basicInfoEthnicity">
-              <mat-option *ngFor="let ethnicityType of ethnicityTypes" value="{{ethnicityType}}">{{ethnicityType}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
+<div *ngIf="selectedPageIndex===1" class="container {{profileCreationPages[1]}}">
+  <div class="container__full">
+    <div class="profile-form" [formGroup]="basicInfoForm">
+      <div class="profile-form__image">
+        <input 
+          style="display: none"
+          type="file"
+          (change)="onPhotoFileSelected($event)"
+          #fileInput>    
+        
+        <img alt="Profile Image" src="{{basicInfoForm.get('photo').value || 'assets/icons/profile-image.svg'}}" (click)="fileInput.click()" >
+      </div>
+      <h3 class="profile-form__title">
+        BASIC INFORMATION
+      </h3>
+      <div class="profile-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>City</mat-label>
+          <input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity" formControlName="basicInfoCity">
+          <mat-icon matSuffix *ngIf="basicInfoForm.get('basicInfoCity').value && helperService.checkSpacesString(basicInfoForm.get('basicInfoCity').value) && basicInfoForm.get('basicInfoCity').valid && onCheckCityValidation()">done</mat-icon>
+          <mat-icon matSuffix class="error-field" *ngIf="basicInfoForm.get('basicInfoCity').value && helperService.checkSpacesString(basicInfoForm.get('basicInfoCity').value) && !onCheckCityValidation() && basicInfoForm.get('basicInfoCity').touched">close</mat-icon>
+          <mat-autocomplete #autocompleteCity="matAutocomplete" (closed)="onBlurCity()">
+            <mat-option *ngFor="let city of autocomplete_cities" [value]="helperService.cityNameFromAutoComplete(city.city)" (onSelectionChange)="onSelectCity(city)">
+              <span>{{city.city}}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <div class="profile-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>State</mat-label>
+          <input matInput placeholder="State" type="text" [matAutocomplete]="autocompleteState" formControlName="basicInfoState">
+          <mat-icon matSuffix *ngIf="basicInfoForm.get('basicInfoState').value && helperService.checkSpacesString(basicInfoForm.get('basicInfoState').value) && basicInfoForm.get('basicInfoState').valid && onCheckStateValidation()">done</mat-icon>
+          <mat-icon matSuffix class="error-field" *ngIf="basicInfoForm.get('basicInfoState').value && helperService.checkSpacesString(basicInfoForm.get('basicInfoState').value) && !onCheckStateValidation() && basicInfoForm.get('basicInfoState').touched">close</mat-icon>
+          <mat-autocomplete #autocompleteState="matAutocomplete" (closed)="onBlurState()">
+            <mat-option *ngFor="let state of autocomplete_states" [value]="state.state" (onSelectionChange)="onSelectState(state)">
+              <span>{{state.state}}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <div class="profile-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Country</mat-label>
+          <mat-select formControlName="basicInfoCountry">
+            <mat-option value="{{null}}">{{null}}</mat-option>
+            <mat-option *ngFor="let country of countries" value="{{country}}">{{country}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="profile-form__field"> 
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Date Of Birth</mat-label>
+          <input matInput placeholder="MM/DD/YYYY" formControlName="basicInfoBirth" pattern="\d{1,2}/\d{1,2}/\d{4}">
+          <input class="hide" [matDatepicker]="birthdate" [max]="maxDate" (dateChange)="onChangeBirthDate($event)">
+          <mat-datepicker-toggle matSuffix [for]="birthdate"></mat-datepicker-toggle>
+          <mat-datepicker
+            touchUi
+            #birthdate
+          >
+          </mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="profile-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Title</mat-label>
+          <input matInput placeholder="Title" type="text" formControlName="basicInfoTitle">
+        </mat-form-field>
+      </div>
+      <div class="profile-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Gender</mat-label>
+          <mat-select formControlName="basicInfoGender">
+            <mat-option *ngFor="let gender of genders" value="{{gender}}">{{gender}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="profile-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Ethnicity</mat-label>
+          <mat-select formControlName="basicInfoEthnicity">
+            <mat-option *ngFor="let ethnicityType of ethnicityTypes" value="{{ethnicityType}}">{{ethnicityType}}</mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
     </div>
-    <div class="container__full">
-      <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!(basicInfoForm.valid && onCheckCityValidation() && onCheckStateValidation())"></action-button>
-    </div>
   </div>
+  <div class="container__full">
+    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!checkBasicInfoFormSkip() && !(basicInfoForm.valid && onCheckCityValidation() && onCheckStateValidation())"></action-button>
+  </div>
+</div>
   
   <!-- Create_Profile_Basic end -->
   
@@ -176,7 +176,7 @@
       </div>
     </div>
     <div class="container__full">
-      <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!aboutMeForm.valid"></action-button>
+      <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!checkAboutMeFormSkip() && !aboutMeForm.valid"></action-button>
     </div>
   </div>
   
@@ -289,7 +289,7 @@
       </div>
     </div>
     <div class="container__full">
-      <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!(educationFormArray.valid && checkAllEducationInfoValidation())"></action-button>
+      <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!checkEducationFormSkip() && !(educationFormArray.valid && checkAllEducationInfoValidation())"></action-button>
     </div>
   </div>
   
@@ -400,7 +400,7 @@
       </div>
     </div>
     <div class="container__full">
-      <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!(workExperienceFormArray.valid && checkAllWorkExperienceInfoValidation())"></action-button>
+      <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!checkExperienceFormSkip() && !(workExperienceFormArray.valid && checkAllWorkExperienceInfoValidation())"></action-button>
     </div>
   </div>
   
@@ -508,7 +508,7 @@
       </div>
     </div>
     <div class="container__full">
-      <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!(projectsFormArray.valid && checkAllProjectsInfoValidation())"></action-button>
+      <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!checkProjectsFormSkip() && !(projectsFormArray.valid && checkAllProjectsInfoValidation())"></action-button>
     </div>
   </div>
   
@@ -565,7 +565,7 @@
       </div>
     </div>
     <div class="container__full">
-      <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!(publicationsFormArray.valid && checkAllPublicationInfoValidation())"></action-button>
+      <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!checkPublicationsFormSkip() && !(publicationsFormArray.valid && checkAllPublicationInfoValidation())"></action-button>
     </div>
   </div>
   

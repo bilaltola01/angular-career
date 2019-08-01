@@ -187,6 +187,7 @@ export class CreateProfileComponent implements OnInit {
   externalResourcesDataList: UserExternalResourcesItemData[];
 
   userRole: string;
+  is_skip: boolean;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -309,30 +310,6 @@ export class CreateProfileComponent implements OnInit {
     }
   }
 
-
-  /**
-   * extractDate
-   * @param date
-   */
-  extractDate(date: string): string {
-    return `${date.slice(5, 7)}/${date.slice(8, 10)}/${date.slice(0, 4)}`;
-  }
-
-  /**
-   *  Extract MM/YYYY string from Date type string
-   */
-  extractYearAndMonth(date: string): string {
-    return `${date.slice(5, 7)}/${date.slice(0, 4)}`;
-  }
-
-  /**
-   * Extract YYYY string from Date
-   * @param date: string
-   */
-  extractYear(date: string): string {
-    return date.slice(0, 4);
-  }
-
   /**
    * General Information Form
    */
@@ -350,7 +327,7 @@ export class CreateProfileComponent implements OnInit {
       basicInfoCountry: new FormControl(''),
       basicInfoBirth: new FormControl(''),
       basicInfoTitle: new FormControl(''),
-      basicInfoGender: new FormControl('', [Validators.required]),
+      basicInfoGender: new FormControl(''),
       basicInfoEthnicity: new FormControl('', [Validators.required])
     });
 
@@ -435,6 +412,7 @@ export class CreateProfileComponent implements OnInit {
   }
 
   updateBasicInformationForm() {
+    this.is_skip = true;
     this.updateGeneralInfoRequest();
     this.basicInfoForm.get('photo').setValue(this.generalInfoResponse.photo);
     this.basicInfoForm.get('basicInfoCity').setValue(this.generalInfoResponse.city);
@@ -586,34 +564,70 @@ export class CreateProfileComponent implements OnInit {
   }
 
   updateGeneralInfo() {
-    if ((this.selectedPageIndex === 1 && this.basicInfoForm.valid && this.onCheckCityValidation() && this.onCheckStateValidation()) ||
-      (this.selectedPageIndex === 2 && this.aboutMeForm.valid) || this.selectedPageIndex === 9) {
-      if (this.userRole) {
-        this.generalInfoRequest[this.userRole] = 1;
-      }
-
-      this.userService.updateGeneralInfo(this.generalInfoRequest).subscribe(
-        dataJson => {
-          this.generalInfoResponse = dataJson['data'];
-          this.updateBasicInformationForm();
-          this.updateAboutMeForm();
-          this.updateProfileStatus();
-          if (this.selectedPageIndex !== 9) {
-            this.selectedPageIndex++;
-            if (this.selectedPageIndex === 3) {
-              this.initializeFormsByPageIndex();
-            }
-          }
-        },
-        error => {
-          this.alertsService.show(error.message, AlertType.error);
+    if (!this.is_skip) {
+      if ((this.selectedPageIndex === 1 && this.basicInfoForm.valid && this.onCheckCityValidation() && this.onCheckStateValidation()) ||
+        (this.selectedPageIndex === 2 && this.aboutMeForm.valid) || this.selectedPageIndex === 9) {
+        if (this.userRole) {
+          this.generalInfoRequest[this.userRole] = 1;
         }
-      );
+
+        this.userService.updateGeneralInfo(this.generalInfoRequest).subscribe(
+          dataJson => {
+            this.generalInfoResponse = dataJson['data'];
+            this.updateBasicInformationForm();
+            this.updateAboutMeForm();
+            this.updateProfileStatus();
+            if (this.selectedPageIndex !== 9) {
+              this.selectedPageIndex++;
+              if (this.selectedPageIndex === 3) {
+                this.initializeFormsByPageIndex();
+              }
+            }
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+          }
+        );
+      }
+    } else {
+      if (this.selectedPageIndex !== 9) {
+        this.selectedPageIndex++;
+        if (this.selectedPageIndex === 3) {
+          this.initializeFormsByPageIndex();
+        }
+      }
     }
+  }
+
+  checkBasicInfoFormSkip(): boolean {
+    if (
+      !this.basicInfoForm.get('photo').value
+      && this.basicInfoForm.get('basicInfoEthnicity').value === 'Undisclosed'
+      && !this.helperService.checkSpacesString(this.basicInfoForm.get('basicInfoCity').value)
+      && !this.helperService.checkSpacesString(this.basicInfoForm.get('basicInfoState').value)
+      && !this.helperService.checkSpacesString(this.basicInfoForm.get('basicInfoCountry').value)
+      && !this.helperService.checkSpacesString(this.basicInfoForm.get('basicInfoGender').value)
+      && !this.helperService.checkSpacesString(this.basicInfoForm.get('basicInfoBirth').value)
+      && !this.helperService.checkSpacesString(this.basicInfoForm.get('basicInfoTitle').value)
+      && this.generalInfoResponse.photo === null
+      && this.generalInfoResponse.city_id === null
+      && this.generalInfoResponse.state_id === null
+      && this.generalInfoResponse.country_id === null
+      && this.generalInfoResponse.gender === null
+      && this.generalInfoResponse.birthdate === null
+      && this.generalInfoResponse.title === null
+      && this.generalInfoResponse.ethnicity === 'Undisclosed'
+    ) {
+      this.is_skip = true;
+    } else {
+      this.is_skip = false;
+    }
+    return this.is_skip;
   }
 
   // About Me Form
   initAboutMeForm() {
+    this.is_skip = true;
     this.aboutMeForm = new FormGroup({
       aboutMe: new FormControl('')
     });
@@ -628,11 +642,21 @@ export class CreateProfileComponent implements OnInit {
     );
   }
 
+  checkAboutMeFormSkip(): boolean {
+    if (!this.helperService.checkSpacesString(this.aboutMeForm.get('aboutMe').value) && this.generalInfoResponse.user_intro === null) {
+      this.is_skip = true;
+    } else {
+      this.is_skip = false;
+    }
+    return this.is_skip;
+  }
+
   /**
    * Education Information Form
    *  Education FormGroup Array Initialization
    */
   initEducationFormArray() {
+    this.is_skip = true;
     this.educationFormArray = new FormArray([]);
     this.educationList = [];
     this.educationDataList = [];
@@ -977,8 +1001,8 @@ export class CreateProfileComponent implements OnInit {
 
   updateEducationData() {
     if (this.educationDataList.length !== 0) {
-      if (this.educationFormArray.valid && this.checkAllEducationInfoValidation()) {
-        if (this.educationFormArray.valid) {
+      if (!this.is_skip) {
+        if (this.educationFormArray.valid && this.checkAllEducationInfoValidation()) {
           let counts = 0;
           this.educationDataList.forEach((education, index) => {
             if (index < this.educationList.length) {
@@ -1012,6 +1036,9 @@ export class CreateProfileComponent implements OnInit {
             }
           });
         }
+      } else {
+        this.selectedPageIndex++;
+        this.initializeFormsByPageIndex();
       }
     } else {
       this.selectedPageIndex++;
@@ -1031,11 +1058,32 @@ export class CreateProfileComponent implements OnInit {
     );
   }
 
+  checkEducationFormSkip(): boolean {
+    if (
+      this.educationList.length === 0
+      && this.educationFormArray.length === 1
+      && !this.helperService.checkSpacesString(this.educationFormArray.at(0).get('university').value)
+      && !this.helperService.checkSpacesString(this.educationFormArray.at(0).get('degree').value)
+      && !this.helperService.checkSpacesString(this.educationFormArray.at(0).get('start_date').value)
+      && !this.helperService.checkSpacesString(this.educationFormArray.at(0).get('graduation_date').value)
+      && !this.helperService.checkSpacesString(this.educationFormArray.at(0).get('major').value)
+      && !this.helperService.checkSpacesString(this.educationFormArray.at(0).get('focus_major').value)
+      && !this.helperService.checkSpacesString(this.educationFormArray.at(0).get('description').value)
+      && !this.helperService.checkSpacesString(this.educationFormArray.at(0).get('gpa').value)
+    ) {
+      this.is_skip = true;
+    } else {
+      this.is_skip = false;
+    }
+    return this.is_skip;
+  }
+
   /**
    * Work Experience Form
    *  Work Experience FormGroup Array Initialization
    */
   initExperienceFormArray() {
+    this.is_skip = true;
     this.workExperienceFormArray = new FormArray([]);
     this.experienceList = [];
     this.experienceDataList = [];
@@ -1395,8 +1443,8 @@ export class CreateProfileComponent implements OnInit {
 
   updateExperienceData() {
     if (this.experienceDataList.length !== 0) {
-      if (this.workExperienceFormArray.valid && this.checkAllWorkExperienceInfoValidation()) {
-        if (this.workExperienceFormArray.valid) {
+      if (!this.is_skip) {
+        if (this.workExperienceFormArray.valid && this.checkAllWorkExperienceInfoValidation()) {
           let counts = 0;
           this.experienceDataList.forEach((experience, index) => {
             if (index < this.experienceList.length) {
@@ -1430,6 +1478,9 @@ export class CreateProfileComponent implements OnInit {
             }
           });
         }
+      } else {
+        this.selectedPageIndex++;
+        this.initializeFormsByPageIndex();
       }
     } else {
       this.selectedPageIndex++;
@@ -1447,6 +1498,25 @@ export class CreateProfileComponent implements OnInit {
         this.alertsService.show(error.message, AlertType.error);
       }
     );
+  }
+
+  checkExperienceFormSkip(): boolean {
+    if (
+      this.experienceList.length === 0
+      && this.workExperienceFormArray.length === 1
+      && !this.helperService.checkSpacesString(this.workExperienceFormArray.at(0).get('company_name').value)
+      && !this.helperService.checkSpacesString(this.workExperienceFormArray.at(0).get('start_date').value)
+      && !this.helperService.checkSpacesString(this.workExperienceFormArray.at(0).get('end_date').value)
+      && !this.helperService.checkSpacesString(this.workExperienceFormArray.at(0).get('job').value)
+      && !this.helperService.checkSpacesString(this.workExperienceFormArray.at(0).get('description').value)
+      && !this.experienceDataList[0].skill_ids_trained
+      && !this.experienceDataList[0].add_industry_ids
+    ) {
+      this.is_skip = true;
+    } else {
+      this.is_skip = false;
+    }
+    return this.is_skip;
   }
 
 
@@ -1676,6 +1746,7 @@ export class CreateProfileComponent implements OnInit {
    */
 
   initProjectsFormArray() {
+    this.is_skip = true;
     this.projectsFormArray = new FormArray([]);
     this.userProjectsList = [];
     this.userProjectsDataList = [];
@@ -1788,39 +1859,44 @@ export class CreateProfileComponent implements OnInit {
 
   updateUserProjectsData() {
     if (this.userProjectsDataList.length !== 0) {
-      if (this.projectsFormArray.valid && this.checkAllProjectsInfoValidation()) {
-        let counts = 0;
-        this.userProjectsDataList.forEach((project, index) => {
-          if (index < this.userProjectsList.length) {
-            this.userService.patchProjectInfoById(project, this.userProjectsList[index].project_id).subscribe(
-              dataJson => {
-                this.userProjectsList[index] = dataJson['data'];
-                counts++;
-                if (counts === this.userProjectsDataList.length) {
-                  this.selectedPageIndex++;
-                  this.initializeFormsByPageIndex();
+      if (!this.is_skip) {
+        if (this.projectsFormArray.valid && this.checkAllProjectsInfoValidation()) {
+          let counts = 0;
+          this.userProjectsDataList.forEach((project, index) => {
+            if (index < this.userProjectsList.length) {
+              this.userService.patchProjectInfoById(project, this.userProjectsList[index].project_id).subscribe(
+                dataJson => {
+                  this.userProjectsList[index] = dataJson['data'];
+                  counts++;
+                  if (counts === this.userProjectsDataList.length) {
+                    this.selectedPageIndex++;
+                    this.initializeFormsByPageIndex();
+                  }
+                },
+                error => {
+                  this.alertsService.show(error.message, AlertType.error);
                 }
-              },
-              error => {
-                this.alertsService.show(error.message, AlertType.error);
-              }
-            );
-          } else {
-            this.userService.postProjectInfo(project).subscribe(
-              dataJson => {
-                this.userProjectsList[index] = dataJson['data'];
-                counts++;
-                if (counts === this.userProjectsDataList.length) {
-                  this.selectedPageIndex++;
-                  this.initializeFormsByPageIndex();
+              );
+            } else {
+              this.userService.postProjectInfo(project).subscribe(
+                dataJson => {
+                  this.userProjectsList[index] = dataJson['data'];
+                  counts++;
+                  if (counts === this.userProjectsDataList.length) {
+                    this.selectedPageIndex++;
+                    this.initializeFormsByPageIndex();
+                  }
+                },
+                error => {
+                  this.alertsService.show(error.message, AlertType.error);
                 }
-              },
-              error => {
-                this.alertsService.show(error.message, AlertType.error);
-              }
-            );
-          }
-        });
+              );
+            }
+          });
+        }
+      } else {
+        this.selectedPageIndex++;
+        this.initializeFormsByPageIndex();
       }
     } else {
       this.selectedPageIndex++;
@@ -1838,6 +1914,22 @@ export class CreateProfileComponent implements OnInit {
         this.alertsService.show(error.message, AlertType.error);
       }
     );
+  }
+
+  checkProjectsFormSkip(): boolean {
+    if (
+      this.userProjectsList.length === 0
+      && this.projectsFormArray.length === 1
+      && !this.helperService.checkSpacesString(this.projectsFormArray.at(0).get('project_name').value)
+      && !this.helperService.checkSpacesString(this.projectsFormArray.at(0).get('description').value)
+      && !this.helperService.checkSpacesString(this.projectsFormArray.at(0).get('date_finished').value)
+      && !this.helperService.checkSpacesString(this.projectsFormArray.at(0).get('href').value)
+    ) {
+      this.is_skip = true;
+    } else {
+      this.is_skip = false;
+    }
+    return this.is_skip;
   }
 
 
@@ -1963,38 +2055,45 @@ export class CreateProfileComponent implements OnInit {
 
   updateUserPublicationsData() {
     if (this.userPublicationsDataList.length !== 0) {
-      let counts = 0;
-      this.userPublicationsDataList.forEach((publication, index) => {
-        if (index < this.userPublicationsList.length) {
-          this.userService.patchPublicationsInfoById(publication, this.userPublicationsList[index].publication_id).subscribe(
-            dataJson => {
-              this.userPublicationsList[index] = dataJson['data'];
-              counts++;
-              if (counts === this.userPublicationsDataList.length) {
-                this.selectedPageIndex++;
-                this.initializeFormsByPageIndex();
-              }
-            },
-            error => {
-              this.alertsService.show(error.message, AlertType.error);
+      if (!this.is_skip) {
+        if (this.publicationsFormArray.valid && this.checkAllPublicationInfoValidation()) {
+          let counts = 0;
+          this.userPublicationsDataList.forEach((publication, index) => {
+            if (index < this.userPublicationsList.length) {
+              this.userService.patchPublicationsInfoById(publication, this.userPublicationsList[index].publication_id).subscribe(
+                dataJson => {
+                  this.userPublicationsList[index] = dataJson['data'];
+                  counts++;
+                  if (counts === this.userPublicationsDataList.length) {
+                    this.selectedPageIndex++;
+                    this.initializeFormsByPageIndex();
+                  }
+                },
+                error => {
+                  this.alertsService.show(error.message, AlertType.error);
+                }
+              );
+            } else {
+              this.userService.postPublicationsInfo(publication).subscribe(
+                dataJson => {
+                  this.userPublicationsList[index] = dataJson['data'];
+                  counts++;
+                  if (counts === this.userPublicationsDataList.length) {
+                    this.selectedPageIndex++;
+                    this.initializeFormsByPageIndex();
+                  }
+                },
+                error => {
+                  this.alertsService.show(error.message, AlertType.error);
+                }
+              );
             }
-          );
-        } else {
-          this.userService.postPublicationsInfo(publication).subscribe(
-            dataJson => {
-              this.userPublicationsList[index] = dataJson['data'];
-              counts++;
-              if (counts === this.userPublicationsDataList.length) {
-                this.selectedPageIndex++;
-                this.initializeFormsByPageIndex();
-              }
-            },
-            error => {
-              this.alertsService.show(error.message, AlertType.error);
-            }
-          );
+          });
         }
-      });
+      } else {
+        this.selectedPageIndex++;
+        this.initializeFormsByPageIndex();
+      }
     } else {
       this.selectedPageIndex++;
       this.initializeFormsByPageIndex();
@@ -2011,6 +2110,22 @@ export class CreateProfileComponent implements OnInit {
         this.alertsService.show(error.message, AlertType.error);
       }
     );
+  }
+
+  checkPublicationsFormSkip(): boolean {
+    if (
+      this.userPublicationsList.length === 0
+      && this.publicationsFormArray.length === 1
+      && !this.helperService.checkSpacesString(this.publicationsFormArray.at(0).get('publication_name').value)
+      && !this.helperService.checkSpacesString(this.publicationsFormArray.at(0).get('description').value)
+      && !this.helperService.checkSpacesString(this.publicationsFormArray.at(0).get('date_published').value)
+      && !this.helperService.checkSpacesString(this.publicationsFormArray.at(0).get('href').value)
+    ) {
+      this.is_skip = true;
+    } else {
+      this.is_skip = false;
+    }
+    return this.is_skip;
   }
 
   /**
@@ -2138,6 +2253,7 @@ export class CreateProfileComponent implements OnInit {
   }
 
   updateProfileStatus() {
+    this.is_skip = false;
     this.profile_status = this.generalInfoResponse.is_looking;
   }
 
