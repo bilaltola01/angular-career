@@ -25,7 +25,7 @@ import {
 } from 'src/app/services';
 
 @Component({
-  selector: 'app-header-section',
+  selector: 'header-section',
   templateUrl: './header-section.component.html',
   styleUrls: ['./header-section.component.scss']
 })

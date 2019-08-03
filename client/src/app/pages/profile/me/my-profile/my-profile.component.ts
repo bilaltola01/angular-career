@@ -19,7 +19,7 @@ import { map } from 'rxjs/operators';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
-  selector: 'app-my-profile',
+  selector: 'my-profile',
   templateUrl: './my-profile.component.html',
   styleUrls: ['./my-profile.component.scss']
 })

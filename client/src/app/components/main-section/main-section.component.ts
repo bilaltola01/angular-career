@@ -51,7 +51,7 @@ export interface EditSkillItem {
 }
 
 @Component({
-  selector: 'main-section',
+  selector: 'main-section-1',
   templateUrl: './main-section.component.html',
   styleUrls: ['./main-section.component.scss']
 })

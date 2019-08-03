@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'app-nav-section',
+  selector: 'nav-section',
   templateUrl: './nav-section.component.html',
   styleUrls: ['./nav-section.component.scss']
 })
