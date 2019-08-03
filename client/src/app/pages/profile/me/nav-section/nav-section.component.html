@@ -1,1 +1,20 @@
-<p>nav-section works!</p>
+<div class="nav-title">
+  <h3 class="section-title">Profile</h3>
+</div>
+
+<nav *ngIf="navMenu && navMenu.length > 0">
+  <ng-container  *ngFor="let menu of navMenu; let i = index;" >
+    <div *ngIf="!editMode || (editMode && i === navIndex)" class="nav-section" [class.active]="i === navIndex">
+      <h3 (click)="onSelectNavMenu(i)">{{menu.title}}</h3>
+      <mat-icon>keyboard_arrow_right</mat-icon>
+      <ol *ngIf="menu.items.length > 0">
+        <ng-container *ngFor="let item of menu.items">
+          <li *ngIf="item.visible || editMode" (click)="onSelectNavItem(item.id)">{{item.title}}</li>
+        </ng-container>
+      </ol>
+    </div>
+  </ng-container>
+  <div *ngIf="editMode" class="btn-section">
+    <action-button class="nav-btn" type="flat" title="Update Changes" [disabled]="!headerFormValid" color="primary" (click)="onClickUpdate()"></action-button>
+  </div>  
+</nav>
