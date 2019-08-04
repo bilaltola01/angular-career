@@ -12,6 +12,10 @@ export const routes: Routes = [
       .then(module => module.ProfileModule)
   },
   {
+    path: '', loadChildren: () => import('./pages/company/company.module')
+      .then(module => module.CompanyModule)
+  },
+  {
     path: 'style-guide', loadChildren: () => import('./pages/style-guide/style-guide.module')
       .then(module => module.StyleGuideModule)
   },
