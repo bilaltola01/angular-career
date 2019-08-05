@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from 'src/app/services/user.service';
-import { AlertsService, AlertType } from 'src/app/services/alerts.service';
+import { UserService, AlertsService, AlertType, UserStateService } from 'src/app/services';
 import {
   NavMenus,
   UserGeneralInfo,
@@ -48,6 +47,7 @@ export class MyProfileComponent implements OnInit {
   constructor(
     private userService: UserService,
     private alertsService: AlertsService,
+    private userStateService: UserStateService,
     private breakpointObserver: BreakpointObserver
   ) { }
 
@@ -61,6 +61,10 @@ export class MyProfileComponent implements OnInit {
     this.selectedNavMenuIndex = 0;
     this.isNavMenuOpened = false;
     this.navMenu = NavMenus.profile;
+    this.editMode = false;
+    this.isProfileLoading = true;
+    this.counts = 0;
+    this.headerFormValid = false;
     this.getGeneralInfo();
     this.getEducationList();
     this.getExperienceList();
@@ -69,10 +73,6 @@ export class MyProfileComponent implements OnInit {
     this.getUserProjectsList();
     this.getUserPublicationsList();
     this.getExternalResourceList();
-    this.editMode = false;
-    this.isProfileLoading = true;
-    this.counts = 0;
-    this.headerFormValid = false;
   }
 
   onSelectNavItem(id: string) {
@@ -108,21 +108,6 @@ export class MyProfileComponent implements OnInit {
     this.generalInfoData.title = $event.data.title;
     this.generalInfoData.ethnicity = $event.data.ethnicity;
     this.headerFormValid = $event.valid;
-  }
-
-  onChangeProfileStatus(generalInfoData: UserObject) {
-    this.generalInfoData.is_looking = generalInfoData.is_looking;
-    this.userService.updateGeneralInfo(this.generalInfoData).subscribe(
-      dataJson => {
-        this.userGeneralInfo = dataJson['data'];
-        this.editMode = false;
-        this.isNavMenuOpened = false;
-        this.generateGeneralInfoData();
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-      }
-    );
   }
 
   onChangeUserIntro(user_intro: string) {
@@ -181,26 +166,40 @@ export class MyProfileComponent implements OnInit {
   }
 
   getGeneralInfo() {
-    this.userService.getGeneralInfo().subscribe(
-      dataJson => {
-        this.userGeneralInfo = dataJson['data'];
-        this.navMenu[0].items[0].visible = this.userGeneralInfo.user_intro ?  true : false;
-        this.counts++;
-        this.generateGeneralInfoData();
-        this.checkProfileLoading();
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
+    this.userStateService.getUser
+    .subscribe(user => {
+      if (user) {
+        this.userGeneralInfo = user;
+        this.checkGeneralInfo();
+      } else {
+        this.userService.getGeneralInfo().subscribe(
+          dataJson => {
+            this.userGeneralInfo = dataJson['data'];
+            this.userStateService.setUser(this.userGeneralInfo);
+            this.checkGeneralInfo();
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+          }
+        );
       }
-    );
+    }, error => {
+      this.alertsService.show(error.message, AlertType.error);
+    });
   }
+
+  checkGeneralInfo() {
+    this.navMenu[0].items[0].visible = this.userGeneralInfo.user_intro ?  true : false;
+    this.counts++;
+    this.generateGeneralInfoData();
+    this.checkProfileLoading();
+  }
+
   getEducationList() {
     this.userService.getEducationInfo().subscribe(
       dataJson => {
         this.educationList = dataJson['data'];
-        this.navMenu[0].items[1].visible = this.educationList && this.educationList.length > 0 ?  true : false;
-        this.counts++;
-        this.checkProfileLoading();
+        this.checkEducationInfo();
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -208,6 +207,13 @@ export class MyProfileComponent implements OnInit {
       }
     );
   }
+
+  checkEducationInfo() {
+    this.navMenu[0].items[1].visible = this.educationList && this.educationList.length > 0 ?  true : false;
+    this.counts++;
+    this.checkProfileLoading();
+  }
+
   getExperienceList() {
     this.userService.getExperienceInfo().subscribe(
       dataJson => {

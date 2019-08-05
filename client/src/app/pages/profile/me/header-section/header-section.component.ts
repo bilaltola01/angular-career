@@ -21,7 +21,10 @@ import {
   HelperService,
   AlertsService,
   AlertType,
-  AutoCompleteService, UserService, PhotoStateService,
+  AutoCompleteService,
+  UserService,
+  PhotoStateService,
+  UserStateService
 } from 'src/app/services';
 
 @Component({
@@ -34,7 +37,6 @@ export class HeaderSectionComponent implements OnChanges, OnInit {
   @Input() generalInfo: UserGeneralInfo;
   @Input() editMode: boolean;
   @Output() updatedGeneralInfoData = new EventEmitter();
-  @Output() updatedProfileStatus = new EventEmitter();
 
   maxDate = new Date();
 
@@ -57,13 +59,12 @@ export class HeaderSectionComponent implements OnChanges, OnInit {
     private autoCompleteService: AutoCompleteService,
     private alertsService: AlertsService,
     private userService: UserService,
-    private photoStateService: PhotoStateService
+    private photoStateService: PhotoStateService,
+    private userStateService: UserStateService
   ) { }
 
   ngOnInit() {
-    if (this.generalInfo) {
-      this.initGeneralInfoForm();
-    }
+    this.getGeneralInfo();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -75,7 +76,29 @@ export class HeaderSectionComponent implements OnChanges, OnInit {
 
   onChangeProfileStatus(active: boolean) {
     this.generalInfoData.is_looking = active ? 0 : 1;
-    this.updatedProfileStatus.emit(this.generalInfoData);
+    const data = {
+      is_looking: active ? 0 : 1
+    };
+    this.userService.updateGeneralInfo(data).subscribe(
+      dataJson => {
+        this.generalInfo = dataJson['data'];
+        this.userStateService.setUser(this.generalInfo);
+        this.initGeneralInfoForm();
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  getGeneralInfo() {
+    this.userStateService.getUser
+    .subscribe(user => {
+      this.generalInfo = user;
+      this.initGeneralInfoForm();
+    }, error => {
+      this.alertsService.show(error.message, AlertType.error);
+    });
   }
 
   initGeneralInfoForm() {

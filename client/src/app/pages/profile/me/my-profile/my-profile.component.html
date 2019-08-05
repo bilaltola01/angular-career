@@ -1,6 +1,6 @@
 <ng-container *ngIf="!isProfileLoading" class="profile-header">
-  <header-section [editMode]="editMode" [generalInfo]="userGeneralInfo"
-    (updatedGeneralInfoData)="onChangedGeneralInfoData($event)" (updatedProfileStatus)="onChangeProfileStatus($event)"
+  <header-section [editMode]="editMode"
+    (updatedGeneralInfoData)="onChangedGeneralInfoData($event)"
     id="header-section"></header-section>
 </ng-container>
 

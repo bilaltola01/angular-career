@@ -50,7 +50,7 @@ export class MainToolbarComponent implements OnInit {
         this.userService.getGeneralInfo().subscribe(
           dataJson => {
             this.userGeneralInfo = dataJson['data'];
-            // this.userStateService.setUser(this.userGeneralInfo);
+            this.userStateService.setUser(this.userGeneralInfo);
           },
           error => {
             this.alertsService.show(error.message, AlertType.error);
