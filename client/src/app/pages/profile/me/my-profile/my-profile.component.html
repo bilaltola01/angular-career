@@ -13,12 +13,9 @@
     <a *ngIf="!editMode" (click)="onClickEdit()">Edit Profile</a>
     <a *ngIf="editMode" [class.disabled]="!headerFormValid" (click)="onClickUpdate()">Update Changes</a>
   </legend>
-  <profile-section [selectedNavMenu]="navMenu[selectedNavMenuIndex].id" [userGeneralInfo]="userGeneralInfo"
-    [educationList]="educationList" [experienceList]="experienceList" [userSkillsList]="userSkillsList"
-    [userInterestsList]="userInterestsList" [userProjectsList]="userProjectsList"
-    [userPublicationsList]="userPublicationsList" [externalResourcesList]="externalResourcesList" [editMode]="editMode"
+  <profile-section [editMode]="editMode"
     [class.edit-mode]="editMode" (navMenuVisibilityChanged)="onChangeNavMenuVisibility($event)"
-    (userIntroUpdated)="onChangeUserIntro($event)" (clickEdit)="onClickEdit()"></profile-section>
+    (clickEdit)="onClickEdit()"></profile-section>
   <nav-section [navMenu]="navMenu" [editMode]="editMode" [navIndex]="selectedNavMenuIndex"
     [headerFormValid]="headerFormValid" (clickUpdate)="onClickUpdate()" (selectNavMenu)="onSelectNavMenu($event)"
     (selectedNavItem)="onSelectNavItem($event)" [isOpened]="isNavMenuOpened"
