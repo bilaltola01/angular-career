@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService, AlertsService, AlertType, UserStateService } from 'src/app/services';
+import {
+  UserService,
+  AlertsService,
+  AlertType,
+  UserStateService,
+  ProfileStateService
+} from 'src/app/services';
 import {
   NavMenus,
   UserGeneralInfo,
@@ -48,6 +54,7 @@ export class MyProfileComponent implements OnInit {
     private userService: UserService,
     private alertsService: AlertsService,
     private userStateService: UserStateService,
+    private profileStateService: ProfileStateService,
     private breakpointObserver: BreakpointObserver
   ) { }
 
@@ -196,16 +203,26 @@ export class MyProfileComponent implements OnInit {
   }
 
   getEducationList() {
-    this.userService.getEducationInfo().subscribe(
-      dataJson => {
-        this.educationList = dataJson['data'];
+    this.profileStateService.getEducations
+    .subscribe(educationList => {
+      if (educationList) {
+        this.educationList = educationList;
         this.checkEducationInfo();
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-        this.educationList = [];
+      } else {
+        this.userService.getEducationInfo().subscribe(
+          dataJson => {
+            this.educationList = dataJson['data'];
+            this.profileStateService.setEducations(this.educationList);
+            this.checkEducationInfo();
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+          }
+        );
       }
-    );
+    }, error => {
+      this.alertsService.show(error.message, AlertType.error);
+    });
   }
 
   checkEducationInfo() {
@@ -215,78 +232,138 @@ export class MyProfileComponent implements OnInit {
   }
 
   getExperienceList() {
-    this.userService.getExperienceInfo().subscribe(
-      dataJson => {
-        this.experienceList = dataJson['data'];
-        this.navMenu[0].items[2].visible = this.experienceList && this.experienceList.length > 0 ? true : false;
-        this.counts++;
-        this.checkProfileLoading();
-        this.experienceList.forEach((experience, arrIndex) => {
-          if (experience.skills_trained && experience.skills_trained.length > 0) {
-            this.getSkillsTrained(arrIndex);
+    this.profileStateService.getExperiences
+    .subscribe(experienceList => {
+      if (experienceList) {
+        this.experienceList = experienceList;
+        this.checkExperienceInfo();
+      } else {
+        this.userService.getExperienceInfo().subscribe(
+          dataJson => {
+            this.experienceList = dataJson['data'];
+            this.profileStateService.setExperiences(this.experienceList);
+            this.checkExperienceInfo();
+            this.experienceList.forEach((experience, arrIndex) => {
+              if (experience.skills_trained && experience.skills_trained.length > 0) {
+                this.getSkillsTrained(arrIndex);
+              }
+              if (experience.add_industries && experience.add_industries.length > 0) {
+                this.getAdditionalIndustries(arrIndex);
+              }
+            });
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
           }
-          if (experience.add_industries && experience.add_industries.length > 0) {
-            this.getAdditionalIndustries(arrIndex);
-          }
-        });
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-        this.experienceList = [];
+        );
       }
-    );
+    }, error => {
+      this.alertsService.show(error.message, AlertType.error);
+    });
   }
+
+  checkExperienceInfo() {
+    this.navMenu[0].items[2].visible = this.experienceList && this.experienceList.length > 0 ? true : false;
+    this.counts++;
+    this.checkProfileLoading();
+  }
+
   getSkillsTrained(arrIndex: number) {
     this.userService.getSkillsTrained(this.experienceList[arrIndex].work_hist_id).subscribe(
       dataJson => {
         this.experienceList[arrIndex].skills_trained = dataJson.data;
+        this.profileStateService.setExperiences(this.experienceList);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
       }
     );
   }
+
   getAdditionalIndustries(arrIndex: number) {
     this.userService.getAdditionalIndustries(this.experienceList[arrIndex].work_hist_id).subscribe(
       dataJson => {
         this.experienceList[arrIndex].add_industries = dataJson.data;
+        this.profileStateService.setExperiences(this.experienceList);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
       }
     );
   }
+
   getUserPublicationsList() {
-    this.userService.getPublicationsInfo().subscribe(
-      dataJson => {
-        this.userPublicationsList = dataJson['data'];
-        this.navMenu[0].items[3].visible  = this.userPublicationsList && this.userPublicationsList.length > 0 ? true : false;
-        this.counts++;
-        this.checkProfileLoading();
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-        this.userPublicationsList = [];
+    this.profileStateService.getPublications
+    .subscribe(publicationsList => {
+      if (publicationsList) {
+        this.userPublicationsList = publicationsList;
+        this.checkPublicationInfo();
+      } else {
+        this.userService.getPublicationsInfo().subscribe(
+          dataJson => {
+            this.userPublicationsList = dataJson['data'];
+            this.profileStateService.setPublications(this.userPublicationsList);
+            this.checkPublicationInfo();
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+          }
+        );
       }
-    );
+    }, error => {
+      this.alertsService.show(error.message, AlertType.error);
+    });
   }
+
+  checkPublicationInfo() {
+    this.navMenu[0].items[3].visible  = this.userPublicationsList && this.userPublicationsList.length > 0 ? true : false;
+    this.counts++;
+    this.checkProfileLoading();
+  }
+
   getUserProjectsList() {
-    this.userService.getProjectsInfo().subscribe(
-      dataJson => {
-        this.userProjectsList = dataJson['data']['data'];
-        this.navMenu[0].items[4].visible = this.userProjectsList && this.userProjectsList.length > 0 ? true : false;
-        this.counts++;
-        this.checkProfileLoading();
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-        this.userProjectsList = [];
+    this.profileStateService.getProjects
+    .subscribe(projectsList => {
+      if (projectsList) {
+        this.userProjectsList = projectsList;
+        this.checkProjectInfo();
+      } else {
+        this.userService.getProjectsInfo().subscribe(
+          dataJson => {
+            this.userProjectsList = dataJson['data']['data'];
+            this.profileStateService.setProjects(this.userProjectsList);
+            this.checkProjectInfo();
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+          }
+        );
       }
-    );
+    }, error => {
+      this.alertsService.show(error.message, AlertType.error);
+    });
   }
+
+  checkProjectInfo() {
+    this.navMenu[0].items[4].visible = this.userProjectsList && this.userProjectsList.length > 0 ? true : false;
+    this.counts++;
+    this.checkProfileLoading();
+  }
+
   getUserSkillsList() {
-    this.getUserSkillsListByOffset(ITEMS_LIMIT, 0);
+    this.profileStateService.getSkills
+    .subscribe(skillsList => {
+      if (skillsList) {
+        this.userSkillsList = skillsList;
+        this.checkSkillsInfo();
+      } else {
+        this.getUserSkillsListByOffset(ITEMS_LIMIT, 0);
+      }
+    }, error => {
+      this.alertsService.show(error.message, AlertType.error);
+    });
   }
+
   getUserSkillsListByOffset(limit: number, offset: number) {
     this.userService.getSkillsInfo(limit, offset).subscribe(
       dataJson => {
@@ -298,20 +375,36 @@ export class MyProfileComponent implements OnInit {
         if (dataJson['data'].length === limit) {
           this.getUserSkillsListByOffset(limit, offset + limit);
         } else {
-          this.navMenu[0].items[5].visible = this.userSkillsList && this.userSkillsList.length > 0 ? true : false;
-          this.counts++;
-          this.checkProfileLoading();
+          this.profileStateService.setSkills(this.userSkillsList);
+          this.checkSkillsInfo();
         }
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
-        this.userSkillsList = [];
       }
     );
   }
-  getUserInterestsList() {
-    this.getUserInterestsListByOffset(ITEMS_LIMIT, 0);
+
+  checkSkillsInfo() {
+    this.navMenu[0].items[5].visible = this.userSkillsList && this.userSkillsList.length > 0 ? true : false;
+    this.counts++;
+    this.checkProfileLoading();
   }
+
+  getUserInterestsList() {
+    this.profileStateService.getInterests
+    .subscribe(interestsList => {
+      if (interestsList) {
+        this.userInterestsList = interestsList;
+        this.checkInterestsInfo();
+      } else {
+        this.getUserInterestsListByOffset(ITEMS_LIMIT, 0);
+      }
+    }, error => {
+      this.alertsService.show(error.message, AlertType.error);
+    });
+  }
+
   getUserInterestsListByOffset(limit: number, offset: number) {
     this.userService.getUserInterestsInfo(limit, offset).subscribe(
       dataJson => {
@@ -323,30 +416,49 @@ export class MyProfileComponent implements OnInit {
         if (dataJson['data'].length === limit) {
           this.getUserInterestsListByOffset(limit, offset + limit);
         } else {
-          this.navMenu[0].items[6].visible = this.userInterestsList && this.userInterestsList.length > 0 ? true : false;
-          this.counts++;
-          this.checkProfileLoading();
+          this.profileStateService.setInterests(this.userInterestsList);
+          this.checkInterestsInfo();
         }
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
-        this.userInterestsList = [];
       }
     );
   }
+
+  checkInterestsInfo() {
+    this.navMenu[0].items[6].visible = this.userInterestsList && this.userInterestsList.length > 0 ? true : false;
+    this.counts++;
+    this.checkProfileLoading();
+  }
+
   getExternalResourceList() {
-    this.userService.getExternalResourcesInfo().subscribe(
-      dataJson => {
-        this.externalResourcesList = dataJson['data'];
-        this.navMenu[0].items[7].visible = this.externalResourcesList && this.externalResourcesList.length > 0 ? true : false;
-        this.counts++;
-        this.checkProfileLoading();
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-        this.externalResourcesList = [];
+    this.profileStateService.getExternalResources
+    .subscribe(externalResourcesList => {
+      if (externalResourcesList) {
+        this.externalResourcesList = externalResourcesList;
+        this.checkExternalResourceInfo();
+      } else {
+        this.userService.getExternalResourcesInfo().subscribe(
+          dataJson => {
+            this.externalResourcesList = dataJson['data'];
+            this.profileStateService.setExternalResources(this.externalResourcesList);
+            this.checkExternalResourceInfo();
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+          }
+        );
       }
-    );
+    }, error => {
+      this.alertsService.show(error.message, AlertType.error);
+    });
+  }
+
+  checkExternalResourceInfo() {
+    this.navMenu[0].items[7].visible = this.externalResourcesList && this.externalResourcesList.length > 0 ? true : false;
+    this.counts++;
+    this.checkProfileLoading();
   }
 
 }
