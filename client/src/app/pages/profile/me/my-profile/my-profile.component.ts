@@ -112,7 +112,17 @@ export class MyProfileComponent implements OnInit {
 
   onChangeProfileStatus(generalInfoData: UserObject) {
     this.generalInfoData.is_looking = generalInfoData.is_looking;
-    this.onClickUpdate();
+    this.userService.updateGeneralInfo(this.generalInfoData).subscribe(
+      dataJson => {
+        this.userGeneralInfo = dataJson['data'];
+        this.editMode = false;
+        this.isNavMenuOpened = false;
+        this.generateGeneralInfoData();
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
   }
 
   onChangeUserIntro(user_intro: string) {
