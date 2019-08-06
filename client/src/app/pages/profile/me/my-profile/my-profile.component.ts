@@ -21,7 +21,7 @@ import {
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'my-profile',
@@ -55,7 +55,8 @@ export class MyProfileComponent implements OnInit {
     private userStateService: UserStateService,
     private profileStateService: ProfileStateService,
     private breakpointObserver: BreakpointObserver,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.parseRouterUrl(router.url);
     this.router.events.subscribe((val) => {
@@ -140,9 +141,8 @@ export class MyProfileComponent implements OnInit {
       this.userService.updateGeneralInfo(this.generalInfoData).subscribe(
         dataJson => {
           this.userGeneralInfo = dataJson['data'];
-          this.editMode = false;
-          this.isNavMenuOpened = false;
-          this.generateGeneralInfoData();
+          this.userStateService.setUser(this.userGeneralInfo);
+          this.router.navigate(['/me/profile'], { relativeTo: this.route });
         },
         error => {
           this.alertsService.show(error.message, AlertType.error);
