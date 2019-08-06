@@ -272,6 +272,9 @@ p {
           &.search {
             border: none;
             padding: 0;
+            img {
+              vertical-align: text-top
+            }
             h3 {
               color: rgba(map-get($md-cfaccent, 500), 0.84);
               display: inline-block;
@@ -283,6 +286,7 @@ p {
             .count {
               font-size: 14px;
               font-weight: 400;
+              vertical-align: 1px
             }
             mat-form-field {
               margin-top: 10px;

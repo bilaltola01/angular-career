@@ -1,15 +1,50 @@
+@import './../../../styles/variables.scss';
 :host {
   button {
     width: 100%;
+
     img {
       margin-right: 5px;
     }
   }
 }
+
 :host-context(.position-search-reload-result) {
-  button{
-    line-height: 24px;
-    // margin-right: 1px;
-    padding: 6px 20px !important;
+  button {
+    line-height: 21px;
+    padding: 4px 20px !important;
+    font-weight: 500;
+    font-size: 14px;
+    font-family: "Poppins", sans-serif;
   }
 }
+
+:host-context(.job-apply-btn) button {
+  line-height: 21px;
+    font-weight: 500;
+    padding: 12px 30px !important;
+    font-size: 14px;
+    font-family: "Poppins", sans-serif;
+}
+:host-context(.side-filter-btn) button {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  box-shadow: none;
+  color: #fff;
+}
+:host-context(.clear-filter) button {
+  font-family: "Poppins", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 10px 0 0 !important;
+}
+:host-context(.show-button) button {
+    line-height: initial;
+    padding: 20px 12px 5px!important;
+    font-weight: 500;
+    font-size: 12px;
+    font-family: "Poppins", sans-serif;
+}
+@media only screen and (max-width: $tablet-breakpoint) {
+  :host-context(.position-search-reload-result)button {padding: 4px 13px !important;}
+  }

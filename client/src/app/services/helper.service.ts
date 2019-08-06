@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import moment from 'moment';
-
+import { JwtHelperService } from '@auth0/angular-jwt';
 @Injectable({
   providedIn: 'root'
 })
 export class HelperService {
 
   shortDescLength = 500;
+
+  helper = new JwtHelperService();
 
   constructor() { }
 
@@ -51,6 +53,16 @@ export class HelperService {
       } else {
         return str;
       }
+    } else {
+      return null;
+    }
+  }
+
+  extractUserId() {
+    const token = localStorage.getItem('token');
+    const decodedToken = this.helper.decodeToken(token);
+    if (decodedToken && decodedToken.user_id) {
+      return decodedToken.user_id;
     } else {
       return null;
     }

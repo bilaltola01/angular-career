@@ -418,10 +418,8 @@ export const SkillLevelDescription = {
   6: 'Specialized: extensive training, possible research experience, and substantial work experience. This level is usually reserved for people with at least 5 years of academic or industry experience or with MS or Ph.D levels of understanding'
 };
 
-
-
 export const PositionLevel = [
-  'Enter Level',
+  'Entry Level',
   'Senior Level',
   'Management',
   'Senior Management',
@@ -456,7 +454,6 @@ export const QualificationLevel = [
   { 'title': 'Extermely Qualified', 'value': 'extremely_qualified' }
 
 ];
-
 
 export const positionListLimit = 7;
 

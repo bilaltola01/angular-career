@@ -126,7 +126,6 @@ export class UserService {
         catchError(this.handleError)
       );
   }
-
   public getSignedPhotoUrl(file: File): Observable<any> {
     const requestUrl =
       `${this.user_service_url}user/${this.user_id}/sign-s3?file-name=${file.name}&file-type=${file.type}`;
@@ -148,6 +147,7 @@ export class UserService {
         catchError(this.handleError));
   }
 
+
   public updateGeneralInfo(generalInfo: any): Observable<any> {
     return this.http.patch(this.user_service_url + `user/${this.user_id}`, generalInfo, this.authHttpOptions())
       .pipe(
@@ -157,7 +157,6 @@ export class UserService {
         catchError(this.handleError)
       );
   }
-
   public getEducationInfo(): Observable<any> {
     return this.http.get(this.user_service_url + `user/${this.user_id}/education?limit=${this.max_limit}`, this.authHttpOptions())
       .pipe(
@@ -310,6 +309,7 @@ export class UserService {
       }),
       catchError(this.handleError)
     );
+
   }
 
   public postSkillTrained(skillInfo: any): Observable<any> {
@@ -341,7 +341,6 @@ export class UserService {
         catchError(this.handleError)
       );
   }
-
   public getSkillsInfo(limit: number, offset: number): Observable<any> {
     return this.http.get(this.user_service_url + `user/${this.user_id}/skills?limit=${limit}&offset=${offset}`, this.authHttpOptions())
       .pipe(
@@ -351,7 +350,6 @@ export class UserService {
         catchError(this.handleError)
       );
   }
-
   public postSkillInfo(skillData: any): Observable<any> {
     return this.http.post(this.user_service_url + `user/${this.user_id}/skill`, skillData, this.authHttpOptions())
       .pipe(
@@ -442,7 +440,6 @@ export class UserService {
         catchError(this.handleError)
       );
   }
-
   // User Interests Services
   public getUserInterestsInfo(limit: number, offset: number): Observable<any> {
     return this.http.get(this.user_service_url + `user/${this.user_id}/interests?limit=${limit}&offset=${offset}`, this.authHttpOptions())

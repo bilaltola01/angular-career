@@ -3,13 +3,18 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
+<<<<<<< HEAD
 import { JwtHelperService } from '@auth0/angular-jwt';
 
+=======
+import { HelperService } from './helper.service';
+>>>>>>> Implemented Pagination and Improved UI.
 @Injectable({
   providedIn: 'root'
 })
 export class ApplicationService {
 
+<<<<<<< HEAD
   private user_id = -1;
   private application_service_url = `${environment.serverUrl}/${environment.application_service}/api/${environment.api_version}/`;
 
@@ -20,6 +25,10 @@ export class ApplicationService {
     if (token) {
       this.user_id = this.helper.decodeToken(token).user_id;
     }
+=======
+  private application_service_url = `${environment.serverUrl}/${environment.application_service}/api/${environment.api_version}/`;
+  constructor(private http: HttpClient, private helperService: HelperService) {
+>>>>>>> Implemented Pagination and Improved UI.
   }
 
   private authHttpOptions() {
@@ -32,6 +41,7 @@ export class ApplicationService {
     };
   }
 
+<<<<<<< HEAD
   private handleError(error) {
     if (!environment.production) {
       console.error(`UserService -> handleError -> error. Error Code: ${error.status}. Message: ${error.error.message ? error.error.message : error.statusText}. Details:`, error);
@@ -130,4 +140,46 @@ export class ApplicationService {
     );
   }
 
+=======
+  public applyJob(position_id: number): Observable<any> {
+    const queryUrl = `${this.application_service_url}application`;
+    const body = {
+      position_id: position_id,
+      application_cover_letter: 'null'
+    };
+    return this.http.post(queryUrl, body, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return { success: true, message: 'Success!', data: data };
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
+
+  public getAppliedJobs(): Observable<any> {
+    const queryUrl = `${this.application_service_url}applications`;
+    return this.http.post(queryUrl, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return { success: true, message: 'Success!', data: data };
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
+  private handleError(error) {
+    let errorMessage = '';
+    if (error.error instanceof ErrorEvent) {
+      errorMessage = error.message;
+    } else {
+      errorMessage = `Error Code: ${error.status}\nMessage: ${error.error.message}`;
+    }
+    return throwError({ success: false, message: errorMessage });
+  }
+>>>>>>> Implemented Pagination and Improved UI.
 }

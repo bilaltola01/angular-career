@@ -1,22 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { AlertsService, AlertType } from '../../../services/alerts.service';
-import { AutoCompleteService } from '../../../services/auto-complete.service';
-import { PositionService } from '../../../services/position.service';
+import {
+  PositionService, AlertsService, AlertType,
+  AutoCompleteService, CartService, ApplicationService
+} from '../../../services/index';
 
 import {
   City,
-  MinimumSalary,
   PositionLevel,
   LatestDatePosted,
-  Salary,
   SortBy,
   Industry,
   Company,
   Skill,
   School,
   SkillLevelDescription,
-  QualificationLevel
+  Recruiter,
+  positionListLimit
 } from 'src/app/models';
 
 @Component({
@@ -25,13 +25,9 @@ import {
   styleUrls: ['./position-search.component.scss']
 })
 export class PositionSearchComponent implements OnInit {
-  showMoreFlag = false;
   // Constants
-  qualificationLevel: object[] = QualificationLevel;
-  minimumSalary: number[] = MinimumSalary;
   positionLevel: string[] = PositionLevel;
   latestDatePosted: string[] = LatestDatePosted;
-  salary: number[] = Salary;
   sortBy: object[] = SortBy;
   SkillLevelDescription = SkillLevelDescription;
   // FormGroup
@@ -42,31 +38,47 @@ export class PositionSearchComponent implements OnInit {
   autocomplete_school: School[][] = [];
   autocomplete_additional_industries: Industry[][] = [];
   autocomplete_companies: Company[][] = [];
+  autocomplete_recruiter: Recruiter[][] = [];
   userSkillsList = [];
   positionList = [];
+  savedJobs = [];
   autocomplete_searchposition = [];
   filterAttributes = {
     city_id: null,
     industry_id: null,
     school_id: null,
+    recruiter_id: null,
     offset: 0,
-    limit: 20
+    limit: positionListLimit
   };
 
   isJobLoading = true;
   selectedAllFlag = false;
-  constructor(private autoCompleteService: AutoCompleteService, private alertsService: AlertsService, private positionService: PositionService) { }
+  qualificationLevelstatus: string;
+  mathFloor = Math.floor;
+  filter_list: boolean;
+  currentPageNumber = 1;
+  parseIntFn = parseInt;
+  paginationArr = [];
+  paginationMin = 0;
+  paginationMax = 10;
+  constructor(private autoCompleteService: AutoCompleteService,
+    private alertsService: AlertsService, private positionService: PositionService,
+    private cartService: CartService, private applicationService: ApplicationService) { }
 
   ngOnInit() {
     this.initPositionFilterForm();
     this.getJobData();
+    this.getSavedJobs();
+    // this.getAppliedJobs();
   }
 
-
+  toggleTabMenuOpen() {
+    this.filter_list = !this.filter_list;
+  }
   initPositionFilterForm() {
     this.positionForm = new FormGroup({
       'searchPosition': new FormControl(null),
-      'minQualificationLvl': new FormControl(null),
       'city': new FormControl(null),
       'skill': new FormControl(null),
       'minSal': new FormControl(null),
@@ -74,7 +86,6 @@ export class PositionSearchComponent implements OnInit {
       'industry': new FormControl(null),
       'company': new FormControl(null),
       'post': new FormControl(null),
-      'salary': new FormControl(null),
       'school': new FormControl(null),
       'recruiter': new FormControl(null),
       'sortBy': new FormControl('post-date')
@@ -98,6 +109,10 @@ export class PositionSearchComponent implements OnInit {
     );
     this.positionForm.get('school').valueChanges.subscribe((school) => {
       school ? this.onSchoolValueChanges(school) : this.autocomplete_school = [];
+    });
+
+    this.positionForm.get('recruiter').valueChanges.subscribe((recruiter) => {
+      recruiter ? this.onRecruiterValueChanges(recruiter) : this.autocomplete_recruiter = [];
     });
 
   }
@@ -193,6 +208,24 @@ export class PositionSearchComponent implements OnInit {
     );
   }
 
+  onRecruiterValueChanges(recruiter: string) {
+    this.autoCompleteService.autoComplete(recruiter, 'users').subscribe(
+      dataJson => {
+        if (dataJson['success']) {
+          this.autocomplete_recruiter = dataJson['data'];
+        }
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+        this.autocomplete_recruiter = [];
+      }
+    );
+  }
+
+  onChangeRecruiter(recruiter) {
+    this.filterAttributes['recruiter_id'] = recruiter.user_id;
+  }
+
   addSkills(skillItem: Skill) {
     this.positionForm.patchValue({ skill: '' });
     this.userSkillsList.push(skillItem);
@@ -201,35 +234,36 @@ export class PositionSearchComponent implements OnInit {
     this.userSkillsList.splice(index, 1);
   }
 
-  generateQueryString(fromSearch): string {
+  generateQueryString(): string {
     let queryString;
-    if (!fromSearch) {
-      const skillArr = this.userSkillsList.map(skill => skill.skill_id);
-      queryString = this.positionForm.value.minQualificationLvl ? `${queryString ? queryString + '&' : ''}qualification=${this.positionForm.value.minQualificationLvl}` : queryString;
-      queryString = this.positionForm.value.city ? `${queryString ? queryString + '&' : ''}city=${this.filterAttributes.city_id}` : queryString;
-      queryString = this.positionForm.value.position ? `${queryString ? queryString + '&' : ''}level=${this.positionForm.value.position}` : queryString;
-      queryString = this.positionForm.value.industry ? `${queryString ? queryString + '&' : ''}industry=${this.filterAttributes.industry_id}` : queryString;
-      queryString = skillArr.length > 0 ? `${queryString ? queryString + '&' : ''}skill=${skillArr}` : queryString;
-      queryString = this.positionForm.value.company ? `${queryString ? queryString + '&' : ''}company=${this.positionForm.value.company}` : queryString;
-      queryString = this.positionForm.value.salary ? `${queryString ? queryString + '&' : ''}pay=${this.positionForm.value.salary}` : queryString;
-      queryString = this.positionForm.value.sortBy ? `${queryString ? queryString + '&' : ''}sort=${this.positionForm.value.sortBy}` : queryString;
-    } else {
-      queryString = this.positionForm.value.searchPosition ? `${queryString ? queryString + '&' : ''}position=${this.positionForm.value.searchPosition}` : queryString;
-    }
-
+    queryString = this.positionForm.value.city ? `${queryString ? queryString + '&' : ''}city=${this.filterAttributes.city_id}` : queryString;
+    queryString = this.positionForm.value.position ? `${queryString ? queryString + '&' : ''}level=${this.positionForm.value.position}` : queryString;
+    queryString = this.positionForm.value.industry ? `${queryString ? queryString + '&' : ''}industry=${this.filterAttributes.industry_id}` : queryString;
+    queryString = this.positionForm.value.company ? `${queryString ? queryString + '&' : ''}company=${this.positionForm.value.company}` : queryString;
+    queryString = this.positionForm.value.minSal ? `${queryString ? queryString + '&' : ''}pay=${this.positionForm.value.minSal}` : queryString;
+    queryString = this.positionForm.value.recruiter ? `${queryString ? queryString + '&' : ''}recruiter=${this.filterAttributes.recruiter_id}` : queryString;
     queryString = queryString ? `${queryString}&offset=${this.filterAttributes.offset}` : `offset=${this.filterAttributes.offset}`;
     queryString = queryString ? `${queryString}&limit=${this.filterAttributes.limit}` : `offset=${this.filterAttributes.limit}`;
+    this.userSkillsList.forEach(skill => {
+      queryString = queryString ? queryString + `&skills=${skill.skill_id}` : `skills=${skill.skill_id}`;
+    });
+    queryString = this.positionForm.value.searchPosition ? `${queryString ? queryString + '&' : ''}position=${this.positionForm.value.searchPosition}` : queryString;
+    queryString = this.positionForm.value.sortBy ? `${queryString ? queryString + '&' : ''}sort=${this.positionForm.value.sortBy}` : queryString;
     return queryString;
   }
-  getJobData(fromSearch = false) {
+  getJobData() {
     this.isJobLoading = true;
     this.selectedAllFlag = false;
-    const queryString = this.generateQueryString(fromSearch);
+    const queryString = this.generateQueryString();
     this.positionService.getPositions(queryString).subscribe(
       dataJson => {
         this.isJobLoading = false;
         if (dataJson['success']) {
           this.positionList = dataJson.data.data;
+          this.paginationArr = Array(Math.ceil((dataJson.data.count + this.filterAttributes.offset) / 10)).fill(0).map((x, i) => i + 1);
+          if (this.filter_list === true) {
+            this.toggleTabMenuOpen();
+          }
         }
       },
       error => {
@@ -242,8 +276,10 @@ export class PositionSearchComponent implements OnInit {
 
   clearFilter() {
     const sortValue = this.positionForm.value.sortBy;
+    const setPositionValue = this.positionForm.value.searchPosition;
     this.positionForm.reset();
     this.positionForm.patchValue({ 'sortBy': sortValue });
+    this.toggleTabMenuOpen();
   }
 
   selectAll(isChecked) {
@@ -255,8 +291,90 @@ export class PositionSearchComponent implements OnInit {
   }
 
   onSearchPosition(event) {
-    this.getJobData(true);
+    this.getJobData();
     event.stopPropagation();
   }
+  calculateQualificationLevel(fitscoreInfo, minimum_skills) {
+    if (!fitscoreInfo || (minimum_skills === null && fitscoreInfo.education_weight === 0 && fitscoreInfo.experience_weight === 0 && fitscoreInfo.interests_weight === 0 && fitscoreInfo.skills_weight === 0)) {
+      return 'Unknown';
+    } else if (fitscoreInfo.fitscore <= 0.2) {
+      return 'Unqualified';
+    } else if (fitscoreInfo.fitscore > 0.2 && fitscoreInfo.fitscore <= 0.6) {
+      return 'Nascent';
+    } else if (fitscoreInfo.fitscore > 0.6 && fitscoreInfo.fitscore <= 0.8) {
+      return 'Qualified';
+    } else if (fitscoreInfo.fitscore > 0.8 && fitscoreInfo.fitscore <= 0.9) {
+      return 'Highly Qualified';
+    } else if (fitscoreInfo.fitscore > 0.9 && fitscoreInfo.fitscore <= 1.0) {
+      return 'Extremely Qualified';
+    } else {
+      return 'Unknown';
+    }
+  }
+
+  getSavedJobs() {
+    this.cartService.getSavedJobs()
+      .subscribe((data: any) => {
+        this.savedJobs = data.data.rows;
+      });
+  }
+
+  // getAppliedJobs() {
+  //   this.applicationService.getAppliedJobs()
+  //     .subscribe(data => {
+  //       console.log("Applied Jobs", data);
+  //     })
+  // }
+
+  saveJob(position) {
+    this.cartService.saveJob(position.position_id).subscribe(data => {
+      this.savedJobs.push(position);
+    });
+  }
+
+  unSaveJob(position) {
+    this.cartService.unSaveJob(position.position_id).subscribe(data => {
+      const savedJobIndex = this.savedJobs.findIndex(job => job.position_id === position.position_id);
+      this.savedJobs.splice(savedJobIndex, 1);
+    });
+  }
+
+  applyJob(position_id) {
+    this.applicationService.applyJob(position_id)
+      .subscribe(data => {
+        console.log('job applied successfully');
+      });
+  }
+
+  applySelected() {
+    const selectedPositionArr = this.positionList.filter(position => position.selected === true);
+    for (const position of selectedPositionArr) {
+      this.applyJob(position.position_id);
+    }
+  }
+
+  saveSelected() {
+    const selectedPositionArr = this.positionList.filter(position => position.selected === true);
+    for (const position of selectedPositionArr) {
+      this.saveJob(position);
+    }
+  }
+
+
+
+  isJobSaved(position_id) {
+    return this.savedJobs.findIndex(position => position.position_id === position_id) === -1 ? false : true;
+  }
+
+  pageClicked(pageNo) {
+    if (this.paginationArr.length > 10) {
+      this.paginationMin = Math.floor((pageNo - 1) / 5) * 5;
+      this.paginationMax = this.paginationMin + 10;
+    }
+    this.currentPageNumber = pageNo;
+    this.filterAttributes.offset = ((this.currentPageNumber - 1) * positionListLimit);
+    this.getJobData();
+  }
+
 
 }

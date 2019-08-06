@@ -9,6 +9,7 @@ import { AlertsService, AlertType } from 'src/app/services/alerts.service';
 import { LocationStrategy } from '@angular/common';
 import { PhotoStateService, UserStateService } from 'src/app/services';
 
+
 @Component({
 // tslint:disable-next-line: component-selector
   selector: 'main-toolbar',
@@ -27,8 +28,12 @@ export class MainToolbarComponent implements OnInit {
     private userService: UserService,
     private alertsService: AlertsService,
     public url: LocationStrategy,
+<<<<<<< HEAD
     private photoStateService: PhotoStateService,
     private userStateService: UserStateService) {}
+=======
+    private photoStateService: PhotoStateService) {}
+>>>>>>> Implemented Pagination and Improved UI.
 
   ngOnInit() {
     // TODO: This get should be called only once and stored in browser storage in the user service

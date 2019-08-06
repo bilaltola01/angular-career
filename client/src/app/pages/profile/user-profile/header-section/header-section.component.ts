@@ -27,6 +27,7 @@ import {
 } from 'src/app/services';
 import { Router, NavigationEnd } from '@angular/router';
 
+
 @Component({
   selector: 'header-section',
   templateUrl: './header-section.component.html',
@@ -134,6 +135,7 @@ export class HeaderSectionComponent implements OnInit {
       title: new FormControl(this.generalInfo && this.generalInfo.title ? this.generalInfo.title : ''),
       ethnicity: new FormControl(this.generalInfo && this.generalInfo.ethnicity ? this.generalInfo.ethnicity : ''),
       gender: new FormControl(this.generalInfo && this.generalInfo.gender ? this.generalInfo.gender : '')
+
     });
 
     this.generalInfoForm.get('first_name').valueChanges.subscribe((first_name) => {
@@ -360,7 +362,6 @@ export class HeaderSectionComponent implements OnInit {
       }
 
       const file = event.target.files[0];
-
       this.userService.getSignedPhotoUrl(file).subscribe((signedPhoto) => {
         this.userService.uploadPhotoToS3(file, signedPhoto.data.signedUrl, signedPhoto.data.url)
           .subscribe((response) => {
@@ -378,5 +379,4 @@ export class HeaderSectionComponent implements OnInit {
       );
     }
   }
-
 }

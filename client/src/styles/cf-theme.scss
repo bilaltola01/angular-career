@@ -190,7 +190,7 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
       color: $btn-text-color;
 
       .mat-form-field-wrapper {
-        padding: 4px 20px;
+        padding: 2px 20px;
 
         .mat-form-field-flex {
           padding-top: 0;
@@ -199,6 +199,8 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
 
           .mat-form-field-infix {
             border-top: none;
+            font-size: 15px;
+            font-weight: 400;
 
             label {
               color: rgba(map-get($md-cfaccent, 500), 0.44);

@@ -13,7 +13,12 @@ export const environment = {
   application_service: 'application-service',
 =======
   position_service: 'position-service',
+<<<<<<< HEAD
 >>>>>>> Implemented postion-search functionality partially.
+=======
+  cart_service: 'cart-service',
+  application_service: 'application-service',
+>>>>>>> Implemented Pagination and Improved UI.
   api_version: 'v1'
 };
 

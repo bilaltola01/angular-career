@@ -6,6 +6,6 @@ export const positionRoutes: Routes = [
   {
     path: '',
     component: PositionSearchComponent,
-    canActivate: [AuthGuard]
+    // canActivate: [AuthGuard]
   }
 ];

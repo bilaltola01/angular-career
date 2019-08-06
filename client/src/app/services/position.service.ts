@@ -21,6 +21,7 @@ export class PositionService {
       })
     };
   }
+
   public getPositions(queryString?: string): Observable<any> {
     let queryUrl = `${this.position_service_url}jobs`;
     if (queryString) {
@@ -36,6 +37,7 @@ export class PositionService {
         catchError(this.handleError)
       );
   }
+
   private handleError(error) {
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {

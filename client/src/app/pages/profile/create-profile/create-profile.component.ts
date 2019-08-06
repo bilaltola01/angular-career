@@ -68,22 +68,6 @@ export class SkillLevelDescriptionDialogComponent {
   }
 }
 
-
-// Dialog component to open skill description
-@Component({
-  selector: 'skill-level-description-dialog',
-  templateUrl: 'skill-level-description-dialog.component.html',
-})
-export class SkillLevelDescriptionDialogComponent {
-
-  constructor(public dialogRef: MatDialogRef<SkillLevelDescriptionDialogComponent>, @Inject(MAT_DIALOG_DATA) public data) {}
-
-  onClose(): void {
-    this.dialogRef.close();
-  }
-}
-
-
 @Component({
   selector: 'create-profile',
   templateUrl: './create-profile.component.html',
@@ -2616,4 +2600,3 @@ export class CreateProfileComponent implements OnInit {
   }
 
 }
-

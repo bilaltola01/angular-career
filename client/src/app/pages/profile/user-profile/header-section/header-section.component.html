@@ -4,7 +4,12 @@
   </div> -->
   <div *ngIf="generalInfo" class="user-row">
     <div>
+<<<<<<< HEAD
       <input [disabled]="(currentPage === 'profile' && !editMode) || currentPage !== 'profile'"
+=======
+      <input [disabled]="!editMode"
+<<<<<<< HEAD:client/src/app/pages/profile/user-profile/header-section/header-section.component.html
+>>>>>>> Implemented Pagination and Improved UI.
         style="display: none"
         type="file"
         (change)="onPhotoFileSelected($event)"
@@ -16,6 +21,17 @@
           src="{{(currentPage === 'profile' && editMode ? generalInfoForm.get('photo').value : generalInfo.photo) || 'assets/icons/no_photo.png'}}"
           alt="Profile Image"
         >
+=======
+             style="display: none"
+             type="file"
+             (change)="onPhotoFileSelected($event)"
+             #fileInput>
+
+      <div [ngClass]="{'hover-img': editMode}" (click)="fileInput.click()">
+        <img class="user-photo"
+             src="{{generalInfoForm.get('photo').value || 'assets/icons/no_photo.png'}}"
+             alt="Profile Image">
+>>>>>>> Implemented Pagination and Improved UI.:client/src/app/components/header-section/header-section.component.html
       </div>
     </div>
 
