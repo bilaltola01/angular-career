@@ -13,7 +13,7 @@
     <a *ngIf="!editMode" (click)="onClickEdit()">Edit Profile</a>
     <a *ngIf="editMode" [class.disabled]="!headerFormValid" (click)="onClickUpdate()">Update Changes</a>
   </legend>
-  <profile-section></profile-section>
+  <router-outlet></router-outlet>
   <nav-section 
     [headerFormValid]="headerFormValid" (clickUpdate)="onClickUpdate()"
     (selectedNavItem)="onSelectNavItem($event)" [isOpened]="isNavMenuOpened"

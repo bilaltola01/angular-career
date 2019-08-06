@@ -5,6 +5,7 @@ import { MyProfileComponent } from './me/my-profile/my-profile.component';
 import { Routes } from '@angular/router';
 import { ProfileSectionComponent } from './me/profile-section/profile-section.component';
 import { ContactsSectionComponent } from './me/contacts-section/contacts-section.component';
+import { TemplateSectionComponent } from './me/template-section/template-section.component';
 
 export const profileRoutes: Routes = [
   {
@@ -40,6 +41,16 @@ export const profileRoutes: Routes = [
       {
         path: 'contacts',
         component: ContactsSectionComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'template',
+        component: TemplateSectionComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'template/:name',
+        component: TemplateSectionComponent,
         canActivate: [AuthGuard]
       }
     ]
