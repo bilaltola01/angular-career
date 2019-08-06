@@ -35,7 +35,7 @@ import { Router, NavigationEnd } from '@angular/router';
 })
 export class HeaderSectionComponent implements OnChanges, OnInit {
 
-  @Input() generalInfo: UserGeneralInfo;
+  generalInfo: UserGeneralInfo;
   editMode: boolean;
   @Output() updatedGeneralInfoData = new EventEmitter();
 
@@ -126,16 +126,16 @@ export class HeaderSectionComponent implements OnChanges, OnInit {
     this.temp_state = null;
 
     this.generalInfoForm = new FormGroup({
-      photo: new FormControl(this.generalInfo.photo ? this.generalInfo.photo : ''),
-      first_name: new FormControl(this.generalInfo.first_name ? this.generalInfo.first_name : '', [Validators.required]),
-      last_name: new FormControl(this.generalInfo.last_name ? this.generalInfo.last_name : '', [Validators.required]),
-      city: new FormControl(this.generalInfo.city ? this.generalInfo.city : ''),
-      state: new FormControl(this.generalInfo.state ? this.generalInfo.state : ''),
-      country: new FormControl(this.generalInfo.country ? this.generalInfo.country : ''),
-      birthdate: new FormControl(this.generalInfo.birthdate ? this.helperService.convertToFormattedString(this.generalInfo.birthdate, 'L') : ''),
-      title: new FormControl(this.generalInfo.title ? this.generalInfo.title : ''),
-      ethnicity: new FormControl(this.generalInfo.ethnicity ? this.generalInfo.ethnicity : '', [Validators.required]),
-      gender: new FormControl(this.generalInfo.gender ? this.generalInfo.gender : '', [Validators.required])
+      photo: new FormControl(this.generalInfo && this.generalInfo.photo ? this.generalInfo.photo : ''),
+      first_name: new FormControl(this.generalInfo && this.generalInfo.first_name ? this.generalInfo.first_name : '', [Validators.required]),
+      last_name: new FormControl(this.generalInfo && this.generalInfo.last_name ? this.generalInfo.last_name : '', [Validators.required]),
+      city: new FormControl(this.generalInfo && this.generalInfo.city ? this.generalInfo.city : ''),
+      state: new FormControl(this.generalInfo && this.generalInfo.state ? this.generalInfo.state : ''),
+      country: new FormControl(this.generalInfo && this.generalInfo.country ? this.generalInfo.country : ''),
+      birthdate: new FormControl(this.generalInfo && this.generalInfo.birthdate ? this.helperService.convertToFormattedString(this.generalInfo.birthdate, 'L') : ''),
+      title: new FormControl(this.generalInfo && this.generalInfo.title ? this.generalInfo.title : ''),
+      ethnicity: new FormControl(this.generalInfo && this.generalInfo.ethnicity ? this.generalInfo.ethnicity : '', [Validators.required]),
+      gender: new FormControl(this.generalInfo && this.generalInfo.gender ? this.generalInfo.gender : '', [Validators.required])
     });
 
     this.generalInfoForm.get('first_name').valueChanges.subscribe((first_name) => {
@@ -244,21 +244,21 @@ export class HeaderSectionComponent implements OnChanges, OnInit {
     });
 
     this.generalInfoData = {
-      photo: this.generalInfo.photo ? this.generalInfo.photo : null,
-      first_name: this.generalInfo.first_name,
-      last_name: this.generalInfo.last_name,
-      birthdate: this.generalInfo.birthdate ? this.generalInfo.birthdate : null,
-      gender: this.generalInfo.gender,
-      phone_num: this.generalInfo.phone_num,
-      recruiter: this.generalInfo.recruiter,
-      applicant: this.generalInfo.applicant,
-      city_id: this.generalInfo.city_id,
-      country_id: this.generalInfo.country_id,
-      state_id: this.generalInfo.state_id,
-      is_looking: this.generalInfo.is_looking,
-      title: this.generalInfo.title,
-      user_intro: this.generalInfo.user_intro,
-      ethnicity: this.generalInfo.ethnicity
+      photo: this.generalInfo && this.generalInfo.photo ? this.generalInfo.photo : null,
+      first_name: this.generalInfo && this.generalInfo.first_name ? this.generalInfo.first_name : null,
+      last_name: this.generalInfo && this.generalInfo.last_name ? this.generalInfo.last_name : null,
+      birthdate: this.generalInfo && this.generalInfo.birthdate ? this.generalInfo.birthdate : null,
+      gender: this.generalInfo && this.generalInfo.gender ? this.generalInfo.gender : null,
+      phone_num: this.generalInfo && this.generalInfo.phone_num ? this.generalInfo.phone_num : null,
+      recruiter: this.generalInfo && this.generalInfo.recruiter ? this.generalInfo.recruiter : null,
+      applicant: this.generalInfo && this.generalInfo.applicant ? this.generalInfo.applicant : null,
+      city_id: this.generalInfo && this.generalInfo.city_id ? this.generalInfo.city_id : null,
+      country_id: this.generalInfo && this.generalInfo.country_id ? this.generalInfo.country_id : null,
+      state_id: this.generalInfo && this.generalInfo.state_id ? this.generalInfo.state_id : null,
+      is_looking: this.generalInfo && this.generalInfo.is_looking ? this.generalInfo.is_looking : null,
+      title: this.generalInfo && this.generalInfo.title ? this.generalInfo.title : null,
+      user_intro: this.generalInfo && this.generalInfo.user_intro ? this.generalInfo.user_intro : null,
+      ethnicity: this.generalInfo && this.generalInfo.ethnicity ? this.generalInfo.ethnicity : null
     };
     this.updatedGeneralInfoData.emit({
       data: this.generalInfoData,

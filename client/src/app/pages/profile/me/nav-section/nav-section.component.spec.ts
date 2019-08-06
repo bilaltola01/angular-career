@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MaterialModule } from 'src/app/modules';
+import { MaterialModule, TestingModule } from 'src/app/modules';
 
 import { NavSectionComponent } from './nav-section.component';
 import { ActionButtonComponent } from 'src/app/components/action-button/action-button.component';
@@ -11,7 +11,7 @@ describe('NavSectionComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports : [ MaterialModule ],
+      imports : [ MaterialModule, TestingModule ],
       declarations: [ NavSectionComponent, ActionButtonComponent ]
     })
     .compileComponents();
