@@ -26,6 +26,7 @@ import {
   PhotoStateService,
   UserStateService
 } from 'src/app/services';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'header-section',
@@ -35,7 +36,7 @@ import {
 export class HeaderSectionComponent implements OnChanges, OnInit {
 
   @Input() generalInfo: UserGeneralInfo;
-  @Input() editMode: boolean;
+  editMode: boolean;
   @Output() updatedGeneralInfoData = new EventEmitter();
 
   maxDate = new Date();
@@ -60,8 +61,25 @@ export class HeaderSectionComponent implements OnChanges, OnInit {
     private alertsService: AlertsService,
     private userService: UserService,
     private photoStateService: PhotoStateService,
-    private userStateService: UserStateService
-  ) { }
+    private userStateService: UserStateService,
+    private router: Router
+  ) {
+    if (this.router.url.includes('edit')) {
+      this.editMode = true;
+    } else {
+      this.editMode = false;
+    }
+    router.events.subscribe((val) => {
+      if (val instanceof NavigationEnd) {
+        if (val.url.includes('edit')) {
+          this.editMode = true;
+        } else {
+          this.editMode = false;
+        }
+        this.getGeneralInfo();
+      }
+    });
+  }
 
   ngOnInit() {
     this.getGeneralInfo();

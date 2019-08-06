@@ -1,5 +1,5 @@
 <ng-container *ngIf="!isProfileLoading" class="profile-header">
-  <header-section [editMode]="editMode"
+  <header-section
     (updatedGeneralInfoData)="onChangedGeneralInfoData($event)"
     id="header-section"></header-section>
 </ng-container>
@@ -13,11 +13,9 @@
     <a *ngIf="!editMode" (click)="onClickEdit()">Edit Profile</a>
     <a *ngIf="editMode" [class.disabled]="!headerFormValid" (click)="onClickUpdate()">Update Changes</a>
   </legend>
-  <profile-section [editMode]="editMode"
-    [class.edit-mode]="editMode" (navMenuVisibilityChanged)="onChangeNavMenuVisibility($event)"
-    (clickEdit)="onClickEdit()"></profile-section>
-  <nav-section [navMenu]="navMenu" [editMode]="editMode" [navIndex]="selectedNavMenuIndex"
-    [headerFormValid]="headerFormValid" (clickUpdate)="onClickUpdate()" (selectNavMenu)="onSelectNavMenu($event)"
+  <profile-section></profile-section>
+  <nav-section 
+    [headerFormValid]="headerFormValid" (clickUpdate)="onClickUpdate()"
     (selectedNavItem)="onSelectNavItem($event)" [isOpened]="isNavMenuOpened"
     [class.nav-hidden]="!((isHandset$ | async) && isNavMenuOpened)" id="nav-section"></nav-section>
 </ng-container>

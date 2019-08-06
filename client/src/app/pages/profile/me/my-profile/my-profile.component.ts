@@ -7,7 +7,6 @@ import {
   ProfileStateService
 } from 'src/app/services';
 import {
-  NavMenus,
   UserGeneralInfo,
   UserEducationItem,
   UserExperienceItem,
@@ -22,6 +21,7 @@ import {
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'my-profile',
@@ -36,7 +36,6 @@ export class MyProfileComponent implements OnInit {
 
   navMenu: any[];
   isNavMenuOpened: boolean;
-  selectedNavMenuIndex: number;
 
   userGeneralInfo: UserGeneralInfo;
   generalInfoData: UserObject;
@@ -55,8 +54,17 @@ export class MyProfileComponent implements OnInit {
     private alertsService: AlertsService,
     private userStateService: UserStateService,
     private profileStateService: ProfileStateService,
-    private breakpointObserver: BreakpointObserver
-  ) { }
+    private breakpointObserver: BreakpointObserver,
+    private router: Router
+  ) {
+    this.parseRouterUrl(router.url);
+    this.router.events.subscribe((val) => {
+      if (val instanceof NavigationEnd) {
+        this.parseRouterUrl(val.url);
+        this.initialize();
+      }
+    });
+  }
 
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(['(max-width: 991px)'])
@@ -65,10 +73,11 @@ export class MyProfileComponent implements OnInit {
     );
 
   ngOnInit() {
-    this.selectedNavMenuIndex = 0;
+    this.initialize();
+  }
+
+  initialize() {
     this.isNavMenuOpened = false;
-    this.navMenu = NavMenus.profile;
-    this.editMode = false;
     this.isProfileLoading = true;
     this.counts = 0;
     this.headerFormValid = false;
@@ -80,6 +89,14 @@ export class MyProfileComponent implements OnInit {
     this.getUserProjectsList();
     this.getUserPublicationsList();
     this.getExternalResourceList();
+  }
+
+  parseRouterUrl(url: string) {
+    if (url.includes('edit')) {
+      this.editMode = true;
+    } else {
+      this.editMode = false;
+    }
   }
 
   onSelectNavItem(id: string) {
@@ -99,10 +116,6 @@ export class MyProfileComponent implements OnInit {
     this.editMode = true;
   }
 
-  onSelectNavMenu(navIndex: number) {
-    this.selectedNavMenuIndex = navIndex;
-  }
-
   onChangedGeneralInfoData($event: any) {
     this.generalInfoData.photo = $event.data.photo;
     this.generalInfoData.first_name = $event.data.first_name;
@@ -120,13 +133,6 @@ export class MyProfileComponent implements OnInit {
   onChangeUserIntro(user_intro: string) {
     this.userGeneralInfo.user_intro = user_intro;
     this.generalInfoData.user_intro = user_intro;
-  }
-
-  onChangeNavMenuVisibility($event: any) {
-    this.navMenu[this.selectedNavMenuIndex].items[$event.navItemIndex].visible = $event.visible;
-    if ($event.navItemIndex === 2 && $event.visible) {
-      this.getUserSkillsList();
-    }
   }
 
   onClickUpdate() {
@@ -196,7 +202,6 @@ export class MyProfileComponent implements OnInit {
   }
 
   checkGeneralInfo() {
-    this.navMenu[0].items[0].visible = this.userGeneralInfo.user_intro ?  true : false;
     this.counts++;
     this.generateGeneralInfoData();
     this.checkProfileLoading();
@@ -226,7 +231,6 @@ export class MyProfileComponent implements OnInit {
   }
 
   checkEducationInfo() {
-    this.navMenu[0].items[1].visible = this.educationList && this.educationList.length > 0 ?  true : false;
     this.counts++;
     this.checkProfileLoading();
   }
@@ -263,7 +267,6 @@ export class MyProfileComponent implements OnInit {
   }
 
   checkExperienceInfo() {
-    this.navMenu[0].items[2].visible = this.experienceList && this.experienceList.length > 0 ? true : false;
     this.counts++;
     this.checkProfileLoading();
   }
@@ -316,7 +319,6 @@ export class MyProfileComponent implements OnInit {
   }
 
   checkPublicationInfo() {
-    this.navMenu[0].items[3].visible  = this.userPublicationsList && this.userPublicationsList.length > 0 ? true : false;
     this.counts++;
     this.checkProfileLoading();
   }
@@ -345,7 +347,6 @@ export class MyProfileComponent implements OnInit {
   }
 
   checkProjectInfo() {
-    this.navMenu[0].items[4].visible = this.userProjectsList && this.userProjectsList.length > 0 ? true : false;
     this.counts++;
     this.checkProfileLoading();
   }
@@ -386,7 +387,6 @@ export class MyProfileComponent implements OnInit {
   }
 
   checkSkillsInfo() {
-    this.navMenu[0].items[5].visible = this.userSkillsList && this.userSkillsList.length > 0 ? true : false;
     this.counts++;
     this.checkProfileLoading();
   }
@@ -427,7 +427,6 @@ export class MyProfileComponent implements OnInit {
   }
 
   checkInterestsInfo() {
-    this.navMenu[0].items[6].visible = this.userInterestsList && this.userInterestsList.length > 0 ? true : false;
     this.counts++;
     this.checkProfileLoading();
   }
@@ -456,7 +455,6 @@ export class MyProfileComponent implements OnInit {
   }
 
   checkExternalResourceInfo() {
-    this.navMenu[0].items[7].visible = this.externalResourcesList && this.externalResourcesList.length > 0 ? true : false;
     this.counts++;
     this.checkProfileLoading();
   }

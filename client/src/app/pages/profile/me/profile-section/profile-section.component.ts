@@ -41,6 +41,7 @@ import {
   MAT_DIALOG_DATA
 } from '@angular/material/dialog';
 import {MatDatepicker} from '@angular/material/datepicker';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
 export interface DialogData {
   category: 'About Me' | 'Education' | 'Work Experience' | 'Project' | 'Publication' | 'External Resources';
@@ -68,7 +69,7 @@ export class ProfileSectionComponent implements OnInit {
   userProjectsList: UserProjectItem[];
   userPublicationsList: UserPublicationItem[];
   externalResourcesList: UserExternalResourcesItem[];
-  @Input() editMode: boolean;
+  editMode: boolean;
   @Output() navMenuVisibilityChanged = new EventEmitter();
   @Output() clickEdit = new EventEmitter();
 
@@ -86,6 +87,8 @@ export class ProfileSectionComponent implements OnInit {
   displayItemsLimit = 7;
 
   constructor(
+    private router: Router,
+    private route: ActivatedRoute,
     private helperService: HelperService,
     private autoCompleteService: AutoCompleteService,
     private alertsService: AlertsService,
@@ -93,9 +96,29 @@ export class ProfileSectionComponent implements OnInit {
     private userStateService: UserStateService,
     private profileStateService: ProfileStateService,
     public dialog: MatDialog
-  ) { }
+  ) {
+    this.parseRouterUrl(router.url);
+    router.events.subscribe((val) => {
+      if (val instanceof NavigationEnd) {
+        this.parseRouterUrl(val.url);
+        this.initialize();
+      }
+    });
+  }
 
   ngOnInit() {
+    this.initialize();
+  }
+
+  parseRouterUrl(url: string) {
+    if (url.includes('edit')) {
+      this.editMode = true;
+    } else {
+      this.editMode = false;
+    }
+  }
+
+  initialize() {
     this.getGeneralInfo();
     this.getEducationList();
     this.getExperienceList();
@@ -196,18 +219,8 @@ export class ProfileSectionComponent implements OnInit {
     });
   }
 
-
-  onChangeNavMenuVisibility(navItemIndex: number, visible: boolean) {
-    this.navMenuVisibilityChanged.emit({
-      navItemIndex: navItemIndex,
-      visible: visible
-    });
-  }
-
   onClickEdit() {
-    this.clickEdit.emit();
-    this.initSkillsSearchForm();
-    this.initInterestsSearchForm();
+    this.router.navigate(['/me/profile', 'edit'], { relativeTo: this.route });
   }
 
   openDialog(category: string, data: any, arrIndex: number = -1) {
@@ -229,32 +242,26 @@ export class ProfileSectionComponent implements OnInit {
           case 'About Me':
             this.userGeneralInfo = result;
             this.userStateService.setUser(this.userGeneralInfo);
-            this.onChangeNavMenuVisibility(0, this.userGeneralInfo.user_intro ? true : false);
             break;
           case 'Education':
             this.educationList = result;
             this.profileStateService.setEducations(this.educationList);
-            this.onChangeNavMenuVisibility(1, this.educationList && this.educationList.length > 0 ? true : false);
             break;
           case 'Work Experience':
             this.experienceList = result;
             this.profileStateService.setExperiences(this.experienceList);
-            this.onChangeNavMenuVisibility(2, this.experienceList && this.experienceList.length > 0 ? true : false);
             break;
           case 'Project':
             this.userProjectsList = result;
             this.profileStateService.setProjects(this.userProjectsList);
-            this.onChangeNavMenuVisibility(4, this.userProjectsList && this.userProjectsList.length > 0 ? true : false);
             break;
           case 'Publication':
             this.userPublicationsList = result;
             this.profileStateService.setPublications(this.userPublicationsList);
-            this.onChangeNavMenuVisibility(3, this.userPublicationsList && this.userPublicationsList.length > 0 ? true : false);
             break;
           case 'External Resources':
             this.externalResourcesList = result;
             this.profileStateService.setExternalResources(this.externalResourcesList);
-            this.onChangeNavMenuVisibility(7, this.externalResourcesList && this.externalResourcesList.length > 0 ? true : false);
             break;
           default:
             break;
@@ -268,7 +275,6 @@ export class ProfileSectionComponent implements OnInit {
       dataJson => {
         this.educationList.splice(arrIndex, 1);
         this.profileStateService.setEducations(this.educationList);
-        this.onChangeNavMenuVisibility(1, this.educationList && this.educationList.length > 0 ? true : false);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -281,7 +287,6 @@ export class ProfileSectionComponent implements OnInit {
       dataJson => {
         this.experienceList.splice(arrIndex, 1);
         this.profileStateService.setExperiences(this.experienceList);
-        this.onChangeNavMenuVisibility(1, this.educationList && this.educationList.length > 0 ? true : false);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -294,7 +299,6 @@ export class ProfileSectionComponent implements OnInit {
       dataJson => {
         this.userPublicationsList.splice(arrIndex, 1);
         this.profileStateService.setPublications(this.userPublicationsList);
-        this.onChangeNavMenuVisibility(3, this.userPublicationsList && this.userPublicationsList.length > 0 ? true : false);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -307,7 +311,6 @@ export class ProfileSectionComponent implements OnInit {
       dataJson => {
         this.userProjectsList.splice(arrIndex, 1);
         this.profileStateService.setProjects(this.userProjectsList);
-        this.onChangeNavMenuVisibility(4, this.userProjectsList && this.userProjectsList.length > 0 ? true : false);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -403,7 +406,6 @@ export class ProfileSectionComponent implements OnInit {
           index: this.userSkillsList.length - 1,
           skillItem: dataJson['data']
         };
-        this.onChangeNavMenuVisibility(5, this.userSkillsList && this.userSkillsList.length > 0 ? true : false);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -416,7 +418,6 @@ export class ProfileSectionComponent implements OnInit {
         this.userSkillsList.splice(index, 1);
         this.profileStateService.setSkills(this.userSkillsList);
         this.temp_skill = null;
-        this.onChangeNavMenuVisibility(5, this.userSkillsList && this.userSkillsList.length > 0 ? true : false);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -475,7 +476,6 @@ export class ProfileSectionComponent implements OnInit {
       dataJson => {
         this.userInterestsList.push(dataJson['data']);
         this.profileStateService.setInterests(this.userInterestsList);
-        this.onChangeNavMenuVisibility(6, this.userInterestsList && this.userInterestsList.length > 0 ? true : false);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -488,7 +488,6 @@ export class ProfileSectionComponent implements OnInit {
         dataJson => {
           this.userInterestsList.splice(index, 1);
           this.profileStateService.setInterests(this.userInterestsList);
-          this.onChangeNavMenuVisibility(6, this.userInterestsList && this.userInterestsList.length > 0 ? true : false);
         },
         error => {
           this.alertsService.show(error.message, AlertType.error);

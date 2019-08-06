@@ -33,6 +33,11 @@ export const profileRoutes: Routes = [
         canActivate: [AuthGuard]
       },
       {
+        path: 'profile/:name',
+        component: ProfileSectionComponent,
+        canActivate: [AuthGuard]
+      },
+      {
         path: 'contacts',
         component: ContactsSectionComponent,
         canActivate: [AuthGuard]
