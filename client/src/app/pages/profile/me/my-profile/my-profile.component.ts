@@ -38,7 +38,7 @@ export class MyProfileComponent implements OnInit {
   isNavMenuOpened: boolean;
 
   userGeneralInfo: UserGeneralInfo;
-  generalInfoData: UserObject;
+  generalInfoData: any;
   educationList: UserEducationItem[];
   experienceList: UserExperienceItem[];
   userSkillsList: UserSkillItem[];
@@ -165,15 +165,10 @@ export class MyProfileComponent implements OnInit {
       last_name: this.userGeneralInfo.last_name,
       birthdate: this.userGeneralInfo.birthdate ? this.userGeneralInfo.birthdate : null,
       gender: this.userGeneralInfo.gender,
-      phone_num: this.userGeneralInfo.phone_num,
-      recruiter: this.userGeneralInfo.recruiter,
-      applicant: this.userGeneralInfo.applicant,
       city_id: this.userGeneralInfo.city_id,
       country_id: this.userGeneralInfo.country_id,
       state_id: this.userGeneralInfo.state_id,
-      is_looking: this.userGeneralInfo.is_looking,
       title: this.userGeneralInfo.title,
-      user_intro: this.userGeneralInfo.user_intro,
       ethnicity: this.userGeneralInfo.ethnicity
     };
   }

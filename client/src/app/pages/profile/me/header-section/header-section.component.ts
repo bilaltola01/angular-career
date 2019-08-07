@@ -46,7 +46,7 @@ export class HeaderSectionComponent implements OnChanges, OnInit {
   countries: string[] = Countries.slice().sort();
 
   generalInfoForm: FormGroup;
-  generalInfoData: UserObject;
+  generalInfoData: any;
 
   autocomplete_cities: City[] = [];
   temp_city: City;
@@ -134,8 +134,8 @@ export class HeaderSectionComponent implements OnChanges, OnInit {
       country: new FormControl(this.generalInfo && this.generalInfo.country ? this.generalInfo.country : ''),
       birthdate: new FormControl(this.generalInfo && this.generalInfo.birthdate ? this.helperService.convertToFormattedString(this.generalInfo.birthdate, 'L') : ''),
       title: new FormControl(this.generalInfo && this.generalInfo.title ? this.generalInfo.title : ''),
-      ethnicity: new FormControl(this.generalInfo && this.generalInfo.ethnicity ? this.generalInfo.ethnicity : '', [Validators.required]),
-      gender: new FormControl(this.generalInfo && this.generalInfo.gender ? this.generalInfo.gender : '', [Validators.required])
+      ethnicity: new FormControl(this.generalInfo && this.generalInfo.ethnicity ? this.generalInfo.ethnicity : ''),
+      gender: new FormControl(this.generalInfo && this.generalInfo.gender ? this.generalInfo.gender : '')
     });
 
     this.generalInfoForm.get('first_name').valueChanges.subscribe((first_name) => {
@@ -249,15 +249,10 @@ export class HeaderSectionComponent implements OnChanges, OnInit {
       last_name: this.generalInfo && this.generalInfo.last_name ? this.generalInfo.last_name : null,
       birthdate: this.generalInfo && this.generalInfo.birthdate ? this.generalInfo.birthdate : null,
       gender: this.generalInfo && this.generalInfo.gender ? this.generalInfo.gender : null,
-      phone_num: this.generalInfo && this.generalInfo.phone_num ? this.generalInfo.phone_num : null,
-      recruiter: this.generalInfo && this.generalInfo.recruiter ? this.generalInfo.recruiter : null,
-      applicant: this.generalInfo && this.generalInfo.applicant ? this.generalInfo.applicant : null,
       city_id: this.generalInfo && this.generalInfo.city_id ? this.generalInfo.city_id : null,
       country_id: this.generalInfo && this.generalInfo.country_id ? this.generalInfo.country_id : null,
       state_id: this.generalInfo && this.generalInfo.state_id ? this.generalInfo.state_id : null,
-      is_looking: this.generalInfo && this.generalInfo.is_looking ? this.generalInfo.is_looking : null,
       title: this.generalInfo && this.generalInfo.title ? this.generalInfo.title : null,
-      user_intro: this.generalInfo && this.generalInfo.user_intro ? this.generalInfo.user_intro : null,
       ethnicity: this.generalInfo && this.generalInfo.ethnicity ? this.generalInfo.ethnicity : null
     };
     this.updatedGeneralInfoData.emit({
