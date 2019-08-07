@@ -1,11 +1,10 @@
 import { CreateProfileComponent } from './create-profile/create-profile.component';
 import { AuthGuard } from '../../guard/auth.guard';
-import { UserProfileComponent } from './user-profile/user-profile.component';
-import { MyProfileComponent } from './me/my-profile/my-profile.component';
+import { MyProfileComponent } from './user-profile/my-profile/my-profile.component';
 import { Routes } from '@angular/router';
-import { ProfileSectionComponent } from './me/profile-section/profile-section.component';
-import { ContactsSectionComponent } from './me/contacts-section/contacts-section.component';
-import { TemplateSectionComponent } from './me/template-section/template-section.component';
+import { ProfileSectionComponent } from './user-profile/profile-section/profile-section.component';
+import { ContactsSectionComponent } from './user-profile/contacts-section/contacts-section.component';
+import { TemplateSectionComponent } from './user-profile/template-section/template-section.component';
 
 export const profileRoutes: Routes = [
   {

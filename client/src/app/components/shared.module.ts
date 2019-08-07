@@ -5,7 +5,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../modules/material.module';
 import { AlertBarComponent } from './alert-bar/alert-bar.component';
-import { ProfileDialogContentComponent } from './main-section/main-section.component';
 
 @NgModule({
   imports: [
@@ -22,8 +21,7 @@ import { ProfileDialogContentComponent } from './main-section/main-section.compo
     ...sharedComponents
   ],
   entryComponents: [
-    AlertBarComponent,
-    ProfileDialogContentComponent
+    AlertBarComponent
   ]
 })
 

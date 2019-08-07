@@ -6,7 +6,7 @@ import { MaterialModule } from '../../modules/material.module';
 import { profileRoutes } from './profile.routing';
 import { profileComponents } from './index';
 import { SharedModule } from '../../components/shared.module';
-import { ProfileDialogContentComponent } from './me/profile-section/profile-section.component';
+import { ProfileDialogContentComponent } from './user-profile/profile-section/profile-section.component';
 
 @NgModule({
   imports: [
