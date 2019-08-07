@@ -114,7 +114,7 @@ export class MyProfileComponent implements OnInit {
   }
 
   onClickEdit() {
-    this.editMode = true;
+    this.router.navigate(['/my-profile', 'edit'], { relativeTo: this.route });
   }
 
   onChangedGeneralInfoData($event: any) {
