@@ -8,9 +8,9 @@ import { MyProfileComponent } from './my-profile.component';
 import { SimpleTagComponent } from 'src/app/components/simple-tag/simple-tag.component';
 import { ActionButtonComponent } from 'src/app/components/action-button/action-button.component';
 
-import { HeaderSectionComponent } from 'src/app/pages/profile/me/header-section/header-section.component';
-import { NavSectionComponent } from 'src/app/pages/profile/me/nav-section/nav-section.component';
-import { ProfileSectionComponent } from 'src/app/pages/profile/me/profile-section/profile-section.component';
+import { HeaderSectionComponent } from 'src/app/pages/profile/user-profile/header-section/header-section.component';
+import { NavSectionComponent } from 'src/app/pages/profile/user-profile/nav-section/nav-section.component';
+import { ProfileSectionComponent } from 'src/app/pages/profile/user-profile/profile-section/profile-section.component';
 
 describe('MyProfileComponent', () => {
   let component: MyProfileComponent;
