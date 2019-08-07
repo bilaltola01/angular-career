@@ -220,7 +220,7 @@ export class ProfileSectionComponent implements OnInit {
   }
 
   onClickEdit() {
-    this.router.navigate(['/me/profile', 'edit'], { relativeTo: this.route });
+    this.router.navigate(['/my-profile', 'edit'], { relativeTo: this.route });
   }
 
   openDialog(category: string, data: any, arrIndex: number = -1) {

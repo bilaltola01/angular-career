@@ -59,11 +59,11 @@ export class NavSectionComponent implements OnInit {
   onSelectNavMenu(navIndex: number) {
     if (!this.editMode) {
       if (navIndex === 0) {
-        this.router.navigate(['/me/profile'], { relativeTo: this.route });
+        this.router.navigate(['/my-profile'], { relativeTo: this.route });
       } else if (navIndex === 1) {
-        this.router.navigate(['/me/contacts'], { relativeTo: this.route });
+        this.router.navigate(['/my-contacts'], { relativeTo: this.route });
       } else if (navIndex === 2) {
-        this.router.navigate(['/me/template'], { relativeTo: this.route });
+        this.router.navigate(['/my-template'], { relativeTo: this.route });
       }
     }
   }

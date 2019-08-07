@@ -142,7 +142,7 @@ export class MyProfileComponent implements OnInit {
         dataJson => {
           this.userGeneralInfo = dataJson['data'];
           this.userStateService.setUser(this.userGeneralInfo);
-          this.router.navigate(['/me/profile'], { relativeTo: this.route });
+          this.router.navigate(['/my-profile'], { relativeTo: this.route });
         },
         error => {
           this.alertsService.show(error.message, AlertType.error);

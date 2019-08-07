@@ -14,42 +14,37 @@ export const profileRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'my-profile',
-    component: UserProfileComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'me',
+    path: '',
     component: MyProfileComponent,
     canActivate: [AuthGuard],
     children: [
       {
         path: '',
-        redirectTo: 'profile',
+        redirectTo: 'my-profile',
         pathMatch: 'full'
       },
       {
-        path: 'profile',
+        path: 'my-profile',
         component: ProfileSectionComponent,
         canActivate: [AuthGuard]
       },
       {
-        path: 'profile/:name',
+        path: 'my-profile/:name',
         component: ProfileSectionComponent,
         canActivate: [AuthGuard]
       },
       {
-        path: 'contacts',
+        path: 'my-contacts',
         component: ContactsSectionComponent,
         canActivate: [AuthGuard]
       },
       {
-        path: 'template',
+        path: 'my-template',
         component: TemplateSectionComponent,
         canActivate: [AuthGuard]
       },
       {
-        path: 'template/:name',
+        path: 'my-template/:name',
         component: TemplateSectionComponent,
         canActivate: [AuthGuard]
       }
