@@ -499,9 +499,9 @@ export class ProfileSectionComponent implements OnInit {
 }
 
 @Component({
-  selector: 'dialog-content',
-  templateUrl: './dialog-content.component.html',
-  styleUrls: ['./dialog-content.component.scss'],
+  selector: 'profile-dialog',
+  templateUrl: './profile-dialog.component.html',
+  styleUrls: ['./profile-dialog.component.scss'],
 })
 
 export class ProfileDialogContentComponent {
