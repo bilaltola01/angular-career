@@ -148,7 +148,7 @@ export class UserService {
         catchError(this.handleError));
   }
 
-  public updateGeneralInfo(generalInfo: UserObject): Observable<any> {
+  public updateGeneralInfo(generalInfo: any): Observable<any> {
     return this.http.patch(this.user_service_url + `user/${this.user_id}`, generalInfo, this.authHttpOptions())
       .pipe(
         map(data => {

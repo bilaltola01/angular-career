@@ -463,7 +463,7 @@ action-button {
     position: relative;
     border-radius: 20px;
     margin: 0 40px;
-    dialog-content {
+    profile-dialog {
       width: 100%;
       @include flex(column, center, flex-start);
       mat-icon.cancel {

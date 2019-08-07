@@ -5,15 +5,17 @@
   <div *ngIf="generalInfo" class="user-row">
     <div>
       <input [disabled]="!editMode"
-             style="display: none"
-             type="file"
-             (change)="onPhotoFileSelected($event)"
-             #fileInput>
+        style="display: none"
+        type="file"
+        (change)="onPhotoFileSelected($event)"
+        #fileInput
+      >
 
       <div [ngClass]="{'hover-img': editMode}" (click)="fileInput.click()">
         <img class="user-photo"
-             src="{{generalInfoForm.get('photo').value || 'assets/icons/no_photo.png'}}"
-             alt="Profile Image">
+          src="{{generalInfoForm.get('photo').value || 'assets/icons/no_photo.png'}}"
+          alt="Profile Image"
+        >
       </div>
     </div>
 

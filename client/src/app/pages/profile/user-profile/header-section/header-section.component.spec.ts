@@ -1,12 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import {
-  MaterialModule,
-  TestingModule
-} from './../../modules';
+import { TestingModule } from 'src/app/modules/testing.module';
+import { MaterialModule } from 'src/app/modules/material.module';
 
 import { HeaderSectionComponent } from './header-section.component';
-import { SimpleTagComponent } from './../simple-tag/simple-tag.component';
+import { SimpleTagComponent } from 'src/app/components/simple-tag/simple-tag.component';
 
 describe('HeaderSectionComponent', () => {
   let component: HeaderSectionComponent;

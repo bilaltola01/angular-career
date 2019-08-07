@@ -6,6 +6,7 @@ import { MaterialModule } from '../../modules/material.module';
 import { profileRoutes } from './profile.routing';
 import { profileComponents } from './index';
 import { SharedModule } from '../../components/shared.module';
+import { ProfileDialogContentComponent } from './user-profile/profile-section/profile-section.component';
 
 @NgModule({
   imports: [
@@ -18,6 +19,9 @@ import { SharedModule } from '../../components/shared.module';
   ],
   declarations: [
     ...profileComponents
+  ],
+  entryComponents: [
+    ProfileDialogContentComponent
   ]
 })
 

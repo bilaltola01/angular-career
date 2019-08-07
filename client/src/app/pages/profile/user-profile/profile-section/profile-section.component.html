@@ -1,4 +1,4 @@
-<ng-container *ngIf="selectedNavMenu === 'profile'">
+<ng-container>
 
   <div class="edit-title">
     <a *ngIf="!editMode" (click)="onClickEdit()">Edit Profile</a>
@@ -206,41 +206,3 @@
     </div>
   </div>
 </ng-container>
-
-<ng-container *ngIf="selectedNavMenu === 'contacts'">
-  <div class="row">
-    <div>
-      <div class="img-tag">
-        <img src="assets/icons/ic_people_1.svg">
-        <label>Jack Richard</label>
-        <a>Los Angeles, California, USA</a>
-      </div>
-      <div class="img-tag">
-        <img src="assets/icons/ic_people_2.svg">
-        <label>Ryan Sandoval</label>
-        <a>Los Angeles, California, USA</a>
-      </div>
-      <div class="img-tag">
-        <img src="assets/icons/ic_people_3.svg">
-        <label>Ryan Sandoval</label>
-        <a>Los Angeles, California, USA</a>
-      </div>
-      <div class="img-tag">
-        <img src="assets/icons/ic_people_4.svg">
-        <label>Ryan Sandoval</label>
-        <a>Los Angeles, California, USA</a>
-      </div>
-      <div class="img-tag">
-        <img src="assets/icons/ic_people_5.svg">
-        <label>Ryan Sandoval</label>
-        <a>Los Angeles, California, USA</a>
-      </div>
-      <div class="img-tag">
-        <img src="assets/icons/ic_people_6.svg">
-        <label>Ryan Sandoval</label>
-        <a>Los Angeles, California, USA</a>
-      </div>
-    </div>
-  </div>
-</ng-container>
-

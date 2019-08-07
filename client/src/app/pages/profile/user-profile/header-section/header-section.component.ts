@@ -21,8 +21,12 @@ import {
   HelperService,
   AlertsService,
   AlertType,
-  AutoCompleteService, UserService, PhotoStateService,
+  AutoCompleteService,
+  UserService,
+  PhotoStateService,
+  UserStateService
 } from 'src/app/services';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'header-section',
@@ -31,10 +35,9 @@ import {
 })
 export class HeaderSectionComponent implements OnChanges, OnInit {
 
-  @Input() generalInfo: UserGeneralInfo;
-  @Input() editMode: boolean;
+  generalInfo: UserGeneralInfo;
+  editMode: boolean;
   @Output() updatedGeneralInfoData = new EventEmitter();
-  @Output() updatedProfileStatus = new EventEmitter();
 
   maxDate = new Date();
 
@@ -43,7 +46,7 @@ export class HeaderSectionComponent implements OnChanges, OnInit {
   countries: string[] = Countries.slice().sort();
 
   generalInfoForm: FormGroup;
-  generalInfoData: UserObject;
+  generalInfoData: any;
 
   autocomplete_cities: City[] = [];
   temp_city: City;
@@ -57,13 +60,29 @@ export class HeaderSectionComponent implements OnChanges, OnInit {
     private autoCompleteService: AutoCompleteService,
     private alertsService: AlertsService,
     private userService: UserService,
-    private photoStateService: PhotoStateService
-  ) { }
+    private photoStateService: PhotoStateService,
+    private userStateService: UserStateService,
+    private router: Router
+  ) {
+    if (this.router.url.includes('edit')) {
+      this.editMode = true;
+    } else {
+      this.editMode = false;
+    }
+    router.events.subscribe((val) => {
+      if (val instanceof NavigationEnd) {
+        if (val.url.includes('edit')) {
+          this.editMode = true;
+        } else {
+          this.editMode = false;
+        }
+        this.getGeneralInfo();
+      }
+    });
+  }
 
   ngOnInit() {
-    if (this.generalInfo) {
-      this.initGeneralInfoForm();
-    }
+    this.getGeneralInfo();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -75,7 +94,29 @@ export class HeaderSectionComponent implements OnChanges, OnInit {
 
   onChangeProfileStatus(active: boolean) {
     this.generalInfoData.is_looking = active ? 0 : 1;
-    this.updatedProfileStatus.emit(this.generalInfoData);
+    const data = {
+      is_looking: active ? 0 : 1
+    };
+    this.userService.updateGeneralInfo(data).subscribe(
+      dataJson => {
+        this.generalInfo = dataJson['data'];
+        this.userStateService.setUser(this.generalInfo);
+        this.initGeneralInfoForm();
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  getGeneralInfo() {
+    this.userStateService.getUser
+    .subscribe(user => {
+      this.generalInfo = user;
+      this.initGeneralInfoForm();
+    }, error => {
+      this.alertsService.show(error.message, AlertType.error);
+    });
   }
 
   initGeneralInfoForm() {
@@ -85,16 +126,16 @@ export class HeaderSectionComponent implements OnChanges, OnInit {
     this.temp_state = null;
 
     this.generalInfoForm = new FormGroup({
-      photo: new FormControl(this.generalInfo.photo ? this.generalInfo.photo : ''),
-      first_name: new FormControl(this.generalInfo.first_name ? this.generalInfo.first_name : '', [Validators.required]),
-      last_name: new FormControl(this.generalInfo.last_name ? this.generalInfo.last_name : '', [Validators.required]),
-      city: new FormControl(this.generalInfo.city ? this.generalInfo.city : ''),
-      state: new FormControl(this.generalInfo.state ? this.generalInfo.state : ''),
-      country: new FormControl(this.generalInfo.country ? this.generalInfo.country : ''),
-      birthdate: new FormControl(this.generalInfo.birthdate ? this.helperService.convertToFormattedString(this.generalInfo.birthdate, 'L') : ''),
-      title: new FormControl(this.generalInfo.title ? this.generalInfo.title : ''),
-      ethnicity: new FormControl(this.generalInfo.ethnicity ? this.generalInfo.ethnicity : '', [Validators.required]),
-      gender: new FormControl(this.generalInfo.gender ? this.generalInfo.gender : '', [Validators.required])
+      photo: new FormControl(this.generalInfo && this.generalInfo.photo ? this.generalInfo.photo : ''),
+      first_name: new FormControl(this.generalInfo && this.generalInfo.first_name ? this.generalInfo.first_name : '', [Validators.required]),
+      last_name: new FormControl(this.generalInfo && this.generalInfo.last_name ? this.generalInfo.last_name : '', [Validators.required]),
+      city: new FormControl(this.generalInfo && this.generalInfo.city ? this.generalInfo.city : ''),
+      state: new FormControl(this.generalInfo && this.generalInfo.state ? this.generalInfo.state : ''),
+      country: new FormControl(this.generalInfo && this.generalInfo.country ? this.generalInfo.country : ''),
+      birthdate: new FormControl(this.generalInfo && this.generalInfo.birthdate ? this.helperService.convertToFormattedString(this.generalInfo.birthdate, 'L') : ''),
+      title: new FormControl(this.generalInfo && this.generalInfo.title ? this.generalInfo.title : ''),
+      ethnicity: new FormControl(this.generalInfo && this.generalInfo.ethnicity ? this.generalInfo.ethnicity : ''),
+      gender: new FormControl(this.generalInfo && this.generalInfo.gender ? this.generalInfo.gender : '')
     });
 
     this.generalInfoForm.get('first_name').valueChanges.subscribe((first_name) => {
@@ -203,21 +244,16 @@ export class HeaderSectionComponent implements OnChanges, OnInit {
     });
 
     this.generalInfoData = {
-      photo: this.generalInfo.photo ? this.generalInfo.photo : null,
-      first_name: this.generalInfo.first_name,
-      last_name: this.generalInfo.last_name,
-      birthdate: this.generalInfo.birthdate ? this.generalInfo.birthdate : null,
-      gender: this.generalInfo.gender,
-      phone_num: this.generalInfo.phone_num,
-      recruiter: this.generalInfo.recruiter,
-      applicant: this.generalInfo.applicant,
-      city_id: this.generalInfo.city_id,
-      country_id: this.generalInfo.country_id,
-      state_id: this.generalInfo.state_id,
-      is_looking: this.generalInfo.is_looking,
-      title: this.generalInfo.title,
-      user_intro: this.generalInfo.user_intro,
-      ethnicity: this.generalInfo.ethnicity
+      photo: this.generalInfo && this.generalInfo.photo ? this.generalInfo.photo : null,
+      first_name: this.generalInfo && this.generalInfo.first_name ? this.generalInfo.first_name : null,
+      last_name: this.generalInfo && this.generalInfo.last_name ? this.generalInfo.last_name : null,
+      birthdate: this.generalInfo && this.generalInfo.birthdate ? this.generalInfo.birthdate : null,
+      gender: this.generalInfo && this.generalInfo.gender ? this.generalInfo.gender : null,
+      city_id: this.generalInfo && this.generalInfo.city_id ? this.generalInfo.city_id : null,
+      country_id: this.generalInfo && this.generalInfo.country_id ? this.generalInfo.country_id : null,
+      state_id: this.generalInfo && this.generalInfo.state_id ? this.generalInfo.state_id : null,
+      title: this.generalInfo && this.generalInfo.title ? this.generalInfo.title : null,
+      ethnicity: this.generalInfo && this.generalInfo.ethnicity ? this.generalInfo.ethnicity : null
     };
     this.updatedGeneralInfoData.emit({
       data: this.generalInfoData,
@@ -327,22 +363,22 @@ export class HeaderSectionComponent implements OnChanges, OnInit {
 
       const file = event.target.files[0];
 
-      this.userService.getSignedPhotoUrl(file)
-        .subscribe((signedPhoto) => {
-            this.userService.uploadPhotoToS3(file, signedPhoto.data.signedUrl, signedPhoto.data.url)
-              .subscribe((response) => {
-                this.generalInfoForm.patchValue({
-                    photo: response.data
-                });
+      this.userService.getSignedPhotoUrl(file).subscribe((signedPhoto) => {
+        this.userService.uploadPhotoToS3(file, signedPhoto.data.signedUrl, signedPhoto.data.url)
+          .subscribe((response) => {
+            this.generalInfoForm.patchValue({
+                photo: response.data
+            });
 
-                this.photoStateService.setPhoto(response.data);
-              }, err => {
-                this.alertsService.show(err.message, AlertType.error);
-              });
+            this.photoStateService.setPhoto(response.data);
           }, err => {
             this.alertsService.show(err.message, AlertType.error);
-          }
-        );
+          });
+        }, err => {
+          this.alertsService.show(err.message, AlertType.error);
+        }
+      );
     }
   }
+
 }
