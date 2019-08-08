@@ -28,12 +28,8 @@ export class MainToolbarComponent implements OnInit {
     private userService: UserService,
     private alertsService: AlertsService,
     public url: LocationStrategy,
-<<<<<<< HEAD
     private photoStateService: PhotoStateService,
     private userStateService: UserStateService) {}
-=======
-    private photoStateService: PhotoStateService) {}
->>>>>>> Implemented Pagination and Improved UI.
 
   ngOnInit() {
     // TODO: This get should be called only once and stored in browser storage in the user service

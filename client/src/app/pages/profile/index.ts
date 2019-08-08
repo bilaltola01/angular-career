@@ -6,6 +6,7 @@ import { ProfileSectionComponent, ProfileDialogContentComponent } from './user-p
 import { ContactsSectionComponent } from './user-profile/contacts-section/contacts-section.component';
 import { TemplateSectionComponent, TemplateDialogContentComponent } from './user-profile/template-section/template-section.component';
 
+
 export const profileComponents = [
   CreateProfileComponent,
   MyProfileComponent,
@@ -14,6 +15,5 @@ export const profileComponents = [
   ProfileSectionComponent,
   ProfileDialogContentComponent,
   ContactsSectionComponent,
-  TemplateSectionComponent,
-  TemplateDialogContentComponent
+  TemplateSectionComponent
 ];
