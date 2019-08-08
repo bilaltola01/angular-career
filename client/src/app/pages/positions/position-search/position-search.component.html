@@ -1,7 +1,9 @@
 <!-- Search Bar -->
 <div class="career-main">
     <div class="comman_search_filter" [formGroup]="positionForm">
-
+        <div class="filter-data">
+            <mat-icon (click)="toggleTabMenuOpen()" class="filter_icon">filter_list</mat-icon>
+        </div>
         <div class="postion-search-header">
             <mat-form-field appearance="standard" class="search">
                 <mat-icon matSuffix (click)="onSearchPosition($event)">search</mat-icon>
@@ -14,12 +16,10 @@
                 </mat-autocomplete>
             </mat-form-field>
         </div>
-        <div class="filter-data">
-            <mat-icon (click)="toggleTabMenuOpen()" class="filter_icon">filter_list</mat-icon>
-        </div>
+
     </div>
     <div [formGroup]="positionForm" class="position-main-container">
-        <!-- Position Card -->
+        <!-- Position Filter Card -->
         <div class="filter-container container__header tablet" [class.open]="filter_list">
             <ng-container>
                 <div class="nav-title">
@@ -40,7 +40,8 @@
                 </div>
                 <div class="filter-card">
                     <mat-form-field>
-                        <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompleteSkills"
+                        <mat-label>Skills</mat-label>
+                        <input matInput placeholder="Skills" type="text" [matAutocomplete]="autocompleteSkills"
                             formControlName="skill">
                         <mat-autocomplete #autocompleteSkills="matAutocomplete">
                             <mat-option *ngFor="let autocomplete_skill of autocomplete_skills"
@@ -58,14 +59,14 @@
                 <div class="filter-card">
                     <mat-form-field>
                         <mat-label>Minimum Salary</mat-label>
-                        <input matInput placeholder="MinimumSalary" type="number" formControlName="minSal">
+                        <input matInput placeholder="Minimum Salary" type="number" formControlName="minSal">
                     </mat-form-field>
                 </div>
                 <div class="filter-card">
                     <mat-form-field>
                         <mat-label>Position Level</mat-label>
                         <mat-select class="arrow" formControlName="position">
-                            <mat-option value=''>Please select</mat-option>
+                            <mat-option value=''></mat-option>
                             <mat-option *ngFor="let position of positionLevel" value="{{position}}">{{position}}
                             </mat-option>
                         </mat-select>
@@ -98,15 +99,6 @@
                 </div>
                 <div class="filter-card">
                     <mat-form-field>
-                        <mat-label>Latest Date Posted </mat-label>
-                        <mat-select class="arrow" formControlName="post">
-                            <mat-option value=''>Please select</mat-option>
-                            <mat-option *ngFor="let posted of latestDatePosted" value="posted">{{posted}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="filter-card">
-                    <mat-form-field>
                         <mat-label>School</mat-label>
                         <input matInput placeholder="School" type="text" [matAutocomplete]="autocompleteSchool"
                             formControlName="school">
@@ -134,7 +126,7 @@
                 </div>
                 <div class="filter-card">
                     <div class="side-filter-btn">
-                        <action-button type="raised" color="primary" title="Apply Filters" (click)="getJobData()">
+                        <action-button type="raised" color="primary" title="Apply Filters" (click)="filterAttributes.offset = 0;toggleTabMenuOpen();getJobData()">
                         </action-button>
                     </div>
                     <div class="clear-filter">
@@ -144,6 +136,9 @@
                 </div>
             </ng-container>
         </div>
+
+        <!-- Job Position Card -->
+
         <div class="position-list-container">
 
             <div class="select-style">
@@ -151,13 +146,24 @@
 
                     <round-checkbox id="test" title="Select All" [checked]="selectedAllFlag"
                         (statusChange)="selectAll($event)"></round-checkbox>
-                    <action-button class="position-search-reload-result" color="primary" title="Apply Selected">
+                    <action-button class="position-search-reload-result" color="primary" title="Apply Selected"
+                        (click)="applySelected()">
                     </action-button>
-                    <action-button class="position-search-reload-result" color="primary" title="Save Selected">
+                    <action-button class="position-search-reload-result" color="primary" title="Save Selected"
+                        (click)="saveSelected()">
                     </action-button>
                     <action-button class="position-search-reload-result" color="primary" title="Reload Results"
                         (click)="getJobData()"></action-button>
-
+                    <div class="drop-buttons">
+                        <mat-form-field>
+                            <mat-select value="Action">
+                                <mat-option value="Action">Action</mat-option>
+                                <mat-option value="Apply Selected" (click)="applySelected()">Apply Selected</mat-option>
+                                <mat-option value="Save Selected" (click)="saveSelected()">Save Selected </mat-option>
+                                <mat-option value="Reload Results" (click)="getJobData()"> Reload Results</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
 
 
                 </div>
@@ -169,10 +175,8 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-
-
-
             </div>
+
             <div *ngFor="let job of positionList">
                 <div class="row" [ngClass]="{'selected': job.selected}">
                     <round-checkbox id="test" [checked]="job.selected"
@@ -180,15 +184,35 @@
                     <h1>{{job.position}}</h1>
                     <div class="position-right">
                         <div class="heart-icon">
-                            <img *ngIf="!isJobSaved(job.position_id)" (click)="saveJob(job);" title="Save Job"
-                                src="assets/icons/ic_heart.svg" class="before-heart-icon">
-                            <img *ngIf="isJobSaved(job.position_id)" (click)="unSaveJob(job);" title="Saved Job"
-                                src="assets/icons/ic_heart_circle.svg" class="after-heart-icon">
+                            <img *ngIf="!appliedJobsMap[job.position_id] && !savedJobsMap[job.position_id]"
+                                (click)="saveJob([job]);" title="Save Job" src="assets/icons/ic_heart.svg"
+                                class="before-heart-icon">
+                            <img *ngIf="!appliedJobsMap[job.position_id] && savedJobsMap[job.position_id]"
+                                (click)="unSaveJob(job);" title="Saved Job" src="assets/icons/ic_heart_circle.svg"
+                                class="after-heart-icon">
                         </div>
                         <span class="right-align">
-                            <action-button title="Apply" class="job-apply-btn" color="primary" (click)="applyJob(job)">
+                            <action-button *ngIf="!appliedJobsMap[job.position_id]" title="Apply" class="job-apply-btn"
+                                color="primary" (click)="applyJob([job])">
+                            </action-button>
+                            <action-button *ngIf="appliedJobsMap[job.position_id]" class="job-applied-btn" title="Applied" type="stroked"
+                                color="primary"  disabled>
                             </action-button>
                         </span>
+                        <span *ngIf="appliedJobsMap[job.position_id]" class="dot-icon">
+                            <button mat-button [matMenuTriggerFor]="menu" disableRipple><img
+                                    src="assets/icons/ic_more_vertical.svg">
+                            </button>
+                            <mat-menu #menu="matMenu">
+                                <button mat-menu-item
+                                    routerLink="../application/{{this.appliedJobsMap[job.position_id]}}">See
+                                    Application</button>
+                                <button mat-menu-item (click)="withdrawApplication(job.position_id)">Withdraw
+                                    Application</button>
+                            </mat-menu>
+                        </span>
+
+
                     </div>
 
 
@@ -196,9 +220,9 @@
                         <div class="job-top-list">
                             <ul>
                                 <li>
-                                    <!-- <mat-icon  aria-hidden="false" aria-label="Source">account_balance_</mat-icon> -->
                                     <img class="img-style" src="assets/icons/ic_company.svg">
-                                    <span class="image"> {{job.company_name}}</span>
+                                    <span class="image" routerLink="../company-page/{{job.company_id}}">
+                                        {{job.company_name}}</span>
                                 </li>
                                 <li>
                                     <img src="assets/icons/ic_location.svg">
@@ -217,7 +241,8 @@
                                 </li>
                             </ul>
                         </div>
-                        <mat-grid-list cols="4" rowHeight="2:1" class="card">
+                        <mat-grid-list [cols]="breakpoint" rowHeight="60px" (window:resize)="onResize($event)"
+                            class="card">
                             <mat-grid-tile>
                                 <div class="card-item">
                                     <span>Qualification Level</span>
@@ -345,10 +370,9 @@
                     No search results found.
                 </div>
             </div>
-            <div class="pagination">
+            <div class="pagination" *ngIf="positionList.length > 0">
                 <ul type="none">
-                    <li class="large_pagination_button"
-                        *ngIf="(currentPageNumber > 5 || currentPageNumber == paginationArr.length)"
+                    <li class="large_pagination_button" *ngIf="(currentPageNumber > 5 )"
                         (click)="pageClicked(currentPageNumber-1)">Prev. Page</li>
                     <li *ngFor="let pageNo of paginationArr | slice : paginationMin : paginationMax"
                         [ngClass]="{'active': pageNo == currentPageNumber}" (click)="pageClicked(pageNo)">{{ pageNo }}

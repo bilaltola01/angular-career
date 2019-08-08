@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, forkJoin } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { HelperService } from './helper.service';
 @Injectable({
@@ -23,14 +23,17 @@ export class CartService {
     };
   }
 
-  public saveJob(position_id: number): Observable<any> {
+  public saveJob(positionArr): Observable<any[]> {
     const queryUrl = `${this.cart_service_url}/user/cart`;
-    const body = {
-      'positionId': position_id,
-      'userId': this.helperService.extractUserId()
-    };
-    return this.http.post(queryUrl, body, this.authHttpOptions())
-      .pipe(
+    const userId = this.helperService.extractUserId();
+    const observableArr = [];
+
+    for (let i = 0; i < positionArr.length; i++) {
+      const body = {
+        'positionId': positionArr[i].position_id,
+        'userId': userId
+      };
+      observableArr[i] = this.http.post(queryUrl, body, this.authHttpOptions()).pipe(
         map(
           data => {
             return { success: true, message: 'Success!', data: data };
@@ -38,6 +41,9 @@ export class CartService {
         ),
         catchError(this.handleError)
       );
+    }
+
+    return forkJoin(observableArr);
   }
 
   public unSaveJob(position_id: number): Observable<any> {
@@ -60,7 +66,7 @@ export class CartService {
       );
   }
 
-  public getSavedJobs(queryString?: string): Observable<any> {
+  public getSavedJobs(): Observable<any> {
     const userId = this.helperService.extractUserId();
     const queryUrl = `${this.cart_service_url}/user/${userId}/cart`;
     return this.http.get(queryUrl, this.authHttpOptions())

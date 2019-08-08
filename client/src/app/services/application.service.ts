@@ -1,34 +1,28 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, forkJoin } from 'rxjs';
 import { environment } from '../../environments/environment';
-<<<<<<< HEAD
 import { JwtHelperService } from '@auth0/angular-jwt';
-
-=======
 import { HelperService } from './helper.service';
->>>>>>> Implemented Pagination and Improved UI.
+
 @Injectable({
   providedIn: 'root'
 })
 export class ApplicationService {
 
-<<<<<<< HEAD
+
   private user_id = -1;
   private application_service_url = `${environment.serverUrl}/${environment.application_service}/api/${environment.api_version}/`;
 
   helper = new JwtHelperService();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private helperService: HelperService) {
     const token = localStorage.getItem('token');
     if (token) {
       this.user_id = this.helper.decodeToken(token).user_id;
     }
-=======
-  private application_service_url = `${environment.serverUrl}/${environment.application_service}/api/${environment.api_version}/`;
-  constructor(private http: HttpClient, private helperService: HelperService) {
->>>>>>> Implemented Pagination and Improved UI.
+
   }
 
   private authHttpOptions() {
@@ -41,7 +35,6 @@ export class ApplicationService {
     };
   }
 
-<<<<<<< HEAD
   private handleError(error) {
     if (!environment.production) {
       console.error(`UserService -> handleError -> error. Error Code: ${error.status}. Message: ${error.error.message ? error.error.message : error.statusText}. Details:`, error);
@@ -139,29 +132,30 @@ export class ApplicationService {
       catchError(this.handleError)
     );
   }
-
-=======
   public applyJob(position_id: number): Observable<any> {
     const queryUrl = `${this.application_service_url}application`;
-    const body = {
-      position_id: position_id,
-      application_cover_letter: 'null'
-    };
-    return this.http.post(queryUrl, body, this.authHttpOptions())
-      .pipe(
+    const observableArr = [];
+    for (let i = 0; i < positionArr.length; i++) {
+      const body = {
+        position_id: positionArr[i].position_id,
+        application_cover_letter: 'null'
+      };
+      observableArr[i] = this.http.post(queryUrl, body, this.authHttpOptions()).pipe(
         map(
           data => {
-            return { success: true, message: 'Success!', data: data };
+            return data;
           }
         ),
         catchError(this.handleError)
       );
+    }
+    return forkJoin(observableArr);
   }
 
 
   public getAppliedJobs(): Observable<any> {
     const queryUrl = `${this.application_service_url}applications`;
-    return this.http.post(queryUrl, this.authHttpOptions())
+    return this.http.get(queryUrl, this.authHttpOptions())
       .pipe(
         map(
           data => {
@@ -172,14 +166,20 @@ export class ApplicationService {
       );
   }
 
-  private handleError(error) {
-    let errorMessage = '';
-    if (error.error instanceof ErrorEvent) {
-      errorMessage = error.message;
-    } else {
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.error.message}`;
-    }
-    return throwError({ success: false, message: errorMessage });
+  public withdrawJobs(position_id: number): Observable<any> {
+    const queryUrl = `${this.application_service_url}application/${position_id}`;
+    const headerOption = {
+      headers: this.authHttpOptions().headers
+    };
+    return this.http.delete(queryUrl, headerOption)
+      .pipe(
+        map(
+          data => {
+            return { success: true, message: 'Success!', data: data };
+          }
+        ),
+        catchError(this.handleError)
+      );
+
   }
->>>>>>> Implemented Pagination and Improved UI.
 }

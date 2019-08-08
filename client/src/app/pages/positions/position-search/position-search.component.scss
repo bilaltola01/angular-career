@@ -61,9 +61,6 @@ $profile-form-field-mt: 30px;
 
                 float: right;
                 width: 70.3%;
-                position: sticky;
-                position: -webkit-sticky;
-                top: 0;
 
                 & .select-style {
                     overflow: hidden;
@@ -93,6 +90,9 @@ $profile-form-field-mt: 30px;
                             display: inline;
                             margin-right: 22px;
 
+                        }
+                        & .drop-buttons{
+                            display: none;
                         }
                     }
 
@@ -168,6 +168,12 @@ $profile-form-field-mt: 30px;
                         }
 
                         vertical-align: middle;
+
+                        & .dot-icon{
+                            img{
+                                margin: 0 0 0 15px;
+                            }
+                        }
                     }
 
                     img {
@@ -229,6 +235,13 @@ $profile-form-field-mt: 30px;
                             vertical-align: middle;
                             font-family: "Poppins", sans-serif;
                             font-weight: 400;
+
+                            a{
+                                @include inline-block-btn;
+                                vertical-align: middle; 
+                                color: rgba(map-get($md-cfaccent, 500), .84); 
+                                text-decoration: none; 
+                            }
 
                             span{
                                 @include inline-block-btn;
@@ -320,16 +333,20 @@ $profile-form-field-mt: 30px;
                 }
 
                 & .card {
+                    margin: 20px 0;
+                    & mat-grid-tile{
+                        border: 1px solid #f0f0f0;
+                        border-right: none;
+                        &:last-child{
+                            border-right:1px solid #f0f0f0;
+                        }
+                    }
                     & .card-item {
                         @include inline-block-btn;
-                        border: 1px solid #ddd;
                         width: 100%;
                         padding: 9px 15px 9px 15px;
                         vertical-align: middle;
-                        border-right: none;
-                        &:last-child{
-                            border-right:1px solid #ddd;
-                        }
+                        
 
                         span {
                             color: rgba(map-get($md-cfaccent, 500), .44);
@@ -403,7 +420,11 @@ $profile-form-field-mt: 30px;
             position: sticky;
             position: -webkit-sticky;
             top: 74px;
-
+            overflow-y: scroll;
+            &::-webkit-scrollbar{
+                width: 0;
+                background-color: transparent;
+            }
             &::after {
                 content: "";
                 display: table;
@@ -497,7 +518,7 @@ $profile-form-field-mt: 30px;
                 background-color: $white;
 
                 .postion-search-header {
-                    display: inline-block;
+                    display: block;
                     border: none;
                     width: 560px;
                     margin: 0 auto;
@@ -513,11 +534,11 @@ $profile-form-field-mt: 30px;
                 }
 
                 .filter-data {
-                    float: right;
+                    float: left;
                     background-color: $white;
-                    margin-top: 18px;
-                    margin-right: 28px;
-
+                    margin-top: 20px;
+                    margin-left: 28px;
+    
                     & .filter_icon {
                         display: block;
                     }
@@ -572,7 +593,7 @@ $profile-form-field-mt: 30px;
                     float: none;
                     width: 95%;
                     margin: 0 auto;
-                    padding-top: 30px;
+                    padding-top: 10px;
 
                     & .select-style {
                         & .selectall {
@@ -623,7 +644,7 @@ $profile-form-field-mt: 30px;
                 background-color: $white;
 
                 .postion-search-header {
-                    display: inline-block;
+                    display: block;
                     border: none;
                     width: 450px;
                     margin: 0 auto;
@@ -639,10 +660,10 @@ $profile-form-field-mt: 30px;
                 }
 
                 .filter-data {
-                    float: right;
+                    float: left;
                     background-color: $white;
-                    margin-top: 18px;
-                    margin-right: 28px;
+                    margin-top: 20px;
+                    margin-left: 28px;
 
                     & .filter_icon {
                         display: block;
@@ -700,6 +721,7 @@ $profile-form-field-mt: 30px;
                     padding: 0 10px;
 
                     & .select-style {
+                        margin: 9px 0;
                         & .selectall {
                             width: 74%;
                             padding-bottom: 6px;
@@ -755,10 +777,10 @@ $profile-form-field-mt: 30px;
                 }
 
                 .filter-data {
-                    float: right;
+                    float: left;
                     background-color: $white;
-                    margin-top: 18px;
-                    margin-right: 18px;
+                    margin-top: 20px;
+                    margin-left: 14px;
 
                     & .filter_icon {
                         display: block;
@@ -769,7 +791,7 @@ $profile-form-field-mt: 30px;
             }
             .position-main-container {
                 width: 100%;
-                padding-bottom: 40px;
+                padding-bottom: 100px;
 
                 & .container__header {
                     &.tablet {
@@ -819,21 +841,38 @@ $profile-form-field-mt: 30px;
                         & .selectall {
                             float: none;
                             width: 100%;
+                            & round-checkbox{
+                                margin-right: 13px;
+                            }
 
-                            action-button {
+                            & action-button {
                                 margin-bottom: 5px;
+                                display: none;
+                            }
+                            & .drop-buttons{
+                                display: inline-block;
+
                             }
                         }
 
                         & .sort-item {
                             float: none;
+                            margin-left: 30px;
 
                             & mat-form-field {
                                 margin-top: 0px;
                                 margin-bottom: 5px;
+                                margin-left: 30px;
 
                             }
                         }
+                    }
+                    & .right-align{
+                        @include inline-block-btn; 
+                        text-align: center;
+                         & action-button{
+                            @include inline-block-btn; 
+                         }
                     }
 
                     & .row {
@@ -841,6 +880,8 @@ $profile-form-field-mt: 30px;
                         h1 {
                             font-size: 18px;
                             margin-top: 3px;
+                            line-height: 20px;
+                            width:67%;
                         }
 
                         & .position-right {
@@ -862,18 +903,24 @@ $profile-form-field-mt: 30px;
 
                         & .job-top-list {
                             ul {
-                                margin-top: 0% li {
-                                    margin-right: 20px;
-                                    font-size: 15px;
+                                margin: 20px auto 0;
+                                 li {
+                                    margin-right: auto;
+                                    font-size: 13px;
                                     margin-bottom: 6px;
+                                    word-wrap: break-word;
+                                    display: block;
                                 }
                             }
                         }
 
                         & .card {
                             & .card-item {
-                                width: 41%;
-                                min-height: 70px;
+                                padding: 18px 5px 12px 5px;
+                                min-height: 60px;
+                                & span{
+                                    font-size: 13px;
+                                }
                             }
                         }
 

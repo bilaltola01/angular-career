@@ -394,6 +394,7 @@ export const NavMenus = {
 export const ITEMS_LIMIT = 100;
 
 
+
 export const PROOF_AUTH_OPTIONS = [
   'U.S. Citizen',
   'Work Visa'
@@ -405,6 +406,7 @@ export const MILITARY_STATUS_OPTIONS = [
   'I am not a veteran',
   'I do not wish to self-identify'
 ];
+
 
 
 
@@ -425,6 +427,7 @@ export const PositionLevel = [
   'Senior Management',
   'Executive Level'
 ];
+
 export const EducationLevel = [
   'No Education',
   'High School',
@@ -439,12 +442,14 @@ export const EducationLevel = [
   'Ph.D.'
 ];
 
+
 export const SortBy = [
   { 'title': 'Likely Fit', 'value': 'qualification' },
   { 'title': 'Date Posted', 'value': 'post-date' },
   { 'title': 'Popularity', 'value': 'popularity' }
 
 ];
+
 
 export const QualificationLevel = [
   { 'title': 'Unqualified', 'value': 'unqualified' },
@@ -456,6 +461,7 @@ export const QualificationLevel = [
 ];
 
 export const positionListLimit = 7;
+
 
 export const positionSearchMessages = {
   'APPLICATION_SAVE_SUCCESS': 'Application submission successful.',

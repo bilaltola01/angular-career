@@ -44,7 +44,17 @@
       font-weight: 600;
       font-size: 20px;
       line-height: 30px;
-      margin-bottom: 20px
+      margin-bottom: 20px;
+      span{
+        vertical-align: middle;
+        margin-top: -2px;
+        display: inline-block;
+        color: #CBD1D8;
+        font-size: 19px;
+        img{
+          vertical-align: middle;
+        }
+      }
     }
     h4 {
       margin-top: 10px;

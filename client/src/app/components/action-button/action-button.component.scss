@@ -26,6 +26,22 @@
     font-size: 14px;
     font-family: "Poppins", sans-serif;
 }
+:host-context(.job-applied-btn) button {
+  line-height: 21px;
+    font-weight: 500;
+    padding: 12px 22px !important;
+    font-size: 14px;
+    font-family: "Poppins", sans-serif;
+    background-color: $secondary-bg-color;
+    color: #318BD6;
+    border:none;
+    &:hover{
+      color: #318BD6;
+    }
+}
+:host-context(.dot-icon) button{
+  padding: 0 !important;
+}
 :host-context(.side-filter-btn) button {
   font-family: "Poppins", sans-serif;
   font-weight: 500;

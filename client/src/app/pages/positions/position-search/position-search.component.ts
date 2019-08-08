@@ -8,7 +8,6 @@ import {
 import {
   City,
   PositionLevel,
-  LatestDatePosted,
   SortBy,
   Industry,
   Company,
@@ -26,8 +25,8 @@ import {
 })
 export class PositionSearchComponent implements OnInit {
   // Constants
+  breakpoint: number;
   positionLevel: string[] = PositionLevel;
-  latestDatePosted: string[] = LatestDatePosted;
   sortBy: object[] = SortBy;
   SkillLevelDescription = SkillLevelDescription;
   // FormGroup
@@ -42,6 +41,7 @@ export class PositionSearchComponent implements OnInit {
   userSkillsList = [];
   positionList = [];
   savedJobs = [];
+  savedJobsMap = {};
   autocomplete_searchposition = [];
   filterAttributes = {
     city_id: null,
@@ -62,6 +62,11 @@ export class PositionSearchComponent implements OnInit {
   paginationArr = [];
   paginationMin = 0;
   paginationMax = 10;
+
+  appliedJobs = [];
+  appliedJobsMap = {};
+  shiftPageCount = 5;
+  maxPageCount = 10;
   constructor(private autoCompleteService: AutoCompleteService,
     private alertsService: AlertsService, private positionService: PositionService,
     private cartService: CartService, private applicationService: ApplicationService) { }
@@ -70,7 +75,12 @@ export class PositionSearchComponent implements OnInit {
     this.initPositionFilterForm();
     this.getJobData();
     this.getSavedJobs();
-    // this.getAppliedJobs();
+    this.getAppliedJobs();
+    this.breakpoint = (window.innerWidth <= 500) ? 2 : 4;
+  }
+
+  onResize(event) {
+    this.breakpoint = (event.target.innerWidth <= 500) ? 2 : 4;
   }
 
   toggleTabMenuOpen() {
@@ -88,7 +98,7 @@ export class PositionSearchComponent implements OnInit {
       'post': new FormControl(null),
       'school': new FormControl(null),
       'recruiter': new FormControl(null),
-      'sortBy': new FormControl('post-date')
+      'sortBy': new FormControl('qualification')
     });
     this.positionForm.get('searchPosition').valueChanges.subscribe((searchPosition) => {
       searchPosition ? this.onSearchPositionValueChanges(searchPosition) : this.autocomplete_searchposition = [];
@@ -228,7 +238,10 @@ export class PositionSearchComponent implements OnInit {
 
   addSkills(skillItem: Skill) {
     this.positionForm.patchValue({ skill: '' });
-    this.userSkillsList.push(skillItem);
+    if (this.userSkillsList.findIndex(skill => skillItem.skill_id === skill.skill_id) === -1) {
+      this.userSkillsList.push(skillItem);
+    }
+
   }
   removeUserSkillsData(index: number) {
     this.userSkillsList.splice(index, 1);
@@ -260,10 +273,7 @@ export class PositionSearchComponent implements OnInit {
         this.isJobLoading = false;
         if (dataJson['success']) {
           this.positionList = dataJson.data.data;
-          this.paginationArr = Array(Math.ceil((dataJson.data.count + this.filterAttributes.offset) / 10)).fill(0).map((x, i) => i + 1);
-          if (this.filter_list === true) {
-            this.toggleTabMenuOpen();
-          }
+          this.paginationArr = Array(Math.ceil((dataJson.data.count + this.filterAttributes.offset) / positionListLimit)).fill(0).map((x, i) => i + 1);
         }
       },
       error => {
@@ -278,7 +288,9 @@ export class PositionSearchComponent implements OnInit {
     const sortValue = this.positionForm.value.sortBy;
     const setPositionValue = this.positionForm.value.searchPosition;
     this.positionForm.reset();
+    this.userSkillsList = [];
     this.positionForm.patchValue({ 'sortBy': sortValue });
+    this.positionForm.patchValue({ 'searchPosition': setPositionValue });
     this.toggleTabMenuOpen();
   }
 
@@ -291,6 +303,7 @@ export class PositionSearchComponent implements OnInit {
   }
 
   onSearchPosition(event) {
+    this.filterAttributes.offset = 0;
     this.getJobData();
     event.stopPropagation();
   }
@@ -311,65 +324,97 @@ export class PositionSearchComponent implements OnInit {
       return 'Unknown';
     }
   }
-
   getSavedJobs() {
     this.cartService.getSavedJobs()
       .subscribe((data: any) => {
         this.savedJobs = data.data.rows;
-      });
+        for (const job of this.savedJobs) {
+          this.savedJobsMap[job.position_id] = job.position_id;
+        }
+
+      },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        });
   }
 
-  // getAppliedJobs() {
-  //   this.applicationService.getAppliedJobs()
-  //     .subscribe(data => {
-  //       console.log("Applied Jobs", data);
-  //     })
-  // }
+  getAppliedJobs() {
+    this.applicationService.getAppliedJobs()
+      .subscribe(data => {
+        this.appliedJobs = data.data.data;
+        for (const job of this.appliedJobs) {
+          this.appliedJobsMap[job.position_id] = job.application_id;
+        }
+      },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        });
+  }
 
-  saveJob(position) {
-    this.cartService.saveJob(position.position_id).subscribe(data => {
-      this.savedJobs.push(position);
-    });
+  saveJob(positionArr) {
+    this.cartService.saveJob(positionArr).subscribe(data => {
+      for (const position of positionArr) {
+        this.savedJobsMap[position.position_id] = position.position_id;
+      }
+    },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      });
   }
 
   unSaveJob(position) {
     this.cartService.unSaveJob(position.position_id).subscribe(data => {
-      const savedJobIndex = this.savedJobs.findIndex(job => job.position_id === position.position_id);
-      this.savedJobs.splice(savedJobIndex, 1);
-    });
-  }
-
-  applyJob(position_id) {
-    this.applicationService.applyJob(position_id)
-      .subscribe(data => {
-        console.log('job applied successfully');
+      delete this.savedJobsMap[position.position_id];
+    },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
       });
   }
 
+  withdrawApplication(position_id) {
+    const application_id = this.appliedJobsMap[position_id];
+    this.applicationService.withdrawJobs(application_id).subscribe(data => {
+      delete this.appliedJobsMap[position_id];
+    },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      });
+  }
+
+  applyJob(positionArr) {
+    this.applicationService.applyJob(positionArr)
+      .subscribe(data => {
+        for (const application of data) {
+          this.appliedJobsMap[application.position_id] = application.application_id;
+        }
+        this.removePositionFromLocalCart(data);
+      },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        });
+  }
+
   applySelected() {
-    const selectedPositionArr = this.positionList.filter(position => position.selected === true);
-    for (const position of selectedPositionArr) {
-      this.applyJob(position.position_id);
-    }
+    const selectedPositionArr = this.positionList.filter(position => position.selected === true && !this.appliedJobsMap[position.position_id]);
+    this.applyJob(selectedPositionArr);
   }
 
   saveSelected() {
-    const selectedPositionArr = this.positionList.filter(position => position.selected === true);
-    for (const position of selectedPositionArr) {
-      this.saveJob(position);
-    }
+    const selectedPositionArr = this.positionList.filter(position => position.selected === true && !this.savedJobsMap[position.position_id]);
+    this.saveJob(selectedPositionArr);
+
   }
 
-
-
-  isJobSaved(position_id) {
-    return this.savedJobs.findIndex(position => position.position_id === position_id) === -1 ? false : true;
+  removePositionFromLocalCart(appliedJobs) {
+    for (const jobs of appliedJobs) {
+      delete this.savedJobsMap[jobs.position_id];
+    }
   }
 
   pageClicked(pageNo) {
     if (this.paginationArr.length > 10) {
-      this.paginationMin = Math.floor((pageNo - 1) / 5) * 5;
-      this.paginationMax = this.paginationMin + 10;
+      this.paginationMin = Math.floor((pageNo - 1) / this.shiftPageCount) * this.shiftPageCount;
+      this.paginationMax = this.paginationMin + this.maxPageCount;
     }
     this.currentPageNumber = pageNo;
     this.filterAttributes.offset = ((this.currentPageNumber - 1) * positionListLimit);
