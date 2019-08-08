@@ -32,6 +32,7 @@ export class MyProfileComponent implements OnInit {
   isProfileLoading: boolean;
   editMode: boolean;
   counts: number;
+  currentPage: string;
 
   navMenu: any[];
   isNavMenuOpened: boolean;
@@ -96,6 +97,13 @@ export class MyProfileComponent implements OnInit {
       this.editMode = true;
     } else {
       this.editMode = false;
+    }
+    if (url.includes('profile')) {
+      this.currentPage = 'profile';
+    } else if (url.includes('contacts')) {
+      this.currentPage = 'contacts';
+    } else  if (url.includes('template')) {
+      this.currentPage = 'template';
     }
   }
 
