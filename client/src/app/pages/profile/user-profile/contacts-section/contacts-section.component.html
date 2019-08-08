@@ -2,38 +2,16 @@
   <div class="edit-title">
   </div>
 
-  <div class="row">
+  <div *ngIf="userContactsList && userContactsList.length > 0" class="row">
     <div>
-      <div class="img-tag">
-        <img src="assets/icons/ic_people_1.svg">
-        <label>Jack Richard</label>
-        <a>Los Angeles, California, USA</a>
+      <div *ngFor="let contact of userContactsList" class="img-tag">
+        <img src="{{ contact.photo ? contact.photo : 'assets/icons/no_photo.png' }}">
+        <label>{{ contact.first_name + ' ' + contact.last_name }}</label>
+        <a>{{(contact.city_id ? contact.city : '') + (contact.city_id && (contact.state_id || contact.country_id) ? ', ' : '') + (contact.state_id ? contact.state : '') + (contact.state_id && contact.country_id ? ', ' : '') + (contact.country_id ? contact.country : '')}}</a>
       </div>
-      <div class="img-tag">
-        <img src="assets/icons/ic_people_2.svg">
-        <label>Ryan Sandoval</label>
-        <a>Los Angeles, California, USA</a>
-      </div>
-      <div class="img-tag">
-        <img src="assets/icons/ic_people_3.svg">
-        <label>Ryan Sandoval</label>
-        <a>Los Angeles, California, USA</a>
-      </div>
-      <div class="img-tag">
-        <img src="assets/icons/ic_people_4.svg">
-        <label>Ryan Sandoval</label>
-        <a>Los Angeles, California, USA</a>
-      </div>
-      <div class="img-tag">
-        <img src="assets/icons/ic_people_5.svg">
-        <label>Ryan Sandoval</label>
-        <a>Los Angeles, California, USA</a>
-      </div>
-      <div class="img-tag">
-        <img src="assets/icons/ic_people_6.svg">
-        <label>Ryan Sandoval</label>
-        <a>Los Angeles, California, USA</a>
-      </div>
+    </div>
+    <div *ngIf="loadMore" class="load-more">
+      <action-button type="text" title="See More" color="primary" (click)="getContactsList(offset)"></action-button>
     </div>
   </div>
 </ng-container>

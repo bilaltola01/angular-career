@@ -15,7 +15,6 @@ import {
   UserProjectItem,
   UserPublicationItem,
   UserExternalResourcesItem,
-  UserObject,
   ITEMS_LIMIT
 } from 'src/app/models';
 import { Observable } from 'rxjs';
