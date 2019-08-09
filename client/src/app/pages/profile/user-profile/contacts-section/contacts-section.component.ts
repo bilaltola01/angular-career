@@ -58,7 +58,9 @@ export class ContactsSectionComponent implements OnInit {
     this.loadMore = false;
     this.offset = 0;
     this.userContactsList = null;
-    this.getContactsList(this.offset);
+    if (this.user) {
+      this.getContactsList(this.offset);
+    }
   }
 
   getContactsList(offset: number) {
