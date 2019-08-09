@@ -176,6 +176,8 @@
     img {
       grid-area: image;
       width: 70px;
+      height: 70px;
+      border-radius: 50%;
     }
     label {
       grid-area: title;
