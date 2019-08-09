@@ -101,7 +101,11 @@ export class MyProfileComponent implements OnInit {
     if (url.includes('profile')) {
       this.currentPage = 'profile';
     } else if (url.includes('contacts')) {
-      this.currentPage = 'contacts';
+      if (url.includes('incoming-requests')) {
+        this.currentPage = 'incoming-requests';
+      } else {
+        this.currentPage = 'contacts';
+      }
     } else  if (url.includes('template')) {
       this.currentPage = 'template';
     }
@@ -122,6 +126,14 @@ export class MyProfileComponent implements OnInit {
 
   onClickEdit() {
     this.router.navigate(['/my-profile', 'edit'], { relativeTo: this.route });
+  }
+
+  navigateToContacts() {
+    this.router.navigate(['/my-contacts'], { relativeTo: this.route });
+  }
+
+  navigateToIncomingRequests() {
+    this.router.navigate(['/my-contacts', 'incoming-requests'], { relativeTo: this.route });
   }
 
   onChangedGeneralInfoData($event: any) {

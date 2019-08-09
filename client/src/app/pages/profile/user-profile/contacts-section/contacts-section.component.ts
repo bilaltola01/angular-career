@@ -17,6 +17,7 @@ export class ContactsSectionComponent implements OnInit {
   limit = 8;
   loadMore: boolean;
   offset: number;
+  currentPage: string;
 
   constructor(
     private userService: UserService,
@@ -24,22 +25,35 @@ export class ContactsSectionComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
+    this.parseRouterUrl(router.url);
     this.router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
+        this.parseRouterUrl(val.url);
         this.initialize();
       }
     });
   }
 
-  ngOnInit() {
+  parseRouterUrl(url: string) {
+    if (url.includes('incoming-requests')) {
+      this.currentPage = 'incoming-requests';
+    } else {
+      this.currentPage = 'contacts';
+    }
     this.initialize();
   }
+
+  ngOnInit() { }
 
   initialize() {
     this.loadMore = false;
     this.offset = 0;
     this.userContactsList = null;
-    this.getContactsList(this.offset);
+    if (this.currentPage === 'contacts') {
+      this.getContactsList(this.offset);
+    } else {
+
+    }
   }
 
   getContactsList(offset: number) {
@@ -61,6 +75,14 @@ export class ContactsSectionComponent implements OnInit {
         this.alertsService.show(error.message, AlertType.error);
       }
     );
+  }
+
+  navigateToContacts() {
+    this.router.navigate(['/my-contacts'], { relativeTo: this.route });
+  }
+
+  navigateToIncomingRequests() {
+    this.router.navigate(['/my-contacts', 'incoming-requests'], { relativeTo: this.route });
   }
 
 }

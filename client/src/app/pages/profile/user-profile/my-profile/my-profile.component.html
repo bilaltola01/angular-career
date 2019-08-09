@@ -12,6 +12,8 @@
     </div>
     <a *ngIf="!editMode && currentPage === 'profile'" (click)="onClickEdit()">Edit Profile</a>
     <a *ngIf="editMode && currentPage === 'profile'" [class.disabled]="!headerFormValid" (click)="onClickUpdate()">Update Changes</a>
+    <a *ngIf="!editMode && currentPage === 'contacts'" (click)="navigateToIncomingRequests()">Incoming Requests</a>
+    <a *ngIf="!editMode && currentPage === 'incoming-requests'" (click)="navigateToContacts()">Contacts</a>
   </legend>
   <router-outlet></router-outlet>
   <nav-section 

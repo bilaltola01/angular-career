@@ -1,5 +1,7 @@
 <ng-container>
   <div class="edit-title">
+    <a *ngIf="currentPage === 'contacts'" (click)="navigateToIncomingRequests()">Incoming Requests</a>
+    <a *ngIf="currentPage === 'incoming-requests'" (click)="navigateToContacts()">Contacts</a>
   </div>
 
   <div *ngIf="userContactsList && userContactsList.length > 0" class="row">
