@@ -6,14 +6,22 @@
 
   <div *ngIf="userContactsList && userContactsList.length > 0" class="row">
     <div>
-      <div *ngFor="let contact of userContactsList" class="img-tag">
+      <div *ngFor="let contact of userContactsList; let i = index;" class="img-tag">
         <img src="{{ contact.photo ? contact.photo : 'assets/icons/no_photo.png' }}">
         <label>{{ contact.first_name + ' ' + contact.last_name }}</label>
         <a>{{(contact.city_id ? contact.city : '') + (contact.city_id && (contact.state_id || contact.country_id) ? ', ' : '') + (contact.state_id ? contact.state : '') + (contact.state_id && contact.country_id ? ', ' : '') + (contact.country_id ? contact.country : '')}}</a>
+        <mat-icon *ngIf="currentPage === 'contacts'" class="remove" (click)="deleteContact(i)">cancel</mat-icon>
+        <div *ngIf="currentPage === 'incoming-requests'" class="overlay">
+          <mat-icon class="accept" (click)="acceptContactRequest(i)">check_circle</mat-icon>
+          <mat-icon class="cancel" (click)="deleteContactRequest(i)">cancel</mat-icon>
+        </div>
       </div>
     </div>
     <div *ngIf="loadMore" class="load-more">
       <action-button type="text" title="See More" color="primary" (click)="getContactsList(offset)"></action-button>
     </div>
+  </div>
+  <div *ngIf="!userContactsList || userContactsList.length === 0" class="row">
+    <p>No contacts</p>
   </div>
 </ng-container>

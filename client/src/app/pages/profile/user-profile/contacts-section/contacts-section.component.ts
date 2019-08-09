@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import {
   UserService,
   AlertsService,
-  AlertType
+  AlertType,
+  UserStateService
 } from 'src/app/services';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { UserGeneralInfo } from 'src/app/models';
 
 @Component({
   selector: 'contacts-section',
@@ -18,13 +20,20 @@ export class ContactsSectionComponent implements OnInit {
   loadMore: boolean;
   offset: number;
   currentPage: string;
+  user: UserGeneralInfo;
 
   constructor(
     private userService: UserService,
+    private userStateService: UserStateService,
     private alertsService: AlertsService,
     private router: Router,
     private route: ActivatedRoute
   ) {
+    this.userStateService.getUser.subscribe(user => {
+      this.user = user;
+    }, error => {
+      this.alertsService.show(error.message, AlertType.error);
+    });
     this.parseRouterUrl(router.url);
     this.router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
@@ -49,27 +58,77 @@ export class ContactsSectionComponent implements OnInit {
     this.loadMore = false;
     this.offset = 0;
     this.userContactsList = null;
-    if (this.currentPage === 'contacts') {
-      this.getContactsList(this.offset);
-    } else {
-
-    }
+    this.getContactsList(this.offset);
   }
 
   getContactsList(offset: number) {
-    this.userService.getUserContacts(1, this.limit, offset).subscribe(
+    if (this.currentPage === 'contacts') {
+      this.userService.getUserContacts(this.user.user_id, this.limit, offset).subscribe(
+        dataJson => {
+          if (offset === 0) {
+            this.userContactsList = dataJson['data'];
+          } else {
+            this.userContactsList = this.userContactsList.slice().concat(dataJson['data']);
+          }
+          if (dataJson['data'].length === this.limit) {
+            this.loadMore = true;
+            this.offset = offset + this.limit;
+          } else {
+            this.loadMore = false;
+          }
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    } else {
+      this.userService.getIncomingContactRequests(this.user.user_id, this.limit, offset).subscribe(
+        dataJson => {
+          if (offset === 0) {
+            this.userContactsList = dataJson['data'];
+          } else {
+            this.userContactsList = this.userContactsList.slice().concat(dataJson['data']);
+          }
+          if (dataJson['data'].length === this.limit) {
+            this.loadMore = true;
+            this.offset = offset + this.limit;
+          } else {
+            this.loadMore = false;
+          }
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    }
+  }
+
+  deleteContact(arrIndex: number) {
+    this.userService.deleteUserContactById(this.user.user_id, this.userContactsList[arrIndex].user_id).subscribe(
       dataJson => {
-        if (offset === 0) {
-          this.userContactsList = dataJson['data'];
-        } else {
-          this.userContactsList = this.userContactsList.slice().concat(dataJson['data']);
-        }
-        if (dataJson['data'].length === this.limit) {
-          this.loadMore = true;
-          this.offset = offset + this.limit;
-        } else {
-          this.loadMore = false;
-        }
+        this.userContactsList.splice(arrIndex, 1);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  deleteContactRequest(arrIndex: number) {
+    this.userService.deleteContactRequestsById(this.userContactsList[arrIndex].requested_contact_id, this.userContactsList[arrIndex].requesting_user_id).subscribe(
+      dataJson => {
+        this.userContactsList.splice(arrIndex, 1);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  acceptContactRequest(arrIndex: number) {
+    this.userService.postUserContact({user_id: this.userContactsList[arrIndex].requested_contact_id, contact_id: this.userContactsList[arrIndex].requesting_user_id}).subscribe(
+      dataJson => {
+        this.userContactsList.splice(arrIndex, 1);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);

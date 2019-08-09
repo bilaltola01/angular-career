@@ -173,6 +173,7 @@
     grid-gap: 0 10px;
     width: 350px;
     margin: 10px 20px 5px 0;
+    position: relative;
     img {
       grid-area: image;
       width: 70px;
@@ -193,6 +194,48 @@
       overflow: hidden;
       text-overflow: ellipsis;
       padding-right: 20px;
+    }
+    .overlay {
+      display: none;
+      position: absolute;
+      border-radius: 38px;
+      top: -3px;
+      bottom: -3px;
+      left: -3px;
+      right: -3px;
+      background-color: rgba($mat-form-prefix-color, .5);
+      mat-icon {
+        font-size: 30px;
+        width: 30px;
+        height: 30px;
+        margin: 0 10px;
+        background: $white;
+        border-radius: 50%;
+        cursor: pointer;
+        &.cancel {
+          color: map-get($md-cfred, 500);
+        }
+        &.accept {
+          color: map-get($md-cdgreen, 500);
+        }
+      }
+    }
+    .remove {
+      position: absolute;
+      font-size: 30px;
+      width: 30px;
+      height: 30px;
+      background: $white;
+      border-radius: 50%;
+      color: map-get($md-cfred, 500);
+      top: 5px;
+      right: 15px;
+      cursor: pointer;
+    }
+    &:hover {
+      .overlay {
+        @include flex(row, center, center);
+      }
     }
   }
   .form-field {
