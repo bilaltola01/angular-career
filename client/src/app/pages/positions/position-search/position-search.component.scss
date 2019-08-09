@@ -421,6 +421,7 @@ $profile-form-field-mt: 30px;
             position: -webkit-sticky;
             top: 74px;
             overflow-y: scroll;
+            height: calc(100vh - 60px);
             &::-webkit-scrollbar{
                 width: 0;
                 background-color: transparent;
@@ -479,7 +480,7 @@ $profile-form-field-mt: 30px;
 
                 & simple-tag {
                     @include inline-block-btn;
-                    margin: 0 5px 5px 5px;
+                    margin: 20px 5px 5px 5px;
                 }
 
                 & mat-form-field {
@@ -575,6 +576,7 @@ $profile-form-field-mt: 30px;
                     }
 
                 &.filter-container {
+                    height: auto;
                     width: 100%;
                     float: none;
                     margin: 0 auto;
@@ -700,6 +702,7 @@ $profile-form-field-mt: 30px;
                         }
                     }
                     &.filter-container {
+                        height: auto;
                         width: 100%;
                         float: none;
                         margin: 0 auto;
@@ -818,6 +821,7 @@ $profile-form-field-mt: 30px;
                         }
                     }
                     &.filter-container {
+                        height: auto;
                         width: 100%;
                         float: none;
                         margin: 0 auto;

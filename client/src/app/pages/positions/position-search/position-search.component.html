@@ -126,7 +126,8 @@
                 </div>
                 <div class="filter-card">
                     <div class="side-filter-btn">
-                        <action-button type="raised" color="primary" title="Apply Filters" (click)="filterAttributes.offset = 0;toggleTabMenuOpen();getJobData()">
+                        <action-button type="raised" color="primary" title="Apply Filters"
+                            (click)="filterAttributes.offset = 0;toggleTabMenuOpen();getJobData()">
                         </action-button>
                     </div>
                     <div class="clear-filter">
@@ -155,14 +156,16 @@
                     <action-button class="position-search-reload-result" color="primary" title="Reload Results"
                         (click)="getJobData()"></action-button>
                     <div class="drop-buttons">
-                        <mat-form-field>
-                            <mat-select value="Action">
-                                <mat-option value="Action">Action</mat-option>
-                                <mat-option value="Apply Selected" (click)="applySelected()">Apply Selected</mat-option>
-                                <mat-option value="Save Selected" (click)="saveSelected()">Save Selected </mat-option>
-                                <mat-option value="Reload Results" (click)="getJobData()"> Reload Results</mat-option>
-                            </mat-select>
-                        </mat-form-field>
+                        <span class="dot-icon">
+                            <button mat-button [matMenuTriggerFor]="menu" disableRipple><img
+                                    src="assets/icons/ic_more_vertical.svg">
+                            </button>
+                            <mat-menu #menu="matMenu">
+                                <button mat-menu-item (click)="applySelected()">Apply Selected</button>
+                                <button mat-menu-item (click)="saveSelected()">Save Selected</button>
+                                <button mat-menu-item (click)="getJobData()">Reload Results</button>
+                            </mat-menu>
+                        </span>
                     </div>
 
 
@@ -181,7 +184,7 @@
                 <div class="row" [ngClass]="{'selected': job.selected}">
                     <round-checkbox id="test" [checked]="job.selected"
                         (statusChange)="job.selected = !job.selected;selectedAllFlag=false;"></round-checkbox>
-                    <h1>{{job.position}}</h1>
+                    <h1 routerLink="../position/{{job.position_id}}">{{job.position}}</h1>
                     <div class="position-right">
                         <div class="heart-icon">
                             <img *ngIf="!appliedJobsMap[job.position_id] && !savedJobsMap[job.position_id]"
@@ -195,8 +198,8 @@
                             <action-button *ngIf="!appliedJobsMap[job.position_id]" title="Apply" class="job-apply-btn"
                                 color="primary" (click)="applyJob([job])">
                             </action-button>
-                            <action-button *ngIf="appliedJobsMap[job.position_id]" class="job-applied-btn" title="Applied" type="stroked"
-                                color="primary"  disabled>
+                            <action-button *ngIf="appliedJobsMap[job.position_id]" class="job-applied-btn"
+                                title="Applied" type="stroked" color="primary" disabled>
                             </action-button>
                         </span>
                         <span *ngIf="appliedJobsMap[job.position_id]" class="dot-icon">
@@ -211,11 +214,7 @@
                                     Application</button>
                             </mat-menu>
                         </span>
-
-
                     </div>
-
-
                     <div>
                         <div class="job-top-list">
                             <ul>
@@ -372,13 +371,11 @@
             </div>
             <div class="pagination" *ngIf="positionList.length > 0">
                 <ul type="none">
-                    <li class="large_pagination_button" *ngIf="(currentPageNumber > 5 )"
-                        (click)="pageClicked(currentPageNumber-1)">Prev. Page</li>
-                    <li *ngFor="let pageNo of paginationArr | slice : paginationMin : paginationMax"
-                        [ngClass]="{'active': pageNo == currentPageNumber}" (click)="pageClicked(pageNo)">{{ pageNo }}
+                    <li class="large_pagination_button" (click)="pageClicked(currentPageNumber-1)">Prev. Page</li>
+                    <li *ngFor="let pageNo of paginationArr" [ngClass]="{'active': pageNo == currentPageNumber}"
+                        (click)="pageClicked(pageNo)">{{ pageNo }}
                     </li>
-                    <li class="large_pagination_button" *ngIf="currentPageNumber < paginationArr.length"
-                        (click)="pageClicked(currentPageNumber+1)">Next Page</li>
+                    <li class="large_pagination_button" (click)="pageClicked(currentPageNumber+1)">Next Page</li>
                 </ul>
             </div>
         </div>
@@ -390,6 +387,4 @@
         </ng-container>
 
     </div>
-
-
 </div>

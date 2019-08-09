@@ -5,6 +5,7 @@ import {
   AutoCompleteService, CartService, ApplicationService
 } from '../../../services/index';
 
+
 import {
   City,
   PositionLevel,
@@ -15,7 +16,8 @@ import {
   School,
   SkillLevelDescription,
   Recruiter,
-  positionListLimit
+  positionListLimit,
+  positionSearchMessages
 } from 'src/app/models';
 
 @Component({
@@ -29,6 +31,7 @@ export class PositionSearchComponent implements OnInit {
   positionLevel: string[] = PositionLevel;
   sortBy: object[] = SortBy;
   SkillLevelDescription = SkillLevelDescription;
+  positionSearchMessages = positionSearchMessages;
   // FormGroup
   positionForm: FormGroup;
   // Autocomplete list
@@ -54,19 +57,12 @@ export class PositionSearchComponent implements OnInit {
 
   isJobLoading = true;
   selectedAllFlag = false;
-  qualificationLevelstatus: string;
   mathFloor = Math.floor;
   filter_list: boolean;
   currentPageNumber = 1;
-  parseIntFn = parseInt;
   paginationArr = [];
-  paginationMin = 0;
-  paginationMax = 10;
-
   appliedJobs = [];
   appliedJobsMap = {};
-  shiftPageCount = 5;
-  maxPageCount = 10;
   constructor(private autoCompleteService: AutoCompleteService,
     private alertsService: AlertsService, private positionService: PositionService,
     private cartService: CartService, private applicationService: ApplicationService) { }
@@ -271,9 +267,19 @@ export class PositionSearchComponent implements OnInit {
     this.positionService.getPositions(queryString).subscribe(
       dataJson => {
         this.isJobLoading = false;
-        if (dataJson['success']) {
+        if (dataJson['success'] && dataJson.data.data) {
           this.positionList = dataJson.data.data;
-          this.paginationArr = Array(Math.ceil((dataJson.data.count + this.filterAttributes.offset) / positionListLimit)).fill(0).map((x, i) => i + 1);
+          let max;
+          let min;
+          if (this.currentPageNumber >= 5) {
+            max = Math.ceil(dataJson.data.count / positionListLimit) <= 6 ? Math.ceil(dataJson.data.count / positionListLimit) + this.currentPageNumber - 1 : this.currentPageNumber + 6;
+            min = max > 10 ? max - 9 : 1;
+          } else {
+            max = Math.ceil((dataJson.data.count + this.filterAttributes.offset) / positionListLimit) < 10 ? Math.ceil((dataJson.data.count + this.filterAttributes.offset) / positionListLimit) : 10;
+            min = 1;
+          }
+
+          this.paginationArr = Array(max - min + 1).fill(0).map((x, i) => i + min);
         }
       },
       error => {
@@ -327,10 +333,13 @@ export class PositionSearchComponent implements OnInit {
   getSavedJobs() {
     this.cartService.getSavedJobs()
       .subscribe((data: any) => {
-        this.savedJobs = data.data.rows;
-        for (const job of this.savedJobs) {
-          this.savedJobsMap[job.position_id] = job.position_id;
+        if (data.data && data.data.rows) {
+          this.savedJobs = data.data.rows;
+          for (const job of this.savedJobs) {
+            this.savedJobsMap[job.position_id] = job.position_id;
+          }
         }
+
 
       },
         error => {
@@ -341,10 +350,14 @@ export class PositionSearchComponent implements OnInit {
   getAppliedJobs() {
     this.applicationService.getAppliedJobs()
       .subscribe(data => {
-        this.appliedJobs = data.data.data;
-        for (const job of this.appliedJobs) {
-          this.appliedJobsMap[job.position_id] = job.application_id;
+        if (data.data && data.data.data) {
+          this.appliedJobs = data.data.data;
+          for (const job of this.appliedJobs) {
+            this.appliedJobsMap[job.position_id] = job.application_id;
+
+          }
         }
+
       },
         error => {
           this.alertsService.show(error.message, AlertType.error);
@@ -355,6 +368,7 @@ export class PositionSearchComponent implements OnInit {
     this.cartService.saveJob(positionArr).subscribe(data => {
       for (const position of positionArr) {
         this.savedJobsMap[position.position_id] = position.position_id;
+        this.openSnackBarPosition();
       }
     },
       error => {
@@ -386,6 +400,7 @@ export class PositionSearchComponent implements OnInit {
       .subscribe(data => {
         for (const application of data) {
           this.appliedJobsMap[application.position_id] = application.application_id;
+          this.openSnackBarApplications();
         }
         this.removePositionFromLocalCart(data);
       },
@@ -403,6 +418,8 @@ export class PositionSearchComponent implements OnInit {
     const selectedPositionArr = this.positionList.filter(position => position.selected === true && !this.savedJobsMap[position.position_id]);
     this.saveJob(selectedPositionArr);
 
+
+
   }
 
   removePositionFromLocalCart(appliedJobs) {
@@ -412,14 +429,23 @@ export class PositionSearchComponent implements OnInit {
   }
 
   pageClicked(pageNo) {
-    if (this.paginationArr.length > 10) {
-      this.paginationMin = Math.floor((pageNo - 1) / this.shiftPageCount) * this.shiftPageCount;
-      this.paginationMax = this.paginationMin + this.maxPageCount;
+    document.getElementById('sidenav-content').scrollTo(0, 0);
+    if (pageNo > 0 && pageNo <= this.paginationArr[this.paginationArr.length - 1]) {
+      this.currentPageNumber = pageNo;
+      this.filterAttributes.offset = ((this.currentPageNumber - 1) * positionListLimit);
+      this.getJobData();
     }
-    this.currentPageNumber = pageNo;
-    this.filterAttributes.offset = ((this.currentPageNumber - 1) * positionListLimit);
-    this.getJobData();
+
   }
+
+
+  openSnackBarApplications() {
+    this.alertsService.show(positionSearchMessages.APPLICATION_SAVE_SUCCESS, AlertType.success);
+  }
+  openSnackBarPosition() {
+    this.alertsService.show(positionSearchMessages.POSITION_APPLY_SUCCESS, AlertType.success);
+  }
+
 
 
 }

@@ -463,8 +463,10 @@ export const QualificationLevel = [
 export const positionListLimit = 7;
 
 
+
 export const positionSearchMessages = {
   'APPLICATION_SAVE_SUCCESS': 'Application submission successful.',
   'POSITION_APPLY_SUCCESS': 'Position saves successful.'
 };
+
 
