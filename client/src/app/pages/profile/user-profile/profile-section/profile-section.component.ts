@@ -386,10 +386,14 @@ export class ProfileSectionComponent implements OnInit {
   updateUserSkillsData(arrIndex: number, userSkillItem: UserSkillItem) {
     this.userService.patchSkillInfoById(userSkillItem.skill_id, userSkillItem).subscribe(
       dataJson => {
+        const temp_skill = this.temp_skill;
         this.userSkillsList[arrIndex] = dataJson['data'];
         this.profileStateService.setSkills(this.userSkillsList);
-        if (this.temp_skill) {
-          this.temp_skill.skillItem = dataJson['data'];
+        if (temp_skill) {
+          this.temp_skill = {
+            index: temp_skill.index,
+            skillItem: dataJson['data']
+          };
         }
       },
       error => {
