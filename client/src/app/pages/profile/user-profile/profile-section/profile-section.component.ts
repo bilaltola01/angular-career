@@ -119,6 +119,8 @@ export class ProfileSectionComponent implements OnInit {
   }
 
   initialize() {
+    this.initSkillsSearchForm();
+    this.initInterestsSearchForm();
     this.getGeneralInfo();
     this.getEducationList();
     this.getExperienceList();
@@ -167,7 +169,6 @@ export class ProfileSectionComponent implements OnInit {
     .subscribe(skillsList => {
       if (skillsList) {
         this.userSkillsList = skillsList;
-        this.initSkillsSearchForm();
       }
     }, error => {
       this.alertsService.show(error.message, AlertType.error);
@@ -179,7 +180,6 @@ export class ProfileSectionComponent implements OnInit {
     .subscribe(interestsList => {
       if (interestsList) {
         this.userInterestsList = interestsList;
-        this.initInterestsSearchForm();
       }
     }, error => {
       this.alertsService.show(error.message, AlertType.error);

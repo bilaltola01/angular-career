@@ -158,7 +158,7 @@
       <mat-icon (click)="editSkillDone()">cancel</mat-icon>
     </div>
     <ng-container *ngIf="!editMode || !temp_skill">
-      <h5>Skills {{userSkillsList.length}}</h5>
+      <h5>Skills {{ userSkillsList ? userSkillsList.length : '0' }}</h5>
       <div class="skills" *ngIf="displayItemsLimit; let limit">
         <ng-container *ngFor="let skill of userSkillsList; let i = index">
           <simple-tag *ngIf="(!editMode && i < limit) || editMode" type="gray" title="{{skill.skill}}" ellipseTag="true" value="{{skill.skill_level}}" (levelChanged)="onLevelChanged($event, i)" (removeClick)="removeUserSkillsData(i, skill)" [isControl]="editMode"></simple-tag>
@@ -182,7 +182,7 @@
         </mat-autocomplete>
       </mat-form-field>
     </div>
-    <h5>Interests {{userInterestsList.length}}</h5>
+    <h5>Interests {{ userInterestsList ? userInterestsList.length : '0' }}</h5>
     <div class="skills" *ngIf="displayItemsLimit; let limit">
       <ng-container *ngFor="let interest of userInterestsList; let i = index">
         <simple-tag *ngIf="(!editMode && i < limit) || editMode" type="gray" title="{{interest.interest}}" [removeTag]="editMode" (click)="removeUserInteretsData(i, interest)"></simple-tag>
