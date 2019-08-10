@@ -233,7 +233,7 @@
       right: 15px;
       cursor: pointer;
       &:hover {
-        color: rgba(map-get($md-cfred, 500), .8);
+        color: map-get($md-cfred, 500);
       }
     }
     &:hover {
