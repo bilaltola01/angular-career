@@ -22,6 +22,6 @@
     </div>
   </div>
   <div *ngIf="!userContactsList || userContactsList.length === 0" class="row">
-    <p>No contacts</p>
+    <p>{{ currentPage === 'contacts' ? 'No contacts' : 'No contact requests' }}</p>
   </div>
 </ng-container>
