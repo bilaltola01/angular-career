@@ -15,7 +15,6 @@ import {
   UserProjectItem,
   UserPublicationItem,
   UserExternalResourcesItem,
-  UserObject,
   ITEMS_LIMIT
 } from 'src/app/models';
 import { Observable } from 'rxjs';
@@ -33,6 +32,7 @@ export class MyProfileComponent implements OnInit {
   isProfileLoading: boolean;
   editMode: boolean;
   counts: number;
+  currentPage: string;
 
   navMenu: any[];
   isNavMenuOpened: boolean;
@@ -98,6 +98,17 @@ export class MyProfileComponent implements OnInit {
     } else {
       this.editMode = false;
     }
+    if (url.includes('profile')) {
+      this.currentPage = 'profile';
+    } else if (url.includes('contacts')) {
+      if (url.includes('incoming-requests')) {
+        this.currentPage = 'incoming-requests';
+      } else {
+        this.currentPage = 'contacts';
+      }
+    } else  if (url.includes('template')) {
+      this.currentPage = 'template';
+    }
   }
 
   onSelectNavItem(id: string) {
@@ -115,6 +126,14 @@ export class MyProfileComponent implements OnInit {
 
   onClickEdit() {
     this.router.navigate(['/my-profile', 'edit'], { relativeTo: this.route });
+  }
+
+  navigateToContacts() {
+    this.router.navigate(['/my-contacts'], { relativeTo: this.route });
+  }
+
+  navigateToIncomingRequests() {
+    this.router.navigate(['/my-contacts', 'incoming-requests'], { relativeTo: this.route });
   }
 
   onChangedGeneralInfoData($event: any) {

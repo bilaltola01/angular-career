@@ -38,6 +38,11 @@ export const profileRoutes: Routes = [
         canActivate: [AuthGuard]
       },
       {
+        path: 'my-contacts/incoming-requests',
+        component: ContactsSectionComponent,
+        canActivate: [AuthGuard]
+      },
+      {
         path: 'my-template',
         component: TemplateSectionComponent,
         canActivate: [AuthGuard]

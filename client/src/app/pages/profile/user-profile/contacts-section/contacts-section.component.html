@@ -1,39 +1,27 @@
 <ng-container>
   <div class="edit-title">
+    <a *ngIf="currentPage === 'contacts'" (click)="navigateToIncomingRequests()">Incoming Requests</a>
+    <a *ngIf="currentPage === 'incoming-requests'" (click)="navigateToContacts()">Contacts</a>
   </div>
 
-  <div class="row">
+  <div *ngIf="userContactsList && userContactsList.length > 0" class="row">
     <div>
-      <div class="img-tag">
-        <img src="assets/icons/ic_people_1.svg">
-        <label>Jack Richard</label>
-        <a>Los Angeles, California, USA</a>
-      </div>
-      <div class="img-tag">
-        <img src="assets/icons/ic_people_2.svg">
-        <label>Ryan Sandoval</label>
-        <a>Los Angeles, California, USA</a>
-      </div>
-      <div class="img-tag">
-        <img src="assets/icons/ic_people_3.svg">
-        <label>Ryan Sandoval</label>
-        <a>Los Angeles, California, USA</a>
-      </div>
-      <div class="img-tag">
-        <img src="assets/icons/ic_people_4.svg">
-        <label>Ryan Sandoval</label>
-        <a>Los Angeles, California, USA</a>
-      </div>
-      <div class="img-tag">
-        <img src="assets/icons/ic_people_5.svg">
-        <label>Ryan Sandoval</label>
-        <a>Los Angeles, California, USA</a>
-      </div>
-      <div class="img-tag">
-        <img src="assets/icons/ic_people_6.svg">
-        <label>Ryan Sandoval</label>
-        <a>Los Angeles, California, USA</a>
+      <div *ngFor="let contact of userContactsList; let i = index;" class="img-tag">
+        <img src="{{ contact.photo ? contact.photo : 'assets/icons/no_photo.png' }}">
+        <label>{{ contact.first_name + ' ' + contact.last_name }}</label>
+        <a>{{(contact.city_id ? contact.city : '') + (contact.city_id && (contact.state_id || contact.country_id) ? ', ' : '') + (contact.state_id ? contact.state : '') + (contact.state_id && contact.country_id ? ', ' : '') + (contact.country_id ? contact.country : '')}}</a>
+        <mat-icon *ngIf="currentPage === 'contacts'" class="remove" (click)="deleteContact(i)">highlight_off</mat-icon>
+        <div *ngIf="currentPage === 'incoming-requests'" class="overlay">
+          <mat-icon class="accept" (click)="acceptContactRequest(i)">check_circle</mat-icon>
+          <mat-icon class="cancel" (click)="deleteContactRequest(i)">cancel</mat-icon>
+        </div>
       </div>
     </div>
+    <div *ngIf="loadMore" class="load-more">
+      <action-button type="text" title="See More" color="primary" (click)="getContactsList(offset)"></action-button>
+    </div>
+  </div>
+  <div *ngIf="!userContactsList || userContactsList.length === 0" class="row">
+    <p>{{ currentPage === 'contacts' ? 'No contacts' : 'No contact requests' }}</p>
   </div>
 </ng-container>

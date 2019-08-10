@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { MaterialModule, TestingModule } from 'src/app/modules';
+
 import { ContactsSectionComponent } from './contacts-section.component';
+import { ActionButtonComponent } from 'src/app/components/action-button/action-button.component';
 
 describe('ContactsSectionComponent', () => {
   let component: ContactsSectionComponent;
@@ -8,7 +11,8 @@ describe('ContactsSectionComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ContactsSectionComponent ]
+      imports : [ MaterialModule, TestingModule ],
+      declarations: [ ContactsSectionComponent, ActionButtonComponent ]
     })
     .compileComponents();
   }));
