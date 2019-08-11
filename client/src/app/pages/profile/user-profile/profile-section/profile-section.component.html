@@ -31,9 +31,7 @@
         <h4 *ngIf="education.gpa" class="detail-info__right_all">{{education.gpa}} GPA</h4>
       </div>
       <ng-container *ngIf="true; let short_desc">
-        <p *ngIf="education.edu_desc" class="description"  [class.short-desc]="short_desc && education.edu_desc.length > helperService.shortDescLength">
-          {{short_desc ? helperService.shortDescription(education.edu_desc) : education.edu_desc}}
-        </p>
+        <p *ngIf="education.edu_desc" class="description"  [class.short-desc]="short_desc && education.edu_desc.length > helperService.shortDescLength">{{short_desc ? helperService.shortDescription(education.edu_desc) : education.edu_desc}}</p>
         <a *ngIf="education.edu_desc && education.edu_desc.length > helperService.shortDescLength" (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
       </ng-container>
       <mat-divider *ngIf="(i < educationList.length - 1) || editMode"></mat-divider>
@@ -54,9 +52,7 @@
       <h4>{{experience.job}}</h4>
       <small>{{helperService.convertToFormattedString(experience.start_date, 'MMM, YYYY')}} - {{(experience.end_date ? helperService.convertToFormattedString(experience.end_date, 'MMM, YYYY') : 'Present')}}</small>
       <ng-container *ngIf="true; let short_desc">
-        <p *ngIf="experience.job_desc" class="description"  [class.short-desc]="short_desc && experience.job_desc.length > helperService.shortDescLength">
-          {{short_desc ? helperService.shortDescription(experience.job_desc ) : experience.job_desc }}
-        </p>
+        <p *ngIf="experience.job_desc" class="description"  [class.short-desc]="short_desc && experience.job_desc.length > helperService.shortDescLength">{{short_desc ? helperService.shortDescription(experience.job_desc) : experience.job_desc }}</p>
         <a *ngIf="experience.job_desc && experience.job_desc.length > helperService.shortDescLength" (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
       </ng-container>
       <ng-container *ngIf="experience.skills_trained && experience.skills_trained.length > 0">
@@ -103,9 +99,7 @@
       </div>
       <small *ngIf="publication.date_published">Published on {{helperService.convertToFormattedString(publication.date_published, 'll')}}</small>
       <ng-container *ngIf="true; let short_desc">
-        <p *ngIf="publication.description" class="description"  [class.short-desc]="short_desc && publication.description.length > helperService.shortDescLength">
-          {{short_desc ? helperService.shortDescription(publication.description) : publication.description}}
-        </p>
+        <p *ngIf="publication.description" class="description"  [class.short-desc]="short_desc && publication.description.length > helperService.shortDescLength">{{short_desc ? helperService.shortDescription(publication.description) : publication.description}}</p>
         <a *ngIf="publication.description && publication.description.length > helperService.shortDescLength" (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
       </ng-container>
       <mat-divider *ngIf="(i < userPublicationsList.length - 1) || editMode"></mat-divider>
@@ -128,9 +122,7 @@
       </div>
       <small *ngIf="project.date_finished">Completed on {{helperService.convertToFormattedString(project.date_finished, 'll')}}</small>
       <ng-container *ngIf="true; let short_desc">
-        <p *ngIf="project.description" class="description"  [class.short-desc]="short_desc && project.description.length > helperService.shortDescLength">
-          {{short_desc ? helperService.shortDescription(project.description) : project.description}}
-        </p>
+        <p *ngIf="project.description" class="description"  [class.short-desc]="short_desc && project.description.length > helperService.shortDescLength">{{short_desc ? helperService.shortDescription(project.description) : project.description}}</p>
         <a *ngIf="short_desc && project.description && project.description.length > helperService.shortDescLength" (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
       </ng-container>
       <mat-divider *ngIf="(i < userProjectsList.length - 1) || editMode"></mat-divider>
@@ -158,7 +150,7 @@
       <mat-icon (click)="editSkillDone()">cancel</mat-icon>
     </div>
     <ng-container *ngIf="!editMode || !temp_skill">
-      <h5>Skills {{userSkillsList.length}}</h5>
+      <h5>Skills {{ userSkillsList ? userSkillsList.length : '0' }}</h5>
       <div class="skills" *ngIf="displayItemsLimit; let limit">
         <ng-container *ngFor="let skill of userSkillsList; let i = index">
           <simple-tag *ngIf="(!editMode && i < limit) || editMode" type="gray" title="{{skill.skill}}" ellipseTag="true" value="{{skill.skill_level}}" (levelChanged)="onLevelChanged($event, i)" (removeClick)="removeUserSkillsData(i, skill)" [isControl]="editMode"></simple-tag>
@@ -182,7 +174,7 @@
         </mat-autocomplete>
       </mat-form-field>
     </div>
-    <h5>Interests {{userInterestsList.length}}</h5>
+    <h5>Interests {{ userInterestsList ? userInterestsList.length : '0' }}</h5>
     <div class="skills" *ngIf="displayItemsLimit; let limit">
       <ng-container *ngFor="let interest of userInterestsList; let i = index">
         <simple-tag *ngIf="(!editMode && i < limit) || editMode" type="gray" title="{{interest.interest}}" [removeTag]="editMode" (click)="removeUserInteretsData(i, interest)"></simple-tag>
