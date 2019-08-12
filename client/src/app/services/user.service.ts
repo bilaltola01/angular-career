@@ -116,6 +116,15 @@ export class UserService {
       );
   }
 
+  public refreshToken(): Observable<any> {
+    return this.http.get(this.auth_service_url + 'token/refresh', this.authHttpOptions())
+      .pipe(
+        map(data => {
+          return {success: true, data: data['token']};
+        })
+      );
+  }
+
   // General Information Services
   public getGeneralInfo(): Observable<any> {
     return this.http.get(this.user_service_url + `user/${this.user_id}`, this.authHttpOptions())
@@ -153,8 +162,7 @@ export class UserService {
       .pipe(
         map(data => {
           return {success: true, message: 'Success!', data: data};
-        }),
-        catchError(this.handleError)
+        })
       );
   }
 
@@ -264,12 +272,12 @@ export class UserService {
 
   public getAdditionalIndustries(experienceId: number): Observable<any> {
     return this.http.get(this.user_service_url + `experience/${experienceId}/additional-industries`, this.authHttpOptions())
-    .pipe(
-      map(data => {
-        return {success: true, message: 'Success!', data: data};
-      }),
-      catchError(this.handleError)
-    );
+      .pipe(
+        map(data => {
+          return {success: true, message: 'Success!', data: data};
+        }),
+        catchError(this.handleError)
+      );
   }
 
   public postAdditionalIndustry(additionalIndustryInfo: any): Observable<any> {
@@ -304,12 +312,12 @@ export class UserService {
 
   public getSkillsTrained(experienceId: number): Observable<any> {
     return this.http.get(this.user_service_url + `experience/${experienceId}/skills-trained`, this.authHttpOptions())
-    .pipe(
-      map(data => {
-        return {success: true, message: 'Success!', data: data};
-      }),
-      catchError(this.handleError)
-    );
+      .pipe(
+        map(data => {
+          return {success: true, message: 'Success!', data: data};
+        }),
+        catchError(this.handleError)
+      );
   }
 
   public postSkillTrained(skillInfo: any): Observable<any> {
@@ -719,8 +727,18 @@ export class UserService {
   }
 
   private handleError(error) {
+    let message: string;
+
+    if (error) {
+      if (error.error) {
+        message = error.error.message;
+      } else {
+        message = error.statusText;
+      }
+    }
+
     if (!environment.production) {
-      console.error(`UserService -> handleError -> error. Error Code: ${error.status}. Message: ${error.error.message ? error.error.message : error.statusText}. Details:`, error);
+      console.error(`UserService -> handleError -> error. Error Code: ${error.status}. Message: ${message}. Details:`, error);
     }
 
     return throwError({success: false, message: error.error.message ? error.error.message : error.statusText});

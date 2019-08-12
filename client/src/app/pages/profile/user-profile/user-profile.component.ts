@@ -17,6 +17,7 @@ import {
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { PhotoStateService } from '../../../services';
 
 @Component({
   selector: 'user-profile',
@@ -48,7 +49,8 @@ export class UserProfileComponent implements OnInit {
   constructor(
     private userService: UserService,
     private alertsService: AlertsService,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private photoStateService: PhotoStateService
   ) { }
 
   isHandset$: Observable<boolean> = this.breakpointObserver
@@ -178,6 +180,8 @@ export class UserProfileComponent implements OnInit {
         this.counts++;
         this.generateGeneralInfoData();
         this.checkProfileLoading();
+
+        this.photoStateService.setPhoto(this.userGeneralInfo.photo);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
