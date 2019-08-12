@@ -9,7 +9,7 @@ export const environment = {
   auth_service: 'auth-service',
   user_service: 'user-service',
   autocomplete_service: 'autocomplete-service',
-  application_service: 'application_service',
+  application_service: 'application-service',
   api_version: 'v1'
 };
 
