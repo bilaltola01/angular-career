@@ -1,1 +1,271 @@
-<p>create-company works!</p>
+<div *ngIf="selectedPageIndex>0" class="profile-completion">
+    <div class="container">
+        <ng-container *ngFor="let page_title of page_titles; let i = index">
+            <action-button *ngIf="page_title" class="link-btn desktop" type="text" title="{{page_title}}"
+                (click)="goToPage(i)" [done]="selectedPageIndex > i" [disabled]="selectedPageIndex < i"></action-button>
+        </ng-container>
+        <mat-icon (click)="toggleTabMenuOpen()">{{isTabMenuOpen ? 'close' : 'menu'}}</mat-icon>
+        <span class="progress-label tablet">{{page_titles[selectedPageIndex]}}</span>
+        <span class="progress-label"
+            [class.done]="selectedPageIndex===9">{{progressWidth[selectedPageIndex].label}}%</span>
+        <div class="progress-bar" [style.width.%]="progressWidth[selectedPageIndex].width"></div>
+        <div class="container__header tablet" [class.open]="isTabMenuOpen">
+            <ng-container *ngFor="let page_title of page_titles; let i = index">
+                <action-button *ngIf="page_title" class="link-btn" type="text" title="{{page_title}}"
+                    (click)="goToPage(i)" [done]="selectedPageIndex > i" [disabled]="selectedPageIndex < i">
+                </action-button>
+            </ng-container>
+        </div>
+    </div>
+</div>
+
+
+<!-- Create_Profile_Basic start -->
+
+<div *ngIf="selectedPageIndex===1" class="container {{profileCreationPages[1]}}">
+    <div class="container__full">
+        <div class="profile-form" [formGroup]="nameOverviewForm">
+            <h3 class="profile-form__title">
+                Company name & Overview
+            </h3>
+
+            <div class="profile-form__image">
+                <input style="display: none" type="file" (change)="onPhotoFileSelected($event)" #fileInput>
+
+                <img alt="Profile Image" src="{{basicInfoForm.get('photo').value || 'assets/icons/profile-image.svg'}}"
+                    (click)="fileInput.click()">
+            </div>
+            <div class="profile-form__field">
+                <mat-form-field class="bg-transparent" appearance="fill">
+                    <mat-label>Company Name</mat-label>
+                    <input matInput placeholder="Company Name" type="text" formControlName="nameCompany">
+                </mat-form-field>
+            </div>
+            <div class="profile-form__field textarea">
+                <mat-form-field>
+                    <textarea matInput placeholder="Briefly introduce the company" rows="15"
+                        formControlName="aboutCompany"></textarea>
+                </mat-form-field>
+            </div>
+
+        </div>
+    </div>
+    <div class="container__full">
+        <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"
+            [disabled]="!checkBasicInfoFormSkip() && !(basicInfoForm.valid && onCheckCityValidation() && onCheckStateValidation())">
+        </action-button>
+    </div>
+</div>
+
+<!-- Create_Profile_Basic end -->
+
+<!-- Create_Profile_About Company Information start -->
+
+<div *ngIf="selectedPageIndex===2" class="container {{profileCreationPages[2]}}">
+    <div class="container__full">
+        <div class="profile-form" [formGroup]="companyBasicInfoForm">
+            <h3 class="profile-form__title">
+                Company Information
+            </h3>
+            <div class="profile-form__field">
+                <mat-form-field class="bg-transparent" appearance="fill">
+                    <mat-label>Company Size</mat-label>
+                    <mat-select formControlName="companySize">
+                        <mat-option *ngFor="let companySizeType of companySizeTypes" value="{{companySizeType}}">
+                            {{companySizeType}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="profile-form__field">
+                <mat-form-field class="bg-transparent" appearance="fill">
+                    <mat-label>Start Date</mat-label>
+                    <input matInput placeholder="YYYY" type="text" formControlName="companyFounded_date" pattern="\d{4}">
+                    <input class="hide" [matDatepicker]="companyFounded_date" [max]="maxDate">
+                    <mat-datepicker-toggle matSuffix [for]="companyFounded_date"></mat-datepicker-toggle>
+                    <mat-datepicker 
+                        touchUi 
+                        #companyFounded_date 
+                        startView="multi-year"  
+                        (yearSelected)="onFoundedYearSelect($event, true, companyFounded_date)"
+                    >
+                    </mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="profile-form__field">
+                <mat-form-field class="bg-transparent" appearance="fill">
+                    <mat-label>Country</mat-label>
+                    <mat-select formControlName="companyCountry">
+                    <mat-option value="{{null}}">{{null}}</mat-option>
+                    <mat-option *ngFor="let country of countries" value="{{country}}">{{country}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <!-- // TODO: Fix wrong state marked as correct -->
+            <div class="profile-form__field">
+                <mat-form-field class="bg-transparent" appearance="fill">
+                    <mat-label>State</mat-label>
+                    <input matInput placeholder="State" type="text" [matAutocomplete]="autocompleteState" formControlName="companyState">
+                    <mat-icon matSuffix *ngIf="companyBasicInfoForm.get('companyState').value && helperService.checkSpacesString(companyBasicInfoForm.get('companyState').value) && companyBasicInfoForm.get('companyState').valid && onCheckStateValidation()">done</mat-icon>
+                    <mat-icon matSuffix class="error-field" *ngIf="companyBasicInfoForm.get('companyState').value && helperService.checkSpacesString(companyBasicInfoForm.get('companyState').value) && !onCheckStateValidation() && companyBasicInfoForm.get('companyState').touched">close</mat-icon>
+                    <mat-autocomplete #autocompleteState="matAutocomplete" (closed)="onBlurState()">
+                    <mat-option *ngFor="let state of autocomplete_states" [value]="state.state" (onSelectionChange)="onSelectState(state)">
+                        <span>{{state.state}}</span>
+                    </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+            <div class="profile-form__field">
+                <mat-form-field class="bg-transparent" appearance="fill">
+                    <mat-label>Website</mat-label>
+                    <input matInput placeholder="Title" type="text" formControlName="companyWebsite">
+                </mat-form-field>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="container__full">
+        <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
+    </div>
+</div>
+
+<!-- Create_Profile_About end -->
+
+<!-- Create_Profile_Education start -->
+
+<div *ngIf="selectedPageIndex===3" class="container {{profileCreationPages[3]}}">
+    <div class="container__full">
+        <div class="profile-form" [formGroup]="companyIndustryForm">
+            <h3 class="profile-form__title">
+                Industry
+            </h3>
+            <div class="profile-form__field search">
+                <h3>Primary Industry <span *ngIf="primary_industries.length > 0" class="count">{{primary_industries.length}}</span></h3>
+                <mat-form-field appearance="standard" class="search">
+                    <mat-icon matSuffix>search</mat-icon>
+                    <input matInput 
+                        placeholder="Search industry" 
+                        type="text" 
+                        [matAutocomplete]="autocompletePrimaryIndustry" 
+                        formControlName="primary_industries_form">
+                    <mat-autocomplete #autocompletePrimaryIndustry="matAutocomplete">
+                    <mat-option *ngFor="let autocomplete_primary_industry of autocomplete_primary_industries"    
+                                [value]="autocomplete_primary_industry.industry_name" 
+                                (onSelectionChange)="addPrimaryIndustry(autocomplete_primary_industry)">
+                        <span>{{autocomplete_primary_industry.industry_name}}</span>
+                    </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+                <div class="skills" *ngIf="primary_industries.length > 0">
+                    <simple-tag *ngFor="let industry of primary_industries; let j = index"         
+                        type="gray"
+                        title="{{industry.industry_name}}" 
+                        removeTag="true" 
+                        (click)="onRemovePrimaryIndustry(industry)">
+                    </simple-tag>
+                </div>
+
+            </div>
+
+            <div class="profile-form__field search">
+                <h3>Secondary Industry <span *ngIf="secondary_industries.length > 0" class="count">{{secondary_industries.length}}</span></h3>
+                <mat-form-field appearance="standard" class="search">
+                    <mat-icon matSuffix>search</mat-icon>
+                    <input matInput 
+                        placeholder="Search industry" 
+                        type="text" 
+                        [matAutocomplete]="autocompleteSecondaryIndustry" 
+                        formControlName="secondary_industries_form">
+                    <mat-autocomplete #autocompleteSecondaryIndustry="matAutocomplete">
+                    <mat-option *ngFor="let autocomplete_secondary_industry of autocomplete_secondary_industries"    
+                                [value]="autocomplete_secondary_industry.industry_name" 
+                                (onSelectionChange)="addSecondaryIndustry(autocomplete_secondary_industry)">
+                        <span>{{autocomplete_secondary_industry.industry_name}}</span>
+                    </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+                <div class="skills" *ngIf="secondary_industries.length > 0">
+                    <simple-tag *ngFor="let industry of secondary_industries; let j = index"         
+                        type="gray"
+                        title="{{industry.industry_name}}" 
+                        removeTag="true" 
+                        (click)="onRemoveSecondaryIndustry(industry)">
+                    </simple-tag>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="container__full">
+      <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
+    </div>
+</div>
+
+<!-- Create_Profile_Education end -->
+
+<!-- Create_Profile_Work start -->
+
+<!-- Create_Profile_Links start -->
+
+<div *ngIf="selectedPageIndex===4" class="container {{profileCreationPages[4]}}">
+        <div class="container__full">
+            <div class="profile-form" [formGroup]="externalResourcesForm">
+                <h3 class="profile-form__title">
+                    EXTERNAL LINKS
+                </h3>
+                <div *ngFor="let resource of externalResources" class="profile-form__field">
+                    <mat-form-field class="bg-transparent" appearance="fill">
+                        <mat-label>{{resource}}</mat-label>
+                        <img matSuffix src="assets/icons/ic_{{resource.toLowerCase()}}.svg">
+                        <input matInput placeholder="{{resource}} Link" type="text"
+                            [formControl]="externalResourcesForm.get(resource)">
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <div class="container__full">
+            <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()">
+            </action-button>
+        </div>
+    </div>
+    
+    <!-- Create_Profile_Links end -->
+
+<!-- Create_Profile_Work end -->
+
+<!-- Create_Profile_Skills start -->
+
+<div *ngIf="selectedPageIndex===5" class="container {{profileCreationPages[5]}}">
+    <div class="container__full">
+        <div class="profile-form" [formGroup]="companyTermsForm">
+            <h3 class="profile-form__title">
+                Terms & Conditions
+            </h3>
+
+            <div class="profile-form__field">
+                <mat-form-field class="bg-transparent" appearance="fill">
+                    <mat-label>Company Website Link</mat-label>
+                    <input matInput placeholder="Company Name" type="text" formControlName="companyWebsiteLink">
+                </mat-form-field>
+            </div>
+            <div class="profile-form__field textarea">
+                <mat-form-field>
+                    <textarea matInput placeholder="Company Terms and Conditions" rows="15"
+                        formControlName="companyTerms"></textarea>
+                </mat-form-field>
+            </div>
+
+        </div>
+    </div>
+    <!-- <div class="container__full">
+        <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"
+            [disabled]="!checkBasicInfoFormSkip() && !(basicInfoForm.valid && onCheckCityValidation() && onCheckStateValidation())">
+        </action-button>
+    </div> -->
+</div>
+
+
+<!-- Create_Profile_Skills end -->
+
+

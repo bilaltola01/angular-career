@@ -72,7 +72,7 @@ export class MainToolbarComponent implements OnInit {
   }
 
   isCreatingProfile() {
-    return this.url.path() === '/create-profile';
+    return this.url.path().includes('/create-profile');
   }
 
   logOut() {

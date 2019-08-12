@@ -8,6 +8,13 @@ export const EthnicityTypes = [
   'Undisclosed'
 ];
 
+export const CompanySizeTypes = [
+  'Small ( 1 - 10)',
+  'Medium ( 11 - 100)',
+  'Large (101 - 1000)'
+];
+
+
 export const Genders = [
   'Male',
   'Female',
@@ -326,7 +333,8 @@ export const ExternalResources = [
   'Twitter',
   'Facebook',
   'Google',
-  'Linkedin'
+  'Linkedin',
+  'Other' // TODO: other?!
 ];
 
 export const ProfileStatuses = [
