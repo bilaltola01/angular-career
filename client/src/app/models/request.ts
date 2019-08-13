@@ -59,3 +59,8 @@ export interface UserExternalResourcesItemData {
   link: string;
   description: string;
 }
+
+export interface MilitaryInfoRequest {
+  military_status: string;
+  military_status_description: string;
+}

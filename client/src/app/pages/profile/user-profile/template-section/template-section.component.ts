@@ -6,6 +6,12 @@ import {
   ApplicationService
 } from 'src/app/services';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import {
+  WorkAuthResponse,
+  MilitaryInfoResponse,
+  MILITARY_STATUS,
+  MilitaryInfoRequest
+} from 'src/app/models';
 
 @Component({
   selector: 'app-template-section',
@@ -14,8 +20,8 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 })
 export class TemplateSectionComponent implements OnInit {
 
-  workAuth: any;
-  militaryService: any;
+  workAuth: WorkAuthResponse;
+  militaryService: MilitaryInfoResponse;
   internalTermsAndConditions: any;
   criminalHistories: any[];
 
@@ -60,7 +66,7 @@ export class TemplateSectionComponent implements OnInit {
   getWorkAuthInfo() {
     this.applicationService.getWorkAuth().subscribe(
       dataJson => {
-        this.workAuth = dataJson['data']['data'];
+        this.workAuth = dataJson['data']['work_auth_info'];
         this.count++;
         this.checkLoadingStatus();
       },
@@ -73,9 +79,32 @@ export class TemplateSectionComponent implements OnInit {
   getMilitaryServiceInfo() {
     this.applicationService.getMilitaryInfo().subscribe(
       dataJson => {
-        this.militaryService = dataJson['data']['data'];
-        this.count++;
-        this.checkLoadingStatus();
+        this.militaryService = dataJson['data']['military_info'];
+        if (this.militaryService.military_status === null) {
+          this.militaryService.military_status = MILITARY_STATUS[0];
+          this.postMilitaryServiceInfo();
+        } else {
+          this.count++;
+          this.checkLoadingStatus();
+        }
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  postMilitaryServiceInfo() {
+    const postData: MilitaryInfoRequest = {
+      military_status: this.militaryService.military_status,
+      military_status_description: this.militaryService.military_status_description
+    };
+    this.applicationService.postMilitaryInfo(postData).subscribe(
+      dataJson => {
+        if (this.count < 3) {
+          this.count++;
+          this.checkLoadingStatus();
+        }
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);

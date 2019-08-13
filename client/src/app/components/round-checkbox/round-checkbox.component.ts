@@ -11,6 +11,7 @@ export class RoundCheckboxComponent implements OnInit {
   @Input() title: string;
   @Input() checked = false;
   @Input() indeterminate = false;
+  @Input() active = true;
   @Output() statusChange = new EventEmitter();
 
   constructor() { }
@@ -19,11 +20,13 @@ export class RoundCheckboxComponent implements OnInit {
   }
 
   toggleCheck() {
-    this.checked = !this.checked;
-    if (this.checked) {
-      this.indeterminate = false;
+    if (this.active) {
+      this.checked = !this.checked;
+      if (this.checked) {
+        this.indeterminate = false;
+      }
+      this.statusChange.emit(this.checked);
     }
-    this.statusChange.emit(this.checked);
   }
 
 }

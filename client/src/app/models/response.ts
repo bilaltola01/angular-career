@@ -93,3 +93,16 @@ export interface UserExternalResourcesItem {
   link: string;
   description: string;
 }
+
+export interface WorkAuthResponse {
+  user_id: number;
+  proof_auth: string;
+  work_auth: number;
+  visa_support: number;
+}
+
+export interface MilitaryInfoResponse {
+  user_id: number;
+  military_status: string;
+  military_status_description: string;
+}
