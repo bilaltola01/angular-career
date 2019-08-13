@@ -23,7 +23,8 @@ import {
   Company,
   Industry,
   ExternalResources,
-  UserExternalResourcesItemData
+  UserExternalResourcesItemData,
+  ITEMS_LIMIT
 } from 'src/app/models';
 import {
   HelperService,
@@ -165,14 +166,25 @@ export class ProfileSectionComponent implements OnInit {
   }
 
   getUserSkillsList() {
-    this.profileStateService.getSkills
-    .subscribe(skillsList => {
-      if (skillsList) {
-        this.userSkillsList = skillsList;
+    this.getUserSkillsListByOffset(ITEMS_LIMIT, 0);
+  }
+
+  getUserSkillsListByOffset(limit: number, offset: number) {
+    this.userService.getSkillsInfo(limit, offset).subscribe(
+      dataJson => {
+        if (offset === 0) {
+          this.userSkillsList = dataJson['data'];
+        } else {
+          this.userSkillsList = this.userSkillsList.slice().concat(dataJson['data']);
+        }
+        if (dataJson['data'].length === limit) {
+          this.getUserSkillsListByOffset(limit, offset + limit);
+        }
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
       }
-    }, error => {
-      this.alertsService.show(error.message, AlertType.error);
-    });
+    );
   }
 
   getUserInterestsList() {
@@ -250,6 +262,7 @@ export class ProfileSectionComponent implements OnInit {
           case 'Work Experience':
             this.experienceList = result;
             this.profileStateService.setExperiences(this.experienceList);
+            this.getUserSkillsList();
             break;
           case 'Project':
             this.userProjectsList = result;
