@@ -567,3 +567,19 @@ action-button {
     }
   }
 }
+.cdk-overlay-pane{
+  mat-option{
+      .mat-option-text{
+          img{
+            width: 35px;
+            height: 35px;
+            margin-left: 10px;
+            vertical-align: middle;
+            border-radius: 100%;
+            float: right;
+        
+          }
+
+      }
+  }
+}   

@@ -63,6 +63,9 @@ export class PositionSearchComponent implements OnInit {
   paginationArr = [];
   appliedJobs = [];
   appliedJobsMap = {};
+  preLoadDataObject = {};
+
+
   constructor(private autoCompleteService: AutoCompleteService,
     private alertsService: AlertsService, private positionService: PositionService,
     private cartService: CartService, private applicationService: ApplicationService) { }
@@ -72,6 +75,7 @@ export class PositionSearchComponent implements OnInit {
     this.getJobData();
     this.getSavedJobs();
     this.getAppliedJobs();
+
     this.breakpoint = (window.innerWidth <= 500) ? 2 : 4;
   }
 
@@ -261,33 +265,50 @@ export class PositionSearchComponent implements OnInit {
     return queryString;
   }
   getJobData() {
-    this.isJobLoading = true;
     this.selectedAllFlag = false;
-    const queryString = this.generateQueryString();
-    this.positionService.getPositions(queryString).subscribe(
-      dataJson => {
-        this.isJobLoading = false;
-        if (dataJson['success'] && dataJson.data.data) {
-          this.positionList = dataJson.data.data;
-          let max;
-          let min;
-          if (this.currentPageNumber >= 5) {
-            max = Math.ceil(dataJson.data.count / positionListLimit) <= 6 ? Math.ceil(dataJson.data.count / positionListLimit) + this.currentPageNumber - 1 : this.currentPageNumber + 6;
-            min = max > 10 ? max - 9 : 1;
-          } else {
-            max = Math.ceil((dataJson.data.count + this.filterAttributes.offset) / positionListLimit) < 10 ? Math.ceil((dataJson.data.count + this.filterAttributes.offset) / positionListLimit) : 10;
-            min = 1;
-          }
-
-          this.paginationArr = Array(max - min + 1).fill(0).map((x, i) => i + min);
-        }
-      },
-      error => {
-        this.isJobLoading = false;
-        this.alertsService.show(error.message, AlertType.error);
-        this.positionList = [];
+    if (this.preLoadDataObject[this.currentPageNumber]) {
+      this.positionList = this.preLoadDataObject[this.currentPageNumber].data.data;
+      this.setPaginationValues(this.preLoadDataObject[this.currentPageNumber]);
+      if (this.currentPageNumber < this.paginationArr[this.paginationArr.length - 1]) {
+        this.preLoadNextPage(this.currentPageNumber + 1);
       }
-    );
+    } else {
+      this.isJobLoading = true;
+      const queryString = this.generateQueryString();
+      this.positionService.getPositions(queryString).subscribe(
+        dataJson => {
+          this.isJobLoading = false;
+          if (dataJson['success'] && dataJson.data.data) {
+            this.positionList = dataJson.data.data;
+            this.setPaginationValues(dataJson);
+            if (this.currentPageNumber < this.paginationArr[this.paginationArr.length - 1]) {
+              this.preLoadNextPage(this.currentPageNumber + 1);
+            }
+          }
+        },
+        error => {
+          this.isJobLoading = false;
+          this.alertsService.show(error.message, AlertType.error);
+          this.positionList = [];
+        }
+      );
+    }
+
+
+  }
+
+  setPaginationValues(dataJson) {
+    let max;
+    let min;
+    if (this.currentPageNumber >= 5) {
+      max = Math.ceil(dataJson.data.count / positionListLimit) <= 6 ? Math.ceil(dataJson.data.count / positionListLimit) + this.currentPageNumber - 1 : this.currentPageNumber + 6;
+      min = max > 10 ? max - 9 : 1;
+    } else {
+      max = Math.ceil((dataJson.data.count + this.filterAttributes.offset) / positionListLimit) < 10 ? Math.ceil((dataJson.data.count + this.filterAttributes.offset) / positionListLimit) : 10;
+      min = 1;
+    }
+
+    this.paginationArr = Array(max - min + 1).fill(0).map((x, i) => i + min);
   }
 
   clearFilter() {
@@ -295,6 +316,7 @@ export class PositionSearchComponent implements OnInit {
     const setPositionValue = this.positionForm.value.searchPosition;
     this.positionForm.reset();
     this.userSkillsList = [];
+    this.preLoadDataObject = {};
     this.positionForm.patchValue({ 'sortBy': sortValue });
     this.positionForm.patchValue({ 'searchPosition': setPositionValue });
     this.toggleTabMenuOpen();
@@ -310,8 +332,16 @@ export class PositionSearchComponent implements OnInit {
 
   onSearchPosition(event) {
     this.filterAttributes.offset = 0;
+    this.preLoadDataObject = {};
     this.getJobData();
     event.stopPropagation();
+  }
+
+  applyFilter() {
+    this.filterAttributes.offset = 0;
+    this.toggleTabMenuOpen();
+    this.preLoadDataObject = {};
+    this.getJobData();
   }
   calculateQualificationLevel(fitscoreInfo, minimum_skills) {
     if (!fitscoreInfo || (minimum_skills === null && fitscoreInfo.education_weight === 0 && fitscoreInfo.experience_weight === 0 && fitscoreInfo.interests_weight === 0 && fitscoreInfo.skills_weight === 0)) {
@@ -368,6 +398,8 @@ export class PositionSearchComponent implements OnInit {
     this.cartService.saveJob(positionArr).subscribe(data => {
       for (const position of positionArr) {
         this.savedJobsMap[position.position_id] = position.position_id;
+      }
+      if (positionArr.length > 1) {
         this.openSnackBarPosition();
       }
     },
@@ -400,6 +432,8 @@ export class PositionSearchComponent implements OnInit {
       .subscribe(data => {
         for (const application of data) {
           this.appliedJobsMap[application.position_id] = application.application_id;
+        }
+        if (data.length > 1) {
           this.openSnackBarApplications();
         }
         this.removePositionFromLocalCart(data);
@@ -412,14 +446,13 @@ export class PositionSearchComponent implements OnInit {
   applySelected() {
     const selectedPositionArr = this.positionList.filter(position => position.selected === true && !this.appliedJobsMap[position.position_id]);
     this.applyJob(selectedPositionArr);
+
+
   }
 
   saveSelected() {
-    const selectedPositionArr = this.positionList.filter(position => position.selected === true && !this.savedJobsMap[position.position_id]);
+    const selectedPositionArr = this.positionList.filter(position => position.selected === true && !this.savedJobsMap[position.position_id] && !this.appliedJobsMap[position.position_id]);
     this.saveJob(selectedPositionArr);
-
-
-
   }
 
   removePositionFromLocalCart(appliedJobs) {
@@ -434,6 +467,7 @@ export class PositionSearchComponent implements OnInit {
       this.currentPageNumber = pageNo;
       this.filterAttributes.offset = ((this.currentPageNumber - 1) * positionListLimit);
       this.getJobData();
+
     }
 
   }
@@ -446,6 +480,25 @@ export class PositionSearchComponent implements OnInit {
     this.alertsService.show(positionSearchMessages.POSITION_APPLY_SUCCESS, AlertType.success);
   }
 
+  preLoadNextPage(nextPageNumber) {
+    if (!this.preLoadDataObject[nextPageNumber]) {
+      const previousOffset = this.filterAttributes.offset;
+      this.filterAttributes.offset = this.filterAttributes.offset + positionListLimit;
+      const queryString = this.generateQueryString();
+      this.positionService.getPositions(queryString).subscribe(
+        dataJson => {
+          if (dataJson['success'] && dataJson) {
+            this.preLoadDataObject[nextPageNumber] = dataJson;
+          }
+          this.filterAttributes.offset = previousOffset;
+        },
+        error => {
+          this.positionList = [];
+        }
+      );
+    }
 
+
+  }
 
 }

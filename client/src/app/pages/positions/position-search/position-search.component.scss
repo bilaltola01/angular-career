@@ -53,7 +53,6 @@ $profile-form-field-mt: 30px;
             background-color: $bg-color-1;
             display: table;
             width: 94%;
-            padding-bottom: 80px;
             margin: 0 auto;
 
 
@@ -61,6 +60,7 @@ $profile-form-field-mt: 30px;
 
                 float: right;
                 width: 70.3%;
+                padding-bottom: 80px;
 
                 & .select-style {
                     overflow: hidden;
@@ -211,6 +211,16 @@ $profile-form-field-mt: 30px;
                     font-size: 14px;
                     line-height: 22px;
                     font-weight: 400;
+                    max-height: 310px;
+                    width: 95%;
+                    -webkit-box-orient: vertical;
+                    display: block;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 14;
+                    overflow: hidden;
+                    /* autoprefixer: ignore next */
+                    -webkit-box-orient: vertical;
+                    text-overflow: ellipsis;
                 }
 
                 & .right-align {
@@ -419,9 +429,9 @@ $profile-form-field-mt: 30px;
             float: left;
             position: sticky;
             position: -webkit-sticky;
-            top: 74px;
+            top: 80px;
             overflow-y: scroll;
-            height: calc(100vh - 60px);
+            height: calc(100vh - 80px);
             &::-webkit-scrollbar{
                 width: 0;
                 background-color: transparent;
@@ -459,7 +469,8 @@ $profile-form-field-mt: 30px;
                 height: fit-content;
                 background: white;
                 border-radius: 5px;
-                margin-bottom: 2px;
+                margin-bottom: 2px;            
+                
 
                 & mat-select {
                     font-size: 14px;
@@ -480,7 +491,7 @@ $profile-form-field-mt: 30px;
 
                 & simple-tag {
                     @include inline-block-btn;
-                    margin: 20px 5px 5px 5px;
+                    margin: 15px 5px 0px 5px;
                 }
 
                 & mat-form-field {
@@ -506,7 +517,11 @@ $profile-form-field-mt: 30px;
         height: calc(100% - 70px);
         @include flex(column, center, center);
     }
+
+    
+    
 }
+
 
 @media only screen and (min-width:$min-mini-desktop-breakpoint) and (max-width:$max-mini-desktop-breakpoint) {
     :host {
@@ -542,6 +557,7 @@ $profile-form-field-mt: 30px;
     
                     & .filter_icon {
                         display: block;
+                        cursor: pointer;
                     }
                 }
                     
@@ -669,6 +685,7 @@ $profile-form-field-mt: 30px;
 
                     & .filter_icon {
                         display: block;
+                        cursor: pointer;
                     }
 
                     
@@ -885,15 +902,21 @@ $profile-form-field-mt: 30px;
                             font-size: 18px;
                             margin-top: 3px;
                             line-height: 20px;
-                            width:67%;
+                            width: 86%;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                            // margin-bottom: 18px;
                         }
 
                         & .position-right {
                             margin-left: 10px;
                             float: none;
-                            display: inline;
+                            padding-top: 16px;
 
                             & .heart-icon{
+                                margin: 8px auto 0;
+                                width: 81px;
                                 img{
                                     &.before-heart-icon {
                                         margin-top: 6px;

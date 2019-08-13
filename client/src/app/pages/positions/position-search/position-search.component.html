@@ -1,3 +1,9 @@
+<ng-container *ngIf="isJobLoading">
+    <div class="loading">
+        <mat-spinner></mat-spinner>
+        <h4>Loading...</h4>
+    </div>
+</ng-container>
 <!-- Search Bar -->
 <div class="career-main">
     <div class="comman_search_filter" [formGroup]="positionForm">
@@ -117,17 +123,17 @@
                             formControlName="recruiter">
                         <mat-autocomplete #autocompleterecruiter="matAutocomplete">
                             <mat-option *ngFor="let recruiter of autocomplete_recruiter"
-                                value="{{recruiter.first_name }} {{  recruiter.last_name}}"
-                                (onSelectionChange)="onChangeRecruiter(recruiter)">
-                                <span>{{recruiter.first_name}} {{recruiter.last_name}} </span>
+                                value="{{recruiter.first_name }} {{  recruiter.last_name}}  "
+                                (onSelectionChange)="onChangeRecruiter(recruiter)" class="recruiter_option">
+                                <span>{{recruiter.first_name}} {{recruiter.last_name}} </span> <img class="userimg"
+                                    src="{{recruiter?.photo ? recruiter.photo : 'assets/icons/no_photo.png'}}">
                             </mat-option>
                         </mat-autocomplete>
                     </mat-form-field>
                 </div>
                 <div class="filter-card">
                     <div class="side-filter-btn">
-                        <action-button type="raised" color="primary" title="Apply Filters"
-                            (click)="filterAttributes.offset = 0;toggleTabMenuOpen();getJobData()">
+                        <action-button type="raised" color="primary" title="Apply Filters" (click)="applyFilter();">
                         </action-button>
                     </div>
                     <div class="clear-filter">
@@ -154,7 +160,7 @@
                         (click)="saveSelected()">
                     </action-button>
                     <action-button class="position-search-reload-result" color="primary" title="Reload Results"
-                        (click)="getJobData()"></action-button>
+                        (click)="preLoadDataObject = {}; getJobData()"></action-button>
                     <div class="drop-buttons">
                         <span class="dot-icon">
                             <button mat-button [matMenuTriggerFor]="menu" disableRipple><img
@@ -162,7 +168,7 @@
                             </button>
                             <mat-menu #menu="matMenu">
                                 <button mat-menu-item (click)="applySelected()">Apply Selected</button>
-                                <button mat-menu-item (click)="saveSelected()">Save Selected</button>
+                                <button mat-menu-item (click)="saveSelected();">Save Selected</button>
                                 <button mat-menu-item (click)="getJobData()">Reload Results</button>
                             </mat-menu>
                         </span>
@@ -180,7 +186,7 @@
                 </div>
             </div>
 
-            <div *ngFor="let job of positionList">
+            <div *ngFor="let job of positionList ">
                 <div class="row" [ngClass]="{'selected': job.selected}">
                     <round-checkbox id="test" [checked]="job.selected"
                         (statusChange)="job.selected = !job.selected;selectedAllFlag=false;"></round-checkbox>
@@ -188,7 +194,7 @@
                     <div class="position-right">
                         <div class="heart-icon">
                             <img *ngIf="!appliedJobsMap[job.position_id] && !savedJobsMap[job.position_id]"
-                                (click)="saveJob([job]);" title="Save Job" src="assets/icons/ic_heart.svg"
+                                (click)="saveJob([job])" title="Save Job" src="assets/icons/ic_heart.svg"
                                 class="before-heart-icon">
                             <img *ngIf="!appliedJobsMap[job.position_id] && savedJobsMap[job.position_id]"
                                 (click)="unSaveJob(job);" title="Saved Job" src="assets/icons/ic_heart_circle.svg"
@@ -379,12 +385,7 @@
                 </ul>
             </div>
         </div>
-        <ng-container *ngIf="isJobLoading">
-            <div class="loading">
-                <mat-spinner></mat-spinner>
-                <h4>Loading...</h4>
-            </div>
-        </ng-container>
+
 
     </div>
 </div>
