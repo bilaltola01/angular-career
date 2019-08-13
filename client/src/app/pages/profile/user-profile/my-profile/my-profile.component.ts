@@ -62,7 +62,6 @@ export class MyProfileComponent implements OnInit {
     this.router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
         this.parseRouterUrl(val.url);
-        this.initialize();
       }
     });
   }
@@ -73,23 +72,25 @@ export class MyProfileComponent implements OnInit {
       map(result => result.matches)
     );
 
-  ngOnInit() {
-    this.initialize();
-  }
+  ngOnInit() { }
 
   initialize() {
     this.isNavMenuOpened = false;
     this.isProfileLoading = true;
     this.counts = 0;
     this.headerFormValid = false;
-    this.getGeneralInfo();
-    this.getEducationList();
-    this.getExperienceList();
-    this.getUserSkillsList();
-    this.getUserInterestsList();
-    this.getUserProjectsList();
-    this.getUserPublicationsList();
-    this.getExternalResourceList();
+    if (this.currentPage === 'profile') {
+      this.getGeneralInfo();
+      this.getEducationList();
+      this.getExperienceList();
+      this.getUserSkillsList();
+      this.getUserInterestsList();
+      this.getUserProjectsList();
+      this.getUserPublicationsList();
+      this.getExternalResourceList();
+    } else {
+      this.getGeneralInfo();
+    }
   }
 
   parseRouterUrl(url: string) {
@@ -109,6 +110,7 @@ export class MyProfileComponent implements OnInit {
     } else  if (url.includes('template')) {
       this.currentPage = 'template';
     }
+    this.initialize();
   }
 
   onSelectNavItem(id: string) {
@@ -171,7 +173,11 @@ export class MyProfileComponent implements OnInit {
   }
 
   checkProfileLoading() {
-    if (this.counts === 8) {
+    let countLength = 8;
+    if (this.currentPage !== 'profile') {
+      countLength = 1;
+    }
+    if (this.counts === countLength) {
       this.counts = 0;
       this.isProfileLoading = false;
     }
