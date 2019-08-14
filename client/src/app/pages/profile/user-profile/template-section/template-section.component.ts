@@ -63,15 +63,18 @@ export class TemplateSectionComponent implements OnInit {
     });
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.initialize();
+  }
 
   parseRouterUrl(url: string) {
-    if (url.includes('edit')) {
-      this.editMode = true;
-    } else {
-      this.editMode = false;
+    if (url.includes('template')) {
+      if (url.includes('edit')) {
+        this.editMode = true;
+      } else {
+        this.editMode = false;
+      }
     }
-    this.initialize();
   }
 
   initialize() {

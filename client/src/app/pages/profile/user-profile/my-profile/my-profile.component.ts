@@ -124,7 +124,11 @@ export class MyProfileComponent implements OnInit {
   }
 
   onClickEdit() {
-    this.router.navigate(['/my-profile', 'edit'], { relativeTo: this.route });
+    if (this.currentPage === 'profile') {
+      this.router.navigate(['/my-profile', 'edit'], { relativeTo: this.route });
+    } else if (this.currentPage === 'template') {
+      this.router.navigate(['/my-template', 'edit'], { relativeTo: this.route });
+    }
   }
 
   navigateToContacts() {
