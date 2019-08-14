@@ -71,8 +71,6 @@ export class ProfileSectionComponent implements OnInit {
   userPublicationsList: UserPublicationItem[];
   externalResourcesList: UserExternalResourcesItem[];
   editMode: boolean;
-  @Output() navMenuVisibilityChanged = new EventEmitter();
-  @Output() clickEdit = new EventEmitter();
 
   autocomplete_skills: Skill[] = [];
   autocomplete_interests: Interest[] = [];
@@ -102,14 +100,11 @@ export class ProfileSectionComponent implements OnInit {
     router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
         this.parseRouterUrl(val.url);
-        this.initialize();
       }
     });
   }
 
-  ngOnInit() {
-    this.initialize();
-  }
+  ngOnInit() { }
 
   parseRouterUrl(url: string) {
     if (url.includes('edit')) {
@@ -117,6 +112,7 @@ export class ProfileSectionComponent implements OnInit {
     } else {
       this.editMode = false;
     }
+    this.initialize();
   }
 
   initialize() {
@@ -125,7 +121,7 @@ export class ProfileSectionComponent implements OnInit {
     this.getGeneralInfo();
     this.getEducationList();
     this.getExperienceList();
-    this.getUserSkillsList();
+    this.getUserSkillsList(false);
     this.getUserInterestsList();
     this.getUserProjectsList();
     this.getUserPublicationsList();
@@ -165,11 +161,11 @@ export class ProfileSectionComponent implements OnInit {
     });
   }
 
-  getUserSkillsList() {
-    this.getUserSkillsListByOffset(ITEMS_LIMIT, 0);
+  getUserSkillsList(isUpdate: boolean) {
+    this.getUserSkillsListByOffset(ITEMS_LIMIT, 0, isUpdate);
   }
 
-  getUserSkillsListByOffset(limit: number, offset: number) {
+  getUserSkillsListByOffset(limit: number, offset: number, isUpdate: boolean) {
     this.userService.getSkillsInfo(limit, offset).subscribe(
       dataJson => {
         if (offset === 0) {
@@ -178,7 +174,11 @@ export class ProfileSectionComponent implements OnInit {
           this.userSkillsList = this.userSkillsList.slice().concat(dataJson['data']);
         }
         if (dataJson['data'].length === limit) {
-          this.getUserSkillsListByOffset(limit, offset + limit);
+          this.getUserSkillsListByOffset(limit, offset + limit, isUpdate);
+        } else {
+          if (isUpdate) {
+            this.profileStateService.setSkills(this.userSkillsList);
+          }
         }
       },
       error => {
@@ -262,7 +262,7 @@ export class ProfileSectionComponent implements OnInit {
           case 'Work Experience':
             this.experienceList = result;
             this.profileStateService.setExperiences(this.experienceList);
-            this.getUserSkillsList();
+            this.getUserSkillsList(true);
             break;
           case 'Project':
             this.userProjectsList = result;
