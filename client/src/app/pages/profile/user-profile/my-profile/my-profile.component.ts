@@ -72,25 +72,23 @@ export class MyProfileComponent implements OnInit {
       map(result => result.matches)
     );
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.initialize();
+  }
 
   initialize() {
+    this.counts = 0;
     this.isNavMenuOpened = false;
     this.isProfileLoading = true;
-    this.counts = 0;
     this.headerFormValid = false;
-    if (this.currentPage === 'profile') {
-      this.getGeneralInfo();
-      this.getEducationList();
-      this.getExperienceList();
-      this.getUserSkillsList();
-      this.getUserInterestsList();
-      this.getUserProjectsList();
-      this.getUserPublicationsList();
-      this.getExternalResourceList();
-    } else {
-      this.getGeneralInfo();
-    }
+    this.getGeneralInfo();
+    this.getEducationList();
+    this.getExperienceList();
+    this.getUserSkillsList();
+    this.getUserInterestsList();
+    this.getUserProjectsList();
+    this.getUserPublicationsList();
+    this.getExternalResourceList();
   }
 
   parseRouterUrl(url: string) {
@@ -110,7 +108,6 @@ export class MyProfileComponent implements OnInit {
     } else  if (url.includes('template')) {
       this.currentPage = 'template';
     }
-    this.initialize();
   }
 
   onSelectNavItem(id: string) {
@@ -139,26 +136,23 @@ export class MyProfileComponent implements OnInit {
   }
 
   onChangedGeneralInfoData($event: any) {
-    this.generalInfoData.photo = $event.data.photo;
-    this.generalInfoData.first_name = $event.data.first_name;
-    this.generalInfoData.last_name = $event.data.last_name;
-    this.generalInfoData.birthdate = $event.data.birthdate;
-    this.generalInfoData.gender = $event.data.gender;
-    this.generalInfoData.city_id = $event.data.city_id;
-    this.generalInfoData.country_id = $event.data.country_id;
-    this.generalInfoData.state_id = $event.data.state_id;
-    this.generalInfoData.title = $event.data.title;
-    this.generalInfoData.ethnicity = $event.data.ethnicity;
+    this.generalInfoData = {
+      photo: $event.data.photo,
+      first_name: $event.data.first_name,
+      last_name: $event.data.last_name,
+      birthdate: $event.data.birthdate,
+      gender: $event.data.gender,
+      city_id: $event.data.city_id,
+      country_id: $event.data.country_id,
+      state_id: $event.data.state_id,
+      title: $event.data.title,
+      ethnicity: $event.data.ethnicity
+    };
     this.headerFormValid = $event.valid;
   }
 
-  onChangeUserIntro(user_intro: string) {
-    this.userGeneralInfo.user_intro = user_intro;
-    this.generalInfoData.user_intro = user_intro;
-  }
-
   onClickUpdate() {
-    if (this.headerFormValid) {
+    if (this.currentPage === 'profile' && this.headerFormValid) {
       this.userService.updateGeneralInfo(this.generalInfoData).subscribe(
         dataJson => {
           this.userGeneralInfo = dataJson['data'];
@@ -169,47 +163,31 @@ export class MyProfileComponent implements OnInit {
           this.alertsService.show(error.message, AlertType.error);
         }
       );
+    } else if (this.currentPage === 'template') {
+      this.router.navigate(['/my-template'], { relativeTo: this.route });
     }
   }
 
   checkProfileLoading() {
-    let countLength = 8;
-    if (this.currentPage !== 'profile') {
-      countLength = 1;
-    }
-    if (this.counts === countLength) {
-      this.counts = 0;
+    if (this.counts === 8) {
       this.isProfileLoading = false;
     }
-  }
-
-  generateGeneralInfoData() {
-    this.generalInfoData = {
-      photo: this.userGeneralInfo.photo ? this.userGeneralInfo.photo : null,
-      first_name: this.userGeneralInfo.first_name,
-      last_name: this.userGeneralInfo.last_name,
-      birthdate: this.userGeneralInfo.birthdate ? this.userGeneralInfo.birthdate : null,
-      gender: this.userGeneralInfo.gender,
-      city_id: this.userGeneralInfo.city_id,
-      country_id: this.userGeneralInfo.country_id,
-      state_id: this.userGeneralInfo.state_id,
-      title: this.userGeneralInfo.title,
-      ethnicity: this.userGeneralInfo.ethnicity
-    };
   }
 
   getGeneralInfo() {
     this.userStateService.getUser
     .subscribe(user => {
       if (user) {
+        if (!this.userGeneralInfo) {
+          this.checkGeneralInfo();
+        }
         this.userGeneralInfo = user;
-        this.checkGeneralInfo();
       } else {
         this.userService.getGeneralInfo().subscribe(
           dataJson => {
+            this.checkGeneralInfo();
             this.userGeneralInfo = dataJson['data'];
             this.userStateService.setUser(this.userGeneralInfo);
-            this.checkGeneralInfo();
           },
           error => {
             this.alertsService.show(error.message, AlertType.error);
@@ -223,7 +201,6 @@ export class MyProfileComponent implements OnInit {
 
   checkGeneralInfo() {
     this.counts++;
-    this.generateGeneralInfoData();
     this.checkProfileLoading();
   }
 
@@ -231,14 +208,16 @@ export class MyProfileComponent implements OnInit {
     this.profileStateService.getEducations
     .subscribe(educationList => {
       if (educationList) {
+        if (!educationList) {
+          this.checkEducationInfo();
+        }
         this.educationList = educationList;
-        this.checkEducationInfo();
       } else {
         this.userService.getEducationInfo().subscribe(
           dataJson => {
+            this.checkEducationInfo();
             this.educationList = dataJson['data'];
             this.profileStateService.setEducations(this.educationList);
-            this.checkEducationInfo();
           },
           error => {
             this.alertsService.show(error.message, AlertType.error);
@@ -259,14 +238,16 @@ export class MyProfileComponent implements OnInit {
     this.profileStateService.getExperiences
     .subscribe(experienceList => {
       if (experienceList) {
+        if (!this.experienceList) {
+          this.checkExperienceInfo();
+        }
         this.experienceList = experienceList;
-        this.checkExperienceInfo();
       } else {
         this.userService.getExperienceInfo().subscribe(
           dataJson => {
+            this.checkExperienceInfo();
             this.experienceList = dataJson['data'];
             this.profileStateService.setExperiences(this.experienceList);
-            this.checkExperienceInfo();
             this.experienceList.forEach((experience, arrIndex) => {
               if (experience.skills_trained && experience.skills_trained.length > 0) {
                 this.getSkillsTrained(arrIndex);
@@ -319,14 +300,16 @@ export class MyProfileComponent implements OnInit {
     this.profileStateService.getPublications
     .subscribe(publicationsList => {
       if (publicationsList) {
+        if (!this.userProjectsList) {
+          this.checkPublicationInfo();
+        }
         this.userPublicationsList = publicationsList;
-        this.checkPublicationInfo();
       } else {
         this.userService.getPublicationsInfo().subscribe(
           dataJson => {
+            this.checkPublicationInfo();
             this.userPublicationsList = dataJson['data'];
             this.profileStateService.setPublications(this.userPublicationsList);
-            this.checkPublicationInfo();
           },
           error => {
             this.alertsService.show(error.message, AlertType.error);
@@ -347,14 +330,16 @@ export class MyProfileComponent implements OnInit {
     this.profileStateService.getProjects
     .subscribe(projectsList => {
       if (projectsList) {
+        if (!this.userProjectsList) {
+          this.checkProjectInfo();
+        }
         this.userProjectsList = projectsList;
-        this.checkProjectInfo();
       } else {
         this.userService.getProjectsInfo().subscribe(
           dataJson => {
+            this.checkProjectInfo();
             this.userProjectsList = dataJson['data']['data'];
             this.profileStateService.setProjects(this.userProjectsList);
-            this.checkProjectInfo();
           },
           error => {
             this.alertsService.show(error.message, AlertType.error);
@@ -375,8 +360,10 @@ export class MyProfileComponent implements OnInit {
     this.profileStateService.getSkills
     .subscribe(skillsList => {
       if (skillsList) {
+        if (!this.userSkillsList) {
+          this.checkSkillsInfo();
+        }
         this.userSkillsList = skillsList;
-        this.checkSkillsInfo();
       } else {
         this.getUserSkillsListByOffset(ITEMS_LIMIT, 0);
       }
@@ -396,8 +383,8 @@ export class MyProfileComponent implements OnInit {
         if (dataJson['data'].length === limit) {
           this.getUserSkillsListByOffset(limit, offset + limit);
         } else {
-          this.profileStateService.setSkills(this.userSkillsList);
           this.checkSkillsInfo();
+          this.profileStateService.setSkills(this.userSkillsList);
         }
       },
       error => {
@@ -415,8 +402,10 @@ export class MyProfileComponent implements OnInit {
     this.profileStateService.getInterests
     .subscribe(interestsList => {
       if (interestsList) {
+        if (!this.userInterestsList) {
+          this.checkInterestsInfo();
+        }
         this.userInterestsList = interestsList;
-        this.checkInterestsInfo();
       } else {
         this.getUserInterestsListByOffset(ITEMS_LIMIT, 0);
       }
@@ -436,8 +425,8 @@ export class MyProfileComponent implements OnInit {
         if (dataJson['data'].length === limit) {
           this.getUserInterestsListByOffset(limit, offset + limit);
         } else {
-          this.profileStateService.setInterests(this.userInterestsList);
           this.checkInterestsInfo();
+          this.profileStateService.setInterests(this.userInterestsList);
         }
       },
       error => {
@@ -455,14 +444,16 @@ export class MyProfileComponent implements OnInit {
     this.profileStateService.getExternalResources
     .subscribe(externalResourcesList => {
       if (externalResourcesList) {
+        if (!this.externalResourcesList) {
+          this.checkExternalResourceInfo();
+        }
         this.externalResourcesList = externalResourcesList;
-        this.checkExternalResourceInfo();
       } else {
         this.userService.getExternalResourcesInfo().subscribe(
           dataJson => {
+            this.checkExternalResourceInfo();
             this.externalResourcesList = dataJson['data'];
             this.profileStateService.setExternalResources(this.externalResourcesList);
-            this.checkExternalResourceInfo();
           },
           error => {
             this.alertsService.show(error.message, AlertType.error);
