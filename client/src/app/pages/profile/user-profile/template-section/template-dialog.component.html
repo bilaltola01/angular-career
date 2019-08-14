@@ -1,0 +1,35 @@
+<mat-icon class="cancel" (click)="onClose()">cancel</mat-icon>
+<h3 mat-dialog-title>{{data.category}}</h3>
+
+<ng-container *ngIf="data.category === 'Criminal History'" [formGroup]="criminalForm">
+  <mat-dialog-content>
+    <div class="form-field">
+      <mat-form-field class="bg-transparent" appearance="fill">
+        <mat-label>Charge</mat-label>
+        <input matInput placeholder="Charge" type="text" formControlName="charge">
+      </mat-form-field>
+    </div>
+    <div class="form-field">
+      <mat-form-field class="bg-transparent" appearance="fill">
+        <mat-label>Arrest Date</mat-label>
+        <input matInput placeholder="MM/DD/YYYY" type="text" formControlName="arrest_date" pattern="\d{1,2}/\d{1,2}/\d{4}">
+        <input class="hide" [matDatepicker]="arrest_date" [max]="maxDate" (dateChange)="onChangeArrestDate($event)">
+        <mat-datepicker-toggle matSuffix [for]="arrest_date"></mat-datepicker-toggle>
+        <mat-datepicker
+          touchUi
+          #arrest_date
+        >
+        </mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div class="form-field textarea">
+      <mat-form-field>
+        <textarea matInput placeholder="Explanation" rows="3" formControlName="explanation"></textarea>
+      </mat-form-field>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <action-button class="update-btn" type="flat" title="{{data.editIndex === -1 ? 'Add' : 'Update'}}" color="primary" [disabled]="!(criminalForm.valid && checkChargeValidation())" (click)="data.editIndex === -1 ? addCriminalHistory() : updateCriminalHistory()"></action-button>
+  </mat-dialog-actions>
+</ng-container>
+  

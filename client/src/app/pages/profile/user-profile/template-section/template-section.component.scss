@@ -7,14 +7,14 @@
   padding-bottom: 80px;
   border-radius: 5px;
   background-color: transparent;
-  :nth-child(2) {
+  :nth-child(4) {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
   }
   :last-child {
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
-    border-bottom: none !important;
+    border-bottom: none;
   }
   h1.title {
     margin-top: 0
@@ -199,23 +199,20 @@
     }
   }
   .form-field {
-    width: 80%;
-    max-width: 615px;
-    min-width: 240px;
+    width: 100%;
     border: solid 1px $mat-form-border-color;
     border-radius: 5px;
     padding: 0;
-    &.search {
-      border: none;
-      padding: 0;
-      mat-form-field {
-        width: 100%;
-        background-color: $third-bg-color;
-        border-radius: 25px;
-      }
+    margin: 20px 0;
+    mat-form-field {
+      width: 100%;
     }
-    &.textarea {
-      padding: 10px 20px 5px 20px;
+    &.proof-auth {
+      width: fit-content
+    }
+    &.military-service {
+      min-width: 200px;
+      max-width: 650px;
     }
   }
   .temp-skill {

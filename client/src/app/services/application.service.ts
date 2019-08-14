@@ -110,8 +110,8 @@ export class ApplicationService {
     );
   }
 
-  public putCriminalHistory(criminalHistory: any): Observable<any> {
-    return this.http.put(this.application_service_url + 'criminal-history', criminalHistory, this.authHttpOptions())
+  public putCriminalHistory(criminalHistoryId: number, criminalHistory: any): Observable<any> {
+    return this.http.put(this.application_service_url + `criminal-history/${criminalHistoryId}`, criminalHistory, this.authHttpOptions())
     .pipe(
       map(data => {
         return {success: true, message: 'Success!', data: data};
@@ -121,7 +121,7 @@ export class ApplicationService {
   }
 
   public deleteCriminalHistory(criminalHistoryId: number): Observable<any> {
-    return this.http.delete(this.application_service_url + `criminal-history${criminalHistoryId}}`, this.authHttpOptions())
+    return this.http.delete(this.application_service_url + `criminal-history/${criminalHistoryId}`, this.authHttpOptions())
     .pipe(
       map(data => {
         return {success: true, message: 'Success!', data: data};

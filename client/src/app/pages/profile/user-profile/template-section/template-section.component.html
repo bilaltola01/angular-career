@@ -1,22 +1,32 @@
 <ng-container *ngIf="!isLoading">
 
   <div class="edit-title">
+    <a *ngIf="!editMode" (click)="onClickEdit()">Edit Template</a>
   </div>
 
   <h1 class="title">Application Template</h1>
   <p>Note that no individual may view this application template other than yourself and the recruiters managing positions you've applied to. Please fill these forms out in order to apply to positions on this site. Once completed you will not be asked for this information again.<br><br></p>
 
-  <div *ngIf="workAuth" class="row">
+  <div *ngIf="workAuth" class="row" [class.edit-mode]="editMode">
     <h3>Work Authorization</h3>
     <p>Are you authorized to work in the United States</p>
-    <round-checkbox class="template-section" id="work-auth" [title]="workAuth.work_auth === 1 ? 'Yes' : 'No'" [checked]="workAuth.work_auth === 1" [active]="editMode"></round-checkbox>
+    <round-checkbox class="template-section" id="work-auth" [title]="workAuth.work_auth === 1 ? 'Yes' : 'No'" [checked]="workAuth.work_auth === 1" [active]="editMode" (statusChange)="toggleWorkAuth($event)"></round-checkbox>
     <p>What type of authorization do you maintain (if applicable)?</p>
-    <round-checkbox class="template-section" id="proof-auth" [title]="workAuth.proof_auth ? workAuth.proof_auth : 'None'" [checked]="workAuth.proof_auth !== null" [active]="editMode"></round-checkbox>
+    <round-checkbox *ngIf="!editMode" class="template-section" id="proof-auth" [title]="workAuth.proof_auth ? workAuth.proof_auth : 'None'" [checked]="workAuth.proof_auth !== null" [active]="false"></round-checkbox>
+    <div *ngIf="editMode" class="form-field proof-auth">
+      <mat-form-field class="bg-transparent" appearance="fill">
+        <mat-label>Authorization Type</mat-label>
+        <mat-select (selectionChange)="proofAuthTypeChanged($event)" [value]="workAuth.proof_auth ? workAuth.proof_auth : 'None'">
+          <mat-option value="None">{{'None'}}</mat-option>
+          <mat-option *ngFor="let option of proof_auth_options" value="{{option}}">{{option}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
     <p>Will you ever require support to acquire a work visa or a U.S citizenship?</p>
-    <round-checkbox class="template-section" id="visa-support" [title]="workAuth.visa_support === 1 ? 'Yes' : 'No'" [checked]="workAuth.visa_support === 1" [active]="editMode"></round-checkbox>
+    <round-checkbox class="template-section" id="visa-support" [title]="workAuth.visa_support === 1 ? 'Yes' : 'No'" [checked]="workAuth.visa_support === 1" [active]="editMode" (statusChange)="toggleVisaSupport($event)"></round-checkbox>
   </div>
 
-  <div *ngIf="militaryService && militaryService.military_status" class="row">
+  <div *ngIf="militaryService && militaryService.military_status" class="row" [class.edit-mode]="editMode">
     <h3>Military Service</h3>
     <ng-container *ngIf="true; let short_desc">
       <p *ngIf="short_desc" class="short-desc">Veteran Form:<br><br>
@@ -32,28 +42,42 @@
     </ng-container>
     <mat-divider></mat-divider>
     <p>Response</p>
-    <round-checkbox class="template-section" id="military-service" [title]="militaryService.military_status" [checked]="true" [active]="editMode"></round-checkbox>
+    <div *ngIf="editMode" class="form-field military-service">
+      <mat-form-field class="bg-transparent" appearance="fill">
+        <mat-label>Select Response</mat-label>
+        <mat-select (selectionChange)="militaryStatusChanged($event)" [value]="militaryService.military_status">
+          <mat-option *ngFor="let option of military_status_options" value="{{option}}">{{option}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <round-checkbox *ngIf="!editMode" class="template-section" id="military-service" [title]="militaryService.military_status" [checked]="true" [active]="false"></round-checkbox>
   </div>
 
-  <div *ngIf="criminalHistories" class="row">
+  <div *ngIf="criminalHistories" class="row" [class.edit-mode]="editMode">
     <h3>Criminal History</h3>
     <p>If you have ever been convicted of a misdemeanor or felony offense please provide the following information. Infractions maybe excluded. If you have never been convicted of such an offense, please leave this section.</p>
 
     <ng-container *ngIf="criminalHistories.length > 0">
       <mat-divider></mat-divider>
-        <ul class="criminal">
-          <li *ngFor="let history of criminalHistories; let i = index;">
-            <div class="detail-info">
+      <ul class="criminal">
+        <li *ngFor="let history of criminalHistories; let i = index;">
+          <div class="editor-container">
+            <div class="detail-info name-field">
               <h4 *ngIf="history.charge" class="detail-info__left-top">{{history.charge}}</h4>
               <small *ngIf="history.arrest_date" class="detail-info__left-bottom">Arrested on {{helperService.convertToFormattedString(history.arrest_date, 'll')}}</small>
             </div>
-            <ng-container *ngIf="true; let short_desc">
-              <p *ngIf="history.explanation" [class.short-desc]="short_desc && history.explanation.length > helperService.shortDescLength">{{short_desc ? helperService.shortDescription(history.explanation) : history.explanation}}</p>
-              <a *ngIf="history.explanation && history.explanation.length > helperService.shortDescLength" (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
-            </ng-container>
-            
-          </li>
-        </ul>
+            <mat-icon *ngIf="editMode" class="btn-edit" (click)="openDialog('Criminal History', criminalHistories, i)">edit</mat-icon>
+            <mat-icon *ngIf="editMode" class="btn-delete" (click)="deleteCriminalHistory(i)">delete</mat-icon>
+          </div>
+          <ng-container *ngIf="true; let short_desc">
+            <p *ngIf="history.explanation" [class.short-desc]="short_desc && history.explanation.length > helperService.shortDescLength">{{short_desc ? helperService.shortDescription(history.explanation) : history.explanation}}</p>
+            <a *ngIf="history.explanation && history.explanation.length > helperService.shortDescLength" (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
+          </ng-container>
+        </li>
+      </ul>
+      <div *ngIf="editMode" class="btn-container">
+        <action-button class="edit-btn" type="stroked" color="primary" title="Add More" (click)="openDialog('Criminal History', criminalHistories)"></action-button>
+      </div>
     </ng-container>
   </div>
 </ng-container>

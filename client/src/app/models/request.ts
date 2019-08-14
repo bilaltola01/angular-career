@@ -60,6 +60,12 @@ export interface UserExternalResourcesItemData {
   description: string;
 }
 
+export interface WorkAuthRequest {
+  proof_auth: string;
+  work_auth: number;
+  visa_support: number;
+}
+
 export interface MilitaryInfoRequest {
   military_status: string;
   military_status_description: string;
