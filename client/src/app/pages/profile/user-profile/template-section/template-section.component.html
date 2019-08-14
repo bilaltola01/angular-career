@@ -9,13 +9,14 @@
   <div *ngIf="workAuth" class="row">
     <h3>Work Authorization</h3>
     <p>Are you authorized to work in the United States</p>
-    <round-checkbox id="work-auth" [title]="workAuth.work_auth === 1 ? 'Yes' : 'No'" [checked]="workAuth.work_auth === 1" [active]="editMode"></round-checkbox>
+    <round-checkbox class="template-section" id="work-auth" [title]="workAuth.work_auth === 1 ? 'Yes' : 'No'" [checked]="workAuth.work_auth === 1" [active]="editMode"></round-checkbox>
     <p>What type of authorization do you maintain (if applicable)?</p>
-    <round-checkbox id="proof-auth" [title]="workAuth.proof_auth ? workAuth.proof_auth : 'None'" [checked]="workAuth.proof_auth !== null" [active]="editMode"></round-checkbox>
+    <round-checkbox class="template-section" id="proof-auth" [title]="workAuth.proof_auth ? workAuth.proof_auth : 'None'" [checked]="workAuth.proof_auth !== null" [active]="editMode"></round-checkbox>
     <p>Will you ever require support to acquire a work visa or a U.S citizenship?</p>
-    <round-checkbox id="visa-support" [title]="workAuth.visa_support === 1 ? 'Yes' : 'No'" [checked]="workAuth.visa_support === 1" [active]="editMode"></round-checkbox>
+    <round-checkbox class="template-section" id="visa-support" [title]="workAuth.visa_support === 1 ? 'Yes' : 'No'" [checked]="workAuth.visa_support === 1" [active]="editMode"></round-checkbox>
   </div>
-  <div class="row">
+
+  <div *ngIf="militaryService && militaryService.military_status" class="row">
     <h3>Military Service</h3>
     <p>Veteran Form:<br><br>
     the Vietnam Era Veterans’ Readjustment Assistance Act of 1974, as amended by the Jobs for Veterans Act of 2002, 38 U.S.C. 4212 (VEVRAA), which requires government contractors to take affirmative action to employ and advance in employment: (1) disabled veterans; (2) recently separated veterans; (3) active duty wartime or campaign badge veterans; and (4) Armed Forces service medal veterans. These classifications are defined as follows and are hereafter referred to all together as "protected veterans": A "disabled veteran" is one of the following: a veteran of the U.S. military, ground, naval or air service who is entitled to compensation (or who but for the receipt of military retired pay would be entitled to compensation) under laws administered by the Secretary of Veterans Affairs; or a person who was discharged or released from active duty because of a service-connected disability.<br><br>
@@ -26,7 +27,7 @@
     Submission of this information is voluntary and refusal to provide it will not subject you to any adverse treatment. The information provided will be used only in ways that are not inconsistent with VEVRAA as amended. We are an equal opportunity employer. We do not discriminate in hiring or employment against any individual on the basis of race, color, gender, national origin, ancestry, religion, physical or mental disability, age, veteran status, sexual orientation, gender identity or expression, marital status, pregnancy, citizenship, or any other factor protected by anti-discrimination laws.</p>
     <mat-divider></mat-divider>
     <p>Response</p>
-    <!-- <round-checkbox id="military-service" [title]="workAuth.visa_support === 1 ? 'Yes' : 'No'" [checked]="workAuth.visa_support === 1" [active]="editMode"></round-checkbox> -->
+    <round-checkbox class="template-section" id="military-service" [title]="militaryService.military_status" [checked]="true" [active]="editMode"></round-checkbox>
   </div>
 
   <div class="row">
@@ -70,7 +71,6 @@
       <li>conduct background checks (as permitted by applicable law), which may include verification of skill proficiency, criminal history, financial</li>
       <li>history and other information that may be necessary for determining your qualifications for an open position at yourCareerfair.</li>
       <li>conduct labor economic and policy research using anonymous data collected from your account</li>
-      <li></li>
     </ul>
     <p>If you accept employment with a company you apply to through yourCareerfair, the information collected on this Site will become part of your employment record and will be used for employment purposes.<br><br>
     How We Share Personal Information with Other Third Parties<br>
@@ -120,6 +120,27 @@
     <p>You may not use, or encourage, promote, facilitate, instruct or induce others to use, yourCareerFair or Site Services for any activities that violate any law, statute, ordinance or regulation; for any other illegal or fraudulent purpose or any purpose that is harmful to others; or to transmit, store, display, distribute or otherwise make available content that is illegal, fraudulent or harmful to others.</p>
     <h4>How You Can Contact Us about Privacy Questions</h4>
     <p>If you have questions or concerns regarding this Privacy Notice, you should contact us by using our company’s contact information.</p>
+    <mat-divider></mat-divider>
+    <p>Responses</p>
+    <round-checkbox class="template-section" id="terms-and-conditions" [title]="'I Agree'" [checked]="true" [active]="editMode"></round-checkbox>
+  </div>
+
+  <div *ngIf="criminalHistories" class="row">
+    <h3>Criminal History</h3>
+    <p>If you have ever been convicted of a misdemeanor or felony offense please provide the following information. Infractions maybe excluded. If you have never been convicted of such an offense, please leave this section.</p>
+
+    <ng-container *ngIf="criminalHistories.length > 0">
+      <mat-divider></mat-divider>
+        <ul >
+          <li *ngFor="let history of criminalHistories; let i = index;">
+            <div class="detail-info">
+              <h4 *ngIf="history.charge" class="detail-info__left-top">{{history.charge}}</h4>
+              <small *ngIf="history.arrest_date" class="detail-info__left-bottom">Arrested on {{helperService.convertToFormattedString(history.arrest_date, 'll')}}</small>
+            </div>
+            <p>{{history.explanation}}</p>
+          </li>
+        </ul>
+    </ng-container>
   </div>
 </ng-container>
 

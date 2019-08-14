@@ -115,7 +115,7 @@ export class TemplateSectionComponent implements OnInit {
   getCriminalHistoriesInfo() {
     this.applicationService.getCriminalHistory().subscribe(
       dataJson => {
-        this.criminalHistories = dataJson['data']['data'];
+        this.criminalHistories = dataJson['data']['criminal_history_info'];
         this.count++;
         this.checkLoadingStatus();
       },

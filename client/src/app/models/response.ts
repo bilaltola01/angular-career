@@ -106,3 +106,12 @@ export interface MilitaryInfoResponse {
   military_status: string;
   military_status_description: string;
 }
+
+export interface CriminalHistoryResponse {
+  criminal_hist_id: number;
+  user_id: number;
+  arrest_date: any;
+  charge: string;
+  explanation: string;
+  criminal_hist_public: number;
+}

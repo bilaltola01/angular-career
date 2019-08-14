@@ -64,3 +64,10 @@ export interface MilitaryInfoRequest {
   military_status: string;
   military_status_description: string;
 }
+
+export interface CriminalHistoryRequest {
+  arrest_date: any;
+  charge: string;
+  explanation: string;
+  criminal_hist_public: number;
+}
