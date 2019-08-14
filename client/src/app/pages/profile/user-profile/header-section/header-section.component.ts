@@ -1,7 +1,6 @@
 import {
   Component,
   OnInit,
-  Input,
   Output,
   EventEmitter,
   OnChanges, SimpleChanges, SimpleChange
@@ -33,10 +32,11 @@ import { Router, NavigationEnd } from '@angular/router';
   templateUrl: './header-section.component.html',
   styleUrls: ['./header-section.component.scss']
 })
-export class HeaderSectionComponent implements OnChanges, OnInit {
+export class HeaderSectionComponent implements OnInit {
 
   generalInfo: UserGeneralInfo;
   editMode: boolean;
+  currentPage: string;
   @Output() updatedGeneralInfoData = new EventEmitter();
 
   maxDate = new Date();
@@ -64,36 +64,36 @@ export class HeaderSectionComponent implements OnChanges, OnInit {
     private userStateService: UserStateService,
     private router: Router
   ) {
-    if (this.router.url.includes('edit')) {
-      this.editMode = true;
-    } else {
-      this.editMode = false;
-    }
+    this.getGeneralInfo();
+    this.parseRouterUrl(router.url);
     router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
-        if (val.url.includes('edit')) {
-          this.editMode = true;
-        } else {
-          this.editMode = false;
-        }
-        this.getGeneralInfo();
+        this.parseRouterUrl(val.url);
       }
     });
   }
 
-  ngOnInit() {
-    this.getGeneralInfo();
-  }
+  ngOnInit() { }
 
-  ngOnChanges(changes: SimpleChanges) {
-    const editMode: SimpleChange = changes.editMode;
-    if (editMode && !editMode.previousValue && editMode.currentValue) {
-      this.initGeneralInfoForm();
+  parseRouterUrl(url: string) {
+    if (url.includes('edit')) {
+      this.editMode = true;
+    } else {
+      this.editMode = false;
+    }
+    if (url.includes('profile')) {
+      this.currentPage = 'profile';
+      if (this.editMode) {
+        this.initGeneralInfoForm();
+      }
+    } else if (url.includes('contacts')) {
+      this.currentPage = 'contacts';
+    } else if (url.includes('template')) {
+      this.currentPage = 'template';
     }
   }
 
   onChangeProfileStatus(active: boolean) {
-    this.generalInfoData.is_looking = active ? 0 : 1;
     const data = {
       is_looking: active ? 0 : 1
     };
@@ -101,7 +101,6 @@ export class HeaderSectionComponent implements OnChanges, OnInit {
       dataJson => {
         this.generalInfo = dataJson['data'];
         this.userStateService.setUser(this.generalInfo);
-        this.initGeneralInfoForm();
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -113,7 +112,6 @@ export class HeaderSectionComponent implements OnChanges, OnInit {
     this.userStateService.getUser
     .subscribe(user => {
       this.generalInfo = user;
-      this.initGeneralInfoForm();
     }, error => {
       this.alertsService.show(error.message, AlertType.error);
     });
