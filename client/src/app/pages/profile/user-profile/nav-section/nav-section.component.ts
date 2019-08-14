@@ -26,6 +26,7 @@ export class NavSectionComponent implements OnInit {
     private profileStateService: ProfileStateService,
     private alertsService: AlertsService
   ) {
+    this.checkNavMenuItemsVisibility();
     this.parseRouterUrl(router.url);
     router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
@@ -44,7 +45,6 @@ export class NavSectionComponent implements OnInit {
     }
     if (url.includes('profile')) {
       this.navIndex = 0;
-      this.checkNavMenuItemsVisibility();
     } else if (url.includes('contacts')) {
       this.navIndex = 1;
     } else if (url.includes('template')) {
