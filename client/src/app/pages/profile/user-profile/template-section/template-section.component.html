@@ -10,20 +10,38 @@
   <div *ngIf="workAuth" class="row" [class.edit-mode]="editMode">
     <h3>Work Authorization</h3>
     <p>Are you authorized to work in the United States</p>
-    <round-checkbox class="template-section" id="work-auth" [title]="workAuth.work_auth === 1 ? 'Yes' : 'No'" [checked]="workAuth.work_auth === 1" [active]="editMode" (statusChange)="toggleWorkAuth($event)"></round-checkbox>
+    <p *ngIf="!editMode" class="response">{{workAuth.work_auth === 1 ? 'Yes' : 'No'}}</p>
+    <div *ngIf="editMode" class="form-field proof-auth">
+      <mat-form-field class="bg-transparent" appearance="fill">
+        <mat-label>Select Options</mat-label>
+        <mat-select (selectionChange)="workAuthValueChanged($event)" [value]="workAuth.work_auth === 1 ? 'Yes' : 'No'">
+          <mat-option value="Yes">Yes</mat-option>
+          <mat-option value="No">No</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
     <p>What type of authorization do you maintain (if applicable)?</p>
-    <round-checkbox *ngIf="!editMode" class="template-section" id="proof-auth" [title]="workAuth.proof_auth ? workAuth.proof_auth : 'None'" [checked]="workAuth.proof_auth !== null" [active]="false"></round-checkbox>
+    <p *ngIf="!editMode" class="response">{{workAuth.proof_auth ? workAuth.proof_auth : 'None'}}</p>
     <div *ngIf="editMode" class="form-field proof-auth">
       <mat-form-field class="bg-transparent" appearance="fill">
         <mat-label>Authorization Type</mat-label>
         <mat-select (selectionChange)="proofAuthTypeChanged($event)" [value]="workAuth.proof_auth ? workAuth.proof_auth : 'None'">
-          <mat-option value="None">{{'None'}}</mat-option>
+          <mat-option value="None">None</mat-option>
           <mat-option *ngFor="let option of proof_auth_options" value="{{option}}">{{option}}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
     <p>Will you ever require support to acquire a work visa or a U.S citizenship?</p>
-    <round-checkbox class="template-section" id="visa-support" [title]="workAuth.visa_support === 1 ? 'Yes' : 'No'" [checked]="workAuth.visa_support === 1" [active]="editMode" (statusChange)="toggleVisaSupport($event)"></round-checkbox>
+    <p *ngIf="!editMode" class="response">{{workAuth.visa_support === 1 ? 'Yes' : 'No'}}</p>
+    <div *ngIf="editMode" class="form-field proof-auth">
+      <mat-form-field class="bg-transparent" appearance="fill">
+        <mat-label>Select Options</mat-label>
+        <mat-select (selectionChange)="visaSupportValueChanged($event)" [value]="workAuth.visa_support === 1 ? 'Yes' : 'No'">
+          <mat-option value="Yes">Yes</mat-option>
+          <mat-option value="No">No</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
   </div>
 
   <div *ngIf="militaryService && militaryService.military_status" class="row" [class.edit-mode]="editMode">
@@ -42,6 +60,7 @@
     </ng-container>
     <mat-divider></mat-divider>
     <p>Response</p>
+    <p *ngIf="!editMode" class="response">{{militaryService.military_status}}</p>
     <div *ngIf="editMode" class="form-field military-service">
       <mat-form-field class="bg-transparent" appearance="fill">
         <mat-label>Select Response</mat-label>
@@ -50,7 +69,6 @@
         </mat-select>
       </mat-form-field>
     </div>
-    <round-checkbox *ngIf="!editMode" class="template-section" id="military-service" [title]="militaryService.military_status" [checked]="true" [active]="false"></round-checkbox>
   </div>
 
   <div *ngIf="criminalHistories" class="row" [class.edit-mode]="editMode">

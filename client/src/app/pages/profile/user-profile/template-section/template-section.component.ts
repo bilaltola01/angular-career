@@ -98,13 +98,15 @@ export class TemplateSectionComponent implements OnInit {
     );
   }
 
-  toggleWorkAuth(work_auth: boolean) {
-    this.workAuth.work_auth = work_auth ? 1 : 0;
+  workAuthValueChanged($event: any) {
+    const work_auth = $event.value;
+    this.workAuth.work_auth = work_auth === 'Yes' ? 1 : 0;
     this.putWorkAuthInfo();
   }
 
-  toggleVisaSupport(visa_support: boolean) {
-    this.workAuth.visa_support = visa_support ? 1 : 0;
+  visaSupportValueChanged($event: any) {
+    const visa_support = $event.value;
+    this.workAuth.visa_support = visa_support === 'Yes' ? 1 : 0;
     this.putWorkAuthInfo();
   }
 
