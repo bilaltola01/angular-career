@@ -57,8 +57,9 @@
     <h3>Criminal History</h3>
     <p>If you have ever been convicted of a misdemeanor or felony offense please provide the following information. Infractions maybe excluded. If you have never been convicted of such an offense, please leave this section.</p>
 
+    <mat-divider *ngIf="editMode || criminalHistories.length > 0"></mat-divider>
+
     <ng-container *ngIf="criminalHistories.length > 0">
-      <mat-divider></mat-divider>
       <ul class="criminal">
         <li *ngFor="let history of criminalHistories; let i = index;">
           <div class="editor-container">
@@ -75,10 +76,10 @@
           </ng-container>
         </li>
       </ul>
-      <div *ngIf="editMode" class="btn-container">
-        <action-button class="edit-btn" type="stroked" color="primary" title="Add More" (click)="openDialog('Criminal History', criminalHistories)"></action-button>
-      </div>
     </ng-container>
+    <div *ngIf="editMode" class="btn-container">
+      <action-button class="edit-btn" type="stroked" color="primary" title="Add More" (click)="openDialog('Criminal History', criminalHistories)"></action-button>
+    </div>
   </div>
 </ng-container>
 
