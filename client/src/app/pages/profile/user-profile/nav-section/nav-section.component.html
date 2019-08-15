@@ -15,6 +15,7 @@
     </div>
   </ng-container>
   <div *ngIf="editMode" class="btn-section">
-    <action-button class="nav-btn" type="flat" title="Update Changes" [disabled]="!headerFormValid" color="primary" (click)="onClickUpdate()"></action-button>
+    <action-button *ngIf="navIndex === 0" class="nav-btn" type="flat" title="Update Changes" [disabled]="!headerFormValid" color="primary" (click)="onClickUpdate()"></action-button>
+    <action-button *ngIf="navIndex === 2" class="nav-btn" type="flat" title="Update Changes" [disabled]="false" color="primary" (click)="onClickUpdate()"></action-button>
   </div>  
 </nav>
