@@ -77,7 +77,6 @@ export class MyProfileComponent implements OnInit {
   }
 
   initialize() {
-    this.counts = 0;
     this.isNavMenuOpened = false;
     this.isProfileLoading = true;
     this.headerFormValid = false;
@@ -173,7 +172,7 @@ export class MyProfileComponent implements OnInit {
   }
 
   checkProfileLoading() {
-    if (this.counts === 8) {
+    if (this.userGeneralInfo && this.educationList && this.experienceList && this.userSkillsList && this.userInterestsList && this.userProjectsList && this.userPublicationsList && this.externalResourcesList) {
       this.isProfileLoading = false;
     }
   }
@@ -182,14 +181,13 @@ export class MyProfileComponent implements OnInit {
     this.userStateService.getUser
     .subscribe(user => {
       if (user) {
-        if (!this.userGeneralInfo) {
-          this.checkGeneralInfo();
-        }
         this.userGeneralInfo = user;
+        if (this.isProfileLoading) {
+          this.checkProfileLoading();
+        }
       } else {
         this.userService.getGeneralInfo().subscribe(
           dataJson => {
-            this.checkGeneralInfo();
             this.userGeneralInfo = dataJson['data'];
             this.userStateService.setUser(this.userGeneralInfo);
           },
@@ -203,23 +201,17 @@ export class MyProfileComponent implements OnInit {
     });
   }
 
-  checkGeneralInfo() {
-    this.counts++;
-    this.checkProfileLoading();
-  }
-
   getEducationList() {
     this.profileStateService.getEducations
     .subscribe(educationList => {
       if (educationList) {
-        if (!educationList) {
-          this.checkEducationInfo();
-        }
         this.educationList = educationList;
+        if (this.isProfileLoading) {
+          this.checkProfileLoading();
+        }
       } else {
         this.userService.getEducationInfo().subscribe(
           dataJson => {
-            this.checkEducationInfo();
             this.educationList = dataJson['data'];
             this.profileStateService.setEducations(this.educationList);
           },
@@ -233,23 +225,17 @@ export class MyProfileComponent implements OnInit {
     });
   }
 
-  checkEducationInfo() {
-    this.counts++;
-    this.checkProfileLoading();
-  }
-
   getExperienceList() {
     this.profileStateService.getExperiences
     .subscribe(experienceList => {
       if (experienceList) {
-        if (!this.experienceList) {
-          this.checkExperienceInfo();
-        }
         this.experienceList = experienceList;
+        if (this.isProfileLoading) {
+          this.checkProfileLoading();
+        }
       } else {
         this.userService.getExperienceInfo().subscribe(
           dataJson => {
-            this.checkExperienceInfo();
             this.experienceList = dataJson['data'];
             this.profileStateService.setExperiences(this.experienceList);
             this.experienceList.forEach((experience, arrIndex) => {
@@ -269,11 +255,6 @@ export class MyProfileComponent implements OnInit {
     }, error => {
       this.alertsService.show(error.message, AlertType.error);
     });
-  }
-
-  checkExperienceInfo() {
-    this.counts++;
-    this.checkProfileLoading();
   }
 
   getSkillsTrained(arrIndex: number) {
@@ -304,14 +285,13 @@ export class MyProfileComponent implements OnInit {
     this.profileStateService.getPublications
     .subscribe(publicationsList => {
       if (publicationsList) {
-        if (!this.userProjectsList) {
-          this.checkPublicationInfo();
-        }
         this.userPublicationsList = publicationsList;
+        if (this.isProfileLoading) {
+          this.checkProfileLoading();
+        }
       } else {
         this.userService.getPublicationsInfo().subscribe(
           dataJson => {
-            this.checkPublicationInfo();
             this.userPublicationsList = dataJson['data'];
             this.profileStateService.setPublications(this.userPublicationsList);
           },
@@ -325,23 +305,17 @@ export class MyProfileComponent implements OnInit {
     });
   }
 
-  checkPublicationInfo() {
-    this.counts++;
-    this.checkProfileLoading();
-  }
-
   getUserProjectsList() {
     this.profileStateService.getProjects
     .subscribe(projectsList => {
       if (projectsList) {
-        if (!this.userProjectsList) {
-          this.checkProjectInfo();
-        }
         this.userProjectsList = projectsList;
+        if (this.isProfileLoading) {
+          this.checkProfileLoading();
+        }
       } else {
         this.userService.getProjectsInfo().subscribe(
           dataJson => {
-            this.checkProjectInfo();
             this.userProjectsList = dataJson['data']['data'];
             this.profileStateService.setProjects(this.userProjectsList);
           },
@@ -355,19 +329,14 @@ export class MyProfileComponent implements OnInit {
     });
   }
 
-  checkProjectInfo() {
-    this.counts++;
-    this.checkProfileLoading();
-  }
-
   getUserSkillsList() {
     this.profileStateService.getSkills
     .subscribe(skillsList => {
       if (skillsList) {
-        if (!this.userSkillsList) {
-          this.checkSkillsInfo();
-        }
         this.userSkillsList = skillsList;
+        if (this.isProfileLoading) {
+          this.checkProfileLoading();
+        }
       } else {
         this.getUserSkillsListByOffset(ITEMS_LIMIT, 0);
       }
@@ -387,7 +356,6 @@ export class MyProfileComponent implements OnInit {
         if (dataJson['data'].length === limit) {
           this.getUserSkillsListByOffset(limit, offset + limit);
         } else {
-          this.checkSkillsInfo();
           this.profileStateService.setSkills(this.userSkillsList);
         }
       },
@@ -397,19 +365,14 @@ export class MyProfileComponent implements OnInit {
     );
   }
 
-  checkSkillsInfo() {
-    this.counts++;
-    this.checkProfileLoading();
-  }
-
   getUserInterestsList() {
     this.profileStateService.getInterests
     .subscribe(interestsList => {
       if (interestsList) {
-        if (!this.userInterestsList) {
-          this.checkInterestsInfo();
-        }
         this.userInterestsList = interestsList;
+        if (this.isProfileLoading) {
+          this.checkProfileLoading();
+        }
       } else {
         this.getUserInterestsListByOffset(ITEMS_LIMIT, 0);
       }
@@ -429,7 +392,6 @@ export class MyProfileComponent implements OnInit {
         if (dataJson['data'].length === limit) {
           this.getUserInterestsListByOffset(limit, offset + limit);
         } else {
-          this.checkInterestsInfo();
           this.profileStateService.setInterests(this.userInterestsList);
         }
       },
@@ -439,23 +401,17 @@ export class MyProfileComponent implements OnInit {
     );
   }
 
-  checkInterestsInfo() {
-    this.counts++;
-    this.checkProfileLoading();
-  }
-
   getExternalResourceList() {
     this.profileStateService.getExternalResources
     .subscribe(externalResourcesList => {
       if (externalResourcesList) {
-        if (!this.externalResourcesList) {
-          this.checkExternalResourceInfo();
-        }
         this.externalResourcesList = externalResourcesList;
+        if (this.isProfileLoading) {
+          this.checkProfileLoading();
+        }
       } else {
         this.userService.getExternalResourcesInfo().subscribe(
           dataJson => {
-            this.checkExternalResourceInfo();
             this.externalResourcesList = dataJson['data'];
             this.profileStateService.setExternalResources(this.externalResourcesList);
           },
@@ -467,11 +423,6 @@ export class MyProfileComponent implements OnInit {
     }, error => {
       this.alertsService.show(error.message, AlertType.error);
     });
-  }
-
-  checkExternalResourceInfo() {
-    this.counts++;
-    this.checkProfileLoading();
   }
 
 }
