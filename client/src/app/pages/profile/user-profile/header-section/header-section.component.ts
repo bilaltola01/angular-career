@@ -272,7 +272,7 @@ export class HeaderSectionComponent implements OnInit {
     this.temp_city = city;
     this.updatedGeneralInfoData.emit({
       data: this.generalInfoData,
-      valid: true
+      valid: this.checkFormValidation()
     });
   }
   onBlurCity() {
@@ -312,7 +312,7 @@ export class HeaderSectionComponent implements OnInit {
     this.temp_state = state;
     this.updatedGeneralInfoData.emit({
       data: this.generalInfoData,
-      valid: true
+      valid: this.checkFormValidation()
     });
   }
   onBlurState() {

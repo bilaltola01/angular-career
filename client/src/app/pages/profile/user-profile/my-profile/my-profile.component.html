@@ -12,13 +12,13 @@
     </div>
     <ng-container *ngIf="currentPage === 'profile'">
       <a *ngIf="!editMode" (click)="onClickEdit()">Edit Profile</a>
-      <a *ngIf="editMode" [class.disabled]="!headerFormValid" (click)="onClickUpdate()">Update Changes</a>
+      <a *ngIf="editMode" [class.disabled]="!headerFormValid" (click)="onClickUpdate()">Update</a>
     </ng-container>
     <a *ngIf="!editMode && currentPage === 'contacts'" (click)="navigateToIncomingRequests()">Incoming Requests</a>
     <a *ngIf="!editMode && currentPage === 'incoming-requests'" (click)="navigateToContacts()">Contacts</a>
     <ng-container *ngIf="currentPage === 'template'">
       <a *ngIf="!editMode" (click)="onClickEdit()">Edit Template</a>
-      <a *ngIf="editMode" [class.disabled]="false" (click)="onClickUpdate()">Update Changes</a>
+      <a *ngIf="editMode" [class.disabled]="false" (click)="onClickUpdate()">Update</a>
     </ng-container>
   </legend>
   <router-outlet></router-outlet>
