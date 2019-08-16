@@ -4,7 +4,7 @@
   </div> -->
   <div *ngIf="generalInfo" class="user-row">
     <div>
-      <input [disabled]="!editMode"
+      <input [disabled]="(currentPage === 'profile' && !editMode) || currentPage !== 'profile'"
         style="display: none"
         type="file"
         (change)="onPhotoFileSelected($event)"
@@ -13,13 +13,13 @@
 
       <div [ngClass]="{'hover-img': editMode}" (click)="fileInput.click()">
         <img class="user-photo"
-          src="{{generalInfoForm.get('photo').value || 'assets/icons/no_photo.png'}}"
+          src="{{(currentPage === 'profile' && editMode ? generalInfoForm.get('photo').value : generalInfo.photo) || 'assets/icons/no_photo.png'}}"
           alt="Profile Image"
         >
       </div>
     </div>
 
-    <ng-container *ngIf="!editMode">
+    <ng-container *ngIf="(currentPage === 'profile' && !editMode) || currentPage !== 'profile'">
       <div class="user-detail">
         <div>
           <h1>{{generalInfo.first_name}} {{generalInfo.last_name}}</h1>
@@ -57,7 +57,7 @@
       </div>
     </ng-container>
 
-    <ng-container *ngIf="editMode" [formGroup]="generalInfoForm">
+    <ng-container *ngIf="editMode && currentPage === 'profile'" [formGroup]="generalInfoForm">
       <div class="edit-form">
 
         <div class="form-field name-field">

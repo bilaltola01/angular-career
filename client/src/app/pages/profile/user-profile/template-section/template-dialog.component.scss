@@ -1,0 +1,50 @@
+@import './../../../../../styles/variables.scss';
+
+.form-field {
+  margin-top: 30px;
+  box-sizing: border-box;
+  width: 100%;
+  border: solid 1px $mat-form-border-color;
+  border-radius: 5px;
+  padding: 0;
+  &.search {
+    border: none;
+    padding: 0;
+    h3 {
+      color: rgba(map-get($md-cfaccent, 500), 0.84);
+    }
+    .count {
+      font-size: 14px;
+      font-weight: 400;
+    }
+    mat-form-field {
+      margin-top: 10px;
+      background-color: $third-bg-color;
+      border-radius: 25px;
+    }
+    .skills {
+      margin-top: 10px;
+      @include flex(row, flex-start, flex-start);
+      simple-tag {
+        margin: 5px;
+      }
+    }
+  }
+  &.textarea {
+    padding: 10px 20px 5px 20px;
+    mat-form-field {
+      width: 100%;
+      border-radius: 25px;
+    }
+  }
+  mat-form-field {
+    width: 100%;
+    img {
+      width: 30px;
+      height: 30px;
+    }
+    input.hide {
+      display: none;
+    }
+  }
+}

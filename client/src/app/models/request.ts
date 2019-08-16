@@ -59,3 +59,21 @@ export interface UserExternalResourcesItemData {
   link: string;
   description: string;
 }
+
+export interface WorkAuthRequest {
+  proof_auth: string;
+  work_auth: number;
+  visa_support: number;
+}
+
+export interface MilitaryInfoRequest {
+  military_status: string;
+  military_status_description: string;
+}
+
+export interface CriminalHistoryRequest {
+  arrest_date: any;
+  charge: string;
+  explanation: string;
+  criminal_hist_public: number;
+}

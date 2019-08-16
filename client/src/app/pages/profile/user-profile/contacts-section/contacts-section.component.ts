@@ -38,21 +38,23 @@ export class ContactsSectionComponent implements OnInit {
     this.router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
         this.parseRouterUrl(val.url);
-        this.initialize();
       }
     });
   }
 
   parseRouterUrl(url: string) {
-    if (url.includes('incoming-requests')) {
-      this.currentPage = 'incoming-requests';
-    } else {
-      this.currentPage = 'contacts';
+    if (url.includes('contacts')) {
+      if (url.includes('incoming-requests')) {
+        this.currentPage = 'incoming-requests';
+      } else {
+        this.currentPage = 'contacts';
+      }
     }
-    this.initialize();
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.initialize();
+  }
 
   initialize() {
     this.loadMore = false;

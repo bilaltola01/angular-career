@@ -393,3 +393,15 @@ export const NavMenus = {
 };
 
 export const ITEMS_LIMIT = 100;
+
+export const PROOF_AUTH_OPTIONS = [
+  'U.S. Citizen',
+  'Work Visa'
+];
+
+export const MILITARY_STATUS_OPTIONS = [
+  'I identify as one or more of the classifications of protected veterans listed above',
+  'I identify as a veteran, just not a protected veteran',
+  'I am not a veteran',
+  'I do not wish to self-identify'
+];

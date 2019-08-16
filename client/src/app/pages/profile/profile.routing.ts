@@ -28,7 +28,7 @@ export const profileRoutes: Routes = [
         canActivate: [AuthGuard]
       },
       {
-        path: 'my-profile/:name',
+        path: 'my-profile/edit',
         component: ProfileSectionComponent,
         canActivate: [AuthGuard]
       },
@@ -48,7 +48,7 @@ export const profileRoutes: Routes = [
         canActivate: [AuthGuard]
       },
       {
-        path: 'my-template/:name',
+        path: 'my-template/edit',
         component: TemplateSectionComponent,
         canActivate: [AuthGuard]
       }

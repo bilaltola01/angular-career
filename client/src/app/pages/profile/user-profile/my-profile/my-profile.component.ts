@@ -62,7 +62,6 @@ export class MyProfileComponent implements OnInit {
     this.router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
         this.parseRouterUrl(val.url);
-        this.initialize();
       }
     });
   }
@@ -80,7 +79,6 @@ export class MyProfileComponent implements OnInit {
   initialize() {
     this.isNavMenuOpened = false;
     this.isProfileLoading = true;
-    this.counts = 0;
     this.headerFormValid = false;
     this.getGeneralInfo();
     this.getEducationList();
@@ -125,7 +123,11 @@ export class MyProfileComponent implements OnInit {
   }
 
   onClickEdit() {
-    this.router.navigate(['/my-profile', 'edit'], { relativeTo: this.route });
+    if (this.currentPage === 'profile') {
+      this.router.navigate(['/my-profile', 'edit'], { relativeTo: this.route });
+    } else if (this.currentPage === 'template') {
+      this.router.navigate(['/my-template', 'edit'], { relativeTo: this.route });
+    }
   }
 
   navigateToContacts() {
@@ -137,26 +139,23 @@ export class MyProfileComponent implements OnInit {
   }
 
   onChangedGeneralInfoData($event: any) {
-    this.generalInfoData.photo = $event.data.photo;
-    this.generalInfoData.first_name = $event.data.first_name;
-    this.generalInfoData.last_name = $event.data.last_name;
-    this.generalInfoData.birthdate = $event.data.birthdate;
-    this.generalInfoData.gender = $event.data.gender;
-    this.generalInfoData.city_id = $event.data.city_id;
-    this.generalInfoData.country_id = $event.data.country_id;
-    this.generalInfoData.state_id = $event.data.state_id;
-    this.generalInfoData.title = $event.data.title;
-    this.generalInfoData.ethnicity = $event.data.ethnicity;
+    this.generalInfoData = {
+      photo: $event.data.photo,
+      first_name: $event.data.first_name,
+      last_name: $event.data.last_name,
+      birthdate: $event.data.birthdate,
+      gender: $event.data.gender,
+      city_id: $event.data.city_id,
+      country_id: $event.data.country_id,
+      state_id: $event.data.state_id,
+      title: $event.data.title,
+      ethnicity: $event.data.ethnicity
+    };
     this.headerFormValid = $event.valid;
   }
 
-  onChangeUserIntro(user_intro: string) {
-    this.userGeneralInfo.user_intro = user_intro;
-    this.generalInfoData.user_intro = user_intro;
-  }
-
   onClickUpdate() {
-    if (this.headerFormValid) {
+    if (this.currentPage === 'profile' && this.headerFormValid) {
       this.userService.updateGeneralInfo(this.generalInfoData).subscribe(
         dataJson => {
           this.userGeneralInfo = dataJson['data'];
@@ -167,29 +166,15 @@ export class MyProfileComponent implements OnInit {
           this.alertsService.show(error.message, AlertType.error);
         }
       );
+    } else if (this.currentPage === 'template') {
+      this.router.navigate(['/my-template'], { relativeTo: this.route });
     }
   }
 
   checkProfileLoading() {
-    if (this.counts === 8) {
-      this.counts = 0;
+    if (this.userGeneralInfo && this.educationList && this.experienceList && this.userSkillsList && this.userInterestsList && this.userProjectsList && this.userPublicationsList && this.externalResourcesList) {
       this.isProfileLoading = false;
     }
-  }
-
-  generateGeneralInfoData() {
-    this.generalInfoData = {
-      photo: this.userGeneralInfo.photo ? this.userGeneralInfo.photo : null,
-      first_name: this.userGeneralInfo.first_name,
-      last_name: this.userGeneralInfo.last_name,
-      birthdate: this.userGeneralInfo.birthdate ? this.userGeneralInfo.birthdate : null,
-      gender: this.userGeneralInfo.gender,
-      city_id: this.userGeneralInfo.city_id,
-      country_id: this.userGeneralInfo.country_id,
-      state_id: this.userGeneralInfo.state_id,
-      title: this.userGeneralInfo.title,
-      ethnicity: this.userGeneralInfo.ethnicity
-    };
   }
 
   getGeneralInfo() {
@@ -197,13 +182,14 @@ export class MyProfileComponent implements OnInit {
     .subscribe(user => {
       if (user) {
         this.userGeneralInfo = user;
-        this.checkGeneralInfo();
+        if (this.isProfileLoading) {
+          this.checkProfileLoading();
+        }
       } else {
         this.userService.getGeneralInfo().subscribe(
           dataJson => {
             this.userGeneralInfo = dataJson['data'];
             this.userStateService.setUser(this.userGeneralInfo);
-            this.checkGeneralInfo();
           },
           error => {
             this.alertsService.show(error.message, AlertType.error);
@@ -213,12 +199,6 @@ export class MyProfileComponent implements OnInit {
     }, error => {
       this.alertsService.show(error.message, AlertType.error);
     });
-  }
-
-  checkGeneralInfo() {
-    this.counts++;
-    this.generateGeneralInfoData();
-    this.checkProfileLoading();
   }
 
   getEducationList() {
@@ -226,13 +206,14 @@ export class MyProfileComponent implements OnInit {
     .subscribe(educationList => {
       if (educationList) {
         this.educationList = educationList;
-        this.checkEducationInfo();
+        if (this.isProfileLoading) {
+          this.checkProfileLoading();
+        }
       } else {
         this.userService.getEducationInfo().subscribe(
           dataJson => {
             this.educationList = dataJson['data'];
             this.profileStateService.setEducations(this.educationList);
-            this.checkEducationInfo();
           },
           error => {
             this.alertsService.show(error.message, AlertType.error);
@@ -244,23 +225,19 @@ export class MyProfileComponent implements OnInit {
     });
   }
 
-  checkEducationInfo() {
-    this.counts++;
-    this.checkProfileLoading();
-  }
-
   getExperienceList() {
     this.profileStateService.getExperiences
     .subscribe(experienceList => {
       if (experienceList) {
         this.experienceList = experienceList;
-        this.checkExperienceInfo();
+        if (this.isProfileLoading) {
+          this.checkProfileLoading();
+        }
       } else {
         this.userService.getExperienceInfo().subscribe(
           dataJson => {
             this.experienceList = dataJson['data'];
             this.profileStateService.setExperiences(this.experienceList);
-            this.checkExperienceInfo();
             this.experienceList.forEach((experience, arrIndex) => {
               if (experience.skills_trained && experience.skills_trained.length > 0) {
                 this.getSkillsTrained(arrIndex);
@@ -278,11 +255,6 @@ export class MyProfileComponent implements OnInit {
     }, error => {
       this.alertsService.show(error.message, AlertType.error);
     });
-  }
-
-  checkExperienceInfo() {
-    this.counts++;
-    this.checkProfileLoading();
   }
 
   getSkillsTrained(arrIndex: number) {
@@ -314,13 +286,14 @@ export class MyProfileComponent implements OnInit {
     .subscribe(publicationsList => {
       if (publicationsList) {
         this.userPublicationsList = publicationsList;
-        this.checkPublicationInfo();
+        if (this.isProfileLoading) {
+          this.checkProfileLoading();
+        }
       } else {
         this.userService.getPublicationsInfo().subscribe(
           dataJson => {
             this.userPublicationsList = dataJson['data'];
             this.profileStateService.setPublications(this.userPublicationsList);
-            this.checkPublicationInfo();
           },
           error => {
             this.alertsService.show(error.message, AlertType.error);
@@ -330,11 +303,6 @@ export class MyProfileComponent implements OnInit {
     }, error => {
       this.alertsService.show(error.message, AlertType.error);
     });
-  }
-
-  checkPublicationInfo() {
-    this.counts++;
-    this.checkProfileLoading();
   }
 
   getUserProjectsList() {
@@ -342,13 +310,14 @@ export class MyProfileComponent implements OnInit {
     .subscribe(projectsList => {
       if (projectsList) {
         this.userProjectsList = projectsList;
-        this.checkProjectInfo();
+        if (this.isProfileLoading) {
+          this.checkProfileLoading();
+        }
       } else {
         this.userService.getProjectsInfo().subscribe(
           dataJson => {
             this.userProjectsList = dataJson['data']['data'];
             this.profileStateService.setProjects(this.userProjectsList);
-            this.checkProjectInfo();
           },
           error => {
             this.alertsService.show(error.message, AlertType.error);
@@ -360,17 +329,14 @@ export class MyProfileComponent implements OnInit {
     });
   }
 
-  checkProjectInfo() {
-    this.counts++;
-    this.checkProfileLoading();
-  }
-
   getUserSkillsList() {
     this.profileStateService.getSkills
     .subscribe(skillsList => {
       if (skillsList) {
         this.userSkillsList = skillsList;
-        this.checkSkillsInfo();
+        if (this.isProfileLoading) {
+          this.checkProfileLoading();
+        }
       } else {
         this.getUserSkillsListByOffset(ITEMS_LIMIT, 0);
       }
@@ -391,7 +357,6 @@ export class MyProfileComponent implements OnInit {
           this.getUserSkillsListByOffset(limit, offset + limit);
         } else {
           this.profileStateService.setSkills(this.userSkillsList);
-          this.checkSkillsInfo();
         }
       },
       error => {
@@ -400,17 +365,14 @@ export class MyProfileComponent implements OnInit {
     );
   }
 
-  checkSkillsInfo() {
-    this.counts++;
-    this.checkProfileLoading();
-  }
-
   getUserInterestsList() {
     this.profileStateService.getInterests
     .subscribe(interestsList => {
       if (interestsList) {
         this.userInterestsList = interestsList;
-        this.checkInterestsInfo();
+        if (this.isProfileLoading) {
+          this.checkProfileLoading();
+        }
       } else {
         this.getUserInterestsListByOffset(ITEMS_LIMIT, 0);
       }
@@ -431,7 +393,6 @@ export class MyProfileComponent implements OnInit {
           this.getUserInterestsListByOffset(limit, offset + limit);
         } else {
           this.profileStateService.setInterests(this.userInterestsList);
-          this.checkInterestsInfo();
         }
       },
       error => {
@@ -440,23 +401,19 @@ export class MyProfileComponent implements OnInit {
     );
   }
 
-  checkInterestsInfo() {
-    this.counts++;
-    this.checkProfileLoading();
-  }
-
   getExternalResourceList() {
     this.profileStateService.getExternalResources
     .subscribe(externalResourcesList => {
       if (externalResourcesList) {
         this.externalResourcesList = externalResourcesList;
-        this.checkExternalResourceInfo();
+        if (this.isProfileLoading) {
+          this.checkProfileLoading();
+        }
       } else {
         this.userService.getExternalResourcesInfo().subscribe(
           dataJson => {
             this.externalResourcesList = dataJson['data'];
             this.profileStateService.setExternalResources(this.externalResourcesList);
-            this.checkExternalResourceInfo();
           },
           error => {
             this.alertsService.show(error.message, AlertType.error);
@@ -466,11 +423,6 @@ export class MyProfileComponent implements OnInit {
     }, error => {
       this.alertsService.show(error.message, AlertType.error);
     });
-  }
-
-  checkExternalResourceInfo() {
-    this.counts++;
-    this.checkProfileLoading();
   }
 
 }

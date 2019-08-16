@@ -7,6 +7,7 @@ import { profileRoutes } from './profile.routing';
 import { profileComponents } from './index';
 import { SharedModule } from '../../components/shared.module';
 import { ProfileDialogContentComponent } from './user-profile/profile-section/profile-section.component';
+import { TemplateDialogContentComponent } from './user-profile/template-section/template-section.component';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { ProfileDialogContentComponent } from './user-profile/profile-section/pr
     ...profileComponents
   ],
   entryComponents: [
-    ProfileDialogContentComponent
+    ProfileDialogContentComponent,
+    TemplateDialogContentComponent
   ]
 })
 
