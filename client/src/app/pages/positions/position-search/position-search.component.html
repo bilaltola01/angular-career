@@ -80,6 +80,29 @@
                 </div>
                 <div class="filter-card">
                     <mat-form-field>
+                        <mat-label>Education Level</mat-label>
+                        <mat-select class="arrow" formControlName="education">
+                            <mat-option value=''></mat-option>
+                            <mat-option *ngFor="let education of educationLevel" value="{{educationLevel.indexOf(education)}}">{{education}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="filter-card">
+                    <mat-form-field>
+                        <mat-label>Major </mat-label>
+                        <input matInput placeholder="Major" type="text" [matAutocomplete]="autocompleteMajor"
+                            formControlName="major">
+                        <mat-autocomplete #autocompleteMajor="matAutocomplete">
+                            <mat-option *ngFor="let major of autocomplete_education_major"
+                                [value]="major.major_name" (onSelectionChange)="onChangeMajor(major)">
+                                <span>{{major.major_name}}</span>
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+                <div class="filter-card">
+                    <mat-form-field>
                         <mat-label>Industry </mat-label>
                         <input matInput placeholder="Industry" type="text" [matAutocomplete]="autocompleteIndustry"
                             formControlName="industry">
@@ -188,10 +211,11 @@
             </div>
 
             <div *ngFor="let job of positionList ">
+                
                 <div class="row" [ngClass]="{'selected': job.selected}">
                     <round-checkbox id="test" [checked]="job.selected"
                         (statusChange)="job.selected = !job.selected;selectedAllFlag=false;"></round-checkbox>
-                    <h1 routerLink="../position/{{job.position_id}}">{{job.position}}</h1>
+                    <h1 routerLink="../position/{{job.position_id}}">{{job.position}} </h1>
                     <div class="position-right">
                         <div class="heart-icon">
                             <img *ngIf="!appliedJobsMap[job.position_id] && !savedJobsMap[job.position_id]"

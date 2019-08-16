@@ -427,6 +427,19 @@ export const PositionLevel = [
   'Senior Management',
   'Executive Level'
 ];
+export const EducationLevel = [
+  'No Education',
+  'High School',
+  'Bachelor of Arts',
+  'Bachelor of Science',
+  'Master of Business',
+  'Master of Arts',
+  'Master of Science',
+  'Master of Engineering',
+  'Doctor of Medicine',
+  'J.D.',
+  'Ph.D.'
+];
 
 export const EducationLevel = [
   'No Education',

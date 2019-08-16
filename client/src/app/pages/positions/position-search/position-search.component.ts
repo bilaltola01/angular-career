@@ -17,7 +17,9 @@ import {
   SkillLevelDescription,
   Recruiter,
   positionListLimit,
-  positionSearchMessages
+  EducationLevel,
+  positionSearchMessages,
+  Major
 } from 'src/app/models';
 
 @Component({
@@ -29,6 +31,7 @@ export class PositionSearchComponent implements OnInit {
   // Constants
   breakpoint: number;
   positionLevel: string[] = PositionLevel;
+  educationLevel: string[] = EducationLevel;
   sortBy: object[] = SortBy;
   SkillLevelDescription = SkillLevelDescription;
   positionSearchMessages = positionSearchMessages;
@@ -39,6 +42,7 @@ export class PositionSearchComponent implements OnInit {
   autocomplete_skills: Skill[] = [];
   autocomplete_school: School[][] = [];
   autocomplete_additional_industries: Industry[][] = [];
+  autocomplete_education_major: Major[][] = [];
   autocomplete_companies: Company[][] = [];
   autocomplete_recruiter: Recruiter[][] = [];
   userSkillsList = [];
@@ -49,6 +53,7 @@ export class PositionSearchComponent implements OnInit {
   filterAttributes = {
     city_id: null,
     industry_id: null,
+    major_id: null,
     school_id: null,
     recruiter_id: null,
     offset: 0,
@@ -75,7 +80,6 @@ export class PositionSearchComponent implements OnInit {
     this.getJobData();
     this.getSavedJobs();
     this.getAppliedJobs();
-
     this.breakpoint = (window.innerWidth <= 500) ? 2 : 4;
   }
 
@@ -93,6 +97,8 @@ export class PositionSearchComponent implements OnInit {
       'skill': new FormControl(null),
       'minSal': new FormControl(null),
       'position': new FormControl(null),
+      'education': new FormControl(null),
+      'major': new FormControl(null),
       'industry': new FormControl(null),
       'company': new FormControl(null),
       'post': new FormControl(null),
@@ -104,7 +110,10 @@ export class PositionSearchComponent implements OnInit {
       searchPosition ? this.onSearchPositionValueChanges(searchPosition) : this.autocomplete_searchposition = [];
     });
     this.positionForm.get('city').valueChanges.subscribe((city) => {
-      city ? this.onCityValueChanges(city) : this.autocomplete_additional_industries = [];
+      city ? this.onCityValueChanges(city) : this.autocomplete_cities = [];
+    });
+    this.positionForm.get('major').valueChanges.subscribe((major) => {
+      major ? this.onMajorValueChanges(major) : this.autocomplete_education_major = [];
     });
     this.positionForm.get('industry').valueChanges.subscribe((industry) => {
       industry ? this.onIndustryValueChanges(industry) : this.autocomplete_additional_industries = [];
@@ -131,6 +140,9 @@ export class PositionSearchComponent implements OnInit {
     this.filterAttributes['city_id'] = city.city_id;
   }
 
+  onChangeMajor(major) {
+    this.filterAttributes['major_id'] = major.major_id;
+  }
   onChangeIndustry(industry) {
     this.filterAttributes['industry_id'] = industry.industry_id;
   }
@@ -148,6 +160,19 @@ export class PositionSearchComponent implements OnInit {
       error => {
         this.alertsService.show(error.message, AlertType.error);
         this.autocomplete_cities = [];
+      }
+    );
+  }
+  onMajorValueChanges(major: string) {
+    this.autoCompleteService.autoComplete(major, 'majors').subscribe(
+      dataJson => {
+        if (dataJson['success']) {
+          this.autocomplete_education_major = dataJson['data'];
+        }
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+        this.autocomplete_education_major = [];
       }
     );
   }
@@ -251,6 +276,8 @@ export class PositionSearchComponent implements OnInit {
     let queryString;
     queryString = this.positionForm.value.city ? `${queryString ? queryString + '&' : ''}city=${this.filterAttributes.city_id}` : queryString;
     queryString = this.positionForm.value.position ? `${queryString ? queryString + '&' : ''}level=${this.positionForm.value.position}` : queryString;
+    queryString = this.positionForm.value.education ? `${queryString ? queryString + '&' : ''}education=${parseInt(this.positionForm.value.education, 10) + 1}` : queryString;
+    queryString = this.positionForm.value.major ? `${queryString ? queryString + '&' : ''}major=${this.filterAttributes.major_id}` : queryString;
     queryString = this.positionForm.value.industry ? `${queryString ? queryString + '&' : ''}industry=${this.filterAttributes.industry_id}` : queryString;
     queryString = this.positionForm.value.company ? `${queryString ? queryString + '&' : ''}company=${this.positionForm.value.company}` : queryString;
     queryString = this.positionForm.value.minSal ? `${queryString ? queryString + '&' : ''}pay=${this.positionForm.value.minSal}` : queryString;
@@ -446,8 +473,6 @@ export class PositionSearchComponent implements OnInit {
   applySelected() {
     const selectedPositionArr = this.positionList.filter(position => position.selected === true && !this.appliedJobsMap[position.position_id]);
     this.applyJob(selectedPositionArr);
-
-
   }
 
   saveSelected() {
