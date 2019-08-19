@@ -1,43 +1,21 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
-import { Observable, pipe, throwError } from 'rxjs';
-import { catchError, switchMap } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { UserService } from './user.service';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
-import { JwtHelperService } from '@auth0/angular-jwt';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 
 export class ErrorInterceptor implements HttpInterceptor {
-  public jwtHelper = new JwtHelperService();
-
   constructor(private userService: UserService,
               private router: Router) {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const token = localStorage.getItem('token');
-    let isExpired = false;
-
-    if (token) {
-      isExpired = this.jwtHelper.isTokenExpired(token);
-    }
-
-    if (!isExpired) {
-      this.userService.getGeneralInfo()
-        .subscribe((data: string) => {
-          localStorage.setItem('token', data['data']);
-
-          return next.handle(request)
-            .pipe(catchError(err => {
-              this.determineActionBasedOnStatusCode(Number(err.status));
-
-              return throwError(err);
-            }));
-        });
-    }
-
     return next.handle(request)
       .pipe(catchError(err => {
         this.determineActionBasedOnStatusCode(Number(err.status), err.url);
@@ -49,7 +27,7 @@ export class ErrorInterceptor implements HttpInterceptor {
   private determineActionBasedOnStatusCode(statusCode: number, reqUrl: string): void {
     switch (statusCode) {
       case 404: {
-        if (!(reqUrl.includes(environment.auth_service) || reqUrl.includes('contact'))) {
+        if (!reqUrl.includes(environment.auth_service)) {
           this.router.navigate(['/error'], {queryParams: {'status-code': statusCode}});
           break;
         }

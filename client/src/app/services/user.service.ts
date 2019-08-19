@@ -845,27 +845,19 @@ export class UserService {
 
   private authHttpOptions() {
     const token = localStorage.getItem('token');
+
     return {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'Authorization': token
       })
     };
+
   }
 
   private handleError(error) {
-    let message: string;
-
-    if (error) {
-      if (error.error) {
-        message = error.error.message;
-      } else {
-        message = error.statusText;
-      }
-    }
-
     if (!environment.production) {
-      console.error(`UserService -> handleError -> error. Error Code: ${error.status}. Message: ${message}. Details:`, error);
+      console.error(`UserService -> handleError -> error. Error Code: ${error.status}. Message: ${error.error.message ? error.error.message : error.statusText}. Details:`, error);
     }
 
     return throwError({success: false, message: error.error.message ? error.error.message : error.statusText});
