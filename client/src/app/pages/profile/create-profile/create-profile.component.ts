@@ -9,6 +9,7 @@ import {
   AlertType,
   HelperService,
   PhotoStateService,
+  ApplicationService,
 } from 'src/app/services';
 
 import {
@@ -33,7 +34,15 @@ import {
   ExternalResources,
   ProfileStatuses,
   UserRoles,
-  ITEMS_LIMIT
+  ITEMS_LIMIT,
+  WorkAuthResponse,
+  WorkAuthRequest,
+  MilitaryInfoResponse,
+  MilitaryInfoRequest,
+  CriminalHistoryResponse,
+  CriminalHistoryRequest,
+  PROOF_AUTH_OPTIONS,
+  MILITARY_STATUS_OPTIONS
 } from 'src/app/models';
 import moment from 'moment';
 
@@ -73,6 +82,7 @@ export class CreateProfileComponent implements OnInit {
     'profile-project',
     'profile-publication',
     'profile-links',
+    'application-template',
     'profile-status'
   ];
 
@@ -118,6 +128,10 @@ export class CreateProfileComponent implements OnInit {
     {
       label: 100,
       width: 100
+    },
+    {
+      label: 100,
+      width: 100
     }
   ];
 
@@ -141,6 +155,7 @@ export class CreateProfileComponent implements OnInit {
   projectsFormArray: FormArray;
   publicationsFormArray: FormArray;
   externalResourcesForm: FormGroup;
+  criminalFormArray: FormArray;
 
   // autocomplete lists
   autocomplete_cities: City[] = [];
@@ -186,6 +201,14 @@ export class CreateProfileComponent implements OnInit {
   externalResourcesList: UserExternalResourcesItem[];
   externalResourcesDataList: UserExternalResourcesItemData[];
 
+  workAuth: WorkAuthResponse;
+  militaryService: MilitaryInfoResponse;
+  criminalHistories: CriminalHistoryResponse[];
+  criminalHistoriesData: CriminalHistoryRequest[];
+
+  proof_auth_options = PROOF_AUTH_OPTIONS;
+  military_status_options = MILITARY_STATUS_OPTIONS;
+
   userRole: string;
   is_skip: boolean;
 
@@ -195,7 +218,8 @@ export class CreateProfileComponent implements OnInit {
     private userService: UserService,
     private alertsService: AlertsService,
     private helperService: HelperService,
-    private photoStateService: PhotoStateService) { }
+    private photoStateService: PhotoStateService,
+    private applicationService: ApplicationService) { }
 
   ngOnInit() {
     if (this.route.snapshot.queryParams.role) {
@@ -253,6 +277,9 @@ export class CreateProfileComponent implements OnInit {
         this.updateExternalResourceData();
         break;
       case 9:
+        this.updateApplicationTemplateInfo();
+        break;
+      case 10:
         this.updateGeneralInfo();
         break;
       default:
@@ -303,6 +330,10 @@ export class CreateProfileComponent implements OnInit {
         this.getExternalResourceList();
         break;
       case 9:
+        this.initApplicationTemplatePage();
+        this.getApplicationTemplateInfo();
+        break;
+      case 10:
         this.getGeneralInfo();
         break;
       default:
@@ -566,7 +597,7 @@ export class CreateProfileComponent implements OnInit {
   updateGeneralInfo() {
     if (!this.is_skip) {
       if ((this.selectedPageIndex === 1 && this.basicInfoForm.valid && this.onCheckCityValidation() && this.onCheckStateValidation()) ||
-        (this.selectedPageIndex === 2 && this.aboutMeForm.valid) || this.selectedPageIndex === 9) {
+        (this.selectedPageIndex === 2 && this.aboutMeForm.valid) || this.selectedPageIndex === 10) {
         if (this.userRole) {
           this.generalInfoRequest[this.userRole] = 1;
         }
@@ -577,7 +608,7 @@ export class CreateProfileComponent implements OnInit {
             this.updateBasicInformationForm();
             this.updateAboutMeForm();
             this.updateProfileStatus();
-            if (this.selectedPageIndex !== 9) {
+            if (this.selectedPageIndex !== 10) {
               this.selectedPageIndex++;
               if (this.selectedPageIndex === 3) {
                 this.initializeFormsByPageIndex();
@@ -590,7 +621,7 @@ export class CreateProfileComponent implements OnInit {
         );
       }
     } else {
-      if (this.selectedPageIndex !== 9) {
+      if (this.selectedPageIndex !== 10) {
         this.selectedPageIndex++;
         if (this.selectedPageIndex === 3) {
           this.initializeFormsByPageIndex();
@@ -2257,9 +2288,288 @@ export class CreateProfileComponent implements OnInit {
     this.profile_status = this.generalInfoResponse.is_looking;
   }
 
-  setProfileStatus(is_looking: number) {
-    this.generalInfoRequest.is_looking = is_looking;
+  setProfileStatus(is_looking: boolean) {
+    this.generalInfoRequest.is_looking = is_looking ? 1 : 0;
     this.updateGeneralInfo();
+  }
+
+  /*
+  * Application template Page
+  */
+
+  initApplicationTemplatePage() {
+    this.workAuth = null;
+    this.militaryService = null;
+    this.criminalHistories = null;
+    this.criminalHistoriesData = [];
+    this.criminalFormArray = new FormArray([]);
+    this.is_skip = true;
+  }
+
+  addCriminalForm(criminalHistory: CriminalHistoryResponse) {
+
+    const criminalHistoriesData = {
+      arrest_date: criminalHistory && criminalHistory.arrest_date ? criminalHistory.arrest_date : null,
+      charge: criminalHistory && criminalHistory.charge ? criminalHistory.charge : null,
+      explanation: criminalHistory && criminalHistory.explanation ? criminalHistory.explanation : null,
+      criminal_hist_public: criminalHistory && criminalHistory.criminal_hist_public ? criminalHistory.criminal_hist_public : null
+    };
+
+    const criminalForm = new FormGroup({
+      charge: new FormControl(criminalHistory && criminalHistory.charge ? criminalHistory.charge : '', [Validators.required]),
+      arrest_date: new FormControl(criminalHistory && criminalHistory.arrest_date ? this.helperService.convertToFormattedString(criminalHistory.arrest_date, 'L') : ''),
+      explanation: new FormControl(criminalHistory && criminalHistory.explanation ? criminalHistory.explanation : '')
+    });
+
+    this.criminalHistoriesData.push(criminalHistoriesData);
+    const arrIndex = this.criminalHistoriesData.length - 1;
+
+    criminalForm.get('charge').valueChanges.subscribe(
+      (charge) => {
+        if (charge && this.helperService.checkSpacesString(charge)) {
+          this.criminalHistoriesData[arrIndex].charge = charge;
+        } else {
+          this.criminalHistoriesData[arrIndex].charge = null;
+        }
+      }
+    );
+    criminalForm.get('explanation').valueChanges.subscribe(
+      (explanation) => {
+        if (explanation && this.helperService.checkSpacesString(explanation)) {
+          this.criminalHistoriesData[arrIndex].explanation = explanation;
+        } else {
+          this.criminalHistoriesData[arrIndex].explanation = null;
+        }
+      }
+    );
+    criminalForm.get('arrest_date').valueChanges.subscribe(
+      (arrest_date) => {
+        if (arrest_date && this.helperService.checkSpacesString(arrest_date)) {
+          this.criminalHistoriesData[arrIndex].arrest_date = arrest_date;
+        } else {
+          this.criminalHistoriesData[arrIndex].arrest_date = null;
+        }
+      }
+    );
+
+    this.criminalFormArray.push(criminalForm);
+  }
+
+  getApplicationTemplateInfo() {
+    this.getWorkAuthInfo();
+    this.getMilitaryServiceInfo();
+    this.getCriminalHistoriesInfo();
+  }
+
+  updateApplicationTemplateInfo() {
+    if (this.criminalHistoriesData.length !== 0) {
+      if (!this.is_skip) {
+        if (this.criminalFormArray.valid && this.checkChargeValidation()) {
+          this.criminalHistoriesData.forEach((data, index) => {
+            if (index > this.criminalHistories.length - 1) {
+              this.addCriminalHistory(index);
+            } else {
+              this.updateCriminalHistory(index);
+            }
+          });
+        }
+      } else {
+        this.selectedPageIndex++;
+        this.initializeFormsByPageIndex();
+      }
+    } else {
+      this.selectedPageIndex++;
+      this.initializeFormsByPageIndex();
+    }
+  }
+
+  getWorkAuthInfo() {
+    this.applicationService.getWorkAuth().subscribe(
+      dataJson => {
+        this.workAuth = dataJson['data']['work_auth_info'];
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  workAuthValueChanged($event: any) {
+    const work_auth = $event.value;
+    this.workAuth.work_auth = work_auth === 'Yes' ? 1 : 0;
+    this.putWorkAuthInfo();
+  }
+
+  visaSupportValueChanged($event: any) {
+    const visa_support = $event.value;
+    this.workAuth.visa_support = visa_support === 'Yes' ? 1 : 0;
+    this.putWorkAuthInfo();
+  }
+
+  proofAuthTypeChanged($event: any) {
+    const proof_auth = $event.value !== 'None' ? $event.value : null;
+    this.workAuth.proof_auth = proof_auth;
+    this.putWorkAuthInfo();
+  }
+
+  putWorkAuthInfo() {
+    const requestData: WorkAuthRequest = {
+      proof_auth: this.workAuth.proof_auth,
+      work_auth: this.workAuth.work_auth,
+      visa_support: this.workAuth.visa_support
+    };
+    this.applicationService.putWorkAuth(requestData).subscribe(
+      dataJson => {  },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  getMilitaryServiceInfo() {
+    this.applicationService.getMilitaryInfo().subscribe(
+      dataJson => {
+        this.militaryService = dataJson['data']['military_info'];
+        if (this.militaryService.military_status === null) {
+          this.militaryService.military_status = MILITARY_STATUS_OPTIONS[3];
+          this.postMilitaryServiceInfo();
+        }
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  militaryStatusChanged($event: any) {
+    const military_status = $event.value;
+    this.militaryService.military_status = military_status;
+    this.postMilitaryServiceInfo();
+  }
+
+  postMilitaryServiceInfo() {
+    const postData: MilitaryInfoRequest = {
+      military_status: this.militaryService.military_status,
+      military_status_description: this.militaryService.military_status_description
+    };
+    this.applicationService.postMilitaryInfo(postData).subscribe(
+      dataJson => {
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  getCriminalHistoriesInfo() {
+    this.applicationService.getCriminalHistory().subscribe(
+      dataJson => {
+        this.criminalHistories = dataJson['data']['criminal_history_info'];
+        this.updateCriminalFormArray();
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  updateCriminalFormArray() {
+    if (this.criminalHistories.length === 0) {
+      this.addCriminalForm(null);
+    } else {
+      this.criminalHistories.forEach((criminalHistory) => {
+        this.addCriminalForm(criminalHistory);
+      });
+    }
+  }
+
+  onRemoveCriminalHistory(arrIndex: number) {
+    if (arrIndex > this.criminalHistories.length) {
+      this.criminalFormArray.removeAt(arrIndex);
+      this.criminalHistoriesData.splice(arrIndex, 1);
+    } else {
+      this.deleteCriminalHistory(arrIndex);
+    }
+  }
+
+  deleteCriminalHistory(arrIndex: number) {
+    this.applicationService.deleteCriminalHistory(this.criminalHistories[arrIndex].criminal_hist_id).subscribe(
+      dataJson => {
+        this.criminalHistories.splice(arrIndex, 1);
+        this.criminalFormArray.removeAt(arrIndex);
+        this.criminalHistoriesData.splice(arrIndex, 1);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  onAddCriminalHistory() {
+    this.addCriminalForm(null);
+  }
+
+  addCriminalHistory(arrIndex: number) {
+    this.applicationService.postCriminalHistory({post_criminal_history: [this.criminalHistoriesData[arrIndex]]}).subscribe(
+      dataJson => {
+        if (arrIndex === this.criminalHistoriesData.length - 1) {
+          this.selectedPageIndex++;
+          this.initializeFormsByPageIndex();
+        }
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  updateCriminalHistory(arrIndex: number) {
+    this.applicationService.putCriminalHistory(this.criminalHistories[arrIndex].criminal_hist_id, this.criminalHistoriesData[arrIndex]).subscribe(
+      dataJson => {
+        if (arrIndex === this.criminalHistoriesData.length - 1) {
+          this.selectedPageIndex++;
+          this.initializeFormsByPageIndex();
+        }
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  onChangeArrestDate(date: any, arrIndex: number) {
+    if (date.value) {
+      this.criminalFormArray.at(arrIndex).get('arrest_date').setValue(this.helperService.convertToFormattedString(date.value, 'L'));
+    } else {
+      this.criminalFormArray.at(arrIndex).get('arrest_date').setValue('');
+    }
+  }
+
+  checkChargeValidation(): boolean {
+    let valid = true;
+
+    this.criminalHistoriesData.forEach((data, index) => {
+     const value = this.criminalFormArray.at(index).get('charge').value;
+     if (!(value && this.helperService.checkSpacesString(value))) {
+      valid = false;
+     }
+    });
+    return valid;
+  }
+
+  checkCriminalFormSkip(): boolean {
+    if (
+      this.criminalHistories.length === 0
+      && this.criminalFormArray.length === 1
+      && !this.helperService.checkSpacesString(this.criminalFormArray.at(0).get('charge').value)
+      && !this.helperService.checkSpacesString(this.criminalFormArray.at(0).get('arrest_date').value)
+      && !this.helperService.checkSpacesString(this.criminalFormArray.at(0).get('explanation').value)
+    ) {
+      this.is_skip = true;
+    } else {
+      this.is_skip = false;
+    }
+    return this.is_skip;
   }
 
 }

@@ -212,6 +212,7 @@ p {
   &.profile-project,
   &.profile-publication,
   &.profile-links,
+  &.application-template,
   &.profile-status {
     position: relative;
     margin-top: $container-mt-desktop;
@@ -323,6 +324,65 @@ p {
     .profile-form {
       &__title {
         margin-top: $profile-form-field-mt;
+      }
+    }
+  }
+  &.application-template {
+    .container__full {
+      .profile-form {
+        .row {
+          width: 100%;
+          mat-divider {
+            margin: 20px 0;
+            border-color: rgba(#707070, 0.1);
+          }
+          h3 {
+            font-weight: 600;
+            font-size: 20px;
+            line-height: 30px;
+            margin-bottom: 20px;
+            margin-top: 40px;
+            color: rgba(map-get($md-cfaccent, 500), .84);
+          }
+          h4 {
+            margin-top: 10px;
+            color: rgba(map-get($md-cfaccent, 500), .84);
+            &.name-field {
+              margin-top: 0;
+            }
+          }
+          p {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-size: 16px;
+            line-height: 24px;
+            color: rgba(map-get($md-cfaccent, 500), .84);
+            &.response {
+              color: map-get($md-cfaccent, 500);
+            }
+          }
+          a {
+            font-size: 14px;
+            line-height: 21px;
+            color: map-get($md-cfprimary, 500);
+            text-decoration: none;
+            cursor: pointer;
+            &.title {
+              color: map-get($md-cfaccent, 500);
+              font-size: inherit;
+              line-height: inherit;
+            }
+          }
+        }
+        &__field {
+          &.proof-auth {
+            width: fit-content;
+          }
+          &.military-service {
+            min-width: 200px;
+            max-width: 650px;
+          }
+        }
       }
     }
   }
