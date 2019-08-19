@@ -394,6 +394,7 @@ export const NavMenus = {
 
 export const ITEMS_LIMIT = 100;
 
+
 export const PROOF_AUTH_OPTIONS = [
   'U.S. Citizen',
   'Work Visa'
@@ -405,3 +406,14 @@ export const MILITARY_STATUS_OPTIONS = [
   'I am not a veteran',
   'I do not wish to self-identify'
 ];
+
+export const SkillLevelDescription = {
+  0: 'No proficiency: no training and no experience',
+  1: 'Limited proficiency: some training or some experience',
+  2: 'Moderately proficient: moderate training and moderate experience, though not enough to be considered competent (if someone were to hire you based on this skill you might need substantial training/assistance)',
+  3: 'proficient: sufficient training or experience to be considered competent (if someone were to hire you based on this skill you might need moderate training/assistance)',
+  4: 'Highly proficient: substantial training or experience (if someone were to hire you based on this skill, you would need minimal training/assistance)',
+  5: 'Extremely proficient: substantial training and experience in the subject, familiarity with industry standards, and some understanding of abstract or esoteric subject matter',
+  6: 'Specialized: extensive training, possible research experience, and substantial work experience. This level is usually reserved for people with at least 5 years of academic or industry experience or with MS or Ph.D levels of understanding'
+};
+

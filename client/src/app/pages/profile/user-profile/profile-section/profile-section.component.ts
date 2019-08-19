@@ -24,7 +24,8 @@ import {
   Industry,
   ExternalResources,
   UserExternalResourcesItemData,
-  ITEMS_LIMIT
+  ITEMS_LIMIT,
+  SkillLevelDescription
 } from 'src/app/models';
 import {
   HelperService,
@@ -45,7 +46,7 @@ import {MatDatepicker} from '@angular/material/datepicker';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
 export interface DialogData {
-  category: 'About Me' | 'Education' | 'Work Experience' | 'Project' | 'Publication' | 'External Resources';
+  category: 'About Me' | 'Education' | 'Work Experience' | 'Project' | 'Publication' | 'External Resources' | 'Skill Level Description';
   data: any;
   editIndex: number;
 }
@@ -71,7 +72,7 @@ export class ProfileSectionComponent implements OnInit {
   userPublicationsList: UserPublicationItem[];
   externalResourcesList: UserExternalResourcesItem[];
   editMode: boolean;
-
+  skillLevelDescription = SkillLevelDescription;
   autocomplete_skills: Skill[] = [];
   autocomplete_interests: Interest[] = [];
 
@@ -553,7 +554,7 @@ export class ProfileDialogContentComponent {
   autocomplete_skills_trained: Skill[][] = [];
   autocomplete_additional_industries: Industry[] = [];
 
-
+  skillLevelDescription = SkillLevelDescription;
   temp_university: School;
   temp_major: Major;
   temp_focus_major: Major;
@@ -598,10 +599,16 @@ export class ProfileDialogContentComponent {
       case 'External Resources':
         this.initExternalResourcesForm();
         break;
+        case 'Skill Level Description':
+        this.initSkillDesc();
+        break;
       default:
         break;
 
     }
+  }
+  initSkillDesc() {
+    this.skillLevelDescription = SkillLevelDescription;
   }
 
   initAboutMeForm() {

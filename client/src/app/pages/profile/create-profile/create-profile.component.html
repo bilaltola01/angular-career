@@ -412,10 +412,10 @@
     <div class="container__full">
       <div class="profile-form" [formGroup]="skillsAndInterestsForm">
         <h3 class="profile-form__title">
-          SKILLS & INTERESTS
+          SKILLS & INTERESTS 
         </h3>
         <div class="profile-form__field search">
-          <h3>Skills <span *ngIf="userSkillsList.length > 0" class="count">{{userSkillsList.length}}</span></h3>
+          <h3>Skills <span *ngIf="userSkillsList.length > 0" class="count">{{userSkillsList.length}}</span></h3><img src="assets/icons/ic_question.svg" (click)="openSkillDescDialog()"> 
           <mat-form-field appearance="standard" class="search">
             <mat-icon matSuffix>search</mat-icon>
             <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompleteSkills" formControlName="skills">
