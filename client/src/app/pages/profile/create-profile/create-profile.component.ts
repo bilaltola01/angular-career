@@ -2288,8 +2288,8 @@ export class CreateProfileComponent implements OnInit {
     this.profile_status = this.generalInfoResponse.is_looking;
   }
 
-  setProfileStatus(is_looking: number) {
-    this.generalInfoRequest.is_looking = is_looking;
+  setProfileStatus(is_looking: boolean) {
+    this.generalInfoRequest.is_looking = is_looking ? 1 : 0;
     this.updateGeneralInfo();
   }
 
