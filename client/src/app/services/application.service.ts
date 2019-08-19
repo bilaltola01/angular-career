@@ -132,7 +132,7 @@ export class ApplicationService {
       catchError(this.handleError)
     );
   }
-  public applyJob(position_id: number): Observable<any> {
+  public applyJob(positionArr): Observable<any> {
     const queryUrl = `${this.application_service_url}application`;
     const observableArr = [];
     for (let i = 0; i < positionArr.length; i++) {

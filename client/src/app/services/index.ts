@@ -5,14 +5,7 @@ export * from './user.service';
 export * from './photo-state.service';
 export * from './user-state.service';
 export * from './profile-state.service';
-<<<<<<< HEAD
-export * from './application.service';
-=======
-export * from './position.service';
-export * from './cart.service';
-export * from './application.service';
 export * from './position.service';
 export * from './cart.service';
 export * from './application.service';
 
->>>>>>> Implemented Pagination and Improved UI.

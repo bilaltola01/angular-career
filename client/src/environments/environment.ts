@@ -9,16 +9,9 @@ export const environment = {
   auth_service: 'auth-service',
   user_service: 'user-service',
   autocomplete_service: 'autocomplete-service',
-<<<<<<< HEAD
   application_service: 'application-service',
-=======
   position_service: 'position-service',
-<<<<<<< HEAD
->>>>>>> Implemented postion-search functionality partially.
-=======
   cart_service: 'cart-service',
-  application_service: 'application-service',
->>>>>>> Implemented Pagination and Improved UI.
   api_version: 'v1'
 };
 
