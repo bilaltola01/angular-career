@@ -7,12 +7,7 @@
         right: 10px;
         color: #318bd6;
     }
-    mat-dialog-container{
-        &::-webkit-scrollbar {
-            width: 0;
-            background-color: transparent;
-            display: none;
-        }
+  
     & mat-dialog-content {
         width: 75%;
         margin: 0 auto;
@@ -20,24 +15,17 @@
         min-width: 280px;
         box-sizing: border-box;
         max-height: auto;
-        &::-webkit-scrollbar {
-            width: 0;
-            background-color: transparent;
-            display: none;
-        }
-        
-         
         h3 {
             color: rgba(map-get($md-cfaccent, 500), 0.84);
             margin: 0px 0 36px;
             display: block;
-        font: 500 20px/32px Roboto, "Helvetica Neue", sans-serif;
-        text-align: center;
-    }
+            font: 500 20px/32px Roboto, "Helvetica Neue", sans-serif;
+            text-align: center;
+        }
     }
 }
    
-    }
+    
 
 
  
