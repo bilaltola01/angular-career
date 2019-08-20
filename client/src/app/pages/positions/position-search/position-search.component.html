@@ -90,6 +90,16 @@
                 </div>
                 <div class="filter-card">
                     <mat-form-field>
+                        <mat-label>Job Type</mat-label>
+                        <mat-select class="arrow" formControlName="job">
+                            <mat-option value=''></mat-option>
+                            <mat-option *ngFor="let jobtype of jobType" value="{{jobtype}}">{{jobtype}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="filter-card">
+                    <mat-form-field>
                         <mat-label>Major </mat-label>
                         <input matInput placeholder="Major" type="text" [matAutocomplete]="autocompleteMajor"
                             formControlName="major">
@@ -161,7 +171,7 @@
                         </action-button>
                     </div>
                     <div class="clear-filter">
-                        <action-button class="clear-btn" type="text" title="Clear Filter" (click)="clearFilter()"
+                        <action-button class="clear-btn" type="text" title="Clear Filters" (click)="clearFilter()"
                             color="primary"></action-button>
                     </div>
                 </div>
@@ -293,7 +303,7 @@
                             </mat-grid-tile>
                             <mat-grid-tile>
                                 <div class="card-item">
-                                    <span>Positions</span>
+                                    <span>Position Level</span>
                                     <p>{{job.level ? job.level : 'N/A'}}</p>
                                 </div>
                             </mat-grid-tile>

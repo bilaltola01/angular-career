@@ -19,7 +19,8 @@ import {
   positionListLimit,
   EducationLevel,
   positionSearchMessages,
-  Major
+  Major,
+  JobType
 } from 'src/app/models';
 
 @Component({
@@ -35,6 +36,7 @@ export class PositionSearchComponent implements OnInit {
   sortBy: object[] = SortBy;
   SkillLevelDescription = SkillLevelDescription;
   positionSearchMessages = positionSearchMessages;
+  jobType = JobType;
   // FormGroup
   positionForm: FormGroup;
   // Autocomplete list
@@ -98,6 +100,7 @@ export class PositionSearchComponent implements OnInit {
       'minSal': new FormControl(null),
       'position': new FormControl(null),
       'education': new FormControl(null),
+      'job': new FormControl(null),
       'major': new FormControl(null),
       'industry': new FormControl(null),
       'company': new FormControl(null),
@@ -277,6 +280,7 @@ export class PositionSearchComponent implements OnInit {
     queryString = this.positionForm.value.city ? `${queryString ? queryString + '&' : ''}city=${this.filterAttributes.city_id}` : queryString;
     queryString = this.positionForm.value.position ? `${queryString ? queryString + '&' : ''}level=${this.positionForm.value.position}` : queryString;
     queryString = this.positionForm.value.education ? `${queryString ? queryString + '&' : ''}education=${parseInt(this.positionForm.value.education, 10) + 1}` : queryString;
+    queryString = this.positionForm.value.job ? `${queryString ? queryString + '&' : ''}job_type=${this.positionForm.value.job}` : queryString;
     queryString = this.positionForm.value.major ? `${queryString ? queryString + '&' : ''}major=${this.filterAttributes.major_id}` : queryString;
     queryString = this.positionForm.value.industry ? `${queryString ? queryString + '&' : ''}industry=${this.filterAttributes.industry_id}` : queryString;
     queryString = this.positionForm.value.company ? `${queryString ? queryString + '&' : ''}company=${this.positionForm.value.company}` : queryString;

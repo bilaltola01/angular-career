@@ -427,6 +427,12 @@ export const PositionLevel = [
   'Senior Management',
   'Executive Level'
 ];
+export const JobType = [
+  'Full Time',
+  'Part Time',
+  'Contractor',
+  'Internship'
+];
 
 
 export const EducationLevel = [
