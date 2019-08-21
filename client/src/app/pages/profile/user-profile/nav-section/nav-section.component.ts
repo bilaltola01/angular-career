@@ -1,7 +1,13 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { NavMenus } from 'src/app/models';
-import { UserStateService, ProfileStateService, AlertsService, AlertType } from 'src/app/services';
+import {
+  UserStateService,
+  ProfileStateService,
+  AlertsService,
+  AlertType,
+  UserProfileStateService
+} from 'src/app/services';
 
 @Component({
   selector: 'nav-section',
@@ -10,6 +16,7 @@ import { UserStateService, ProfileStateService, AlertsService, AlertType } from 
 })
 export class NavSectionComponent implements OnInit {
 
+  userId: number;
   navMenu: any[] = NavMenus.profile;
   editMode: boolean;
   navIndex: number;
@@ -24,8 +31,12 @@ export class NavSectionComponent implements OnInit {
     private route: ActivatedRoute,
     private userStateService: UserStateService,
     private profileStateService: ProfileStateService,
-    private alertsService: AlertsService
+    private alertsService: AlertsService,
+    private userProfileStateService: UserProfileStateService
   ) {
+    if (router.url.includes('user')) {
+      this.userId = parseInt(router.url.split('/')[2], 10);
+    }
     this.checkNavMenuItemsVisibility();
     this.parseRouterUrl(router.url);
     router.events.subscribe((val) => {
@@ -59,21 +70,23 @@ export class NavSectionComponent implements OnInit {
   onSelectNavMenu(navIndex: number) {
     if (!this.editMode) {
       if (navIndex === 0) {
-        this.router.navigate(['/my-profile'], { relativeTo: this.route });
+        this.router.navigate([this.userId ? `/user/${this.userId}/profile` : '/my-profile'], { relativeTo: this.route });
       } else if (navIndex === 1) {
-        this.router.navigate(['/my-contacts'], { relativeTo: this.route });
+        this.router.navigate([this.userId ? `/user/${this.userId}/contacts` : '/my-contacts'], { relativeTo: this.route });
       } else if (navIndex === 2) {
-        this.router.navigate(['/my-template'], { relativeTo: this.route });
+        this.router.navigate([this.userId ? `/user/${this.userId}/template` : '/my-template'], { relativeTo: this.route });
       }
     }
   }
 
   onClickUpdate() {
-    this.clickUpdate.emit();
+    if (!this.userId) {
+      this.clickUpdate.emit();
+    }
   }
 
   checkNavMenuItemsVisibility() {
-    this.userStateService.getUser
+    this[this.userId ? 'userProfileStateService' : 'userStateService'].getUser
     .subscribe(user => {
       if (user) {
         this.navMenu[0].items[0].visible = user.user_intro ?  true : false;
@@ -82,7 +95,7 @@ export class NavSectionComponent implements OnInit {
       this.alertsService.show(error.message, AlertType.error);
     });
 
-    this.profileStateService.getEducations
+    this[this.userId ? 'userProfileStateService' : 'profileStateService'].getEducations
     .subscribe(educationList => {
       if (educationList) {
         this.navMenu[0].items[1].visible = educationList && educationList.length > 0 ?  true : false;
@@ -91,7 +104,7 @@ export class NavSectionComponent implements OnInit {
       this.alertsService.show(error.message, AlertType.error);
     });
 
-    this.profileStateService.getExperiences
+    this[this.userId ? 'userProfileStateService' : 'profileStateService'].getExperiences
     .subscribe(experienceList => {
       if (experienceList) {
         this.navMenu[0].items[2].visible = experienceList && experienceList.length > 0 ? true : false;
@@ -100,7 +113,7 @@ export class NavSectionComponent implements OnInit {
       this.alertsService.show(error.message, AlertType.error);
     });
 
-    this.profileStateService.getPublications
+    this[this.userId ? 'userProfileStateService' : 'profileStateService'].getPublications
     .subscribe(publicationsList => {
       if (publicationsList) {
         this.navMenu[0].items[3].visible  = publicationsList && publicationsList.length > 0 ? true : false;
@@ -109,7 +122,7 @@ export class NavSectionComponent implements OnInit {
       this.alertsService.show(error.message, AlertType.error);
     });
 
-    this.profileStateService.getProjects
+    this[this.userId ? 'userProfileStateService' : 'profileStateService'].getProjects
     .subscribe(projectsList => {
       if (projectsList) {
         this.navMenu[0].items[4].visible = projectsList && projectsList.length > 0 ? true : false;
@@ -118,7 +131,7 @@ export class NavSectionComponent implements OnInit {
       this.alertsService.show(error.message, AlertType.error);
     });
 
-    this.profileStateService.getSkills
+    this[this.userId ? 'userProfileStateService' : 'profileStateService'].getSkills
     .subscribe(skillsList => {
       if (skillsList) {
         this.navMenu[0].items[5].visible = skillsList && skillsList.length > 0 ? true : false;
@@ -127,7 +140,7 @@ export class NavSectionComponent implements OnInit {
       this.alertsService.show(error.message, AlertType.error);
     });
 
-    this.profileStateService.getInterests
+    this[this.userId ? 'userProfileStateService' : 'profileStateService'].getInterests
     .subscribe(interestsList => {
       if (interestsList) {
         this.navMenu[0].items[6].visible = interestsList && interestsList.length > 0 ? true : false;
@@ -136,7 +149,7 @@ export class NavSectionComponent implements OnInit {
       this.alertsService.show(error.message, AlertType.error);
     });
 
-    this.profileStateService.getExternalResources
+    this[this.userId ? 'userProfileStateService' : 'profileStateService'].getExternalResources
     .subscribe(externalResourcesList => {
       if (externalResourcesList) {
         this.navMenu[0].items[7].visible = externalResourcesList && externalResourcesList.length > 0 ? true : false;
