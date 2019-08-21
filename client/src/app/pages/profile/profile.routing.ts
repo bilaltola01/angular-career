@@ -5,6 +5,7 @@ import { Routes } from '@angular/router';
 import { ProfileSectionComponent } from './user-profile/profile-section/profile-section.component';
 import { ContactsSectionComponent } from './user-profile/contacts-section/contacts-section.component';
 import { TemplateSectionComponent } from './user-profile/template-section/template-section.component';
+import { UserProfileComponent } from './user-profile/user-profile/user-profile.component';
 
 export const profileRoutes: Routes = [
   {
@@ -49,6 +50,38 @@ export const profileRoutes: Routes = [
       },
       {
         path: 'my-template/edit',
+        component: TemplateSectionComponent,
+        canActivate: [AuthGuard]
+      }
+    ]
+  },
+  {
+    path: 'user/:userId',
+    component: UserProfileComponent,
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: '',
+        redirectTo: 'profile',
+        pathMatch: 'full'
+      },
+      {
+        path: 'profile',
+        component: ProfileSectionComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'contacts',
+        component: ContactsSectionComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'contacts/incoming-requests',
+        component: ContactsSectionComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'template',
         component: TemplateSectionComponent,
         canActivate: [AuthGuard]
       }
