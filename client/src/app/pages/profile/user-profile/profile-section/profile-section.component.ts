@@ -34,7 +34,8 @@ import {
   AlertType,
   UserService,
   UserStateService,
-  ProfileStateService
+  ProfileStateService,
+  UserProfileStateService
 } from 'src/app/services';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {
@@ -63,6 +64,7 @@ export interface EditSkillItem {
 })
 export class ProfileSectionComponent implements OnInit {
 
+  userId: number;
   userGeneralInfo: UserGeneralInfo;
   educationList: UserEducationItem[];
   experienceList: UserExperienceItem[];
@@ -95,8 +97,12 @@ export class ProfileSectionComponent implements OnInit {
     private userService: UserService,
     private userStateService: UserStateService,
     private profileStateService: ProfileStateService,
+    private userProfileStateService: UserProfileStateService,
     public dialog: MatDialog
   ) {
+    if (router.url.includes('user')) {
+      this.userId = parseInt(router.url.split('/')[2], 10);
+    }
     this.parseRouterUrl(router.url);
     router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
@@ -133,7 +139,7 @@ export class ProfileSectionComponent implements OnInit {
   }
 
   getGeneralInfo() {
-    this.userStateService.getUser
+    this[this.userId ? 'userProfileStateService' : 'userStateService'].getUser
     .subscribe(user => {
       if (user) {
         this.userGeneralInfo = user;
@@ -144,7 +150,7 @@ export class ProfileSectionComponent implements OnInit {
   }
 
   getEducationList() {
-    this.profileStateService.getEducations
+    this[this.userId ? 'userProfileStateService' : 'profileStateService'].getEducations
     .subscribe(educationList => {
       if (educationList) {
         this.educationList = educationList;
@@ -155,7 +161,7 @@ export class ProfileSectionComponent implements OnInit {
   }
 
   getExperienceList() {
-    this.profileStateService.getExperiences
+    this[this.userId ? 'userProfileStateService' : 'profileStateService'].getExperiences
     .subscribe(experienceList => {
       if (experienceList) {
         this.experienceList = experienceList;
@@ -166,7 +172,7 @@ export class ProfileSectionComponent implements OnInit {
   }
 
   getUserSkillsList() {
-    this.profileStateService.getSkills
+    this[this.userId ? 'userProfileStateService' : 'profileStateService'].getSkills
     .subscribe(userSkillsList => {
       if (userSkillsList) {
         this.userSkillsList = userSkillsList;
@@ -197,7 +203,7 @@ export class ProfileSectionComponent implements OnInit {
   }
 
   getUserInterestsList() {
-    this.profileStateService.getInterests
+    this[this.userId ? 'userProfileStateService' : 'profileStateService'].getInterests
     .subscribe(interestsList => {
       if (interestsList) {
         this.userInterestsList = interestsList;
@@ -208,7 +214,7 @@ export class ProfileSectionComponent implements OnInit {
   }
 
   getUserProjectsList() {
-    this.profileStateService.getProjects
+    this[this.userId ? 'userProfileStateService' : 'profileStateService'].getProjects
     .subscribe(projectsList => {
       if (projectsList) {
         this.userProjectsList = projectsList;
@@ -219,7 +225,7 @@ export class ProfileSectionComponent implements OnInit {
   }
 
   getUserPublicationsList() {
-    this.profileStateService.getPublications
+    this[this.userId ? 'userProfileStateService' : 'profileStateService'].getPublications
     .subscribe(publicationsList => {
       if (publicationsList) {
         this.userPublicationsList = publicationsList;
@@ -230,7 +236,7 @@ export class ProfileSectionComponent implements OnInit {
   }
 
   getExternalResourceList() {
-    this.profileStateService.getExternalResources
+    this[this.userId ? 'userProfileStateService' : 'profileStateService'].getExternalResources
     .subscribe(externalResourcesList => {
       if (externalResourcesList) {
         this.externalResourcesList = externalResourcesList;
