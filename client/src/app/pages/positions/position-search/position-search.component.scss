@@ -431,7 +431,7 @@ $profile-form-field-mt: 30px;
             position: -webkit-sticky;
             top: 80px;
             overflow-y: scroll;
-            height: calc(100vh - 210px);
+            height: calc(100vh - 70px);
             &::-webkit-scrollbar{
                 width: 0;
                 background-color: transparent;
