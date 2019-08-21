@@ -1,0 +1,25 @@
+<ng-container *ngIf="!isProfileLoading" class="profile-header">
+  <header-section id="header-section"></header-section>
+</ng-container>
+
+<ng-container *ngIf="!isProfileLoading">
+  <legend id="legend">
+    <div class="nav-title" (click)="onClickTogggle()">
+      <h3 class="section-title">Profile</h3>
+      <mat-icon>menu</mat-icon>
+    </div>
+    <a *ngIf="!editMode && currentPage === 'contacts'" (click)="navigateToIncomingRequests()">Incoming Requests</a>
+    <a *ngIf="!editMode && currentPage === 'incoming-requests'" (click)="navigateToContacts()">Contacts</a>
+  </legend>
+  <router-outlet></router-outlet>
+  <nav-section 
+    (selectedNavItem)="onSelectNavItem($event)" [isOpened]="isNavMenuOpened"
+    [class.nav-hidden]="!((isHandset$ | async) && isNavMenuOpened)" id="nav-section"></nav-section>
+</ng-container>
+
+<ng-container *ngIf="isProfileLoading">
+  <div class="loading">
+    <mat-spinner></mat-spinner>
+    <h4>Loading...</h4>
+  </div>
+</ng-container>

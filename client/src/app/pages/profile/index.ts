@@ -5,6 +5,7 @@ import { NavSectionComponent } from './user-profile/nav-section/nav-section.comp
 import { ProfileSectionComponent, ProfileDialogContentComponent } from './user-profile/profile-section/profile-section.component';
 import { ContactsSectionComponent } from './user-profile/contacts-section/contacts-section.component';
 import { TemplateSectionComponent, TemplateDialogContentComponent } from './user-profile/template-section/template-section.component';
+import { UserProfileComponent } from './user-profile/user-profile/user-profile.component';
 
 export const profileComponents = [
   CreateProfileComponent,
@@ -15,5 +16,6 @@ export const profileComponents = [
   ProfileDialogContentComponent,
   ContactsSectionComponent,
   TemplateSectionComponent,
-  TemplateDialogContentComponent
+  TemplateDialogContentComponent,
+  UserProfileComponent
 ];
