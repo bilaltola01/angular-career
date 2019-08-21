@@ -3,7 +3,8 @@ import {
   UserService,
   AlertsService,
   AlertType,
-  UserStateService
+  UserStateService,
+  UserProfileStateService
 } from 'src/app/services';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { UserGeneralInfo } from 'src/app/models';
@@ -15,6 +16,7 @@ import { UserGeneralInfo } from 'src/app/models';
 })
 export class ContactsSectionComponent implements OnInit {
 
+  userId: number;
   userContactsList: any[];
   limit = 8;
   loadMore: boolean;
@@ -26,6 +28,7 @@ export class ContactsSectionComponent implements OnInit {
     private userService: UserService,
     private userStateService: UserStateService,
     private alertsService: AlertsService,
+    private userProfileStateService: UserProfileStateService,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -34,6 +37,9 @@ export class ContactsSectionComponent implements OnInit {
     }, error => {
       this.alertsService.show(error.message, AlertType.error);
     });
+    if (router.url.includes('user')) {
+      this.userId = parseInt(router.url.split('/')[2], 10);
+    }
     this.parseRouterUrl(router.url);
     this.router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
@@ -60,14 +66,14 @@ export class ContactsSectionComponent implements OnInit {
     this.loadMore = false;
     this.offset = 0;
     this.userContactsList = null;
-    if (this.user) {
+    if (this.user || this.userId) {
       this.getContactsList(this.offset);
     }
   }
 
   getContactsList(offset: number) {
     if (this.currentPage === 'contacts') {
-      this.userService.getUserContacts(this.user.user_id, this.limit, offset).subscribe(
+      this.userService.getUserContacts(this.userId ? this.userId : this.user.user_id, this.limit, offset).subscribe(
         dataJson => {
           if (offset === 0) {
             this.userContactsList = dataJson['data'];
@@ -86,7 +92,7 @@ export class ContactsSectionComponent implements OnInit {
         }
       );
     } else {
-      this.userService.getIncomingContactRequests(this.user.user_id, this.limit, offset).subscribe(
+      this.userService.getIncomingContactRequests(this.userId ? this.userId : this.user.user_id, this.limit, offset).subscribe(
         dataJson => {
           if (offset === 0) {
             this.userContactsList = dataJson['data'];
@@ -141,7 +147,7 @@ export class ContactsSectionComponent implements OnInit {
   }
 
   navigateToContacts() {
-    this.router.navigate(['/my-contacts'], { relativeTo: this.route });
+    this.router.navigate([this.userId ? `/user/${this.userId}/contacts` : '/my-contacts'], { relativeTo: this.route });
   }
 
   navigateToIncomingRequests() {

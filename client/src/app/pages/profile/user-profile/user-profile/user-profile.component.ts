@@ -114,14 +114,6 @@ export class UserProfileComponent implements OnInit {
     this.isNavMenuOpened = !this.isNavMenuOpened;
   }
 
-  navigateToContacts() {
-    this.router.navigate([`/user/${this.userId}/contacts`], { relativeTo: this.route });
-  }
-
-  navigateToIncomingRequests() {
-    this.router.navigate([`/user/${this.userId}/contacts`, 'incoming-requests'], { relativeTo: this.route });
-  }
-
   getGeneralInfo() {
     this.userService.getGeneralInfo(this.userId).subscribe(
       dataJson => {

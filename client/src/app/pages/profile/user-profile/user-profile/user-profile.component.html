@@ -8,8 +8,6 @@
       <h3 class="section-title">Profile</h3>
       <mat-icon>menu</mat-icon>
     </div>
-    <a *ngIf="!editMode && currentPage === 'contacts'" (click)="navigateToIncomingRequests()">Incoming Requests</a>
-    <a *ngIf="!editMode && currentPage === 'incoming-requests'" (click)="navigateToContacts()">Contacts</a>
   </legend>
   <router-outlet></router-outlet>
   <nav-section 

@@ -76,11 +76,6 @@ export const profileRoutes: Routes = [
         canActivate: [AuthGuard]
       },
       {
-        path: 'contacts/incoming-requests',
-        component: ContactsSectionComponent,
-        canActivate: [AuthGuard]
-      },
-      {
         path: 'template',
         component: TemplateSectionComponent,
         canActivate: [AuthGuard]
