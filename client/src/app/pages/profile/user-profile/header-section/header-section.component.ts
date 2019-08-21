@@ -2,8 +2,7 @@ import {
   Component,
   OnInit,
   Output,
-  EventEmitter,
-  OnChanges, SimpleChanges, SimpleChange
+  EventEmitter
 } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {
@@ -23,7 +22,8 @@ import {
   AutoCompleteService,
   UserService,
   PhotoStateService,
-  UserStateService
+  UserStateService,
+  UserProfileStateService
 } from 'src/app/services';
 import { Router, NavigationEnd } from '@angular/router';
 
@@ -34,16 +34,12 @@ import { Router, NavigationEnd } from '@angular/router';
 })
 export class HeaderSectionComponent implements OnInit {
 
+  @Output() updatedGeneralInfoData = new EventEmitter();
+
+  userId: number;
   generalInfo: UserGeneralInfo;
   editMode: boolean;
   currentPage: string;
-  @Output() updatedGeneralInfoData = new EventEmitter();
-
-  maxDate = new Date();
-
-  genders: string[] = Genders;
-  ethnicityTypes: string[] = EthnicityTypes;
-  countries: string[] = Countries.slice().sort();
 
   generalInfoForm: FormGroup;
   generalInfoData: any;
@@ -53,7 +49,12 @@ export class HeaderSectionComponent implements OnInit {
   autocomplete_states: State[] = [];
   temp_state: State;
 
+  genders: string[] = Genders;
+  ethnicityTypes: string[] = EthnicityTypes;
+  countries: string[] = Countries.slice().sort();
   profileStatuses = ProfileStatuses;
+
+  maxDate = new Date();
 
   constructor(
     private helperService: HelperService,
@@ -62,8 +63,12 @@ export class HeaderSectionComponent implements OnInit {
     private userService: UserService,
     private photoStateService: PhotoStateService,
     private userStateService: UserStateService,
+    private userProfileStateService: UserProfileStateService,
     private router: Router
   ) {
+    if (router.url.includes('user')) {
+      this.userId = parseInt(router.url.split('/')[2], 10);
+    }
     this.getGeneralInfo();
     this.parseRouterUrl(router.url);
     router.events.subscribe((val) => {
@@ -94,27 +99,38 @@ export class HeaderSectionComponent implements OnInit {
   }
 
   onChangeProfileStatus(active: boolean) {
-    const data = {
-      is_looking: active ? 0 : 1
-    };
-    this.userService.updateGeneralInfo(data).subscribe(
-      dataJson => {
-        this.generalInfo = dataJson['data'];
-        this.userStateService.setUser(this.generalInfo);
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-      }
-    );
+    if (!this.userId) {
+      const data = {
+        is_looking: active ? 0 : 1
+      };
+      this.userService.updateGeneralInfo(data).subscribe(
+        dataJson => {
+          this.generalInfo = dataJson['data'];
+          this.userStateService.setUser(this.generalInfo);
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    }
   }
 
   getGeneralInfo() {
-    this.userStateService.getUser
-    .subscribe(user => {
-      this.generalInfo = user;
-    }, error => {
-      this.alertsService.show(error.message, AlertType.error);
-    });
+    if (this.userId) {
+      this.userProfileStateService.getUser
+      .subscribe(user => {
+        this.generalInfo = user;
+      }, error => {
+        this.alertsService.show(error.message, AlertType.error);
+      });
+    } else {
+      this.userStateService.getUser
+      .subscribe(user => {
+        this.generalInfo = user;
+      }, error => {
+        this.alertsService.show(error.message, AlertType.error);
+      });
+    }
   }
 
   initGeneralInfoForm() {
