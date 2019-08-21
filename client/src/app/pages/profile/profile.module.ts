@@ -10,7 +10,6 @@ import { ProfileDialogContentComponent } from './user-profile/profile-section/pr
 import { TemplateDialogContentComponent } from './user-profile/template-section/template-section.component';
 import { SkillLevelDescriptionDialogComponent } from './create-profile/create-profile.component';
 
-
 @NgModule({
   imports: [
     CommonModule,
