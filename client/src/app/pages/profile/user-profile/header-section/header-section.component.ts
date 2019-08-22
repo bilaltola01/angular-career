@@ -27,6 +27,12 @@ import {
 } from 'src/app/services';
 import { Router, NavigationEnd } from '@angular/router';
 
+export enum ContactStatus {
+  none = 'none',
+  pending = 'pending',
+  added = 'added'
+}
+
 @Component({
   selector: 'header-section',
   templateUrl: './header-section.component.html',
@@ -37,6 +43,7 @@ export class HeaderSectionComponent implements OnInit {
   @Output() updatedGeneralInfoData = new EventEmitter();
 
   userId: number;
+  contact_status: string;
   generalInfo: UserGeneralInfo;
   editMode: boolean;
   currentPage: string;
@@ -95,6 +102,9 @@ export class HeaderSectionComponent implements OnInit {
       this.currentPage = 'contacts';
     } else if (url.includes('template')) {
       this.currentPage = 'template';
+    }
+    if (this.userId) {
+      this.checkContactStatus();
     }
   }
 
@@ -390,6 +400,76 @@ export class HeaderSectionComponent implements OnInit {
           });
         }, err => {
           this.alertsService.show(err.message, AlertType.error);
+        }
+      );
+    }
+  }
+
+  checkContactStatus() {
+    this.userService.getUserContactById(this.userId).subscribe(
+      dataJson => {
+        if (dataJson['data']) {
+          this.contact_status = ContactStatus.added;
+        }
+      },
+      error => {
+        if (error.message === 'No user contact found with given parameters.') {
+          this.checkOutgoingRequest();
+        } else {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      }
+    );
+  }
+
+  checkOutgoingRequest() {
+    this.userService.getOutgoingContactRequestById(this.userId).subscribe(
+      dataJson => {
+        if (dataJson['data']) {
+          this.contact_status = ContactStatus.pending;
+        }
+      },
+      error => {
+        if (error.message === 'No outgoing request found.') {
+          this.contact_status = ContactStatus.none;
+        } else {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      }
+    );
+  }
+
+  contactBtnTitle(): string {
+    if (this.contact_status === 'none') {
+      return 'Add Contact';
+    } else if (this.contact_status === 'pending') {
+      return 'Request Sent';
+    } else {
+      return 'Remove Contact';
+    }
+  }
+
+  onClickContactBtn() {
+    if (this.contact_status === 'none') {
+      this.userService.postOutgoingContactRequest(this.userId).subscribe(
+        dataJson => {
+          if (dataJson['data']) {
+            this.contact_status = ContactStatus.pending;
+          }
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    } else if (this.contact_status === 'added') {
+      this.userService.deleteUserContactById(this.userId).subscribe(
+        dataJson => {
+          if (dataJson['data']) {
+            this.contact_status = ContactStatus.none;
+          }
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
         }
       );
     }
