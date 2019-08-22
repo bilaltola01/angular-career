@@ -139,62 +139,87 @@ export class ProfileSectionComponent implements OnInit {
   }
 
   getGeneralInfo() {
-    this[this.userId ? 'userProfileStateService' : 'userStateService'].getUser
-    .subscribe(user => {
-      if (user) {
-        this.userGeneralInfo = user;
-      }
-    }, error => {
-      this.alertsService.show(error.message, AlertType.error);
-    });
+    if (this.userId) {
+      this.userService.getGeneralInfo(this.userId).subscribe(
+        dataJson => {
+          this.userGeneralInfo = dataJson['data'];
+          this.userProfileStateService.setUser(this.userGeneralInfo);
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    } else {
+      this.userStateService.getUser
+      .subscribe(user => {
+        if (user) {
+          this.userGeneralInfo = user;
+        }
+      }, error => {
+        this.alertsService.show(error.message, AlertType.error);
+      });
+    }
   }
 
   getEducationList() {
-    this[this.userId ? 'userProfileStateService' : 'profileStateService'].getEducations
-    .subscribe(educationList => {
-      if (educationList) {
-        this.educationList = educationList;
-      }
-    }, error => {
-      this.alertsService.show(error.message, AlertType.error);
-    });
+    if (this.userId) {
+      this.userService.getEducationInfo(this.userId).subscribe(
+        dataJson => {
+          this.educationList = dataJson['data'];
+          this.userProfileStateService.setEducations(this.educationList);
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    } else {
+      this.profileStateService.getEducations
+      .subscribe(educationList => {
+        if (educationList) {
+          this.educationList = educationList;
+        }
+      }, error => {
+        this.alertsService.show(error.message, AlertType.error);
+      });
+    }
   }
 
   getExperienceList() {
-    this[this.userId ? 'userProfileStateService' : 'profileStateService'].getExperiences
-    .subscribe(experienceList => {
-      if (experienceList) {
-        this.experienceList = experienceList;
-      }
-    }, error => {
-      this.alertsService.show(error.message, AlertType.error);
-    });
+    if (this.userId) {
+      this.userService.getExperienceInfo(this.userId).subscribe(
+        dataJson => {
+          this.experienceList = dataJson['data'];
+          this.userProfileStateService.setExperiences(this.experienceList);
+          this.experienceList.forEach((experience, arrIndex) => {
+            if (experience.skills_trained && experience.skills_trained.length > 0) {
+              this.getSkillsTrained(arrIndex);
+            }
+            if (experience.add_industries && experience.add_industries.length > 0) {
+              this.getAdditionalIndustries(arrIndex);
+            }
+          });
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    } else {
+      this.profileStateService.getExperiences
+      .subscribe(experienceList => {
+        if (experienceList) {
+          this.experienceList = experienceList;
+        }
+      }, error => {
+        this.alertsService.show(error.message, AlertType.error);
+      });
+    }
   }
 
-  getUserSkillsList() {
-    this[this.userId ? 'userProfileStateService' : 'profileStateService'].getSkills
-    .subscribe(userSkillsList => {
-      if (userSkillsList) {
-        this.userSkillsList = userSkillsList;
-      }
-    }, error => {
-      this.alertsService.show(error.message, AlertType.error);
-    });
-  }
-
-  getUserSkillsListByOffset(limit: number, offset: number) {
-    this.userService.getSkillsInfo(limit, offset).subscribe(
+  getSkillsTrained(arrIndex: number) {
+    this.userService.getSkillsTrained(this.experienceList[arrIndex].work_hist_id).subscribe(
       dataJson => {
-        if (offset === 0) {
-          this.userSkillsList = dataJson['data'];
-        } else {
-          this.userSkillsList = this.userSkillsList.slice().concat(dataJson['data']);
-        }
-        if (dataJson['data'].length === limit) {
-          this.getUserSkillsListByOffset(limit, offset + limit);
-        } else {
-          this.profileStateService.setSkills(this.userSkillsList);
-        }
+        this.experienceList[arrIndex].skills_trained = dataJson.data;
+        this.userProfileStateService.setExperiences(this.experienceList);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -202,48 +227,177 @@ export class ProfileSectionComponent implements OnInit {
     );
   }
 
-  getUserInterestsList() {
-    this[this.userId ? 'userProfileStateService' : 'profileStateService'].getInterests
-    .subscribe(interestsList => {
-      if (interestsList) {
-        this.userInterestsList = interestsList;
+  getAdditionalIndustries(arrIndex: number) {
+    this.userService.getAdditionalIndustries(this.experienceList[arrIndex].work_hist_id).subscribe(
+      dataJson => {
+        this.experienceList[arrIndex].add_industries = dataJson.data;
+        this.userProfileStateService.setExperiences(this.experienceList);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
       }
-    }, error => {
-      this.alertsService.show(error.message, AlertType.error);
-    });
+    );
+  }
+
+  getUserSkillsList() {
+    if (this.userId) {
+      this.getUserSkillsListByOffset(ITEMS_LIMIT, 0);
+    } else {
+      this.profileStateService.getSkills
+      .subscribe(userSkillsList => {
+        if (userSkillsList) {
+          this.userSkillsList = userSkillsList;
+        }
+      }, error => {
+        this.alertsService.show(error.message, AlertType.error);
+      });
+    }
+  }
+
+  getUserSkillsListByOffset(limit: number, offset: number) {
+    if (this.userId) {
+      this.userService.getSkillsInfo(limit, offset, this.userId).subscribe(
+        dataJson => {
+          if (offset === 0) {
+            this.userSkillsList = dataJson['data'];
+          } else {
+            this.userSkillsList = this.userSkillsList.slice().concat(dataJson['data']);
+          }
+          if (dataJson['data'].length === limit) {
+            this.getUserSkillsListByOffset(limit, offset + limit);
+          } else {
+            this.userProfileStateService.setSkills(this.userSkillsList);
+          }
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    } else {
+      this.userService.getSkillsInfo(limit, offset).subscribe(
+        dataJson => {
+          if (offset === 0) {
+            this.userSkillsList = dataJson['data'];
+          } else {
+            this.userSkillsList = this.userSkillsList.slice().concat(dataJson['data']);
+          }
+          if (dataJson['data'].length === limit) {
+            this.getUserSkillsListByOffset(limit, offset + limit);
+          } else {
+            this.profileStateService.setSkills(this.userSkillsList);
+          }
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    }
+  }
+
+  getUserInterestsList() {
+    if (this.userId) {
+      this.getUserInterestsListByOffset(ITEMS_LIMIT, 0);
+    } else {
+      this.profileStateService.getInterests
+      .subscribe(interestsList => {
+        if (interestsList) {
+          this.userInterestsList = interestsList;
+        }
+      }, error => {
+        this.alertsService.show(error.message, AlertType.error);
+      });
+    }
+  }
+
+  getUserInterestsListByOffset(limit: number, offset: number) {
+    if (this.userId) {
+      this.userService.getUserInterestsInfo(limit, offset, this.userId).subscribe(
+        dataJson => {
+          if (offset === 0) {
+            this.userInterestsList = dataJson['data'];
+          } else {
+            this.userInterestsList = this.userInterestsList.slice().concat(dataJson['data']);
+          }
+          if (dataJson['data'].length === limit) {
+            this.getUserInterestsListByOffset(limit, offset + limit);
+          } else {
+            this.userProfileStateService.setInterests(this.userInterestsList);
+          }
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    }
   }
 
   getUserProjectsList() {
-    this[this.userId ? 'userProfileStateService' : 'profileStateService'].getProjects
-    .subscribe(projectsList => {
-      if (projectsList) {
-        this.userProjectsList = projectsList;
-      }
-    }, error => {
-      this.alertsService.show(error.message, AlertType.error);
-    });
+    if (this.userId) {
+      this.userService.getProjectsInfo(this.userId).subscribe(
+        dataJson => {
+          this.userProjectsList = dataJson['data']['data'];
+          this.userProfileStateService.setProjects(this.userProjectsList);
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    } else {
+      this.profileStateService.getProjects
+      .subscribe(projectsList => {
+        if (projectsList) {
+          this.userProjectsList = projectsList;
+        }
+      }, error => {
+        this.alertsService.show(error.message, AlertType.error);
+      });
+    }
   }
 
   getUserPublicationsList() {
-    this[this.userId ? 'userProfileStateService' : 'profileStateService'].getPublications
-    .subscribe(publicationsList => {
-      if (publicationsList) {
-        this.userPublicationsList = publicationsList;
-      }
-    }, error => {
-      this.alertsService.show(error.message, AlertType.error);
-    });
+    if (this.userId) {
+      this.userService.getPublicationsInfo(this.userId).subscribe(
+        dataJson => {
+          this.userPublicationsList = dataJson['data'];
+          this.userProfileStateService.setPublications(this.userPublicationsList);
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    } else {
+      this.profileStateService.getPublications
+      .subscribe(publicationsList => {
+        if (publicationsList) {
+          this.userPublicationsList = publicationsList;
+        }
+      }, error => {
+        this.alertsService.show(error.message, AlertType.error);
+      });
+    }
   }
 
   getExternalResourceList() {
-    this[this.userId ? 'userProfileStateService' : 'profileStateService'].getExternalResources
-    .subscribe(externalResourcesList => {
-      if (externalResourcesList) {
-        this.externalResourcesList = externalResourcesList;
-      }
-    }, error => {
-      this.alertsService.show(error.message, AlertType.error);
-    });
+    if (this.userId) {
+      this.userService.getExternalResourcesInfo(this.userId).subscribe(
+        dataJson => {
+          this.externalResourcesList = dataJson['data'];
+          this.userProfileStateService.setExternalResources(this.externalResourcesList);
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    } else {
+      this.profileStateService.getExternalResources
+      .subscribe(externalResourcesList => {
+        if (externalResourcesList) {
+          this.externalResourcesList = externalResourcesList;
+        }
+      }, error => {
+        this.alertsService.show(error.message, AlertType.error);
+      });
+    }
   }
 
   onClickEdit() {
