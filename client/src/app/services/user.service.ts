@@ -709,7 +709,7 @@ export class UserService {
     );
   }
 
-  public getUserContactById(userId: number, contactId: number): Observable<any> {
+  public getUserContactById(contactId: number, userId: number = this.user_id): Observable<any> {
     return this.http.get(this.user_service_url + `user/${userId}/contact/${contactId}`, this.authHttpOptions())
     .pipe(
       map(data => {
@@ -719,7 +719,7 @@ export class UserService {
     );
   }
 
-  public deleteUserContactById(userId: number, contactId: number): Observable<any> {
+  public deleteUserContactById(contactId: number, userId: number = this.user_id): Observable<any> {
     return this.http.delete(this.user_service_url + `user/${userId}/contact/${contactId}`, this.authHttpOptions())
     .pipe(
       map(data => {
@@ -761,6 +761,26 @@ export class UserService {
 
   public deleteContactRequestsById(userId: number, contactId: number): Observable<any> {
     return this.http.delete(this.user_service_url + `user/${userId}/contact/${contactId}/contact-request`, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  public getOutgoingContactRequestById(contactId: number, userId: number = this.user_id): Observable<any> {
+    return this.http.get(this.user_service_url + `user/${userId}/contact/${contactId}/outgoing-contact-request`, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  public postOutgoingContactRequest(contactId: number, userId: number = this.user_id): Observable<any> {
+    return this.http.post(this.user_service_url + 'user/outgoing-contact-request', {user_id: userId, contact_id: contactId}, this.authHttpOptions())
     .pipe(
       map(data => {
         return {success: true, message: 'Success!', data: data};
