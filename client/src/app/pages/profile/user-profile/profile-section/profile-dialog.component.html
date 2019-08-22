@@ -14,6 +14,14 @@
     <action-button class="update-btn" type="flat" title="Update" color="primary" (click)="updateGeneralInfo()"></action-button>
   </mat-dialog-actions>
 </ng-container>
+<ng-container *ngIf="data.category === 'Skill Level Description'" >
+  <mat-dialog-content>
+   <ul type="none" class="skill_level_desc">
+     <li *ngFor="let item of skillLevelDescription | keyvalue">{{item.key}} - {{item.value}}</li>
+   </ul>
+  </mat-dialog-content>
+ 
+</ng-container>
 
 
 <ng-container *ngIf="data.category === 'Education'" [formGroup]="educationForm">
