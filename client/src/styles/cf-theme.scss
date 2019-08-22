@@ -464,7 +464,7 @@ action-button {
     border-radius: 20px;
     margin: 0 40px;
     profile-dialog,
-    template-dialog {
+    template-dialog, skill-level-description-dialog {
       width: 100%;
       @include flex(column, center, flex-start);
       mat-icon.cancel {

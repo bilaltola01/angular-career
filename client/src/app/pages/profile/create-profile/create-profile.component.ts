@@ -1,7 +1,8 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import {MatDatepicker} from '@angular/material/datepicker';
+import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {
   AutoCompleteService,
   UserService,
@@ -42,13 +43,29 @@ import {
   CriminalHistoryResponse,
   CriminalHistoryRequest,
   PROOF_AUTH_OPTIONS,
-  MILITARY_STATUS_OPTIONS
+  MILITARY_STATUS_OPTIONS,
+  SkillLevelDescription
+
 } from 'src/app/models';
 import moment from 'moment';
 
 export interface EditSkillItem {
   index: number;
   skillItem: UserSkillItem;
+
+}
+@Component({
+  selector: 'skill-level-description-dialog',
+  templateUrl: 'skill-level-description-dialog.component.html',
+  styleUrls: ['skill-level-description-dialog.component.scss']
+})
+export class SkillLevelDescriptionDialogComponent {
+
+  constructor(public dialogRef: MatDialogRef<SkillLevelDescriptionDialogComponent>, @Inject(MAT_DIALOG_DATA) public data) {}
+
+  onClose(): void {
+    this.dialogRef.close();
+  }
 }
 
 @Component({
@@ -219,7 +236,7 @@ export class CreateProfileComponent implements OnInit {
     private alertsService: AlertsService,
     private helperService: HelperService,
     private photoStateService: PhotoStateService,
-    private applicationService: ApplicationService) { }
+    private applicationService: ApplicationService, public dialog: MatDialog) { }
 
   ngOnInit() {
     if (this.route.snapshot.queryParams.role) {
@@ -2570,6 +2587,16 @@ export class CreateProfileComponent implements OnInit {
       this.is_skip = false;
     }
     return this.is_skip;
+
+  }
+  openSkillDescDialog() {
+    const dialogRef = this.dialog.open(SkillLevelDescriptionDialogComponent, {
+      data: {skillDesc: SkillLevelDescription},
+      width: '100vw',
+      maxWidth: '880px',
+      minWidth: '280px',
+      panelClass: ['edit-dialog-container']
+    });
   }
 
 }

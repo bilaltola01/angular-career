@@ -274,6 +274,11 @@ p {
             padding: 0;
             h3 {
               color: rgba(map-get($md-cfaccent, 500), 0.84);
+              display: inline-block;
+            }
+            img {
+              margin-left: 6px;
+              vertical-align: text-bottom;
             }
             .count {
               font-size: 14px;
