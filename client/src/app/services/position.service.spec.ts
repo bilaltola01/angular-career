@@ -1,18 +1,18 @@
 import { TestBed } from '@angular/core/testing';
-
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { ApplicationService } from './application.service';
+import { PositionService } from './position.service';
 
-
-describe('ApplicationService', () => {
+describe('PositionService', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [HttpClientTestingModule],
-    providers: [ApplicationService]
+    providers: [PositionService]
   }));
 
   it('should be created', () => {
-    const service: ApplicationService = TestBed.get(ApplicationService);
+    const service: PositionService = TestBed.get(PositionService);
     expect(service).toBeTruthy();
   });
 });
+
+

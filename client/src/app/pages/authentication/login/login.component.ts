@@ -49,12 +49,11 @@ export class LoginComponent implements OnInit {
 
   navigateToProfilePage(isProfileCreated: boolean) {
     if (isProfileCreated) {
-      this.router.navigate(['/my-profile']);
+      this.router.navigate(['/positions']);
     } else {
       this.router.navigate(['/create-profile'], {queryParams: {role: UserRoles[this.currentRole]}});
     }
   }
-
   checkProfileCreation(userInfo: UserGeneralInfo) {
     let isProfileCreated = false;
     if (userInfo.applicant === 1 || userInfo.recruiter === 1) {
@@ -85,6 +84,7 @@ export class LoginComponent implements OnInit {
         data => {
           if (data['success']) {
            this.getGeneralInformation();
+          // this.router.navigate['/positions'];
           }
         },
         error => {

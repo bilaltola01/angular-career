@@ -7,9 +7,9 @@
   label.icon {
     position: absolute;
     cursor: pointer;
-    height: 24px;
-    width: 24px;
-    left: 0;
+    height: 22px;
+    width: 22px;
+    left: 6px;
     top: 0;
     background-image: url('/assets/icons/ic_checkbox_empty.svg');
     background-repeat: no-repeat;
@@ -19,9 +19,13 @@
 
   label.title {
     font-size: 14px;
-    color: rgba(map-get($md-cfaccent, 500), .44);
-    margin-left: 20px;
+    color: rgba(0, 29, 64, 0.44);
+    margin-left: 18px;
+    vertical-align: middle;
+    line-height: 22px;
     @include disable-select();
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
   }
 
   input[type="checkbox"] {
@@ -55,7 +59,7 @@
       width: 18px;
     }
     label.title {
-      font-size: 12px;
+      font-size: 16px;
       margin-left: 10px;
     }
   }

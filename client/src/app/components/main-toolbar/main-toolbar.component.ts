@@ -9,6 +9,7 @@ import { AlertsService, AlertType } from 'src/app/services/alerts.service';
 import { LocationStrategy } from '@angular/common';
 import { PhotoStateService, UserStateService } from 'src/app/services';
 
+
 @Component({
 // tslint:disable-next-line: component-selector
   selector: 'main-toolbar',

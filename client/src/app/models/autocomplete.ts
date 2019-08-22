@@ -44,3 +44,8 @@ export interface Industry {
   industry_id: number;
   industry_name: string;
 }
+
+export interface Recruiter {
+  recruiter_id: number;
+  recruiter_name: string;
+}
