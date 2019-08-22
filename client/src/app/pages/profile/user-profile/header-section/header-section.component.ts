@@ -100,10 +100,13 @@ export class HeaderSectionComponent implements OnInit {
       }
     } else if (url.includes('contacts')) {
       this.currentPage = 'contacts';
+      if (this.userId && this.contact_status) {
+        this.checkContactStatus();
+      }
     } else if (url.includes('template')) {
       this.currentPage = 'template';
     }
-    if (this.userId) {
+    if (this.userId && !this.contact_status) {
       this.checkContactStatus();
     }
   }
