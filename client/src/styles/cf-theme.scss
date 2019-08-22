@@ -511,7 +511,7 @@ action-button {
     border-radius: 20px;
     margin: 0 40px;
     template-dialog, skill-level-description-dialog,
-    profile-dialog,
+    profile-dialog, add-skill-popup,
     dialog-content {
       width: 100%;
       @include flex(column, center, flex-start);
