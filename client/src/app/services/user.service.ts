@@ -117,8 +117,8 @@ export class UserService {
   }
 
   // General Information Services
-  public getGeneralInfo(): Observable<any> {
-    return this.http.get(this.user_service_url + `user/${this.user_id}`, this.authHttpOptions())
+  public getGeneralInfo(userId: number = this.user_id): Observable<any> {
+    return this.http.get(this.user_service_url + `user/${userId}`, this.authHttpOptions())
       .pipe(
         map(data => {
           return {success: true, message: 'Success!', data: data};
@@ -157,8 +157,9 @@ export class UserService {
         catchError(this.handleError)
       );
   }
-  public getEducationInfo(): Observable<any> {
-    return this.http.get(this.user_service_url + `user/${this.user_id}/education?limit=${this.max_limit}`, this.authHttpOptions())
+
+  public getEducationInfo(userId: number = this.user_id): Observable<any> {
+    return this.http.get(this.user_service_url + `user/${userId}/education?limit=${this.max_limit}`, this.authHttpOptions())
       .pipe(
         map(data => {
           return {success: true, message: 'Success!', data: data};
@@ -209,8 +210,8 @@ export class UserService {
       );
   }
 
-  public getExperienceInfo(): Observable<any> {
-    return this.http.get(this.user_service_url + `user/${this.user_id}/experience?limit=${this.max_limit}`, this.authHttpOptions())
+  public getExperienceInfo(userId: number = this.user_id): Observable<any> {
+    return this.http.get(this.user_service_url + `user/${userId}/experience?limit=${this.max_limit}`, this.authHttpOptions())
       .pipe(
         map(data => {
           return {success: true, message: 'Success!', data: data};
@@ -341,8 +342,9 @@ export class UserService {
         catchError(this.handleError)
       );
   }
-  public getSkillsInfo(limit: number, offset: number): Observable<any> {
-    return this.http.get(this.user_service_url + `user/${this.user_id}/skills?limit=${limit}&offset=${offset}`, this.authHttpOptions())
+
+  public getSkillsInfo(limit: number, offset: number, userId: number = this.user_id): Observable<any> {
+    return this.http.get(this.user_service_url + `user/${userId}/skills?limit=${limit}&offset=${offset}`, this.authHttpOptions())
       .pipe(
         map(data => {
           return {success: true, message: 'Success!', data: data};
@@ -391,8 +393,8 @@ export class UserService {
   }
 
   // Publications Information Services
-  public getPublicationsInfo(): Observable<any> {
-    return this.http.get(this.user_service_url + `user/${this.user_id}/publications?limit=${this.max_limit}`, this.authHttpOptions())
+  public getPublicationsInfo(userId: number = this.user_id): Observable<any> {
+    return this.http.get(this.user_service_url + `user/${userId}/publications?limit=${this.max_limit}`, this.authHttpOptions())
       .pipe(
         map(data => {
           return {success: true, message: 'Success!', data: data};
@@ -441,8 +443,8 @@ export class UserService {
       );
   }
   // User Interests Services
-  public getUserInterestsInfo(limit: number, offset: number): Observable<any> {
-    return this.http.get(this.user_service_url + `user/${this.user_id}/interests?limit=${limit}&offset=${offset}`, this.authHttpOptions())
+  public getUserInterestsInfo(limit: number, offset: number, userId: number = this.user_id): Observable<any> {
+    return this.http.get(this.user_service_url + `user/${userId}/interests?limit=${limit}&offset=${offset}`, this.authHttpOptions())
       .pipe(
         map(data => {
           return {success: true, message: 'Success!', data: data};
@@ -617,8 +619,8 @@ export class UserService {
   }
 
   // Projects Information Services
-  public getProjectsInfo(): Observable<any> {
-    return this.http.get(this.user_service_url + `user/${this.user_id}/projects?limit=${this.max_limit}`, this.authHttpOptions())
+  public getProjectsInfo(userId: number = this.user_id): Observable<any> {
+    return this.http.get(this.user_service_url + `user/${userId}/projects?limit=${this.max_limit}`, this.authHttpOptions())
       .pipe(
         map(data => {
           return {success: true, message: 'Success!', data: data};
@@ -657,8 +659,8 @@ export class UserService {
       );
   }
 
-  public getExternalResourcesInfo(): Observable<any> {
-    return this.http.get(this.user_service_url + `user/${this.user_id}/external-resources`, this.authHttpOptions())
+  public getExternalResourcesInfo(userId: number = this.user_id): Observable<any> {
+    return this.http.get(this.user_service_url + `user/${userId}/external-resources`, this.authHttpOptions())
       .pipe(
         map(data => {
           return {success: true, message: 'Success!', data: data};
@@ -707,7 +709,7 @@ export class UserService {
     );
   }
 
-  public getUserContactById(userId: number, contactId: number): Observable<any> {
+  public getUserContactById(contactId: number, userId: number = this.user_id): Observable<any> {
     return this.http.get(this.user_service_url + `user/${userId}/contact/${contactId}`, this.authHttpOptions())
     .pipe(
       map(data => {
@@ -717,7 +719,7 @@ export class UserService {
     );
   }
 
-  public deleteUserContactById(userId: number, contactId: number): Observable<any> {
+  public deleteUserContactById(contactId: number, userId: number = this.user_id): Observable<any> {
     return this.http.delete(this.user_service_url + `user/${userId}/contact/${contactId}`, this.authHttpOptions())
     .pipe(
       map(data => {
@@ -759,6 +761,26 @@ export class UserService {
 
   public deleteContactRequestsById(userId: number, contactId: number): Observable<any> {
     return this.http.delete(this.user_service_url + `user/${userId}/contact/${contactId}/contact-request`, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  public getOutgoingContactRequestById(contactId: number, userId: number = this.user_id): Observable<any> {
+    return this.http.get(this.user_service_url + `user/${userId}/contact/${contactId}/outgoing-contact-request`, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  public postOutgoingContactRequest(contactId: number, userId: number = this.user_id): Observable<any> {
+    return this.http.post(this.user_service_url + 'user/outgoing-contact-request', {user_id: userId, contact_id: contactId}, this.authHttpOptions())
     .pipe(
       map(data => {
         return {success: true, message: 'Success!', data: data};

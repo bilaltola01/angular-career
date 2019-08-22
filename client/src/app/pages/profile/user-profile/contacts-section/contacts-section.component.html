@@ -1,7 +1,7 @@
 <ng-container>
   <div class="edit-title">
-    <a *ngIf="currentPage === 'contacts'" (click)="navigateToIncomingRequests()">Incoming Requests</a>
-    <a *ngIf="currentPage === 'incoming-requests'" (click)="navigateToContacts()">Contacts</a>
+    <a *ngIf="currentPage === 'contacts' && !userId" (click)="navigateToIncomingRequests()">Incoming Requests</a>
+    <a *ngIf="currentPage === 'incoming-requests' && !userId" (click)="navigateToContacts()">Contacts</a>
   </div>
 
   <div *ngIf="userContactsList && userContactsList.length > 0" class="row">
@@ -10,8 +10,8 @@
         <img src="{{ contact.photo ? contact.photo : 'assets/icons/no_photo.png' }}">
         <label>{{ contact.first_name + ' ' + contact.last_name }}</label>
         <a>{{(contact.city_id ? contact.city : '') + (contact.city_id && (contact.state_id || contact.country_id) ? ', ' : '') + (contact.state_id ? contact.state : '') + (contact.state_id && contact.country_id ? ', ' : '') + (contact.country_id ? contact.country : '')}}</a>
-        <mat-icon *ngIf="currentPage === 'contacts'" class="remove" (click)="deleteContact(i)">highlight_off</mat-icon>
-        <div *ngIf="currentPage === 'incoming-requests'" class="overlay">
+        <mat-icon *ngIf="currentPage === 'contacts' && !userId" class="remove" (click)="deleteContact(i)">highlight_off</mat-icon>
+        <div *ngIf="currentPage === 'incoming-requests' && !userId" class="overlay">
           <mat-icon class="accept" (click)="acceptContactRequest(i)">check_circle</mat-icon>
           <mat-icon class="cancel" (click)="deleteContactRequest(i)">cancel</mat-icon>
         </div>

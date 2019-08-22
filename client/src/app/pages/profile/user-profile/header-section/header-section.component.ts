@@ -2,8 +2,7 @@ import {
   Component,
   OnInit,
   Output,
-  EventEmitter,
-  OnChanges, SimpleChanges, SimpleChange
+  EventEmitter
 } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {
@@ -23,9 +22,16 @@ import {
   AutoCompleteService,
   UserService,
   PhotoStateService,
-  UserStateService
+  UserStateService,
+  UserProfileStateService
 } from 'src/app/services';
 import { Router, NavigationEnd } from '@angular/router';
+
+export enum ContactStatus {
+  none = 'none',
+  pending = 'pending',
+  added = 'added'
+}
 
 @Component({
   selector: 'header-section',
@@ -34,16 +40,13 @@ import { Router, NavigationEnd } from '@angular/router';
 })
 export class HeaderSectionComponent implements OnInit {
 
+  @Output() updatedGeneralInfoData = new EventEmitter();
+
+  userId: number;
+  contact_status: string;
   generalInfo: UserGeneralInfo;
   editMode: boolean;
   currentPage: string;
-  @Output() updatedGeneralInfoData = new EventEmitter();
-
-  maxDate = new Date();
-
-  genders: string[] = Genders;
-  ethnicityTypes: string[] = EthnicityTypes;
-  countries: string[] = Countries.slice().sort();
 
   generalInfoForm: FormGroup;
   generalInfoData: any;
@@ -53,7 +56,12 @@ export class HeaderSectionComponent implements OnInit {
   autocomplete_states: State[] = [];
   temp_state: State;
 
+  genders: string[] = Genders;
+  ethnicityTypes: string[] = EthnicityTypes;
+  countries: string[] = Countries.slice().sort();
   profileStatuses = ProfileStatuses;
+
+  maxDate = new Date();
 
   constructor(
     private helperService: HelperService,
@@ -62,8 +70,12 @@ export class HeaderSectionComponent implements OnInit {
     private userService: UserService,
     private photoStateService: PhotoStateService,
     private userStateService: UserStateService,
+    private userProfileStateService: UserProfileStateService,
     private router: Router
   ) {
+    if (router.url.includes('user')) {
+      this.userId = parseInt(router.url.split('/')[2], 10);
+    }
     this.getGeneralInfo();
     this.parseRouterUrl(router.url);
     router.events.subscribe((val) => {
@@ -88,33 +100,50 @@ export class HeaderSectionComponent implements OnInit {
       }
     } else if (url.includes('contacts')) {
       this.currentPage = 'contacts';
+      if (this.userId && this.contact_status) {
+        this.checkContactStatus();
+      }
     } else if (url.includes('template')) {
       this.currentPage = 'template';
+    }
+    if (this.userId && !this.contact_status) {
+      this.checkContactStatus();
     }
   }
 
   onChangeProfileStatus(active: boolean) {
-    const data = {
-      is_looking: active ? 0 : 1
-    };
-    this.userService.updateGeneralInfo(data).subscribe(
-      dataJson => {
-        this.generalInfo = dataJson['data'];
-        this.userStateService.setUser(this.generalInfo);
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-      }
-    );
+    if (!this.userId) {
+      const data = {
+        is_looking: active ? 0 : 1
+      };
+      this.userService.updateGeneralInfo(data).subscribe(
+        dataJson => {
+          this.generalInfo = dataJson['data'];
+          this.userStateService.setUser(this.generalInfo);
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    }
   }
 
   getGeneralInfo() {
-    this.userStateService.getUser
-    .subscribe(user => {
-      this.generalInfo = user;
-    }, error => {
-      this.alertsService.show(error.message, AlertType.error);
-    });
+    if (this.userId) {
+      this.userProfileStateService.getUser
+      .subscribe(user => {
+        this.generalInfo = user;
+      }, error => {
+        this.alertsService.show(error.message, AlertType.error);
+      });
+    } else {
+      this.userStateService.getUser
+      .subscribe(user => {
+        this.generalInfo = user;
+      }, error => {
+        this.alertsService.show(error.message, AlertType.error);
+      });
+    }
   }
 
   initGeneralInfoForm() {
@@ -374,6 +403,76 @@ export class HeaderSectionComponent implements OnInit {
           });
         }, err => {
           this.alertsService.show(err.message, AlertType.error);
+        }
+      );
+    }
+  }
+
+  checkContactStatus() {
+    this.userService.getUserContactById(this.userId).subscribe(
+      dataJson => {
+        if (dataJson['data']) {
+          this.contact_status = ContactStatus.added;
+        }
+      },
+      error => {
+        if (error.message === 'No user contact found with given parameters.') {
+          this.checkOutgoingRequest();
+        } else {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      }
+    );
+  }
+
+  checkOutgoingRequest() {
+    this.userService.getOutgoingContactRequestById(this.userId).subscribe(
+      dataJson => {
+        if (dataJson['data']) {
+          this.contact_status = ContactStatus.pending;
+        }
+      },
+      error => {
+        if (error.message === 'No outgoing request found.') {
+          this.contact_status = ContactStatus.none;
+        } else {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      }
+    );
+  }
+
+  contactBtnTitle(): string {
+    if (this.contact_status === 'none') {
+      return 'Add Contact';
+    } else if (this.contact_status === 'pending') {
+      return 'Request Sent';
+    } else {
+      return 'Remove Contact';
+    }
+  }
+
+  onClickContactBtn() {
+    if (this.contact_status === 'none') {
+      this.userService.postOutgoingContactRequest(this.userId).subscribe(
+        dataJson => {
+          if (dataJson['data']) {
+            this.contact_status = ContactStatus.pending;
+          }
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    } else if (this.contact_status === 'added') {
+      this.userService.deleteUserContactById(this.userId).subscribe(
+        dataJson => {
+          if (dataJson['data']) {
+            this.contact_status = ContactStatus.none;
+          }
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
         }
       );
     }
