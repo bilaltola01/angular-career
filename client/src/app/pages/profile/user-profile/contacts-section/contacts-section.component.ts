@@ -114,7 +114,7 @@ export class ContactsSectionComponent implements OnInit {
   }
 
   deleteContact(arrIndex: number) {
-    this.userService.deleteUserContactById(this.user.user_id, this.userContactsList[arrIndex].user_id).subscribe(
+    this.userService.deleteUserContactById(this.userContactsList[arrIndex].user_id).subscribe(
       dataJson => {
         this.userContactsList.splice(arrIndex, 1);
       },

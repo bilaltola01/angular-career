@@ -17,7 +17,7 @@ import {
 export class NavSectionComponent implements OnInit {
 
   userId: number;
-  navMenu: any[] = NavMenus.profile;
+  navMenu: any[];
   editMode: boolean;
   navIndex: number;
 
@@ -34,8 +34,11 @@ export class NavSectionComponent implements OnInit {
     private alertsService: AlertsService,
     private userProfileStateService: UserProfileStateService
   ) {
+    this.navMenu = NavMenus.profile;
     if (router.url.includes('user')) {
       this.userId = parseInt(router.url.split('/')[2], 10);
+      this.navMenu[0]['title'] = 'Profile';
+      this.navMenu.splice(2, 1);
     }
     this.checkNavMenuItemsVisibility();
     this.parseRouterUrl(router.url);
