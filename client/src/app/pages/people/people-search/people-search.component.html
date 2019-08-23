@@ -36,9 +36,9 @@
           <mat-form-field>
             <mat-label>State</mat-label>
             <input matInput placeholder="State" type="text" [matAutocomplete]="autocompleteState" formControlName="state">
-            <mat-autocomplete #autocompleteCity="matAutocomplete">
+            <mat-autocomplete #autocompleteState="matAutocomplete">
               <mat-option *ngFor="let state of autocomplete_states" [value]="state.state" (onSelectionChange)="onChangeState(state)">
-                <span>{{city.city}}</span>
+                <span>{{state.state}}</span>
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
@@ -94,7 +94,7 @@
             <mat-label>Major </mat-label>
             <input matInput placeholder="Major" type="text" [matAutocomplete]="autocompleteMajor" formControlName="major">
             <mat-autocomplete #autocompleteMajor="matAutocomplete">
-              <mat-option *ngFor="let major of utocomplete_education_major" [value]="major.major_name" (onSelectionChange)="onChangeMajor(major)">
+              <mat-option *ngFor="let major of autocomplete_education_major" [value]="major.major_name" (onSelectionChange)="onChangeMajor(major)">
                 <span>{{major.major_name}}</span>
               </mat-option>
             </mat-autocomplete>
