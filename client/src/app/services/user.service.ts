@@ -81,9 +81,8 @@ export class UserService {
       );
   }
 
-  public loadUsers(params: string): Observable<any> {
-
-    return this.http.get(this.user_service_url + `users?limit=${this.max_limit}&${params}`, this.authHttpOptions())
+  public getUsers(query: string): Observable<any> {
+    return this.http.get(this.user_service_url + `users?${query}`, this.authHttpOptions())
       .pipe(
         map(data => {
           return {success: true, message: 'Success!', data: data};

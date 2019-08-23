@@ -1,1 +1,115 @@
-<p>people-search works!</p>
+<!-- <ng-container *ngIf="isPeopleLoading">
+  <div class="loading">
+    <mat-spinner></mat-spinner>
+    <h4>Loading...</h4>
+  </div>
+</ng-container> -->
+<!-- Search Bar -->
+
+<div class="career-main">
+  <div class="comman_search_filter" [formGroup]="peopleForm">
+    <div class="filter-data">
+      <mat-icon (click)="toggleTabMenuOpen()" class="filter_icon">filter_list</mat-icon>
+    </div>
+    <div class="postion-search-header">
+      <mat-form-field appearance="standard" class="search">
+        <mat-icon matSuffix (click)="onSearchUser($event)">search</mat-icon>
+        <input matInput placeholder="Search peoples by name or email" type="text" [matAutocomplete]="autocompleteSearch" formControlName="searchPeople" (keyup.enter)="onSearchPosition($event)">
+        <mat-autocomplete #autocompleteSearch="matAutocomplete">
+          <mat-option *ngFor="let people of autocomplete_searchpeoples" [value]="people.first_name + (people.last_name ? ' ' + people.last_name : '')">
+            <img [src]="people.photo ? people.photo : 'assets/icons/no_photo.png'">
+            <span>{{people.first_name + (people.last_name ? ' ' + people.last_name : '')}}</span>
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div [formGroup]="peopleForm" class="position-main-container">
+    <!-- Position Filter Card -->
+    <div class="filter-container container__header tablet" [class.open]="filter_list">
+      <ng-container>
+        <div class="nav-title">
+          <h3 class="section-title">User Filters</h3>
+        </div>
+        <div class="filter-card">
+          <mat-form-field>
+            <mat-label>State</mat-label>
+            <input matInput placeholder="State" type="text" [matAutocomplete]="autocompleteState" formControlName="state">
+            <mat-autocomplete #autocompleteCity="matAutocomplete">
+              <mat-option *ngFor="let state of autocomplete_states" [value]="state.state" (onSelectionChange)="onChangeState(state)">
+                <span>{{city.city}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="filter-card">
+          <mat-form-field>
+            <mat-label>City</mat-label>
+            <input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity" formControlName="city">
+            <mat-autocomplete #autocompleteCity="matAutocomplete">
+              <mat-option *ngFor="let city of autocomplete_cities" [value]="(city.city)?.split(',')[0]" (onSelectionChange)="onChangeCity(city)">
+                <span>{{city.city}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="filter-card">
+          <mat-form-field>
+            <mat-label>Skills</mat-label>
+            <input matInput placeholder="Skills" type="text" [matAutocomplete]="autocompleteSkills" formControlName="skill">
+            <mat-autocomplete #autocompleteSkills="matAutocomplete">
+              <mat-option *ngFor="let autocomplete_skill of autocomplete_skills" [value]="autocomplete_skill.skill" (onSelectionChange)="addSkills(autocomplete_skill)">
+                <span>{{autocomplete_skill.skill}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <div *ngIf="userSkillsList.length > 0" class="skills">
+            <simple-tag *ngFor="let skillData of userSkillsList; let i = index" type="gray" removeTag="true" title="{{skillData.skill}}" (click)="removeUserSkillsData(i)"></simple-tag>
+          </div>
+        </div>
+        <div class="filter-card">
+          <mat-form-field>
+            <mat-label>Education Level</mat-label>
+            <mat-select class="arrow" formControlName="education">
+              <mat-option value=''></mat-option>
+              <mat-option *ngFor="let education of educationLevel" value="{{educationLevel.indexOf(education)}}">{{education}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="filter-card">
+          <mat-form-field>
+            <mat-label>School</mat-label>
+            <input matInput placeholder="School" type="text" [matAutocomplete]="autocompleteSchool" formControlName="school">
+            <mat-autocomplete #autocompleteSchool="matAutocomplete">
+              <mat-option *ngFor="let school of autocomplete_school" [value]="school.school_name" (onSelectionChange)="onChangeSchool(school)">
+                <span>{{school.school_name}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="filter-card">
+          <mat-form-field>
+            <mat-label>Major </mat-label>
+            <input matInput placeholder="Major" type="text" [matAutocomplete]="autocompleteMajor" formControlName="major">
+            <mat-autocomplete #autocompleteMajor="matAutocomplete">
+              <mat-option *ngFor="let major of utocomplete_education_major" [value]="major.major_name" (onSelectionChange)="onChangeMajor(major)">
+                <span>{{major.major_name}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="filter-card">
+          <div class="side-filter-btn">
+            <action-button type="raised" color="primary" title="Apply Filters" (click)="applyFilter();">
+            </action-button>
+          </div>
+          <div class="clear-filter">
+            <action-button class="clear-btn" type="text" title="Clear Filters" (click)="clearFilter()" color="primary"></action-button>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

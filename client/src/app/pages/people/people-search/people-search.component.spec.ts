@@ -1,6 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { TestingModule, MaterialModule } from 'src/app/modules';
+
 import { PeopleSearchComponent } from './people-search.component';
+import { SimpleTagComponent } from '../../../components/simple-tag/simple-tag.component';
+import { ActionButtonComponent } from '../../../components/action-button/action-button.component';
+import { RoundCheckboxComponent } from '../../../components/round-checkbox/round-checkbox.component';
 
 describe('PeopleSearchComponent', () => {
   let component: PeopleSearchComponent;
@@ -8,7 +13,8 @@ describe('PeopleSearchComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PeopleSearchComponent ]
+      imports : [ MaterialModule, TestingModule ],
+      declarations: [ PeopleSearchComponent, SimpleTagComponent, ActionButtonComponent, RoundCheckboxComponent ]
     })
     .compileComponents();
   }));
