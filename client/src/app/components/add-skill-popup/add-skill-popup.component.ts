@@ -20,6 +20,8 @@ export class AddSkillPopupComponent  {
    temp_skill: EditSkillItem;
    prevent_skills_autocomplete: boolean;
   skillsForm: FormGroup;
+  skillData: any;
+  skillFlag = true;
 
   constructor(public dialogRef: MatDialogRef<AddSkillPopupComponent>, @Inject(MAT_DIALOG_DATA) public data,
   public dialog: MatDialog,
@@ -31,7 +33,7 @@ export class AddSkillPopupComponent  {
     this.initSkillsForm();
     this.getUserSkillsList(true);
    }
-  onClose(): void {
+     onClose(): void {
     this.dialogRef.close();
   }
   initSkillsForm() {
@@ -39,11 +41,10 @@ export class AddSkillPopupComponent  {
     this.prevent_skills_autocomplete = true;
     this.userSkillsList = [];
     this.temp_skill = null;
-
+    this.skillData = this.data.skillData;
     this.skillsForm = new FormGroup({
-      skills: new FormControl(''),
+    skills: new FormControl(''),
     });
-
     this.skillsForm.get('skills').valueChanges.subscribe(
       (skill) => {
         if (skill && this.helperService.checkSpacesString(skill)) {
@@ -125,6 +126,14 @@ export class AddSkillPopupComponent  {
       }
     );
   }
+  onJobLevelChanged(level: number) {
+    const skillItemData = {
+      skill_id: this.skillData.skill_id,
+      skill: this.skillData.skill,
+      skill_level: level
+    };
+    this.updateJobSkillsData(skillItemData);
+  }
   onLevelChanged(level: number, index: number) {
     const skillItemData = {
       skill_id: this.userSkillsList[index].skill_id,
@@ -133,6 +142,21 @@ export class AddSkillPopupComponent  {
     };
     this.updateUserSkillsData(index, skillItemData);
   }
+  updateJobSkillsData( userSkillItem: UserSkillItem) {
+    this.userService.patchSkillInfoById(userSkillItem.skill_id, userSkillItem).subscribe(
+      dataJson => {
+        this.skillData = dataJson['data'];
+        if (this.temp_skill) {
+          this.temp_skill.skillItem = dataJson['data'];
+                }
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+
   updateUserSkillsData(arrIndex: number, userSkillItem: UserSkillItem) {
     this.userService.patchSkillInfoById(userSkillItem.skill_id, userSkillItem).subscribe(
       dataJson => {
@@ -157,6 +181,9 @@ export class AddSkillPopupComponent  {
         this.alertsService.show(error.message, AlertType.error);
       }
     );
+  }
+  removeExistingSkillsData(userSkillItem: UserSkillItem) {
+    this.skillFlag = false;
   }
   editSkillDone() {
     this.temp_skill = null;

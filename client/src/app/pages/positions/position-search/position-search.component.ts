@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import {
   PositionService, AlertsService, AlertType,
   AutoCompleteService, CartService, ApplicationService
@@ -22,6 +23,10 @@ import {
   Major,
   JobType
 } from 'src/app/models';
+import { AddSkillPopupComponent } from 'src/app/components/add-skill-popup/add-skill-popup.component';
+export interface DialogData {
+  data: any;
+}
 
 @Component({
   selector: 'app-position-search',
@@ -75,7 +80,7 @@ export class PositionSearchComponent implements OnInit {
 
   constructor(private autoCompleteService: AutoCompleteService,
     private alertsService: AlertsService, private positionService: PositionService,
-    private cartService: CartService, private applicationService: ApplicationService) { }
+    private cartService: CartService, private applicationService: ApplicationService,  public dialog: MatDialog) { }
 
   ngOnInit() {
     this.initPositionFilterForm();
@@ -529,5 +534,13 @@ export class PositionSearchComponent implements OnInit {
 
 
   }
-
+  openSkilladdDialog(skillData) {
+    const dialogRef = this.dialog.open(AddSkillPopupComponent, {
+      data: { skillData },
+      width: '100vw',
+      maxWidth: '880px',
+      minWidth: '280px',
+      panelClass: ['edit-dialog-container']
+    } );
+  }
 }

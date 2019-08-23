@@ -339,7 +339,7 @@
                                             <simple-tag type="gray" title="{{preskill.skill}}" ellipseTag="true"
                                                 value="{{preskill.skill_level}}"
                                                 [matTooltip]="SkillLevelDescription[preskill.skill_level]"
-                                                [matTooltipShowDelay]=500>
+                                                [matTooltipShowDelay]=500  (click)="openSkilladdDialog(preskill)">
                                             </simple-tag>
                                         </div>
                                     </div>
