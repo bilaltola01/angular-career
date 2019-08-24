@@ -3,7 +3,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import {
   AlertsService, AlertType,
   AutoCompleteService,
-  UserService
+  UserService,
+  HelperService
 } from '../../../services';
 
 import {
@@ -14,7 +15,8 @@ import {
   School,
   Major,
   User,
-  peopleListLimit
+  peopleListLimit,
+  UserGeneralInfo
 } from 'src/app/models';
 
 @Component({
@@ -52,10 +54,13 @@ export class PeopleSearchComponent implements OnInit {
   paginationArr = [];
   preLoadDataObject = {};
 
+  userList: UserGeneralInfo[];
+
   constructor(
     private autoCompleteService: AutoCompleteService,
     private alertsService: AlertsService,
-    private userService: UserService
+    private userService: UserService,
+    private helperService: HelperService
   ) { }
 
   ngOnInit() {
@@ -82,24 +87,24 @@ export class PeopleSearchComponent implements OnInit {
       'major': new FormControl(null)
     });
     this.peopleForm.get('searchPeople').valueChanges.subscribe((searchPeople) => {
-      searchPeople ? this.onSearchPeopleValueChanges(searchPeople) : this.autocomplete_searchpeoples = [];
+      searchPeople && this.helperService.checkSpacesString(searchPeople) ? this.onSearchPeopleValueChanges(searchPeople) : this.autocomplete_searchpeoples = [];
     });
     this.peopleForm.get('state').valueChanges.subscribe((state) => {
-      state ? this.onStateValueChanges(state) : this.autocomplete_states = [];
+      state && this.helperService.checkSpacesString(state) ? this.onStateValueChanges(state) : this.autocomplete_states = [];
     });
     this.peopleForm.get('city').valueChanges.subscribe((city) => {
-      city ? this.onCityValueChanges(city) : this.autocomplete_cities = [];
+      city && this.helperService.checkSpacesString(city) ? this.onCityValueChanges(city) : this.autocomplete_cities = [];
     });
     this.peopleForm.get('skill').valueChanges.subscribe(
       (skill) => {
-        skill ? this.onSkillValueChanges(skill) : this.autocomplete_skills = [];
+        skill && this.helperService.checkSpacesString(skill) ? this.onSkillValueChanges(skill) : this.autocomplete_skills = [];
       }
     );
     this.peopleForm.get('school').valueChanges.subscribe((school) => {
-      school ? this.onSchoolValueChanges(school) : this.autocomplete_school = [];
+      school && this.helperService.checkSpacesString(school) ? this.onSchoolValueChanges(school) : this.autocomplete_school = [];
     });
     this.peopleForm.get('major').valueChanges.subscribe((major) => {
-      major ? this.onMajorValueChanges(major) : this.autocomplete_education_major = [];
+      major && this.helperService.checkSpacesString(major) ? this.onMajorValueChanges(major) : this.autocomplete_education_major = [];
     });
 
   }
@@ -220,12 +225,44 @@ export class PeopleSearchComponent implements OnInit {
     queryString = this.peopleForm.value.education ? `${queryString ? queryString + '&' : ''}education=${parseInt(this.peopleForm.value.education, 10) + 1}` : queryString;
     queryString = this.peopleForm.value.major ? `${queryString ? queryString + '&' : ''}major=${this.filterAttributes.major_id}` : queryString;
     queryString = queryString ? `${queryString}&offset=${this.filterAttributes.offset}` : `offset=${this.filterAttributes.offset}`;
-    queryString = queryString ? `${queryString}&limit=${this.filterAttributes.limit}` : `offset=${this.filterAttributes.limit}`;
+    queryString = queryString ? `${queryString}&limit=${this.filterAttributes.limit}` : `limit=${this.filterAttributes.limit}`;
     this.userSkillsList.forEach(skill => {
       queryString = queryString ? queryString + `&skills=${skill.skill_id}` : `skills=${skill.skill_id}`;
     });
-    queryString = this.peopleForm.value.searchPeople ? `${queryString ? queryString + '&' : ''}position=${this.peopleForm.value.searchPeople}` : queryString;
+    const people = this.peopleForm.value.searchPeople && this.helperService.checkSpacesString(this.peopleForm.value.searchPeople) ? this.peopleForm.value.searchPeople.replace('+', '%2B') : null;
+    queryString = people ? `${queryString ? queryString + '&' : ''}name=${people}` : queryString;
     return queryString;
+  }
+
+  getUsersData() {
+    if (this.preLoadDataObject[this.currentPageNumber]) {
+      this.userList = this.preLoadDataObject[this.currentPageNumber].data.data;
+      this.setPaginationValues(this.preLoadDataObject[this.currentPageNumber]);
+      if (this.currentPageNumber < this.paginationArr[this.paginationArr.length - 1]) {
+        this.preLoadNextPage(this.currentPageNumber + 1);
+      }
+    } else {
+      this.isPeopleLoading = true;
+      const queryString = this.generateQueryString();
+      this.userService.getUsers(queryString).subscribe(
+        dataJson => {
+          this.isPeopleLoading = false;
+          if (dataJson['success'] && dataJson.data.data) {
+            this.userList = dataJson.data.data;
+            this.setPaginationValues(dataJson);
+            this.preLoadDataObject[this.currentPageNumber] = dataJson;
+            if (this.currentPageNumber < this.paginationArr[this.paginationArr.length - 1]) {
+              this.preLoadNextPage(this.currentPageNumber + 1);
+            }
+          }
+        },
+        error => {
+          this.isPeopleLoading = false;
+          this.alertsService.show(error.message, AlertType.error);
+          this.userList = [];
+        }
+      );
+    }
   }
 
   setPaginationValues(dataJson) {
@@ -242,6 +279,34 @@ export class PeopleSearchComponent implements OnInit {
     this.paginationArr = Array(max - min + 1).fill(0).map((x, i) => i + min);
   }
 
+  pageClicked(pageNo) {
+    document.getElementById('sidenav-content').scrollTo(0, 0);
+    if (pageNo > 0 && pageNo <= this.paginationArr[this.paginationArr.length - 1]) {
+      this.currentPageNumber = pageNo;
+      this.filterAttributes.offset = ((this.currentPageNumber - 1) * peopleListLimit);
+      this.getUsersData();
+    }
+  }
+
+  preLoadNextPage(nextPageNumber) {
+    if (!this.preLoadDataObject[nextPageNumber]) {
+      const previousOffset = this.filterAttributes.offset;
+      this.filterAttributes.offset = this.filterAttributes.offset + peopleListLimit;
+      const queryString = this.generateQueryString();
+      this.userService.getUsers(queryString).subscribe(
+        dataJson => {
+          if (dataJson['success'] && dataJson) {
+            this.preLoadDataObject[nextPageNumber] = dataJson;
+          }
+          this.filterAttributes.offset = previousOffset;
+        },
+        error => {
+          this.userList = [];
+        }
+      );
+    }
+  }
+
   clearFilter() {
     const setSearchPeopleValue = this.peopleForm.value.searchPeople;
     this.peopleForm.reset();
@@ -251,21 +316,24 @@ export class PeopleSearchComponent implements OnInit {
     this.toggleTabMenuOpen();
   }
 
-  selectAll(isChecked) {
-    this.selectedAllFlag = isChecked;
-  }
+  // selectAll(isChecked) {
+  //   this.selectedAllFlag = isChecked;
+  // }
 
   onSearchUser(event) {
     this.filterAttributes.offset = 0;
+    this.currentPageNumber = 1;
     this.preLoadDataObject = {};
-    // this.getUsersData();
+    this.getUsersData();
     event.stopPropagation();
   }
 
   applyFilter() {
     this.filterAttributes.offset = 0;
+    this.currentPageNumber = 1;
     this.toggleTabMenuOpen();
     this.preLoadDataObject = {};
+    this.getUsersData();
   }
 
 

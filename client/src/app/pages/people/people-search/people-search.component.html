@@ -111,5 +111,27 @@
         </div>
       </ng-container>
     </div>
+
+    <div class="position-list-container">
+      <div *ngFor="let user of userList">
+        <span>{{user.first_name + '' + user.last_name}}</span>
+      </div>
+
+      <div *ngIf="!userList || (userList && userList.length === 0)">
+        <div class="row no-job">
+          No search results found.
+        </div>
+      </div>
+
+      <div class="pagination" *ngIf="userList && userList.length > 0">
+        <ul type="none">
+          <li class="large_pagination_button" (click)="pageClicked(currentPageNumber-1)">Prev Page</li>
+          <li *ngFor="let pageNo of paginationArr" [ngClass]="{'active': pageNo == currentPageNumber}"
+            (click)="pageClicked(pageNo)">{{ pageNo }}
+          </li>
+          <li class="large_pagination_button" (click)="pageClicked(currentPageNumber+1)">Next Page</li>
+        </ul>
+      </div>
+    </div>
   </div>
 </div>
