@@ -11,7 +11,7 @@
     <div class="filter-data">
       <mat-icon (click)="toggleTabMenuOpen()" class="filter_icon">filter_list</mat-icon>
     </div>
-    <div class="postion-search-header">
+    <div class="people-search-header">
       <mat-form-field appearance="standard" class="search">
         <mat-icon matSuffix (click)="onSearchUser($event)">search</mat-icon>
         <input matInput placeholder="Search peoples by name or email" type="text" [matAutocomplete]="autocompleteSearch" formControlName="searchPeople" (keyup.enter)="onSearchPosition($event)">
@@ -25,7 +25,7 @@
     </div>
   </div>
 
-  <div [formGroup]="peopleForm" class="position-main-container">
+  <div [formGroup]="peopleForm" class="people-main-container">
     <!-- Position Filter Card -->
     <div class="filter-container container__header tablet" [class.open]="filter_list">
       <ng-container>
@@ -112,13 +112,17 @@
       </ng-container>
     </div>
 
-    <div class="position-list-container">
-      <div *ngFor="let user of userList">
-        <span>{{user.first_name + '' + user.last_name}}</span>
-      </div>
+    <div class="people-list-container">
+      <ng-container *ngIf="userList && userList.length > 0">
+        <div *ngFor="let user of userList">
+          <div class="row">
+            <span>{{user.general_info.first_name + '' + user.general_info.last_name}}</span>
+          </div>
+        </div>
+      </ng-container>
 
       <div *ngIf="!userList || (userList && userList.length === 0)">
-        <div class="row no-job">
+        <div class="row no-people">
           No search results found.
         </div>
       </div>

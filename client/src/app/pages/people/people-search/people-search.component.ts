@@ -16,8 +16,16 @@ import {
   Major,
   User,
   peopleListLimit,
-  UserGeneralInfo
+  UserGeneralInfo,
+  UserSkillItem,
+  UserEducationItem
 } from 'src/app/models';
+
+export interface PeopleData {
+  general_info: UserGeneralInfo;
+  skillList: UserSkillItem[];
+  educationList: UserEducationItem[];
+}
 
 @Component({
   selector: 'app-people-search',
@@ -54,7 +62,7 @@ export class PeopleSearchComponent implements OnInit {
   paginationArr = [];
   preLoadDataObject = {};
 
-  userList: UserGeneralInfo[];
+  userList: PeopleData[];
 
   constructor(
     private autoCompleteService: AutoCompleteService,
@@ -236,7 +244,7 @@ export class PeopleSearchComponent implements OnInit {
 
   getUsersData() {
     if (this.preLoadDataObject[this.currentPageNumber]) {
-      this.userList = this.preLoadDataObject[this.currentPageNumber].data.data;
+      this.userList = this.preLoadDataObject[this.currentPageNumber].data;
       this.setPaginationValues(this.preLoadDataObject[this.currentPageNumber]);
       if (this.currentPageNumber < this.paginationArr[this.paginationArr.length - 1]) {
         this.preLoadNextPage(this.currentPageNumber + 1);
@@ -248,9 +256,21 @@ export class PeopleSearchComponent implements OnInit {
         dataJson => {
           this.isPeopleLoading = false;
           if (dataJson['success'] && dataJson.data.data) {
-            this.userList = dataJson.data.data;
-            this.setPaginationValues(dataJson);
-            this.preLoadDataObject[this.currentPageNumber] = dataJson;
+            this.userList = [];
+            dataJson.data.data.forEach((data) => {
+              const peopleData: PeopleData = {
+                general_info: data,
+                skillList: null,
+                educationList: null
+              };
+              this.userList.push(peopleData);
+            });
+            const prelaodData = {
+              data: this.userList,
+              count: dataJson.data.count
+            };
+            this.setPaginationValues(prelaodData);
+            this.preLoadDataObject[this.currentPageNumber] = prelaodData;
             if (this.currentPageNumber < this.paginationArr[this.paginationArr.length - 1]) {
               this.preLoadNextPage(this.currentPageNumber + 1);
             }
@@ -265,14 +285,14 @@ export class PeopleSearchComponent implements OnInit {
     }
   }
 
-  setPaginationValues(dataJson) {
+  setPaginationValues(data) {
     let max;
     let min;
     if (this.currentPageNumber >= 5) {
-      max = Math.ceil(dataJson.data.count / peopleListLimit) <= 6 ? Math.ceil(dataJson.data.count / peopleListLimit) + this.currentPageNumber - 1 : this.currentPageNumber + 6;
+      max = Math.ceil(data.count / peopleListLimit) <= 6 ? Math.ceil(data.count / peopleListLimit) + this.currentPageNumber - 1 : this.currentPageNumber + 6;
       min = max > 10 ? max - 9 : 1;
     } else {
-      max = Math.ceil((dataJson.data.count + this.filterAttributes.offset) / peopleListLimit) < 10 ? Math.ceil((dataJson.data.count + this.filterAttributes.offset) / peopleListLimit) : 10;
+      max = Math.ceil((data.count + this.filterAttributes.offset) / peopleListLimit) < 10 ? Math.ceil((data.count + this.filterAttributes.offset) / peopleListLimit) : 10;
       min = 1;
     }
 
@@ -296,7 +316,20 @@ export class PeopleSearchComponent implements OnInit {
       this.userService.getUsers(queryString).subscribe(
         dataJson => {
           if (dataJson['success'] && dataJson) {
-            this.preLoadDataObject[nextPageNumber] = dataJson;
+            const userList = [];
+            dataJson.data.data.forEach((data) => {
+              const peopleData: PeopleData = {
+                general_info: data,
+                skillList: null,
+                educationList: null
+              };
+              userList.push(peopleData);
+            });
+            const prelaodData = {
+              data: userList,
+              count: dataJson.data.count
+            };
+            this.preLoadDataObject[nextPageNumber] = prelaodData;
           }
           this.filterAttributes.offset = previousOffset;
         },
