@@ -18,7 +18,8 @@ import {
   peopleListLimit,
   UserGeneralInfo,
   UserSkillItem,
-  UserEducationItem
+  UserEducationItem,
+  ITEMS_LIMIT
 } from 'src/app/models';
 
 export interface PeopleData {
@@ -54,7 +55,7 @@ export class PeopleSearchComponent implements OnInit {
     offset: 0,
     limit: peopleListLimit
   };
-  isPeopleLoading = true;
+  isPeopleLoading = false;
   selectedAllFlag = false;
   mathFloor = Math.floor;
   filter_list: boolean;
@@ -63,6 +64,8 @@ export class PeopleSearchComponent implements OnInit {
   preLoadDataObject = {};
 
   userList: PeopleData[];
+
+  displayItemsLimit = 7;
 
   constructor(
     private autoCompleteService: AutoCompleteService,
@@ -271,6 +274,7 @@ export class PeopleSearchComponent implements OnInit {
             };
             this.setPaginationValues(prelaodData);
             this.preLoadDataObject[this.currentPageNumber] = prelaodData;
+            this.getUserSkillsAndEducationInfo(this.currentPageNumber);
             if (this.currentPageNumber < this.paginationArr[this.paginationArr.length - 1]) {
               this.preLoadNextPage(this.currentPageNumber + 1);
             }
@@ -283,6 +287,49 @@ export class PeopleSearchComponent implements OnInit {
         }
       );
     }
+  }
+
+  getUserSkillsAndEducationInfo(pageNo: number) {
+    this.preLoadDataObject[pageNo].data.forEach((data, arrIndex) => {
+      this.getUserSkillsListByOffset(ITEMS_LIMIT, 0, arrIndex, pageNo);
+      this.getUserEducationList(arrIndex, pageNo);
+    });
+  }
+
+  getUserSkillsListByOffset(limit: number, offset: number, arrIndex: number, pageNo: number) {
+    this.userService.getSkillsInfo(limit, offset, this.preLoadDataObject[pageNo].data[arrIndex].general_info.user_id).subscribe(
+      dataJson => {
+        if (offset === 0) {
+          this.preLoadDataObject[pageNo].data[arrIndex].skillList = dataJson['data'];
+        } else {
+          this.preLoadDataObject[pageNo].data[arrIndex].skillList = this.preLoadDataObject[pageNo].data[arrIndex].skillList.slice().concat(dataJson['data']);
+        }
+        if (dataJson['data'].length === limit) {
+          this.getUserSkillsListByOffset(limit, offset + limit, arrIndex, pageNo);
+        } else {
+          if (pageNo === this.currentPageNumber) {
+            this.userList[arrIndex].skillList = this.preLoadDataObject[pageNo].data[arrIndex].skillList;
+          }
+        }
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  getUserEducationList(arrIndex: number, pageNo: number) {
+    this.userService.getEducationInfo(this.preLoadDataObject[pageNo].data[arrIndex].general_info.user_id).subscribe(
+      dataJson => {
+        this.preLoadDataObject[pageNo].data[arrIndex].educationList = dataJson['data'];
+        if (pageNo === this.currentPageNumber) {
+          this.userList[arrIndex].educationList = this.preLoadDataObject[pageNo].data[arrIndex].educationList;
+        }
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
   }
 
   setPaginationValues(data) {
@@ -330,6 +377,7 @@ export class PeopleSearchComponent implements OnInit {
               count: dataJson.data.count
             };
             this.preLoadDataObject[nextPageNumber] = prelaodData;
+            this.getUserSkillsAndEducationInfo(nextPageNumber);
           }
           this.filterAttributes.offset = previousOffset;
         },
