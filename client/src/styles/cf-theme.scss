@@ -493,6 +493,12 @@ action-button {
     margin-top: 20px;
     min-width: 150px;
   }
+
+  &.contact-btn {
+    &>button {
+      padding: 5px 25px !important;
+    }
+  }
 }
 
 .container {

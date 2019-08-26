@@ -122,8 +122,54 @@
       </ng-container>
 
       <div *ngIf="!userList || (userList && userList.length === 0)">
-        <div class="row no-people">
+        <!-- <div class="row no-people">
           No search results found.
+        </div> -->
+        <div class="row">
+          <div class="header-container">
+            <div class="user-info">
+              <div class="image"><img src="assets/icons/no_photo.png"></div>
+              <div class="info">
+                <h2 class="name">Jack Richard</h2>
+                <h3 class="title">Sr. Software Engineer</h3>
+              </div>
+            </div>
+            <action-button class="contact-btn" type="flat" title="Add Contact" color="primary"></action-button>
+          </div>
+          <div class="sub-container">
+            <div class="user-info">
+              <div class="image secondary"><img src="assets/icons/ic_location_1.svg"></div>
+              <div class="info">
+                <h5 class="secondary-title">Location</h5>
+                <h4 class="secondary-title">San Francisco<br>California</h4>
+              </div>
+            </div>
+            <div class="user-info">
+              <div class="image secondary"><img src="assets/icons/ic_university.svg"></div>
+              <div class="info">
+                <h5 class="secondary-title">Brown University</h5>
+                <h4 class="secondary-title">Bachelor’s of Science<br>2015 - 2018</h4>
+              </div>
+            </div>
+          </div>
+          <div class="skills-container">
+            <h5>Skills <span class="count">8</span></h5>
+            <div class="skills">
+              <simple-tag type="gray" title="Motion Design" ellipseTag="true" value="6"></simple-tag>
+              <simple-tag type="gray" title="Motion Design" ellipseTag="true" value="6"></simple-tag>
+              <simple-tag type="gray" title="Motion Design" ellipseTag="true" value="6"></simple-tag>
+              <img src="assets/icons/ic_see_less.svg" alt="See Less">
+            </div>
+          </div>
+          <div class="skills-container">
+            <h5>Major <span class="count">8</span></h5>
+            <div class="skills">
+              <simple-tag type="gray" title="Motion Design"></simple-tag>
+              <simple-tag type="gray" title="Motion Design"></simple-tag>
+              <simple-tag type="gray" title="Motion Design"></simple-tag>
+              <img src="assets/icons/ic_see_less.svg" alt="See Less">
+            </div>
+          </div>
         </div>
       </div>
 
