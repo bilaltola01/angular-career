@@ -1,9 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, throwMatDialogContentAlreadyAttachedError } from '@angular/material/dialog';
 import { UserSkillItem, Skill, ITEMS_LIMIT } from 'src/app/models';
 import { FormGroup, FormControl } from '@angular/forms';
 import { UserService, AlertsService, AlertType, HelperService, AutoCompleteService, ProfileStateService } from 'src/app/services';
-
 export interface EditSkillItem {
   index: number;
   skillItem: UserSkillItem;
@@ -14,36 +13,36 @@ export interface EditSkillItem {
   templateUrl: './add-skill-popup.component.html',
   styleUrls: ['./add-skill-popup.component.scss']
 })
-export class AddSkillPopupComponent  {
+export class AddSkillPopupComponent {
   userSkillsList: UserSkillItem[];
   autocomplete_skills: Skill[] = [];
-   temp_skill: EditSkillItem;
-   prevent_skills_autocomplete: boolean;
+
+  prevent_skills_autocomplete: boolean;
   skillsForm: FormGroup;
-  skillData: any;
-  skillFlag = true;
+  skillData: UserSkillItem;
+  allSkills = [];
 
   constructor(public dialogRef: MatDialogRef<AddSkillPopupComponent>, @Inject(MAT_DIALOG_DATA) public data,
-  public dialog: MatDialog,
-  private userService: UserService,
-   private alertsService: AlertsService,
-   private autoCompleteService: AutoCompleteService,
-   private helperService: HelperService,
-   private profileStateService: ProfileStateService ) {
+    public dialog: MatDialog,
+    private userService: UserService,
+    private alertsService: AlertsService,
+    private autoCompleteService: AutoCompleteService,
+    private helperService: HelperService,
+    private profileStateService: ProfileStateService) {
     this.initSkillsForm();
     this.getUserSkillsList(true);
-   }
-     onClose(): void {
+  }
+  onClose(): void {
     this.dialogRef.close();
   }
   initSkillsForm() {
     this.autocomplete_skills = [];
     this.prevent_skills_autocomplete = true;
     this.userSkillsList = [];
-    this.temp_skill = null;
     this.skillData = this.data.skillData;
+    this.allSkills.push(this.skillData);
     this.skillsForm = new FormGroup({
-    skills: new FormControl(''),
+      skills: new FormControl(''),
     });
     this.skillsForm.get('skills').valueChanges.subscribe(
       (skill) => {
@@ -53,6 +52,8 @@ export class AddSkillPopupComponent  {
               dataJson => {
                 if (dataJson['success']) {
                   this.autocomplete_skills = dataJson['data'];
+
+
                 }
               },
               error => {
@@ -94,98 +95,57 @@ export class AddSkillPopupComponent  {
       }
     );
   }
+
   addSkills(skillItem: Skill) {
-    const skillItemData = {
+    let skillItemData = {
       skill_id: skillItem.skill_id,
       skill: skillItem.skill,
       skill_level: 1
     };
     const filterList = this.userSkillsList.filter(value => value.skill_id === skillItemData.skill_id);
     if (filterList.length === 0) {
-      this.addUserSkillsData(skillItemData);
+      const filterData = this.allSkills.filter(value => value.skill_id === skillItemData.skill_id);
+      if (filterData.length === 0) {
+        this.allSkills.push(skillItemData);
+      }
     } else {
-      this.temp_skill = {
-        index: this.userSkillsList.indexOf(filterList[0]),
-        skillItem: filterList[0]
+      skillItemData = {
+        skill_id: skillItem.skill_id,
+        skill: skillItem.skill,
+        skill_level: filterList[0].skill_level
       };
+      const filterData = this.allSkills.filter(value => value.skill_id === skillItemData.skill_id);
+      if (filterData.length === 0) {
+        this.allSkills.push(skillItemData);
+      }
     }
     this.skillsForm.get('skills').setValue('');
     this.prevent_skills_autocomplete = true;
+
+  }
+
+  updateSkills() {
+    for (const i of this.allSkills) {
+      this.addUserSkillsData(i);
+    }
+
   }
   addUserSkillsData(userSkillItem: UserSkillItem) {
     this.userService.postSkillInfo(userSkillItem).subscribe(
       dataJson => {
         this.userSkillsList.push(dataJson['data']);
-        this.temp_skill = {
-          index: this.userSkillsList.length - 1,
-          skillItem: dataJson['data']
-        };
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
       }
     );
   }
-  onJobLevelChanged(level: number) {
-    const skillItemData = {
-      skill_id: this.skillData.skill_id,
-      skill: this.skillData.skill,
-      skill_level: level
-    };
-    this.updateJobSkillsData(skillItemData);
-  }
+
   onLevelChanged(level: number, index: number) {
-    const skillItemData = {
-      skill_id: this.userSkillsList[index].skill_id,
-      skill: this.userSkillsList[index].skill,
-      skill_level: level
-    };
-    this.updateUserSkillsData(index, skillItemData);
+    this.allSkills[index]['skill_level'] = level;
   }
-  updateJobSkillsData( userSkillItem: UserSkillItem) {
-    this.userService.patchSkillInfoById(userSkillItem.skill_id, userSkillItem).subscribe(
-      dataJson => {
-        this.skillData = dataJson['data'];
-        if (this.temp_skill) {
-          this.temp_skill.skillItem = dataJson['data'];
-                }
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-      }
-    );
-  }
-
-
-  updateUserSkillsData(arrIndex: number, userSkillItem: UserSkillItem) {
-    this.userService.patchSkillInfoById(userSkillItem.skill_id, userSkillItem).subscribe(
-      dataJson => {
-        this.userSkillsList[arrIndex] = dataJson['data'];
-        if (this.temp_skill) {
-          this.temp_skill.skillItem = dataJson['data'];
-        }
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-      }
-    );
-  }
-
   removeUserSkillsData(index: number, userSkillItem: UserSkillItem) {
-    this.userService.deleteSkillInfoById(userSkillItem.skill_id).subscribe(
-      dataJson => {
-        this.userSkillsList.splice(index, 1);
-        this.temp_skill = null;
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-      }
-    );
-  }
-  removeExistingSkillsData(userSkillItem: UserSkillItem) {
-    this.skillFlag = false;
-  }
-  editSkillDone() {
-    this.temp_skill = null;
+    this.allSkills.splice(index, 1);
+
   }
 }

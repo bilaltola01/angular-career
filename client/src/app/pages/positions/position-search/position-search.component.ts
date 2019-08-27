@@ -80,16 +80,16 @@ export class PositionSearchComponent implements OnInit {
 
   constructor(private autoCompleteService: AutoCompleteService,
     private alertsService: AlertsService, private positionService: PositionService,
-    private cartService: CartService, private applicationService: ApplicationService,  public dialog: MatDialog) { }
-
+    private cartService: CartService, private applicationService: ApplicationService, public dialog: MatDialog) {
+  }
   ngOnInit() {
     this.initPositionFilterForm();
     this.getJobData();
     this.getSavedJobs();
     this.getAppliedJobs();
     this.breakpoint = (window.innerWidth <= 500) ? 2 : 4;
-  }
 
+  }
   onResize(event) {
     this.breakpoint = (event.target.innerWidth <= 500) ? 2 : 4;
   }
@@ -304,6 +304,7 @@ export class PositionSearchComponent implements OnInit {
     this.selectedAllFlag = false;
     if (this.preLoadDataObject[this.currentPageNumber]) {
       this.positionList = this.preLoadDataObject[this.currentPageNumber].data.data;
+
       this.setPaginationValues(this.preLoadDataObject[this.currentPageNumber]);
       if (this.currentPageNumber < this.paginationArr[this.paginationArr.length - 1]) {
         this.preLoadNextPage(this.currentPageNumber + 1);
@@ -488,7 +489,6 @@ export class PositionSearchComponent implements OnInit {
     const selectedPositionArr = this.positionList.filter(position => position.selected === true && !this.savedJobsMap[position.position_id] && !this.appliedJobsMap[position.position_id]);
     this.saveJob(selectedPositionArr);
   }
-
   removePositionFromLocalCart(appliedJobs) {
     for (const jobs of appliedJobs) {
       delete this.savedJobsMap[jobs.position_id];
@@ -541,6 +541,6 @@ export class PositionSearchComponent implements OnInit {
       maxWidth: '880px',
       minWidth: '280px',
       panelClass: ['edit-dialog-container']
-    } );
+    });
   }
 }

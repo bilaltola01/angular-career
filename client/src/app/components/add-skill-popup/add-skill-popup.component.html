@@ -13,35 +13,28 @@
               <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompleteSkills"
                 formControlName="skills">
               <mat-autocomplete #autocompleteSkills="matAutocomplete">
-                <mat-option *ngFor="let autocomplete_skill of autocomplete_skills" [value]="autocomplete_skill.skill"
+                <mat-option *ngFor="let autocomplete_skill of autocomplete_skills" [value]="autocomplete_skill?.skill"
                   (onSelectionChange)="addSkills(autocomplete_skill)">
-                  <span>{{autocomplete_skill.skill}}</span>
+                  <span>{{autocomplete_skill?.skill}}</span>
                 </mat-option>
               </mat-autocomplete>
             </mat-form-field>
-
-            <div *ngIf="skillFlag" class="skills">
-              <simple-tag type="gray" title="{{skillData.skill}}" ellipseTag="true" value="{{skillData.skill_level}}"
-                isControl="true" (levelChanged)="onJobLevelChanged($event)"
-                (removeClick)="removeExistingSkillsData(skillData)">
+            <div class="skills" > <div *ngFor="let skill of allSkills; let i = index"> 
+              <simple-tag type="gray" title="{{skill?.skill}}" ellipseTag="true" value="{{skill?.skill_level}}"
+                isControl="true" (levelChanged)="onLevelChanged($event, i)" (removeClick)="removeUserSkillsData(i, skill)">
               </simple-tag>
             </div>
-            <div *ngIf="temp_skill" class="skills">
-              <simple-tag type="gray" title="{{temp_skill.skillItem.skill}}" ellipseTag="true" isControl="true"
-                value="{{temp_skill.skillItem.skill_level}}" (levelChanged)="onLevelChanged($event, temp_skill.index)"
-                (removeClick)="removeUserSkillsData(temp_skill.index, temp_skill.skillItem)"></simple-tag>
-
-            </div>
-
+          </div>
+           
           </div>
         </div>
       </div>
-      <div class="nextButton">
-        <action-button class="btn-next" type="flat" title="Add" color="primary" (click)="addSkills(skillData)">
-        </action-button>
-      </div>
     </div>
-
   </mat-dialog-content>
-
+<mat-dialog-actions>
+  <div class="nextButton">
+    <action-button class="btn-next" type="flat" title="Update Skills" color="primary" (click)="updateSkills()">
+    </action-button>
+  </div>
+</mat-dialog-actions>
 </ng-container>

@@ -5,6 +5,7 @@ import { TestingModule } from 'src/app/modules/testing.module';
 import { SimpleTagComponent } from 'src/app/components/simple-tag/simple-tag.component';
 import { ActionButtonComponent } from '../action-button/action-button.component';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
 describe('AddSkillPopupComponent', () => {
   let component: AddSkillPopupComponent;
   let fixture: ComponentFixture<AddSkillPopupComponent>;
@@ -24,7 +25,7 @@ describe('AddSkillPopupComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(AddSkillPopupComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    fixture.autoDetectChanges();
   });
 
   it('should create', () => {

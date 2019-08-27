@@ -85,14 +85,16 @@ $profile-form-padding-desktop: 60px;
           }
         }
       }
-      .nextButton {
-        action-button.btn-next {
-          min-width: 130px;
-          position: relative;
-          /* top: 10%; */
-          left: 15%;
-        }
-      }
     }
   }
+      .nextButton {
+        margin: 0 auto;
+        // action-button.btn-next {
+        //   min-width: 130px;
+        //   position: relative;
+        //   /* top: 10%; */
+        //   // left: 15%;
+        // }
+      }
+    
 }
