@@ -4,7 +4,8 @@ import {
   AlertsService, AlertType,
   AutoCompleteService,
   UserService,
-  HelperService
+  HelperService,
+  UserStateService
 } from '../../../services';
 
 import {
@@ -26,6 +27,13 @@ export interface PeopleData {
   general_info: UserGeneralInfo;
   skillList: UserSkillItem[];
   educationList: UserEducationItem[];
+  contact_status: string;
+}
+
+export enum ContactStatus {
+  none = 'none',
+  pending = 'pending',
+  added = 'added'
 }
 
 @Component({
@@ -66,13 +74,17 @@ export class PeopleSearchComponent implements OnInit {
   userList: PeopleData[];
 
   displayItemsLimit = 7;
+  current_user: UserGeneralInfo;
 
   constructor(
     private autoCompleteService: AutoCompleteService,
     private alertsService: AlertsService,
     private userService: UserService,
-    private helperService: HelperService
-  ) { }
+    private helperService: HelperService,
+    private userStateService: UserStateService
+  ) {
+    this.getCurrentUser();
+  }
 
   ngOnInit() {
     this.initPeopleFilterForm();
@@ -85,6 +97,15 @@ export class PeopleSearchComponent implements OnInit {
 
   toggleTabMenuOpen() {
     this.filter_list = !this.filter_list;
+  }
+
+  getCurrentUser() {
+    this.userStateService.getUser
+      .subscribe(user => {
+        this.current_user = user;
+      }, error => {
+        this.alertsService.show(error.message, AlertType.error);
+      });
   }
 
   initPeopleFilterForm() {
@@ -264,7 +285,8 @@ export class PeopleSearchComponent implements OnInit {
               const peopleData: PeopleData = {
                 general_info: data,
                 skillList: null,
-                educationList: null
+                educationList: null,
+                contact_status: null
               };
               this.userList.push(peopleData);
             });
@@ -274,7 +296,7 @@ export class PeopleSearchComponent implements OnInit {
             };
             this.setPaginationValues(prelaodData);
             this.preLoadDataObject[this.currentPageNumber] = prelaodData;
-            this.getUserSkillsAndEducationInfo(this.currentPageNumber);
+            this.getUsersInfo(this.currentPageNumber);
             if (this.currentPageNumber < this.paginationArr[this.paginationArr.length - 1]) {
               this.preLoadNextPage(this.currentPageNumber + 1);
             }
@@ -289,10 +311,11 @@ export class PeopleSearchComponent implements OnInit {
     }
   }
 
-  getUserSkillsAndEducationInfo(pageNo: number) {
+  getUsersInfo(pageNo: number) {
     this.preLoadDataObject[pageNo].data.forEach((data, arrIndex) => {
       this.getUserSkillsListByOffset(ITEMS_LIMIT, 0, arrIndex, pageNo);
       this.getUserEducationList(arrIndex, pageNo);
+      this.checkContactStatus(arrIndex, pageNo);
     });
   }
 
@@ -328,6 +351,51 @@ export class PeopleSearchComponent implements OnInit {
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  checkContactStatus(arrIndex: number, pageNo: number) {
+    if (this.current_user.user_id !== this.preLoadDataObject[pageNo].data[arrIndex].general_info.user_id) {
+      this.userService.getUserContactById(this.preLoadDataObject[pageNo].data[arrIndex].general_info.user_id).subscribe(
+        dataJson => {
+          if (dataJson['data']) {
+            this.preLoadDataObject[pageNo].data[arrIndex].contact_status = ContactStatus.added;
+            if (pageNo === this.currentPageNumber) {
+              this.userList[arrIndex].contact_status = this.preLoadDataObject[pageNo].data[arrIndex].contact_status;
+            }
+          }
+        },
+        error => {
+          if (error.message === 'No user contact found with given parameters.') {
+            this.checkOutgoingRequest(arrIndex, pageNo);
+          } else {
+            this.alertsService.show(error.message, AlertType.error);
+          }
+        }
+      );
+    }
+  }
+
+  checkOutgoingRequest(arrIndex: number, pageNo: number) {
+    this.userService.getOutgoingContactRequestById(this.preLoadDataObject[pageNo].data[arrIndex].general_info.user_id).subscribe(
+      dataJson => {
+        if (dataJson['data']) {
+          this.preLoadDataObject[pageNo].data[arrIndex].contact_status = ContactStatus.pending;
+          if (pageNo === this.currentPageNumber) {
+            this.userList[arrIndex].contact_status = this.preLoadDataObject[pageNo].data[arrIndex].contact_status;
+          }
+        }
+      },
+      error => {
+        if (error.message === 'No outgoing request found.') {
+          this.preLoadDataObject[pageNo].data[arrIndex].contact_status = ContactStatus.none;
+          if (pageNo === this.currentPageNumber) {
+            this.userList[arrIndex].contact_status = this.preLoadDataObject[pageNo].data[arrIndex].contact_status;
+          }
+        } else {
+          this.alertsService.show(error.message, AlertType.error);
+        }
       }
     );
   }
@@ -368,7 +436,8 @@ export class PeopleSearchComponent implements OnInit {
               const peopleData: PeopleData = {
                 general_info: data,
                 skillList: null,
-                educationList: null
+                educationList: null,
+                contact_status: null
               };
               userList.push(peopleData);
             });
@@ -377,7 +446,7 @@ export class PeopleSearchComponent implements OnInit {
               count: dataJson.data.count
             };
             this.preLoadDataObject[nextPageNumber] = prelaodData;
-            this.getUserSkillsAndEducationInfo(nextPageNumber);
+            this.getUsersInfo(nextPageNumber);
           }
           this.filterAttributes.offset = previousOffset;
         },
@@ -397,10 +466,6 @@ export class PeopleSearchComponent implements OnInit {
     this.toggleTabMenuOpen();
   }
 
-  // selectAll(isChecked) {
-  //   this.selectedAllFlag = isChecked;
-  // }
-
   onSearchUser(event) {
     this.filterAttributes.offset = 0;
     this.currentPageNumber = 1;
@@ -415,6 +480,32 @@ export class PeopleSearchComponent implements OnInit {
     this.toggleTabMenuOpen();
     this.preLoadDataObject = {};
     this.getUsersData();
+  }
+
+  contactBtnTitle(contact_status: string): string {
+    if (contact_status === 'none') {
+      return 'Add Contact';
+    } else if (contact_status === 'pending') {
+      return 'Request Sent';
+    }
+  }
+
+  onClickContactBtn(arrIndex: number, pageNo: number) {
+    if (this.preLoadDataObject[pageNo].data[arrIndex].contact_status === 'none') {
+      this.userService.postOutgoingContactRequest(this.preLoadDataObject[pageNo].data[arrIndex].general_info.user_id).subscribe(
+        dataJson => {
+          if (dataJson['data']) {
+            this.preLoadDataObject[pageNo].data[arrIndex].contact_status = ContactStatus.pending;
+            if (pageNo === this.currentPageNumber) {
+              this.userList[arrIndex].contact_status = this.preLoadDataObject[pageNo].data[arrIndex].contact_status;
+            }
+          }
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    }
   }
 
 

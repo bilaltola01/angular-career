@@ -125,7 +125,7 @@
                   <h3 *ngIf="user.general_info.title" class="title">{{user.general_info.title}}</h3>
                 </div>
               </div>
-              <action-button class="contact-btn" type="flat" title="Add Contact" color="primary"></action-button>
+              <action-button *ngIf="user.contact_status && user.contact_status !== 'added'" class="contact-btn" type="flat" [title]="contactBtnTitle(user.contact_status)" color="primary" (click)="onClickContactBtn(i, currentPageNumber)"></action-button>
             </div>
 
             <div *ngIf="user.general_info.city_id || user.general_info.state_id || (user.educationList && user.educationList.length > 0)" class="sub-container">
