@@ -78,7 +78,7 @@
             </div>
             <div class="profile-form__field">
                 <mat-form-field class="bg-transparent" appearance="fill">
-                    <mat-label>Start Date</mat-label>
+                    <mat-label>Founding Year</mat-label>
                     <input matInput placeholder="YYYY" type="text" formControlName="companyFounded_date" pattern="\d{4}">
                     <input class="hide" [matDatepicker]="companyFounded_date" [max]="maxDate">
                     <mat-datepicker-toggle matSuffix [for]="companyFounded_date"></mat-datepicker-toggle>
@@ -263,6 +263,8 @@
             [disabled]="!checkBasicInfoFormSkip() && !(basicInfoForm.valid && onCheckCityValidation() && onCheckStateValidation())">
         </action-button>
     </div> -->
+
+    <action-button class="btn-next" type="flat" title="Finish" color="primary" (click)="finish()"></action-button>
 </div>
 
 

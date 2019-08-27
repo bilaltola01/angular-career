@@ -5,6 +5,7 @@ import {MatDatepicker} from '@angular/material/datepicker';
 import {
   AutoCompleteService,
   UserService,
+  CompanyService,
   AlertsService,
   AlertType,
   HelperService,
@@ -137,6 +138,8 @@ export class CreateCompanyComponent implements OnInit {
   companyBasicInfoForm: FormGroup;
   companyIndustryForm: FormGroup;
   companyTermsForm: FormGroup;
+  externalResourcesForm: FormGroup;
+
 
   basicInfoForm: FormGroup; // TODO: Omg ...
   educationFormArray: FormArray;
@@ -145,7 +148,6 @@ export class CreateCompanyComponent implements OnInit {
   skillsAndInterestsForm: FormGroup;
   projectsFormArray: FormArray;
   publicationsFormArray: FormArray;
-  externalResourcesForm: FormGroup;
 
   // autocomplete lists
   autocomplete_cities: City[] = [];
@@ -198,6 +200,7 @@ export class CreateCompanyComponent implements OnInit {
     private router: Router,
     private autoCompleteService: AutoCompleteService,
     private userService: UserService,
+    private companyService: CompanyService,
     private alertsService: AlertsService,
     public helperService: HelperService,
     private photoStateService: PhotoStateService) { }
@@ -809,5 +812,39 @@ export class CreateCompanyComponent implements OnInit {
     this.secondary_industries = this.secondary_industries.filter(primary_industry => primary_industry !== industry);
   }
 
+  finish() {
+    console.log("TCL: CreateCompanyComponent -> finish -> nameOverviewForm", this.nameOverviewForm.value)
+    const companyPayload = {
+      company_name: this.nameOverviewForm.get('nameCompany').value,
+      company_desc: this.nameOverviewForm.get('aboutCompany').value,
+      company_logo: this.nameOverviewForm.get('photo').value || '',
+      company_size: 'small',
+      hq_city: 10,
+      // hq_state: this.companyBasicInfoForm.get('companyState').value,
+      // hq_country: this.companyBasicInfoForm.get('companyCountry').value,
+      // founding_year: this.companyBasicInfoForm.get('companyFounded_date').value,
+      // website: this.companyBasicInfoForm.get('companyWebsite').value,
+      hq_state: 100,
+      hq_country: 100,
+      // founding_year: this.companyBasicInfoForm.get('companyFounded_date').value,
+      website: this.companyBasicInfoForm.get('companyWebsite').value,
+      // main_industry: 100,
+      // active: 1,
+      // company_industry_ids: [101, 102 , 103],
+    };
+    console.log("TCL: CreateCompanyComponent -> finish -> companyPayload", companyPayload);
+
+
+
+    this.companyService.createCompany(companyPayload).subscribe(dataJson => {
+      console.log("TCL: CreateCompanyComponent -> finish -> dataJson", dataJson);
+    },
+    error => {
+      console.log("TCL: CreateCompanyComponent -> finish -> error", error);
+    });
+
+
+    
+  }
 }
 

@@ -1,0 +1,58 @@
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { catchError, map } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { environment } from '../../environments/environment';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class CompanyService {
+  private company_service_url = `${environment.serverUrl}/${environment.company_service}/api/${environment.api_version}/`;
+
+  constructor(private http: HttpClient) { }
+
+
+  public createCompany(company): Observable<any> {
+    return this.http.post(this.company_service_url + 'company', this.httpOptions())
+      .pipe(
+        map(
+          data => {
+            console.log("TCL: CompanyService -> constructor -> data", data);
+            if (data['token']) {
+              return {success: true, message: data['message']};
+            } else {
+              return {success: false, message: data['message']};
+            }
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
+  private httpOptions() {
+    return {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      })
+    };
+  }
+
+  private authHttpOptions() {
+    const token = localStorage.getItem('token');
+    return {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': token
+      })
+    };
+  }
+
+  private handleError(error) {
+    if (!environment.production) {
+      console.error(`UserService -> handleError -> error. Error Code: ${error.status}. Message: ${error.error.message ? error.error.message : error.statusText}. Details:`, error);
+    }
+
+    return throwError({success: false, message: error.error.message ? error.error.message : error.statusText});
+  }
+}
