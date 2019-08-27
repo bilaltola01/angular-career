@@ -87,14 +87,12 @@ $profile-form-padding-desktop: 60px;
       }
     }
   }
-      .nextButton {
-        margin: 0 auto;
-        // action-button.btn-next {
-        //   min-width: 130px;
-        //   position: relative;
-        //   /* top: 10%; */
-        //   // left: 15%;
-        // }
-      }
+  & mat-dialog-actions {
+    margin-bottom: 0 !important;
+    .nextButton {
+      margin: 0 auto;
+    }
+  }
+      
     
 }
