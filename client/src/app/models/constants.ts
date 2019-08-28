@@ -9,8 +9,8 @@ export const EthnicityTypes = [
 ];
 
 export const CompanySizeTypes = [
-  'Small ( 1 - 10)',
-  'Medium ( 11 - 100)',
+  'Small (1 - 10)',
+  'Medium (11 - 100)',
   'Large (101 - 1000)'
 ];
 

@@ -3,22 +3,31 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CompanyService {
+
+  helper = new JwtHelperService();
+  private user_id = -1;
+
   private company_service_url = `${environment.serverUrl}/${environment.company_service}/api/${environment.api_version}/`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.user_id = this.helper.decodeToken(token).user_id;
+    }
+  }
 
 
-  public createCompany(company): Observable<any> {
-    return this.http.post(this.company_service_url + 'company', this.httpOptions())
+  public createCompany(company: any): Observable<any> {
+    return this.http.post(this.company_service_url + 'company', company, this.authHttpOptions())
       .pipe(
         map(
           data => {
-            console.log("TCL: CompanyService -> constructor -> data", data);
             if (data['token']) {
               return {success: true, message: data['message']};
             } else {

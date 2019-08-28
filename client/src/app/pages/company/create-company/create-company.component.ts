@@ -53,7 +53,6 @@ export class CreateCompanyComponent implements OnInit {
   @Output() updatedGeneralInfoData = new EventEmitter();
 
   page_titles = [
-    '',
     'Name & Overview',
     'Company Information',
     'Industry',
@@ -63,9 +62,9 @@ export class CreateCompanyComponent implements OnInit {
   ];
 
   profileCreationPages = [
-    'choose-option',
     'profile-basic',
-    'profile-about',
+    'profile-basic',
+    'profile-skills',
     'profile-education',
     'profile-work',
     'profile-skills',
@@ -78,10 +77,6 @@ export class CreateCompanyComponent implements OnInit {
   isTabMenuOpen: boolean;
 
   progressWidth = [
-    {
-      label: 0,
-      width: 0
-    },
     {
       label: 10,
       width: 100 / 9 - 100 / 18
@@ -196,6 +191,16 @@ export class CreateCompanyComponent implements OnInit {
   userRole: string;
   is_skip: boolean;
 
+  company_logo: string;
+  company_name: string;
+  company_desc: string;
+  company_size:	string;
+  hq_city: City;
+  hq_state:	State;
+  hq_country:	number;
+  founding_year: any;
+  website: string;
+
   constructor(private route: ActivatedRoute,
     private router: Router,
     private autoCompleteService: AutoCompleteService,
@@ -211,17 +216,20 @@ export class CreateCompanyComponent implements OnInit {
       this.userRole = UserRoles[0];
     }
     this.isTabMenuOpen = false;
-    this.selectedPageIndex = 1;
 
-    this.initNameOverviewForm();
-    this.initCompanyBasicInfoForm();
-    this.initCompanyIndustryForm();
-    this.initCompanyTermsForm();
+    this.company_size = CompanySizeTypes[0];
+    this.selectedPageIndex = 0;
+    this.initializeFormsByPageIndex();
+
+    // this.initNameOverviewForm();
+    // this.initCompanyBasicInfoForm();
+    // this.initCompanyIndustryForm();
+    // this.initCompanyTermsForm();
 
 
-    this.initBasicInfoForm();
-    // this.initAboutMeForm();
-    this.initExternalResourcesForm();
+    // this.initBasicInfoForm();
+    // // this.initAboutMeForm();
+    // this.initExternalResourcesForm();
     // this.initProfileStatus();
 
     // this.getGeneralInfo();
@@ -236,15 +244,14 @@ export class CreateCompanyComponent implements OnInit {
   }
 
   goToNextPage() {
-    console.log("TCL: CreateCompanyComponent -> goToNextPage -> this.selectedPageIndex", this.selectedPageIndex)
     ++this.selectedPageIndex;
     switch (this.selectedPageIndex) {
-      // case 1:
-      //   this.updateGeneralInfo();
-      //   break;
-      // case 2:
-      //   this.updateGeneralInfo();
-      //   break;
+      case 1:
+        this.initCompanyBasicInfoForm();
+        break;
+      case 2:
+        this.initCompanyIndustryForm();
+        break;
       // case 3:
       //   this.updateEducationData();
       //   break;
@@ -283,12 +290,15 @@ export class CreateCompanyComponent implements OnInit {
 
   initializeFormsByPageIndex() {
     switch (this.selectedPageIndex) {
-      // case 1:
-      //   this.getGeneralInfo();
-      //   break;
-      // case 2:
-      //   this.getGeneralInfo();
-      //   break;
+      case 0:
+        this.initNameOverviewForm();
+        break;
+      case 1:
+        this.initCompanyBasicInfoForm();
+        break;
+      case 2:
+        this.initCompanyIndustryForm();
+        break;
       // case 3:
       //   this.initEducationFormArray();
       //   this.getEducationList();
@@ -356,149 +366,23 @@ export class CreateCompanyComponent implements OnInit {
    */
   initNameOverviewForm() {
     this.nameOverviewForm = new FormGroup({
-      photo: new FormControl(''),
-      nameCompany: new FormControl('', [Validators.required]),
-      aboutCompany: new FormControl('', [Validators.required]),
+      company_logo: new FormControl(this.company_logo ? this.company_logo : null),
+      company_name: new FormControl(this.company_name ? this.company_name : null, [Validators.required]),
+      company_desc: new FormControl(this.company_desc ? this.company_desc : null, [Validators.required]),
+    });
+
+    this.nameOverviewForm.get('company_logo').valueChanges.subscribe((company_logo) => {
+      this.company_logo = company_logo ? company_logo : null;
+    });
+
+    this.nameOverviewForm.get('company_name').valueChanges.subscribe((company_name) => {
+      this.company_name = company_name && this.helperService.checkSpacesString(company_name) ? company_name : null;
+    });
+
+    this.nameOverviewForm.get('company_desc').valueChanges.subscribe((company_desc) => {
+      this.company_desc = company_desc && this.helperService.checkSpacesString(company_desc) ? company_desc : null;
     });
   }
-
-    /**
-   * General Information Form
-   */
-  initBasicInfoForm() {
-    this.autocomplete_cities = [];
-    this.autocomplete_states = [];
-
-    this.generalInfoResponse = null;
-    this.generalInfoRequest = null;
-
-    this.basicInfoForm = new FormGroup({
-      photo: new FormControl(''),
-      basicInfoCity: new FormControl(''),
-      basicInfoState: new FormControl(''),
-      basicInfoCountry: new FormControl(''),
-      basicInfoBirth: new FormControl(''),
-      basicInfoTitle: new FormControl(''),
-      basicInfoGender: new FormControl(''),
-      basicInfoEthnicity: new FormControl('', [Validators.required])
-    });
-
-    this.basicInfoForm.get('basicInfoCity').valueChanges.subscribe((city) => {
-      if (city && this.helperService.checkSpacesString(city)) {
-        this.autoCompleteService.autoComplete(city, 'cities').subscribe(
-          dataJson => {
-            if (dataJson['success']) {
-              this.autocomplete_cities = dataJson['data'];
-              if (this.autocomplete_cities.length === 0) {
-                this.clearCity();
-              }
-            }
-          },
-          error => {
-            this.alertsService.show(error.message, AlertType.error);
-            this.autocomplete_cities = [];
-            this.clearCity();
-          }
-        );
-      } else {
-        this.autocomplete_cities = [];
-        this.generalInfoRequest.city_id = null;
-      }
-    });
-    this.basicInfoForm.get('basicInfoState').valueChanges.subscribe((state) => {
-      if (state && this.helperService.checkSpacesString(state)) {
-        this.autoCompleteService.autoComplete(state, 'states').subscribe(
-          dataJson => {
-            if (dataJson['success']) {
-              this.autocomplete_states = dataJson['data'];
-              if (this.autocomplete_states.length === 0) {
-                this.clearState();
-              }
-            }
-          },
-          error => {
-            this.alertsService.show(error.message, AlertType.error);
-            this.autocomplete_states = [];
-            this.clearState();
-          }
-        );
-      } else {
-        this.autocomplete_states = [];
-        this.generalInfoRequest.state_id = null;
-      }
-    });
-    this.basicInfoForm.get('basicInfoCountry').valueChanges.subscribe(
-      (country) => {
-        if (country) {
-          this.generalInfoRequest.country_id = Countries.indexOf(country) + 1;
-        } else {
-          this.generalInfoRequest.country_id = null;
-        }
-      }
-    );
-    this.basicInfoForm.get('basicInfoGender').valueChanges.subscribe(
-      (gender) => {
-        this.generalInfoRequest.gender = gender;
-      }
-    );
-    this.basicInfoForm.get('basicInfoBirth').valueChanges.subscribe(
-      (date) => {
-        this.generalInfoRequest.birthdate = date ? this.helperService.checkSpacesString(date) : null;
-      }
-    );
-    this.basicInfoForm.get('basicInfoTitle').valueChanges.subscribe(
-      (title) => {
-        this.generalInfoRequest.title = title ? this.helperService.checkSpacesString(title) : null;
-      }
-    );
-    this.basicInfoForm.get('basicInfoEthnicity').valueChanges.subscribe(
-      (ethnicity) => {
-        this.generalInfoRequest.ethnicity = ethnicity;
-      }
-    );
-
-    this.basicInfoForm.get('photo').valueChanges
-      .subscribe((photoUrl: string) => {
-        this.generalInfoRequest.photo = photoUrl ? photoUrl : null;
-      });
-  }
-
-  updateGeneralInfo() {
-    if (!this.is_skip) {
-      if ((this.selectedPageIndex === 1 && this.basicInfoForm.valid && this.onCheckCityValidation() && this.onCheckStateValidation()) ||
-        (this.selectedPageIndex === 2 && this.aboutMeForm.valid) || this.selectedPageIndex === 9) {
-        if (this.userRole) {
-          this.generalInfoRequest[this.userRole] = 1;
-        }
-
-        this.userService.updateGeneralInfo(this.generalInfoRequest).subscribe(
-          dataJson => {
-            this.generalInfoResponse = dataJson['data'];
-            // this.updateBasicInformationForm();
-            // this.updateAboutMeForm();
-            // this.updateProfileStatus();
-            if (this.selectedPageIndex !== 9) {
-              this.selectedPageIndex++;
-              if (this.selectedPageIndex === 3) {
-                this.initializeFormsByPageIndex();
-              }
-            }
-          },
-          error => {
-            this.alertsService.show(error.message, AlertType.error);
-          }
-        );
-      }
-    } else {
-      if (this.selectedPageIndex !== 9) {
-        this.selectedPageIndex++;
-        if (this.selectedPageIndex === 3) {
-          this.initializeFormsByPageIndex();
-        }
-      }
-    }
-  }
-
 
   /**
    * Company Basic Info
@@ -507,47 +391,80 @@ export class CreateCompanyComponent implements OnInit {
     this.autocomplete_cities = [];
     this.autocomplete_states = [];
 
-    this.generalInfoResponse = null;
-    this.generalInfoRequest = null;
-
     this.companyBasicInfoForm = new FormGroup({
-      companySize: new FormControl('', [Validators.required]),
-      companyFounded_date: new FormControl('', [Validators.required]),
-      companyCountry: new FormControl('', [Validators.required]),
-      companyState: new FormControl('', [Validators.required]),
-      // companyHeadquarters: new FormControl('', [Validators.required]),
-      companyWebsite: new FormControl('')
+      company_size: new FormControl(this.company_size ? this.company_size : null, [Validators.required]),
+      founding_year: new FormControl(this.founding_year ? this.helperService.convertStringToFormattedDateString(this.founding_year, 'L', 'YYYY') : null),
+      hq_city: new FormControl(this.hq_city ? this.helperService.cityNameFromAutoComplete(this.hq_city.city) : null),
+      hq_state: new FormControl(this.hq_state ? this.hq_state.state : null),
+      hq_country: new FormControl(this.hq_country ? Countries[this.hq_country - 1] : null),
+      website: new FormControl(this.website ? this.website : null)
     });
 
-    this.companyBasicInfoForm.get('companyState').valueChanges.subscribe((state) => {
-      if (state && this.helperService.checkSpacesString(state)) {
-        this.autoCompleteService.autoComplete(state, 'states').subscribe(
+    this.companyBasicInfoForm.get('hq_city').valueChanges.subscribe((hq_city) => {
+      if (hq_city && this.helperService.checkSpacesString(hq_city)) {
+        this.autoCompleteService.autoComplete(hq_city, 'cities').subscribe(
+          dataJson => {
+            if (dataJson['success']) {
+              this.autocomplete_cities = dataJson['data'];
+              if (this.autocomplete_cities.length === 0) {
+                this.hq_city = null;
+              }
+            }
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+            this.autocomplete_cities = [];
+            this.hq_city = null;
+          }
+        );
+      } else {
+        this.autocomplete_cities = [];
+        this.hq_city = null;
+      }
+    });
+
+    this.companyBasicInfoForm.get('hq_state').valueChanges.subscribe((hq_state) => {
+      if (hq_state && this.helperService.checkSpacesString(hq_state)) {
+        this.autoCompleteService.autoComplete(hq_state, 'states').subscribe(
           dataJson => {
             if (dataJson['success']) {
               this.autocomplete_states = dataJson['data'];
               if (this.autocomplete_states.length === 0) {
-                this.clearState();
+                this.hq_state = null;
               }
             }
           },
           error => {
             this.alertsService.show(error.message, AlertType.error);
             this.autocomplete_states = [];
-            this.clearState();
+            this.hq_state = null;
           }
         );
       } else {
         this.autocomplete_states = [];
-        this.generalInfoRequest.state_id = null;
+        this.hq_state = null;
       }
     });
-    this.companyBasicInfoForm.get('companyCountry').valueChanges.subscribe(
-      (country) => {
-        if (country) {
-          this.generalInfoRequest.country_id = Countries.indexOf(country) + 1;
+
+    this.companyBasicInfoForm.get('hq_country').valueChanges.subscribe(
+      (hq_country) => {
+        if (hq_country) {
+          this.hq_country = Countries.indexOf(hq_country) + 1;
         } else {
-          this.generalInfoRequest.country_id = null;
+          this.hq_country = null;
         }
+      }
+    );
+
+    this.companyBasicInfoForm.get('founding_year').valueChanges.subscribe(
+      (founding_year) => {
+        this.founding_year = founding_year ? this.helperService.convertStringToFormattedDateString(founding_year, 'YYYY', 'L') : null;
+      }
+    );
+
+    this.companyBasicInfoForm.get('website').valueChanges.subscribe(
+      (website) => {
+        this.website = website ? this.helperService.checkSpacesString(website) : null;
       }
     );
 
@@ -698,79 +615,58 @@ export class CreateCompanyComponent implements OnInit {
   }
 
   onSelectCity(city: City) {
-    this.generalInfoRequest.city_id = city.city_id;
-    this.temp_city = city;
+    this.hq_city = city;
   }
 
   onBlurCity() {
-    if (this.temp_city) {
-      if (this.basicInfoForm.get('basicInfoCity').value !== this.helperService.cityNameFromAutoComplete(this.temp_city.city)) {
-        this.clearCity();
-        this.temp_city = null;
-      }
-    } else {
-      if (this.basicInfoForm.get('basicInfoCity').value !== this.generalInfoResponse.city) {
-        this.clearCity();
-      }
+    if (this.hq_city && this.companyBasicInfoForm.value.hq_city !== this.helperService.cityNameFromAutoComplete(this.hq_city.city)) {
+      this.hq_city = null;
     }
   }
 
   onCheckCityValidation(): boolean {
-    const value = this.basicInfoForm.get('basicInfoCity').value;
+    const value = this.companyBasicInfoForm.get('hq_city').value;
     if (value && this.helperService.checkSpacesString(value)) {
-      if (this.temp_city) {
-        return value === this.helperService.cityNameFromAutoComplete(this.temp_city.city) ? true : false;
+      if (this.hq_city) {
+        return value === this.helperService.cityNameFromAutoComplete(this.hq_city.city) ? true : false;
       } else {
-        return value === this.generalInfoResponse.city ? true : false;
+        return false;
       }
     } else {
-      return true;
+      return this.hq_city ? false : true;
     }
   }
 
   clearCity() {
-    this.generalInfoRequest.city_id = null;
+    this.hq_city = null;
   }
 
   onSelectState(state: State) {
-    this.generalInfoRequest.state_id = state.state_id;
-    this.temp_state = state;
+    this.hq_state = state;
   }
 
   onBlurState() {
-    if (this.temp_state) {
-      if (this.basicInfoForm.get('basicInfoState').value !== this.temp_state.state) {
-        this.clearState();
-        this.temp_state = null;
-      }
-    } else {
-      if (this.basicInfoForm.get('basicInfoState').value !== this.generalInfoResponse.state) {
-        this.clearState();
-      }
+    if (this.hq_state && this.companyBasicInfoForm.value.hq_state !== this.hq_state.state) {
+      this.hq_state = null;
     }
   }
 
   onCheckStateValidation(): boolean {
-    const value = this.basicInfoForm.get('basicInfoState').value;
+    const value = this.companyBasicInfoForm.value.hq_state;
     if (value && this.helperService.checkSpacesString(value)) {
-      if (this.temp_state) {
-        return value === this.temp_state.state ? true : false;
+      if (this.hq_state) {
+        return value === this.hq_state.state ? true : false;
       } else {
-        return value === this.generalInfoResponse.state ? true : false;
+        return false;
       }
     } else {
-      return true;
+      return this.hq_state ? true : false;
     }
   }
 
-  clearState() {
-    this.generalInfoRequest.state_id = null;
-  }
-
-  onFoundedYearSelect(date: any, isStartDate: boolean = true, datePicker: MatDatepicker<any>) {
-    const dateValue = new Date(date);
+  onFoundedYearSelect(date: any, datePicker: MatDatepicker<any>) {
     datePicker.close();
-    this.companyBasicInfoForm.get('companyFounded_date').setValue(moment(dateValue).format('YYYY'));
+    this.companyBasicInfoForm.get('founding_year').setValue(this.helperService.convertToFormattedString(date, 'YYYY'));
   }
 
 
