@@ -320,7 +320,7 @@
                                             <simple-tag type="gray" title="{{min_skill.skill}}" ellipseTag="true"
                                                 value="{{min_skill.skill_level}}"
                                                 [matTooltip]="SkillLevelDescription[min_skill.skill_level]"
-                                                [matTooltipShowDelay]=500>
+                                                [matTooltipShowDelay]=500 (click)="openSkilladdDialog(min_skill)">
                                             </simple-tag>
 
                                         </div>

@@ -44,14 +44,14 @@ $profile-form-padding-desktop: 60px;
         &__field {
           margin-top: $profile-form-field-mt;
           box-sizing: border-box;
-          width: 80%;
+          width: 100%;
           max-width: 615px;
           border: solid 1px $mat-form-border-color;
           border-radius: 5px;
           padding: 0;
           &.search {
             border: none;
-            padding: 0;
+            padding: 0px 0 0 18px;
             h3 {
               color: rgba(map-get($md-cfaccent, 500), 0.84);
             }

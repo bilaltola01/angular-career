@@ -21,7 +21,6 @@ export class AddSkillPopupComponent {
   skillsForm: FormGroup;
   skillData: UserSkillItem;
   allSkills = [];
-
   constructor(public dialogRef: MatDialogRef<AddSkillPopupComponent>, @Inject(MAT_DIALOG_DATA) public data,
     public dialog: MatDialog,
     private userService: UserService,
@@ -32,6 +31,7 @@ export class AddSkillPopupComponent {
     this.initSkillsForm();
     this.getUserSkillsList(true);
   }
+
   onClose(): void {
     this.dialogRef.close();
   }
@@ -39,7 +39,7 @@ export class AddSkillPopupComponent {
     this.autocomplete_skills = [];
     this.prevent_skills_autocomplete = true;
     this.userSkillsList = [];
-    this.skillData = this.data.skillData;
+    this.skillData = Object.assign({}, this.data.skillData);
     this.allSkills.push(this.skillData);
     this.skillsForm = new FormGroup({
       skills: new FormControl(''),
@@ -95,7 +95,6 @@ export class AddSkillPopupComponent {
       }
     );
   }
-
   addSkills(skillItem: Skill) {
     let skillItemData = {
       skill_id: skillItem.skill_id,
@@ -125,10 +124,15 @@ export class AddSkillPopupComponent {
   }
 
   updateSkills() {
+    const index = this.userSkillsList.findIndex(value => value.skill_id === this.allSkills[0].skill_id);
+    if (index > -1) {
+      this.allSkills[0].skill_level = this.userSkillsList[index].skill_level > this.allSkills[0].skill_level ? this.userSkillsList[index].skill_level : this.allSkills[0].skill_level;
+    }
+
     for (const i of this.allSkills) {
       this.addUserSkillsData(i);
     }
-
+    this.dialogRef.close();
   }
   addUserSkillsData(userSkillItem: UserSkillItem) {
     this.userService.postSkillInfo(userSkillItem).subscribe(
