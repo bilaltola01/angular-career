@@ -11,6 +11,7 @@ export const environment = {
   autocomplete_service: 'autocomplete-service',
   application_service: 'application-service',
   position_service: 'position-service',
+  score_service: 'score-service',
   cart_service: 'cart-service',
   api_version: 'v1'
 };

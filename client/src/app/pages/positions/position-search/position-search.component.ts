@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import {
   PositionService, AlertsService, AlertType,
-  AutoCompleteService, CartService, ApplicationService
+  AutoCompleteService, CartService, ApplicationService, ScoreService
 } from '../../../services/index';
 
 
@@ -77,10 +77,10 @@ export class PositionSearchComponent implements OnInit {
   appliedJobsMap = {};
   preLoadDataObject = {};
 
-
   constructor(private autoCompleteService: AutoCompleteService,
-    private alertsService: AlertsService, private positionService: PositionService,
+    private alertsService: AlertsService, private positionService: PositionService, private scoreService: ScoreService,
     private cartService: CartService, private applicationService: ApplicationService, public dialog: MatDialog) {
+    this.updateSkillCallback = this.updateSkillCallback.bind(this);
   }
   ngOnInit() {
     this.initPositionFilterForm();
@@ -522,6 +522,7 @@ export class PositionSearchComponent implements OnInit {
       this.positionService.getPositions(queryString).subscribe(
         dataJson => {
           if (dataJson['success'] && dataJson) {
+            this.preLoadDataObject = {};
             this.preLoadDataObject[nextPageNumber] = dataJson;
           }
           this.filterAttributes.offset = previousOffset;
@@ -534,13 +535,35 @@ export class PositionSearchComponent implements OnInit {
 
 
   }
+
+  getPositionIds() {
+    let positionIds = this.positionList.map(position => `positionList=${position.position_id}`);
+    if (this.preLoadDataObject[this.currentPageNumber + 1] && this.preLoadDataObject[this.currentPageNumber + 1].data.data) {
+      const preLoadData = this.preLoadDataObject[this.currentPageNumber + 1].data.data.map(position => `positionList=${position.position_id}`);
+      positionIds = [...positionIds, ...preLoadData];
+    }
+
+    return positionIds.join('&');
+  }
+  updateSkillCallback() {
+    // get updated fit-score after updating skills
+    const queryParam = this.getPositionIds();
+    this.scoreService.getUpdatedfitscore(queryParam).subscribe(
+      data => {
+        console.log(data);
+        // TODO: When API return proper data update fitscore of all positions.
+      }
+    );
+
+  }
   openSkilladdDialog(skillData) {
     const dialogRef = this.dialog.open(AddSkillPopupComponent, {
-      data: { skillData },
+      data: { skillData, callback: this.updateSkillCallback },
       width: '100vw',
       maxWidth: '880px',
       minWidth: '280px',
       panelClass: ['edit-dialog-container']
     });
   }
+
 }

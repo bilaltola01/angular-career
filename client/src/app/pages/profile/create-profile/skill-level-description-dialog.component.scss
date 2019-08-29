@@ -8,6 +8,13 @@
         color: #318bd6;
     }
   
+    .title {
+        color: rgba(map-get($md-cfaccent, 500), 0.84);
+        margin: 0px 0 20px;
+        display: block;
+        font: 500 20px/32px Roboto, "Helvetica Neue", sans-serif;
+        text-align: center;
+    }
     & mat-dialog-content {
         width: 75%;
         margin: 0 auto;
@@ -15,13 +22,6 @@
         min-width: 280px;
         box-sizing: border-box;
         max-height: auto;
-        h3 {
-            color: rgba(map-get($md-cfaccent, 500), 0.84);
-            margin: 0px 0 36px;
-            display: block;
-            font: 500 20px/32px Roboto, "Helvetica Neue", sans-serif;
-            text-align: center;
-        }
     }
 }
    

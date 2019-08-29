@@ -1,11 +1,31 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, throwMatDialogContentAlreadyAttachedError } from '@angular/material/dialog';
+import { Component, Inject, ViewChild } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { UserSkillItem, Skill, ITEMS_LIMIT } from 'src/app/models';
 import { FormGroup, FormControl } from '@angular/forms';
-import { UserService, AlertsService, AlertType, HelperService, AutoCompleteService, ProfileStateService } from 'src/app/services';
+import { UserService, AlertsService, AlertType, HelperService, AutoCompleteService, ProfileStateService, PositionService } from 'src/app/services';
+import { SkillLevelDescription } from 'src/app/models';
+
+
 export interface EditSkillItem {
   index: number;
   skillItem: UserSkillItem;
+}
+
+@Component({
+  selector: 'Skill-Level-Description',
+  templateUrl: './skill-level-description.component.html',
+  styleUrls: ['./skill-level-description.component.scss']
+
+})
+export class SkillLevelPopupComponent  {
+  skillLevelDescription = SkillLevelDescription;
+
+  constructor(public dialogRef: MatDialogRef<AddSkillPopupComponent>, @Inject(MAT_DIALOG_DATA) public data,
+  public dialog: MatDialog) {}
+
+  onClose(): void {
+    this.dialogRef.close();
+  }
 }
 
 @Component({
@@ -21,13 +41,16 @@ export class AddSkillPopupComponent {
   skillsForm: FormGroup;
   skillData: UserSkillItem;
   allSkills = [];
+  skillLevelDescription = SkillLevelDescription;
+  skillUpdateCalllback;
   constructor(public dialogRef: MatDialogRef<AddSkillPopupComponent>, @Inject(MAT_DIALOG_DATA) public data,
     public dialog: MatDialog,
     private userService: UserService,
     private alertsService: AlertsService,
     private autoCompleteService: AutoCompleteService,
     private helperService: HelperService,
-    private profileStateService: ProfileStateService) {
+    private profileStateService: ProfileStateService,
+    private positionService: PositionService) {
     this.initSkillsForm();
     this.getUserSkillsList(true);
   }
@@ -40,6 +63,7 @@ export class AddSkillPopupComponent {
     this.prevent_skills_autocomplete = true;
     this.userSkillsList = [];
     this.skillData = Object.assign({}, this.data.skillData);
+    this.skillUpdateCalllback = this.data.callback;
     this.allSkills.push(this.skillData);
     this.skillsForm = new FormGroup({
       skills: new FormControl(''),
@@ -138,6 +162,7 @@ export class AddSkillPopupComponent {
     this.userService.postSkillInfo(userSkillItem).subscribe(
       dataJson => {
         this.userSkillsList.push(dataJson['data']);
+        this.skillUpdateCalllback();
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -151,5 +176,14 @@ export class AddSkillPopupComponent {
   removeUserSkillsData(index: number, userSkillItem: UserSkillItem) {
     this.allSkills.splice(index, 1);
 
+  }
+  openSkilladdDialog(skillLevelDescription) {
+    const dialogRef = this.dialog.open(SkillLevelPopupComponent, {
+      data: {skillLevelDescription },
+      width: '100vw',
+      maxWidth: '880px',
+      minWidth: '280px',
+      panelClass: ['edit-dialog-container']
+    });
   }
 }
