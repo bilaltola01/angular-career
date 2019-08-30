@@ -283,3 +283,69 @@
 </div>
 	
 <!-- Company Recruiters end -->
+
+<!-- Company Preview start -->
+<div *ngIf="selectedPageIndex===5" class="container company-preview">
+	<div class="header-section">
+		<div class="user-row">
+			<div>
+				<img class="user-photo" src="assets/icons/no_photo.png" alt="Company logo">
+			</div>
+
+			<div class="user-detail">
+				<div>
+					<h1>Google Earth & Maps</h1>
+				</div>
+				<div class="user-info">
+					<small>
+						<img src="assets/icons/ic_location.svg">
+						{{'Los Angeles, California, USA'}}
+					</small>
+					<small>
+						<img src="assets/icons/ic_founding.svg">
+						{{'Since 2017'}}
+					</small>
+				</div>
+				<div class="user-info">
+					<div class="icon-title">
+						<img src="assets/icons/ic_employees.svg">
+						<label>Company Size</label>
+						<p>Large (100-200)</p>
+					</div>
+					<div class="icon-title">
+						<img src="assets/icons/ic_website.svg">
+						<label>Website</label>
+						<p>www.google.com</p>
+					</div>
+					<div class="icon-title">
+						<img src="assets/icons/ic_permissions.svg">
+						<label>Permissions Level</label>
+						<p>Admin</p>
+					</div>
+				</div>
+			</div>
+			<div class="user-status">
+				<action-button type="flat" color="primary" title="Publish"></action-button>
+			</div>
+		</div>
+		<div class="tabs-row">
+			<h3 class="active"> About </h3>
+			<h3> Positions </h3>
+			<h3> People </h3>
+    </div>
+
+	</div>
+	<legend id="legend">
+		<div class="nav-title" (click)="onClickTogggle()">
+			<h3 class="section-title">About</h3>
+			<mat-icon>menu</mat-icon>
+		</div>
+	</legend>
+	<div class="main-section">
+
+	</div>
+	<div class="nav-section">
+
+	</div>
+</div>
+<!-- Company Preview end-->

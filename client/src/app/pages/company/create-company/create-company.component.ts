@@ -132,7 +132,7 @@ export class CreateCompanyComponent implements OnInit {
     this.isTabMenuOpen = false;
 
     this.company_size = CompanySizeTypes[0];
-    this.selectedPageIndex = 0;
+    this.selectedPageIndex = 5;
     this.initializeFormsByPageIndex();
   }
 
