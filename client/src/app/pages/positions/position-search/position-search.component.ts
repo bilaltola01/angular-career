@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import {
   PositionService, AlertsService, AlertType,
-  AutoCompleteService, CartService, ApplicationService, ScoreService
+  AutoCompleteService, CartService, ApplicationService
 } from '../../../services/index';
 
 
@@ -78,7 +78,7 @@ export class PositionSearchComponent implements OnInit {
   preLoadDataObject = {};
 
   constructor(private autoCompleteService: AutoCompleteService,
-    private alertsService: AlertsService, private positionService: PositionService, private scoreService: ScoreService,
+    private alertsService: AlertsService, private positionService: PositionService,
     private cartService: CartService, private applicationService: ApplicationService, public dialog: MatDialog) {
     this.updateSkillCallback = this.updateSkillCallback.bind(this);
   }
@@ -546,15 +546,8 @@ export class PositionSearchComponent implements OnInit {
     return positionIds.join('&');
   }
   updateSkillCallback() {
-    // get updated fit-score after updating skills
-    const queryParam = this.getPositionIds();
-    this.scoreService.getUpdatedfitscore(queryParam).subscribe(
-      data => {
-        console.log(data);
-        // TODO: When API return proper data update fitscore of all positions.
-      }
-    );
-
+    this.preLoadDataObject = {};
+    this.getJobData();
   }
   openSkilladdDialog(skillData) {
     const dialogRef = this.dialog.open(AddSkillPopupComponent, {
