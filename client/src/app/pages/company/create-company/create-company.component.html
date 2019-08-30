@@ -18,13 +18,13 @@
 </div>
 
 
-<!-- Create_Profile_Basic start -->
+<!-- Company Name & Overview start -->
 
-<div *ngIf="selectedPageIndex===0" class="container {{profileCreationPages[0]}}">
+<div *ngIf="selectedPageIndex===0" class="container profile-basic">
 	<div class="container__full">
 		<div class="profile-form" [formGroup]="nameOverviewForm">
 			<h3 class="profile-form__title">
-				Company name & Overview
+				Company Name & Overview
 			</h3>
 
 			<div class="profile-form__image">
@@ -48,16 +48,16 @@
 	</div>
 
 	<div class="container__full">
-		<action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!checkBasicInfoFormSkip() && !(basicInfoForm.valid && onCheckCityValidation() && onCheckStateValidation())">
+		<action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!(nameOverviewForm.valid && helperService.checkSpacesString(nameOverviewForm.value.company_name) && helperService.checkSpacesString(nameOverviewForm.value.company_desc))">
 		</action-button>
 	</div>
 </div>
 
-<!-- Create_Profile_Basic end -->
+<!-- Company Name & Overview end -->
 
-<!-- Create_Profile_About Company Information start -->
+<!-- Company Information start -->
 
-<div *ngIf="selectedPageIndex===1" class="container {{profileCreationPages[1]}}">
+<div *ngIf="selectedPageIndex===1" class="container profile-basic">
 	<div class="container__full">
 		<div class="profile-form" [formGroup]="companyBasicInfoForm">
 			<h3 class="profile-form__title">
@@ -135,144 +135,151 @@
 	</div>
 </div>
 
-<!-- Create_Profile_About end -->
+<!-- Company Information end -->
 
-<!-- Create_Profile_Education start -->
+<!-- Company Industry start -->
 
-<div *ngIf="selectedPageIndex===2" class="container {{profileCreationPages[2]}}">
-    <div class="container__full">
-        <div class="profile-form" [formGroup]="companyIndustryForm">
-            <h3 class="profile-form__title">
-                Industry
-            </h3>
-            <div class="profile-form__field search">
-                <h3>Primary Industry <span *ngIf="primary_industries.length > 0" class="count">{{primary_industries.length}}</span></h3>
-                <mat-form-field appearance="standard" class="search">
-                    <mat-icon matSuffix>search</mat-icon>
-                    <input matInput 
-                        placeholder="Search industry" 
-                        type="text" 
-                        [matAutocomplete]="autocompletePrimaryIndustry" 
-                        formControlName="primary_industries_form">
-                    <mat-autocomplete #autocompletePrimaryIndustry="matAutocomplete">
-                    <mat-option *ngFor="let autocomplete_primary_industry of autocomplete_primary_industries"    
-                                [value]="autocomplete_primary_industry.industry_name" 
-                                (onSelectionChange)="addPrimaryIndustry(autocomplete_primary_industry)">
-                        <span>{{autocomplete_primary_industry.industry_name}}</span>
-                    </mat-option>
-                    </mat-autocomplete>
-                </mat-form-field>
-                <div class="skills" *ngIf="primary_industries.length > 0">
-                    <simple-tag *ngFor="let industry of primary_industries; let j = index"         
-                        type="gray"
-                        title="{{industry.industry_name}}" 
-                        removeTag="true" 
-                        (click)="onRemovePrimaryIndustry(industry)">
-                    </simple-tag>
-                </div>
+<div *ngIf="selectedPageIndex===2" class="container profile-skills">
+	<div class="container__full">
+		<div class="profile-form" [formGroup]="companyIndustryForm">
+			<h3 class="profile-form__title">
+				Industry
+			</h3>
+			<div class="profile-form__field">
+				<mat-form-field class="bg-transparent" appearance="fill">
+					<mat-label>Primary Industry</mat-label>
+					<input matInput placeholder="Primary Industry" type="text" [matAutocomplete]="autocompleteMainIndustry" formControlName="main_industry">
+					<mat-icon matSuffix *ngIf="companyIndustryForm.get('main_industry').value && helperService.checkSpacesString(companyIndustryForm.get('main_industry').value) && companyIndustryForm.get('main_industry').valid && onCheckMainIndustryValidation()">done</mat-icon>
+					<mat-icon matSuffix class="error-field" *ngIf="companyIndustryForm.get('main_industry').value && helperService.checkSpacesString(companyIndustryForm.get('main_industry').value) && !onCheckMainIndustryValidation() && companyIndustryForm.get('main_industry').touched">close</mat-icon>
+					<mat-autocomplete #autocompleteMainIndustry="matAutocomplete" (closed)="onBlurMainIndustry()">
+						<mat-option *ngFor="let industry of autocomplete_main_industries" [value]="industry.industry_name" (onSelectionChange)="onSelectMainIndustry(industry)">
+							<span>{{industry.industry_name}}</span>
+						</mat-option>
+					</mat-autocomplete>
+				</mat-form-field>
+			</div>
 
-            </div>
-
-            <div class="profile-form__field search">
-                <h3>Secondary Industry <span *ngIf="secondary_industries.length > 0" class="count">{{secondary_industries.length}}</span></h3>
-                <mat-form-field appearance="standard" class="search">
-                    <mat-icon matSuffix>search</mat-icon>
-                    <input matInput 
-                        placeholder="Search industry" 
-                        type="text" 
-                        [matAutocomplete]="autocompleteSecondaryIndustry" 
-                        formControlName="secondary_industries_form">
-                    <mat-autocomplete #autocompleteSecondaryIndustry="matAutocomplete">
-                    <mat-option *ngFor="let autocomplete_secondary_industry of autocomplete_secondary_industries"    
-                                [value]="autocomplete_secondary_industry.industry_name" 
-                                (onSelectionChange)="addSecondaryIndustry(autocomplete_secondary_industry)">
-                        <span>{{autocomplete_secondary_industry.industry_name}}</span>
-                    </mat-option>
-                    </mat-autocomplete>
-                </mat-form-field>
-                <div class="skills" *ngIf="secondary_industries.length > 0">
-                    <simple-tag *ngFor="let industry of secondary_industries; let j = index"         
-                        type="gray"
-                        title="{{industry.industry_name}}" 
-                        removeTag="true" 
-                        (click)="onRemoveSecondaryIndustry(industry)">
-                    </simple-tag>
-                </div>
-            </div>
-
-        </div>
-    </div>
-    <div class="container__full">
-      <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
-    </div>
+			<div class="profile-form__field search">
+				<h3>Additional Company Industries <span *ngIf="company_industries && company_industries.length > 0" class="count">{{company_industries.length}}</span></h3>
+				<mat-form-field appearance="standard" class="search">
+					<mat-icon matSuffix>search</mat-icon>
+					<input matInput 
+						placeholder="Search industry" 
+						type="text" 
+						[matAutocomplete]="autocompleteCompanyIndustry" 
+						formControlName="company_industry">
+					<mat-autocomplete #autocompleteCompanyIndustry="matAutocomplete">
+						<mat-option *ngFor="let industry of autocomplete_company_industries"
+							[value]="industry.industry_name" 
+							(onSelectionChange)="addCompanyIndustry(industry)">
+							<span>{{industry.industry_name}}</span>
+						</mat-option>
+					</mat-autocomplete>
+				</mat-form-field>
+				<div class="skills" *ngIf="company_industries && company_industries.length > 0">
+					<simple-tag *ngFor="let company_industry of company_industries; let j = index" 
+						type="gray"
+						title="{{company_industry.industry_name}}" 
+						removeTag="true" 
+						(click)="onRemoveCompanyIndustry(company_industry, j)">
+					</simple-tag>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container__full">
+		<action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
+	</div>
 </div>
 
-<!-- Create_Profile_Education end -->
+<!-- Company Industry end -->
 
-<!-- Create_Profile_Work start -->
+<!-- Company Administrators start -->
 
-<!-- Create_Profile_Links start -->
+<div *ngIf="selectedPageIndex===3" class="container profile-skills">
+	<div class="container__full">
+		<div class="profile-form" [formGroup]="companyAdministratorsForm">
+			<h3 class="profile-form__title">
+				Admin List
+			</h3>
 
-<div *ngIf="selectedPageIndex===4" class="container {{profileCreationPages[4]}}">
-        <div class="container__full">
-            <div class="profile-form" [formGroup]="externalResourcesForm">
-                <h3 class="profile-form__title">
-                    EXTERNAL LINKS
-                </h3>
-                <div *ngFor="let resource of externalResources" class="profile-form__field">
-                    <mat-form-field class="bg-transparent" appearance="fill">
-                        <mat-label>{{resource}}</mat-label>
-                        <img matSuffix src="assets/icons/ic_{{resource.toLowerCase()}}.svg">
-                        <input matInput placeholder="{{resource}} Link" type="text"
-                            [formControl]="externalResourcesForm.get(resource)">
-                    </mat-form-field>
-                </div>
-            </div>
-        </div>
-        <div class="container__full">
-            <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()">
-            </action-button>
-        </div>
-    </div>
-    
-    <!-- Create_Profile_Links end -->
-
-<!-- Create_Profile_Work end -->
-
-<!-- Create_Profile_Skills start -->
-
-<div *ngIf="selectedPageIndex===5" class="container {{profileCreationPages[5]}}">
-    <div class="container__full">
-        <div class="profile-form" [formGroup]="companyTermsForm">
-            <h3 class="profile-form__title">
-                Terms & Conditions
-            </h3>
-
-            <div class="profile-form__field">
-                <mat-form-field class="bg-transparent" appearance="fill">
-                    <mat-label>Company Website Link</mat-label>
-                    <input matInput placeholder="Company Name" type="text" formControlName="companyWebsiteLink">
-                </mat-form-field>
-            </div>
-            <div class="profile-form__field textarea">
-                <mat-form-field>
-                    <textarea matInput placeholder="Company Terms and Conditions" rows="15"
-                        formControlName="companyTerms"></textarea>
-                </mat-form-field>
-            </div>
-
-        </div>
-    </div>
-    <!-- <div class="container__full">
-        <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"
-            [disabled]="!checkBasicInfoFormSkip() && !(basicInfoForm.valid && onCheckCityValidation() && onCheckStateValidation())">
-        </action-button>
-    </div> -->
-
-    <action-button class="btn-next" type="flat" title="Finish" color="primary" (click)="finish()"></action-button>
+			<div class="profile-form__field search">
+				<h3>Search People</h3>
+				<mat-form-field appearance="standard" class="search">
+					<mat-icon matSuffix>search</mat-icon>
+					<input matInput 
+						placeholder="Search people" 
+						type="text" 
+						[matAutocomplete]="autocompleteCompanyAdministrator" 
+						formControlName="company_administrator">
+					<mat-autocomplete #autocompleteCompanyAdministrator="matAutocomplete">
+						<mat-option *ngFor="let admin of autocomplete_administrators"
+							[value]="admin.first_name + (admin.last_name ? ' ' + admin.last_name : '')" 
+							(onSelectionChange)="addCompanyAdministrator(admin)">
+							<img [src]="admin.photo ? admin.photo : 'assets/icons/no_photo.png'">
+							<span>{{admin.first_name + (admin.last_name ? ' ' + admin.last_name : '')}}</span>
+						</mat-option>
+					</mat-autocomplete>
+				</mat-form-field>
+				<div class="users" *ngIf="company_administrators && company_administrators.length > 0">
+					<div *ngFor="let company_administrator of company_administrators; let j = index" class="img-tag">
+						<img src="{{ company_administrator.photo ? company_administrator.photo : 'assets/icons/no_photo.png' }}">
+						<label>{{company_administrator.first_name + (company_administrator.last_name ? ' ' + company_administrator.last_name : '')}}</label>
+						<a>{{(company_administrator.city_id ? company_administrator.city : '') + (company_administrator.city_id && (company_administrator.state_id || company_administrator.country_id) ? ', ' : '') + (company_administrator.state_id ? company_administrator.state : '') + (company_administrator.state_id && company_administrator.country_id ? ', ' : '') + (company_administrator.country_id ? company_administrator.country : '')}}</a>
+						<mat-icon class="remove" (click)="onRemoveCompanyAdministrator(company_administrator, j)">highlight_off</mat-icon>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container__full">
+		<action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
+	</div>
 </div>
+	
+<!-- Company Industry end -->
 
+<!-- Company Recruiters start -->
 
-<!-- Create_Profile_Skills end -->
+<div *ngIf="selectedPageIndex===4" class="container profile-skills">
+	<div class="container__full">
+		<div class="profile-form" [formGroup]="companyRecruitersForm">
+			<h3 class="profile-form__title">
+				Recruiter List
+			</h3>
 
-
+			<div class="profile-form__field search">
+				<h3>Search People</h3>
+				<mat-form-field appearance="standard" class="search">
+					<mat-icon matSuffix>search</mat-icon>
+					<input matInput 
+						placeholder="Search people" 
+						type="text" 
+						[matAutocomplete]="autocompleteCompanyRecruiter" 
+						formControlName="company_recruiter">
+					<mat-autocomplete #autocompleteCompanyRecruiter="matAutocomplete">
+						<mat-option *ngFor="let recruiter of autocomplete_recruiters"
+							[value]="recruiter.first_name + (recruiter.last_name ? ' ' + recruiter.last_name : '')" 
+							(onSelectionChange)="addCompanyRecruiter(recruiter)">
+							<img [src]="recruiter.photo ? recruiter.photo : 'assets/icons/no_photo.png'">
+							<span>{{recruiter.first_name + (recruiter.last_name ? ' ' + recruiter.last_name : '')}}</span>
+						</mat-option>
+					</mat-autocomplete>
+				</mat-form-field>
+				<div class="users" *ngIf="company_recruiters && company_recruiters.length > 0">
+					<div *ngFor="let company_recruiter of company_recruiters; let j = index" class="img-tag">
+						<img src="{{ company_recruiter.photo ? company_recruiter.photo : 'assets/icons/no_photo.png' }}">
+						<label>{{company_recruiter.first_name + (company_recruiter.last_name ? ' ' + company_recruiter.last_name : '')}}</label>
+						<a>{{(company_recruiter.city_id ? company_recruiter.city : '') + (company_recruiter.city_id && (company_recruiter.state_id || company_recruiter.country_id) ? ', ' : '') + (company_recruiter.state_id ? company_recruiter.state : '') + (company_recruiter.state_id && company_recruiter.country_id ? ', ' : '') + (company_recruiter.country_id ? company_recruiter.country : '')}}</a>
+						<mat-icon class="remove" (click)="onRemoveCompanyRecruiter(company_recruiter, j)">highlight_off</mat-icon>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container__full">
+		<action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
+	</div>
+</div>
+	
+<!-- Company Recruiters end -->

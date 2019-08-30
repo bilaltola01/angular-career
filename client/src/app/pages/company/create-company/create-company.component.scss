@@ -233,6 +233,10 @@ p {
         box-sizing: border-box;
         background-color: $white;
         @include flex(column, center, flex-start);
+        &__title {
+          margin: $profile-form-field-mt;
+          text-transform: uppercase;
+        }
         &__image {
           width: 20%;
           max-width: 125px;
@@ -294,6 +298,14 @@ p {
                 color: map-get($md-cfaccent, 100);
               }
             }
+            .users {
+              margin-top: 10px;
+              @include flex(column, center, center);
+              & > *  {
+                margin-top: 20px;
+                margin-right: 15px;
+              }
+            }
           }
           &.simple-tag {
             border: none;
@@ -319,13 +331,54 @@ p {
       }
     }
   }
-  &.profile-basic {
-    .profile-form {
-      &__title {
-        // margin-top: $profile-form-field-mt;
-        margin: $profile-form-field-mt;
-        text-transform: uppercase;
-      }
+}
+
+.img-tag {
+  background-color: $secondary-bg-color;
+  border: solid 3px $secondary-bg-color;
+  border-radius: 38px;
+  display: inline-grid;
+  grid-template: 
+    "image title" 35px
+    "image info" 35px
+    / 70px auto;
+  grid-gap: 0 10px;
+  width: 350px;
+  margin: 10px 20px 5px 0;
+  position: relative;
+  img {
+    grid-area: image;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+  }
+  label {
+    grid-area: title;
+    font-size: 16px;
+    display: flex;
+    align-items: flex-end;
+  }
+  a {
+    grid-area: info;
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 20px;
+  }
+  .remove {
+    position: absolute;
+    font-size: 30px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    color: rgba(map-get($md-cfaccent, 500), .1) !important;
+    top: 5px;
+    right: 15px;
+    cursor: pointer;
+    &:hover {
+      color: map-get($md-cfred, 500) !important;
     }
   }
 }
@@ -445,7 +498,10 @@ p {
         }
       }
     }
-  }  
+  }
+  .img-tag {
+    width: 330px;
+  } 
 }
 
 @media only screen and (max-width: $mobile-breakpoint) {
@@ -532,5 +588,9 @@ p {
         }
       }
     }
+  }
+  .img-tag {
+    width: 230px;
+    margin-right: 0;
   }
 }

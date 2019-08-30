@@ -333,8 +333,7 @@ export const ExternalResources = [
   'Twitter',
   'Facebook',
   'Google',
-  'Linkedin',
-  'Other' // TODO: other?!
+  'Linkedin'
 ];
 
 export const ProfileStatuses = [
