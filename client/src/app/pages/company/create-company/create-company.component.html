@@ -392,6 +392,26 @@
 				</div>
 			</ng-container>
 		</div>
+
+		<div *ngIf="company_administrators.length > 0" class="row">
+			<h3>Administrators</h3>
+			<p>This list of administrators associated with this company.</p>
+			<ng-container *ngIf="displayItemsLimit; let limit">
+				<div>
+					<ng-container *ngFor="let administrator of company_administrators; let i = index;">
+						<div *ngIf="i < limit" class="img-tag">
+							<img src="{{ administrator.photo ? administrator.photo : 'assets/icons/no_photo.png' }}">
+							<label>{{ administrator.first_name + ' ' + administrator.last_name }}</label>
+							<a>{{(administrator.city_id ? administrator.city : '') + (administrator.city_id && (administrator.state_id || administrator.country_id) ? ', ' : '') + (administrator.state_id ? administrator.state : '') + (administrator.state_id && administrator.country_id ? ', ' : '') + (administrator.country_id ? administrator.country : '')}}</a>
+						</div>
+					</ng-container>
+				</div>
+				<div class="load-more">
+					<action-button *ngIf="limit > displayItemsLimit" type="text" title="See Less" color="primary" (click)="limit = limit - displayItemsLimit"></action-button>
+					<action-button *ngIf="limit < company_administrators.length" type="text" title="See More" color="primary" (click)="limit = limit + displayItemsLimit"></action-button>
+				</div>
+			</ng-container>
+		</div>
 	</div>
 	<div class="nav-section">
 			<div class="nav-title">
