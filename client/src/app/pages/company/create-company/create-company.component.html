@@ -293,29 +293,29 @@
 			</div>
 
 			<div class="user-detail">
-				<div>
-					<h1>Google Earth & Maps</h1>
+				<div *ngIf="company_name">
+					<h1>{{company_name}}</h1>
 				</div>
 				<div class="user-info">
-					<small>
+					<small *ngIf="hq_country || hq_state || hq_city">
 						<img src="assets/icons/ic_location.svg">
-						{{'Los Angeles, California, USA'}}
+						{{(hq_city ? helperService.cityNameFromAutoComplete(hq_city.city) : '') + (hq_city && (hq_state || hq_country) ? ', ' : '') + (hq_state ? hq_state.state : '') + (hq_state && hq_country ? ', ' : '') + (hq_country ? countries[hq_country - 1] : '')}}
 					</small>
-					<small>
+					<small *ngIf="founding_year">
 						<img src="assets/icons/ic_founding.svg">
-						{{'Since 2017'}}
+						{{'Since ' + helperService.convertStringToFormattedDateString(founding_year, 'L', 'YYYY')}}
 					</small>
 				</div>
 				<div class="user-info">
-					<div class="icon-title">
+					<div *ngIf="company_size" class="icon-title">
 						<img src="assets/icons/ic_employees.svg">
 						<label>Company Size</label>
-						<p>Large (100-200)</p>
+						<p>{{company_size}}</p>
 					</div>
-					<div class="icon-title">
+					<div *ngIf="website" class="icon-title">
 						<img src="assets/icons/ic_website.svg">
 						<label>Website</label>
-						<p>www.google.com</p>
+						<p>{{website}}</p>
 					</div>
 					<div class="icon-title">
 						<img src="assets/icons/ic_permissions.svg">

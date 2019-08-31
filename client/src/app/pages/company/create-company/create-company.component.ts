@@ -142,7 +142,7 @@ export class CreateCompanyComponent implements OnInit {
     this.company_size = CompanySizeTypes[0];
     this.current_tab = this.tab_menus[0];
     this.is_administrators = false;
-    this.selectedPageIndex = 5;
+    this.selectedPageIndex = 0;
     this.initializeFormsByPageIndex();
   }
 
