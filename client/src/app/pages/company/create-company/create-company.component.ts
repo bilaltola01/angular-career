@@ -579,5 +579,13 @@ export class CreateCompanyComponent implements OnInit {
     }
   }
 
+  onSelectNavItem(id: string) {
+    let height = 130;
+    if (document.getElementById('legend').clientHeight === 0) {
+      height = 70;
+    }
+    document.getElementById('sidenav-content').scrollTop = document.getElementById(id).offsetTop - height;
+  }
+
 }
 

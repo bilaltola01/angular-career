@@ -344,6 +344,7 @@
 	<div class="main-section">
 		<div class="edit-title">
 		</div>
+
 		<div *ngIf="company_desc" class="row" id="about-company">
 			<h3>About Company</h3>
 			<ng-container *ngIf="true; let short_desc">
@@ -351,6 +352,7 @@
 				<a *ngIf="company_desc && company_desc.length > helperService.shortDescLength" (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
 			</ng-container>
 		</div>
+
 		<div *ngIf="main_industry || company_industries.length > 0" class="row" id="company-industry">
 			<h3>Company Industry</h3>
 			<ng-container *ngIf="main_industry">
@@ -370,6 +372,26 @@
 				</div>
 			</ng-container>
 		</div>
+
+		<div *ngIf="company_recruiters.length > 0" class="row">
+			<h3>Recruiters</h3>
+			<p>This list of recruiters associated with this company.</p>
+			<ng-container *ngIf="displayItemsLimit; let limit">
+				<div>
+					<ng-container *ngFor="let recruiter of company_recruiters; let i = index;">
+						<div *ngIf="i < limit" class="img-tag">
+							<img src="{{ recruiter.photo ? recruiter.photo : 'assets/icons/no_photo.png' }}">
+							<label>{{ recruiter.first_name + ' ' + recruiter.last_name }}</label>
+							<a>{{(recruiter.city_id ? recruiter.city : '') + (recruiter.city_id && (recruiter.state_id || recruiter.country_id) ? ', ' : '') + (recruiter.state_id ? recruiter.state : '') + (recruiter.state_id && recruiter.country_id ? ', ' : '') + (recruiter.country_id ? recruiter.country : '')}}</a>
+						</div>
+					</ng-container>
+				</div>
+				<div class="load-more">
+					<action-button *ngIf="limit > displayItemsLimit" type="text" title="See Less" color="primary" (click)="limit = limit - displayItemsLimit"></action-button>
+					<action-button *ngIf="limit < company_recruiters.length" type="text" title="See More" color="primary" (click)="limit = limit + displayItemsLimit"></action-button>
+				</div>
+			</ng-container>
+		</div>
 	</div>
 	<div class="nav-section">
 			<div class="nav-title">
@@ -380,9 +402,15 @@
 				<div class="navmenu-title active">
 					<h3>Table Of Content</h3>
 					<ol>
-						<li>About Company</li>
-						<li>Company Industry</li>
+						<li (click)="onSelectNavItem('about-company')">About Company</li>
+						<li (click)="onSelectNavItem('company-industry')">Company Industry</li>
 					</ol>
+				</div>
+				<div class="navmenu-title">
+					<h3>Recruiters</h3>
+				</div>
+				<div class="navmenu-title">
+					<h3>Administrators</h3>
 				</div>
 			</nav>
 	</div>

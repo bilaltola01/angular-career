@@ -663,11 +663,11 @@ p {
       padding-bottom: 80px;
       border-radius: 5px;
       background-color: transparent;
-      :nth-child(2) {
+      & > :nth-child(2) {
         border-top-left-radius: 5px;
         border-top-right-radius: 5px;
       }
-      :last-child {
+      & > :last-child {
         border-bottom-left-radius: 5px;
         border-bottom-right-radius: 5px;
         border-bottom: none !important;
@@ -688,6 +688,10 @@ p {
         background: white;
         padding: 25px 20px;
         border-bottom: 1px solid map-get($md-cfaccent, 50);
+        .load-more {
+          text-align: center;
+          margin: 20px 0;
+        }
         .btn-container {
           text-align: center;
           padding: 10px 0;
@@ -699,10 +703,6 @@ p {
           margin-bottom: 20px;
           display: inline-block;
         }
-          img{
-            margin-left: 8px;
-            vertical-align: text-bottom;
-          }
         
         h4 {
           margin-top: 10px;
