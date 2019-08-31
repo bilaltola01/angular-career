@@ -329,15 +329,14 @@
 			</div>
 		</div>
 		<div class="tabs-row">
-			<h3 class="active"> About </h3>
-			<h3> Positions </h3>
-			<h3> People </h3>
+			<h3 [class.active]="current_tab === 'About'" (click)="onSelectTabMenu(0)"> About </h3>
+			<h3 [class.active]="current_tab === 'People'" (click)="onSelectTabMenu(1)"> People </h3>
     </div>
 
 	</div>
 	<legend id="legend">
 		<div class="nav-title" (click)="onClickTogggle()">
-			<h3 class="section-title">About</h3>
+			<h3 class="section-title">{{current_tab}}</h3>
 			<mat-icon>menu</mat-icon>
 		</div>
 	</legend>
@@ -345,7 +344,7 @@
 		<div class="edit-title">
 		</div>
 
-		<div *ngIf="company_desc" class="row" id="about-company">
+		<div *ngIf="current_tab === 'About' && company_desc" class="row" id="about-company">
 			<h3>About Company</h3>
 			<ng-container *ngIf="true; let short_desc">
 				<p *ngIf="company_desc" class="description" [class.short-desc]="short_desc && company_desc.length > helperService.shortDescLength">{{short_desc ? helperService.shortDescription(company_desc) : company_desc}}</p>
@@ -353,7 +352,7 @@
 			</ng-container>
 		</div>
 
-		<div *ngIf="main_industry || company_industries.length > 0" class="row" id="company-industry">
+		<div *ngIf="current_tab === 'About' && (main_industry || company_industries.length > 0)" class="row" id="company-industry">
 			<h3>Company Industry</h3>
 			<ng-container *ngIf="main_industry">
 				<h5>Primary Industry</h5>
@@ -373,65 +372,73 @@
 			</ng-container>
 		</div>
 
-		<div *ngIf="company_recruiters.length > 0" class="row">
-			<h3>Recruiters</h3>
-			<p>This list of recruiters associated with this company.</p>
-			<ng-container *ngIf="displayItemsLimit; let limit">
-				<div>
-					<ng-container *ngFor="let recruiter of company_recruiters; let i = index;">
-						<div *ngIf="i < limit" class="img-tag">
-							<img src="{{ recruiter.photo ? recruiter.photo : 'assets/icons/no_photo.png' }}">
-							<label>{{ recruiter.first_name + ' ' + recruiter.last_name }}</label>
-							<a>{{(recruiter.city_id ? recruiter.city : '') + (recruiter.city_id && (recruiter.state_id || recruiter.country_id) ? ', ' : '') + (recruiter.state_id ? recruiter.state : '') + (recruiter.state_id && recruiter.country_id ? ', ' : '') + (recruiter.country_id ? recruiter.country : '')}}</a>
-						</div>
-					</ng-container>
-				</div>
-				<div class="load-more">
-					<action-button *ngIf="limit > displayItemsLimit" type="text" title="See Less" color="primary" (click)="limit = limit - displayItemsLimit"></action-button>
-					<action-button *ngIf="limit < company_recruiters.length" type="text" title="See More" color="primary" (click)="limit = limit + displayItemsLimit"></action-button>
-				</div>
+		<div *ngIf="current_tab === 'People'" class="row">
+			<ng-container *ngIf="!is_administrators && company_recruiters.length > 0">
+				<h3>Recruiters</h3>
+				<p>This list of recruiters associated with this company.</p>
+				<ng-container *ngIf="displayItemsLimit; let limit">
+					<div>
+						<ng-container *ngFor="let recruiter of company_recruiters; let i = index;">
+							<div *ngIf="i < limit" class="img-tag">
+								<img src="{{ recruiter.photo ? recruiter.photo : 'assets/icons/no_photo.png' }}">
+								<label>{{ recruiter.first_name + ' ' + recruiter.last_name }}</label>
+								<a>{{(recruiter.city_id ? recruiter.city : '') + (recruiter.city_id && (recruiter.state_id || recruiter.country_id) ? ', ' : '') + (recruiter.state_id ? recruiter.state : '') + (recruiter.state_id && recruiter.country_id ? ', ' : '') + (recruiter.country_id ? recruiter.country : '')}}</a>
+							</div>
+						</ng-container>
+					</div>
+					<div class="load-more">
+						<action-button *ngIf="limit > displayItemsLimit" type="text" title="See Less" color="primary" (click)="limit = limit - displayItemsLimit"></action-button>
+						<action-button *ngIf="limit < company_recruiters.length" type="text" title="See More" color="primary" (click)="limit = limit + displayItemsLimit"></action-button>
+					</div>
+				</ng-container>
 			</ng-container>
-		</div>
+		
+			<ng-container *ngIf="is_administrators && company_administrators.length > 0">
+				<h3>Administrators</h3>
+				<p>This list of administrators associated with this company.</p>
+				<ng-container *ngIf="displayItemsLimit; let limit">
+					<div>
+						<ng-container *ngFor="let administrator of company_administrators; let i = index;">
+							<div *ngIf="i < limit" class="img-tag">
+								<img src="{{ administrator.photo ? administrator.photo : 'assets/icons/no_photo.png' }}">
+								<label>{{ administrator.first_name + ' ' + administrator.last_name }}</label>
+								<a>{{(administrator.city_id ? administrator.city : '') + (administrator.city_id && (administrator.state_id || administrator.country_id) ? ', ' : '') + (administrator.state_id ? administrator.state : '') + (administrator.state_id && administrator.country_id ? ', ' : '') + (administrator.country_id ? administrator.country : '')}}</a>
+							</div>
+						</ng-container>
+					</div>
+					<div class="load-more">
+						<action-button *ngIf="limit > displayItemsLimit" type="text" title="See Less" color="primary" (click)="limit = limit - displayItemsLimit"></action-button>
+						<action-button *ngIf="limit < company_administrators.length" type="text" title="See More" color="primary" (click)="limit = limit + displayItemsLimit"></action-button>
+					</div>
+				</ng-container>
+			</ng-container>
 
-		<div *ngIf="company_administrators.length > 0" class="row">
-			<h3>Administrators</h3>
-			<p>This list of administrators associated with this company.</p>
-			<ng-container *ngIf="displayItemsLimit; let limit">
-				<div>
-					<ng-container *ngFor="let administrator of company_administrators; let i = index;">
-						<div *ngIf="i < limit" class="img-tag">
-							<img src="{{ administrator.photo ? administrator.photo : 'assets/icons/no_photo.png' }}">
-							<label>{{ administrator.first_name + ' ' + administrator.last_name }}</label>
-							<a>{{(administrator.city_id ? administrator.city : '') + (administrator.city_id && (administrator.state_id || administrator.country_id) ? ', ' : '') + (administrator.state_id ? administrator.state : '') + (administrator.state_id && administrator.country_id ? ', ' : '') + (administrator.country_id ? administrator.country : '')}}</a>
-						</div>
-					</ng-container>
-				</div>
-				<div class="load-more">
-					<action-button *ngIf="limit > displayItemsLimit" type="text" title="See Less" color="primary" (click)="limit = limit - displayItemsLimit"></action-button>
-					<action-button *ngIf="limit < company_administrators.length" type="text" title="See More" color="primary" (click)="limit = limit + displayItemsLimit"></action-button>
-				</div>
+			<ng-container *ngIf="(!is_administrators && company_recruiters.length === 0) || (is_administrators && company_administrators.length === 0)">
+				<p>No {{is_administrators ? 'Administrators' : 'Recruiters'}}</p>
 			</ng-container>
 		</div>
 	</div>
 	<div class="nav-section">
 			<div class="nav-title">
-				<h3 class="section-title">About</h3>
+				<h3 class="section-title">{{current_tab}}</h3>
 			</div>
 			
 			<nav>
-				<div class="navmenu-title active">
+				<div *ngIf="current_tab === 'About'" class="navmenu-title active">
 					<h3>Table Of Content</h3>
 					<ol>
-						<li (click)="onSelectNavItem('about-company')">About Company</li>
-						<li (click)="onSelectNavItem('company-industry')">Company Industry</li>
+						<li *ngIf="company_desc" (click)="onSelectNavItem('about-company')">About Company</li>
+						<li *ngIf="main_industry || company_industries.length > 0" (click)="onSelectNavItem('company-industry')">Company Industry</li>
 					</ol>
 				</div>
-				<div class="navmenu-title">
-					<h3>Recruiters</h3>
-				</div>
-				<div class="navmenu-title">
-					<h3>Administrators</h3>
-				</div>
+				<ng-container *ngIf="current_tab === 'People'">
+					<div class="navmenu-title" [class.active]="!is_administrators">
+						<h3 (click)="onSelectNavMenuPeople(false)">Recruiters</h3>
+					</div>
+					<div class="navmenu-title" [class.active]="is_administrators">
+						<h3 (click)="onSelectNavMenuPeople(true)">Administrators</h3>
+					</div>
+				</ng-container>
 			</nav>
 	</div>
 </div>

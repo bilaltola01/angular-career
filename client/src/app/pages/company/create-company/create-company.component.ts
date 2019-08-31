@@ -87,6 +87,10 @@ export class CreateCompanyComponent implements OnInit {
   companySizeTypes: string[] = CompanySizeTypes;
   countries: string[] = Countries.slice().sort();
   displayItemsLimit = 7;
+  tab_menus = [
+    'About',
+    'People'
+  ];
 
   // FormGroups
   nameOverviewForm: FormGroup;
@@ -121,6 +125,9 @@ export class CreateCompanyComponent implements OnInit {
   company_administrators: UserGeneralInfo[] = [];
   company_recruiters: UserGeneralInfo[] = [];
 
+  current_tab: string;
+  is_administrators: boolean;
+
   constructor(private route: ActivatedRoute,
     private router: Router,
     private autoCompleteService: AutoCompleteService,
@@ -133,6 +140,8 @@ export class CreateCompanyComponent implements OnInit {
     this.isTabMenuOpen = false;
 
     this.company_size = CompanySizeTypes[0];
+    this.current_tab = this.tab_menus[0];
+    this.is_administrators = false;
     this.selectedPageIndex = 5;
     this.initializeFormsByPageIndex();
   }
@@ -155,6 +164,10 @@ export class CreateCompanyComponent implements OnInit {
         break;
       case 4:
         this.initCompanyRecruitersForm();
+        break;
+      case 5:
+        this.current_tab = this.tab_menus[0];
+        this.is_administrators = false;
         break;
       default:
         break;
@@ -186,6 +199,10 @@ export class CreateCompanyComponent implements OnInit {
         break;
       case 4:
         this.initCompanyRecruitersForm();
+        break;
+      case 5:
+        this.current_tab = this.tab_menus[0];
+        this.is_administrators = false;
         break;
       default:
         break;
@@ -585,6 +602,14 @@ export class CreateCompanyComponent implements OnInit {
       height = 70;
     }
     document.getElementById('sidenav-content').scrollTop = document.getElementById(id).offsetTop - height;
+  }
+
+  onSelectTabMenu(arrIndex: number) {
+    this.current_tab = this.tab_menus[arrIndex];
+  }
+
+  onSelectNavMenuPeople(is_administrators: boolean) {
+    this.is_administrators = is_administrators;
   }
 
 }
