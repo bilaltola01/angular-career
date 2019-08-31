@@ -342,7 +342,34 @@
 		</div>
 	</legend>
 	<div class="main-section">
-
+		<div class="edit-title">
+		</div>
+		<div *ngIf="company_desc" class="row" id="about-company">
+			<h3>About Company</h3>
+			<ng-container *ngIf="true; let short_desc">
+				<p *ngIf="company_desc" class="description" [class.short-desc]="short_desc && company_desc.length > helperService.shortDescLength">{{short_desc ? helperService.shortDescription(company_desc) : company_desc}}</p>
+				<a *ngIf="company_desc && company_desc.length > helperService.shortDescLength" (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
+			</ng-container>
+		</div>
+		<div *ngIf="main_industry || company_industries.length > 0" class="row" id="company-industry">
+			<h3>Company Industry</h3>
+			<ng-container *ngIf="main_industry">
+				<h5>Primary Industry</h5>
+				<div class="skills">
+					<simple-tag type="gray" title="{{main_industry.industry_name}}"></simple-tag>
+				</div>
+			</ng-container>
+			<ng-container *ngIf="company_industries.length > 0">
+				<h5>Secondary Industries {{company_industries.length}}</h5>
+				<div class="skills" *ngIf="displayItemsLimit; let limit">
+					<ng-container *ngFor="let industry of company_industries; let i = index">
+						<simple-tag *ngIf="i < limit" type="gray" title="{{industry.industry_name}}"></simple-tag>
+					</ng-container>
+					<img *ngIf="limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
+      		<img *ngIf="limit < company_industries.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
+				</div>
+			</ng-container>
+		</div>
 	</div>
 	<div class="nav-section">
 			<div class="nav-title">

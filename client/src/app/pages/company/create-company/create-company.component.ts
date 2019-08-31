@@ -86,6 +86,7 @@ export class CreateCompanyComponent implements OnInit {
   genders: string[] = Genders;
   companySizeTypes: string[] = CompanySizeTypes;
   countries: string[] = Countries.slice().sort();
+  displayItemsLimit = 7;
 
   // FormGroups
   nameOverviewForm: FormGroup;
