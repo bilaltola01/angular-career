@@ -11,6 +11,11 @@ $profile-form-field-mt: 30px;
   padding: 0;
 }
 
+a {
+  text-decoration: none;
+  color: rgba(map-get($md-cfaccent, 500), .84);
+}
+
 .loader {
   position: absolute;
   top: 50%;
@@ -315,6 +320,10 @@ $profile-form-field-mt: 30px;
   }
 }
 
+// .mat-option-text {
+
+// }
+
 @media only screen and (max-width: $max-tablet-breakpoint) {
   :host {
     display: grid;
@@ -354,10 +363,17 @@ $profile-form-field-mt: 30px;
     .row {
       .header-container {
         action-button {
-          margin: auto;
+          margin: 10px auto;
+        }
+      }
+    }
+    .user-info {
+      .info {
+        h2.name {
+          font-size: 20px;
+          line-height: 43px;
         }
       }
     }
   }
-  
 }

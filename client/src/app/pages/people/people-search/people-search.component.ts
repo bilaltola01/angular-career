@@ -328,7 +328,7 @@ export class PeopleSearchComponent implements OnInit {
     const people = this.peopleForm.value.searchPeople && this.helperService.checkSpacesString(this.peopleForm.value.searchPeople) ? this.peopleForm.value.searchPeople.replace('+', '%2B') : null;
     queryString = people ? `${queryString ? queryString + '&' : ''}name=${people}` : queryString;
 
-    const decoded = JSON.parse('{"' + decodeURI(queryString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}')
+    const decoded = JSON.parse('{"' + decodeURI(queryString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}');
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: decoded,
