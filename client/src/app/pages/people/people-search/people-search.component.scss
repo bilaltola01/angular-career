@@ -13,7 +13,16 @@ $profile-form-field-mt: 30px;
 
 a {
   text-decoration: none;
-  color: rgba(map-get($md-cfaccent, 500), .84);
+}
+
+.clickable {
+  margin: 0;
+  cursor: pointer;
+  text-align: center;
+  padding: 10px;
+  &:hover {
+    background: rgba(map-get($md-cfaccent, 100), .84);
+  }
 }
 
 .loader {

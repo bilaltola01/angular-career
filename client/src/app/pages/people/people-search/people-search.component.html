@@ -20,13 +20,14 @@
               formControlName="searchPeople" 
               (keyup.enter)="onSearchUser($event)">
       <mat-autocomplete #autocompleteSearch="matAutocomplete">
-        <mat-option *ngFor="let people of autocomplete_searchpeoples"
+        <mat-option *ngFor="let people of autocomplete_searchpeoples | slice:0:4"
                     [value]="people.first_name + (people.last_name ? ' ' + people.last_name : '')">
           <a routerLink="/user/{{ people.user_id }}/profile" [queryParams]="{showBackButton: 'true'}">
             <img [src]="people.photo ? people.photo : 'assets/icons/no_photo.png'">
             <span>{{people.first_name + (people.last_name ? ' ' + people.last_name : '')}}</span>
           </a>
         </mat-option>
+        <p class="clickable" (click)="onSearchUser($event)"> See all results for <b>{{peopleForm.value.searchPeople}}</b></p>
       </mat-autocomplete>
     </mat-form-field>
   </div>
@@ -97,7 +98,7 @@
     </div>
     <div class="filter-card">
       <mat-form-field>
-        <mat-label>Major </mat-label>
+        <mat-label>Majors </mat-label>
         <input matInput placeholder="Major" type="text" [matAutocomplete]="autocompleteMajor" formControlName="major">
         <mat-autocomplete #autocompleteMajor="matAutocomplete">
           <mat-option *ngFor="let major of autocomplete_education_major" [value]="major.major_name" (onSelectionChange)="onChangeMajor(major)">

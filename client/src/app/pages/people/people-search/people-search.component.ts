@@ -79,8 +79,6 @@ export enum ContactStatus {
   ],
 })
 export class PeopleSearchComponent implements OnInit {
-  // Constants
-  breakpoint: number;
   educationLevel: string[] = EducationLevel;
   // FormGroup
   peopleForm: FormGroup;
@@ -136,7 +134,6 @@ export class PeopleSearchComponent implements OnInit {
 
   ngOnInit() {
     this.initPeopleFilterForm();
-    this.breakpoint = (window.innerWidth <= 500) ? 2 : 4; // TODO: remove duh
     this.isHandset$.subscribe(handsetFlag => {
       if (handsetFlag) {
         this.searchPlaceholderCopy = 'Search by name or email.';
@@ -147,10 +144,6 @@ export class PeopleSearchComponent implements OnInit {
 
     const querySearchedName = this.route.snapshot.queryParamMap.get('name');
 
-  }
-
-  onResize(event) {
-    this.breakpoint = (event.target.innerWidth <= 500) ? 2 : 4; // TODO: remove duh
   }
 
   toggleTabMenuOpen() {
@@ -328,6 +321,7 @@ export class PeopleSearchComponent implements OnInit {
     const people = this.peopleForm.value.searchPeople && this.helperService.checkSpacesString(this.peopleForm.value.searchPeople) ? this.peopleForm.value.searchPeople.replace('+', '%2B') : null;
     queryString = people ? `${queryString ? queryString + '&' : ''}name=${people}` : queryString;
 
+    // TODO: Alex
     const decoded = JSON.parse('{"' + decodeURI(queryString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}');
     this.router.navigate([], {
       relativeTo: this.route,
