@@ -1,8 +1,8 @@
-import { Component, Inject, ViewChild } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { UserSkillItem, Skill, ITEMS_LIMIT } from 'src/app/models';
 import { FormGroup, FormControl } from '@angular/forms';
-import { UserService, AlertsService, AlertType, HelperService, AutoCompleteService, ProfileStateService, PositionService } from 'src/app/services';
+import { UserService, AlertsService, AlertType, HelperService, AutoCompleteService, ProfileStateService, PositionService, ScoreService } from 'src/app/services';
 import { SkillLevelDescription } from 'src/app/models';
 
 
@@ -40,6 +40,7 @@ export class AddSkillPopupComponent {
   prevent_skills_autocomplete: boolean;
   skillsForm: FormGroup;
   skillData: UserSkillItem;
+  filteredSkill: UserSkillItem;
   allSkills = [];
   skillLevelDescription = SkillLevelDescription;
   skillUpdateCalllback;
@@ -49,10 +50,11 @@ export class AddSkillPopupComponent {
     private alertsService: AlertsService,
     private autoCompleteService: AutoCompleteService,
     private helperService: HelperService,
-    private profileStateService: ProfileStateService,
+    private profileStateService: ProfileStateService, private scoreService: ScoreService,
     private positionService: PositionService) {
-    this.initSkillsForm();
-    this.getUserSkillsList(true);
+      this.getUserSkillsList(true);
+      this.initSkillsForm();
+
   }
 
   onClose(): void {
@@ -64,7 +66,6 @@ export class AddSkillPopupComponent {
     this.userSkillsList = [];
     this.skillData = Object.assign({}, this.data.skillData);
     this.skillUpdateCalllback = this.data.callback;
-    this.allSkills.push(this.skillData);
     this.skillsForm = new FormGroup({
       skills: new FormControl(''),
     });
@@ -95,6 +96,20 @@ export class AddSkillPopupComponent {
       }
     );
   }
+
+  updateSkillData() {
+    const filterskill = this.userSkillsList.filter(value => value.skill_id === this.skillData.skill_id);
+    if (filterskill.length === 1) {
+      this.filteredSkill = {
+        skill_id: this.skillData.skill_id,
+        skill: this.skillData.skill,
+        skill_level: filterskill[0].skill_level > this.skillData.skill_level ?  filterskill[0].skill_level : this.skillData.skill_level
+    };
+    this.allSkills.push(this.filteredSkill);
+    }   else {
+      this.allSkills.push(this.skillData);
+    }
+  }
   getUserSkillsList(isUpdate: boolean) {
     this.getUserSkillsListByOffset(ITEMS_LIMIT, 0, isUpdate);
   }
@@ -113,6 +128,7 @@ export class AddSkillPopupComponent {
             this.profileStateService.setSkills(this.userSkillsList);
           }
         }
+        this.updateSkillData();
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -148,11 +164,6 @@ export class AddSkillPopupComponent {
   }
 
   updateSkills() {
-    const index = this.userSkillsList.findIndex(value => value.skill_id === this.allSkills[0].skill_id);
-    if (index > -1) {
-      this.allSkills[0].skill_level = this.userSkillsList[index].skill_level > this.allSkills[0].skill_level ? this.userSkillsList[index].skill_level : this.allSkills[0].skill_level;
-    }
-
     for (const i of this.allSkills) {
       this.addUserSkillsData(i);
     }
@@ -163,6 +174,7 @@ export class AddSkillPopupComponent {
       dataJson => {
         this.userSkillsList.push(dataJson['data']);
         this.skillUpdateCalllback();
+
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);

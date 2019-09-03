@@ -9,3 +9,4 @@ export * from './position.service';
 export * from './cart.service';
 export * from './application.service';
 export * from './userprofile-state.service';
+export * from './score.service';

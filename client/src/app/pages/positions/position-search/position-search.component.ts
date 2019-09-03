@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import {
   PositionService, AlertsService, AlertType,
-  AutoCompleteService, CartService, ApplicationService
+  AutoCompleteService, CartService, ApplicationService, ScoreService
 } from '../../../services/index';
 
 
@@ -24,6 +24,7 @@ import {
   JobType
 } from 'src/app/models';
 import { AddSkillPopupComponent } from 'src/app/components/add-skill-popup/add-skill-popup.component';
+import { count } from 'rxjs/operators';
 export interface DialogData {
   data: any;
 }
@@ -67,6 +68,7 @@ export class PositionSearchComponent implements OnInit {
     limit: positionListLimit
   };
 
+
   isJobLoading = true;
   selectedAllFlag = false;
   mathFloor = Math.floor;
@@ -76,9 +78,10 @@ export class PositionSearchComponent implements OnInit {
   appliedJobs = [];
   appliedJobsMap = {};
   preLoadDataObject = {};
+  updatedFitscoreList = [];
 
   constructor(private autoCompleteService: AutoCompleteService,
-    private alertsService: AlertsService, private positionService: PositionService,
+    private alertsService: AlertsService, private positionService: PositionService, private scoreService: ScoreService,
     private cartService: CartService, private applicationService: ApplicationService, public dialog: MatDialog) {
     this.updateSkillCallback = this.updateSkillCallback.bind(this);
   }
@@ -542,13 +545,29 @@ export class PositionSearchComponent implements OnInit {
       const preLoadData = this.preLoadDataObject[this.currentPageNumber + 1].data.data.map(position => `positionList=${position.position_id}`);
       positionIds = [...positionIds, ...preLoadData];
     }
-
     return positionIds.join('&');
   }
   updateSkillCallback() {
-    this.preLoadDataObject = {};
-    this.getJobData();
+    this.scoreService.putSkillVector().subscribe();
+    const positionIds = this.getPositionIds();
+    this.scoreService.getUpdatedfitscore(positionIds).subscribe(
+      dataJson => {
+        this.updatedFitscoreList = [...dataJson.data['fitscores']];
+        this.updatedFitscore();
+      });
   }
+  updatedFitscore() {
+    for (let i = 0; i < this.updatedFitscoreList.length; i++) {
+      let index = this.positionList.findIndex(position => position.position_id === this.updatedFitscoreList[i].position_id);
+      if (index > -1) {
+        this.positionList[index]['true_fitscore_info'] = this.updatedFitscoreList[i];
+      } else {
+        index = this.preLoadDataObject[this.currentPageNumber + 1].findIndex(position => position.position_id === this.updatedFitscoreList[i].position_id);
+        this.preLoadDataObject[this.currentPageNumber + 1].data.data[index]['true_fitscore_info'] = this.updatedFitscoreList[i];
+      }
+    }
+  }
+
   openSkilladdDialog(skillData) {
     const dialogRef = this.dialog.open(AddSkillPopupComponent, {
       data: { skillData, callback: this.updateSkillCallback },
