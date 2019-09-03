@@ -25,7 +25,8 @@ import {
   UserStateService,
   UserProfileStateService
 } from 'src/app/services';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 
 export enum ContactStatus {
   none = 'none',
@@ -64,6 +65,8 @@ export class HeaderSectionComponent implements OnInit {
   maxDate = new Date();
   photo_url: string;
 
+  showBackButtonFlag = false;
+
   constructor(
     private helperService: HelperService,
     private autoCompleteService: AutoCompleteService,
@@ -72,7 +75,10 @@ export class HeaderSectionComponent implements OnInit {
     private photoStateService: PhotoStateService,
     private userStateService: UserStateService,
     private userProfileStateService: UserProfileStateService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
+    private location: Location
+
   ) {
     if (router.url.includes('user')) {
       this.userId = parseInt(router.url.split('/')[2], 10);
@@ -86,7 +92,9 @@ export class HeaderSectionComponent implements OnInit {
     });
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.showBackButtonFlag = this.route.snapshot.queryParamMap.get('showBackButton') === 'true' ? true : false;
+  }
 
   parseRouterUrl(url: string) {
     if (url.includes('edit')) {
@@ -484,6 +492,10 @@ export class HeaderSectionComponent implements OnInit {
         }
       );
     }
+  }
+
+  goBack() {
+    this.location.back();
   }
 
 }

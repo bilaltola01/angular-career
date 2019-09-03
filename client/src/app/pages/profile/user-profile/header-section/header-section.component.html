@@ -1,7 +1,7 @@
 <ng-container>
-  <!-- <div class="back-row">
-    <button class="back">Back</button>
-  </div> -->
+  <div class="back-row" *ngIf="showBackButtonFlag">
+    <button class="back" (click)="goBack()">Back</button>
+  </div>
   <div *ngIf="generalInfo" class="user-row">
     <div>
       <input [disabled]="(currentPage === 'profile' && !editMode) || currentPage !== 'profile'"

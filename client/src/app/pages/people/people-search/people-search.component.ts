@@ -22,6 +22,11 @@ import {
   UserEducationItem,
   ITEMS_LIMIT
 } from 'src/app/models';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { trigger, style, animate, transition, query, stagger } from '@angular/animations';
+import { ActivatedRoute, Router } from '@angular/router';
 
 export interface PeopleData {
   general_info: UserGeneralInfo;
@@ -39,7 +44,39 @@ export enum ContactStatus {
 @Component({
   selector: 'app-people-search',
   templateUrl: './people-search.component.html',
-  styleUrls: ['./people-search.component.scss']
+  styleUrls: ['./people-search.component.scss'],
+  animations: [
+    trigger(
+      'enterAnimation', [
+        transition(':enter', [
+          style({ transform: 'translateY(-100%)', opacity: 0 }),
+          animate('250ms', style({ transform: 'translateY(0)', opacity: 1 }))
+        ]),
+        transition(':leave', [
+          style({ transform: 'translateY(0)', opacity: 1 }),
+          animate('250ms', style({ transform: 'translateY(-100%)', opacity: 0 }))
+        ])
+      ]
+    ),
+    trigger('listStaggerAnimation', [
+      transition('* <=> *', [
+        query(
+          ':enter', [ style({ opacity: 0, transform: 'translateY(-15px)' }),
+            stagger(
+              '50ms',
+              animate(
+                '350ms ease-out',
+                style({ opacity: 1, transform: 'translateY(0px)' })
+              )
+            )],
+          { optional: true }
+        ),
+        query(':leave', animate('50ms', style({ opacity: 0 })), {
+          optional: true
+        })
+      ])
+    ])
+  ],
 })
 export class PeopleSearchComponent implements OnInit {
   // Constants
@@ -66,7 +103,7 @@ export class PeopleSearchComponent implements OnInit {
   isPeopleLoading = false;
   selectedAllFlag = false;
   mathFloor = Math.floor;
-  filter_list: boolean;
+  showFilterListFlag = true;
   currentPageNumber = 1;
   paginationArr = [];
   preLoadDataObject = {};
@@ -75,28 +112,55 @@ export class PeopleSearchComponent implements OnInit {
 
   displayItemsLimit = 7;
   current_user: UserGeneralInfo;
+  searchPlaceholderCopy = 'Search people by name or email.';
+  emptyResultsCopy = 'Use the search and filter to find peers.';
 
   constructor(
     private autoCompleteService: AutoCompleteService,
     private alertsService: AlertsService,
     private userService: UserService,
     private helperService: HelperService,
-    private userStateService: UserStateService
+    private userStateService: UserStateService,
+    private breakpointObserver: BreakpointObserver,
+    private route: ActivatedRoute,
+    private router: Router,
   ) {
     this.getCurrentUser();
   }
 
+  isHandset$: Observable<boolean> = this.breakpointObserver
+    .observe(['(max-width: 991px)'])
+    .pipe(
+      map(result => result.matches)
+    );
+
   ngOnInit() {
     this.initPeopleFilterForm();
-    this.breakpoint = (window.innerWidth <= 500) ? 2 : 4;
+    this.breakpoint = (window.innerWidth <= 500) ? 2 : 4; // TODO: remove duh
+    this.isHandset$.subscribe(handsetFlag => {
+      if (handsetFlag) {
+        this.searchPlaceholderCopy = 'Search by name or email.';
+      } else {
+        this.searchPlaceholderCopy = 'Search people by name or email.';
+      }
+    });
+
+    const querySearchedName = this.route.snapshot.queryParamMap.get('name');
+
   }
 
   onResize(event) {
-    this.breakpoint = (event.target.innerWidth <= 500) ? 2 : 4;
+    this.breakpoint = (event.target.innerWidth <= 500) ? 2 : 4; // TODO: remove duh
   }
 
   toggleTabMenuOpen() {
-    this.filter_list = !this.filter_list;
+    this.isHandset$.subscribe(handsetFlag => {
+      if (handsetFlag) {
+        this.showFilterListFlag = !this.showFilterListFlag;
+      } else {
+        this.showFilterListFlag = true;
+      }
+    });
   }
 
   getCurrentUser() {
@@ -263,6 +327,14 @@ export class PeopleSearchComponent implements OnInit {
     });
     const people = this.peopleForm.value.searchPeople && this.helperService.checkSpacesString(this.peopleForm.value.searchPeople) ? this.peopleForm.value.searchPeople.replace('+', '%2B') : null;
     queryString = people ? `${queryString ? queryString + '&' : ''}name=${people}` : queryString;
+
+    const decoded = JSON.parse('{"' + decodeURI(queryString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}')
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: decoded,
+      queryParamsHandling: 'merge',
+    });
+
     return queryString;
   }
 
@@ -467,6 +539,7 @@ export class PeopleSearchComponent implements OnInit {
   }
 
   onSearchUser(event) {
+    this.emptyResultsCopy = 'No search results found.';
     this.filterAttributes.offset = 0;
     this.currentPageNumber = 1;
     this.preLoadDataObject = {};
@@ -475,6 +548,7 @@ export class PeopleSearchComponent implements OnInit {
   }
 
   applyFilter() {
+    this.emptyResultsCopy = 'No search results found.';
     this.filterAttributes.offset = 0;
     this.currentPageNumber = 1;
     this.toggleTabMenuOpen();
