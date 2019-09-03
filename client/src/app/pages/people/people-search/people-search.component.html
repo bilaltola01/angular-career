@@ -24,8 +24,10 @@
       <mat-autocomplete #autocompleteSearch="matAutocomplete">
         <mat-option *ngFor="let people of autocomplete_searchpeoples"
                     [value]="people.first_name + (people.last_name ? ' ' + people.last_name : '')">
-          <img [src]="people.photo ? people.photo : 'assets/icons/no_photo.png'">
-          <span>{{people.first_name + (people.last_name ? ' ' + people.last_name : '')}}</span>
+          <a routerLink="/user/{{ people.user_id }}/profile" [queryParams]="{showBackButton: 'true'}">
+            <img [src]="people.photo ? people.photo : 'assets/icons/no_photo.png'">
+            <span>{{people.first_name + (people.last_name ? ' ' + people.last_name : '')}}</span>
+          </a>
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
