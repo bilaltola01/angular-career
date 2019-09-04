@@ -30,7 +30,42 @@ $profile-form-padding-desktop: 60px;
       & li {
         line-height: 26px;
         margin-bottom: 10px;
+        .simpletag {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-content: flex-start;
+          padding: 5px 0;
+          border-radius: 18px;
+          width: 20%;
+          display: inline-block;
+        }
       }
     }
   }
+}
+
+@media only screen and (max-width: 480px) {
+  :host {
+    mat-dialog-content {
+      .skill_level_desc {
+        padding: 0;
+        & li {
+          line-height: 26px;
+          margin-bottom: 10px;
+          .simpletag {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-content: flex-start;
+            padding: 5px 0;
+            border-radius: 18px;
+            width: 40%;
+            display: inline-block;
+          }
+        }
+      }
+    }
+  }
+
 }

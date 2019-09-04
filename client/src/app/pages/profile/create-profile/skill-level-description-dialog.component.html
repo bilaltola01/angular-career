@@ -2,9 +2,10 @@
 <ng-container>
   <h3 class="title">Skill Level Description</h3>
   <mat-dialog-content>
-    <div>
+    <div class="center">
       <ul type="none" class="skill_level_desc">
-        <li *ngFor="let level of data.skillDesc | keyvalue">{{level.key}} - {{level.value}}</li>
+          <li *ngFor="let level of data.skillDesc | keyvalue"><simple-tag class="simpletag" type="gray" ellipseTag="true" value="{{level.key}}">
+            </simple-tag> - {{level.value}} <hr></li>
       </ul>
     </div>
   </mat-dialog-content>
