@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import {
   PositionService, AlertsService, AlertType,
-  AutoCompleteService, CartService, ApplicationService
+  AutoCompleteService, CartService, ApplicationService, ScoreService
 } from '../../../services/index';
 
 
@@ -22,6 +23,11 @@ import {
   Major,
   JobType
 } from 'src/app/models';
+import { AddSkillPopupComponent } from 'src/app/components/add-skill-popup/add-skill-popup.component';
+import { count } from 'rxjs/operators';
+export interface DialogData {
+  data: any;
+}
 
 @Component({
   selector: 'app-position-search',
@@ -62,6 +68,7 @@ export class PositionSearchComponent implements OnInit {
     limit: positionListLimit
   };
 
+
   isJobLoading = true;
   selectedAllFlag = false;
   mathFloor = Math.floor;
@@ -71,20 +78,21 @@ export class PositionSearchComponent implements OnInit {
   appliedJobs = [];
   appliedJobsMap = {};
   preLoadDataObject = {};
-
+  updatedFitscoreList = [];
 
   constructor(private autoCompleteService: AutoCompleteService,
-    private alertsService: AlertsService, private positionService: PositionService,
-    private cartService: CartService, private applicationService: ApplicationService) { }
-
+    private alertsService: AlertsService, private positionService: PositionService, private scoreService: ScoreService,
+    private cartService: CartService, private applicationService: ApplicationService, public dialog: MatDialog) {
+    this.updateSkillCallback = this.updateSkillCallback.bind(this);
+  }
   ngOnInit() {
     this.initPositionFilterForm();
     this.getJobData();
     this.getSavedJobs();
     this.getAppliedJobs();
     this.breakpoint = (window.innerWidth <= 500) ? 2 : 4;
-  }
 
+  }
   onResize(event) {
     this.breakpoint = (event.target.innerWidth <= 500) ? 2 : 4;
   }
@@ -299,6 +307,7 @@ export class PositionSearchComponent implements OnInit {
     this.selectedAllFlag = false;
     if (this.preLoadDataObject[this.currentPageNumber]) {
       this.positionList = this.preLoadDataObject[this.currentPageNumber].data.data;
+
       this.setPaginationValues(this.preLoadDataObject[this.currentPageNumber]);
       if (this.currentPageNumber < this.paginationArr[this.paginationArr.length - 1]) {
         this.preLoadNextPage(this.currentPageNumber + 1);
@@ -483,7 +492,6 @@ export class PositionSearchComponent implements OnInit {
     const selectedPositionArr = this.positionList.filter(position => position.selected === true && !this.savedJobsMap[position.position_id] && !this.appliedJobsMap[position.position_id]);
     this.saveJob(selectedPositionArr);
   }
-
   removePositionFromLocalCart(appliedJobs) {
     for (const jobs of appliedJobs) {
       delete this.savedJobsMap[jobs.position_id];
@@ -517,6 +525,7 @@ export class PositionSearchComponent implements OnInit {
       this.positionService.getPositions(queryString).subscribe(
         dataJson => {
           if (dataJson['success'] && dataJson) {
+            this.preLoadDataObject = {};
             this.preLoadDataObject[nextPageNumber] = dataJson;
           }
           this.filterAttributes.offset = previousOffset;
@@ -528,6 +537,45 @@ export class PositionSearchComponent implements OnInit {
     }
 
 
+  }
+
+  getPositionIds() {
+    let positionIds = this.positionList.map(position => `positionList=${position.position_id}`);
+    if (this.preLoadDataObject[this.currentPageNumber + 1] && this.preLoadDataObject[this.currentPageNumber + 1].data.data) {
+      const preLoadData = this.preLoadDataObject[this.currentPageNumber + 1].data.data.map(position => `positionList=${position.position_id}`);
+      positionIds = [...positionIds, ...preLoadData];
+    }
+    return positionIds.join('&');
+  }
+  updateSkillCallback() {
+    this.scoreService.putSkillVector().subscribe();
+    const positionIds = this.getPositionIds();
+    this.scoreService.getUpdatedfitscore(positionIds).subscribe(
+      dataJson => {
+        this.updatedFitscoreList = [...dataJson.data['fitscores']];
+        this.updatedFitscore();
+      });
+  }
+  updatedFitscore() {
+    for (let i = 0; i < this.updatedFitscoreList.length; i++) {
+      let index = this.positionList.findIndex(position => position.position_id === this.updatedFitscoreList[i].position_id);
+      if (index > -1) {
+        this.positionList[index]['true_fitscore_info'] = this.updatedFitscoreList[i];
+      } else {
+        index = this.preLoadDataObject[this.currentPageNumber + 1].findIndex(position => position.position_id === this.updatedFitscoreList[i].position_id);
+        this.preLoadDataObject[this.currentPageNumber + 1].data.data[index]['true_fitscore_info'] = this.updatedFitscoreList[i];
+      }
+    }
+  }
+
+  openSkilladdDialog(skillData) {
+    const dialogRef = this.dialog.open(AddSkillPopupComponent, {
+      data: { skillData, callback: this.updateSkillCallback },
+      width: '100vw',
+      maxWidth: '880px',
+      minWidth: '280px',
+      panelClass: ['edit-dialog-container']
+    });
   }
 
 }

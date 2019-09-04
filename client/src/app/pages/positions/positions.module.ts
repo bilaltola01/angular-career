@@ -6,6 +6,7 @@ import { MaterialModule } from '../../modules/material.module';
 import { positionRoutes } from './positions.routing';
 import { positionComponents } from './index';
 import { SharedModule } from '../../components/shared.module';
+import { AddSkillPopupComponent } from 'src/app/components/add-skill-popup/add-skill-popup.component';
 
 @NgModule({
   imports: [
@@ -18,6 +19,9 @@ import { SharedModule } from '../../components/shared.module';
   ],
   declarations: [
     ...positionComponents
+  ],
+  entryComponents: [
+    AddSkillPopupComponent
   ]
 })
 

@@ -9,6 +9,7 @@ import { environment } from '../../environments/environment';
 })
 export class PositionService {
   private position_service_url = `${environment.serverUrl}/${environment.position_service}/api/${environment.api_version}/`;
+
   constructor(private http: HttpClient) {
   }
 
@@ -21,6 +22,7 @@ export class PositionService {
       })
     };
   }
+
 
   public getPositions(queryString?: string): Observable<any> {
     let queryUrl = `${this.position_service_url}jobs`;
@@ -47,4 +49,5 @@ export class PositionService {
     }
     return throwError({ success: false, message: errorMessage });
   }
+
 }

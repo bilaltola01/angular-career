@@ -1,0 +1,159 @@
+@import "./../../../styles/variables.scss";
+$container-mt-desktop: 70px;
+$container-mt-tablet: 50px;
+$container-mt-mobile: 35px;
+
+$container-padding-desktop: 0 60px;
+$container-padding-tablet: 0 40px;
+$container-padding-mobile: 0 25px;
+$profile-form-field-mt: 30px;
+$profile-form-max-width-desktop: 880px;
+$profile-form-padding-desktop: 60px;
+
+:host {
+  .cancel {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #318bd6;
+  }
+  & mat-dialog-content {
+    .container {
+      &__full {
+        grid-column-start: 1;
+        grid-column-end: 13;
+      }
+      .profile-form {
+        action-button {
+          min-width: 150px;
+        }
+        &__title {
+          margin-top: $profile-form-field-mt;
+          text-align: center;
+        }
+        .mat-form-field {
+          width: 100%;
+        }
+
+        &__field {
+          margin-top: $profile-form-field-mt;
+          box-sizing: border-box;
+          width: 100%;
+          max-width: 615px;
+          border: solid 1px $mat-form-border-color;
+          border-radius: 5px;
+          padding: 0;
+          &.search {
+            border: none;
+            padding: 0px 0 0 18px;
+            h3 {
+              color: rgba(map-get($md-cfaccent, 500), 0.84);
+              display: inline-block;
+            }
+            .question {
+              vertical-align: text-bottom;
+              margin-left: 8px;
+            }
+            .count {
+              font-size: 14px;
+              font-weight: 400;
+            }
+            mat-form-field {
+              margin-top: 10px;
+
+              background-color: $third-bg-color;
+              border-radius: 25px;
+            }
+            .skills {
+              margin-top: 10px;
+              margin-bottom: 19px;
+              @include flex(row, center, flex-start);
+              & > * {
+                margin-top: 20px;
+                margin-right: 15px;
+              }
+              mat-icon {
+                color: map-get($md-cfaccent, 100);
+              }
+            }
+          }
+          &.simple-tag {
+            border: none;
+            @include flex(column, center, center);
+            simple-tag {
+              margin: 10px 0;
+            }
+          }
+        }
+      }
+    }
+  }
+  & mat-dialog-actions {
+    margin-bottom: 0 !important;
+    .nextButton {
+      margin: 0 auto;
+    }
+  }
+}
+@media only screen and (max-width: 480px) {
+  :host {
+    & mat-dialog-content {
+      .container {
+        padding: 0 0px;
+        &__full {
+          grid-column-start: 1;
+          grid-column-end: 12;
+        }
+        .profile-form {
+          &__field {
+            &.search {
+              border: none;
+              h3 {
+                color: rgba(map-get($md-cfaccent, 500), 0.84);
+                display: inline-block;
+              }
+              .question {
+                vertical-align: text-bottom;
+                margin-left: 5px;
+              }
+              .count {
+                font-size: 14px;
+                font-weight: 400;
+              }
+              mat-form-field {
+                margin-top: 10px;
+
+                background-color: $third-bg-color;
+                border-radius: 25px;
+              }
+              .skills {
+                margin-top: 10px;
+                margin-bottom: 19px;
+                @include flex(row, center, flex-start);
+                & > * {
+                  margin-top: 20px;
+                  margin-right: 15px;
+                }
+                mat-icon {
+                  color: map-get($md-cfaccent, 100);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  mat-dialog-actions {
+    margin-bottom: 0 !important;
+    .nextButton {
+      margin: 0 auto;
+      .btn-next {
+        button {
+          width: 97%;
+        }
+      }
+    }
+  }
+}

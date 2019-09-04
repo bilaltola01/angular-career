@@ -83,7 +83,8 @@
                         <mat-label>Education Level</mat-label>
                         <mat-select class="arrow" formControlName="education">
                             <mat-option value=''></mat-option>
-                            <mat-option *ngFor="let education of educationLevel" value="{{educationLevel.indexOf(education)}}">{{education}}
+                            <mat-option *ngFor="let education of educationLevel"
+                                value="{{educationLevel.indexOf(education)}}">{{education}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -104,8 +105,8 @@
                         <input matInput placeholder="Major" type="text" [matAutocomplete]="autocompleteMajor"
                             formControlName="major">
                         <mat-autocomplete #autocompleteMajor="matAutocomplete">
-                            <mat-option *ngFor="let major of autocomplete_education_major"
-                                [value]="major.major_name" (onSelectionChange)="onChangeMajor(major)">
+                            <mat-option *ngFor="let major of autocomplete_education_major" [value]="major.major_name"
+                                (onSelectionChange)="onChangeMajor(major)">
                                 <span>{{major.major_name}}</span>
                             </mat-option>
                         </mat-autocomplete>
@@ -221,7 +222,7 @@
             </div>
 
             <div *ngFor="let job of positionList ">
-                
+
                 <div class="row" [ngClass]="{'selected': job.selected}">
                     <round-checkbox id="test" [checked]="job.selected"
                         (statusChange)="job.selected = !job.selected;selectedAllFlag=false;"></round-checkbox>
@@ -320,7 +321,7 @@
                                             <simple-tag type="gray" title="{{min_skill.skill}}" ellipseTag="true"
                                                 value="{{min_skill.skill_level}}"
                                                 [matTooltip]="SkillLevelDescription[min_skill.skill_level]"
-                                                [matTooltipShowDelay]=500>
+                                                [matTooltipShowDelay]=500 (click)="openSkilladdDialog(min_skill)">
                                             </simple-tag>
 
                                         </div>
@@ -339,7 +340,7 @@
                                             <simple-tag type="gray" title="{{preskill.skill}}" ellipseTag="true"
                                                 value="{{preskill.skill_level}}"
                                                 [matTooltip]="SkillLevelDescription[preskill.skill_level]"
-                                                [matTooltipShowDelay]=500>
+                                                [matTooltipShowDelay]=500 (click)="openSkilladdDialog(preskill)">
                                             </simple-tag>
                                         </div>
                                     </div>
@@ -356,28 +357,28 @@
                         <div *ngIf="job.showMoreFlag">
                             <div class="qualification-level-m">
                                 <h5>Qualification Level Estimate Breakdown</h5>
-                                
-                                    <simple-tag *ngIf="job.true_fitscore_info?.skills_weight" type="gray"
-                                        title="Skills Match" ellipseTag="true"
-                                        value="{{mathFloor(6*job.true_fitscore_info?.skills_fitscore)}}">
-                                    </simple-tag>
-                                    <simple-tag  *ngIf="job.true_fitscore_info?.experience_weight" type="gray"
-                                        title="Experience Match" ellipseTag="true"
-                                        value="{{mathFloor(6*job.true_fitscore_info?.experience_fitscore)}}">
-                                    </simple-tag>
-                                    <simple-tag *ngIf="job.true_fitscore_info?.education_weight" type="gray"
-                                        title="Education Match" ellipseTag="true"
-                                        value="{{mathFloor(6*job.true_fitscore_info?.education_fitscore)}}">
-                                    </simple-tag>
-                                    <simple-tag *ngIf="job.true_fitscore_info?.interests_weight" type="gray"
-                                        title="Interests Match" ellipseTag="true"
-                                        value="{{mathFloor(6*job.true_fitscore_info?.interests_fitscore)}}">
-                                    </simple-tag>
-                                    <simple-tag *ngIf="job.minimum_skills" type="gray" title="Required Skills Match"
-                                        ellipseTag="true"
-                                        value="{{mathFloor(6*job.true_fitscore_info?.required_skills_fitscore)}}">
-                                    </simple-tag>
-                                
+
+                                <simple-tag *ngIf="job.true_fitscore_info?.skills_weight" type="gray"
+                                    title="Skills Match" ellipseTag="true"
+                                    value="{{mathFloor(6*job.true_fitscore_info?.skills_fitscore)}}">
+                                </simple-tag>
+                                <simple-tag *ngIf="job.true_fitscore_info?.experience_weight" type="gray"
+                                    title="Experience Match" ellipseTag="true"
+                                    value="{{mathFloor(6*job.true_fitscore_info?.experience_fitscore)}}">
+                                </simple-tag>
+                                <simple-tag *ngIf="job.true_fitscore_info?.education_weight" type="gray"
+                                    title="Education Match" ellipseTag="true"
+                                    value="{{mathFloor(6*job.true_fitscore_info?.education_fitscore)}}">
+                                </simple-tag>
+                                <simple-tag *ngIf="job.true_fitscore_info?.interests_weight" type="gray"
+                                    title="Interests Match" ellipseTag="true"
+                                    value="{{mathFloor(6*job.true_fitscore_info?.interests_fitscore)}}">
+                                </simple-tag>
+                                <simple-tag *ngIf="job.minimum_skills" type="gray" title="Required Skills Match"
+                                    ellipseTag="true"
+                                    value="{{mathFloor(6*job.true_fitscore_info?.required_skills_fitscore)}}">
+                                </simple-tag>
+
                                 <p
                                     *ngIf="!job.true_fitscore_info ||  (job.true_fitscore_info && !job.true_fitscore_info.skills_weight && !job.true_fitscore_info.experience_weight && !job.true_fitscore_info.education_weight && !job.true_fitscore_info.interests_weight && !job.minimum_skills)">
                                     N/A

@@ -12,6 +12,7 @@ export const environment = {
   application_service: 'application-service',
   position_service: 'position-service',
   cart_service: 'cart-service',
+  score_service: 'score-service',
   api_version: 'v1'
 };
 

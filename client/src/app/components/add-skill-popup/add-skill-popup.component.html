@@ -1,0 +1,39 @@
+<mat-icon class="cancel" (click)="onClose()">cancel</mat-icon>
+<ng-container>
+  <mat-dialog-content>
+    <div class="container">
+      <div class="container__full">
+        <div class="profile-form" [formGroup]="skillsForm">
+
+          <div class="profile-form__field search">
+            <h3>Skills</h3> <img src="assets/icons/ic_question.svg" class="question" (click)="openSkilladdDialog(skillLevelDescription)">
+            <mat-form-field appearance="standard" class="search">
+              <mat-icon matSuffix>search</mat-icon>
+              <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompleteSkills"
+                formControlName="skills">
+              <mat-autocomplete #autocompleteSkills="matAutocomplete">
+                <mat-option *ngFor="let autocomplete_skill of autocomplete_skills" [value]="autocomplete_skill?.skill"
+                  (onSelectionChange)="addSkills(autocomplete_skill)">
+                  <span>{{autocomplete_skill?.skill}}</span>
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+            <div class="skills" > <div *ngFor="let skill of allSkills; let i = index"> 
+              <simple-tag type="gray" title="{{skill?.skill}}" ellipseTag="true" value="{{skill?.skill_level}}"
+                isControl="true" (levelChanged)="onLevelChanged($event, i)" (removeClick)="removeUserSkillsData(i, skill)">
+              </simple-tag>
+            </div>
+          </div>
+           
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+<mat-dialog-actions>
+  <div class="nextButton">
+    <action-button class="btn-next" type="flat" title="Update Skills" color="primary" (click)="updateSkills()" >
+    </action-button>
+  </div>
+</mat-dialog-actions>
+</ng-container>
