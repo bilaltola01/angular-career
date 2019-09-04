@@ -27,6 +27,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { trigger, style, animate, transition, query, stagger } from '@angular/animations';
 import { ActivatedRoute, Router } from '@angular/router';
+import { uniqBy, orderBy } from 'lodash';
 
 export interface PeopleData {
   general_info: UserGeneralInfo;
@@ -117,7 +118,7 @@ export class PeopleSearchComponent implements OnInit {
     private autoCompleteService: AutoCompleteService,
     private alertsService: AlertsService,
     private userService: UserService,
-    private helperService: HelperService,
+    public helperService: HelperService,
     private userStateService: UserStateService,
     private breakpointObserver: BreakpointObserver,
     private route: ActivatedRoute,
@@ -133,7 +134,7 @@ export class PeopleSearchComponent implements OnInit {
     );
 
   ngOnInit() {
-    this.initPeopleFilterForm();
+    this.initPeopleFilterForm(); // TODO: Add the query params here
     this.isHandset$.subscribe(handsetFlag => {
       if (handsetFlag) {
         this.searchPlaceholderCopy = 'Search by name or email.';
@@ -142,8 +143,8 @@ export class PeopleSearchComponent implements OnInit {
       }
     });
 
-    const querySearchedName = this.route.snapshot.queryParamMap.get('name');
-
+    // Initial search
+    this.applyFilter();
   }
 
   toggleTabMenuOpen() {
@@ -166,8 +167,16 @@ export class PeopleSearchComponent implements OnInit {
   }
 
   initPeopleFilterForm() {
+    const querySearchedName = this.route.snapshot.queryParamMap.get('name') || null;
+    const querySearchedState = this.route.snapshot.queryParamMap.get('state') || null;
+    const querySearchedCity = this.route.snapshot.queryParamMap.get('city') || null;
+    const querySearchedSkill = this.route.snapshot.queryParamMap.get('skill') || null;
+    const querySearchedEducation = this.route.snapshot.queryParamMap.get('education') || null;
+    const querySearchedSchool = this.route.snapshot.queryParamMap.get('school') || null;
+    const querySearchedMajor = this.route.snapshot.queryParamMap.get('major') || null;
+
     this.peopleForm = new FormGroup({
-      'searchPeople': new FormControl(null),
+      'searchPeople': new FormControl(querySearchedName),
       'state': new FormControl(null),
       'city': new FormControl(null),
       'skill': new FormControl(null),
@@ -175,6 +184,8 @@ export class PeopleSearchComponent implements OnInit {
       'school': new FormControl(null),
       'major': new FormControl(null)
     });
+
+
     this.peopleForm.get('searchPeople').valueChanges.subscribe((searchPeople) => {
       searchPeople && this.helperService.checkSpacesString(searchPeople) ? this.onSearchPeopleValueChanges(searchPeople) : this.autocomplete_searchpeoples = [];
     });
@@ -195,6 +206,15 @@ export class PeopleSearchComponent implements OnInit {
     this.peopleForm.get('major').valueChanges.subscribe((major) => {
       major && this.helperService.checkSpacesString(major) ? this.onMajorValueChanges(major) : this.autocomplete_education_major = [];
     });
+
+    // TODO: Call onChangeCity somehow
+    // this.peopleForm.patchValue({
+    //   state: querySearchedState,
+    //   city: querySearchedCity,
+    //   education: querySearchedEducation,
+    //   school: querySearchedSchool,
+    //   major: querySearchedMajor,
+    // });
 
   }
 
@@ -312,6 +332,7 @@ export class PeopleSearchComponent implements OnInit {
     queryString = this.peopleForm.value.state ? `${queryString ? queryString + '&' : ''}state=${this.filterAttributes.state_id}` : queryString;
     queryString = this.peopleForm.value.city ? `${queryString ? queryString + '&' : ''}city=${this.filterAttributes.city_id}` : queryString;
     queryString = this.peopleForm.value.education ? `${queryString ? queryString + '&' : ''}education=${parseInt(this.peopleForm.value.education, 10) + 1}` : queryString;
+    queryString = this.peopleForm.value.school ? `${queryString ? queryString + '&' : ''}school=${this.filterAttributes.school_id}` : queryString;
     queryString = this.peopleForm.value.major ? `${queryString ? queryString + '&' : ''}major=${this.filterAttributes.major_id}` : queryString;
     queryString = queryString ? `${queryString}&offset=${this.filterAttributes.offset}` : `offset=${this.filterAttributes.offset}`;
     queryString = queryString ? `${queryString}&limit=${this.filterAttributes.limit}` : `limit=${this.filterAttributes.limit}`;
@@ -321,11 +342,20 @@ export class PeopleSearchComponent implements OnInit {
     const people = this.peopleForm.value.searchPeople && this.helperService.checkSpacesString(this.peopleForm.value.searchPeople) ? this.peopleForm.value.searchPeople.replace('+', '%2B') : null;
     queryString = people ? `${queryString ? queryString + '&' : ''}name=${people}` : queryString;
 
-    // TODO: Alex
-    const decoded = JSON.parse('{"' + decodeURI(queryString).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}');
+    // TODO: Skill
+    // const querySearchedSkill = this.route.snapshot.queryParamMap.get('skill') || null;
+    const paramsInQuery = {
+      'name': people,
+      'state': this.peopleForm.value.state,
+      'city': this.peopleForm.value.city,
+      'education': this.peopleForm.value.education,
+      'major': this.peopleForm.value.major,
+      'school': this.peopleForm.value.school,
+    };
+
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: decoded,
+      queryParams: paramsInQuery,
       queryParamsHandling: 'merge',
     });
 
@@ -413,6 +443,13 @@ export class PeopleSearchComponent implements OnInit {
         this.preLoadDataObject[pageNo].data[arrIndex].educationList = dataJson['data'];
         if (pageNo === this.currentPageNumber) {
           this.userList[arrIndex].educationList = this.preLoadDataObject[pageNo].data[arrIndex].educationList;
+
+          // Order by graduation date, remove duplicate majors and remove more than 3 majors.
+          this.userList[arrIndex].educationList = orderBy(this.userList[arrIndex].educationList, ['graduation_date'], ['desc']);
+          this.userList[arrIndex].educationList = uniqBy(this.userList[arrIndex].educationList, 'major_id');
+          for (let i = 3; i < this.userList[arrIndex].educationList.length; i++) {
+            this.userList[arrIndex].educationList.pop();
+          }
         }
       },
       error => {

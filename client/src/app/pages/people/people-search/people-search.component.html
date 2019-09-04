@@ -20,14 +20,17 @@
               formControlName="searchPeople" 
               (keyup.enter)="onSearchUser($event)">
       <mat-autocomplete #autocompleteSearch="matAutocomplete">
-        <mat-option *ngFor="let people of autocomplete_searchpeoples | slice:0:4"
-                    [value]="people.first_name + (people.last_name ? ' ' + people.last_name : '')">
-          <a routerLink="/user/{{ people.user_id }}/profile" [queryParams]="{showBackButton: 'true'}">
-            <img [src]="people.photo ? people.photo : 'assets/icons/no_photo.png'">
-            <span>{{people.first_name + (people.last_name ? ' ' + people.last_name : '')}}</span>
+          <a *ngFor="let people of autocomplete_searchpeoples | slice:0:4" 
+             routerLink="/user/{{people.user_id}}/profile" 
+             [queryParams]="{showBackButton: 'true'}">
+            <mat-option [value]="people.first_name + (people.last_name ? ' ' + people.last_name : '')">
+                <img [src]="people.photo ? people.photo : 'assets/icons/no_photo.png'">
+                <span>{{people.first_name + (people.last_name ? ' ' + people.last_name : '')}}</span>
+            </mat-option>
           </a>
-        </mat-option>
-        <p class="clickable" (click)="onSearchUser($event)"> See all results for <b>{{peopleForm.value.searchPeople}}</b></p>
+          <mat-option [value]="peopleForm.value.searchPeople" (click)="onSearchUser($event)" *ngIf="peopleForm.value.searchPeople?.length > 0">
+              See all results for <b>{{peopleForm.value.searchPeople}}</b>
+          </mat-option>
       </mat-autocomplete>
     </mat-form-field>
   </div>
@@ -168,7 +171,7 @@
         </div>
 
         <div *ngIf="user.educationList && user.educationList.length > 0" class="skills-container">
-          <h5>Major <span class="count">{{user.educationList.length}}</span></h5>
+          <h5>Majors <span class="count">{{user.educationList.length}}</span></h5>
           <div class="skills" *ngIf="displayItemsLimit; let limit">
             <ng-container *ngFor="let education of user.educationList; let j = index;">
               <simple-tag *ngIf="j < limit" type="gray" [title]="education.major_name"></simple-tag>

@@ -17,16 +17,6 @@ a {
   text-decoration: none;
 }
 
-.clickable {
-  margin: 0;
-  cursor: pointer;
-  text-align: center;
-  padding: 10px;
-  &:hover {
-    background: rgba(map-get($md-cfaccent, 100), .84);
-  }
-}
-
 .loader {
   position: absolute;
   top: 50%;
@@ -230,8 +220,6 @@ a {
       }
 
       &.secondary {
-        @include flex(row, flex-start, flex-start);
-
         &>img {
           width: 56px;
           height: 56px;
@@ -268,7 +256,7 @@ a {
         font-weight: 500;
         font-style: normal;
         font-size: 16px;
-        line-height: 21px;
+        line-height: 17px;
         color: rgba(map-get($md-cfaccent, 500), .84);
         margin: 0;
       }
@@ -328,10 +316,6 @@ a {
     }
   }
 }
-
-// .mat-option-text {
-
-// }
 
 @media only screen and (max-width: $max-tablet-breakpoint) {
   :host {
