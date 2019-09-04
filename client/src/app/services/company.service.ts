@@ -23,20 +23,40 @@ export class CompanyService {
   }
 
 
-  public createCompany(company: any): Observable<any> {
-    return this.http.post(this.company_service_url + 'company', company, this.authHttpOptions())
+  public postCompany(companyInfo: any): Observable<any> {
+    return this.http.post(this.company_service_url + 'company', companyInfo, this.authHttpOptions())
       .pipe(
         map(
           data => {
-            if (data['token']) {
-              return {success: true, message: data['message']};
-            } else {
-              return {success: false, message: data['message']};
-            }
+            return {success: true, message: 'Success!', data: data};
           }
         ),
         catchError(this.handleError)
       );
+  }
+
+  public patchCompanyById(companyInfo: any, companyId: number): Observable<any> {
+    return this.http.patch(this.company_service_url + `company/${companyId}`, companyInfo, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
+  public getSignedS3Url(file: File, companyId: number): Observable<any> {
+    const requestUrl =
+      `${this.company_service_url}company/${companyId}/sign-s3?file-name=${file.name}&file-type=${file.type}&companyId=${companyId}`;
+
+    return this.http.get(`${requestUrl}`, this.authHttpOptions())
+      .pipe(
+        map(data => {
+          return {success: true, message: 'Success!', data: data};
+        }),
+        catchError(this.handleError));
   }
 
   private httpOptions() {

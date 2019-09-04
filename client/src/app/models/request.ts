@@ -79,7 +79,6 @@ export interface CriminalHistoryRequest {
 }
 
 export interface CompanyInfoRequest {
-  admin_password: string;
   company_name:	string;
   company_desc:	string;
   company_logo:	string;
@@ -90,7 +89,6 @@ export interface CompanyInfoRequest {
   founding_year: number;
   website: string;
   main_industry: number;
-  school:	number;
   active:	number;
   company_industry_ids:	number[];
 }

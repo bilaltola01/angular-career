@@ -30,18 +30,18 @@
 			<div class="profile-form__image">
 				<input style="display: none" type="file" (change)="onPhotoFileSelected($event)" #fileInput>
 
-				<img alt="Profile Image" src="{{nameOverviewForm.value.company_logo || 'assets/icons/profile-image.svg'}}" (click)="fileInput.click()">
+				<img alt="Profile Image" src="{{company_logo_url || 'assets/icons/profile-image.svg'}}" (click)="fileInput.click()">
 			</div>
 
 			<div class="profile-form__field">
 				<mat-form-field class="bg-transparent" appearance="fill">
-					<mat-label>Company Name</mat-label>
-					<input matInput placeholder="Company Name" type="text" formControlName="company_name">
+					<mat-label>Company Name *</mat-label>
+					<input matInput placeholder="Company Name *" type="text" formControlName="company_name">
 				</mat-form-field>
 			</div>
 			<div class="profile-form__field textarea">
 				<mat-form-field>
-					<textarea matInput placeholder="Briefly introduce the company" rows="15" formControlName="company_desc"></textarea>
+					<textarea matInput placeholder="Briefly introduce the company *" rows="15" formControlName="company_desc"></textarea>
 				</mat-form-field>
 			</div>
 		</div>
@@ -131,7 +131,7 @@
 		</div>
 	</div>
 	<div class="container__full">
-		<action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
+		<action-button class="btn-next" type="flat" title="Next" color="primary" [disabled]="!(companyBasicInfoForm.valid && onCheckCityValidation() && onCheckStateValidation())" (click)="goToNextPage()"></action-button>
 	</div>
 </div>
 
@@ -188,7 +188,7 @@
 		</div>
 	</div>
 	<div class="container__full">
-		<action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
+		<action-button class="btn-next" type="flat" title="Next" color="primary" [disabled]="!(companyIndustryForm.valid && onCheckMainIndustryValidation())" (click)="goToNextPage()"></action-button>
 	</div>
 </div>
 
@@ -289,7 +289,7 @@
 	<div class="header-section">
 		<div class="user-row">
 			<div>
-				<img class="user-photo" src="assets/icons/no_photo.png" alt="Company logo">
+				<img class="user-photo" src="{{company_logo_url || 'assets/icons/no_photo.png'}}" alt="Company logo">
 			</div>
 
 			<div class="user-detail">
@@ -325,7 +325,7 @@
 				</div>
 			</div>
 			<div class="user-status">
-				<action-button type="flat" color="primary" title="Publish"></action-button>
+				<action-button type="flat" color="primary" title="Publish" (click)="onClickPublish()"></action-button>
 			</div>
 		</div>
 		<div class="tabs-row">

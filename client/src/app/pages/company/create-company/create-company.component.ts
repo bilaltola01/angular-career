@@ -18,7 +18,9 @@ import {
   Genders,
   State,
   Countries,
-  Industry
+  Industry,
+  CompanyInfoRequest,
+  CompanyInfoResponse
 } from 'src/app/models';
 
 @Component({
@@ -110,7 +112,8 @@ export class CreateCompanyComponent implements OnInit {
 
   selectedPageIndex: number;
 
-  company_logo: string;
+  company_logo: File;
+  company_logo_url: string;
   company_name: string;
   company_desc: string;
   company_size:	string;
@@ -124,6 +127,8 @@ export class CreateCompanyComponent implements OnInit {
 
   company_administrators: UserGeneralInfo[] = [];
   company_recruiters: UserGeneralInfo[] = [];
+
+  company: CompanyInfoResponse;
 
   current_tab: string;
   is_administrators: boolean;
@@ -151,6 +156,9 @@ export class CreateCompanyComponent implements OnInit {
   }
 
   goToNextPage() {
+    if (this.selectedPageIndex === 0 && !this.company_name && !this.company_desc) {
+      return;
+    }
     ++this.selectedPageIndex;
     switch (this.selectedPageIndex) {
       case 1:
@@ -175,6 +183,9 @@ export class CreateCompanyComponent implements OnInit {
   }
 
   goToPage(index: number) {
+    if (this.selectedPageIndex === 0 && !this.company_name && !this.company_desc) {
+      return;
+    }
     this.selectedPageIndex = index;
     this.initializeFormsByPageIndex();
   }
@@ -239,22 +250,14 @@ export class CreateCompanyComponent implements OnInit {
         return null;
       }
 
-      const file = event.target.files[0];
+      const reader = new FileReader();
 
-      this.userService.getSignedPhotoUrl(file)
-        .subscribe((signedPhoto) => {
-          this.userService.uploadPhotoToS3(file, signedPhoto.data.signedUrl, signedPhoto.data.url)
-            .subscribe((response) => {
-              this.nameOverviewForm.patchValue({
-                company_logo: response.data
-              });
-            }, err => {
-              this.alertsService.show(err.message, AlertType.error);
-            });
-          }, err => {
-            this.alertsService.show(err.message, AlertType.error);
-          }
-        );
+      reader.onload = (reader_event: any) => {
+        this.company_logo_url = reader_event.target.result;
+      };
+
+      reader.readAsDataURL(event.target.files[0]);
+      this.company_logo = event.target.files[0];
     }
   }
 
@@ -341,6 +344,12 @@ export class CreateCompanyComponent implements OnInit {
         this.website = website ? this.helperService.checkSpacesString(website) : null;
       }
     );
+
+    this.companyBasicInfoForm.get('company_size').valueChanges.subscribe(
+      (company_size) => {
+        this.company_size = company_size;
+      }
+    );
   }
 
   onSelectCity(city: City) {
@@ -348,7 +357,12 @@ export class CreateCompanyComponent implements OnInit {
   }
 
   onBlurCity() {
-    if (this.hq_city && this.companyBasicInfoForm.value.hq_city !== this.helperService.cityNameFromAutoComplete(this.hq_city.city)) {
+    const value = this.companyBasicInfoForm.value.hq_city;
+    if (value && this.helperService.checkSpacesString(value)) {
+      if (this.hq_city && value !== this.helperService.cityNameFromAutoComplete(this.hq_city.city)) {
+        this.hq_city = null;
+      }
+    } else {
       this.hq_city = null;
     }
   }
@@ -362,7 +376,7 @@ export class CreateCompanyComponent implements OnInit {
         return false;
       }
     } else {
-      return this.hq_city ? false : true;
+      return true;
     }
   }
 
@@ -371,7 +385,12 @@ export class CreateCompanyComponent implements OnInit {
   }
 
   onBlurState() {
-    if (this.hq_state && this.companyBasicInfoForm.value.hq_state !== this.hq_state.state) {
+    const value = this.companyBasicInfoForm.value.hq_state;
+    if (value && this.helperService.checkSpacesString(value)) {
+      if (this.hq_state && value !== this.hq_state.state) {
+        this.hq_state = null;
+      }
+    } else {
       this.hq_state = null;
     }
   }
@@ -385,7 +404,7 @@ export class CreateCompanyComponent implements OnInit {
         return false;
       }
     } else {
-      return this.hq_state ? true : false;
+      return true;
     }
   }
 
@@ -453,7 +472,12 @@ export class CreateCompanyComponent implements OnInit {
   }
 
   onBlurMainIndustry() {
-    if (this.main_industry && this.companyIndustryForm.value.main_industry !== this.main_industry.industry_name) {
+    const value = this.companyIndustryForm.value.main_industry;
+    if (value && this.helperService.checkSpacesString(value)) {
+      if (this.main_industry && this.companyIndustryForm.value.main_industry !== this.main_industry.industry_name) {
+        this.main_industry = null;
+      }
+    } else {
       this.main_industry = null;
     }
   }
@@ -467,7 +491,7 @@ export class CreateCompanyComponent implements OnInit {
         return false;
       }
     } else {
-      return this.main_industry ? false : true;
+      return true;
     }
   }
 
@@ -610,6 +634,71 @@ export class CreateCompanyComponent implements OnInit {
 
   onSelectNavMenuPeople(is_administrators: boolean) {
     this.is_administrators = is_administrators;
+  }
+
+  onClickPublish() {
+    const company: CompanyInfoRequest = {
+      company_logo: null,
+      company_name: this.company_name,
+      company_desc: this.company_desc,
+      company_size: this.parseCompanySize(this.company_size),
+      hq_city: this.hq_city ? this.hq_city.city_id : null,
+      hq_state: this.hq_state ? this.hq_state.state_id : null,
+      hq_country: this.hq_country,
+      founding_year: this.founding_year,
+      website: this.website,
+      main_industry: this.main_industry ? this.main_industry.industry_id : null,
+      company_industry_ids: this.company_industries.length !== 0 ? this.company_industries.map((industry) => industry.industry_id) : null,
+      active: 1
+    };
+
+    this.companyService.postCompany(company).subscribe(
+      dataJson => {
+        this.company = dataJson['data'];
+        if (this.company_logo) {
+          this.addCompanyLogo();
+        }
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  parseCompanySize(companySizeTypes: string): string {
+    let company_size = 'small';
+    if (companySizeTypes.includes('Medium')) {
+      company_size = 'medium';
+    } else if (companySizeTypes.includes('Large')) {
+      company_size = 'large';
+    }
+
+    return company_size;
+  }
+
+  addCompanyLogo() {
+    this.companyService.getSignedS3Url(this.company_logo, this.company.company_id)
+      .subscribe((signedS3Url) => {
+        this.userService.uploadPhotoToS3(this.company_logo, signedS3Url.data.signedUrl, signedS3Url.data.url)
+          .subscribe((response) => {
+              if (response.data) {
+                this.company_logo_url = response.data;
+                this.companyService.patchCompanyById({company_logo: this.company_logo_url}, this.company.company_id).subscribe(
+                  dataJson => {
+                    this.company = dataJson['data'];
+                  },
+                  error => {
+                    this.alertsService.show(error.message, AlertType.error);
+                  }
+                );
+              }
+          }, err => {
+            this.alertsService.show(err.message, AlertType.error);
+          });
+        }, err => {
+          this.alertsService.show(err.message, AlertType.error);
+        }
+      );
   }
 
 }

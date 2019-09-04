@@ -117,7 +117,7 @@ export interface CriminalHistoryResponse {
 }
 
 export interface CompanyInfoResponse {
-  company_id: string;
+  company_id: number;
   company_name:	string;
   company_desc:	string;
   company_logo:	string;
