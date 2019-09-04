@@ -8,7 +8,9 @@ import {
   AlertsService,
   UserService,
   AlertType,
-  HelperService
+  HelperService,
+  CompanyRecruiterService,
+  CompanyAdminService
 } from 'src/app/services';
 
 import {
@@ -138,6 +140,8 @@ export class CreateCompanyComponent implements OnInit {
     private autoCompleteService: AutoCompleteService,
     private userService: UserService,
     private companyService: CompanyService,
+    private companyAdminService: CompanyAdminService,
+    private companyRecruiterService: CompanyRecruiterService,
     private alertsService: AlertsService,
     public helperService: HelperService) { }
 
@@ -658,6 +662,12 @@ export class CreateCompanyComponent implements OnInit {
         if (this.company_logo) {
           this.addCompanyLogo();
         }
+        if (this.company_recruiters.length > 0) {
+          this.addRecruiters();
+        }
+        if (this.company_administrators.length > 0) {
+          this.addAdministrators();
+        }
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -699,6 +709,30 @@ export class CreateCompanyComponent implements OnInit {
           this.alertsService.show(err.message, AlertType.error);
         }
       );
+  }
+
+  addRecruiters() {
+    this.company_recruiters.forEach(recruiter => {
+      this.companyRecruiterService.postRecruiterByCompanyId(recruiter.user_id, this.company.company_id).subscribe(
+        dataJson => {
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    });
+  }
+
+  addAdministrators() {
+    this.company_administrators.forEach(administrator => {
+      this.companyAdminService.postAdmin({admin_id: administrator.user_id, company_id: this.company.company_id}).subscribe(
+        dataJson => {
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    });
   }
 
 }

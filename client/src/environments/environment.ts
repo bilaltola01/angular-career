@@ -14,6 +14,8 @@ export const environment = {
   cart_service: 'cart-service',
   score_service: 'score-service',
   company_service: 'companies-service',
+  recruiter_service: 'recruiter-service',
+  company_admin_service: 'company-admin-service',
   api_version: 'v1'
 };
 
