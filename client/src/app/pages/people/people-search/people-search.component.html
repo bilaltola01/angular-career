@@ -37,7 +37,7 @@
 </form>
 
 <!-- Filter Side -->
-<div class="filter-container container__header tablet" [formGroup]="peopleForm" *ngIf="showFilterListFlag" [@enterAnimation]>
+<form class="filter-container container__header tablet" [formGroup]="peopleForm" *ngIf="showFilterListFlag" [@enterAnimation] autocomplete="off">
   <ng-container>
     <div class="nav-title">
       <h3 class="section-title">User Filters</h3>
@@ -120,7 +120,7 @@
       </div>
     </div>
   </ng-container>
-</div>
+</form>
 
 
 <!-- Results Side-->
