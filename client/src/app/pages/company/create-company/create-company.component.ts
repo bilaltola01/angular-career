@@ -26,6 +26,10 @@ import {
   CompanyInfoResponse
 } from 'src/app/models';
 
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+
 @Component({
   selector: 'app-create-company',
   templateUrl: './create-company.component.html',
@@ -136,6 +140,7 @@ export class CreateCompanyComponent implements OnInit {
   current_tab: string;
   is_administrators: boolean;
   currentUser: UserGeneralInfo;
+  isNavMenuOpened: boolean;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -146,18 +151,31 @@ export class CreateCompanyComponent implements OnInit {
     private companyRecruiterService: CompanyRecruiterService,
     private userStateService: UserStateService,
     private alertsService: AlertsService,
-    public helperService: HelperService) {
-      this.getCurrentUserInfo();
-    }
+    public helperService: HelperService,
+    private breakpointObserver: BreakpointObserver
+  ) {
+    this.getCurrentUserInfo();
+  }
+
+  isHandset$: Observable<boolean> = this.breakpointObserver
+    .observe(['(max-width: 991px)'])
+    .pipe(
+      map(result => result.matches)
+    );
 
   ngOnInit() {
     this.isTabMenuOpen = false;
+    this.isNavMenuOpened = false;
 
     this.company_size = CompanySizeTypes[0];
     this.current_tab = this.tab_menus[0];
     this.is_administrators = false;
     this.selectedPageIndex = 0;
     this.initializeFormsByPageIndex();
+  }
+
+  onClickTogggle() {
+    this.isNavMenuOpened = !this.isNavMenuOpened;
   }
 
   toggleTabMenuOpen() {
@@ -202,9 +220,12 @@ export class CreateCompanyComponent implements OnInit {
 
   goToPage(index: number) {
     if (this.selectedPageIndex === 0 && !this.company_name && !this.company_desc) {
+      this.alertsService.show('Please fill out the company\'s name and description field.', AlertType.error);
       return;
     }
     this.selectedPageIndex = index;
+    this.isTabMenuOpen = false;
+    this.isNavMenuOpened = false;
     this.initializeFormsByPageIndex();
   }
 
@@ -652,41 +673,44 @@ export class CreateCompanyComponent implements OnInit {
 
   onSelectNavMenuPeople(is_administrators: boolean) {
     this.is_administrators = is_administrators;
+    this.isNavMenuOpened = false;
   }
 
   onClickPublish() {
-    const company: CompanyInfoRequest = {
-      company_logo: null,
-      company_name: this.company_name,
-      company_desc: this.company_desc,
-      company_size: this.parseCompanySize(this.company_size),
-      hq_city: this.hq_city ? this.hq_city.city_id : null,
-      hq_state: this.hq_state ? this.hq_state.state_id : null,
-      hq_country: this.hq_country,
-      founding_year: this.founding_year,
-      website: this.website,
-      main_industry: this.main_industry ? this.main_industry.industry_id : null,
-      company_industry_ids: this.company_industries.length !== 0 ? this.company_industries.map((industry) => industry.industry_id) : null,
-      active: 1
-    };
+    if (!this.company) {
+      const company: CompanyInfoRequest = {
+        company_logo: null,
+        company_name: this.company_name,
+        company_desc: this.company_desc,
+        company_size: this.parseCompanySize(this.company_size),
+        hq_city: this.hq_city ? this.hq_city.city_id : null,
+        hq_state: this.hq_state ? this.hq_state.state_id : null,
+        hq_country: this.hq_country,
+        founding_year: this.founding_year,
+        website: this.website,
+        main_industry: this.main_industry ? this.main_industry.industry_id : null,
+        company_industry_ids: this.company_industries.length !== 0 ? this.company_industries.map((industry) => industry.industry_id) : null,
+        active: 1
+      };
 
-    this.companyService.postCompany(company).subscribe(
-      dataJson => {
-        this.company = dataJson['data'];
-        if (this.company_logo) {
-          this.addCompanyLogo();
+      this.companyService.postCompany(company).subscribe(
+        dataJson => {
+          this.company = dataJson['data'];
+          if (this.company_logo) {
+            this.addCompanyLogo();
+          }
+          if (this.company_recruiters.length > 0) {
+            this.addRecruiters();
+          }
+          if (this.company_administrators.length > 0) {
+            this.addAdministrators();
+          }
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
         }
-        if (this.company_recruiters.length > 0) {
-          this.addRecruiters();
-        }
-        if (this.company_administrators.length > 0) {
-          this.addAdministrators();
-        }
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-      }
-    );
+      );
+    }
   }
 
   parseCompanySize(companySizeTypes: string): string {
@@ -749,6 +773,14 @@ export class CreateCompanyComponent implements OnInit {
         );
       }
     });
+  }
+
+  backToEdit() {
+    if (this.current_tab === 'About') {
+      this.goToPage(0);
+    } else if (this.current_tab === 'People') {
+      this.goToPage(this.is_administrators ? 3 : 4);
+    }
   }
 
 }

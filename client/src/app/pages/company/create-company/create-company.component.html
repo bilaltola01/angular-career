@@ -1,4 +1,4 @@
-<div class="profile-completion">
+<div *ngIf="selectedPageIndex < 5" class="profile-completion">
 	<div class="container">
 		<ng-container *ngFor="let page_title of page_titles; let i = index">
 			<action-button *ngIf="page_title" class="link-btn desktop" type="text" title="{{page_title}}" (click)="goToPage(i)" [done]="selectedPageIndex > i" [disabled]="selectedPageIndex < i"></action-button>
@@ -338,7 +338,8 @@
 		<div class="nav-title" (click)="onClickTogggle()">
 			<h3 class="section-title">{{current_tab}}</h3>
 			<mat-icon>menu</mat-icon>
-		</div>
+        </div>
+        <a (click)="backToEdit()">Edit</a> 
 	</legend>
 	<div class="main-section">
 		<div class="edit-title">
@@ -418,7 +419,7 @@
 			</ng-container>
 		</div>
 	</div>
-	<div class="nav-section">
+	<div class="nav-section" [class.nav-hidden]="!isNavMenuOpened">
 			<div class="nav-title">
 				<h3 class="section-title">{{current_tab}}</h3>
 			</div>
@@ -438,7 +439,10 @@
 					<div class="navmenu-title" [class.active]="is_administrators">
 						<h3 (click)="onSelectNavMenuPeople(true)">Administrators</h3>
 					</div>
-				</ng-container>
+                </ng-container>
+                <div class="btn-section">
+                    <action-button class="nav-btn" type="flat" title="Edit" color="primary" (click)="backToEdit()"></action-button>
+                </div>  
 			</nav>
 	</div>
 </div>
