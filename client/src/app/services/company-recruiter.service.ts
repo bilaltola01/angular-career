@@ -32,8 +32,8 @@ export class CompanyRecruiterService {
       );
   }
 
-  public postRecruiterByCompanyId(recruiterId: number, companyId): Observable<any> {
-    return this.http.post(this.recruiter_service_url + `company/${companyId}/recruiter`, recruiterId, this.authHttpOptions())
+  public postRecruiterByCompanyId(recruiterInfo: any, companyId: number): Observable<any> {
+    return this.http.post(this.recruiter_service_url + `company/${companyId}/recruiter`, recruiterInfo, this.authHttpOptions())
       .pipe(
         map(data => {
           return {success: true, message: 'Success!', data: data};

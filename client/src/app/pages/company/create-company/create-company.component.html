@@ -325,7 +325,7 @@
 				</div>
 			</div>
 			<div class="user-status">
-				<action-button type="flat" color="primary" title="Publish" (click)="onClickPublish()"></action-button>
+				<action-button type="flat" color="primary" [title]="company ? 'Published' : 'Publish'" (click)="onClickPublish()"></action-button>
 			</div>
 		</div>
 		<div class="tabs-row">

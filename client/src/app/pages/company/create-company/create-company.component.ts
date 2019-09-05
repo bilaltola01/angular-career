@@ -10,7 +10,8 @@ import {
   AlertType,
   HelperService,
   CompanyRecruiterService,
-  CompanyAdminService
+  CompanyAdminService,
+  UserStateService
 } from 'src/app/services';
 
 import {
@@ -134,6 +135,7 @@ export class CreateCompanyComponent implements OnInit {
 
   current_tab: string;
   is_administrators: boolean;
+  currentUser: UserGeneralInfo;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -142,8 +144,11 @@ export class CreateCompanyComponent implements OnInit {
     private companyService: CompanyService,
     private companyAdminService: CompanyAdminService,
     private companyRecruiterService: CompanyRecruiterService,
+    private userStateService: UserStateService,
     private alertsService: AlertsService,
-    public helperService: HelperService) { }
+    public helperService: HelperService) {
+      this.getCurrentUserInfo();
+    }
 
   ngOnInit() {
     this.isTabMenuOpen = false;
@@ -157,6 +162,15 @@ export class CreateCompanyComponent implements OnInit {
 
   toggleTabMenuOpen() {
     this.isTabMenuOpen = !this.isTabMenuOpen;
+  }
+
+  getCurrentUserInfo() {
+    this.userStateService.getUser
+      .subscribe(user => {
+        this.currentUser = user;
+      }, error => {
+        this.alertsService.show(error.message, AlertType.error);
+      });
   }
 
   goToNextPage() {
@@ -713,7 +727,7 @@ export class CreateCompanyComponent implements OnInit {
 
   addRecruiters() {
     this.company_recruiters.forEach(recruiter => {
-      this.companyRecruiterService.postRecruiterByCompanyId(recruiter.user_id, this.company.company_id).subscribe(
+      this.companyRecruiterService.postRecruiterByCompanyId({recruiterId: recruiter.user_id}, this.company.company_id).subscribe(
         dataJson => {
         },
         error => {
@@ -725,13 +739,15 @@ export class CreateCompanyComponent implements OnInit {
 
   addAdministrators() {
     this.company_administrators.forEach(administrator => {
-      this.companyAdminService.postAdmin({admin_id: administrator.user_id, company_id: this.company.company_id}).subscribe(
-        dataJson => {
-        },
-        error => {
-          this.alertsService.show(error.message, AlertType.error);
-        }
-      );
+      if (administrator.user_id !== this.currentUser.user_id) {
+        this.companyAdminService.postAdmin({admin_id: administrator.user_id, company_id: this.company.company_id}).subscribe(
+          dataJson => {
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+          }
+        );
+      }
     });
   }
 
