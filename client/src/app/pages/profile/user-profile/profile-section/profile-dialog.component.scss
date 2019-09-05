@@ -1,8 +1,8 @@
-@import './../../../../../styles/variables.scss';
+@import "./../../../../../styles/variables.scss";
 
-mat-dialog-content{
+mat-dialog-content {
   ul {
-    li {
+    .key {
       .simpletag {
         display: flex;
         flex-direction: column;
@@ -12,6 +12,11 @@ mat-dialog-content{
         border-radius: 18px;
         width: 20%;
         display: inline-block;
+      }
+      & li {
+        b.bold {
+          font-weight: 590;
+        }
       }
     }
   }
@@ -67,9 +72,9 @@ mat-dialog-content{
 
 @media only screen and (max-width: 480px) {
   :host {
-    mat-dialog-content{
+    mat-dialog-content {
       ul {
-        li {
+        .key {
           .simpletag {
             display: flex;
             flex-direction: column;
@@ -85,4 +90,3 @@ mat-dialog-content{
     }
   }
 }
-

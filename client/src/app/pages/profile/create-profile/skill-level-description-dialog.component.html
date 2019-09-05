@@ -4,8 +4,13 @@
   <mat-dialog-content>
     <div class="center">
       <ul type="none" class="skill_level_desc">
-          <li *ngFor="let level of data.skillDesc | keyvalue"><simple-tag class="simpletag" type="gray" ellipseTag="true" value="{{level.key}}">
-            </simple-tag> - {{level.value}} <hr></li>
+        <div *ngFor="let item of data.skillDesc | keyvalue" class="key">
+          <simple-tag class="simpletag" type="gray" ellipseTag="true" [value]="item.key">
+          </simple-tag>
+          <li *ngFor="let desc of item.value"> <b class="bold">{{desc.title}}</b> {{desc.value}}
+            <hr>
+          </li>
+        </div>
       </ul>
     </div>
   </mat-dialog-content>

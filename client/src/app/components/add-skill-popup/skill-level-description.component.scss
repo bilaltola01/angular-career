@@ -27,9 +27,7 @@ $profile-form-padding-desktop: 60px;
   & mat-dialog-content {
     .skill_level_desc {
       padding: 0;
-      & li {
-        line-height: 26px;
-        margin-bottom: 10px;
+      .key {
         .simpletag {
           display: flex;
           flex-direction: column;
@@ -39,6 +37,13 @@ $profile-form-padding-desktop: 60px;
           border-radius: 18px;
           width: 20%;
           display: inline-block;
+        }
+        & li {
+          line-height: 26px;
+          margin-bottom: 10px;
+          b.bold {
+            font-weight: 590;
+          }
         }
       }
     }
@@ -50,9 +55,7 @@ $profile-form-padding-desktop: 60px;
     mat-dialog-content {
       .skill_level_desc {
         padding: 0;
-        & li {
-          line-height: 26px;
-          margin-bottom: 10px;
+        .key {
           .simpletag {
             display: flex;
             flex-direction: column;
@@ -63,9 +66,15 @@ $profile-form-padding-desktop: 60px;
             width: 40%;
             display: inline-block;
           }
+          & li {
+            line-height: 26px;
+            margin-bottom: 10px;
+            b.bold {
+              font-weight: 590;
+            }
+          }
         }
       }
     }
   }
-
 }
