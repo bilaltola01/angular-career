@@ -30,7 +30,7 @@ export class PositionService {
       queryUrl = `${queryUrl}?${queryString}`;
     }
     return this.http.get(queryUrl, this.authHttpOptions())
-      .pipe(
+    .pipe(
         map(
           data => {
             return { success: true, message: 'Success!', data: data };
