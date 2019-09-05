@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {MatDatepicker} from '@angular/material/datepicker';
 import {
   AutoCompleteService,
@@ -18,7 +18,6 @@ import {
   City,
   UserGeneralInfo,
   CompanySizeTypes,
-  Genders,
   State,
   Countries,
   Industry,
@@ -26,18 +25,14 @@ import {
   CompanyInfoResponse
 } from 'src/app/models';
 
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-
 @Component({
   selector: 'app-create-company',
   templateUrl: './create-company.component.html',
   styleUrls: ['./create-company.component.scss']
 })
 export class CreateCompanyComponent implements OnInit {
-  @Output() updatedGeneralInfoData = new EventEmitter();
 
+  // constants
   page_titles = [
     'Name & Overview',
     'Company Information',
@@ -46,21 +41,6 @@ export class CreateCompanyComponent implements OnInit {
     'Recruiters',
     ''
   ];
-
-  profileCreationPages = [
-    'profile-basic',
-    'profile-basic',
-    'profile-skills',
-    'profile-links',
-    'profile-skills',
-    'profile-skills',
-    'profile-project',
-    'profile-publication',
-    'profile-links',
-    'profile-status'
-  ];
-
-  isTabMenuOpen: boolean;
 
   progressWidth = [
     {
@@ -80,19 +60,12 @@ export class CreateCompanyComponent implements OnInit {
       width: 400 / 6 - 100 / 12
     },
     {
-      label: 90,
-      width: 500 / 6 - 100 / 12
-    },
-    {
       label: 100,
       width: 100
     }
   ];
 
   maxDate = new Date();
-
-  // constants
-  genders: string[] = Genders;
   companySizeTypes: string[] = CompanySizeTypes;
   countries: string[] = Countries.slice().sort();
   displayItemsLimit = 7;
@@ -117,8 +90,7 @@ export class CreateCompanyComponent implements OnInit {
   autocomplete_administrators: UserGeneralInfo[];
   autocomplete_recruiters: UserGeneralInfo[];
 
-  selectedPageIndex: number;
-
+  // Company information
   company_logo: File;
   company_logo_url: string;
   company_name: string;
@@ -131,16 +103,17 @@ export class CreateCompanyComponent implements OnInit {
   website: string;
   main_industry: Industry;
   company_industries: Industry[] = [];
-
   company_administrators: UserGeneralInfo[] = [];
   company_recruiters: UserGeneralInfo[] = [];
 
   company: CompanyInfoResponse;
+  currentUser: UserGeneralInfo;
 
+  selectedPageIndex: number;
   current_tab: string;
   is_administrators: boolean;
-  currentUser: UserGeneralInfo;
   isNavMenuOpened: boolean;
+  isTabMenuOpen: boolean;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -151,17 +124,10 @@ export class CreateCompanyComponent implements OnInit {
     private companyRecruiterService: CompanyRecruiterService,
     private userStateService: UserStateService,
     private alertsService: AlertsService,
-    public helperService: HelperService,
-    private breakpointObserver: BreakpointObserver
+    public helperService: HelperService
   ) {
     this.getCurrentUserInfo();
   }
-
-  isHandset$: Observable<boolean> = this.breakpointObserver
-    .observe(['(max-width: 991px)'])
-    .pipe(
-      map(result => result.matches)
-    );
 
   ngOnInit() {
     this.isTabMenuOpen = false;
