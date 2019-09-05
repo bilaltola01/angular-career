@@ -309,9 +309,9 @@
                   </h5>
                   <div class="skil-height-fix" [ngClass]="{'skill-more-height': job.showMoreFlag}"
                     *ngIf="job.minimum_skills; else noSkills">
-                    <div class="skills-preferred-m" *ngFor="let min_skill of job.minimum_skills">
+                    <div class="skills-preferred-m" *ngFor="let min_skill of job.minimum_skills ">
                       <simple-tag type="gray" title="{{min_skill.skill}}" ellipseTag="true"
-                        value="{{min_skill.skill_level}}" [matTooltip]="SkillLevelDescription[min_skill.skill_level]"
+                        value="{{min_skill.skill_level}}" [matTooltip]="SkillLevelDescription[min_skill.skill_level].title + SkillLevelDescription[min_skill.skill_level].description">
                         [matTooltipShowDelay]=500 (click)="openSkilladdDialog(min_skill)">
                       </simple-tag>
 
@@ -328,7 +328,7 @@
                     *ngIf="job.preferred_skills; else noSkills">
                     <div class="skills-preferred-m skill-prefer" *ngFor="let preskill of job.preferred_skills">
                       <simple-tag type="gray" title="{{preskill.skill}}" ellipseTag="true"
-                        value="{{preskill.skill_level}}" [matTooltip]="SkillLevelDescription[preskill.skill_level]"
+                        value="{{preskill.skill_level}}" [matTooltip]="SkillLevelDescription[preskill.skill_level].title + SkillLevelDescription[preskill.skill_level].description"
                         [matTooltipShowDelay]=500 (click)="openSkilladdDialog(preskill)">
                       </simple-tag>
                     </div>

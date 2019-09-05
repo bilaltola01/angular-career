@@ -411,13 +411,13 @@ export const MILITARY_STATUS_OPTIONS = [
 
 
 export const SkillLevelDescription = {
- 0 : [{'title': 'No proficiency:', 'value': 'no training and no experience'}],
- 1 : [{'title': 'Limited proficiency:' , 'value': 'some training or some experience'}],
- 2: [{'title': 'Moderately proficient:', 'value': 'moderate training and moderate experience, though not enough to be considered competent (if someone were to hire you based on this skill you might need substantial training/assistance)'}],
- 3: [{'title': 'Proficient:', 'value': 'sufficient training or experience to be considered competent (if someone were to hire you based on this skill you might need moderate training/assistance)'}],
- 4: [{'title': 'Highly proficient:', 'value': 'substantial training or experience (if someone were to hire you based on this skill, you would need minimal training/assistance)'}],
- 5: [{'title': 'Extremely proficient:', 'value': 'substantial training and experience in the subject, familiarity with industry standards, and some understanding of abstract or esoteric subject matter'}],
- 6: [{'title': 'Specialized:', 'value': ' extensive training, possible research experience, and substantial work experience. This level is usually reserved for people with at least 5 years of academic or industry experience or with MS or Ph.D levels of understanding'}]
+ 0 : {'title': 'No proficiency:', 'description': 'no training and no experience'},
+ 1 : {'title': 'Limited proficiency:' , 'description': 'some training or some experience'},
+ 2 : {'title': 'Moderately proficient:', 'description': 'moderate training and moderate experience, though not enough to be considered competent (if someone were to hire you based on this skill you might need substantial training/assistance)'},
+ 3 : {'title': 'Proficient:', 'description': 'sufficient training or experience to be considered competent (if someone were to hire you based on this skill you might need moderate training/assistance)'},
+ 4 : {'title': 'Highly proficient:', 'description': 'substantial training or experience (if someone were to hire you based on this skill, you would need minimal training/assistance)'},
+ 5 : {'title': 'Extremely proficient:', 'description': 'substantial training and experience in the subject, familiarity with industry standards, and some understanding of abstract or esoteric subject matter'},
+ 6 : {'title': 'Specialized:', 'description': ' extensive training, possible research experience, and substantial work experience. This level is usually reserved for people with at least 5 years of academic or industry experience or with MS or Ph.D levels of understanding'}
 };
 
 export const PositionLevel = [
