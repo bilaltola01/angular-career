@@ -123,10 +123,10 @@ p {
         &__title {
           margin: $profile-form-field-mt;
           text-transform: uppercase;
+          text-align: center;
         }
         &__image {
-          width: 20%;
-          max-width: 125px;
+          width: 125px;
           img {
             cursor: pointer;
             width: 125px;
@@ -250,48 +250,6 @@ p {
       grid-area: hero;
       background-color: $white;
 
-      .back-row {
-        // width: 100%;
-        height: 60px;
-        padding-left: 40px;
-        display: flex;
-        align-items: center;
-        border-bottom: 1px solid map-get($md-cfaccent, 50);
-      }
-    
-      button.back { // TODO: Make more like the designs
-        width: 80px;
-        height: 30px;
-        background-color: rgba(map-get($md-cfaccent, 500), 0.05);
-        border-color: rgba(map-get($md-cfaccent, 500), 0.05);
-        color: rgba(map-get($md-cfaccent, 500), 0.84);
-        padding: 3px 13px;
-        margin-right: 5px;
-        border-radius: 500px;
-        cursor: pointer;
-    
-        &:focus {
-          outline: 0;
-        }
-      }
-    
-      .company-row {
-        display: inline-flex;
-        padding: 20px 40px;
-        border-bottom: 1px solid map-get($md-cfaccent, 50);
-    
-        .company-logo {
-          width: 125px;
-          height: 125px;
-          margin-right: 15px;
-        }
-    
-        .company-undertitle {
-          display: inline-flex;
-          width: 100%;
-        }
-      }
-    
       .tabs-row {
         height: 60px;
         width: fit-content;
@@ -299,7 +257,6 @@ p {
         display: flex;
         justify-content: center;
         align-items: center;
-    
         h3 {
           cursor: pointer;
           font-family: 'Poppins-Semibold', sans-serif;
@@ -307,11 +264,9 @@ p {
           text-transform: uppercase;
           color: rgba(map-get($md-cfaccent, 500), .34);
           margin: 0 20px;
-    
           &:hover {
             color: map-get($md-cfprimary, 500);
           }
-    
           &.active {
             color: map-get($md-cfprimary, 500);
           }
@@ -325,12 +280,10 @@ p {
         grid-gap: 0 10px;
         width: 240px;
         margin: 5px 10px 5px 0;
-      
         img {
           grid-area: image;
           width: 56px;
         }
-      
         label {
           grid-area: title;
           font-family: 'Poppins-Regular', sans-serif;
@@ -340,7 +293,6 @@ p {
           font-weight: 400;
           color: rgba(map-get($md-cfaccent, 500), .44);
         }
-      
         p {
           grid-area: info;
           margin: 0;
@@ -350,7 +302,6 @@ p {
           font-style: normal;
           font-weight: 500;
         }
-      
         a {
           grid-area: info;
           text-decoration: none;
@@ -367,16 +318,13 @@ p {
         font-size: 14px;
         line-height: 16px;
         color: rgba(map-get($md-cfaccent, 500), .84);
-      
         label {
           color: rgba(map-get($md-cfaccent, 500), .34);
           margin-right: 5px;
         }
-      
         img {
           width: 10px;
           margin-right: 5px;
-      
           &.valid {
             width: 15px;
             margin: 0;
@@ -384,27 +332,24 @@ p {
         }
       }
       
-      .user-row {
+      .company-row {
         width: 100%;
         box-sizing: border-box;
         display: inline-flex;
         flex-wrap: wrap;
         padding: 20px 40px;
         border-bottom: 1px solid map-get($md-cfaccent, 50);
-      
-        .user-photo {
+        .company-logo {
           width: 125px;
           height: 125px;
           border-radius: 50%;
           object-fit: cover;
         }
-      
-        .user-detail {
+        .company-detail {
           display: inline-flex;
           flex-direction: column;
           flex: 1;
           margin-left: 30px;
-      
           h1 {
             font-family: 'Poppins', sans-serif;
             font-size: 30px;
@@ -413,14 +358,12 @@ p {
             margin: 0;
             margin-bottom: 5px;
           }
-      
-          .user-info {
+          .company-info {
             display: inline-flex;
             flex-wrap: wrap;
           }
         }
-      
-        .user-status {
+        .company-status {
           min-width: 260px;
           display: flex;
           flex-direction: column;
@@ -555,25 +498,17 @@ p {
           text-align: center;
           margin: 20px 0;
         }
-        .btn-container {
-          text-align: center;
-          padding: 10px 0;
-        }
         h3 {
+          font-family: 'Poppins', sans-serif;
           font-weight: 600;
           font-size: 20px;
           line-height: 30px;
+          margin-top: 0;
           margin-bottom: 20px;
           display: inline-block;
         }
-        
-        h4 {
-          margin-top: 10px;
-          &.name-field {
-            margin-top: 0;
-          }
-        }
         h5 {
+          color: rgba(map-get($md-cfaccent, 500), .34);
           margin-top: 15px;
           margin-bottom: 0;
           font-size: 14px;
@@ -584,10 +519,10 @@ p {
           margin-bottom: 10px;
           font-size: 16px;
           line-height: 24px;
-        }
-        &.edit-mode {
-          border-bottom: none;
-          margin-bottom: 10px;
+          color: rgba(map-get($md-cfaccent, 500), .74);
+          &.short-desc {
+            color: rgba(map-get($md-cfaccent, 500), .74);
+          }
         }
       }
       simple-tag {
@@ -597,10 +532,6 @@ p {
       action-button {
         display: inline-flex;
         margin-right: 20px;
-        &.edit-btn {
-          margin-right: 0;
-          width: 190px;
-        }
       }
       a {
         font-size: 14px;
@@ -612,137 +543,6 @@ p {
           color: map-get($md-cfaccent, 500);
           font-size: inherit;
           line-height: inherit;
-        }
-      }
-      h3 {
-        margin-top: 0;
-        font-family: 'Poppins', sans-serif;
-      }
-      h4 {
-        margin-bottom: 0;
-        font-family: 'Poppins', sans-serif;
-      }
-      h5 {
-        margin: 10px 0;
-        color: rgba(map-get($md-cfaccent, 500), .34);
-      }
-      small {
-        font-size: 14px;
-        color: rgba(map-get($md-cfaccent, 500), .84);
-      }
-      mat-divider {
-        margin: 20px 0;
-        border-color: rgba(#707070, 0.1);
-      }
-      p {
-        color: rgba(map-get($md-cfaccent, 500), .74);
-        &.short-desc {
-          color: rgba(map-get($md-cfaccent, 500), .74);
-        }
-      }
-      .detail-info {
-        width: 100%;
-        display: inline-grid;
-        grid-template: 
-          "left-top right-all" auto
-          "left-middle right-all" auto
-          "left-bottom right-all" auto
-          / auto 70px;
-        grid-gap: 0 10px;
-        &__left-top {
-          grid-area: left-top;
-        }
-        &__left-middle {
-          grid-area: left-middle;
-        }
-        &__left-bottom {
-          grid-area: left-bottom;
-        }
-        &__right_all {
-          grid-area: right-all;
-          text-align: right;
-        }
-      }
-      .editor-container {
-        width: 100%;
-        display: inline-grid;
-        grid-template: 
-          " name-field btn-edit btn-delete " auto
-          / auto 24px 24px;
-          grid-gap: 0 10px;
-        .name-field {
-          grid-area: name-field;
-        }
-        .btn-edit {
-          grid-area: btn-edit;
-          color: map-get($md-cfprimary, 300);
-        }
-        .btn-delete {
-          grid-area: btn-delete;
-          color: map-get($md-cfred, 400);
-        }
-      }
-      .img-tag {
-        background-color: $secondary-bg-color;
-        border: solid 3px $secondary-bg-color;
-        border-radius: 38px;
-        display: inline-grid;
-        grid-template: 
-          "image title" 35px
-          "image info" 35px
-          / 70px auto;
-        grid-gap: 0 10px;
-        width: 350px;
-        margin: 10px 20px 5px 0;
-        img {
-          grid-area: image;
-          width: 70px;
-        }
-        label {
-          grid-area: title;
-          font-size: 16px;
-          display: flex;
-          align-items: flex-end;
-        }
-        a {
-          grid-area: info;
-          text-decoration: none;
-          cursor: pointer;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          padding-right: 20px;
-        }
-      }
-      .form-field {
-        width: 80%;
-        max-width: 615px;
-        min-width: 240px;
-        border: solid 1px $mat-form-border-color;
-        border-radius: 5px;
-        padding: 0;
-        &.search {
-          border: none;
-          padding: 0;
-          mat-form-field {
-            width: 100%;
-            background-color: $third-bg-color;
-            border-radius: 25px;
-          }
-        }
-        &.textarea {
-          padding: 10px 20px 5px 20px;
-        }
-      }
-      .temp-skill {
-        margin-top: 10px;
-        @include flex(row, center, flex-start);
-        & > *  {
-          margin-top: 20px;
-          margin-right: 15px;
-        }
-        mat-icon {
-          color: map-get($md-cfaccent, 100);
         }
       }
       .skills {
@@ -879,8 +679,11 @@ p {
           padding: $profile-form-padding-tablet;
           margin-bottom: 0;
           &__image {
-            width: 30%;
-            max-width: 110px;
+            width: 110px;
+            img {
+              width: 110px;
+              height: 110px;
+            }
           }
           &__field {
             width: 90%;
@@ -928,40 +731,35 @@ p {
           }
         }
       }
+
       .header-section {
-        .user-row {
+        .company-row {
           padding: 20px 20px;
           flex-direction: column;
           align-items: center;
-      
-          .user-photo {
+          .company-logo {
             width: 110px;
             height: 110px;
             margin-right: 0;
             border-radius: 50%;
             object-fit: cover;
           }
-      
-          .user-detail {
+          .company-detail {
+            margin: 20px 0;
             h1, h4 {
               text-align: center;
             }
           }
-      
-          .user-status {
+          .company-status {
             flex-direction: row;
             justify-content: center;
             & > * {
               margin: 5px;
             }
           }
-      
-          .edit-form {
-            margin-top: 30px;
-            justify-content: space-evenly;
-          }
         }
       }
+
       .nav-section {
         position: fixed;
         padding: 10px 40px 30px 40px;
@@ -973,20 +771,17 @@ p {
         .nav-title {
           display: none;
         }
-      
         &.nav-hidden {
           display: none;
         }
       }
+ 
       .main-section {
         margin: 0 40px;
         padding-top: 40px;
         padding-bottom: 40px;
         .edit-title {
           display: none;
-        }
-        .img-tag {
-          width: 330px;
         }
       }
     }
@@ -1019,8 +814,11 @@ p {
           padding: $profile-form-padding-mobile;
           margin-bottom: 35px;
           &__image {
-            width: 50%;
-            max-width: 95px;
+            width: 95px;
+            img {
+              width: 95px;
+              height: 95px;
+            }
           }
           &__field {
             width: 95%;
@@ -1038,6 +836,7 @@ p {
       legend {
         padding: 0 20px;
       }
+
       .header-section {
         .tabs-row {
           h3 {
@@ -1045,17 +844,15 @@ p {
             margin: 0 10px;
           }
         }
-        .user-row {
-          .user-detail {
-            .user-info {
+        .company-row {
+          .company-detail {
+            .company-info {
               flex-direction: column;
             }
           }
-      
-          .user-status {
+          .company-status {
             flex-direction: column;
             align-items: center;
-      
             img {
               margin-top: 15px;
             }
@@ -1070,10 +867,6 @@ p {
       }
       .main-section {
         margin: 0 20px;
-        .img-tag {
-          width: 230px;
-          margin-right: 0;
-        }
       }
     }
   }

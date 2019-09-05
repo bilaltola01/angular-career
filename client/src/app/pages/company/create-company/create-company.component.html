@@ -287,16 +287,16 @@
 <!-- Company Preview start -->
 <div *ngIf="selectedPageIndex===5" class="container company-preview">
 	<div class="header-section">
-		<div class="user-row">
+		<div class="company-row">
 			<div>
-				<img class="user-photo" src="{{company_logo_url || 'assets/icons/no_photo.png'}}" alt="Company logo">
+				<img class="company-logo" src="{{company_logo_url || 'assets/icons/no_photo.png'}}" alt="Company logo">
 			</div>
 
-			<div class="user-detail">
+			<div class="company-detail">
 				<div *ngIf="company_name">
 					<h1>{{company_name}}</h1>
 				</div>
-				<div class="user-info">
+				<div class="company-info">
 					<small *ngIf="hq_country || hq_state || hq_city">
 						<img src="assets/icons/ic_location.svg">
 						{{(hq_city ? helperService.cityNameFromAutoComplete(hq_city.city) : '') + (hq_city && (hq_state || hq_country) ? ', ' : '') + (hq_state ? hq_state.state : '') + (hq_state && hq_country ? ', ' : '') + (hq_country ? countries[hq_country - 1] : '')}}
@@ -306,7 +306,7 @@
 						{{'Since ' + helperService.convertStringToFormattedDateString(founding_year, 'L', 'YYYY')}}
 					</small>
 				</div>
-				<div class="user-info">
+				<div class="company-info">
 					<div *ngIf="company_size" class="icon-title">
 						<img src="assets/icons/ic_employees.svg">
 						<label>Company Size</label>
@@ -324,7 +324,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="user-status">
+			<div class="company-status">
 				<action-button type="flat" color="primary" [title]="company ? 'Published' : 'Publish'" (click)="onClickPublish()"></action-button>
 			</div>
 		</div>
