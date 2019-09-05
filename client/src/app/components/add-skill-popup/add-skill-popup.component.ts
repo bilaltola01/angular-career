@@ -4,6 +4,7 @@ import { UserSkillItem, Skill, ITEMS_LIMIT } from 'src/app/models';
 import { FormGroup, FormControl } from '@angular/forms';
 import { UserService, AlertsService, AlertType, HelperService, AutoCompleteService, ProfileStateService, PositionService, ScoreService } from 'src/app/services';
 import { SkillLevelDescription } from 'src/app/models';
+import { SkillDescriptionPopupComponent } from '../skill-description-popup/skill-description-popup.component';
 
 
 export interface EditSkillItem {
@@ -11,22 +12,6 @@ export interface EditSkillItem {
   skillItem: UserSkillItem;
 }
 
-@Component({
-  selector: 'Skill-Level-Description',
-  templateUrl: './skill-level-description.component.html',
-  styleUrls: ['./skill-level-description.component.scss']
-
-})
-export class SkillLevelPopupComponent  {
-  skillLevelDescription = SkillLevelDescription;
-
-  constructor(public dialogRef: MatDialogRef<AddSkillPopupComponent>, @Inject(MAT_DIALOG_DATA) public data,
-  public dialog: MatDialog) {}
-
-  onClose(): void {
-    this.dialogRef.close();
-  }
-}
 
 @Component({
   selector: 'app-add-skill-popup',
@@ -189,10 +174,10 @@ export class AddSkillPopupComponent {
     this.allSkills.splice(index, 1);
 
   }
-  openSkilladdDialog(skillLevelDescription) {
-    const dialogRef = this.dialog.open(SkillLevelPopupComponent, {
-      data: {skillLevelDescription },
-      width: '100vw',
+  openSkillDescriptionDialog() {
+    const dialogRef = this.dialog.open(SkillDescriptionPopupComponent, {
+      data: { skill : SkillLevelDescription},
+      width:  '100vw',
       maxWidth: '880px',
       minWidth: '280px',
       panelClass: ['edit-dialog-container']

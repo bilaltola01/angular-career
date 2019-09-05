@@ -45,9 +45,10 @@ import {
 } from '@angular/material/dialog';
 import {MatDatepicker} from '@angular/material/datepicker';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { SkillDescriptionPopupComponent } from 'src/app/components/skill-description-popup/skill-description-popup.component';
 
 export interface DialogData {
-  category: 'About Me' | 'Education' | 'Work Experience' | 'Project' | 'Publication' | 'External Resources' | 'Skill Level Description';
+  category: 'About Me' | 'Education' | 'Work Experience' | 'Project' | 'Publication' | 'External Resources' ;
   data: any;
   editIndex: number;
 }
@@ -404,6 +405,15 @@ export class ProfileSectionComponent implements OnInit {
     this.router.navigate(['/my-profile', 'edit'], { relativeTo: this.route });
   }
 
+  openSkillDescriptionDialog() {
+    const dialogRef = this.dialog.open(SkillDescriptionPopupComponent, {
+      data: { skillDesc : SkillLevelDescription},
+      width:  '100vw',
+      maxWidth: '880px',
+      minWidth: '280px',
+      panelClass: ['edit-dialog-container']
+    });
+  }
   openDialog(category: string, data: any, arrIndex: number = -1) {
     // tslint:disable-next-line: no-use-before-declare
     const dialgoRef = this.dialog.open(ProfileDialogContentComponent, {
@@ -758,9 +768,6 @@ export class ProfileDialogContentComponent {
         break;
       case 'External Resources':
         this.initExternalResourcesForm();
-        break;
-        case 'Skill Level Description':
-        this.initSkillDesc();
         break;
       default:
         break;
@@ -1641,5 +1648,4 @@ export class ProfileDialogContentComponent {
   onClose(): void {
     this.dialogRef.close();
   }
-
 }

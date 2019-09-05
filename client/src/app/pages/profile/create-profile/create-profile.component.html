@@ -14,10 +14,10 @@
     </div>
   </div>
 </div>
-  
+
   <!-- Create_Profile_Choose start -->
   <!-- "Drop Resume Here" feature won't be available at launch. -->
-  
+
 <div *ngIf="selectedPageIndex===0" class="container {{profileCreationPages[0]}}">
   <div class="container__full">
     <h1>Choose To Create Profile</h1>
@@ -61,21 +61,21 @@
     </div>
   </div>
 </div>
-  
+
   <!-- Create_Profile_Choose end -->
-  
+
   <!-- Create_Profile_Basic start -->
-  
+
 <div *ngIf="selectedPageIndex===1" class="container {{profileCreationPages[1]}}">
   <div class="container__full">
     <div class="profile-form" [formGroup]="basicInfoForm">
       <div class="profile-form__image">
-        <input 
+        <input
           style="display: none"
           type="file"
           (change)="onPhotoFileSelected($event)"
-          #fileInput>    
-        
+          #fileInput>
+
         <img alt="Profile Image" src="{{basicInfoForm.get('photo').value || 'assets/icons/profile-image.svg'}}" (click)="fileInput.click()" >
       </div>
       <h3 class="profile-form__title">
@@ -116,7 +116,7 @@
           </mat-select>
         </mat-form-field>
       </div>
-      <div class="profile-form__field"> 
+      <div class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
           <mat-label>Date Of Birth</mat-label>
           <input matInput placeholder="MM/DD/YYYY" formControlName="basicInfoBirth" pattern="\d{1,2}/\d{1,2}/\d{4}">
@@ -157,11 +157,11 @@
     <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!checkBasicInfoFormSkip() && !(basicInfoForm.valid && onCheckCityValidation() && onCheckStateValidation())"></action-button>
   </div>
 </div>
-  
+
   <!-- Create_Profile_Basic end -->
-  
+
   <!-- Create_Profile_About start -->
-  
+
   <div *ngIf="selectedPageIndex===2" class="container {{profileCreationPages[2]}}">
     <div class="container__full">
       <div class="profile-form" [formGroup]="aboutMeForm">
@@ -179,11 +179,11 @@
       <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!checkAboutMeFormSkip() && !aboutMeForm.valid"></action-button>
     </div>
   </div>
-  
+
   <!-- Create_Profile_About end -->
-  
+
   <!-- Create_Profile_Education start -->
-  
+
   <div *ngIf="selectedPageIndex===3" class="container {{profileCreationPages[3]}}">
     <div class="container__full">
       <div class="profile-form">
@@ -292,11 +292,11 @@
       <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!checkEducationFormSkip() && !(educationFormArray.valid && checkAllEducationInfoValidation())"></action-button>
     </div>
   </div>
-  
+
   <!-- Create_Profile_Education end -->
-  
+
   <!-- Create_Profile_Work start -->
-  
+
   <div *ngIf="selectedPageIndex===4" class="container {{profileCreationPages[4]}}">
     <div class="container__full">
       <div class="profile-form">
@@ -356,7 +356,7 @@
               <textarea matInput placeholder="Description (Optional)" rows="3" formControlName="description"></textarea>
             </mat-form-field>
           </div>
-  
+
           <div class="profile-form__field search">
             <h3>Skills Trained <span *ngIf="skills_trained[i].length > 0" class="count">{{skills_trained[i].length}}</span></h3>
             <mat-form-field appearance="standard" class="search">
@@ -372,7 +372,7 @@
               <simple-tag *ngFor="let skill of skills_trained[i]; let j = index" type="gray" title="{{skill.skill}}" removeTag="true" (click)="onRemoveSkillsTrained(i, j, skill)"></simple-tag>
             </div>
           </div>
-  
+
           <div class="profile-form__field search">
             <h3>Industry Exposure <span *ngIf="additional_industries[i].length > 0" class="count">{{additional_industries[i].length}}</span></h3>
             <mat-form-field appearance="standard" class="search">
@@ -403,19 +403,19 @@
       <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!checkExperienceFormSkip() && !(workExperienceFormArray.valid && checkAllWorkExperienceInfoValidation())"></action-button>
     </div>
   </div>
-  
+
   <!-- Create_Profile_Work end -->
-  
+
   <!-- Create_Profile_Skills start -->
-  
+
   <div *ngIf="selectedPageIndex===5" class="container {{profileCreationPages[5]}}">
     <div class="container__full">
       <div class="profile-form" [formGroup]="skillsAndInterestsForm">
         <h3 class="profile-form__title">
-          SKILLS & INTERESTS 
+          SKILLS & INTERESTS
         </h3>
         <div class="profile-form__field search">
-          <h3>Skills <span *ngIf="userSkillsList.length > 0" class="count">{{userSkillsList.length}}</span></h3><img src="assets/icons/ic_question.svg" (click)="openSkillDescDialog()"> 
+          <h3>Skills <span *ngIf="userSkillsList.length > 0" class="count">{{userSkillsList.length}}</span></h3><img src="assets/icons/ic_question.svg" (click)="openSkillDescriptionDialog()">
           <mat-form-field appearance="standard" class="search">
             <mat-icon matSuffix>search</mat-icon>
             <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompleteSkills" formControlName="skills">
@@ -454,11 +454,11 @@
       <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
     </div>
   </div>
-  
+
   <!-- Create_Profile_Skills end -->
-  
+
   <!-- Create_Profile_Project start -->
-  
+
   <div *ngIf="selectedPageIndex===6" class="container {{profileCreationPages[6]}}">
     <div class="container__full">
       <div class="profile-form">
@@ -511,11 +511,11 @@
       <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!checkProjectsFormSkip() && !(projectsFormArray.valid && checkAllProjectsInfoValidation())"></action-button>
     </div>
   </div>
-  
+
   <!-- Create_Profile_Project end -->
-  
+
   <!-- Create_Profile_Publication start -->
-  
+
   <div *ngIf="selectedPageIndex===7" class="container {{profileCreationPages[7]}}">
     <div class="container__full">
       <div class="profile-form">
@@ -568,11 +568,11 @@
       <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!checkPublicationsFormSkip() && !(publicationsFormArray.valid && checkAllPublicationInfoValidation())"></action-button>
     </div>
   </div>
-  
+
   <!-- Create_Profile_Publication end -->
-  
+
   <!-- Create_Profile_Links start -->
-  
+
   <div *ngIf="selectedPageIndex===8" class="container {{profileCreationPages[8]}}">
     <div class="container__full">
       <div class="profile-form" [formGroup]="externalResourcesForm">
@@ -592,7 +592,7 @@
       <action-button class="btn-next" type="flat" title="Finish" color="primary" (click)="goToNextPage()"></action-button>
     </div>
   </div>
-  
+
   <!-- Create_Profile_Links end -->
 
   <!-- Add application template start -->
@@ -666,10 +666,10 @@
         <div class="row">
           <h3>Criminal History</h3>
           <p>If you have ever been convicted of a misdemeanor or felony offense please provide the following information. Infractions maybe excluded. If you have never been convicted of such an offense, please leave this section blank.</p>
-      
+
           <ng-container *ngIf="criminalHistoriesData.length > 0">
             <mat-divider></mat-divider>
-            
+
             <ng-container *ngFor="let history of criminalFormArray.controls; let i = index;" [formGroup]="criminalFormArray.at(i)">
               <div class="profile-form__field">
                 <mat-form-field class="bg-transparent" appearance="fill">
@@ -677,7 +677,7 @@
                   <input matInput placeholder="Charge" type="text" formControlName="charge">
                 </mat-form-field>
               </div>
-              <div class="profile-form__field"> 
+              <div class="profile-form__field">
                 <mat-form-field class="bg-transparent" appearance="fill">
                   <mat-label>Arrest Date</mat-label>
                   <input matInput placeholder="MM/DD/YYYY" type="text" formControlName="arrest_date" pattern="\d{1,2}/\d{1,2}/\d{4}">
@@ -713,9 +713,9 @@
     </div>
   </div>
   <!-- Add application template end -->
-  
+
   <!-- Create_Profile_Status start -->
-  
+
   <div *ngIf="selectedPageIndex===10" class="container {{profileCreationPages[9]}}">
     <div class="container__full">
       <div class="profile-form">
@@ -732,7 +732,7 @@
       <action-button class="view-profile" type="flat" title="View Profile" color="primary" (click)="goToMyProfilePage()"></action-button>
     </div>
   </div>
-  
+
   <!-- Create_Profile_Status end -->
-  
-  
+
+

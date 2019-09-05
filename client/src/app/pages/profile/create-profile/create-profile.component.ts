@@ -48,24 +48,12 @@ import {
 
 } from 'src/app/models';
 import moment from 'moment';
+import { SkillDescriptionPopupComponent } from 'src/app/components/skill-description-popup/skill-description-popup.component';
 
 export interface EditSkillItem {
   index: number;
   skillItem: UserSkillItem;
 
-}
-@Component({
-  selector: 'skill-level-description-dialog',
-  templateUrl: 'skill-level-description-dialog.component.html',
-  styleUrls: ['skill-level-description-dialog.component.scss']
-})
-export class SkillLevelDescriptionDialogComponent {
-
-  constructor(public dialogRef: MatDialogRef<SkillLevelDescriptionDialogComponent>, @Inject(MAT_DIALOG_DATA) public data) {}
-
-  onClose(): void {
-    this.dialogRef.close();
-  }
 }
 
 @Component({
@@ -2589,14 +2577,14 @@ export class CreateProfileComponent implements OnInit {
     return this.is_skip;
 
   }
-  openSkillDescDialog() {
-    const dialogRef = this.dialog.open(SkillLevelDescriptionDialogComponent, {
-      data: {skillDesc: SkillLevelDescription},
-      width: '100vw',
+
+  openSkillDescriptionDialog() {
+    const dialogRef = this.dialog.open(SkillDescriptionPopupComponent, {
+      data: { skillDesc : SkillLevelDescription},
+      width:  '100vw',
       maxWidth: '880px',
       minWidth: '280px',
       panelClass: ['edit-dialog-container']
     });
   }
-
 }
