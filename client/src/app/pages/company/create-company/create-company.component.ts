@@ -340,7 +340,7 @@ export class CreateCompanyComponent implements OnInit {
 
     this.companyBasicInfoForm.get('founding_year').valueChanges.subscribe(
       (founding_year) => {
-        this.founding_year = founding_year ? founding_year : null;
+        this.founding_year = founding_year ? parseInt(founding_year, 10) : null;
       }
     );
 
