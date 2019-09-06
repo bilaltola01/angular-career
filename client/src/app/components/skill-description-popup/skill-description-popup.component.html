@@ -1,0 +1,14 @@
+<mat-icon class="cancel" (click)="onClose()">cancel</mat-icon>
+<h3 class="title">Skill Level Description</h3>
+<mat-dialog-content>
+  <ul type="none" class="skill_level_desc">
+    <div *ngFor="let item of skillLevelDescription | keyvalue" class="key">
+      <simple-tag class="simpletag" type="gray" ellipseTag="true" [value]="item.key">
+      </simple-tag>
+      <li> <b class="bold">{{item.value.title}}</b>  {{item.value.description}}
+        <hr>
+      </li>
+    </div>
+  </ul>
+</mat-dialog-content>
+

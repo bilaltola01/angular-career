@@ -6,7 +6,7 @@
         <div class="profile-form" [formGroup]="skillsForm">
 
           <div class="profile-form__field search">
-            <h3>Skills</h3> <img src="assets/icons/ic_question.svg" class="question" (click)="openSkilladdDialog(skillLevelDescription)">
+            <h3>Skills</h3> <img src="assets/icons/ic_question.svg" class="question" (click)="openSkillDescriptionDialog()">
             <mat-form-field appearance="standard" class="search">
               <mat-icon matSuffix>search</mat-icon>
               <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompleteSkills"
@@ -18,13 +18,13 @@
                 </mat-option>
               </mat-autocomplete>
             </mat-form-field>
-            <div class="skills" > <div *ngFor="let skill of allSkills; let i = index"> 
+            <div class="skills" > <div *ngFor="let skill of allSkills; let i = index">
               <simple-tag type="gray" title="{{skill?.skill}}" ellipseTag="true" value="{{skill?.skill_level}}"
                 isControl="true" (levelChanged)="onLevelChanged($event, i)" (removeClick)="removeUserSkillsData(i, skill)">
               </simple-tag>
             </div>
           </div>
-           
+
           </div>
         </div>
       </div>

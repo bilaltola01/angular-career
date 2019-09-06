@@ -510,8 +510,7 @@ action-button {
     position: relative;
     border-radius: 20px;
     margin: 0 40px;
-    template-dialog, skill-level-description-dialog,skill-level-description,
-    profile-dialog, add-skill-popup,
+    template-dialog,profile-dialog, add-skill-popup, app-skill-description-popup,
     dialog-content {
       width: 100%;
       @include flex(column, center, flex-start);
@@ -579,4 +578,4 @@ action-button {
 
       }
   }
-}   
+}

@@ -1,428 +1,414 @@
 <ng-container *ngIf="isJobLoading">
-    <div class="loading">
-        <mat-spinner></mat-spinner>
-        <h4>Loading...</h4>
-    </div>
+  <div class="loading">
+    <mat-spinner></mat-spinner>
+    <h4>Loading...</h4>
+  </div>
 </ng-container>
 <!-- Search Bar -->
 <div class="career-main">
-    <div class="comman_search_filter" [formGroup]="positionForm">
-        <div class="filter-data">
-            <mat-icon (click)="toggleTabMenuOpen()" class="filter_icon">filter_list</mat-icon>
-        </div>
-        <div class="postion-search-header">
-            <mat-form-field appearance="standard" class="search">
-                <mat-icon matSuffix (click)="onSearchPosition($event)">search</mat-icon>
-                <input matInput placeholder="Search Position" type="text" [matAutocomplete]="autocompleteSearch"
-                    formControlName="searchPosition" (keyup.enter)="onSearchPosition($event)">
-                <mat-autocomplete #autocompleteSearch="matAutocomplete">
-                    <mat-option *ngFor="let search of autocomplete_searchposition" [value]="search.position">
-                        <span>{{search.position}}</span>
-                    </mat-option>
-                </mat-autocomplete>
-            </mat-form-field>
-        </div>
-
+  <div class="comman_search_filter" [formGroup]="positionForm">
+    <div class="filter-data">
+      <mat-icon (click)="toggleTabMenuOpen()" class="filter_icon">filter_list</mat-icon>
     </div>
-    <div [formGroup]="positionForm" class="position-main-container">
-        <!-- Position Filter Card -->
-        <div class="filter-container container__header tablet" [class.open]="filter_list">
-            <ng-container>
-                <div class="nav-title">
-                    <h3 class="section-title">Positions Filters</h3>
-                </div>
-                <div class="filter-card">
-                    <mat-form-field>
-                        <mat-label>City</mat-label>
-                        <input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity"
-                            formControlName="city">
-                        <mat-autocomplete #autocompleteCity="matAutocomplete">
-                            <mat-option *ngFor="let city of autocomplete_cities" [value]="(city.city)?.split(',')[0]"
-                                (onSelectionChange)="onChangeCity(city)">
-                                <span>{{city.city}}</span>
-                            </mat-option>
-                        </mat-autocomplete>
-                    </mat-form-field>
-                </div>
-                <div class="filter-card">
-                    <mat-form-field>
-                        <mat-label>Skills</mat-label>
-                        <input matInput placeholder="Skills" type="text" [matAutocomplete]="autocompleteSkills"
-                            formControlName="skill">
-                        <mat-autocomplete #autocompleteSkills="matAutocomplete">
-                            <mat-option *ngFor="let autocomplete_skill of autocomplete_skills"
-                                [value]="autocomplete_skill.skill" (onSelectionChange)="addSkills(autocomplete_skill)">
-                                <span>{{autocomplete_skill.skill}}</span>
-                            </mat-option>
-                        </mat-autocomplete>
-                    </mat-form-field>
-                    <div *ngIf="userSkillsList.length > 0" class="skills">
-                        <simple-tag *ngFor="let skillData of userSkillsList; let i = index" type="gray" removeTag="true"
-                            title="{{skillData.skill}}" (click)="removeUserSkillsData(i)"></simple-tag>
+    <div class="postion-search-header">
+      <mat-form-field appearance="standard" class="search">
+        <mat-icon matSuffix (click)="onSearchPosition($event)">search</mat-icon>
+        <input matInput placeholder="Search Position" type="text" [matAutocomplete]="autocompleteSearch"
+          formControlName="searchPosition" (keyup.enter)="onSearchPosition($event)">
+        <mat-autocomplete #autocompleteSearch="matAutocomplete">
+          <mat-option *ngFor="let search of autocomplete_searchposition" [value]="search.position">
+            <span>{{search.position}}</span>
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
 
-                    </div>
-                </div>
-                <div class="filter-card">
-                    <mat-form-field>
-                        <mat-label>Minimum Salary</mat-label>
-                        <input matInput placeholder="Minimum Salary" type="number" formControlName="minSal">
-                    </mat-form-field>
-                </div>
-                <div class="filter-card">
-                    <mat-form-field>
-                        <mat-label>Position Level</mat-label>
-                        <mat-select class="arrow" formControlName="position">
-                            <mat-option value=''></mat-option>
-                            <mat-option *ngFor="let position of positionLevel" value="{{position}}">{{position}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="filter-card">
-                    <mat-form-field>
-                        <mat-label>Education Level</mat-label>
-                        <mat-select class="arrow" formControlName="education">
-                            <mat-option value=''></mat-option>
-                            <mat-option *ngFor="let education of educationLevel"
-                                value="{{educationLevel.indexOf(education)}}">{{education}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="filter-card">
-                    <mat-form-field>
-                        <mat-label>Job Type</mat-label>
-                        <mat-select class="arrow" formControlName="job">
-                            <mat-option value=''></mat-option>
-                            <mat-option *ngFor="let jobtype of jobType" value="{{jobtype}}">{{jobtype}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="filter-card">
-                    <mat-form-field>
-                        <mat-label>Major </mat-label>
-                        <input matInput placeholder="Major" type="text" [matAutocomplete]="autocompleteMajor"
-                            formControlName="major">
-                        <mat-autocomplete #autocompleteMajor="matAutocomplete">
-                            <mat-option *ngFor="let major of autocomplete_education_major" [value]="major.major_name"
-                                (onSelectionChange)="onChangeMajor(major)">
-                                <span>{{major.major_name}}</span>
-                            </mat-option>
-                        </mat-autocomplete>
-                    </mat-form-field>
-                </div>
-                <div class="filter-card">
-                    <mat-form-field>
-                        <mat-label>Industry </mat-label>
-                        <input matInput placeholder="Industry" type="text" [matAutocomplete]="autocompleteIndustry"
-                            formControlName="industry">
-                        <mat-autocomplete #autocompleteIndustry="matAutocomplete">
-                            <mat-option *ngFor="let industry of autocomplete_additional_industries"
-                                [value]="industry.industry_name" (onSelectionChange)="onChangeIndustry(industry)">
-                                <span>{{industry.industry_name}}</span>
-                            </mat-option>
-                        </mat-autocomplete>
-                    </mat-form-field>
-                </div>
-                <div class="filter-card">
-                    <mat-form-field>
-                        <mat-label>Company </mat-label>
-                        <input matInput placeholder="Company" type="text" [matAutocomplete]="autocompleteCompany"
-                            formControlName="company">
-                        <mat-autocomplete #autocompleteCompany="matAutocomplete">
-                            <mat-option *ngFor="let company of autocomplete_companies" [value]="company.company_name">
-                                <span>{{company.company_name}}</span>
-                            </mat-option>
-                        </mat-autocomplete>
-                    </mat-form-field>
-                </div>
-                <div class="filter-card">
-                    <mat-form-field>
-                        <mat-label>School</mat-label>
-                        <input matInput placeholder="School" type="text" [matAutocomplete]="autocompleteSchool"
-                            formControlName="school">
-                        <mat-autocomplete #autocompleteSchool="matAutocomplete">
-                            <mat-option *ngFor="let school of autocomplete_school" [value]="school.school_name"
-                                (onSelectionChange)="onChangeSchool(school)">
-                                <span>{{school.school_name}}</span>
-                            </mat-option>
-                        </mat-autocomplete>
-                    </mat-form-field>
-                </div>
-                <div class="filter-card">
-                    <mat-form-field>
-                        <mat-label>Recruiter</mat-label>
-                        <input matInput placeholder="Recruiter" type="text" [matAutocomplete]="autocompleterecruiter"
-                            formControlName="recruiter">
-                        <mat-autocomplete #autocompleterecruiter="matAutocomplete">
-                            <mat-option *ngFor="let recruiter of autocomplete_recruiter"
-                                value="{{recruiter.first_name }} {{  recruiter.last_name}}  "
-                                (onSelectionChange)="onChangeRecruiter(recruiter)" class="recruiter_option">
-                                <img class="userimg"
-                                    src="{{recruiter?.photo ? recruiter.photo : 'assets/icons/no_photo.png'}}">
-                                <span>{{recruiter.first_name}} {{recruiter.last_name}} </span>
-                            </mat-option>
-                        </mat-autocomplete>
-                    </mat-form-field>
-                </div>
-                <div class="filter-card">
-                    <div class="side-filter-btn">
-                        <action-button type="raised" color="primary" title="Apply Filters" (click)="applyFilter();">
-                        </action-button>
-                    </div>
-                    <div class="clear-filter">
-                        <action-button class="clear-btn" type="text" title="Clear Filters" (click)="clearFilter()"
-                            color="primary"></action-button>
-                    </div>
-                </div>
-            </ng-container>
+  </div>
+  <div [formGroup]="positionForm" class="position-main-container">
+    <!-- Position Filter Card -->
+    <div class="filter-container container__header tablet" [class.open]="filter_list">
+      <ng-container>
+        <div class="nav-title">
+          <h3 class="section-title">Positions Filters</h3>
         </div>
+        <div class="filter-card">
+          <mat-form-field>
+            <mat-label>City</mat-label>
+            <input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity" formControlName="city">
+            <mat-autocomplete #autocompleteCity="matAutocomplete">
+              <mat-option *ngFor="let city of autocomplete_cities" [value]="(city.city)?.split(',')[0]"
+                (onSelectionChange)="onChangeCity(city)">
+                <span>{{city.city}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="filter-card">
+          <mat-form-field>
+            <mat-label>Skills</mat-label>
+            <input matInput placeholder="Skills" type="text" [matAutocomplete]="autocompleteSkills"
+              formControlName="skill">
+            <mat-autocomplete #autocompleteSkills="matAutocomplete">
+              <mat-option *ngFor="let autocomplete_skill of autocomplete_skills" [value]="autocomplete_skill.skill"
+                (onSelectionChange)="addSkills(autocomplete_skill)">
+                <span>{{autocomplete_skill.skill}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <div *ngIf="userSkillsList.length > 0" class="skills">
+            <simple-tag *ngFor="let skillData of userSkillsList; let i = index" type="gray" removeTag="true"
+              title="{{skillData.skill}}" (click)="removeUserSkillsData(i)"></simple-tag>
 
-        <!-- Job Position Card -->
+          </div>
+        </div>
+        <div class="filter-card">
+          <mat-form-field>
+            <mat-label>Minimum Salary</mat-label>
+            <input matInput placeholder="Minimum Salary" type="number" formControlName="minSal">
+          </mat-form-field>
+        </div>
+        <div class="filter-card">
+          <mat-form-field>
+            <mat-label>Position Level</mat-label>
+            <mat-select class="arrow" formControlName="position">
+              <mat-option value=''></mat-option>
+              <mat-option *ngFor="let position of positionLevel" value="{{position}}">{{position}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="filter-card">
+          <mat-form-field>
+            <mat-label>Education Level</mat-label>
+            <mat-select class="arrow" formControlName="education">
+              <mat-option value=''></mat-option>
+              <mat-option *ngFor="let education of educationLevel" value="{{educationLevel.indexOf(education)}}">
+                {{education}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="filter-card">
+          <mat-form-field>
+            <mat-label>Job Type</mat-label>
+            <mat-select class="arrow" formControlName="job">
+              <mat-option value=''></mat-option>
+              <mat-option *ngFor="let jobtype of jobType" value="{{jobtype}}">{{jobtype}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="filter-card">
+          <mat-form-field>
+            <mat-label>Major </mat-label>
+            <input matInput placeholder="Major" type="text" [matAutocomplete]="autocompleteMajor"
+              formControlName="major">
+            <mat-autocomplete #autocompleteMajor="matAutocomplete">
+              <mat-option *ngFor="let major of autocomplete_education_major" [value]="major.major_name"
+                (onSelectionChange)="onChangeMajor(major)">
+                <span>{{major.major_name}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="filter-card">
+          <mat-form-field>
+            <mat-label>Industry </mat-label>
+            <input matInput placeholder="Industry" type="text" [matAutocomplete]="autocompleteIndustry"
+              formControlName="industry">
+            <mat-autocomplete #autocompleteIndustry="matAutocomplete">
+              <mat-option *ngFor="let industry of autocomplete_additional_industries" [value]="industry.industry_name"
+                (onSelectionChange)="onChangeIndustry(industry)">
+                <span>{{industry.industry_name}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="filter-card">
+          <mat-form-field>
+            <mat-label>Company </mat-label>
+            <input matInput placeholder="Company" type="text" [matAutocomplete]="autocompleteCompany"
+              formControlName="company">
+            <mat-autocomplete #autocompleteCompany="matAutocomplete">
+              <mat-option *ngFor="let company of autocomplete_companies" [value]="company.company_name">
+                <span>{{company.company_name}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="filter-card">
+          <mat-form-field>
+            <mat-label>School</mat-label>
+            <input matInput placeholder="School" type="text" [matAutocomplete]="autocompleteSchool"
+              formControlName="school">
+            <mat-autocomplete #autocompleteSchool="matAutocomplete">
+              <mat-option *ngFor="let school of autocomplete_school" [value]="school.school_name"
+                (onSelectionChange)="onChangeSchool(school)">
+                <span>{{school.school_name}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="filter-card">
+          <mat-form-field>
+            <mat-label>Recruiter</mat-label>
+            <input matInput placeholder="Recruiter" type="text" [matAutocomplete]="autocompleterecruiter"
+              formControlName="recruiter">
+            <mat-autocomplete #autocompleterecruiter="matAutocomplete">
+              <mat-option *ngFor="let recruiter of autocomplete_recruiter"
+                value="{{recruiter.first_name }} {{  recruiter.last_name}}  "
+                (onSelectionChange)="onChangeRecruiter(recruiter)" class="recruiter_option">
+                <img class="userimg" src="{{recruiter?.photo ? recruiter.photo : 'assets/icons/no_photo.png'}}">
+                <span>{{recruiter.first_name}} {{recruiter.last_name}} </span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="filter-card">
+          <div class="side-filter-btn">
+            <action-button type="raised" color="primary" title="Apply Filters" (click)="applyFilter();">
+            </action-button>
+          </div>
+          <div class="clear-filter">
+            <action-button class="clear-btn" type="text" title="Clear Filters" (click)="clearFilter()" color="primary">
+            </action-button>
+          </div>
+        </div>
+      </ng-container>
+    </div>
 
-        <div class="position-list-container">
+    <!-- Job Position Card -->
 
-            <div class="select-style">
-                <div class="selectall">
+    <div class="position-list-container">
 
-                    <round-checkbox id="test" title="Select All" [checked]="selectedAllFlag"
-                        (statusChange)="selectAll($event)"></round-checkbox>
-                    <action-button class="position-search-reload-result" color="primary" title="Apply Selected"
-                        (click)="applySelected()">
-                    </action-button>
-                    <action-button class="position-search-reload-result" color="primary" title="Save Selected"
-                        (click)="saveSelected()">
-                    </action-button>
-                    <action-button class="position-search-reload-result" color="primary" title="Reload Results"
-                        (click)="preLoadDataObject = {}; getJobData()"></action-button>
-                    <div class="drop-buttons">
-                        <span class="dot-icon">
-                            <button mat-button [matMenuTriggerFor]="menu" disableRipple><img
-                                    src="assets/icons/ic_more_vertical.svg">
-                            </button>
-                            <mat-menu #menu="matMenu">
-                                <button mat-menu-item (click)="applySelected()">Apply Selected</button>
-                                <button mat-menu-item (click)="saveSelected();">Save Selected</button>
-                                <button mat-menu-item (click)="getJobData()">Reload Results</button>
-                            </mat-menu>
-                        </span>
-                    </div>
+      <div class="select-style">
+        <div class="selectall">
+
+          <round-checkbox id="test" title="Select All" [checked]="selectedAllFlag" (statusChange)="selectAll($event)">
+          </round-checkbox>
+          <action-button class="position-search-reload-result" color="primary" title="Apply Selected"
+            (click)="applySelected()">
+          </action-button>
+          <action-button class="position-search-reload-result" color="primary" title="Save Selected"
+            (click)="saveSelected()">
+          </action-button>
+          <action-button class="position-search-reload-result" color="primary" title="Reload Results"
+            (click)="preLoadDataObject = {}; getJobData()"></action-button>
+          <div class="drop-buttons">
+            <span class="dot-icon">
+              <button mat-button [matMenuTriggerFor]="menu" disableRipple><img src="assets/icons/ic_more_vertical.svg">
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="applySelected()">Apply Selected</button>
+                <button mat-menu-item (click)="saveSelected();">Save Selected</button>
+                <button mat-menu-item (click)="getJobData()">Reload Results</button>
+              </mat-menu>
+            </span>
+          </div>
 
 
-                </div>
-                <div class="sort-item">
-                    <mat-label>Sort by</mat-label>&nbsp;
-                    <mat-form-field>
-                        <mat-select value="dateposted" formControlName="sortBy" (selectionChange)="getJobData()">
-                            <mat-option *ngFor="let sort of sortBy" [value]="sort.value">{{sort.title}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
+        </div>
+        <div class="sort-item">
+          <mat-label>Sort by</mat-label>&nbsp;
+          <mat-form-field>
+            <mat-select value="dateposted" formControlName="sortBy" (selectionChange)="getJobData()">
+              <mat-option *ngFor="let sort of sortBy" [value]="sort.value">{{sort.title}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div *ngFor="let job of positionList ">
+
+        <div class="row" [ngClass]="{'selected': job.selected}">
+          <round-checkbox id="test" [checked]="job.selected"
+            (statusChange)="job.selected = !job.selected;selectedAllFlag=false;"></round-checkbox>
+          <h1 routerLink="../position/{{job.position_id}}">{{job.position}} </h1>
+          <div class="position-right">
+            <div class="heart-icon">
+              <img *ngIf="!appliedJobsMap[job.position_id] && !savedJobsMap[job.position_id]" (click)="saveJob([job])"
+                title="Save Job" src="assets/icons/ic_heart.svg" class="before-heart-icon">
+              <img *ngIf="!appliedJobsMap[job.position_id] && savedJobsMap[job.position_id]" (click)="unSaveJob(job);"
+                title="Saved Job" src="assets/icons/ic_heart_circle.svg" class="after-heart-icon">
             </div>
-
-            <div *ngFor="let job of positionList ">
-
-                <div class="row" [ngClass]="{'selected': job.selected}">
-                    <round-checkbox id="test" [checked]="job.selected"
-                        (statusChange)="job.selected = !job.selected;selectedAllFlag=false;"></round-checkbox>
-                    <h1 routerLink="../position/{{job.position_id}}">{{job.position}} </h1>
-                    <div class="position-right">
-                        <div class="heart-icon">
-                            <img *ngIf="!appliedJobsMap[job.position_id] && !savedJobsMap[job.position_id]"
-                                (click)="saveJob([job])" title="Save Job" src="assets/icons/ic_heart.svg"
-                                class="before-heart-icon">
-                            <img *ngIf="!appliedJobsMap[job.position_id] && savedJobsMap[job.position_id]"
-                                (click)="unSaveJob(job);" title="Saved Job" src="assets/icons/ic_heart_circle.svg"
-                                class="after-heart-icon">
-                        </div>
-                        <span class="right-align">
-                            <action-button *ngIf="!appliedJobsMap[job.position_id]" title="Apply" class="job-apply-btn"
-                                color="primary" (click)="applyJob([job])">
-                            </action-button>
-                            <action-button *ngIf="appliedJobsMap[job.position_id]" class="job-applied-btn"
-                                title="Applied" type="stroked" color="primary" disabled>
-                            </action-button>
-                        </span>
-                        <span *ngIf="appliedJobsMap[job.position_id]" class="dot-icon">
-                            <button mat-button [matMenuTriggerFor]="menu" disableRipple><img
-                                    src="assets/icons/ic_more_vertical.svg">
-                            </button>
-                            <mat-menu #menu="matMenu">
-                                <button mat-menu-item
-                                    routerLink="../application/{{this.appliedJobsMap[job.position_id]}}">See
-                                    Application</button>
-                                <button mat-menu-item (click)="withdrawApplication(job.position_id)">Withdraw
-                                    Application</button>
-                            </mat-menu>
-                        </span>
-                    </div>
-                    <div>
-                        <div class="job-top-list">
-                            <ul>
-                                <li>
-                                    <img class="img-style" src="assets/icons/ic_company.svg">
-                                    <span class="image" routerLink="../company-page/{{job.company_id}}">
-                                        {{job.company_name}}</span>
-                                </li>
-                                <li>
-                                    <img src="assets/icons/ic_location.svg">
-                                    <span class="image"
-                                        *ngIf="job.hq_city_name && job.hq_state_name && job.hq_country_name; else noLocation">
-                                        {{job.hq_city_name }},
-                                        {{job.hq_state_name }},
-                                        {{job.hq_country_name }}</span>
-                                    <ng-template #noLocation>
-                                        <span>N/A</span>
-                                    </ng-template>
-                                </li>
-                                <li>
-                                    <img src="assets/icons/ic_clock.svg">
-                                    <span class="image"> {{job.post_date | date}}</span>
-                                </li>
-                            </ul>
-                        </div>
-                        <mat-grid-list [cols]="breakpoint" rowHeight="60px" (window:resize)="onResize($event)"
-                            class="card">
-                            <mat-grid-tile>
-                                <div class="card-item">
-                                    <span>Qualification Level</span>
-                                    <p>{{calculateQualificationLevel(job.true_fitscore_info, job.minimum_skills)}}</p>
-                                </div>
-                            </mat-grid-tile>
-                            <mat-grid-tile>
-                                <div class="card-item">
-                                    <span>Salary</span>
-                                    <p>{{job.pay ? job.pay + ' USD' : 'N/A' }} </p>
-                                </div>
-                            </mat-grid-tile>
-                            <mat-grid-tile>
-                                <div class="card-item">
-                                    <span>Industry</span>
-                                    <p>{{job.main_industry_name ? job.main_industry_name : 'N/A'}}</p>
-                                </div>
-                            </mat-grid-tile>
-                            <mat-grid-tile>
-                                <div class="card-item">
-                                    <span>Position Level</span>
-                                    <p>{{job.level ? job.level : 'N/A'}}</p>
-                                </div>
-                            </mat-grid-tile>
-                        </mat-grid-list>
-                        <div class="main-card">
-
-                            <ul type="none">
-                                <li>
-                                    <h5 for="skill_required">Skills Required<span>{{ job.minimum_skills?.length}}</span>
-                                    </h5>
-                                    <div class="skil-height-fix" [ngClass]="{'skill-more-height': job.showMoreFlag}"
-                                        *ngIf="job.minimum_skills; else noSkills">
-                                        <div class="skills-preferred-m" *ngFor="let min_skill of job.minimum_skills">
-                                            <simple-tag type="gray" title="{{min_skill.skill}}" ellipseTag="true"
-                                                value="{{min_skill.skill_level}}"
-                                                [matTooltip]="SkillLevelDescription[min_skill.skill_level]"
-                                                [matTooltipShowDelay]=500 (click)="openSkilladdDialog(min_skill)">
-                                            </simple-tag>
-
-                                        </div>
-
-                                    </div>
-
-
-                                </li>
-                                <li class="skill-chips">
-                                    <h5 class="skill-label" for="skill_preferred">Skills Preferred
-                                        <span> {{job.preferred_skills?.length}}</span></h5>
-                                    <div class="skil-height-fix" [ngClass]="{'skill-more-height': job.showMoreFlag}"
-                                        *ngIf="job.preferred_skills; else noSkills">
-                                        <div class="skills-preferred-m skill-prefer"
-                                            *ngFor="let preskill of job.preferred_skills">
-                                            <simple-tag type="gray" title="{{preskill.skill}}" ellipseTag="true"
-                                                value="{{preskill.skill_level}}"
-                                                [matTooltip]="SkillLevelDescription[preskill.skill_level]"
-                                                [matTooltipShowDelay]=500 (click)="openSkilladdDialog(preskill)">
-                                            </simple-tag>
-                                        </div>
-                                    </div>
-
-                                </li>
-                            </ul>
-                            <ng-template #noSkills>
-                                <ul>
-                                    <li>N/A</li>
-                                </ul>
-                            </ng-template>
-                        </div>
-
-                        <div *ngIf="job.showMoreFlag">
-                            <div class="qualification-level-m">
-                                <h5>Qualification Level Estimate Breakdown</h5>
-
-                                <simple-tag *ngIf="job.true_fitscore_info?.skills_weight" type="gray"
-                                    title="Skills Match" ellipseTag="true"
-                                    value="{{mathFloor(6*job.true_fitscore_info?.skills_fitscore)}}">
-                                </simple-tag>
-                                <simple-tag *ngIf="job.true_fitscore_info?.experience_weight" type="gray"
-                                    title="Experience Match" ellipseTag="true"
-                                    value="{{mathFloor(6*job.true_fitscore_info?.experience_fitscore)}}">
-                                </simple-tag>
-                                <simple-tag *ngIf="job.true_fitscore_info?.education_weight" type="gray"
-                                    title="Education Match" ellipseTag="true"
-                                    value="{{mathFloor(6*job.true_fitscore_info?.education_fitscore)}}">
-                                </simple-tag>
-                                <simple-tag *ngIf="job.true_fitscore_info?.interests_weight" type="gray"
-                                    title="Interests Match" ellipseTag="true"
-                                    value="{{mathFloor(6*job.true_fitscore_info?.interests_fitscore)}}">
-                                </simple-tag>
-                                <simple-tag *ngIf="job.minimum_skills" type="gray" title="Required Skills Match"
-                                    ellipseTag="true"
-                                    value="{{mathFloor(6*job.true_fitscore_info?.required_skills_fitscore)}}">
-                                </simple-tag>
-
-                                <p
-                                    *ngIf="!job.true_fitscore_info ||  (job.true_fitscore_info && !job.true_fitscore_info.skills_weight && !job.true_fitscore_info.experience_weight && !job.true_fitscore_info.education_weight && !job.true_fitscore_info.interests_weight && !job.minimum_skills)">
-                                    N/A
-                                </p>
-                            </div>
-
-
-                            <div class="jobdesc-space">
-
-                                <h5>Job Description</h5>
-                                <p>
-                                    {{job.position_desc}}
-                                </p>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="show-button">
-                        <action-button routerLink="." type="text" title="{{!job.showMoreFlag ? 'Show More' :
-                    'Show Less'}}" color="primary" (click)="job.showMoreFlag = !job.showMoreFlag"></action-button>
-                        &nbsp;&nbsp;
-                        <action-button type="text" title="Go to Details Page" color="primary"
-                            routerLink="../position/{{job.position_id}}" *ngIf="job.showMoreFlag"></action-button>
-
-
-                    </div>
-                </div>
+            <span class="right-align">
+              <action-button *ngIf="!appliedJobsMap[job.position_id]" title="Apply" class="job-apply-btn"
+                color="primary" (click)="applyJob([job])">
+              </action-button>
+              <action-button *ngIf="appliedJobsMap[job.position_id]" class="job-applied-btn" title="Applied"
+                type="stroked" color="primary" disabled>
+              </action-button>
+            </span>
+            <span *ngIf="appliedJobsMap[job.position_id]" class="dot-icon">
+              <button mat-button [matMenuTriggerFor]="menu" disableRipple><img src="assets/icons/ic_more_vertical.svg">
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item routerLink="../application/{{this.appliedJobsMap[job.position_id]}}">See
+                  Application</button>
+                <button mat-menu-item (click)="withdrawApplication(job.position_id)">Withdraw
+                  Application</button>
+              </mat-menu>
+            </span>
+          </div>
+          <div>
+            <div class="job-top-list">
+              <ul>
+                <li>
+                  <img class="img-style" src="assets/icons/ic_company.svg">
+                  <span class="image" routerLink="../company-page/{{job.company_id}}">
+                    {{job.company_name}}</span>
+                </li>
+                <li>
+                  <img src="assets/icons/ic_location.svg">
+                  <span class="image"
+                    *ngIf="job.hq_city_name && job.hq_state_name && job.hq_country_name; else noLocation">
+                    {{job.hq_city_name }},
+                    {{job.hq_state_name }},
+                    {{job.hq_country_name }}</span>
+                  <ng-template #noLocation>
+                    <span>N/A</span>
+                  </ng-template>
+                </li>
+                <li>
+                  <img src="assets/icons/ic_clock.svg">
+                  <span class="image"> {{job.post_date | date}}</span>
+                </li>
+              </ul>
             </div>
-            <div *ngIf="!positionList || positionList.length == 0">
-                <div class="row no-job">
-                    No search results found.
+            <mat-grid-list [cols]="breakpoint" rowHeight="60px" (window:resize)="onResize($event)" class="card">
+              <mat-grid-tile>
+                <div class="card-item">
+                  <span>Qualification Level</span>
+                  <p>{{calculateQualificationLevel(job.true_fitscore_info, job.minimum_skills)}}</p>
                 </div>
-            </div>
-            <div class="pagination" *ngIf="positionList.length > 0">
-                <ul type="none">
-                    <li class="large_pagination_button" (click)="pageClicked(currentPageNumber-1)">Prev. Page</li>
-                    <li *ngFor="let pageNo of paginationArr" [ngClass]="{'active': pageNo == currentPageNumber}"
-                        (click)="pageClicked(pageNo)">{{ pageNo }}
-                    </li>
-                    <li class="large_pagination_button" (click)="pageClicked(currentPageNumber+1)">Next Page</li>
+              </mat-grid-tile>
+              <mat-grid-tile>
+                <div class="card-item">
+                  <span>Salary</span>
+                  <p>{{job.pay ? job.pay + ' USD' : 'N/A' }} </p>
+                </div>
+              </mat-grid-tile>
+              <mat-grid-tile>
+                <div class="card-item">
+                  <span>Industry</span>
+                  <p>{{job.main_industry_name ? job.main_industry_name : 'N/A'}}</p>
+                </div>
+              </mat-grid-tile>
+              <mat-grid-tile>
+                <div class="card-item">
+                  <span>Position Level</span>
+                  <p>{{job.level ? job.level : 'N/A'}}</p>
+                </div>
+              </mat-grid-tile>
+            </mat-grid-list>
+            <div class="main-card">
+
+              <ul type="none">
+                <li>
+                  <h5 for="skill_required">Skills Required<span>{{ job.minimum_skills?.length}}</span>
+                  </h5>
+                  <div class="skil-height-fix" [ngClass]="{'skill-more-height': job.showMoreFlag}"
+                    *ngIf="job.minimum_skills; else noSkills">
+                    <div class="skills-preferred-m" *ngFor="let min_skill of job.minimum_skills ">
+                      <simple-tag type="gray" title="{{min_skill.skill}}" ellipseTag="true"
+                        value="{{min_skill.skill_level}}" [matTooltip]="SkillLevelDescription[min_skill.skill_level].title + SkillLevelDescription[min_skill.skill_level].description">
+                        [matTooltipShowDelay]=500 (click)="openSkilladdDialog(min_skill)">
+                      </simple-tag>
+
+                    </div>
+
+                  </div>
+
+
+                </li>
+                <li class="skill-chips">
+                  <h5 class="skill-label" for="skill_preferred">Skills Preferred
+                    <span> {{job.preferred_skills?.length}}</span></h5>
+                  <div class="skil-height-fix" [ngClass]="{'skill-more-height': job.showMoreFlag}"
+                    *ngIf="job.preferred_skills; else noSkills">
+                    <div class="skills-preferred-m skill-prefer" *ngFor="let preskill of job.preferred_skills">
+                      <simple-tag type="gray" title="{{preskill.skill}}" ellipseTag="true"
+                        value="{{preskill.skill_level}}" [matTooltip]="SkillLevelDescription[preskill.skill_level].title + SkillLevelDescription[preskill.skill_level].description"
+                        [matTooltipShowDelay]=500 (click)="openSkilladdDialog(preskill)">
+                      </simple-tag>
+                    </div>
+                  </div>
+
+                </li>
+              </ul>
+              <ng-template #noSkills>
+                <ul>
+                  <li>N/A</li>
                 </ul>
+              </ng-template>
             </div>
+
+            <div *ngIf="job.showMoreFlag">
+              <div class="qualification-level-m">
+                <h5>Qualification Level Estimate Breakdown</h5>
+
+                <simple-tag *ngIf="job.true_fitscore_info?.skills_weight" type="gray" title="Skills Match"
+                  ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.skills_fitscore)}}">
+                </simple-tag>
+                <simple-tag *ngIf="job.true_fitscore_info?.experience_weight" type="gray" title="Experience Match"
+                  ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.experience_fitscore)}}">
+                </simple-tag>
+                <simple-tag *ngIf="job.true_fitscore_info?.education_weight" type="gray" title="Education Match"
+                  ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.education_fitscore)}}">
+                </simple-tag>
+                <simple-tag *ngIf="job.true_fitscore_info?.interests_weight" type="gray" title="Interests Match"
+                  ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.interests_fitscore)}}">
+                </simple-tag>
+                <simple-tag *ngIf="job.minimum_skills" type="gray" title="Required Skills Match" ellipseTag="true"
+                  value="{{mathFloor(6*job.true_fitscore_info?.required_skills_fitscore)}}">
+                </simple-tag>
+
+                <p
+                  *ngIf="!job.true_fitscore_info ||  (job.true_fitscore_info && !job.true_fitscore_info.skills_weight && !job.true_fitscore_info.experience_weight && !job.true_fitscore_info.education_weight && !job.true_fitscore_info.interests_weight && !job.minimum_skills)">
+                  N/A
+                </p>
+              </div>
+
+
+              <div class="jobdesc-space">
+
+                <h5>Job Description</h5>
+                <p>
+                  {{job.position_desc}}
+                </p>
+              </div>
+
+            </div>
+          </div>
+          <div class="show-button">
+            <action-button routerLink="." type="text" title="{{!job.showMoreFlag ? 'Show More' :
+                    'Show Less'}}" color="primary" (click)="job.showMoreFlag = !job.showMoreFlag"></action-button>
+            &nbsp;&nbsp;
+            <action-button type="text" title="Go to Details Page" color="primary"
+              routerLink="../position/{{job.position_id}}" *ngIf="job.showMoreFlag"></action-button>
+
+
+          </div>
         </div>
+      </div>
+      <div *ngIf="!positionList || positionList.length == 0">
+        <div class="row no-job">
+          No search results found.
+        </div>
+      </div>
+      <div class="pagination" *ngIf="positionList.length > 0">
+        <ul type="none">
+          <li class="large_pagination_button" (click)="pageClicked(currentPageNumber-1)">Prev. Page</li>
+          <li *ngFor="let pageNo of paginationArr" [ngClass]="{'active': pageNo == currentPageNumber}"
+            (click)="pageClicked(pageNo)">{{ pageNo }}
+          </li>
+          <li class="large_pagination_button" (click)="pageClicked(currentPageNumber+1)">Next Page</li>
+        </ul>
+      </div>
+    </div>
+
 
 
     </div>
+
 </div>

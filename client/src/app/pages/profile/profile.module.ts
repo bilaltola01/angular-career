@@ -8,7 +8,7 @@ import { profileComponents } from './index';
 import { SharedModule } from '../../components/shared.module';
 import { ProfileDialogContentComponent } from './user-profile/profile-section/profile-section.component';
 import { TemplateDialogContentComponent } from './user-profile/template-section/template-section.component';
-import { SkillLevelDescriptionDialogComponent } from './create-profile/create-profile.component';
+import { SkillDescriptionPopupComponent } from 'src/app/components/skill-description-popup/skill-description-popup.component';
 
 
 @NgModule({
@@ -22,12 +22,11 @@ import { SkillLevelDescriptionDialogComponent } from './create-profile/create-pr
   ],
   declarations: [
     ...profileComponents,
-    SkillLevelDescriptionDialogComponent
   ],
   entryComponents: [
     ProfileDialogContentComponent,
     TemplateDialogContentComponent,
-    SkillLevelDescriptionDialogComponent
+    SkillDescriptionPopupComponent
   ]
 })
 

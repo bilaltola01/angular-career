@@ -1,5 +1,26 @@
-@import './../../../../../styles/variables.scss';
+@import "./../../../../../styles/variables.scss";
 
+mat-dialog-content {
+  ul {
+    .key {
+      .simpletag {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-content: flex-start;
+        padding: 5px 0;
+        border-radius: 18px;
+        width: 20%;
+        display: inline-block;
+      }
+      & li {
+        b.bold {
+          font-weight: 590;
+        }
+      }
+    }
+  }
+}
 .form-field {
   margin-top: 30px;
   box-sizing: border-box;
@@ -49,3 +70,23 @@
   }
 }
 
+@media only screen and (max-width: 480px) {
+  :host {
+    mat-dialog-content {
+      ul {
+        .key {
+          .simpletag {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-content: flex-start;
+            padding: 5px 0;
+            border-radius: 18px;
+            width: 40%;
+            display: inline-block;
+          }
+        }
+      }
+    }
+  }
+}

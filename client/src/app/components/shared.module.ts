@@ -5,7 +5,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../modules/material.module';
 import { AlertBarComponent } from './alert-bar/alert-bar.component';
-import { AddSkillPopupComponent, SkillLevelPopupComponent } from './add-skill-popup/add-skill-popup.component';
+import { AddSkillPopupComponent } from './add-skill-popup/add-skill-popup.component';
+import { SkillDescriptionPopupComponent } from './skill-description-popup/skill-description-popup.component';
 
 @NgModule({
   imports: [
@@ -18,14 +19,14 @@ import { AddSkillPopupComponent, SkillLevelPopupComponent } from './add-skill-po
   declarations: [
     ...sharedComponents,
     AddSkillPopupComponent,
-    SkillLevelPopupComponent
+    SkillDescriptionPopupComponent
   ],
   exports: [
     ...sharedComponents
   ],
   entryComponents: [
     AlertBarComponent,
-    SkillLevelPopupComponent
+    SkillDescriptionPopupComponent
   ]
 })
 
