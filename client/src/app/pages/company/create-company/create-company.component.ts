@@ -275,7 +275,7 @@ export class CreateCompanyComponent implements OnInit {
 
     this.companyBasicInfoForm = new FormGroup({
       company_size: new FormControl(this.company_size ? this.company_size : null, [Validators.required]),
-      founding_year: new FormControl(this.founding_year ? this.helperService.convertStringToFormattedDateString(this.founding_year, 'L', 'YYYY') : null),
+      founding_year: new FormControl(this.founding_year ? this.founding_year : null),
       hq_city: new FormControl(this.hq_city ? this.helperService.cityNameFromAutoComplete(this.hq_city.city) : null),
       hq_state: new FormControl(this.hq_state ? this.hq_state.state : null),
       hq_country: new FormControl(this.hq_country ? Countries[this.hq_country - 1] : null),
@@ -340,7 +340,7 @@ export class CreateCompanyComponent implements OnInit {
 
     this.companyBasicInfoForm.get('founding_year').valueChanges.subscribe(
       (founding_year) => {
-        this.founding_year = founding_year ? this.helperService.convertStringToFormattedDateString(founding_year, 'YYYY', 'L') : null;
+        this.founding_year = founding_year ? founding_year : null;
       }
     );
 
