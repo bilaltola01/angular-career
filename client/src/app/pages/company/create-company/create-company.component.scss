@@ -126,13 +126,20 @@ p {
           text-align: center;
         }
         &__image {
+          position: relative;
           width: 125px;
+          height: 125px;
+          @include disable-select();
           img {
             cursor: pointer;
-            width: 125px;
-            height: 125px;
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
-            object-fit: cover;
+            &.image-upload {
+              position: absolute;
+              top: 0;
+              left: 0;
+            }
           }
         }
         &__field {
@@ -680,10 +687,7 @@ p {
           margin-bottom: 0;
           &__image {
             width: 110px;
-            img {
-              width: 110px;
-              height: 110px;
-            }
+            height: 110px;
           }
           &__field {
             width: 90%;
@@ -815,10 +819,7 @@ p {
           margin-bottom: 35px;
           &__image {
             width: 95px;
-            img {
-              width: 95px;
-              height: 95px;
-            }
+            height: 95px;
           }
           &__field {
             width: 95%;

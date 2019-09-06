@@ -30,7 +30,8 @@
 			<div class="profile-form__image">
 				<input style="display: none" type="file" (change)="onPhotoFileSelected($event)" #fileInput>
 
-				<img alt="Profile Image" src="{{company_logo_url || 'assets/icons/profile-image.svg'}}" (click)="fileInput.click()">
+                <img alt="Company Logo" src="{{company_logo_url || 'assets/icons/ic_default_company_logo.svg'}}">
+                <img class="image-upload" alt="Upload Image" src="assets/icons/ic_image_upload.svg" (click)="fileInput.click()">
 			</div>
 
 			<div class="profile-form__field">
