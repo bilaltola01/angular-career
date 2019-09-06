@@ -311,7 +311,7 @@
                     *ngIf="job.minimum_skills; else noSkills">
                     <div class="skills-preferred-m" *ngFor="let min_skill of job.minimum_skills ">
                       <simple-tag type="gray" title="{{min_skill.skill}}" ellipseTag="true"
-                        value="{{min_skill.skill_level}}" [matTooltip]="SkillLevelDescription[min_skill.skill_level].title + SkillLevelDescription[min_skill.skill_level].description">
+                        value="{{min_skill.skill_level}}" [matTooltip]="SkillLevelDescription[min_skill.skill_level].title + SkillLevelDescription[min_skill.skill_level].description"
                         [matTooltipShowDelay]=500 (click)="openSkilladdDialog(min_skill)">
                       </simple-tag>
 
