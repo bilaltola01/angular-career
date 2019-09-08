@@ -67,7 +67,8 @@ export class CreateCompanyComponent implements OnInit {
 
   maxDate = new Date();
   companySizeTypes: string[] = CompanySizeTypes;
-  countries: string[] = Countries.slice().sort();
+  countries: string[] = Countries.slice();
+  countries_sort: string[] = Countries.slice().sort();
   displayItemsLimit = 7;
   tab_menus = [
     'About',
