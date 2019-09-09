@@ -664,7 +664,7 @@ export class CreateCompanyComponent implements OnInit {
         dataJson => {
           this.company = dataJson['data'];
           if (this.company.warning) {
-            this.alertsService.show(this.company.warning, AlertType.error);
+            this.alertsService.show(this.company.warning, AlertType.yellow);
           }
           if (this.company_logo) {
             this.addCompanyLogo();
