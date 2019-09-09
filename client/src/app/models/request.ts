@@ -77,3 +77,18 @@ export interface CriminalHistoryRequest {
   explanation: string;
   criminal_hist_public: number;
 }
+
+export interface CompanyInfoRequest {
+  company_name:	string;
+  company_desc:	string;
+  company_logo:	string;
+  company_size:	string;
+  hq_city: number;
+  hq_state:	number;
+  hq_country:	number;
+  founding_year: number;
+  website: string;
+  main_industry: number;
+  active:	number;
+  company_industry_ids:	number[];
+}

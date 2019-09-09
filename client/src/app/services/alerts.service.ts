@@ -5,6 +5,7 @@ export enum AlertType {
   success = 'success',
   warning = 'warning',
   error = 'error',
+  yellow = 'yellow'
 }
 
 @Injectable({

@@ -10,3 +10,6 @@ export * from './cart.service';
 export * from './application.service';
 export * from './userprofile-state.service';
 export * from './score.service';
+export * from './company.service';
+export * from './company-admin.service';
+export * from './company-recruiter.service';

@@ -17,7 +17,10 @@
         background: map-get($md-cfred, 50);
     }
     &.warning {
-        background: map-get($md-cfprimary, 50 );
+        background: map-get($md-cfprimary, 50);
+    }
+    &.yellow {
+        background: map-get($md-cfyellow, 50);
     }
     .snackbar-text {
         font-family: 'Roboto', sans-serif;
@@ -28,13 +31,16 @@
         color: black;
         margin: 0;
         &.success {
-            color: map-get($md-cdgreen, 900 );
+            color: map-get($md-cdgreen, 900);
         }
         &.error {
             color: map-get($md-cfred, 900);
         }
         &.warning {
-            color: map-get($md-cfprimary, 900 );
+            color: map-get($md-cfprimary, 900);
+        }
+        &.yellow {
+            color: map-get($md-cfyellow, 900);
         }
     }
   }
@@ -67,5 +73,10 @@
         color: white;
         background: map-get($md-cfprimary, 900 );
         border: 1px solid map-get($md-cfprimary, 900 );
+    }
+    &.yellow {
+        color: white;
+        background: map-get($md-cfyellow, 900 );
+        border: 1px solid map-get($md-cfyellow, 900 );
     }
 }

@@ -8,6 +8,13 @@ export const EthnicityTypes = [
   'Undisclosed'
 ];
 
+export const CompanySizeTypes = [
+  'Small (1 - 49)',
+  'Medium (50 - 499)',
+  'Large (500+)'
+];
+
+
 export const Genders = [
   'Male',
   'Female',

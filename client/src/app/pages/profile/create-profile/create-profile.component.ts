@@ -224,7 +224,8 @@ export class CreateProfileComponent implements OnInit {
     private alertsService: AlertsService,
     private helperService: HelperService,
     private photoStateService: PhotoStateService,
-    private applicationService: ApplicationService, public dialog: MatDialog) { }
+    private applicationService: ApplicationService,
+    public dialog: MatDialog) { }
 
   ngOnInit() {
     if (this.route.snapshot.queryParams.role) {

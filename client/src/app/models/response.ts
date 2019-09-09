@@ -115,3 +115,24 @@ export interface CriminalHistoryResponse {
   explanation: string;
   criminal_hist_public: number;
 }
+
+export interface CompanyInfoResponse {
+  company_id: number;
+  company_name:	string;
+  company_desc:	string;
+  company_logo:	string;
+  company_size:	string;
+  hq_city: number;
+  hq_city_name: string;
+  hq_state:	number;
+  hq_state_name: string;
+  hq_country:	number;
+  hq_country_name: string;
+  main_industry: number;
+  main_industry_name: string;
+  school:	number;
+  warning:	string;
+  company_industry_ids:	number[];
+  company_industries: any[];
+}
+
