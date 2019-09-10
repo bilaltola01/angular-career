@@ -167,22 +167,26 @@ export class PeopleSearchComponent implements OnInit {
   initPeopleFilterForm() {
     const querySearchedName = this.route.snapshot.queryParamMap.get('name') || null;
     const querySearchedState = this.route.snapshot.queryParamMap.get('state') || null;
+    const querySearchedStateId = this.route.snapshot.queryParamMap.get('stateId') || null;
     const querySearchedCity = this.route.snapshot.queryParamMap.get('city') || null;
-    const querySearchedSkill = this.route.snapshot.queryParamMap.get('skill') || null;
-    const querySearchedEducation = this.route.snapshot.queryParamMap.get('education') || null;
+    const querySearchedCityId = this.route.snapshot.queryParamMap.get('cityId') || null;
+    const querySearchedEducationLevel = this.route.snapshot.queryParamMap.get('educationLevel') || null;
     const querySearchedSchool = this.route.snapshot.queryParamMap.get('school') || null;
+    const querySearchedSchoolId = this.route.snapshot.queryParamMap.get('schoolId') || null;
     const querySearchedMajor = this.route.snapshot.queryParamMap.get('major') || null;
+    const querySearchedMajorId = this.route.snapshot.queryParamMap.get('majorId') || null;
+    // const querySearchedSkill = this.route.snapshot.queryParamMap.get('skill') || null; // TODO: Skill
+
 
     this.peopleForm = new FormGroup({
       'searchPeople': new FormControl(querySearchedName),
-      'state': new FormControl(null),
-      'city': new FormControl(null),
+      'state': new FormControl(querySearchedState),
+      'city': new FormControl(querySearchedCity),
       'skill': new FormControl(null),
-      'education': new FormControl(null),
-      'school': new FormControl(null),
-      'major': new FormControl(null)
+      'education': new FormControl(querySearchedEducationLevel),
+      'school': new FormControl(querySearchedSchool),
+      'major': new FormControl(querySearchedMajor)
     });
-
 
     this.peopleForm.get('searchPeople').valueChanges.subscribe((searchPeople) => {
       searchPeople && this.helperService.checkSpacesString(searchPeople) ? this.onSearchPeopleValueChanges(searchPeople) : this.autocomplete_searchpeoples = [];
@@ -193,8 +197,7 @@ export class PeopleSearchComponent implements OnInit {
     this.peopleForm.get('city').valueChanges.subscribe((city) => {
       city && this.helperService.checkSpacesString(city) ? this.onCityValueChanges(city) : this.autocomplete_cities = [];
     });
-    this.peopleForm.get('skill').valueChanges.subscribe(
-      (skill) => {
+    this.peopleForm.get('skill').valueChanges.subscribe((skill) => {
         skill && this.helperService.checkSpacesString(skill) ? this.onSkillValueChanges(skill) : this.autocomplete_skills = [];
       }
     );
@@ -205,15 +208,10 @@ export class PeopleSearchComponent implements OnInit {
       major && this.helperService.checkSpacesString(major) ? this.onMajorValueChanges(major) : this.autocomplete_education_major = [];
     });
 
-    // TODO: Call onChangeCity somehow
-    // this.peopleForm.patchValue({
-    //   state: querySearchedState,
-    //   city: querySearchedCity,
-    //   education: querySearchedEducation,
-    //   school: querySearchedSchool,
-    //   major: querySearchedMajor,
-    // });
-
+    this.filterAttributes['state_id'] = querySearchedStateId;
+    this.filterAttributes['city_id'] = querySearchedCityId;
+    this.filterAttributes['school_id'] = querySearchedSchoolId;
+    this.filterAttributes['major_id'] = querySearchedMajorId;
   }
 
   onChangeCity(city: City) {
@@ -341,14 +339,17 @@ export class PeopleSearchComponent implements OnInit {
     queryString = people ? `${queryString ? queryString + '&' : ''}name=${people}` : queryString;
 
     // TODO: Skill
-    // const querySearchedSkill = this.route.snapshot.queryParamMap.get('skill') || null;
     const paramsInQuery = {
       'name': people,
       'state': this.peopleForm.value.state,
+      'stateId': this.filterAttributes.state_id,
       'city': this.peopleForm.value.city,
-      'education': this.peopleForm.value.education,
-      'major': this.peopleForm.value.major,
+      'cityId': this.filterAttributes.city_id,
+      'educationLevel': this.peopleForm.value.education,
       'school': this.peopleForm.value.school,
+      'schoolId': this.filterAttributes.school_id,
+      'major': this.peopleForm.value.major,
+      'majorId': this.filterAttributes.major_id,
     };
 
     this.router.navigate([], {
