@@ -28,7 +28,7 @@ export const routes: Routes = [
       .then(module => module.LegalTermsModule)
   },
   {
-    path: 'positions', loadChildren: () => import('./pages/positions/positions.module')
+    path: '', loadChildren: () => import('./pages/positions/positions.module')
       .then(module => module.PositionModule)
   },
   {

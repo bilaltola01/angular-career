@@ -1,4 +1,5 @@
 import { PositionSearchComponent } from './position-search/position-search.component';
+import { CreatePositionComponent } from './create-position/create-position.component';
 import { AuthGuard } from '../../guard/auth.guard';
 import { Routes } from '@angular/router';
 import { PositionsDetailsComponent } from 'src/app/components/positions-details/positions-details.component';
@@ -6,17 +7,22 @@ import { PositionsDetailsComponent } from 'src/app/components/positions-details/
 export const positionRoutes: Routes = [
   {
     path: '',
-    component: PositionSearchComponent
-    // canActivate: [AuthGuard]
+    redirectTo: 'positions',
+    pathMatch: 'full'
+  },
+  {
+    path: 'positions',
+    component: PositionSearchComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'create-position',
+    component: CreatePositionComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'position-info/:position_id',
     component: PositionsDetailsComponent
     // canActivate: [AuthGuard]
-  },
-  {
-    path: '',
-    component: PositionSearchComponent,
-    pathMatch: 'full'
-  },
+  }
 ];
