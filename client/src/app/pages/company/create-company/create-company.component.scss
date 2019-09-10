@@ -40,7 +40,7 @@ $profile-form-field-mt: 30px;
       height: 100%;
       @include flex(row, center, space-around);
       & > * {
-        width: calc(100% / 9);
+        width: calc(100% / 6);
       }
       .progress-label {
         font-size: 16px;

@@ -6,7 +6,7 @@
 		<mat-icon (click)="toggleTabMenuOpen()">{{isTabMenuOpen ? 'close' : 'menu'}}</mat-icon>
 		<span class="progress-label tablet">{{page_titles[selectedPageIndex]}}</span>
 		<span class="progress-label"
-			[class.done]="selectedPageIndex===9">{{progressWidth[selectedPageIndex].label}}%</span>
+			[class.done]="selectedPageIndex===5">{{progressWidth[selectedPageIndex].label}}%</span>
 		<div class="progress-bar" [style.width.%]="progressWidth[selectedPageIndex].width"></div>
 		<div class="container__header tablet" [class.open]="isTabMenuOpen">
 			<ng-container *ngFor="let page_title of page_titles; let i = index">

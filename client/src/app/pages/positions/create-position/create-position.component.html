@@ -1,1 +1,163 @@
-<p>create-position works!</p>
+<div *ngIf="selectedPageIndex < 8" class="profile-completion">
+	<div class="container">
+		<ng-container *ngFor="let page_title of page_titles; let i = index">
+			<action-button *ngIf="page_title" class="link-btn desktop" type="text" title="{{page_title}}" (click)="goToPage(i)" [done]="selectedPageIndex > i" [disabled]="selectedPageIndex < i"></action-button>
+		</ng-container>
+		<mat-icon (click)="toggleTabMenuOpen()">{{isTabMenuOpen ? 'close' : 'menu'}}</mat-icon>
+		<span class="progress-label tablet">{{page_titles[selectedPageIndex]}}</span>
+		<span class="progress-label"
+			[class.done]="selectedPageIndex===8">{{progressWidth[selectedPageIndex].label}}%</span>
+		<div class="progress-bar" [style.width.%]="progressWidth[selectedPageIndex].width"></div>
+		<div class="container__header tablet" [class.open]="isTabMenuOpen">
+			<ng-container *ngFor="let page_title of page_titles; let i = index">
+				<action-button *ngIf="page_title" class="link-btn" type="text" title="{{page_title}}" (click)="goToPage(i)" [done]="selectedPageIndex > i" [disabled]="selectedPageIndex < i">
+				</action-button>
+			</ng-container>
+		</div>
+	</div>
+</div>
+
+<!-- Position Name & Overview start -->
+
+<div *ngIf="selectedPageIndex===0" class="container profile-basic">
+	<div class="container__full">
+		<div class="profile-form" [formGroup]="nameOverviewForm">
+			<h3 class="profile-form__title">
+				Position Name & Overview
+			</h3>
+
+			<div class="profile-form__field">
+				<mat-form-field class="bg-transparent" appearance="fill">
+					<mat-label>Position Name *</mat-label>
+					<input matInput placeholder="Position Name *" type="text" formControlName="position_name">
+				</mat-form-field>
+			</div>
+			<div class="profile-form__field textarea">
+				<mat-form-field>
+					<textarea matInput placeholder="Position Description *" rows="15" formControlName="position_desc"></textarea>
+				</mat-form-field>
+			</div>
+		</div>
+	</div>
+
+	<div class="container__full">
+		<action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!(nameOverviewForm.valid && helperService.checkSpacesString(nameOverviewForm.value.position_name) && helperService.checkSpacesString(nameOverviewForm.value.position_desc))">
+		</action-button>
+	</div>
+</div>
+
+<!-- Position Name & Overview end -->
+
+<!-- Position Information start -->
+<div *ngIf="selectedPageIndex===1" class="container profile-basic">
+  <div class="container__full">
+    <div class="profile-form" [formGroup]="positionBasicInfoForm">
+      <h3 class="profile-form__title">
+        Position Information
+      </h3>
+      <div class="profile-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Company</mat-label>
+          <input matInput placeholder="Company" type="text" [matAutocomplete]="autocompleteCompany" formControlName="position_company">
+          <mat-icon matSuffix *ngIf="positionBasicInfoForm.get('position_company').value && helperService.checkSpacesString(positionBasicInfoForm.get('position_company').value) && positionBasicInfoForm.get('position_company').valid && onCheckCompanyValidation()">done</mat-icon>
+          <mat-icon matSuffix class="error-field" *ngIf="positionBasicInfoForm.get('position_company').value && helperService.checkSpacesString(positionBasicInfoForm.get('position_company').value) && !onCheckCompanyValidation() && positionBasicInfoForm.get('position_company').touched">close</mat-icon>
+          <mat-autocomplete #autocompleteCompany="matAutocomplete" (closed)="onBlurCompany()">
+            <mat-option *ngFor="let company of autocomplete_companies" [value]="company.company_name" (onSelectionChange)="onSelectCompany(company)">
+              <span>{{company.company_name}}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <div class="profile-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>City</mat-label>
+          <input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity" formControlName="position_city">
+          <mat-icon matSuffix *ngIf="positionBasicInfoForm.get('position_city').value && helperService.checkSpacesString(positionBasicInfoForm.get('position_city').value) && positionBasicInfoForm.get('position_city').valid && onCheckCityValidation()">done</mat-icon>
+          <mat-icon matSuffix class="error-field" *ngIf="positionBasicInfoForm.get('position_city').value && helperService.checkSpacesString(positionBasicInfoForm.get('position_city').value) && !onCheckCityValidation() && positionBasicInfoForm.get('position_city').touched">close</mat-icon>
+          <mat-autocomplete #autocompleteCity="matAutocomplete" (closed)="onBlurCity()">
+            <mat-option *ngFor="let city of autocomplete_cities" [value]="helperService.cityNameFromAutoComplete(city.city)" (onSelectionChange)="onSelectCity(city)">
+              <span>{{city.city}}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <div class="profile-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>State</mat-label>
+          <input matInput placeholder="State" type="text" [matAutocomplete]="autocompleteState" formControlName="position_state">
+          <mat-icon matSuffix *ngIf="positionBasicInfoForm.value.position_state && helperService.checkSpacesString(positionBasicInfoForm.value.position_state) && positionBasicInfoForm.get('position_state').valid && onCheckStateValidation()">done</mat-icon>
+          <mat-icon matSuffix class="error-field" *ngIf="positionBasicInfoForm.get('position_state').value && helperService.checkSpacesString(positionBasicInfoForm.get('position_state').value) && !onCheckStateValidation() && positionBasicInfoForm.get('position_state').touched">close</mat-icon>
+          <mat-autocomplete #autocompleteState="matAutocomplete" (closed)="onBlurState()">
+          <mat-option *ngFor="let state of autocomplete_states" [value]="state.state" (onSelectionChange)="onSelectState(state)">
+            <span>{{state.state}}</span>
+          </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <div class="profile-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Country</mat-label>
+          <mat-select formControlName="position_country">
+          <mat-option value="{{null}}">{{null}}</mat-option>
+          <mat-option *ngFor="let country of countries_sort" value="{{country}}">{{country}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="profile-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Salary</mat-label>
+          <input matInput placeholder="Title" type="text" formControlName="position_salary">
+        </mat-form-field>
+      </div>
+      <div class="profile-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Position Level</mat-label>
+          <mat-select formControlName="position_level">
+            <mat-option *ngFor="let positionLevel of positionLevels" value="{{positionLevel}}">{{positionLevel}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="profile-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Position Type</mat-label>
+          <mat-select formControlName="position_type">
+            <mat-option *ngFor="let jobType of jobTypes" value="{{jobType}}">{{jobType}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="profile-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Application Type</mat-label>
+          <mat-select formControlName="position_type">
+            <mat-option *ngFor="let applicationType of applicationTypes" value="{{applicationType}}">{{applicationType}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="profile-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Application Deadline</mat-label>
+          <input matInput placeholder="MM/DD/YYYY" formControlName="position_application_deadline" pattern="\d{1,2}/\d{1,2}/\d{4}">
+          <input class="hide" [matDatepicker]="deadline" [max]="maxDate" (dateChange)="onChangeApplicationDeadline($event)">
+          <mat-datepicker-toggle matSuffix [for]="deadline"></mat-datepicker-toggle>
+          <mat-datepicker
+            touchUi
+            #deadline
+          >
+          </mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="profile-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Recruiter</mat-label>
+          <input matInput placeholder="Title" type="text" formControlName="position_recruiter">
+        </mat-form-field>
+      </div>
+      <p>In order to change the recruiter, you must provide a valid company first.</p>
+    </div>
+  </div>
+  <div class="container__full">
+    <action-button class="btn-next" type="flat" title="Next" color="primary" [disabled]="!(positionBasicInfoForm.valid && onCheckCompanyValidation() && onCheckCityValidation() && onCheckStateValidation())" (click)="goToNextPage()"></action-button>
+  </div>
+</div>
+  
+  <!-- Company Information end -->
