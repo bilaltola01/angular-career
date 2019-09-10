@@ -144,11 +144,11 @@
                           [title]="contactBtnTitle(user.contact_status)" 
                           color="primary" 
                           (click)="onClickContactBtn(user)"
-                          disabled="{{user.contact_status === 'added'}}">
+                          disabled="{{user.contact_status === 'added' || !user.contact_status}}">
           </action-button>
         </div>
 
-        <div *ngIf="user.general_info.city_id || user.general_info.state_id || (user.educationList && user.educationList.length > 0)" class="sub-container">
+        <div *ngIf="user.general_info.city_id || user.general_info.state_id || (user.general_info.education && user.general_info.education.length > 0)" class="sub-container">
           <div *ngIf="user.general_info.city_id || user.general_info.state_id" class="user-info">
             <div class="image secondary"><img src="assets/icons/ic_location_1.svg"></div>
             <div class="info">
@@ -156,34 +156,34 @@
               <h4 class="secondary-title">{{user.general_info.city}}<br *ngIf="user.general_info.city && user.general_info.state">{{user.general_info.state}}</h4>
             </div>
           </div>
-          <div class="user-info" *ngFor="let education of user.educationList">
+          <div class="user-info" *ngFor="let education of user.general_info.education">
             <div class="image secondary"><img src="assets/icons/ic_university.svg"></div>
             <div class="info">
-              <h5 class="secondary-title">{{education.school_id ? education.school_name : education.user_specified_school_name}}</h5>
+              <h5 class="secondary-title">{{education.school_id ? education.school : education.user_specified_school_name}}</h5>
               <h4 class="secondary-title">{{education.education_level}}<br *ngIf="education.major_name && education.start_date">{{helperService.convertToFormattedString(education.start_date, 'YYYY')}} - {{education.graduation_date ? helperService.convertToFormattedString(education.graduation_date, 'YYYY') : 'Present'}}</h4>
             </div>
           </div>
         </div>
 
-        <div *ngIf="user.skillList && user.skillList.length > 0" class="skills-container">
-          <h5>Skills <span class="count">{{user.skillList.length}}</span></h5>
+        <div *ngIf="user.general_info.skills && user.general_info.skills.length > 0" class="skills-container">
+          <h5>Skills <span class="count">{{user.general_info.skills.length}}</span></h5>
           <div class="skills" *ngIf="displayItemsLimit; let limit">
-            <ng-container *ngFor="let skill of user.skillList; let j = index;">
+            <ng-container *ngFor="let skill of user.general_info.skills; let j = index;">
               <simple-tag *ngIf="j < limit" type="gray" [title]="skill.skill" ellipseTag="true" [value]="skill.skill_level"></simple-tag>
             </ng-container>
             <img *ngIf="limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
-            <img *ngIf="limit < user.skillList.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
+            <img *ngIf="limit < user.general_info.skills.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
           </div>
         </div>
 
-        <div *ngIf="user.educationList && user.educationList.length > 0" class="skills-container">
-          <h5>Majors <span class="count">{{user.educationList.length}}</span></h5>
+        <div *ngIf="user.general_info.education && user.general_info.education.length > 0" class="skills-container">
+          <h5>Majors <span class="count">{{user.general_info.education.length}}</span></h5>
           <div class="skills" *ngIf="displayItemsLimit; let limit">
-            <ng-container *ngFor="let education of user.educationList; let j = index;">
+            <ng-container *ngFor="let education of user.general_info.education; let j = index;">
               <simple-tag *ngIf="j < limit" type="gray" [title]="education.major_name"></simple-tag>
             </ng-container>
             <img *ngIf="limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
-            <img *ngIf="limit < user.educationList.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
+            <img *ngIf="limit < user.general_info.education.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
           </div>
         </div>
 

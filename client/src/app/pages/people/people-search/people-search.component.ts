@@ -31,8 +31,6 @@ import { uniqBy, orderBy } from 'lodash';
 
 export interface PeopleData {
   general_info: UserGeneralInfo;
-  skillList: UserSkillItem[];
-  educationList: UserEducationItem[];
   contact_status: string;
 }
 
@@ -380,8 +378,6 @@ export class PeopleSearchComponent implements OnInit {
             dataJson.data.data.forEach((data) => {
               const peopleData: PeopleData = {
                 general_info: data,
-                skillList: null,
-                educationList: null,
                 contact_status: null
               };
               this.userList.push(peopleData);
@@ -409,53 +405,8 @@ export class PeopleSearchComponent implements OnInit {
 
   getUsersInfo(pageNo: number) {
     this.preLoadDataObject[pageNo].data.forEach((data, arrIndex) => {
-      this.getUserSkillsListByOffset(ITEMS_LIMIT, 0, arrIndex, pageNo);
-      this.getUserEducationList(arrIndex, pageNo);
-      this.checkContactStatus(arrIndex, pageNo);
+      this.checkContactStatus(arrIndex, pageNo); // TODO: Should be in the combined get request.
     });
-  }
-
-  getUserSkillsListByOffset(limit: number, offset: number, arrIndex: number, pageNo: number) {
-    this.userService.getSkillsInfo(limit, offset, this.preLoadDataObject[pageNo].data[arrIndex].general_info.user_id).subscribe(
-      dataJson => {
-        if (offset === 0) {
-          this.preLoadDataObject[pageNo].data[arrIndex].skillList = dataJson['data'];
-        } else {
-          this.preLoadDataObject[pageNo].data[arrIndex].skillList = this.preLoadDataObject[pageNo].data[arrIndex].skillList.slice().concat(dataJson['data']);
-        }
-        if (dataJson['data'].length === limit) {
-          this.getUserSkillsListByOffset(limit, offset + limit, arrIndex, pageNo);
-        } else {
-          if (pageNo === this.currentPageNumber) {
-            this.userList[arrIndex].skillList = this.preLoadDataObject[pageNo].data[arrIndex].skillList;
-          }
-        }
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-      }
-    );
-  }
-
-  getUserEducationList(arrIndex: number, pageNo: number) {
-    this.userService.getEducationInfo(this.preLoadDataObject[pageNo].data[arrIndex].general_info.user_id).subscribe(
-      dataJson => {
-        this.preLoadDataObject[pageNo].data[arrIndex].educationList = dataJson['data'];
-        if (pageNo === this.currentPageNumber) {
-          this.userList[arrIndex].educationList = this.preLoadDataObject[pageNo].data[arrIndex].educationList;
-
-          // Order by graduation date, remove duplicate majors and remove more than 3 majors.
-          this.userList[arrIndex].educationList = orderBy(this.userList[arrIndex].educationList, ['graduation_date'], ['desc']);
-          this.userList[arrIndex].educationList = uniqBy(this.userList[arrIndex].educationList, 'major_id');
-          for (let i = 3; i < this.userList[arrIndex].educationList.length; i++) {
-            this.userList[arrIndex].educationList.pop();
-          }
-        }
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-      }
-    );
   }
 
   checkContactStatus(arrIndex: number, pageNo: number) {
@@ -538,8 +489,6 @@ export class PeopleSearchComponent implements OnInit {
             dataJson.data.data.forEach((data) => {
               const peopleData: PeopleData = {
                 general_info: data,
-                skillList: null,
-                educationList: null,
                 contact_status: null
               };
               userList.push(peopleData);
@@ -592,8 +541,10 @@ export class PeopleSearchComponent implements OnInit {
       return 'Add Contact';
     } else if (contact_status === 'pending') {
       return 'Cancel Request';
-    } else {
+    } else if (contact_status === 'added') {
       return 'In Contacts';
+    } else {
+      return 'Self';
     }
   }
 
