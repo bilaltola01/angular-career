@@ -788,6 +788,15 @@ export class UserService {
     );
   }
 
+  public deleteOutgoingContactRequest(contactId: number, userId: number = this.user_id): Observable<any> {
+    return this.http.delete(this.user_service_url + `user/${userId}/contact/${contactId}/contact-request`, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
 
   private httpOptions() {
     return {

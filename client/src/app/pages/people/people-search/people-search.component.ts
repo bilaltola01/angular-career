@@ -591,27 +591,43 @@ export class PeopleSearchComponent implements OnInit {
     if (contact_status === 'none') {
       return 'Add Contact';
     } else if (contact_status === 'pending') {
-      return 'Request Sent';
+      return 'Cancel Request';
+    } else {
+      return 'In Contacts';
     }
   }
 
-  onClickContactBtn(arrIndex: number, pageNo: number) {
-    if (this.preLoadDataObject[pageNo].data[arrIndex].contact_status === 'none') {
-      this.userService.postOutgoingContactRequest(this.preLoadDataObject[pageNo].data[arrIndex].general_info.user_id).subscribe(
+  onClickContactBtn( contacteeUser ) {
+    if ( contacteeUser.contact_status === ContactStatus.none) {
+      // Send a Contact Request
+      this.userService.postOutgoingContactRequest(contacteeUser.general_info.user_id).subscribe(
         dataJson => {
           if (dataJson['data']) {
-            this.preLoadDataObject[pageNo].data[arrIndex].contact_status = ContactStatus.pending;
-            if (pageNo === this.currentPageNumber) {
-              this.userList[arrIndex].contact_status = this.preLoadDataObject[pageNo].data[arrIndex].contact_status;
-            }
+            contacteeUser.contact_status = ContactStatus.pending;
+            this.alertsService.show(`Contact request succesfully sent to ${contacteeUser.general_info.first_name} ${contacteeUser.general_info.last_name}.`, AlertType.success);
           }
         },
         error => {
           this.alertsService.show(error.message, AlertType.error);
         }
       );
+    } else if ( contacteeUser.contact_status === ContactStatus.pending) {
+      // Remove previously sent Contact Request
+      this.userService.deleteOutgoingContactRequest(contacteeUser.general_info.user_id).subscribe(
+        dataJson => {
+          if (dataJson['data']) {
+            contacteeUser.contact_status = ContactStatus.none;
+            this.alertsService.show(`Contact request succesfully retracted from ${contacteeUser.general_info.first_name} ${contacteeUser.general_info.last_name}.`, AlertType.success);
+          }
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    } else {
+      // No Action: Contact already In Contacts
+      return;
     }
   }
-
 
 }

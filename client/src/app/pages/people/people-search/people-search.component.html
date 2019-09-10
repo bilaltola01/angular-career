@@ -139,7 +139,13 @@
               <h3 *ngIf="user.general_info.title" class="title">{{user.general_info.title}}</h3>
             </div>
           </div>
-          <action-button *ngIf="user.contact_status && user.contact_status !== 'added'" class="contact-btn" type="flat" [title]="contactBtnTitle(user.contact_status)" color="primary" (click)="onClickContactBtn(i, currentPageNumber)"></action-button>
+          <action-button  class="contact-btn" 
+                          type="flat" 
+                          [title]="contactBtnTitle(user.contact_status)" 
+                          color="primary" 
+                          (click)="onClickContactBtn(user)"
+                          disabled="{{user.contact_status === 'added'}}">
+          </action-button>
         </div>
 
         <div *ngIf="user.general_info.city_id || user.general_info.state_id || (user.educationList && user.educationList.length > 0)" class="sub-container">
