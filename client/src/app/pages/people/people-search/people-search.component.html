@@ -37,7 +37,7 @@
 </form>
 
 <!-- Filter Side -->
-<form class="filter-container container__header tablet" [formGroup]="peopleForm" *ngIf="showFilterListFlag" [@enterAnimation] autocomplete="off">
+<form class="filter-container container__header tablet" [formGroup]="peopleForm" *ngIf="showFilterListFlag" autocomplete="off">
   <ng-container>
     <div class="nav-title">
       <h3 class="section-title">User Filters</h3>
@@ -126,7 +126,7 @@
 <!-- Results Side-->
 <div class="people-list-container">
   <ng-container *ngIf="userList && userList.length > 0" >
-    <div *ngFor="let user of userList; let i = index;" [@listStaggerAnimation]>
+    <div *ngFor="let user of userList; let i = index;" >
       <div class="row">
         <div class="header-container">
           <div class="user-info">

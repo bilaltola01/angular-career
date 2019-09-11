@@ -7,7 +7,6 @@ import {
   HelperService,
   UserStateService
 } from '../../../services';
-
 import {
   State,
   City,
@@ -18,16 +17,12 @@ import {
   User,
   peopleListLimit,
   UserGeneralInfo,
-  UserSkillItem,
-  UserEducationItem,
-  ITEMS_LIMIT
 } from 'src/app/models';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { trigger, style, animate, transition, query, stagger } from '@angular/animations';
 import { ActivatedRoute, Router } from '@angular/router';
-import { uniqBy, orderBy } from 'lodash';
+import { uniqBy } from 'lodash';
 
 export interface PeopleData {
   general_info: UserGeneralInfo;
@@ -44,38 +39,7 @@ export enum ContactStatus {
   selector: 'app-people-search',
   templateUrl: './people-search.component.html',
   styleUrls: ['./people-search.component.scss'],
-  animations: [
-    trigger(
-      'enterAnimation', [
-        transition(':enter', [
-          style({ transform: 'translateY(-100%)', opacity: 0 }),
-          animate('250ms', style({ transform: 'translateY(0)', opacity: 1 }))
-        ]),
-        transition(':leave', [
-          style({ transform: 'translateY(0)', opacity: 1 }),
-          animate('250ms', style({ transform: 'translateY(-100%)', opacity: 0 }))
-        ])
-      ]
-    ),
-    trigger('listStaggerAnimation', [
-      transition('* <=> *', [
-        query(
-          ':enter', [ style({ opacity: 0, transform: 'translateY(-15px)' }),
-            stagger(
-              '50ms',
-              animate(
-                '350ms ease-out',
-                style({ opacity: 1, transform: 'translateY(0px)' })
-              )
-            )],
-          { optional: true }
-        ),
-        query(':leave', animate('50ms', style({ opacity: 0 })), {
-          optional: true
-        })
-      ])
-    ])
-  ],
+
 })
 export class PeopleSearchComponent implements OnInit {
   educationLevel: string[] = EducationLevel;
@@ -176,7 +140,6 @@ export class PeopleSearchComponent implements OnInit {
     const querySearchedMajor = this.route.snapshot.queryParamMap.get('major') || null;
     const querySearchedMajorId = this.route.snapshot.queryParamMap.get('majorId') || null;
     // const querySearchedSkill = this.route.snapshot.queryParamMap.get('skill') || null; // TODO: Skill
-
 
     this.peopleForm = new FormGroup({
       'searchPeople': new FormControl(querySearchedName),
@@ -377,6 +340,8 @@ export class PeopleSearchComponent implements OnInit {
           if (dataJson['success'] && dataJson.data.data) {
             this.userList = [];
             dataJson.data.data.forEach((data) => {
+              // Remove duplicate majors
+              data.education = uniqBy(data.education, 'major_id');
               const peopleData: PeopleData = {
                 general_info: data,
                 contact_status: null
