@@ -24,7 +24,8 @@ import {
   UserGeneralInfo,
   PositionLevel,
   JobType,
-  ApplicationType
+  ApplicationType,
+  User
 } from 'src/app/models';
 
 @Component({
@@ -95,6 +96,7 @@ export class CreatePositionComponent implements OnInit {
   autocomplete_companies: Company[] = [];
   autocomplete_cities: City[] = [];
   autocomplete_states: State[] = [];
+  autocomplete_recruiters: User[] = [];
 
   // Position information
   position_name: string;
@@ -108,7 +110,7 @@ export class CreatePositionComponent implements OnInit {
   position_type: string;
   position_application_type: string;
   position_application_deadline: string;
-  position_recruiter: UserGeneralInfo;
+  position_recruiter: User;
 
   selectedPageIndex: number;
   isNavMenuOpened: boolean;
@@ -188,6 +190,7 @@ export class CreatePositionComponent implements OnInit {
     this.autocomplete_companies = [];
     this.autocomplete_cities = [];
     this.autocomplete_states = [];
+    this.autocomplete_recruiters = [];
 
     this.positionBasicInfoForm = new FormGroup({
       position_company: new FormControl(this.position_company ? this.position_company.company_name : null, [Validators.required]),
@@ -310,6 +313,29 @@ export class CreatePositionComponent implements OnInit {
         this.position_application_deadline = position_application_deadline ? this.helperService.checkSpacesString(position_application_deadline) : null;
       }
     );
+
+    this.positionBasicInfoForm.get('position_recruiter').valueChanges.subscribe((position_recruiter) => {
+      if (position_recruiter && this.helperService.checkSpacesString(position_recruiter)) {
+        this.autoCompleteService.autoComplete(position_recruiter, 'users').subscribe(
+          dataJson => {
+            if (dataJson['success']) {
+              this.autocomplete_recruiters = dataJson['data'];
+              if (this.autocomplete_recruiters.length === 0) {
+                this.position_recruiter = null;
+              }
+            }
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+            this.autocomplete_recruiters = [];
+            this.position_recruiter = null;
+          }
+        );
+      } else {
+        this.autocomplete_recruiters = [];
+        this.position_recruiter = null;
+      }
+    });
   }
 
   onSelectCompany(company: Company) {
@@ -388,6 +414,34 @@ export class CreatePositionComponent implements OnInit {
     if (value && this.helperService.checkSpacesString(value)) {
       if (this.position_state) {
         return value === this.position_state.state ? true : false;
+      } else {
+        return false;
+      }
+    } else {
+      return true;
+    }
+  }
+
+  onSelectRecruiter(recruiter: User) {
+    this.position_recruiter = recruiter;
+  }
+
+  onBlurRecruiter() {
+    const value = this.positionBasicInfoForm.value.position_recruiter;
+    if (value && this.helperService.checkSpacesString(value)) {
+      if (this.position_recruiter && value !== `${this.position_recruiter.first_name} ${this.position_recruiter.last_name}`) {
+        this.position_recruiter = null;
+      }
+    } else {
+      this.position_recruiter = null;
+    }
+  }
+
+  onCheckRecruiterValidation(): boolean {
+    const value = this.positionBasicInfoForm.value.position_recruiter;
+    if (value && this.helperService.checkSpacesString(value)) {
+      if (this.position_recruiter) {
+        return value === `${this.position_recruiter.first_name} ${this.position_recruiter.last_name}` ? true : false;
       } else {
         return false;
       }

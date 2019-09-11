@@ -149,14 +149,22 @@
       <div class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
           <mat-label>Recruiter</mat-label>
-          <input matInput placeholder="Title" type="text" formControlName="position_recruiter">
+          <input matInput placeholder="Recruiter" type="text" [matAutocomplete]="autocompleteRecruiter" formControlName="position_recruiter">
+          <mat-icon matSuffix *ngIf="positionBasicInfoForm.value.position_recruiter && helperService.checkSpacesString(positionBasicInfoForm.value.position_recruiter) && positionBasicInfoForm.get('position_recruiter').valid && onCheckRecruiterValidation()">done</mat-icon>
+          <mat-icon matSuffix class="error-field" *ngIf="positionBasicInfoForm.get('position_recruiter').value && helperService.checkSpacesString(positionBasicInfoForm.get('position_recruiter').value) && !onCheckRecruiterValidation() && positionBasicInfoForm.get('position_recruiter').touched">close</mat-icon>
+          <mat-autocomplete #autocompleteRecruiter="matAutocomplete" (closed)="onBlurRecruiter()">
+          <mat-option *ngFor="let recruiter of autocomplete_recruiters" [value]="recruiter.first_name + (recruiter.last_name ? ' ' + recruiter.last_name : '')"(onSelectionChange)="onSelectRecruiter(recruiter)">
+            <img [src]="recruiter.photo ? recruiter.photo : 'assets/icons/no_photo.png'">
+            <span>{{recruiter.first_name + (recruiter.last_name ? ' ' + recruiter.last_name : '')}}</span>
+          </mat-option>
+          </mat-autocomplete>
         </mat-form-field>
       </div>
-      <p>In order to change the recruiter, you must provide a valid company first.</p>
+      <p class="headup">In order to change the recruiter, you must provide a valid company first.</p>
     </div>
   </div>
   <div class="container__full">
-    <action-button class="btn-next" type="flat" title="Next" color="primary" [disabled]="!(positionBasicInfoForm.valid && onCheckCompanyValidation() && onCheckCityValidation() && onCheckStateValidation())" (click)="goToNextPage()"></action-button>
+    <action-button class="btn-next" type="flat" title="Next" color="primary" [disabled]="!(positionBasicInfoForm.valid && onCheckCompanyValidation() && onCheckCityValidation() && onCheckStateValidation() && onCheckRecruiterValidation())" (click)="goToNextPage()"></action-button>
   </div>
 </div>
   
