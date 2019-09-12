@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import {MatDatepicker} from '@angular/material/datepicker';
 import {
   AutoCompleteService,
@@ -32,8 +32,16 @@ import {
   MajorCategory,
   Skill,
   Interest,
-  School
+  School,
+  Industry
 } from 'src/app/models';
+
+export interface PreferredWorkExperience {
+  industry: Industry;
+  years: number;
+  description: string;
+  skills_trained: Skill[];
+}
 
 @Component({
   selector: 'app-create-position',
@@ -95,7 +103,7 @@ export class CreatePositionComponent implements OnInit {
   nameOverviewForm: FormGroup;
   positionBasicInfoForm: FormGroup;
   preferredEducationForm: FormGroup;
-  preferredWorkExperienceForm: FormGroup;
+  preferredWorkExperienceFormArray: FormArray;
   skillsForm: FormGroup;
   interestsForm: FormGroup;
   schoolRestrictionsForm: FormGroup;
@@ -113,6 +121,8 @@ export class CreatePositionComponent implements OnInit {
   autocomplete_preferred_skills: Skill[] = [];
   autocomplete_preferred_interests: Interest[] = [];
   autocomplete_preferred_schools: School[] = [];
+  autocomplete_industries: Industry[][] = [];
+  autocomplete_skills_trained: Skill[][] = [];
 
   // Position information
   position_name: string;
@@ -136,6 +146,8 @@ export class CreatePositionComponent implements OnInit {
   preferred_skills: Skill[];
   preferred_interests: Interest[];
   preferred_schools: School[];
+
+  preferred_work_experiences: PreferredWorkExperience[];
 
   selectedPageIndex: number;
   isNavMenuOpened: boolean;
@@ -166,7 +178,7 @@ export class CreatePositionComponent implements OnInit {
         this.initPreferredEducationForm();
         break;
       case 3:
-        this.initPreferredWorkExperienceForm();
+        this.initPreferredWorkExperienceFormArray();
         break;
       case 4:
         this.initSkillsForm();
@@ -204,7 +216,7 @@ export class CreatePositionComponent implements OnInit {
         this.initPreferredEducationForm();
         break;
       case 3:
-        this.initPreferredWorkExperienceForm();
+        this.initPreferredWorkExperienceFormArray();
         break;
       case 4:
         this.initSkillsForm();
@@ -635,9 +647,132 @@ export class CreatePositionComponent implements OnInit {
   /**
   * Preferred Work Experience Form
   */
-  initPreferredWorkExperienceForm() {
-    
+  initPreferredWorkExperienceFormArray() {
+    this.autocomplete_industries = [];
+    this.autocomplete_skills_trained = [];
+
+    if (!this.preferred_work_experiences) {
+      this.preferred_work_experiences.push({
+        industry: null,
+        years: null,
+        description: null,
+        skills_trained: null
+      });
+      this.addPreferredWorkExperienceFormGroup(null);
+    } else {
+      this.preferred_work_experiences.forEach((experience, index) => {
+        this.addPreferredWorkExperienceFormGroup(experience, index);
+      });
+    }
   }
+
+  addPreferredWorkExperienceFormGroup(experience: PreferredWorkExperience, arrIndex: number = 0) {
+    this.autocomplete_industries.push([]);
+    this.autocomplete_skills_trained.push([]);
+
+    const experienceForm = new FormGroup({
+      industry: new FormControl(experience && experience.industry ? experience.industry.industry_name : ''),
+      years: new FormControl(experience && experience.years ? experience.years : ''),
+      description: new FormControl(experience && experience.description ? experience.description : ''),
+      skills_trained: new FormControl('')
+    });
+
+    experienceForm.get('industry').valueChanges.subscribe((industry) => {
+      if (industry && this.helperService.checkSpacesString(industry)) {
+        this.autoCompleteService.autoComplete(industry, 'industries').subscribe(
+          dataJson => {
+            if (dataJson['success']) {
+              this.autocomplete_industries[arrIndex] = dataJson['data'];
+            }
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+            this.autocomplete_industries[arrIndex] = [];
+          }
+        );
+      } else {
+        this.autocomplete_industries[arrIndex] = [];
+      }
+    });
+    experienceForm.get('years').valueChanges.subscribe(
+      (years) => {
+        this.preferred_work_experiences[arrIndex].years = years ? parseInt(years, 10) : null;
+      }
+    );
+    experienceForm.get('description').valueChanges.subscribe(
+      (description) => {
+        this.preferred_work_experiences[arrIndex].description = description ? this.helperService.checkSpacesString(description) : null;
+      }
+    );
+    experienceForm.get('skills_trained').valueChanges.subscribe((skills_trained) => {
+      if (skills_trained && this.helperService.checkSpacesString(skills_trained)) {
+        this.autoCompleteService.autoComplete(skills_trained, 'industries').subscribe(
+          dataJson => {
+            if (dataJson['success']) {
+              this.autocomplete_skills_trained[arrIndex] = dataJson['data'];
+            }
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+            this.autocomplete_skills_trained[arrIndex] = [];
+          }
+        );
+      } else {
+        this.autocomplete_skills_trained[arrIndex] = [];
+      }
+    });
+
+    this.preferredWorkExperienceFormArray.push(experienceForm);
+  }
+
+  onSelectIndustry(industry: Industry, arrIndex: number) {
+    this.preferred_work_experiences[arrIndex].industry = industry;
+  }
+
+  onBlurIndustry(arrIndex: number) {
+    const value = this.preferredWorkExperienceFormArray.value[arrIndex].industry;
+    if (value && this.helperService.checkSpacesString(value)) {
+      if (this.preferred_work_experiences[arrIndex].industry && value !== this.preferred_work_experiences[arrIndex].industry.industry_name) {
+        this.preferred_work_experiences[arrIndex].industry = null;
+      }
+    } else {
+      this.preferred_work_experiences[arrIndex].industry = null;
+    }
+  }
+
+  onCheckIndustryValidation(arrIndex: number): boolean {
+    const value = this.preferredWorkExperienceFormArray.value[arrIndex].industry;
+    if (value && this.helperService.checkSpacesString(value)) {
+      if (this.preferred_work_experiences[arrIndex].industry) {
+        return value === this.preferred_work_experiences[arrIndex].industry.industry_name ? true : false;
+      } else {
+        return false;
+      }
+    } else {
+      return true;
+    }
+  }
+
+  onSelectSkillsTrained(formIndex: number, skill: Skill) {
+    if (!this.preferred_work_experiences[formIndex].skills_trained) {
+      this.preferred_work_experiences[formIndex].skills_trained = [skill];
+    } else {
+      const filter = this.preferred_work_experiences[formIndex].skills_trained.filter(value => value.skill_id === skill.skill_id);
+      if (filter.length === 0) {
+        this.preferred_work_experiences[formIndex].skills_trained.push(skill);
+      }
+    }
+  }
+
+  onRemoveSkillsTrained(formIndex: number, skill: Skill, arrIndex: number) {
+    if (this.preferred_work_experiences[formIndex].skills_trained[arrIndex].skill_id === skill.skill_id) {
+      this.preferred_work_experiences[formIndex].skills_trained.splice(arrIndex, 1);
+    }
+    if (this.preferred_work_experiences[formIndex].skills_trained.length === 0) {
+      this.preferred_work_experiences[formIndex].skills_trained = null;
+    }
+  }
+
 
   /**
    * Skills Form
@@ -787,7 +922,7 @@ export class CreatePositionComponent implements OnInit {
       search_preferred_school: new FormControl('')
     });
 
-    this.preferredEducationForm.get('search_preferred_school').valueChanges.subscribe((search_preferred_school) => {
+    this.schoolRestrictionsForm.get('search_preferred_school').valueChanges.subscribe((search_preferred_school) => {
       if (search_preferred_school && this.helperService.checkSpacesString(search_preferred_school)) {
         this.autoCompleteService.autoComplete(search_preferred_school, 'schools').subscribe(
           dataJson => {
