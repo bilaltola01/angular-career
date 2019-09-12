@@ -31,7 +31,8 @@ import {
   Levels,
   MajorCategory,
   Skill,
-  Interest
+  Interest,
+  School
 } from 'src/app/models';
 
 @Component({
@@ -111,6 +112,7 @@ export class CreatePositionComponent implements OnInit {
   autocomplete_minimum_skills: Skill[] = [];
   autocomplete_preferred_skills: Skill[] = [];
   autocomplete_preferred_interests: Interest[] = [];
+  autocomplete_preferred_schools: School[] = [];
 
   // Position information
   position_name: string;
@@ -133,6 +135,7 @@ export class CreatePositionComponent implements OnInit {
   minimum_skills: Skill[];
   preferred_skills: Skill[];
   preferred_interests: Interest[];
+  preferred_schools: School[];
 
   selectedPageIndex: number;
   isNavMenuOpened: boolean;
@@ -648,7 +651,7 @@ export class CreatePositionComponent implements OnInit {
       search_preferred_skill: new FormControl('')
     });
 
-    this.preferredEducationForm.get('search_minimum_skill').valueChanges.subscribe((search_minimum_skill) => {
+    this.skillsForm.get('search_minimum_skill').valueChanges.subscribe((search_minimum_skill) => {
       if (search_minimum_skill && this.helperService.checkSpacesString(search_minimum_skill)) {
         this.autoCompleteService.autoComplete(search_minimum_skill, 'skills').subscribe(
           dataJson => {
@@ -666,7 +669,7 @@ export class CreatePositionComponent implements OnInit {
       }
     });
 
-    this.preferredEducationForm.get('search_preferred_skill').valueChanges.subscribe((search_preferred_skill) => {
+    this.skillsForm.get('search_preferred_skill').valueChanges.subscribe((search_preferred_skill) => {
       if (search_preferred_skill && this.helperService.checkSpacesString(search_preferred_skill)) {
         this.autoCompleteService.autoComplete(search_preferred_skill, 'skills').subscribe(
           dataJson => {
@@ -735,7 +738,7 @@ export class CreatePositionComponent implements OnInit {
       search_preferred_interest: new FormControl('')
     });
 
-    this.preferredEducationForm.get('search_preferred_interest').valueChanges.subscribe((search_preferred_interest) => {
+    this.interestsForm.get('search_preferred_interest').valueChanges.subscribe((search_preferred_interest) => {
       if (search_preferred_interest && this.helperService.checkSpacesString(search_preferred_interest)) {
         this.autoCompleteService.autoComplete(search_preferred_interest, 'interests').subscribe(
           dataJson => {
@@ -778,7 +781,49 @@ export class CreatePositionComponent implements OnInit {
    * School Restrictions Form
    */
   initSchoolRestrictionsForm() {
+    this.autocomplete_preferred_schools = [];
 
+    this.schoolRestrictionsForm = new FormGroup({
+      search_preferred_school: new FormControl('')
+    });
+
+    this.preferredEducationForm.get('search_preferred_school').valueChanges.subscribe((search_preferred_school) => {
+      if (search_preferred_school && this.helperService.checkSpacesString(search_preferred_school)) {
+        this.autoCompleteService.autoComplete(search_preferred_school, 'schools').subscribe(
+          dataJson => {
+            if (dataJson['success']) {
+              this.autocomplete_preferred_schools = dataJson['data'];
+            }
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+            this.autocomplete_preferred_schools = [];
+          }
+        );
+      } else {
+        this.autocomplete_preferred_schools = [];
+      }
+    });
+  }
+
+  onSelectPreferredSchool(school: School) {
+    if (!this.preferred_schools) {
+      this.preferred_schools = [school];
+    } else {
+      const filter = this.preferred_schools.filter(value => value.school_id === school.school_id);
+      if (filter.length === 0) {
+        this.preferred_schools.push(school);
+      }
+    }
+  }
+
+  onRemovePreferredSchool(school: School, arrIndex: number) {
+    if (this.preferred_schools[arrIndex].school_id === school.school_id) {
+      this.preferred_schools.splice(arrIndex, 1);
+    }
+    if (this.preferred_schools.length === 0) {
+      this.preferred_schools = null;
+    }
   }
 
 }
