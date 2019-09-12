@@ -1,26 +1,25 @@
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError, map } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class ScoreService {
+export class MatchingService {
   private user_id = -1;
   helper = new JwtHelperService();
+  private skill_url = `${environment.serverUrl}/${environment.matching_service}/api/${environment.api_version}/user`;
+  private company_url = `${environment.serverUrl}/${environment.company_service}/api/${environment.api_version}/company`;
 
-  private fitscore_service_url = `${environment.serverUrl}/${environment.score_service}/api/${environment.api_version}/user/positions/calculated-fitscores`;
-  private skill_vector_url = `${environment.serverUrl}/${environment.score_service}/api/${environment.api_version}/user`;
   constructor(private http: HttpClient) {
     if (this.isLoggedIn()) {
       const token = localStorage.getItem('token');
       this.user_id = this.helper.decodeToken(token).user_id;
     }
-
-  }
-  public isLoggedIn(): boolean {
+   }
+   public isLoggedIn(): boolean {
     const token = localStorage.getItem('token');
     let isLoggedIn = false;
     if (token) {
@@ -38,12 +37,11 @@ export class ScoreService {
     };
   }
 
-// to get the fitscore of position list array
-  public getUpdatedfitscores(queryParam) {
-    let queryUrl = `${this.fitscore_service_url}`;
-    console.log(queryUrl);
+
+  getMatchedSkills(queryParam) {
+    let queryUrl = `${this.skill_url}`;
     if (queryParam) {
-      queryUrl = `${queryUrl}?userId=${this.user_id}&${queryParam}`;
+      queryUrl = `${queryUrl}/${this.user_id}/position/${queryParam}/matching-skills`;
     }
     return this.http.get(queryUrl, this.authHttpOptions())
       .pipe(
@@ -54,13 +52,11 @@ export class ScoreService {
         ),
         catchError(this.handleError)
       );
-
   }
-  // to get the fitscore of postion
-  public getUpdatedfitscore(queryParam) {
-    let queryUrl = `${this.fitscore_service_url}`;
+  getMissingSkills(queryParam) {
+    let queryUrl = `${this.skill_url}`;
     if (queryParam) {
-      queryUrl = `${queryUrl}?userId=${this.user_id}&positionList=${queryParam}`;
+      queryUrl = `${queryUrl}/${this.user_id}/position/${queryParam}/missing-skills`;
     }
     return this.http.get(queryUrl, this.authHttpOptions())
       .pipe(
@@ -71,17 +67,32 @@ export class ScoreService {
         ),
         catchError(this.handleError)
       );
-
   }
-
-  public putSkillVector() {
-    const queryUrl = `${this.skill_vector_url}/${this.user_id}/skills-vector`;
-    return this.http.put(queryUrl, {}, this.authHttpOptions())
+  getinterests(queryParam) {
+    let queryUrl = `${this.skill_url}`;
+    if (queryParam) {
+      queryUrl = `${queryUrl}/${this.user_id}/position/${queryParam}/matching-interests`;
+    }
+    return this.http.get(queryUrl, this.authHttpOptions())
       .pipe(
         map(
           data => {
             return { success: true, message: 'Success!', data: data };
-
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+  getCompanyData(queryParam) {
+    let queryUrl = `${this.company_url}`;
+    if (queryParam) {
+      queryUrl = `${queryUrl}/${queryParam}`;
+    }
+    return this.http.get(queryUrl, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return { success: true, message: 'Success!', data: data };
           }
         ),
         catchError(this.handleError)

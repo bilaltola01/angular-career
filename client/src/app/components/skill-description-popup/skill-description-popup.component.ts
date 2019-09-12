@@ -14,14 +14,9 @@ export class SkillDescriptionPopupComponent  {
 
   constructor(public dialogRef: MatDialogRef<SkillDescriptionPopupComponent>, @Inject(MAT_DIALOG_DATA) public data,
   public dialog: MatDialog) {
-    // this.skillLevelDescription = data.SkillLevelDescription;
-    // this.call();
   }
 
   onClose(): void {
     this.dialogRef.close();
-  }
-  call() {
-    console.log(this.skillLevelDescription );
   }
 }

@@ -25,6 +25,7 @@ import {
 } from 'src/app/models';
 import { AddSkillPopupComponent } from 'src/app/components/add-skill-popup/add-skill-popup.component';
 import { count } from 'rxjs/operators';
+import { Router } from '@angular/router';
 export interface DialogData {
   data: any;
 }
@@ -80,7 +81,7 @@ export class PositionSearchComponent implements OnInit {
   preLoadDataObject = {};
   updatedFitscoreList = [];
 
-  constructor(private autoCompleteService: AutoCompleteService,
+  constructor(private autoCompleteService: AutoCompleteService, private router: Router,
     private alertsService: AlertsService, private positionService: PositionService, private scoreService: ScoreService,
     private cartService: CartService, private applicationService: ApplicationService, public dialog: MatDialog) {
     this.updateSkillCallback = this.updateSkillCallback.bind(this);
@@ -94,7 +95,7 @@ export class PositionSearchComponent implements OnInit {
 
   }
   onResize(event) {
-    this.breakpoint = (event.target.innerWidth <= 500) ? 2 : 4;
+    this.breakpoint = (event.target.innerWidth <= 500) ? 2 : 6;
   }
 
   toggleTabMenuOpen() {
@@ -536,8 +537,6 @@ export class PositionSearchComponent implements OnInit {
         }
       );
     }
-
-
   }
 
   getPositionIds() {
@@ -551,7 +550,7 @@ export class PositionSearchComponent implements OnInit {
   updateSkillCallback() {
     this.scoreService.putSkillVector().subscribe();
     const positionIds = this.getPositionIds();
-    this.scoreService.getUpdatedfitscore(positionIds).subscribe(
+    this.scoreService.getUpdatedfitscores(positionIds).subscribe(
       dataJson => {
         this.updatedFitscoreList = [...dataJson.data['fitscores']];
         this.updatedFitscore();
@@ -563,7 +562,7 @@ export class PositionSearchComponent implements OnInit {
       if (index > -1) {
         this.positionList[index]['true_fitscore_info'] = this.updatedFitscoreList[i];
       } else {
-        index = this.preLoadDataObject[this.currentPageNumber + 1].findIndex(position => position.position_id === this.updatedFitscoreList[i].position_id);
+        index = this.preLoadDataObject[this.currentPageNumber + 1].data.data.findIndex(position => position.position_id === this.updatedFitscoreList[i].position_id);
         this.preLoadDataObject[this.currentPageNumber + 1].data.data[index]['true_fitscore_info'] = this.updatedFitscoreList[i];
       }
     }
