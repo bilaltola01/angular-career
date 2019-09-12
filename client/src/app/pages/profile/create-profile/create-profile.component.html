@@ -77,10 +77,7 @@
           #fileInput>
 
         <img alt="Profile Image" src="{{ photo_url || basicInfoForm.value.photo || 'assets/icons/no_photo.png'}}">
-        <img *ngIf="!photo_url" class="image-upload" alt="Upload Image" src="assets/icons/ic_image_upload.svg" (click)="fileInput.click()">
-        <div *ngIf="photo_url" class="image-loading">
-          <mat-spinner [diameter]="50"></mat-spinner>
-        </div>
+        <img class="image-upload" alt="Upload Image" src="assets/icons/ic_image_upload.svg" (click)="fileInput.click()">
       </div>
       <h3 class="profile-form__title">
         BASIC INFORMATION
