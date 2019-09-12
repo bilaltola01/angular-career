@@ -29,7 +29,9 @@ import {
   Major,
   Level,
   Levels,
-  MajorCategory
+  MajorCategory,
+  Skill,
+  Interest
 } from 'src/app/models';
 
 @Component({
@@ -47,8 +49,7 @@ export class CreatePositionComponent implements OnInit {
     'Experience',
     'Skills',
     'Interests',
-    'School Restrictions',
-    'T & C'
+    'School Restrictions'
   ];
   progressWidth = [
     {
@@ -74,10 +75,6 @@ export class CreatePositionComponent implements OnInit {
     {
       label: 70,
       width: 600 / 8 - 100 / 16
-    },
-    {
-      label: 80,
-      width: 700 / 8 - 100 / 16
     },
     {
       label: 100,
@@ -111,6 +108,9 @@ export class CreatePositionComponent implements OnInit {
   autocomplete_majors: Major[] = [];
   autocomplete_major_categories: MajorCategory[] = [];
   autocomplete_education_levels: Level[] = [];
+  autocomplete_minimum_skills: Skill[] = [];
+  autocomplete_preferred_skills: Skill[] = [];
+  autocomplete_preferred_interests: Interest[] = [];
 
   // Position information
   position_name: string;
@@ -129,6 +129,10 @@ export class CreatePositionComponent implements OnInit {
   preferred_education_levels: Level[];
   preferred_education_majors: Major[];
   preferred_education_major_categories: MajorCategory[];
+
+  minimum_skills: Skill[];
+  preferred_skills: Skill[];
+  preferred_interests: Interest[];
 
   selectedPageIndex: number;
   isNavMenuOpened: boolean;
@@ -636,14 +640,138 @@ export class CreatePositionComponent implements OnInit {
    * Skills Form
    */
   initSkillsForm() {
+    this.autocomplete_minimum_skills = [];
+    this.autocomplete_preferred_skills = [];
 
+    this.skillsForm = new FormGroup({
+      search_minimum_skill: new FormControl(''),
+      search_preferred_skill: new FormControl('')
+    });
+
+    this.preferredEducationForm.get('search_minimum_skill').valueChanges.subscribe((search_minimum_skill) => {
+      if (search_minimum_skill && this.helperService.checkSpacesString(search_minimum_skill)) {
+        this.autoCompleteService.autoComplete(search_minimum_skill, 'skills').subscribe(
+          dataJson => {
+            if (dataJson['success']) {
+              this.autocomplete_minimum_skills = dataJson['data'];
+            }
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+            this.autocomplete_minimum_skills = [];
+          }
+        );
+      } else {
+        this.autocomplete_minimum_skills = [];
+      }
+    });
+
+    this.preferredEducationForm.get('search_preferred_skill').valueChanges.subscribe((search_preferred_skill) => {
+      if (search_preferred_skill && this.helperService.checkSpacesString(search_preferred_skill)) {
+        this.autoCompleteService.autoComplete(search_preferred_skill, 'skills').subscribe(
+          dataJson => {
+            if (dataJson['success']) {
+              this.autocomplete_preferred_skills = dataJson['data'];
+            }
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+            this.autocomplete_preferred_skills = [];
+          }
+        );
+      } else {
+        this.autocomplete_preferred_skills = [];
+      }
+    });
+  }
+
+  onSelectMinimumSkill(skill: Skill) {
+    if (!this.minimum_skills) {
+      this.minimum_skills = [skill];
+    } else {
+      const filter = this.minimum_skills.filter(value => value.skill_id === skill.skill_id);
+      if (filter.length === 0) {
+        this.minimum_skills.push(skill);
+      }
+    }
+  }
+
+  onRemoveMinimumSkill(skill: Skill, arrIndex: number) {
+    if (this.minimum_skills[arrIndex].skill_id === skill.skill_id) {
+      this.minimum_skills.splice(arrIndex, 1);
+    }
+    if (this.minimum_skills.length === 0) {
+      this.minimum_skills = null;
+    }
+  }
+
+  onSelectPreferredSkill(skill: Skill) {
+    if (!this.preferred_skills) {
+      this.preferred_skills = [skill];
+    } else {
+      const filter = this.preferred_skills.filter(value => value.skill_id === skill.skill_id);
+      if (filter.length === 0) {
+        this.preferred_skills.push(skill);
+      }
+    }
+  }
+
+  onRemovePreferredSkill(skill: Skill, arrIndex: number) {
+    if (this.preferred_skills[arrIndex].skill_id === skill.skill_id) {
+      this.preferred_skills.splice(arrIndex, 1);
+    }
+    if (this.preferred_skills.length === 0) {
+      this.preferred_skills = null;
+    }
   }
 
   /**
   * Interests Form
   */
   initInterestsForm() {
+    this.autocomplete_preferred_interests = [];
 
+    this.interestsForm = new FormGroup({
+      search_preferred_interest: new FormControl('')
+    });
+
+    this.preferredEducationForm.get('search_preferred_interest').valueChanges.subscribe((search_preferred_interest) => {
+      if (search_preferred_interest && this.helperService.checkSpacesString(search_preferred_interest)) {
+        this.autoCompleteService.autoComplete(search_preferred_interest, 'interests').subscribe(
+          dataJson => {
+            if (dataJson['success']) {
+              this.autocomplete_preferred_interests = dataJson['data'];
+            }
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+            this.autocomplete_preferred_interests = [];
+          }
+        );
+      } else {
+        this.autocomplete_preferred_interests = [];
+      }
+    });
+  }
+
+  onSelectPreferredInterest(interest: Interest) {
+    if (!this.preferred_interests) {
+      this.preferred_interests = [interest];
+    } else {
+      const filter = this.preferred_interests.filter(value => value.interest_id === interest.interest_id);
+      if (filter.length === 0) {
+        this.preferred_interests.push(interest);
+      }
+    }
+  }
+
+  onRemovePreferredInterest(interest: Interest, arrIndex: number) {
+    if (this.preferred_interests[arrIndex].interest_id === interest.interest_id) {
+      this.preferred_interests.splice(arrIndex, 1);
+    }
+    if (this.preferred_interests.length === 0) {
+      this.preferred_interests = null;
+    }
   }
 
   /**
