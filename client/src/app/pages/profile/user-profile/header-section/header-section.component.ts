@@ -62,6 +62,7 @@ export class HeaderSectionComponent implements OnInit {
   profileStatuses = ProfileStatuses;
 
   maxDate = new Date();
+  photo_url: string;
 
   constructor(
     private helperService: HelperService,
@@ -151,6 +152,7 @@ export class HeaderSectionComponent implements OnInit {
     this.autocomplete_states = [];
     this.temp_city = null;
     this.temp_state = null;
+    this.photo_url = null;
 
     this.generalInfoForm = new FormGroup({
       photo: new FormControl(this.generalInfo && this.generalInfo.photo ? this.generalInfo.photo : ''),
@@ -390,13 +392,19 @@ export class HeaderSectionComponent implements OnInit {
 
       const file = event.target.files[0];
 
+      const reader = new FileReader();
+      reader.onload = (reader_event: any) => {
+        this.photo_url = reader_event.target.result;
+      };
+      reader.readAsDataURL(file);
+
       this.userService.getSignedPhotoUrl(file).subscribe((signedPhoto) => {
         this.userService.uploadPhotoToS3(file, signedPhoto.data.signedUrl, signedPhoto.data.url)
           .subscribe((response) => {
             this.generalInfoForm.patchValue({
                 photo: response.data
             });
-
+            this.photo_url = null;
             this.photoStateService.setPhoto(response.data);
           }, err => {
             this.alertsService.show(err.message, AlertType.error);

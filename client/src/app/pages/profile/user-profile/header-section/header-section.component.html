@@ -11,9 +11,9 @@
         #fileInput
       >
 
-      <div [ngClass]="{'hover-img': editMode}" (click)="fileInput.click()">
+      <div [ngClass]="{'hover-img': currentPage === 'profile' && editMode}" (click)="fileInput.click()">
         <img class="user-photo"
-          src="{{(currentPage === 'profile' && editMode ? generalInfoForm.get('photo').value : generalInfo.photo) || 'assets/icons/no_photo.png'}}"
+          src="{{(currentPage === 'profile' && editMode ? (photo_url || generalInfoForm.get('photo').value) : generalInfo.photo) || 'assets/icons/no_photo.png'}}"
           alt="Profile Image"
         >
       </div>
