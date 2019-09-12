@@ -25,7 +25,11 @@ import {
   PositionLevel,
   JobType,
   ApplicationType,
-  User
+  User,
+  Major,
+  Level,
+  Levels,
+  MajorCategory
 } from 'src/app/models';
 
 @Component({
@@ -49,31 +53,31 @@ export class CreatePositionComponent implements OnInit {
   progressWidth = [
     {
       label: 10,
-      width: 100 / 9 - 100 / 18
+      width: 100 / 8 - 100 / 16
     },
     {
       label: 20,
-      width: 200 / 9 - 100 / 18
+      width: 200 / 8 - 100 / 16
     },
     {
       label: 30,
-      width: 300 / 9 - 100 / 18
+      width: 300 / 8 - 100 / 16
     },
     {
       label: 50,
-      width: 400 / 9 - 100 / 18
+      width: 400 / 8 - 100 / 16
     },
     {
       label: 60,
-      width: 500 / 9 - 100 / 18
+      width: 500 / 8 - 100 / 16
     },
     {
       label: 70,
-      width: 600 / 9 - 100 / 18
+      width: 600 / 8 - 100 / 16
     },
     {
       label: 80,
-      width: 700 / 9 - 100 / 18
+      width: 700 / 8 - 100 / 16
     },
     {
       label: 100,
@@ -87,16 +91,26 @@ export class CreatePositionComponent implements OnInit {
   positionLevels = PositionLevel;
   jobTypes = JobType;
   applicationTypes = ApplicationType;
+  education_levels = Levels;
 
   // FormGroups
   nameOverviewForm: FormGroup;
   positionBasicInfoForm: FormGroup;
+  preferredEducationForm: FormGroup;
+  preferredWorkExperienceForm: FormGroup;
+  skillsForm: FormGroup;
+  interestsForm: FormGroup;
+  schoolRestrictionsForm: FormGroup;
+  termsAndConditionsForm: FormGroup;
 
   // autocomplete lists
   autocomplete_companies: Company[] = [];
   autocomplete_cities: City[] = [];
   autocomplete_states: State[] = [];
   autocomplete_recruiters: User[] = [];
+  autocomplete_majors: Major[] = [];
+  autocomplete_major_categories: MajorCategory[] = [];
+  autocomplete_education_levels: Level[] = [];
 
   // Position information
   position_name: string;
@@ -111,6 +125,10 @@ export class CreatePositionComponent implements OnInit {
   position_application_type: string;
   position_application_deadline: string;
   position_recruiter: User;
+
+  preferred_education_levels: Level[];
+  preferred_education_majors: Major[];
+  preferred_education_major_categories: MajorCategory[];
 
   selectedPageIndex: number;
   isNavMenuOpened: boolean;
@@ -137,6 +155,21 @@ export class CreatePositionComponent implements OnInit {
       case 1:
         this.initPositionBasicInfoForm();
         break;
+      case 2:
+        this.initPreferredEducationForm();
+        break;
+      case 3:
+        this.initPreferredWorkExperienceForm();
+        break;
+      case 4:
+        this.initSkillsForm();
+        break;
+      case 5:
+        this.initInterestsForm();
+        break;
+      case 6:
+        this.initSchoolRestrictionsForm();
+        break;
       default:
         break;
     }
@@ -159,6 +192,21 @@ export class CreatePositionComponent implements OnInit {
         break;
       case 1:
         this.initPositionBasicInfoForm();
+        break;
+      case 2:
+        this.initPreferredEducationForm();
+        break;
+      case 3:
+        this.initPreferredWorkExperienceForm();
+        break;
+      case 4:
+        this.initSkillsForm();
+        break;
+      case 5:
+        this.initInterestsForm();
+        break;
+      case 6:
+        this.initSchoolRestrictionsForm();
         break;
       default:
         break;
@@ -456,6 +504,153 @@ export class CreatePositionComponent implements OnInit {
     } else {
       this.positionBasicInfoForm.get('position_application_deadline').setValue('');
     }
+  }
+
+  /**
+   * Preferred Education Form
+   */
+  initPreferredEducationForm() {
+    this.autocomplete_education_levels = [];
+    this.autocomplete_majors = [];
+    this.autocomplete_major_categories = [];
+
+    this.preferredEducationForm = new FormGroup({
+      search_eduaction_level: new FormControl(''),
+      search_education_major: new FormControl(''),
+      search_major_category: new FormControl('')
+    });
+
+    this.preferredEducationForm.get('search_eduaction_level').valueChanges.subscribe((search_eduaction_level) => {
+      if (search_eduaction_level && this.helperService.checkSpacesString(search_eduaction_level)) {
+       this.autocomplete_education_levels = this.education_levels.filter(value => value.education_level.includes(search_eduaction_level));
+      } else {
+        this.autocomplete_education_levels = [];
+      }
+    });
+
+    this.preferredEducationForm.get('search_education_major').valueChanges.subscribe((search_education_major) => {
+      if (search_education_major && this.helperService.checkSpacesString(search_education_major)) {
+        this.autoCompleteService.autoComplete(search_education_major, 'majors').subscribe(
+          dataJson => {
+            if (dataJson['success']) {
+              this.autocomplete_majors = dataJson['data'];
+            }
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+            this.autocomplete_majors = [];
+          }
+        );
+      } else {
+        this.autocomplete_majors = [];
+      }
+    });
+
+    this.preferredEducationForm.get('search_major_category').valueChanges.subscribe((search_major_category) => {
+      if (search_major_category && this.helperService.checkSpacesString(search_major_category)) {
+        this.autoCompleteService.autoComplete(search_major_category, 'major-categories').subscribe(
+          dataJson => {
+            if (dataJson['success']) {
+              this.autocomplete_major_categories = dataJson['data'];
+            }
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+            this.autocomplete_major_categories = [];
+          }
+        );
+      } else {
+        this.autocomplete_major_categories = [];
+      }
+    });
+  }
+
+  onSelectEducationLevel(level: Level) {
+    if (!this.preferred_education_levels) {
+      this.preferred_education_levels = [level];
+    } else {
+      const filter = this.preferred_education_levels.filter(value => value.level_id = level.level_id);
+      if (filter.length === 0) {
+        this.preferred_education_levels.push(level);
+      }
+    }
+  }
+
+  onRemoveEducationLevel(level: Level, arrIndex: number) {
+    if (this.preferred_education_levels[arrIndex].level_id === level.level_id) {
+      this.preferred_education_levels.splice(arrIndex, 1);
+    }
+    if (this.preferred_education_levels.length === 0) {
+      this.preferred_education_levels = null;
+    }
+  }
+
+  onSelectEducationMajor(major: Major) {
+    if (!this.preferred_education_majors) {
+      this.preferred_education_majors = [major];
+    } else {
+      const filter = this.preferred_education_majors.filter(value => value.major_id === major.major_id);
+      if (filter.length === 0) {
+        this.preferred_education_majors.push(major);
+      }
+    }
+  }
+
+  onRemoveEducationMajor(major: Major, arrIndex: number) {
+    if (this.preferred_education_majors[arrIndex].major_id === major.major_id) {
+      this.preferred_education_majors.splice(arrIndex, 1);
+    }
+    if (this.preferred_education_majors.length === 0) {
+      this.preferred_education_majors = null;
+    }
+  }
+
+  onSelectEducationMajorCategory(major_category: MajorCategory) {
+    if (!this.preferred_education_major_categories) {
+      this.preferred_education_major_categories = [major_category];
+    } else {
+      const filter = this.preferred_education_major_categories.filter(value => value.cat_id === major_category.cat_id);
+      if (filter.length === 0) {
+        this.preferred_education_major_categories.push(major_category);
+      }
+    }
+  }
+
+  onRemoveEducationMajorCategory(major_category: MajorCategory, arrIndex: number) {
+    if (this.preferred_education_major_categories[arrIndex].cat_id === major_category.cat_id) {
+      this.preferred_education_major_categories.splice(arrIndex, 1);
+    }
+    if (this.preferred_education_major_categories.length === 0) {
+      this.preferred_education_major_categories = null;
+    }
+  }
+
+  /**
+  * Preferred Work Experience Form
+  */
+  initPreferredWorkExperienceForm() {
+    
+  }
+
+  /**
+   * Skills Form
+   */
+  initSkillsForm() {
+
+  }
+
+  /**
+  * Interests Form
+  */
+  initInterestsForm() {
+
+  }
+
+  /**
+   * School Restrictions Form
+   */
+  initSchoolRestrictionsForm() {
+
   }
 
 }
