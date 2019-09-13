@@ -11,7 +11,6 @@ export class MatchingService {
   private user_id = -1;
   helper = new JwtHelperService();
   private skill_url = `${environment.serverUrl}/${environment.matching_service}/api/${environment.api_version}/user`;
-  private company_url = `${environment.serverUrl}/${environment.company_service}/api/${environment.api_version}/company`;
 
   constructor(private http: HttpClient) {
     if (this.isLoggedIn()) {
@@ -82,22 +81,6 @@ export class MatchingService {
         ),
         catchError(this.handleError)
       );
-  }
-  getCompanyData(queryParam) {
-    let queryUrl = `${this.company_url}`;
-    if (queryParam) {
-      queryUrl = `${queryUrl}/${queryParam}`;
-    }
-    return this.http.get(queryUrl, this.authHttpOptions())
-      .pipe(
-        map(
-          data => {
-            return { success: true, message: 'Success!', data: data };
-          }
-        ),
-        catchError(this.handleError)
-      );
-
   }
   private handleError(error) {
     let errorMessage = '';

@@ -19,11 +19,77 @@
     </div>
   </div>
   <div class="position-main-container">
+    <!-- Position-left-side -->
+    <div class="filter-container container__header tablet" >
+
+        <div class="position-company-map" *ngFor="let info of companyData"  >
+          <div class="company-map">
+            <mat-card>
+              <div class="company-border">
+                <img src="assets/icons/ic_google.svg">
+              </div>
+              <h5>{{info.company_name}}</h5>
+              <p><img src="assets/icons/ic_location.svg"> {{info.hq_city_name ? info.hq_city_name : 'N/A'}},
+                {{info.hq_state_name ? info.hq_state_name : 'N/A' }},
+                {{info.hq_country_name ? info.hq_country_name : 'N/A'}} </p>
+              <span>Website</span>
+              <small>{{info.website ? info.website : 'N/A'}}</small>
+              <div *ngIf="info.showMoreFlag">
+                <ul>
+                <li>
+                <span>Company Size</span>
+                <small>{{info.company_size ? info.company_size : 'N/A'}}</small>
+              </li>
+              <li>
+                <span>verification Status</span>
+                <small>{{info.verified}}</small>
+              </li>
+              <li>
+                <span>Company Industries</span>
+                <small>{{info.company_industries ? info.company_industries : 'N/A'}}</small>
+              </li>
+              <li>
+                <span>Positions Available</span>
+                <small>N/A</small>
+              </li>
+              <li>
+                <span>About Company</span>
+                <small>{{info.company_desc ? info.company_desc : 'N/A' }}</small>
+              </li>
+              </ul>
+              </div>
+              <div class="show-button2">
+                <action-button routerLink="." type="text" title="{{!info.showMoreFlag ? 'Show More' :
+              'Show Less'}}" color="primary" (click)="info.showMoreFlag = !info.showMoreFlag"></action-button>
+                <action-button class="company-go-detail" type="text" title="Go to Details Page" color="primary" *ngIf="info.showMoreFlag">
+                </action-button>
+              </div>
+            </mat-card>
+          </div>
+          <div class="company-content" >
+              <ng-container *ngIf= "filter_list">
+            <mat-card>
+              <h4>Contents</h4>
+              <ol>
+                <li (click)="scroll(one)" > Position Information</li>
+                <li (click)="scroll(second)">Skills</li>
+                <li >Preferred Interests</li>
+                <li>Qualification Level</li>
+                <li>Preferred Experience</li>
+                <li>Job Description</li>
+                <li>School Restrictions</li>
+              </ol>
+            </mat-card>
+            </ng-container>
+          </div>
+        </div>
+
+    </div>
       <div class="position-list-container">
 
-          <div *ngFor="let info of positionName ">
+          <div *ngFor="let info of positionName " >
 
-            <div class="row position-detail" >
+            <div class="row position-detail"  #one>
 
               <h1>{{info.position}} </h1>
               <div class="position-right">
@@ -83,32 +149,32 @@
                   </ul>
                 </div>
                 <mat-grid-list [cols]="breakpoint" rowHeight="60px" (window:resize)="onResize($event)" class="card">
-                  <mat-grid-tile>
-                    <div class="card-item">
-                      <span>Qualification Level</span>
-                      <p>{{calculatedQualificationLevel}}</p>
-                    </div>
-                  </mat-grid-tile>
-                  <mat-grid-tile>
-                    <div class="card-item">
-                      <span>Salary</span>
-                      <p>{{info.pay ? info.pay + ' USD' : 'N/A' }} </p>
-                    </div>
-                  </mat-grid-tile>
-                  <mat-grid-tile>
-                    <div class="card-item">
-                      <span>Industry</span>
-                      <p>{{info.main_industry_name ? info.main_industry_name : 'N/A'}}</p>
-                    </div>
-                  </mat-grid-tile>
-                  <mat-grid-tile>
-                    <div class="card-item">
-                      <span>Position Level</span>
-                      <p>{{info.level ? info.level : 'N/A'}}</p>
-                    </div>
-                  </mat-grid-tile>
-                </mat-grid-list>
-                <mat-grid-list [cols]="breakpoint" rowHeight="60px" (window:resize)="onResize($event)" class="card">
+                    <mat-grid-tile>
+                      <div class="card-item">
+                        <span>Qualification Level</span>
+                        <p>{{calculatedQualificationLevel}}</p>
+                      </div>
+                    </mat-grid-tile>
+                    <mat-grid-tile>
+                      <div class="card-item">
+                        <span>Salary</span>
+                        <p>{{info.pay ? info.pay + ' USD' : 'N/A' }}</p>
+                      </div>
+                    </mat-grid-tile>
+                    <mat-grid-tile>
+                      <div class="card-item">
+                        <span>Industry</span>
+                        <p>{{info.main_industry_name ? info.main_industry_name : 'N/A'}}</p>
+                      </div>
+                    </mat-grid-tile>
+                    <mat-grid-tile>
+                      <div class="card-item">
+                        <span>Position Level</span>
+                        <p>{{info.level ? info.level : 'N/A'}}</p>
+                      </div>
+                    </mat-grid-tile>
+                  </mat-grid-list>
+                <mat-grid-list [cols]="breakpoint" rowHeight="60px" (window:resize)="onResize($event)" class="card second-card">
                   <mat-grid-tile>
                     <div class="card-item">
                       <span>Application Type</span>
@@ -170,7 +236,7 @@
               <h3>Matched Skills</h3>
 
               <ul>
-                <li>
+                <li >
                   <h5 for="skill_required">Matched Skills<span>{{ matchedSkills?.length}}</span>
                   </h5>
                   <div class="skil-height-fix" [ngClass]="{'skill-more-height': info.showMoreFlag}"
@@ -243,7 +309,7 @@
                       <simple-tag type="gray" *ngIf="i < limit" title="{{major.major_name}}">
                       </simple-tag>
                     </div>
-                    <img *ngIf="limit < jobData.preferred_majors?.length" (click)="limit = limit + displayItemsLimit"
+                    <img *ngIf="limit < jobData.preferred_majors?.length" class="edu_img"  (click)="limit = limit + displayItemsLimit"
                       src="assets/icons/ic_more.svg" alt="See More">
                   </div>
                 </div>
@@ -283,7 +349,7 @@
               </ul>
               </div>
               <div class="row position-required-skills-detail">
-                <h3>Preferred & Required Skills</h3><img src="assets/icons/ic_question.svg"
+                <h3>Preferred & Required Skills</h3><img class="question-icon" src="assets/icons/ic_question.svg"
                   (click)="openSkillDescriptionDialog()">
                 <div class="education-level-m">
                   <h5 for="skill_required">Skills Required <span>{{ jobData.minimum_skills?.length}}</span>
@@ -300,8 +366,7 @@
                       src="assets/icons/ic_more.svg" alt="See More">
                   </div>
                 </div>
-                <ng-container class="education-level-m">
-                    <div >
+                    <div  class="education-level-m" >
                   <h5 for="skill_required">Skills Preferred <span>{{ jobData.preferred_skills?.length}}</span>
                   </h5>
                   <div class="skills" *ngIf="displayItemsLimit; let limit">
@@ -320,7 +385,6 @@
 
                   </div>
                 </div>
-                </ng-container>
               </div>
               <div class="row position-required-skills-detail">
                 <h3>Preferred Interests</h3>
@@ -332,13 +396,14 @@
                       <simple-tag type="gray" *ngIf="i < limit" title="{{preferred.interest}}">
                       </simple-tag>
                     </div>
-                    <img *ngIf="limit < jobData.preferred_interests" (click)="limit = limit + displayItemsLimit"
+                    <img *ngIf="limit < jobData.preferred_interests?.length" (click)="limit = limit + displayItemsLimit"
                       src="assets/icons/ic_more.svg" alt="See More">
                   </div>
                 </div>
               </div>
             </div>
-            <div class="row position-schools-restriction">
+            <div   >
+            <div class="row position-schools-restriction" #second>
               <h3>School Restrictions</h3>
               <div class="position-prefer-interest">
                 <p>Applicants should be currently enrolled or alumni of the following schools.</p>
@@ -350,75 +415,12 @@
                 </div>
               </div>
             </div>
-
+</div>
           </div>
 
 
         </div>
-    <!-- Position-left-side -->
-    <div class="filter-container container__header tablet" [class.open]="filter_list">
-      <ng-container>
-        <div class="position-company-map" *ngFor="let info of companyData">
-          <div class="company-map">
-            <mat-card>
-              <div class="company-border">
-                <img src="assets/icons/ic_google.svg">
-              </div>
-              <h5>{{info.company_name}}</h5>
-              <p><img src="assets/icons/ic_location.svg"> {{info.hq_city_name ? info.hq_city_name : 'N/A'}},
-                {{info.hq_state_name ? info.hq_state_name : 'N/A' }},
-                {{info.hq_country_name ? info.hq_country_name : 'N/A'}} </p>
-              <span>Website</span>
-              <small>{{info.website ? info.website : 'N/A'}}</small>
-              <div *ngIf="info.showMoreFlag">
-                <ul>
-                <li>
-                <span>Company Size</span>
-                <small>{{info.company_size ? info.company_size : 'N/A'}}</small>
-              </li>
-              <li>
-                <span>verification Status</span>
-                <small>{{info.verified}}</small>
-              </li>
-              <li>
-                <span>Company Industries</span>
-                <small>{{info.company_industries ? info.company_industries : 'N/A'}}</small>
-              </li>
-              <li>
-                <span>Positions Available</span>
-                <small>N/A</small>
-              </li>
-              <li>
-                <span>About Company</span>
-                <small>{{info.company_desc ? info.company_desc : 'N/A' }}</small>
-              </li>
-              </ul>
-              </div>
-              <div class="show-button2">
-                <action-button routerLink="." type="text" title="{{!info.showMoreFlag ? 'Show More' :
-              'Show Less'}}" color="primary" (click)="info.showMoreFlag = !info.showMoreFlag"></action-button>
-                <action-button class="company-go-detail" type="text" title="Go to Details Page" color="primary" *ngIf="info.showMoreFlag">
-                </action-button>
-              </div>
-            </mat-card>
-          </div>
-          <div class="company-content" >
-            <mat-card>
-              <h4>Contents</h4>
-              <ol>
-                <li>Position Information</li>
-                <li>Skills</li>
-                <li>Preferred Interests</li>
-                <li>Qualification Level</li>
-                <li>Preferred Experience</li>
-                <li>Job Description</li>
-                <li>School Restrictions</li>
-              </ol>
-            </mat-card>
-          </div>
-        </div>
-      </ng-container>
-    </div>
+
 
     <!-- Job Position Card -->
 

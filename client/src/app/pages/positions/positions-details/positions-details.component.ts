@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { PositionService, CartService, AlertsService, AlertType, ApplicationService, UserService, ScoreService } from 'src/app/services';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { PositionService, CartService, AlertsService, AlertType, ApplicationService, UserService, ScoreService, CompanyService } from 'src/app/services';
 import { ActivatedRoute } from '@angular/router';
 import { MatchingService } from 'src/app/services/matching.service';
 import { SkillLevelDescription } from 'src/app/models';
 import { MatDialog } from '@angular/material/dialog';
 import { SkillDescriptionPopupComponent } from 'src/app/components/skill-description-popup/skill-description-popup.component';
 import { AddSkillPopupComponent } from 'src/app/components/add-skill-popup/add-skill-popup.component';
+import { ViewportScroller } from '@angular/common';
 
 @Component({
   selector: 'app-positions-details',
@@ -32,15 +33,23 @@ export class PositionsDetailsComponent implements OnInit {
   SkillLevelDescription = SkillLevelDescription;
   updatedFitscoreData;
   filter_list: boolean;
+
   calculatedQualificationLevel: string;
 
+  @ViewChild('one', {static: false}) positionInfo: ElementRef;
+  @ViewChild('second', {static: false}) skills: ElementRef;
+  // @ViewChild('3', {static: false}) interests: ElementRef;
+  // @ViewChild('4', {static: false}) qualification: ElementRef;
+  // @ViewChild('5', {static: false}) experience: ElementRef;
+  // @ViewChild('6', {static: false}) jobDesc: ElementRef;
+  // @ViewChild('7', {static: false}) school: ElementRef;
   constructor(private positionService: PositionService,
     private route: ActivatedRoute,
     private matchingService: MatchingService,
     private cartService: CartService,
     private alertsService: AlertsService,
     private applicationService: ApplicationService,
-    public dialog: MatDialog, private scoreService: ScoreService,
+    public dialog: MatDialog, private scoreService: ScoreService, private companyService: CompanyService,
     private userService: UserService) {
     this.updateSkillCallback = this.updateSkillCallback.bind(this);
   }
@@ -53,6 +62,10 @@ export class PositionsDetailsComponent implements OnInit {
     this.getMatchedInterests();
     this.getRestrcitedSchoolData(this.positionId);
     this.breakpoint = (window.innerWidth <= 500) ? 2 : 4;
+    this.filter_list = true;
+  }
+  onResize(event) {
+    this.breakpoint = (event.target.innerWidth <= 500) ? 2 : 6;
   }
   toggleTabMenuOpen() {
     this.filter_list = !this.filter_list;
@@ -62,20 +75,25 @@ export class PositionsDetailsComponent implements OnInit {
       dataJson => {
         this.positionName.push(dataJson.data);
         this.getCompanyData(this.positionName[0].company_id);
-        console.log('position name', this.positionName);
         this.getRecruiterData(this.positionName[0].recruiter_id);
         this.countDays();
         this.calculatedQualificationLevel = this.calculateQualificationLevel(this.positionName[0].true_fitscore_info, this.positionName[0].minimum_skills);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
-      });
+      }
+      );
+
+
+  }
+  scroll() {
+    this.positionInfo.nativeElement.scrollIntoView();
+    this.skills.nativeElement.scrollIntoView();
   }
   getCompanyData(comapnyId) {
-    this.matchingService.getCompanyData(comapnyId).subscribe(
+    this.companyService.getCompanyData(comapnyId).subscribe(
       dataJson => {
         this.companyData.push(dataJson.data);
-        console.log('company', this.companyData);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -125,8 +143,6 @@ export class PositionsDetailsComponent implements OnInit {
     this.positionService.getRestrictedSchool(positionId).subscribe(
       dataJson => {
         this.restrictedSchools = dataJson.data['data'];
-        // console.log('school', dataJson['data'][0]);
-        console.log('school', this.restrictedSchools);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -134,9 +150,7 @@ export class PositionsDetailsComponent implements OnInit {
     );
 
   }
-  onResize(event) {
-    this.breakpoint = (event.target.innerWidth <= 500) ? 2 : 6;
-  }
+
   withdrawApplication(position_id) {
     const application_id = this.appliedJobsMap[position_id];
     this.applicationService.withdrawJobs(application_id).subscribe(data => {
@@ -222,7 +236,6 @@ export class PositionsDetailsComponent implements OnInit {
   updatedFitscore() {
     this.positionName[0].true_fitscore_info = this.updatedFitscoreData;
     this.calculatedQualificationLevel = this.calculateQualificationLevel(this.positionName[0].true_fitscore_info, this.positionName[0].minimum_skills);
-    console.log('fit', this.calculatedQualificationLevel);
   }
   openSkillDescriptionDialog() {
     const dialogRef = this.dialog.open(SkillDescriptionPopupComponent, {

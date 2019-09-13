@@ -12,7 +12,7 @@ $profile-form-field-mt: 30px;
       .postion-search-detail {
         background-color: $white;
         border: 1px solid #ddd;
-        padding: 18px 3%;
+        padding: 15px 3%;
         text-align: left;
         margin-bottom: 36px;
         position: relative;
@@ -21,6 +21,11 @@ $profile-form-field-mt: 30px;
 
         & .go-back-btn {
           display: inline-block;
+        }
+        .filter-data {
+          & .filter_icon {
+            display: none;
+          }
         }
       }
     }
@@ -36,59 +41,18 @@ $profile-form-field-mt: 30px;
         width: 70.3%;
         padding-bottom: 60px;
 
-        & .select-style {
-          overflow: hidden;
-          margin-bottom: 9px;
-
-          & .sort-item {
-            color: rgba(map-get($md-cfaccent, 500), 0.44);
-            font-size: 14px;
-            font-family: "Poppins", sans-serif;
-            font-weight: 400;
-
-            & mat-form-field {
-              margin-top: -10px;
-              margin-bottom: 5px;
-              width: 123px;
-              font-family: "Poppins", sans-serif;
-              font-weight: 400;
-            }
-          }
-
-          & .selectall {
-            float: left;
-            width: 70%;
-
-            & round-checkbox {
-              display: inline;
-              margin-right: 22px;
-            }
-            & .drop-buttons {
-              display: none;
-            }
-          }
-
-          & action-button {
-            @include inline-block-btn;
-            margin-right: 2%;
-          }
-        }
-
-        & .sort-item {
-          float: right;
-        }
-
         .row {
           background: $white;
-          padding: 20px 18px 20px;
+          padding: 20px 20px 20px;
           border-bottom: 1px solid map-get($md-cfaccent, 50);
           &.position-detail {
             border-top-left-radius: 5px;
             border-top-right-radius: 5px;
+            padding: 30px 20px 20px;
           }
 
           & .job-top-list {
-            margin-top: 10px;
+            margin: 10px 0 20px;
           }
 
           & .qualification-level-m {
@@ -108,12 +72,6 @@ $profile-form-field-mt: 30px;
           &.no-job {
             @include btn-align-center;
           }
-
-          & round-checkbox {
-            @include inline-block-btn;
-            vertical-align: middle;
-          }
-
           h1 {
             @include inline-block-btn;
             vertical-align: middle;
@@ -161,6 +119,10 @@ $profile-form-field-mt: 30px;
           h3 {
             font-size: 20px;
             margin-top: 0;
+            font-family: "Poppins", sans-serif;
+            font-weight: 600;
+            color: #001d40;
+            opacity: 0.84;
           }
 
           & .skills-preferred-m {
@@ -221,11 +183,17 @@ $profile-form-field-mt: 30px;
             img {
               margin-left: 8px;
               margin-top: 0;
+              &.question-icon{
+                margin-top:5px;
+              }
             }
             & .education-level-m {
               & img {
                 margin-left: 0;
                 margin-top: 15px;
+                &.edu_img {
+                  margin-top: 0;
+                }
               }
             }
           }
@@ -246,13 +214,15 @@ $profile-form-field-mt: 30px;
 
           & simple-tag {
             display: inline-block;
-            margin-bottom: 5px;
-
+            margin-bottom: 10px;
           }
           & .position-matched {
             p {
               opacity: 0.54;
               margin-bottom: 0;
+              font-size: 16px;
+              line-height: 24px;
+              color: #001d40;
             }
           }
         }
@@ -416,7 +386,7 @@ $profile-form-field-mt: 30px;
         }
 
         & .card {
-          margin: 20px 0;
+          margin: 0;
           & mat-grid-tile {
             border: 1px solid #f0f0f0;
             border-right: none;
@@ -443,47 +413,9 @@ $profile-form-field-mt: 30px;
               line-height: 16px;
             }
           }
-        }
-      }
-
-      .pagination {
-        float: right;
-
-        ul {
-          padding: 3px 10px;
-          border-radius: 50px;
-          background-color: map-get($md-cfgray, 500);
-          @include inline-block-btn;
-
-          li {
-            @include inline-block-btn;
-            height: 15px;
-            width: 15px;
-            font-size: 14px;
-            text-align: center;
-            border-radius: 100%;
-            padding: 8px;
-            overflow: hidden;
-            vertical-align: middle;
-            color: $header-color;
-            cursor: pointer;
-            font-family: "Poppins", sans-serif;
-            font-weight: 500;
-            line-height: 21px;
-
-            &.active {
-              background-color: $white;
-            }
-
-            &.large_pagination_button {
-              height: auto;
-              width: auto;
-              margin-top: 4px;
-            }
-
-            & span {
-              vertical-align: middle;
-              @include inline-block-btn;
+          &.second-card{
+            & mat-grid-tile {
+              border-top:none;
             }
           }
         }
@@ -532,7 +464,6 @@ $profile-form-field-mt: 30px;
             & .company-border {
               height: 60px;
               width: 60px;
-              border-radius: 100%;
               text-align: center;
               border: 1px solid #efefef;
               img {
@@ -661,16 +592,6 @@ $profile-form-field-mt: 30px;
             }
           }
 
-          & .select-style {
-            & .selectall {
-              width: 64%;
-
-              & action-button {
-                margin-bottom: 5px;
-              }
-            }
-          }
-
           & .row {
             h1 {
               font-size: 26px;
@@ -698,6 +619,18 @@ $profile-form-field-mt: 30px;
 @media only screen and (min-width: $min-tablet-breakpoint) and (max-width: $max-tablet-breakpoint) {
   :host {
     .career-main {
+      .comman_search_filter {
+        .postion-search-detail {
+          .filter-data {
+            float: right;
+            margin-top: 5px;
+
+            .filter_icon {
+              display: block;
+            }
+          }
+        }
+      }
       .filter-container {
         width: 95%;
         float: none;
@@ -709,36 +642,37 @@ $profile-form-field-mt: 30px;
         padding-bottom: 60px;
         box-sizing: border-box;
         margin: 0 auto;
+        .company-content {
+          position: absolute;
+          z-index: 1;
+          top: 0;
+          width: 100%;
+        }
       }
       .position-main-container {
         width: 100%;
+        height: 100%;
 
         .position-list-container {
           float: none;
           width: 95%;
           margin: 0 auto;
           padding: 0 10px;
-          .job-top-list[_ngcontent-dex-c10]{
-            ul{
-              li{
+          .card {
+            .card-item {
+              span {
+                font-size: 11px;
+              }
+            }
+          }
+          .job-top-list {
+            ul {
+              li {
                 margin-right: 30px;
-              font-size: 13px;
+                font-size: 13px;
               }
             }
           }
-
-          & .select-style {
-            margin: 9px 0;
-            & .selectall {
-              width: 74%;
-              padding-bottom: 6px;
-
-              & action-button {
-                margin-bottom: 5px;
-              }
-            }
-          }
-
           .row {
             h1 {
               font-size: 26px;
@@ -758,45 +692,46 @@ $profile-form-field-mt: 30px;
 @media only screen and (min-width: $min-mobile-breakpoint) and (max-width: $max-mobile-breakpoint) {
   :host {
     .career-main {
-      .position-main-container {
-        width: 100%;
-       height:100%;
+      .comman_search_filter {
+        .postion-search-detail {
+          .filter-data {
+            float: right;
+            margin-top: 5px;
 
-        & .container__header {
-          &.tablet {
-            position: absolute;
-            width: 100%;
-            top: -1000%;
-            left: 0;
-            border-bottom: none;
-            @include flex(column, center, center);
-            background-color: $white;
-            padding-top: $profile-form-field-mt;
-            padding-bottom: $profile-form-field-mt;
-            box-sizing: border-box;
-            transition: top 0.5s;
-            transition-timing-function: ease;
-            z-index: 1;
-
-            &.open {
-              top: 140px;
-              transition: top 0.5s;
-              transition-timing-function: ease;
-              background-color: #f2f2f2;
-              padding-top: 0;
+            & .filter_icon {
+              display: block;
             }
           }
+        }
+      }
+      .position-main-container {
+        width: 100%;
+        height: 100%;
+
+        & .container__header {
           &.filter-container {
             height: auto;
-            width: 100%;
+            width: 92%;
             float: none;
-            margin: 0 auto;
+            margin: 0 auto 20px;
             padding: 0 10px;
             clear: both;
+            position: relative;
+            top: 0px;
+            box-sizing: inherit;
+            & .position-company-map {
+              display: block;
+              width: 100%;
+              position: relative;
+              .company-content {
+                position: absolute;
+                z-index: 1;
+                top: 0;
+                width: 100%;
+              }
+            }
           }
-          & .nav-title {
-            width: 100%;
-          }
+
           & .filter-card {
             width: 90%;
           }
@@ -806,35 +741,6 @@ $profile-form-field-mt: 30px;
           width: 92%;
           margin: auto;
           padding: 0 10px;
-
-          & .select-style {
-            & .selectall {
-              float: none;
-              width: 100%;
-              & round-checkbox {
-                margin-right: 13px;
-              }
-
-              & action-button {
-                margin-bottom: 5px;
-                display: none;
-              }
-              & .drop-buttons {
-                display: inline-block;
-              }
-            }
-
-            & .sort-item {
-              float: none;
-              margin-left: 30px;
-
-              & mat-form-field {
-                margin-top: 0px;
-                margin-bottom: 5px;
-                margin-left: 30px;
-              }
-            }
-          }
           & .right-align {
             @include inline-block-btn;
             text-align: center;
@@ -895,6 +801,9 @@ $profile-form-field-mt: 30px;
                 & span {
                   font-size: 13px;
                 }
+              }
+              & mat-grid-tile{
+                border-right: 1px solid #f0f0f0;
               }
             }
 

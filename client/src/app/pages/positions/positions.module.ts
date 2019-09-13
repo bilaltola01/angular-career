@@ -15,7 +15,8 @@ import { AddSkillPopupComponent } from 'src/app/components/add-skill-popup/add-s
     FormsModule,
     ReactiveFormsModule,
     MaterialModule,
-    SharedModule
+    SharedModule,
+
   ],
   declarations: [
     ...positionComponents
