@@ -22,10 +22,11 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
-import { uniqBy } from 'lodash';
+import { uniqBy, pick, uniqWith, isEqual } from 'lodash';
 
 export interface PeopleData {
   general_info: UserGeneralInfo;
+  display_majors: string[];
   contact_status: string;
 }
 
@@ -341,10 +342,17 @@ export class PeopleSearchComponent implements OnInit {
             this.userList = [];
             dataJson.data.data.forEach((data) => {
               // Remove duplicate majors
-              data.education = uniqBy(data.education, 'major_id');
+              let displayMajors = [];
+              data.education.forEach(educationalElement => {
+                displayMajors.push(educationalElement.major_name);
+                displayMajors.push(educationalElement.focus_major_name);
+              });
+              displayMajors = [ ...new Set(displayMajors)];
+
               const peopleData: PeopleData = {
                 general_info: data,
-                contact_status: null
+                contact_status: null,
+                display_majors: displayMajors,
               };
               this.userList.push(peopleData);
             });
@@ -453,9 +461,18 @@ export class PeopleSearchComponent implements OnInit {
           if (dataJson['success'] && dataJson) {
             const userList = [];
             dataJson.data.data.forEach((data) => {
+              // Remove duplicate majors
+              let displayMajors = [];
+              data.education.forEach(educationalElement => {
+                displayMajors.push(educationalElement.major_name);
+                displayMajors.push(educationalElement.focus_major_name);
+              });
+              displayMajors = [ ...new Set(displayMajors)];
+
               const peopleData: PeopleData = {
                 general_info: data,
-                contact_status: null
+                contact_status: null,
+                display_majors: displayMajors,
               };
               userList.push(peopleData);
             });
