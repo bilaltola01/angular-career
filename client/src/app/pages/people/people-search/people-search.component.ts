@@ -22,7 +22,6 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
-import { uniqBy, pick, uniqWith, isEqual } from 'lodash';
 
 export interface PeopleData {
   general_info: UserGeneralInfo;
