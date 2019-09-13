@@ -169,3 +169,85 @@
 </div>
   
   <!-- Company Information end -->
+
+  <!-- Preferred Education Start -->
+  <div *ngIf="selectedPageIndex===2" class="container profile-skills">
+    <div class="container__full">
+      <div class="profile-form" [formGroup]="preferredEducationForm">
+        <h3 class="profile-form__title">
+          Preferred Education
+        </h3>
+        <div class="profile-form__field search">
+          <h3>Preferred Education Level <span *ngIf="preferred_education_levels && preferred_education_levels.length > 0" class="count">{{preferred_education_levels.length}}</span></h3>
+          <mat-form-field appearance="standard" class="search">
+            <mat-icon matSuffix>search</mat-icon>
+            <input matInput 
+              placeholder="Search Eudaction Level" 
+              type="text" 
+              [matAutocomplete]="autocompleteEducationLevel" 
+              formControlName="search_eduaction_level">
+            <mat-autocomplete #autocompleteEducationLevel="matAutocomplete">
+              <mat-option *ngFor="let level of autocomplete_education_levels"
+                [value]="level.education_level" 
+                (onSelectionChange)="onSelectEducationLevel(level)">
+                <span>{{level.education_level}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <div class="skills" *ngIf="preferred_education_levels && preferred_education_levels.length > 0">
+            <simple-tag *ngFor="let level of preferred_education_levels; let j = index" 
+              type="gray"
+              title="{{level.education_level}}" 
+              removeTag="true" 
+              (click)="onRemoveEducationLevel(level, j)">
+            </simple-tag>
+          </div>
+        </div>
+
+        <div class="profile-form__field">
+          <mat-form-field class="bg-transparent" appearance="fill">
+            <mat-label>Preferred Major</mat-label>
+            <input matInput placeholder="Preferred Major" type="text" [matAutocomplete]="autocompleteEducationMajor" formControlName="education_major">
+            <mat-icon matSuffix *ngIf="preferredEducationForm.get('education_major').value && helperService.checkSpacesString(preferredEducationForm.get('education_major').value) && preferredEducationForm.get('education_major').valid && onCheckEducationMajorValidation()">done</mat-icon>
+            <mat-icon matSuffix class="error-field" *ngIf="preferredEducationForm.get('education_major').value && helperService.checkSpacesString(preferredEducationForm.get('education_major').value) && !onCheckEducationMajorValidation() && preferredEducationForm.get('education_major').touched">close</mat-icon>
+            <mat-autocomplete #autocompleteEducationMajor="matAutocomplete" (closed)="onBlurEducationMajor()">
+              <mat-option *ngFor="let major of autocomplete_majors" [value]="major.major_name" (onSelectionChange)="onSelectEducationMajor(major)">
+                <span>{{major.major_name}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+
+        <div class="profile-form__field search">
+          <h3>Preferred Major Categories <span *ngIf="preferred_education_major_categories && preferred_education_major_categories.length > 0" class="count">{{preferred_education_major_categories.length}}</span></h3>
+          <mat-form-field appearance="standard" class="search">
+            <mat-icon matSuffix>search</mat-icon>
+            <input matInput 
+              placeholder="Search Major Category" 
+              type="text" 
+              [matAutocomplete]="autocompleteMajorCategory" 
+              formControlName="search_major_category">
+            <mat-autocomplete #autocompleteMajorCategory="matAutocomplete">
+              <mat-option *ngFor="let major_category of autocomplete_major_categories"
+                [value]="major_category.cat_name" 
+                (onSelectionChange)="onSelectEducationMajorCategory(major_category)">
+                <span>{{major_category.cat_name}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <div class="skills" *ngIf="preferred_education_major_categories && preferred_education_major_categories.length > 0">
+            <simple-tag *ngFor="let major_category of preferred_education_major_categories; let j = index" 
+              type="gray"
+              title="{{major_category.cat_name}}" 
+              removeTag="true" 
+              (click)="onRemoveEducationMajorCategory(major_category, j)">
+            </simple-tag>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container__full">
+      <action-button class="btn-next" type="flat" title="Next" color="primary" [disabled]="!(preferredEducationForm.valid && onCheckEducationMajorValidation())" (click)="goToNextPage()"></action-button>
+    </div>
+  </div>
+  <!-- Perferred Education End -->

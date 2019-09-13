@@ -139,7 +139,7 @@ export class CreatePositionComponent implements OnInit {
   position_recruiter: User;
 
   preferred_education_levels: Level[];
-  preferred_education_majors: Major[];
+  preferred_education_major: Major;
   preferred_education_major_categories: MajorCategory[];
 
   minimum_skills: Skill[];
@@ -535,7 +535,7 @@ export class CreatePositionComponent implements OnInit {
 
     this.preferredEducationForm = new FormGroup({
       search_eduaction_level: new FormControl(''),
-      search_education_major: new FormControl(''),
+      education_major: new FormControl(this.preferred_education_major ? this.preferred_education_major.major_name : ''),
       search_major_category: new FormControl('')
     });
 
@@ -547,9 +547,9 @@ export class CreatePositionComponent implements OnInit {
       }
     });
 
-    this.preferredEducationForm.get('search_education_major').valueChanges.subscribe((search_education_major) => {
-      if (search_education_major && this.helperService.checkSpacesString(search_education_major)) {
-        this.autoCompleteService.autoComplete(search_education_major, 'majors').subscribe(
+    this.preferredEducationForm.get('education_major').valueChanges.subscribe((education_major) => {
+      if (education_major && this.helperService.checkSpacesString(education_major)) {
+        this.autoCompleteService.autoComplete(education_major, 'majors').subscribe(
           dataJson => {
             if (dataJson['success']) {
               this.autocomplete_majors = dataJson['data'];
@@ -588,11 +588,12 @@ export class CreatePositionComponent implements OnInit {
     if (!this.preferred_education_levels) {
       this.preferred_education_levels = [level];
     } else {
-      const filter = this.preferred_education_levels.filter(value => value.level_id = level.level_id);
+      const filter = this.preferred_education_levels.filter(value => value.level_id === level.level_id);
       if (filter.length === 0) {
         this.preferred_education_levels.push(level);
       }
     }
+    this.preferredEducationForm.patchValue({search_eduaction_level: ''});
   }
 
   onRemoveEducationLevel(level: Level, arrIndex: number) {
@@ -605,22 +606,30 @@ export class CreatePositionComponent implements OnInit {
   }
 
   onSelectEducationMajor(major: Major) {
-    if (!this.preferred_education_majors) {
-      this.preferred_education_majors = [major];
-    } else {
-      const filter = this.preferred_education_majors.filter(value => value.major_id === major.major_id);
-      if (filter.length === 0) {
-        this.preferred_education_majors.push(major);
+    this.preferred_education_major = major;
+  }
+
+  onBlurEducationMajor() {
+    const value = this.preferredEducationForm.value.education_major;
+    if (value && this.helperService.checkSpacesString(value)) {
+      if (this.preferred_education_major && value !== this.preferred_education_major.major_name) {
+        this.preferred_education_major = null;
       }
+    } else {
+      this.preferred_education_major = null;
     }
   }
 
-  onRemoveEducationMajor(major: Major, arrIndex: number) {
-    if (this.preferred_education_majors[arrIndex].major_id === major.major_id) {
-      this.preferred_education_majors.splice(arrIndex, 1);
-    }
-    if (this.preferred_education_majors.length === 0) {
-      this.preferred_education_majors = null;
+  onCheckEducationMajorValidation(): boolean {
+    const value = this.preferredEducationForm.value.education_major;
+    if (value && this.helperService.checkSpacesString(value)) {
+      if (this.preferred_education_major) {
+        return value === this.preferred_education_major.major_name ? true : false;
+      } else {
+        return false;
+      }
+    } else {
+      return true;
     }
   }
 
@@ -633,6 +642,7 @@ export class CreatePositionComponent implements OnInit {
         this.preferred_education_major_categories.push(major_category);
       }
     }
+    this.preferredEducationForm.patchValue({search_major_category: ''});
   }
 
   onRemoveEducationMajorCategory(major_category: MajorCategory, arrIndex: number) {
