@@ -76,7 +76,8 @@
           (change)="onPhotoFileSelected($event)"
           #fileInput>
 
-        <img alt="Profile Image" src="{{basicInfoForm.get('photo').value || 'assets/icons/profile-image.svg'}}" (click)="fileInput.click()" >
+        <img alt="Profile Image" src="{{ photo_url || basicInfoForm.value.photo || 'assets/icons/no_photo.png'}}">
+        <img class="image-upload" alt="Upload Image" src="assets/icons/ic_image_upload.svg" (click)="fileInput.click()">
       </div>
       <h3 class="profile-form__title">
         BASIC INFORMATION

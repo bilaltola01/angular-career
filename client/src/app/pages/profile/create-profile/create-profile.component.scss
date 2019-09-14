@@ -235,14 +235,28 @@ p {
         background-color: $white;
         @include flex(column, center, flex-start);
         &__image {
-          width: 20%;
-          max-width: 125px;
+          position: relative;
+          width: 125px;
+          height: 125px;
+          @include disable-select();
           img {
             cursor: pointer;
-            width: 125px;
-            height: 125px;
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
-            object-fit: cover;
+            &.image-upload {
+              position: absolute;
+              top: 0;
+              left: 0;
+            }
+          }
+          .image-loading {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            @include flex(column, center, center);
           }
         }
         &__field {
@@ -487,8 +501,8 @@ p {
           max-width: $profile-form-max-width-tablet;
           padding: $profile-form-padding-tablet;
           &__image {
-            width: 30%;
-            max-width: 110px;
+            width: 110px;
+            height: 110px;
           }
           &__field {
             width: 90%;

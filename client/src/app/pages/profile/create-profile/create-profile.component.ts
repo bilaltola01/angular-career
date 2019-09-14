@@ -217,6 +217,8 @@ export class CreateProfileComponent implements OnInit {
   userRole: string;
   is_skip: boolean;
 
+  photo_url: string;
+
   constructor(private route: ActivatedRoute,
     private router: Router,
     private autoCompleteService: AutoCompleteService,
@@ -356,6 +358,7 @@ export class CreateProfileComponent implements OnInit {
 
     this.generalInfoResponse = null;
     this.generalInfoRequest = null;
+    this.photo_url = null;
 
     this.basicInfoForm = new FormGroup({
       photo: new FormControl(''),
@@ -490,6 +493,12 @@ export class CreateProfileComponent implements OnInit {
 
       const file = event.target.files[0];
 
+      const reader = new FileReader();
+      reader.onload = (reader_event: any) => {
+        this.photo_url = reader_event.target.result;
+      };
+      reader.readAsDataURL(file);
+
       this.userService.getSignedPhotoUrl(file)
         .subscribe((signedPhoto) => {
             this.userService.uploadPhotoToS3(file, signedPhoto.data.signedUrl, signedPhoto.data.url)
@@ -497,6 +506,7 @@ export class CreateProfileComponent implements OnInit {
                 this.basicInfoForm.patchValue({
                   photo: response.data
                 });
+                this.photo_url = null;
                 this.photoStateService.setPhoto(response.data);
               }, err => {
                 this.alertsService.show(err.message, AlertType.error);
