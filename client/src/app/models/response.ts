@@ -22,6 +22,8 @@ export class UserGeneralInfo {
   is_looking: number;
   site_admin: number;
   date_created: Date;
+  skills: UserSkillItem[];
+  education: UserEducationItem [];
 }
 
 export interface UserEducationItem {

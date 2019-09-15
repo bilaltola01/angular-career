@@ -483,4 +483,6 @@ export const positionSearchMessages = {
   'POSITION_APPLY_SUCCESS': 'Position saves successful.'
 };
 
+export const peopleListLimit = 7;
+
 

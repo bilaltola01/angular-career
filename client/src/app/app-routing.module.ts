@@ -31,6 +31,10 @@ export const routes: Routes = [
     path: 'positions', loadChildren: () => import('./pages/positions/positions.module')
       .then(module => module.PositionModule)
   },
+  {
+    path: 'people', loadChildren: () => import('./pages/people/people.module')
+      .then(module => module.PeopleModule)
+  },
   // Use this route to redirect to /404 if we want to pop error page to the user
   // We cannot redirect to '**' so we shall use 404 instead
   { path: 'error/:status-code', component: ErrorPageComponent },

@@ -418,7 +418,6 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
   }
 }
 
-
 @include angular-material-theme($client-theme);
 
 
@@ -492,6 +491,12 @@ action-button {
   &.update-btn {
     margin-top: 20px;
     min-width: 150px;
+  }
+
+  &.contact-btn {
+    &>button {
+      padding: 5px 25px !important;
+    }
   }
 }
 

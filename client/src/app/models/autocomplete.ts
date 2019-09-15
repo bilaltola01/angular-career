@@ -49,3 +49,10 @@ export interface Recruiter {
   recruiter_id: number;
   recruiter_name: string;
 }
+
+export interface User {
+  user_id: number;
+  first_name: string;
+  last_name: string;
+  photo: string;
+}

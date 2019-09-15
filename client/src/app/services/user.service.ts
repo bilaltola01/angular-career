@@ -81,9 +81,8 @@ export class UserService {
       );
   }
 
-  public loadUsers(params: string): Observable<any> {
-
-    return this.http.get(this.user_service_url + `users?limit=${this.max_limit}&${params}`, this.authHttpOptions())
+  public getUsers(query: string): Observable<any> {
+    return this.http.get(this.user_service_url + `users?${query}`, this.authHttpOptions())
       .pipe(
         map(data => {
           return {success: true, message: 'Success!', data: data};
@@ -789,6 +788,15 @@ export class UserService {
     );
   }
 
+  public deleteOutgoingContactRequest(contactId: number, userId: number = this.user_id): Observable<any> {
+    return this.http.delete(this.user_service_url + `user/${userId}/contact/${contactId}/contact-request`, this.authHttpOptions())
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+  }
 
   private httpOptions() {
     return {
