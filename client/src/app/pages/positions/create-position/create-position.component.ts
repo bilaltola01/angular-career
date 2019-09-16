@@ -33,7 +33,8 @@ import {
   Skill,
   Interest,
   School,
-  Industry
+  Industry,
+  UserSkillItem
 } from 'src/app/models';
 
 export interface PreferredWorkExperience {
@@ -41,6 +42,11 @@ export interface PreferredWorkExperience {
   years: number;
   description: string;
   skills_trained: Skill[];
+}
+
+export interface EditSkillItem {
+  index: number;
+  skillItem: UserSkillItem;
 }
 
 @Component({
@@ -142,8 +148,10 @@ export class CreatePositionComponent implements OnInit {
   preferred_education_major: Major;
   preferred_education_major_categories: MajorCategory[];
 
-  minimum_skills: Skill[];
-  preferred_skills: Skill[];
+  minimum_skills: UserSkillItem[];
+  preferred_skills: UserSkillItem[];
+  temp_minimum_skill: EditSkillItem;
+  temp_preferred_skill: EditSkillItem;
   preferred_interests: Interest[];
   preferred_schools: School[];
 
@@ -834,14 +842,30 @@ export class CreatePositionComponent implements OnInit {
   }
 
   onSelectMinimumSkill(skill: Skill) {
+    const skillItemData = {
+      skill_id: skill.skill_id,
+      skill: skill.skill,
+      skill_level: 1
+    };
+
+    let arrIndex = 0;
     if (!this.minimum_skills) {
-      this.minimum_skills = [skill];
+      this.minimum_skills = [skillItemData];
     } else {
       const filter = this.minimum_skills.filter(value => value.skill_id === skill.skill_id);
       if (filter.length === 0) {
-        this.minimum_skills.push(skill);
+        this.minimum_skills.push(skillItemData);
+        arrIndex = this.minimum_skills.length - 1;
+      } else {
+        arrIndex = this.minimum_skills.indexOf(filter[0]);
+        skillItemData.skill_level = filter[0].skill_level;
       }
     }
+    this.temp_minimum_skill = {
+      index: arrIndex,
+      skillItem: skillItemData
+    };
+    this.skillsForm.get('search_minimum_skill').setValue('');
   }
 
   onRemoveMinimumSkill(skill: Skill, arrIndex: number) {
@@ -854,14 +878,29 @@ export class CreatePositionComponent implements OnInit {
   }
 
   onSelectPreferredSkill(skill: Skill) {
+    const skillItemData = {
+      skill_id: skill.skill_id,
+      skill: skill.skill,
+      skill_level: 1
+    };
+    let arrIndex = 0;
     if (!this.preferred_skills) {
-      this.preferred_skills = [skill];
+      this.preferred_skills = [skillItemData];
     } else {
       const filter = this.preferred_skills.filter(value => value.skill_id === skill.skill_id);
       if (filter.length === 0) {
-        this.preferred_skills.push(skill);
+        this.preferred_skills.push(skillItemData);
+        arrIndex = this.preferred_skills.length - 1;
+      } else {
+        arrIndex = this.preferred_skills.indexOf(filter[0]);
+        skillItemData.skill_level = filter[0].skill_level;
       }
     }
+    this.temp_preferred_skill = {
+      index: arrIndex,
+      skillItem: skillItemData
+    };
+    this.skillsForm.get('search_preferred_skill').setValue('');
   }
 
   onRemovePreferredSkill(skill: Skill, arrIndex: number) {
@@ -872,6 +911,23 @@ export class CreatePositionComponent implements OnInit {
       this.preferred_skills = null;
     }
   }
+
+  onLevelChanged(level: number, index: number, is_minimum_skill: boolean) {
+    if (is_minimum_skill) {
+      this.minimum_skills[index].skill_level = level;
+    } else {
+      this.preferred_skills[index].skill_level = level;
+    }
+  }
+
+  editSkillDone(is_minimum_skill: boolean) {
+    if (is_minimum_skill) {
+      this.temp_minimum_skill = null;
+    } else {
+      this.temp_preferred_skill = null;
+    }
+  }
+
 
   /**
   * Interests Form
@@ -911,6 +967,7 @@ export class CreatePositionComponent implements OnInit {
         this.preferred_interests.push(interest);
       }
     }
+    this.interestsForm.get('search_preferred_interest').setValue('');
   }
 
   onRemovePreferredInterest(interest: Interest, arrIndex: number) {
@@ -960,6 +1017,7 @@ export class CreatePositionComponent implements OnInit {
         this.preferred_schools.push(school);
       }
     }
+    this.schoolRestrictionsForm.get('search_preferred_school').setValue('');
   }
 
   onRemovePreferredSchool(school: School, arrIndex: number) {
