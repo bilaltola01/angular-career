@@ -80,6 +80,7 @@ export class PositionSearchComponent implements OnInit {
   appliedJobsMap = {};
   preLoadDataObject = {};
   updatedFitscoreList = [];
+  goBackQueryParam;
 
   constructor(private autoCompleteService: AutoCompleteService, private router: Router,
     private alertsService: AlertsService, private positionService: PositionService, private scoreService: ScoreService,
@@ -303,6 +304,7 @@ export class PositionSearchComponent implements OnInit {
     });
     queryString = this.positionForm.value.searchPosition ? `${queryString ? queryString + '&' : ''}position=${this.positionForm.value.searchPosition}` : queryString;
     queryString = this.positionForm.value.sortBy ? `${queryString ? queryString + '&' : ''}sort=${this.positionForm.value.sortBy}` : queryString;
+    this.goBackQueryParam = queryString;
     return queryString;
   }
   getJobData() {

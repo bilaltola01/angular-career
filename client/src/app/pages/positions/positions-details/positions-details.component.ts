@@ -29,6 +29,7 @@ export class PositionsDetailsComponent implements OnInit {
   recruiterData = [];
   recruiterName;
   Difference_In_Days;
+  queryCallback;
   displayItemsLimit = 7;
   SkillLevelDescription = SkillLevelDescription;
   updatedFitscoreData;
@@ -36,13 +37,6 @@ export class PositionsDetailsComponent implements OnInit {
 
   calculatedQualificationLevel: string;
 
-  @ViewChild('one', {static: false}) positionInfo: ElementRef;
-  @ViewChild('second', {static: false}) skills: ElementRef;
-  // @ViewChild('3', {static: false}) interests: ElementRef;
-  // @ViewChild('4', {static: false}) qualification: ElementRef;
-  // @ViewChild('5', {static: false}) experience: ElementRef;
-  // @ViewChild('6', {static: false}) jobDesc: ElementRef;
-  // @ViewChild('7', {static: false}) school: ElementRef;
   constructor(private positionService: PositionService,
     private route: ActivatedRoute,
     private matchingService: MatchingService,
@@ -56,18 +50,19 @@ export class PositionsDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.positionId = this.route.snapshot.paramMap.get('position_id');
+    this.queryCallback = this.route.snapshot.paramMap.get('goBackQueryParam');
     this.getposition(this.positionId);
     this.getMatchedSkill();
     this.getMissingSkill();
     this.getMatchedInterests();
     this.getRestrcitedSchoolData(this.positionId);
     this.breakpoint = (window.innerWidth <= 500) ? 2 : 4;
-    this.filter_list = true;
+    this.filter_list = false;
   }
   onResize(event) {
     this.breakpoint = (event.target.innerWidth <= 500) ? 2 : 6;
   }
-  toggleTabMenuOpen() {
+  toggleTabOpen() {
     this.filter_list = !this.filter_list;
   }
   getposition(positionId) {
@@ -85,10 +80,6 @@ export class PositionsDetailsComponent implements OnInit {
       );
 
 
-  }
-  scroll() {
-    this.positionInfo.nativeElement.scrollIntoView();
-    this.skills.nativeElement.scrollIntoView();
   }
   getCompanyData(comapnyId) {
     this.companyService.getCompanyData(comapnyId).subscribe(
@@ -253,5 +244,10 @@ const date = new Date().toLocaleString().split(',')[0];
 const todayDate = new Date(date);
  const Difference_In_Time = todayDate.getTime() - postDate.getTime();
  this.Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+  }
+  scrollSmoothTo(elementId) {
+    const element = document.getElementById(elementId);
+    element.scrollIntoView({ block: 'start',  behavior: 'smooth' });
+    this.filter_list = false;
   }
 }

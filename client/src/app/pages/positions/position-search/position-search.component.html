@@ -223,7 +223,7 @@
         <div class="row" [ngClass]="{'selected': job.selected}">
           <round-checkbox id="test" [checked]="job.selected"
             (statusChange)="job.selected = !job.selected;selectedAllFlag=false;"></round-checkbox>
-          <h1  [routerLink]="['/positions/position-info/',job.position_id]" >{{job.position}} </h1>
+          <h1  [routerLink]="['/positions/position-info/',job.position_id,goBackQueryParam]" >{{job.position}} </h1>
           <div class="position-right">
             <div class="heart-icon">
               <img *ngIf="!appliedJobsMap[job.position_id] && !savedJobsMap[job.position_id]" (click)="saveJob([job])"

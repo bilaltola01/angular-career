@@ -5,16 +5,15 @@
   </div>
 </ng-container>
 <!-- Search Bar -->
-<div class="career-main">
+<div class="career-main" id="information">
   <div class="comman_search_filter">
-
     <div class="postion-search-detail">
       <div class="go-back-btn">
-        <action-button class="back-btn" type="stroked" title="Go Back" [routerLink]="['/positions']">
+        <action-button class="back-btn" type="stroked" title="Go Back" [routerLink]="['/positions/']">
         </action-button>
       </div>
       <div class="filter-data">
-          <mat-icon (click)="toggleTabMenuOpen()" class="filter_icon">filter_list</mat-icon>
+          <mat-icon (click)="toggleTabOpen()" class="filter_icon">{{filter_list ? 'clear' : 'menu'}}</mat-icon>
         </div>
     </div>
   </div>
@@ -22,8 +21,10 @@
     <!-- Position-left-side -->
     <div class="filter-container container__header tablet" >
 
-        <div class="position-company-map" *ngFor="let info of companyData"  >
-          <div class="company-map">
+        <div class="position-company-map" >
+
+          <div class="company-map" *ngFor="let info of companyData"  >
+
             <mat-card>
               <div class="company-border">
                 <img src="assets/icons/ic_google.svg">
@@ -65,31 +66,33 @@
                 </action-button>
               </div>
             </mat-card>
+
           </div>
-          <div class="company-content" >
-              <ng-container *ngIf= "filter_list">
+          <div class="content" [class.open]="filter_list" >
+              <ng-container>
             <mat-card>
               <h4>Contents</h4>
               <ol>
-                <li (click)="scroll(one)" > Position Information</li>
-                <li (click)="scroll(second)">Skills</li>
-                <li >Preferred Interests</li>
-                <li>Qualification Level</li>
-                <li>Preferred Experience</li>
-                <li>Job Description</li>
-                <li>School Restrictions</li>
+                <li (click)="scrollSmoothTo('information')"> Position Information</li>
+                <li (click)="scrollSmoothTo('skills')">Skills</li>
+                <li (click)="scrollSmoothTo('interest')">Preferred Interests</li>
+                <li (click)="scrollSmoothTo('description')">Job Description</li>
+                <li (click)="scrollSmoothTo('qualification')">Qualification Level</li>
+                <li (click)="scrollSmoothTo('experience')">Preferred Experience</li>
+                <li (click)="scrollSmoothTo('school')">School Restrictions</li>
               </ol>
             </mat-card>
-            </ng-container>
+          </ng-container>
           </div>
+
         </div>
 
     </div>
-      <div class="position-list-container">
+      <div class="position-list-container" >
 
           <div *ngFor="let info of positionName " >
 
-            <div class="row position-detail"  #one>
+            <div class="row position-detail">
 
               <h1>{{info.position}} </h1>
               <div class="position-right">
@@ -204,7 +207,7 @@
               </div>
             </div>
 
-            <div class="row position-qualification-detail">
+            <div class="row position-qualification-detail" id="skills">
               <h3>Qualification Level Estimate Breakdown</h3>
               <div class="position-qualification-skills" *ngFor="let score of positionName">
                 <simple-tag *ngIf="score.true_fitscore_info?.skills_weight" type="gray" title="Skills Match"
@@ -228,7 +231,7 @@
                 </p>
               </div>
             </div>
-            <div class="row position-required-skills-detail main-card">
+            <div class="row position-required-skills-detail main-card" id="interest" >
               <div class="show-button">
                 <action-button routerLink="." type="text" title="{{!info.showMoreFlag ? 'See All' :
                   'See Less'}}" color="primary" (click)="info.showMoreFlag = !info.showMoreFlag"></action-button>
@@ -265,7 +268,8 @@
               </ul>
 
             </div>
-            <div class="row position-interest-detail">
+
+            <div class="row position-interest-detail" id="description">
               <h3>Matched Interests</h3>
               <div class="position-matched">
                 <h5 for="skill_required">Matched Interests <span>{{ matchedInterests?.length}}</span>
@@ -278,7 +282,7 @@
                 </div>
               </div>
             </div>
-            <div class="comman" *ngFor="let jobData of positionName">
+            <div class="comman" *ngFor="let jobData of positionName" >
               <div class="row position-interest-detail">
                 <h3>Job Description</h3>
                 <div class="position-matched" [ngClass]="{'skill-more-height': info.readMoreFlag}">
@@ -289,7 +293,7 @@
               'Read Less'}}" color="primary" (click)="info.readMoreFlag = !info.readMoreFlag"></action-button>
                 </div>
               </div>
-              <div class="row position-eductaion-detail position-required-skills-detail">
+              <div class="row position-eductaion-detail position-required-skills-detail" id="qualification">
                 <h3>Education Level</h3>
                 <div class="education-level-m">
                   <h5 for="skill_required">Preferred Education <span>{{ jobData.preferred_education_levels?.length}}</span>
@@ -325,7 +329,7 @@
                   </div>
                 </div>
               </div>
-              <div class="row position-experience-detail">
+              <div class="row position-experience-detail" id="experience">
                 <h3>Preferred Experience</h3>
                 <ul >
                   <li *ngFor="let experience of jobData.preferred_experience">
@@ -403,7 +407,7 @@
               </div>
             </div>
             <div   >
-            <div class="row position-schools-restriction" #second>
+            <div class="row position-schools-restriction" id="school">
               <h3>School Restrictions</h3>
               <div class="position-prefer-interest">
                 <p>Applicants should be currently enrolled or alumni of the following schools.</p>

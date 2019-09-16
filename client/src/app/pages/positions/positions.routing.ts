@@ -10,8 +10,13 @@ export const positionRoutes: Routes = [
     // canActivate: [AuthGuard]
   },
       {
-        path: 'position-info/:position_id',
+        path: 'position-info/:position_id/:goBackQueryParam',
         component: PositionsDetailsComponent,
         // canActivate: [AuthGuard]
-      }
+      },
+      {
+        path: '',
+        component: PositionSearchComponent,
+        pathMatch: 'full'
+      },
 ];

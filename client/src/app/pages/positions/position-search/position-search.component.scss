@@ -120,7 +120,7 @@ $profile-form-field-mt: 30px;
                         }
                         p{
                             margin-top: 0px;
-                            
+
                         }
                     }
 
@@ -196,7 +196,7 @@ $profile-form-field-mt: 30px;
                     margin-top: 0;
                     font-weight: 400;
 
-                   
+
 
                     span {
                         display: inline-block;
@@ -248,15 +248,15 @@ $profile-form-field-mt: 30px;
 
                             a{
                                 @include inline-block-btn;
-                                vertical-align: middle; 
-                                color: rgba(map-get($md-cfaccent, 500), .84); 
-                                text-decoration: none; 
+                                vertical-align: middle;
+                                color: rgba(map-get($md-cfaccent, 500), .84);
+                                text-decoration: none;
                             }
 
                             span{
                                 @include inline-block-btn;
-                                vertical-align: middle; 
-                                color: rgba(map-get($md-cfaccent, 500), .84); 
+                                vertical-align: middle;
+                                color: rgba(map-get($md-cfaccent, 500), .84);
                             }
 
                             img {
@@ -356,7 +356,7 @@ $profile-form-field-mt: 30px;
                         width: 100%;
                         padding: 9px 15px 9px 15px;
                         vertical-align: middle;
-                        
+
 
                         span {
                             color: rgba(map-get($md-cfaccent, 500), .44);
@@ -471,8 +471,8 @@ $profile-form-field-mt: 30px;
                 height: fit-content;
                 background: white;
                 border-radius: 5px;
-                margin-bottom: 2px;            
-                
+                margin-bottom: 2px;
+
 
                 & mat-select {
                     font-size: 14px;
@@ -520,8 +520,8 @@ $profile-form-field-mt: 30px;
         @include flex(column, center, center);
     }
 
-    
-    
+
+
 }
 
 
@@ -556,18 +556,18 @@ $profile-form-field-mt: 30px;
                     background-color: $white;
                     margin-top: 20px;
                     margin-left: 28px;
-    
+
                     & .filter_icon {
                         display: block;
                         cursor: pointer;
                     }
                 }
-                    
+
             }
             .position-main-container {
                 width: 100%;
 
-                
+
                 & .container__header {
                     &.tablet {
                         position: absolute;
@@ -608,7 +608,7 @@ $profile-form-field-mt: 30px;
                     width: 97%;
                 }
             }
-                
+
                 .position-list-container {
                     float: none;
                     width: 95%;
@@ -690,7 +690,7 @@ $profile-form-field-mt: 30px;
                         cursor: pointer;
                     }
 
-                    
+
                 }
             }
             .position-main-container {
@@ -808,7 +808,7 @@ $profile-form-field-mt: 30px;
                         display: block;
                     }
 
-                    
+
                 }
             }
             .position-main-container {
@@ -891,10 +891,10 @@ $profile-form-field-mt: 30px;
                         }
                     }
                     & .right-align{
-                        @include inline-block-btn; 
+                        @include inline-block-btn;
                         text-align: center;
                          & action-button{
-                            @include inline-block-btn; 
+                            @include inline-block-btn;
                          }
                     }
 
@@ -969,7 +969,7 @@ $profile-form-field-mt: 30px;
                             font-family: "Poppins", sans-serif;
                             font-weight: 400;
                         }
-    
+
                     }
 
 
