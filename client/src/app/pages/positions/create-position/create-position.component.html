@@ -253,6 +253,77 @@
   <!-- Perferred Education End -->
 
   <!-- Preferred Work Experience Start -->
+  <div *ngIf="selectedPageIndex===3" class="container profile-basic">
+    <div class="container__full">
+      <div class="profile-form">
+        <h3 class="profile-form__title">
+          PREFERRED WORK EXPERIENCE
+        </h3>
+        <ng-container *ngFor="let preferredWorkExperienceForm of preferredWorkExperienceFormArray.controls; let i = index" [formGroup]="preferredWorkExperienceFormArray.at(i)">
+          <div class="profile-form__field">
+            <mat-form-field class="bg-transparent" appearance="fill">
+              <mat-label>Industry</mat-label>
+              <input matInput placeholder="Industry" type="text" [matAutocomplete]="autocompleteWorkIndustry" formControlName="industry">
+              <mat-autocomplete #autocompleteWorkIndustry="matAutocomplete" (closed)="onBlurIndustry(i)">
+                <mat-option *ngFor="let autocomplete_industry of autocomplete_industries[i]" [value]="autocomplete_industries.industry_name" (onSelectionChange)="onSelectIndustry(autocomplete_industry, i)">
+                  <span>{{autocomplete_industry.industry_name}}</span>
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+          <div class="profile-form__field">
+            <mat-form-field class="bg-transparent" appearance="fill">
+              <mat-label>Years</mat-label>
+              <input matInput placeholder="YYYY" type="text" formControlName="years" pattern="\d{4}">
+              <input class="hide" [matDatepicker]="experience_years" [max]="maxDate">
+              <mat-datepicker-toggle matSuffix [for]="experience_years"></mat-datepicker-toggle>
+              <mat-datepicker
+                touchUi
+                #experience_years
+                startView="multi-year"
+                (yearSelected)="onExperienceYearSelect($event, i, experience_years)"
+              >
+              </mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="profile-form__field textarea">
+            <mat-form-field>
+              <textarea matInput placeholder="Description" rows="15" formControlName="description"></textarea>
+            </mat-form-field>
+          </div>
+
+          <div class="profile-form__field search">
+            <h3>Skills Trained <span *ngIf="preferred_work_experiences[i].skills_trained &&  preferred_work_experiences[i].skills_trained.length > 0" class="count">{{preferred_work_experiences[i].skills_trained.length}}</span></h3>
+            <mat-form-field appearance="standard" class="search">
+              <mat-icon matSuffix>search</mat-icon>
+              <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompleteSkillsTrained" formControlName="skills_trained">
+              <mat-autocomplete #autocompleteSkillsTrained="matAutocomplete">
+                <mat-option *ngFor="let autocomplete_skill_trained of autocomplete_skills_trained[i]" [value]="autocomplete_skill_trained.skill" (onSelectionChange)="onSelectSkillsTrained(i, autocomplete_skill_trained)">
+                  <span>{{autocomplete_skill_trained.skill}}</span>
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+            <div class="skills" *ngIf="preferred_work_experiences[i].skills_trained && preferred_work_experiences[i].skills_trained.length > 0">
+              <simple-tag *ngFor="let skill of preferred_work_experiences[i].skills_trained; let j = index" type="gray" title="{{skill.skill}}" removeTag="true" (click)="onRemoveSkillsTrained(i, skill, j)"></simple-tag>
+            </div>
+          </div>
+
+          
+          <div class="profile-form__field btn">
+            <action-button title="Remove" color="warn" (click)="onRemovePreferredWorkExperienceFormGroup(i)"></action-button>
+          </div>
+          <div class="profile-form__field border">
+          </div>
+        </ng-container>
+        <div class="profile-form__field btn">
+          <action-button type="stroked" title="Add Another" (click)="onAddPreferredWorkExperienceFormGroup()" [disabled]="!(preferredWorkExperienceFormArray.valid)"></action-button>
+        </div>
+      </div>
+    </div>
+    <div class="container__full">
+      <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" ></action-button>
+    </div>
+  </div>
   <!-- Preferred Work Experience End -->
 
   <!-- Skills Start -->

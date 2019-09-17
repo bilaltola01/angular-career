@@ -669,14 +669,16 @@ export class CreatePositionComponent implements OnInit {
     this.autocomplete_industries = [];
     this.autocomplete_skills_trained = [];
 
-    if (!this.preferred_work_experiences) {
-      this.preferred_work_experiences.push({
+    this.preferredWorkExperienceFormArray = new FormArray([]);
+
+    if (!this.preferred_work_experiences || this.preferred_work_experiences.length === 0) {
+      this.preferred_work_experiences = [{
         industry: null,
         years: null,
         description: null,
         skills_trained: null
-      });
-      this.addPreferredWorkExperienceFormGroup(null);
+      }];
+      this.addPreferredWorkExperienceFormGroup(null, 0);
     } else {
       this.preferred_work_experiences.forEach((experience, index) => {
         this.addPreferredWorkExperienceFormGroup(experience, index);
@@ -684,7 +686,7 @@ export class CreatePositionComponent implements OnInit {
     }
   }
 
-  addPreferredWorkExperienceFormGroup(experience: PreferredWorkExperience, arrIndex: number = 0) {
+  addPreferredWorkExperienceFormGroup(experience: PreferredWorkExperience, arrIndex: number) {
     this.autocomplete_industries.push([]);
     this.autocomplete_skills_trained.push([]);
 
@@ -724,7 +726,7 @@ export class CreatePositionComponent implements OnInit {
     );
     experienceForm.get('skills_trained').valueChanges.subscribe((skills_trained) => {
       if (skills_trained && this.helperService.checkSpacesString(skills_trained)) {
-        this.autoCompleteService.autoComplete(skills_trained, 'industries').subscribe(
+        this.autoCompleteService.autoComplete(skills_trained, 'skills').subscribe(
           dataJson => {
             if (dataJson['success']) {
               this.autocomplete_skills_trained[arrIndex] = dataJson['data'];
@@ -780,6 +782,7 @@ export class CreatePositionComponent implements OnInit {
         this.preferred_work_experiences[formIndex].skills_trained.push(skill);
       }
     }
+    this.preferredWorkExperienceFormArray.at(formIndex).get('skills_trained').setValue('');
   }
 
   onRemoveSkillsTrained(formIndex: number, skill: Skill, arrIndex: number) {
@@ -789,6 +792,21 @@ export class CreatePositionComponent implements OnInit {
     if (this.preferred_work_experiences[formIndex].skills_trained.length === 0) {
       this.preferred_work_experiences[formIndex].skills_trained = null;
     }
+  }
+
+  onAddPreferredWorkExperienceFormGroup() {
+    this.preferred_work_experiences.push({
+      industry: null,
+      years: null,
+      description: null,
+      skills_trained: null
+    });
+    this.addPreferredWorkExperienceFormGroup(null, this.preferred_work_experiences.length - 1);
+  }
+
+  onRemovePreferredWorkExperienceFormGroup(arrIndex: number) {
+    this.preferredWorkExperienceFormArray.removeAt(arrIndex);
+    this.preferred_work_experiences.splice(arrIndex, 1);
   }
 
 

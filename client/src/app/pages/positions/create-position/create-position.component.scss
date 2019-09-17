@@ -153,6 +153,19 @@ p {
           &.textarea {
             padding: 10px 20px 5px 20px;
           }
+          &.border {
+            margin-top: 60px;
+            padding: 0;
+          }
+          &.btn {
+            margin-top: 60px;
+            border: none;
+            padding: 0;
+            @include flex(row, center, flex-start);
+            action-button {
+              min-width: 150px;
+            }
+          }
           &.search {
             border: none;
             padding: 0;
@@ -702,6 +715,12 @@ p {
           }
           &__field {
             width: 90%;
+            &.border {
+              margin-top: 40px;
+            }
+            &.btn {
+              margin-top: 40px;
+            }
             mat-form-field {
               img {
                 width: 24px;
@@ -762,6 +781,12 @@ p {
           }
           &__field {
             width: 95%;
+            &.border {
+              margin-top: 30px;
+            }
+            &.btn {
+              margin-top: 30px;
+            }
             mat-form-field {
               img {
                 width: 20px;
