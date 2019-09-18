@@ -168,278 +168,249 @@
   </div>
 </div>
   
-  <!-- Position Information end -->
+<!-- Position Information end -->
 
-  <!-- Preferred Education Start -->
-  <div *ngIf="selectedPageIndex===2" class="container profile-skills">
-    <div class="container__full">
-      <div class="profile-form" [formGroup]="preferredEducationForm">
-        <h3 class="profile-form__title">
-          Preferred Education
-        </h3>
-        <div class="profile-form__field search">
-          <h3>Preferred Education Level <span *ngIf="preferred_education_levels && preferred_education_levels.length > 0" class="count">{{preferred_education_levels.length}}</span></h3>
-          <mat-form-field appearance="standard" class="search">
-            <mat-icon matSuffix>search</mat-icon>
-            <input matInput 
-              placeholder="Search Eudaction Level" 
-              type="text" 
-              [matAutocomplete]="autocompleteEducationLevel" 
-              formControlName="search_eduaction_level">
-            <mat-autocomplete #autocompleteEducationLevel="matAutocomplete">
-              <mat-option *ngFor="let level of autocomplete_education_levels"
-                [value]="level.education_level" 
-                (onSelectionChange)="onSelectEducationLevel(level)">
-                <span>{{level.education_level}}</span>
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-          <div class="skills" *ngIf="preferred_education_levels && preferred_education_levels.length > 0">
-            <simple-tag *ngFor="let level of preferred_education_levels; let j = index" 
-              type="gray"
-              title="{{level.education_level}}" 
-              removeTag="true" 
-              (click)="onRemoveEducationLevel(level, j)">
-            </simple-tag>
-          </div>
+<!-- Preferred Education Start -->
+<div *ngIf="selectedPageIndex===2" class="container profile-skills">
+  <div class="container__full">
+    <div class="profile-form" [formGroup]="preferredEducationForm">
+      <h3 class="profile-form__title">
+        Preferred Education
+      </h3>
+      <div class="profile-form__field search">
+        <h3>Preferred Education Level <span *ngIf="preferred_education_levels && preferred_education_levels.length > 0" class="count">{{preferred_education_levels.length}}</span></h3>
+        <mat-form-field appearance="standard" class="search">
+          <mat-icon matSuffix>search</mat-icon>
+          <input matInput 
+            placeholder="Search Eudaction Level" 
+            type="text" 
+            [matAutocomplete]="autocompleteEducationLevel" 
+            formControlName="search_eduaction_level">
+          <mat-autocomplete #autocompleteEducationLevel="matAutocomplete">
+            <mat-option *ngFor="let level of autocomplete_education_levels"
+              [value]="level.education_level" 
+              (onSelectionChange)="onSelectEducationLevel(level)">
+              <span>{{level.education_level}}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <div class="skills" *ngIf="preferred_education_levels && preferred_education_levels.length > 0">
+          <simple-tag *ngFor="let level of preferred_education_levels; let j = index" 
+            type="gray"
+            title="{{level.education_level}}" 
+            removeTag="true" 
+            (click)="onRemoveEducationLevel(level, j)">
+          </simple-tag>
         </div>
+      </div>
 
+      <div class="profile-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Preferred Major</mat-label>
+          <input matInput placeholder="Preferred Major" type="text" [matAutocomplete]="autocompleteEducationMajor" formControlName="education_major">
+          <mat-icon matSuffix *ngIf="preferredEducationForm.get('education_major').value && helperService.checkSpacesString(preferredEducationForm.get('education_major').value) && preferredEducationForm.get('education_major').valid && onCheckEducationMajorValidation()">done</mat-icon>
+          <mat-icon matSuffix class="error-field" *ngIf="preferredEducationForm.get('education_major').value && helperService.checkSpacesString(preferredEducationForm.get('education_major').value) && !onCheckEducationMajorValidation() && preferredEducationForm.get('education_major').touched">close</mat-icon>
+          <mat-autocomplete #autocompleteEducationMajor="matAutocomplete" (closed)="onBlurEducationMajor()">
+            <mat-option *ngFor="let major of autocomplete_majors" [value]="major.major_name" (onSelectionChange)="onSelectEducationMajor(major)">
+              <span>{{major.major_name}}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+
+      <div class="profile-form__field search">
+        <h3>Preferred Major Categories <span *ngIf="preferred_education_major_categories && preferred_education_major_categories.length > 0" class="count">{{preferred_education_major_categories.length}}</span></h3>
+        <mat-form-field appearance="standard" class="search">
+          <mat-icon matSuffix>search</mat-icon>
+          <input matInput 
+            placeholder="Search Major Category" 
+            type="text" 
+            [matAutocomplete]="autocompleteMajorCategory" 
+            formControlName="search_major_category">
+          <mat-autocomplete #autocompleteMajorCategory="matAutocomplete">
+            <mat-option *ngFor="let major_category of autocomplete_major_categories"
+              [value]="major_category.cat_name" 
+              (onSelectionChange)="onSelectEducationMajorCategory(major_category)">
+              <span>{{major_category.cat_name}}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <div class="skills" *ngIf="preferred_education_major_categories && preferred_education_major_categories.length > 0">
+          <simple-tag *ngFor="let major_category of preferred_education_major_categories; let j = index" 
+            type="gray"
+            title="{{major_category.cat_name}}" 
+            removeTag="true" 
+            (click)="onRemoveEducationMajorCategory(major_category, j)">
+          </simple-tag>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container__full">
+    <action-button class="btn-next" type="flat" title="Next" color="primary" [disabled]="!(preferredEducationForm.valid && onCheckEducationMajorValidation())" (click)="goToNextPage()"></action-button>
+  </div>
+</div>
+<!-- Perferred Education End -->
+
+<!-- Preferred Work Experience Start -->
+<div *ngIf="selectedPageIndex===3" class="container profile-basic">
+  <div class="container__full">
+    <div class="profile-form">
+      <h3 class="profile-form__title">
+        PREFERRED WORK EXPERIENCE
+      </h3>
+      <ng-container *ngFor="let preferredWorkExperienceForm of preferredWorkExperienceFormArray.controls; let i = index" [formGroup]="preferredWorkExperienceFormArray.at(i)">
         <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
-            <mat-label>Preferred Major</mat-label>
-            <input matInput placeholder="Preferred Major" type="text" [matAutocomplete]="autocompleteEducationMajor" formControlName="education_major">
-            <mat-icon matSuffix *ngIf="preferredEducationForm.get('education_major').value && helperService.checkSpacesString(preferredEducationForm.get('education_major').value) && preferredEducationForm.get('education_major').valid && onCheckEducationMajorValidation()">done</mat-icon>
-            <mat-icon matSuffix class="error-field" *ngIf="preferredEducationForm.get('education_major').value && helperService.checkSpacesString(preferredEducationForm.get('education_major').value) && !onCheckEducationMajorValidation() && preferredEducationForm.get('education_major').touched">close</mat-icon>
-            <mat-autocomplete #autocompleteEducationMajor="matAutocomplete" (closed)="onBlurEducationMajor()">
-              <mat-option *ngFor="let major of autocomplete_majors" [value]="major.major_name" (onSelectionChange)="onSelectEducationMajor(major)">
-                <span>{{major.major_name}}</span>
+            <mat-label>Industry</mat-label>
+            <input matInput placeholder="Industry" type="text" [matAutocomplete]="autocompleteWorkIndustry" formControlName="industry">
+            <mat-autocomplete #autocompleteWorkIndustry="matAutocomplete" (closed)="onBlurIndustry(i)">
+              <mat-option *ngFor="let autocomplete_industry of autocomplete_industries[i]" [value]="autocomplete_industries.industry_name" (onSelectionChange)="onSelectIndustry(autocomplete_industry, i)">
+                <span>{{autocomplete_industry.industry_name}}</span>
               </mat-option>
             </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="profile-form__field">
+          <mat-form-field class="bg-transparent" appearance="fill">
+            <mat-label>Years</mat-label>
+            <input matInput placeholder="YYYY" type="text" formControlName="years" pattern="\d{4}">
+            <input class="hide" [matDatepicker]="experience_years" [max]="maxDate">
+            <mat-datepicker-toggle matSuffix [for]="experience_years"></mat-datepicker-toggle>
+            <mat-datepicker
+              touchUi
+              #experience_years
+              startView="multi-year"
+              (yearSelected)="onExperienceYearSelect($event, i, experience_years)"
+            >
+            </mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="profile-form__field textarea">
+          <mat-form-field>
+            <textarea matInput placeholder="Description" rows="15" formControlName="description"></textarea>
           </mat-form-field>
         </div>
 
         <div class="profile-form__field search">
-          <h3>Preferred Major Categories <span *ngIf="preferred_education_major_categories && preferred_education_major_categories.length > 0" class="count">{{preferred_education_major_categories.length}}</span></h3>
+          <h3>Skills Trained <span *ngIf="preferred_work_experiences[i].skills_trained &&  preferred_work_experiences[i].skills_trained.length > 0" class="count">{{preferred_work_experiences[i].skills_trained.length}}</span></h3>
           <mat-form-field appearance="standard" class="search">
             <mat-icon matSuffix>search</mat-icon>
-            <input matInput 
-              placeholder="Search Major Category" 
-              type="text" 
-              [matAutocomplete]="autocompleteMajorCategory" 
-              formControlName="search_major_category">
-            <mat-autocomplete #autocompleteMajorCategory="matAutocomplete">
-              <mat-option *ngFor="let major_category of autocomplete_major_categories"
-                [value]="major_category.cat_name" 
-                (onSelectionChange)="onSelectEducationMajorCategory(major_category)">
-                <span>{{major_category.cat_name}}</span>
+            <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompleteSkillsTrained" formControlName="skills_trained">
+            <mat-autocomplete #autocompleteSkillsTrained="matAutocomplete">
+              <mat-option *ngFor="let autocomplete_skill_trained of autocomplete_skills_trained[i]" [value]="autocomplete_skill_trained.skill" (onSelectionChange)="onSelectSkillsTrained(i, autocomplete_skill_trained)">
+                <span>{{autocomplete_skill_trained.skill}}</span>
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
-          <div class="skills" *ngIf="preferred_education_major_categories && preferred_education_major_categories.length > 0">
-            <simple-tag *ngFor="let major_category of preferred_education_major_categories; let j = index" 
-              type="gray"
-              title="{{major_category.cat_name}}" 
-              removeTag="true" 
-              (click)="onRemoveEducationMajorCategory(major_category, j)">
-            </simple-tag>
+          <div class="skills" *ngIf="preferred_work_experiences[i].skills_trained && preferred_work_experiences[i].skills_trained.length > 0">
+            <simple-tag *ngFor="let skill of preferred_work_experiences[i].skills_trained; let j = index" type="gray" title="{{skill.skill}}" removeTag="true" (click)="onRemoveSkillsTrained(i, skill, j)"></simple-tag>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="container__full">
-      <action-button class="btn-next" type="flat" title="Next" color="primary" [disabled]="!(preferredEducationForm.valid && onCheckEducationMajorValidation())" (click)="goToNextPage()"></action-button>
-    </div>
-  </div>
-  <!-- Perferred Education End -->
 
-  <!-- Preferred Work Experience Start -->
-  <div *ngIf="selectedPageIndex===3" class="container profile-basic">
-    <div class="container__full">
-      <div class="profile-form">
-        <h3 class="profile-form__title">
-          PREFERRED WORK EXPERIENCE
-        </h3>
-        <ng-container *ngFor="let preferredWorkExperienceForm of preferredWorkExperienceFormArray.controls; let i = index" [formGroup]="preferredWorkExperienceFormArray.at(i)">
-          <div class="profile-form__field">
-            <mat-form-field class="bg-transparent" appearance="fill">
-              <mat-label>Industry</mat-label>
-              <input matInput placeholder="Industry" type="text" [matAutocomplete]="autocompleteWorkIndustry" formControlName="industry">
-              <mat-autocomplete #autocompleteWorkIndustry="matAutocomplete" (closed)="onBlurIndustry(i)">
-                <mat-option *ngFor="let autocomplete_industry of autocomplete_industries[i]" [value]="autocomplete_industries.industry_name" (onSelectionChange)="onSelectIndustry(autocomplete_industry, i)">
-                  <span>{{autocomplete_industry.industry_name}}</span>
-                </mat-option>
-              </mat-autocomplete>
-            </mat-form-field>
-          </div>
-          <div class="profile-form__field">
-            <mat-form-field class="bg-transparent" appearance="fill">
-              <mat-label>Years</mat-label>
-              <input matInput placeholder="YYYY" type="text" formControlName="years" pattern="\d{4}">
-              <input class="hide" [matDatepicker]="experience_years" [max]="maxDate">
-              <mat-datepicker-toggle matSuffix [for]="experience_years"></mat-datepicker-toggle>
-              <mat-datepicker
-                touchUi
-                #experience_years
-                startView="multi-year"
-                (yearSelected)="onExperienceYearSelect($event, i, experience_years)"
-              >
-              </mat-datepicker>
-            </mat-form-field>
-          </div>
-          <div class="profile-form__field textarea">
-            <mat-form-field>
-              <textarea matInput placeholder="Description" rows="15" formControlName="description"></textarea>
-            </mat-form-field>
-          </div>
-
-          <div class="profile-form__field search">
-            <h3>Skills Trained <span *ngIf="preferred_work_experiences[i].skills_trained &&  preferred_work_experiences[i].skills_trained.length > 0" class="count">{{preferred_work_experiences[i].skills_trained.length}}</span></h3>
-            <mat-form-field appearance="standard" class="search">
-              <mat-icon matSuffix>search</mat-icon>
-              <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompleteSkillsTrained" formControlName="skills_trained">
-              <mat-autocomplete #autocompleteSkillsTrained="matAutocomplete">
-                <mat-option *ngFor="let autocomplete_skill_trained of autocomplete_skills_trained[i]" [value]="autocomplete_skill_trained.skill" (onSelectionChange)="onSelectSkillsTrained(i, autocomplete_skill_trained)">
-                  <span>{{autocomplete_skill_trained.skill}}</span>
-                </mat-option>
-              </mat-autocomplete>
-            </mat-form-field>
-            <div class="skills" *ngIf="preferred_work_experiences[i].skills_trained && preferred_work_experiences[i].skills_trained.length > 0">
-              <simple-tag *ngFor="let skill of preferred_work_experiences[i].skills_trained; let j = index" type="gray" title="{{skill.skill}}" removeTag="true" (click)="onRemoveSkillsTrained(i, skill, j)"></simple-tag>
-            </div>
-          </div>
-
-          
-          <div class="profile-form__field btn">
-            <action-button title="Remove" color="warn" (click)="onRemovePreferredWorkExperienceFormGroup(i)"></action-button>
-          </div>
-          <div class="profile-form__field border">
-          </div>
-        </ng-container>
+        
         <div class="profile-form__field btn">
-          <action-button type="stroked" title="Add Another" (click)="onAddPreferredWorkExperienceFormGroup()" [disabled]="!(preferredWorkExperienceFormArray.valid)"></action-button>
+          <action-button title="Remove" color="warn" (click)="onRemovePreferredWorkExperienceFormGroup(i)"></action-button>
+        </div>
+        <div class="profile-form__field border">
+        </div>
+      </ng-container>
+      <div class="profile-form__field btn">
+        <action-button type="stroked" title="Add Another" (click)="onAddPreferredWorkExperienceFormGroup()" [disabled]="!(preferredWorkExperienceFormArray.valid)"></action-button>
+      </div>
+    </div>
+  </div>
+  <div class="container__full">
+    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" ></action-button>
+  </div>
+</div>
+<!-- Preferred Work Experience End -->
+
+<!-- Skills Start -->
+<div *ngIf="selectedPageIndex===4" class="container profile-skills">
+  <div class="container__full">
+    <div class="profile-form" [formGroup]="skillsForm">
+      <h3 class="profile-form__title">
+        SKILLS
+      </h3>
+      <div class="profile-form__field search">
+        <h3>Minimum Skills <span *ngIf="minimum_skills &&  minimum_skills.length > 0" class="count">{{minimum_skills.length}}</span></h3>
+        <!-- <img src="assets/icons/ic_question.svg" (click)="openSkillDescriptionDialog()"> -->
+        <mat-form-field appearance="standard" class="search">
+          <mat-icon matSuffix>search</mat-icon>
+          <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompleteMinimumSkills" formControlName="search_minimum_skill">
+          <mat-autocomplete #autocompleteMinimumSkills="matAutocomplete">
+            <mat-option *ngFor="let autocomplete_skill of autocomplete_minimum_skills" [value]="autocomplete_skill.skill" (onSelectionChange)="onSelectMinimumSkill(autocomplete_skill)">
+              <span>{{autocomplete_skill.skill}}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <div *ngIf="temp_minimum_skill" class="skills">
+          <simple-tag type="gray" title="{{temp_minimum_skill.skillItem.skill}}" ellipseTag="true" isControl="true" value="{{temp_minimum_skill.skillItem.skill_level}}" (levelChanged)="onLevelChanged($event, temp_minimum_skill.index, true)" (removeClick)="onRemoveMinimumSkill(temp_skill.skillItem, temp_skill.index)"></simple-tag>
+          <mat-icon (click)="editSkillDone(true)">cancel</mat-icon>
+        </div>
+        <div *ngIf="!temp_minimum_skill && minimum_skills && minimum_skills.length > 0" class="skills">
+          <simple-tag *ngFor="let minimum_skill of minimum_skills; let i = index" type="gray" title="{{minimum_skill.skill}}" ellipseTag="true" value="{{minimum_skill.skill_level}}" isControl="true" (levelChanged)="onLevelChanged($event, i, true)" (removeClick)="onRemoveMinimumSkill(minimum_skill, i)"></simple-tag>
+        </div>
+      </div>
+      <div class="profile-form__field search">
+        <h3>Preferred Skills <span *ngIf="preferred_skills &&  preferred_skills.length > 0" class="count">{{preferred_skills.length}}</span></h3>
+        <!-- <img src="assets/icons/ic_question.svg" (click)="openSkillDescriptionDialog()"> -->
+        <mat-form-field appearance="standard" class="search">
+          <mat-icon matSuffix>search</mat-icon>
+          <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompletePreferredSkills" formControlName="search_preferred_skill">
+          <mat-autocomplete #autocompletePreferredSkills="matAutocomplete">
+            <mat-option *ngFor="let autocomplete_skill of autocomplete_preferred_skills" [value]="autocomplete_skill.skill" (onSelectionChange)="onSelectPreferredSkill(autocomplete_skill)">
+              <span>{{autocomplete_skill.skill}}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <div *ngIf="temp_preferred_skill" class="skills">
+          <simple-tag type="gray" title="{{temp_preferred_skill.skillItem.skill}}" ellipseTag="true" isControl="true" value="{{temp_preferred_skill.skillItem.skill_level}}" (levelChanged)="onLevelChanged($event, temp_preferred_skill.index, false)" (removeClick)="onRemovePreferredSkill(temp_skill.skillItem, temp_skill.index)"></simple-tag>
+          <mat-icon (click)="editSkillDone(false)">cancel</mat-icon>
+        </div>
+        <div *ngIf="!temp_preferred_skill && preferred_skills && preferred_skills.length > 0" class="skills">
+          <simple-tag *ngFor="let preferred_skill of preferred_skills; let i = index" type="gray" title="{{preferred_skill.skill}}" ellipseTag="true" value="{{preferred_skill.skill_level}}" isControl="true" (levelChanged)="onLevelChanged($event, i, false)" (removeClick)="onRemovePreferredSkill(preferred_skill, i)"></simple-tag>
         </div>
       </div>
     </div>
-    <div class="container__full">
-      <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" ></action-button>
-    </div>
   </div>
-  <!-- Preferred Work Experience End -->
+  <div class="container__full">
+    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
+  </div>
+</div>
+<!-- Skills End -->
 
-  <!-- Skills Start -->
-  <div *ngIf="selectedPageIndex===4" class="container profile-skills">
-    <div class="container__full">
-      <div class="profile-form" [formGroup]="skillsForm">
-        <h3 class="profile-form__title">
-          SKILLS
-        </h3>
-        <div class="profile-form__field search">
-          <h3>Minimum Skills <span *ngIf="minimum_skills &&  minimum_skills.length > 0" class="count">{{minimum_skills.length}}</span></h3>
-          <!-- <img src="assets/icons/ic_question.svg" (click)="openSkillDescriptionDialog()"> -->
-          <mat-form-field appearance="standard" class="search">
-            <mat-icon matSuffix>search</mat-icon>
-            <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompleteMinimumSkills" formControlName="search_minimum_skill">
-            <mat-autocomplete #autocompleteMinimumSkills="matAutocomplete">
-              <mat-option *ngFor="let autocomplete_skill of autocomplete_minimum_skills" [value]="autocomplete_skill.skill" (onSelectionChange)="onSelectMinimumSkill(autocomplete_skill)">
-                <span>{{autocomplete_skill.skill}}</span>
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-          <div *ngIf="temp_minimum_skill" class="skills">
-            <simple-tag type="gray" title="{{temp_minimum_skill.skillItem.skill}}" ellipseTag="true" isControl="true" value="{{temp_minimum_skill.skillItem.skill_level}}" (levelChanged)="onLevelChanged($event, temp_minimum_skill.index, true)" (removeClick)="onRemoveMinimumSkill(temp_skill.skillItem, temp_skill.index)"></simple-tag>
-            <mat-icon (click)="editSkillDone(true)">cancel</mat-icon>
-          </div>
-          <div *ngIf="!temp_minimum_skill && minimum_skills && minimum_skills.length > 0" class="skills">
-            <simple-tag *ngFor="let minimum_skill of minimum_skills; let i = index" type="gray" title="{{minimum_skill.skill}}" ellipseTag="true" value="{{minimum_skill.skill_level}}" isControl="true" (levelChanged)="onLevelChanged($event, i, true)" (removeClick)="onRemoveMinimumSkill(minimum_skill, i)"></simple-tag>
-          </div>
-        </div>
-        <div class="profile-form__field search">
-          <h3>Preferred Skills <span *ngIf="preferred_skills &&  preferred_skills.length > 0" class="count">{{preferred_skills.length}}</span></h3>
-          <!-- <img src="assets/icons/ic_question.svg" (click)="openSkillDescriptionDialog()"> -->
-          <mat-form-field appearance="standard" class="search">
-            <mat-icon matSuffix>search</mat-icon>
-            <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompletePreferredSkills" formControlName="search_preferred_skill">
-            <mat-autocomplete #autocompletePreferredSkills="matAutocomplete">
-              <mat-option *ngFor="let autocomplete_skill of autocomplete_preferred_skills" [value]="autocomplete_skill.skill" (onSelectionChange)="onSelectPreferredSkill(autocomplete_skill)">
-                <span>{{autocomplete_skill.skill}}</span>
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-          <div *ngIf="temp_preferred_skill" class="skills">
-            <simple-tag type="gray" title="{{temp_preferred_skill.skillItem.skill}}" ellipseTag="true" isControl="true" value="{{temp_preferred_skill.skillItem.skill_level}}" (levelChanged)="onLevelChanged($event, temp_preferred_skill.index, false)" (removeClick)="onRemovePreferredSkill(temp_skill.skillItem, temp_skill.index)"></simple-tag>
-            <mat-icon (click)="editSkillDone(false)">cancel</mat-icon>
-          </div>
-          <div *ngIf="!temp_preferred_skill && preferred_skills && preferred_skills.length > 0" class="skills">
-            <simple-tag *ngFor="let preferred_skill of preferred_skills; let i = index" type="gray" title="{{preferred_skill.skill}}" ellipseTag="true" value="{{preferred_skill.skill_level}}" isControl="true" (levelChanged)="onLevelChanged($event, i, false)" (removeClick)="onRemovePreferredSkill(preferred_skill, i)"></simple-tag>
-          </div>
+<!-- Interests Start -->
+<div *ngIf="selectedPageIndex===5" class="container profile-skills">
+  <div class="container__full">
+    <div class="profile-form" [formGroup]="interestsForm">
+      <h3 class="profile-form__title">
+        INTERESTS
+      </h3>
+      <div class="profile-form__field search">
+        <h3>Preferred Interests <span *ngIf="preferred_interests && preferred_interests.length > 0" class="count">{{preferred_interests.length}}</span></h3>
+        <mat-form-field appearance="standard" class="search">
+          <mat-icon matSuffix>search</mat-icon>
+          <input matInput placeholder="Search Interests" type="text" [matAutocomplete]="autocompleteInterests" formControlName="search_preferred_interest">
+          <mat-autocomplete #autocompleteInterests="matAutocomplete">
+            <mat-option *ngFor="let autocomplete_interest of autocomplete_preferred_interests" [value]="autocomplete_interest.interest" (onSelectionChange)="onSelectPreferredInterest(autocomplete_interest)">
+              <span>{{autocomplete_interest.interest}}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <div *ngIf="preferred_interests && preferred_interests.length > 0" class="skills">
+          <simple-tag *ngFor="let interestData of preferred_interests; let i = index" type="gray" removeTag="true" title="{{interestData.interest}}" (click)="onRemovePreferredInterest(interestData, i)"></simple-tag>
         </div>
       </div>
     </div>
-    <div class="container__full">
-      <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
-    </div>
   </div>
-  <!-- Skills End -->
-
-  <!-- Interests Start -->
-  <div *ngIf="selectedPageIndex===5" class="container profile-skills">
-    <div class="container__full">
-      <div class="profile-form" [formGroup]="interestsForm">
-        <h3 class="profile-form__title">
-          INTERESTS
-        </h3>
-        <div class="profile-form__field search">
-          <h3>Preferred Interests <span *ngIf="preferred_interests && preferred_interests.length > 0" class="count">{{preferred_interests.length}}</span></h3>
-          <mat-form-field appearance="standard" class="search">
-            <mat-icon matSuffix>search</mat-icon>
-            <input matInput placeholder="Search Interests" type="text" [matAutocomplete]="autocompleteInterests" formControlName="search_preferred_interest">
-            <mat-autocomplete #autocompleteInterests="matAutocomplete">
-              <mat-option *ngFor="let autocomplete_interest of autocomplete_preferred_interests" [value]="autocomplete_interest.interest" (onSelectionChange)="onSelectPreferredInterest(autocomplete_interest)">
-                <span>{{autocomplete_interest.interest}}</span>
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-          <div *ngIf="preferred_interests && preferred_interests.length > 0" class="skills">
-            <simple-tag *ngFor="let interestData of preferred_interests; let i = index" type="gray" removeTag="true" title="{{interestData.interest}}" (click)="onRemovePreferredInterest(interestData, i)"></simple-tag>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="container__full">
-      <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
-    </div>
+  <div class="container__full">
+    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
   </div>
-  <!-- Interests End -->
+</div>
+<!-- Interests End -->
 
-  <!-- Preferred Schools Start -->
-  <div *ngIf="selectedPageIndex===6" class="container profile-skills">
-    <div class="container__full">
-      <div class="profile-form" [formGroup]="schoolRestrictionsForm">
-        <h3 class="profile-form__title">
-          School Restrictions
-        </h3>
-        <div class="profile-form__field search">
-          <h3>Applicants should be currently enrolled or alumni of the following schools.</h3>
-          <mat-form-field appearance="standard" class="search">
-            <mat-icon matSuffix>search</mat-icon>
-            <input matInput placeholder="Search school or university" type="text" [matAutocomplete]="autocompleteSchools" formControlName="search_preferred_school">
-            <mat-autocomplete #autocompleteSchools="matAutocomplete">
-              <mat-option *ngFor="let autocomplete_preferred_school of autocomplete_preferred_schools" [value]="autocomplete_preferred_school.school_name" (onSelectionChange)="onSelectPreferredSchool(autocomplete_preferred_school)">
-                <span>{{autocomplete_preferred_school.school_name}}</span>
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-          <div *ngIf="preferred_schools && preferred_schools.length > 0" class="skills">
-            <simple-tag *ngFor="let preferred_school of preferred_schools; let i = index" type="gray" removeTag="true" title="{{preferred_school.school_name}}" (click)="onRemovePreferredSchool(preferred_school, i)"></simple-tag>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="container__full">
-      <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
-    </div>
-  </div>
-  <!-- Preferred Schools End -->
+<!-- Preferred Schools Start -->
 
-  <!-- Postion Preview Start -->
-  <!-- Position Preview End -->
+<!-- Position Preview End -->
