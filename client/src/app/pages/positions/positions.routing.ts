@@ -13,5 +13,10 @@ export const positionRoutes: Routes = [
         path: 'position-info/:position_id',
         component: PositionsDetailsComponent,
         // canActivate: [AuthGuard]
-      }
+      },
+      {
+        path: '',
+        component: PositionSearchComponent,
+        pathMatch: 'full'
+      },
 ];
