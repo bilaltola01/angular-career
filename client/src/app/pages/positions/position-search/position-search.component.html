@@ -14,7 +14,7 @@
       <mat-form-field appearance="standard" class="search">
         <mat-icon matSuffix (click)="onSearchPosition($event)">search</mat-icon>
         <input matInput placeholder="Search Positions"  type="text" [matAutocomplete]="autocompleteSearch"
-          formControlName="searchPosition" (keyup.enter)="onSearchPosition($event)" [(ngModel)]="urlParams['position']">
+          formControlName="searchPosition" (keyup.enter)="onSearchPosition($event)" >
         <mat-autocomplete #autocompleteSearch="matAutocomplete">
           <mat-option *ngFor="let search of autocomplete_searchposition" [value]="search.position  ">
             <span>{{search.position}}</span>
@@ -34,7 +34,7 @@
         <div class="filter-card">
           <mat-form-field>
             <mat-label>City</mat-label>
-            <input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity" formControlName="city" [(ngModel)]="urlParams['city']">
+            <input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity" formControlName="city" >
             <mat-autocomplete #autocompleteCity="matAutocomplete">
               <mat-option *ngFor="let city of autocomplete_cities" [value]="(city.city)?.split(',')[0]"
                 (onSelectionChange)="onChangeCity(city)">
@@ -64,13 +64,13 @@
         <div class="filter-card">
           <mat-form-field>
             <mat-label>Minimum Salary</mat-label>
-            <input matInput placeholder="Minimum Salary" type="number" formControlName="minSal" [(ngModel)]="urlParams['pay']">
+            <input matInput placeholder="Minimum Salary" type="number" formControlName="minSal" >
           </mat-form-field>
         </div>
         <div class="filter-card">
           <mat-form-field>
             <mat-label>Position Level</mat-label>
-            <mat-select class="arrow" formControlName="position"  [(ngModel)]="urlParams['level']">
+            <mat-select class="arrow" formControlName="position" >
               <mat-option value=''></mat-option>
               <mat-option *ngFor="let position of positionLevel" value="{{position}}">{{position}}
               </mat-option>
@@ -80,7 +80,7 @@
         <div class="filter-card">
           <mat-form-field>
             <mat-label>Education Level</mat-label>
-            <mat-select class="arrow" formControlName="education"  [(ngModel)]="urlParams['education']">
+            <mat-select class="arrow" formControlName="education"  >
               <mat-option value=''></mat-option>
               <mat-option *ngFor="let education of educationLevel" value="{{educationLevel.indexOf(education)}}">
                 {{education}}
@@ -91,7 +91,7 @@
         <div class="filter-card">
           <mat-form-field>
             <mat-label>Job Type</mat-label>
-            <mat-select class="arrow" formControlName="job" [(ngModel)]="urlParams['job_type']">
+            <mat-select class="arrow" formControlName="job" >
               <mat-option value=''></mat-option>
               <mat-option *ngFor="let jobtype of jobType" value="{{jobtype}}">{{jobtype}}
               </mat-option>
@@ -128,7 +128,7 @@
           <mat-form-field>
             <mat-label>Company </mat-label>
             <input matInput placeholder="Company" type="text" [matAutocomplete]="autocompleteCompany"
-              formControlName="company" [(ngModel)]="urlParams['company']">
+              formControlName="company" >
             <mat-autocomplete #autocompleteCompany="matAutocomplete">
               <mat-option *ngFor="let company of autocomplete_companies" [value]="company.company_name">
                 <span>{{company.company_name}}</span>

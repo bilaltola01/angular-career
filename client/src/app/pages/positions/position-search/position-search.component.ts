@@ -159,7 +159,14 @@ export class PositionSearchComponent implements OnInit {
     this.positionForm.get('recruiter').valueChanges.subscribe((recruiter) => {
       recruiter ? this.onRecruiterValueChanges(recruiter) : this.autocomplete_recruiter = [];
     });
-
+    this.positionForm.patchValue({
+      'searchPosition': this.urlParams['position'],
+      'minSal': this.urlParams['pay'],
+      'level': this.urlParams['level'],
+      'education': this.urlParams['education'],
+      'job': this.urlParams['job_type'],
+      'company': this.urlParams['company']
+      });
   }
 
   onChangeCity(city) {
