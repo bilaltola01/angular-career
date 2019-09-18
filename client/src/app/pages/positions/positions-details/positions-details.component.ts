@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit,  } from '@angular/core';
 import { PositionService, CartService, AlertsService, AlertType, ApplicationService, UserService, ScoreService, CompanyService } from 'src/app/services';
 import { ActivatedRoute } from '@angular/router';
 import { MatchingService } from 'src/app/services/matching.service';
@@ -6,7 +6,7 @@ import { SkillLevelDescription } from 'src/app/models';
 import { MatDialog } from '@angular/material/dialog';
 import { SkillDescriptionPopupComponent } from 'src/app/components/skill-description-popup/skill-description-popup.component';
 import { AddSkillPopupComponent } from 'src/app/components/add-skill-popup/add-skill-popup.component';
-import { ViewportScroller } from '@angular/common';
+
 
 @Component({
   selector: 'app-positions-details',
@@ -50,7 +50,6 @@ export class PositionsDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.positionId = this.route.snapshot.paramMap.get('position_id');
-    this.queryCallback = this.route.snapshot.paramMap.get('goBackQueryParam');
     this.getposition(this.positionId);
     this.getMatchedSkill();
     this.getMissingSkill();
@@ -217,15 +216,18 @@ export class PositionsDetailsComponent implements OnInit {
   }
 
   updateSkillCallback() {
-    this.scoreService.putSkillVector().subscribe();
-    this.scoreService.getUpdatedfitscore(this.positionId).subscribe(
+    this.scoreService.putSkillVector().subscribe(
       dataJson => {
-        this.updatedFitscoreData = [...dataJson.data['fitscores']];
-        this.updatedFitscore();
+        this.scoreService.getUpdatedfitscore(this.positionId).subscribe(
+           data => {
+            this.updatedFitscoreData = [...data.data['fitscores']];
+            this.updatedFitscore();
+          });
+
       });
   }
   updatedFitscore() {
-    this.positionName[0].true_fitscore_info = this.updatedFitscoreData;
+    this.positionName[0].true_fitscore_info = this.updatedFitscoreData[0];
     this.calculatedQualificationLevel = this.calculateQualificationLevel(this.positionName[0].true_fitscore_info, this.positionName[0].minimum_skills);
   }
   openSkillDescriptionDialog() {

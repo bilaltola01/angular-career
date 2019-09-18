@@ -11,7 +11,6 @@ $profile-form-field-mt: 30px;
       .postion-search-detail {
         background-color: $white;
         border: 1px solid #ddd;
-        padding: 15px 3%;
         text-align: left;
         margin-bottom: 36px;
         position: relative;
@@ -646,9 +645,10 @@ $profile-form-field-mt: 30px;
     justify-content: space-between;
     z-index: 100;
         .postion-search-detail {
+          padding: 12px 20px;
+           overflow: hidden;
           .filter-data {
             float: right;
-            margin-top: 5px;
 
             .filter_icon {
               display: block;
@@ -771,9 +771,11 @@ $profile-form-field-mt: 30px;
     justify-content: space-between;
     z-index: 100;
         .postion-search-detail {
+          padding: 12px 20px;
+          overflow: hidden;
           .filter-data {
             float: right;
-            margin-top: 5px;
+            margin-top: 0;
 
             & .filter_icon {
               display: block;
