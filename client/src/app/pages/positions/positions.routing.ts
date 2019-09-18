@@ -6,12 +6,12 @@ import { PositionsDetailsComponent } from './positions-details/positions-details
 export const positionRoutes: Routes = [
   {
     path: '',
-    component: PositionSearchComponent,
+    component: PositionSearchComponent
     // canActivate: [AuthGuard]
   },
       {
         path: 'position-info/:position_id',
-        component: PositionsDetailsComponent,
+        component: PositionsDetailsComponent
         // canActivate: [AuthGuard]
       },
       {
