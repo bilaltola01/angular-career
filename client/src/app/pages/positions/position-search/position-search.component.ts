@@ -93,11 +93,11 @@ export class PositionSearchComponent implements OnInit {
   ngOnInit() {
     const urlParams = new URLSearchParams(window.location.search);
     this.searchQueryParam = urlParams.get('search');
-    if ( this.searchQueryParam) {
-      const urlObject =  this.searchQueryParam.split('&');
-      for ( let i = 0 ; i < urlObject.length; i++) {
-       const result =  urlObject[i].split('=');
-        this.urlParams [ result[0]] = result[1];
+    if (this.searchQueryParam) {
+      const urlObject = this.searchQueryParam.split('&');
+      for (let i = 0; i < urlObject.length; i++) {
+        const result = urlObject[i].split('=');
+        this.urlParams[result[0]] = result[1];
       }
     }
     this.initPositionFilterForm();
@@ -166,7 +166,7 @@ export class PositionSearchComponent implements OnInit {
       'education': this.urlParams['education'],
       'job': this.urlParams['job_type'],
       'company': this.urlParams['company']
-      });
+    });
   }
 
   onChangeCity(city) {
@@ -308,10 +308,10 @@ export class PositionSearchComponent implements OnInit {
 
   generateQueryString(): string {
     let queryString;
-     if ( this.searchQueryParam) {
-        queryString = this.searchQueryParam;
-        this.searchQueryParam = null;
-      } else {
+    if (this.searchQueryParam) {
+      queryString = this.searchQueryParam;
+      this.searchQueryParam = null;
+    } else {
       queryString = this.positionForm.value.city ? `${queryString ? queryString + '&' : ''}city=${this.filterAttributes.city_id}` : queryString;
       queryString = this.positionForm.value.position ? `${queryString ? queryString + '&' : ''}level=${this.positionForm.value.position}` : queryString;
       queryString = this.positionForm.value.education ? `${queryString ? queryString + '&' : ''}education=${parseInt(this.positionForm.value.education, 10) + 1}` : queryString;
@@ -322,17 +322,17 @@ export class PositionSearchComponent implements OnInit {
       queryString = this.positionForm.value.company ? `${queryString ? queryString + '&' : ''}company=${this.positionForm.value.company}` : queryString;
       queryString = this.positionForm.value.minSal ? `${queryString ? queryString + '&' : ''}pay=${this.positionForm.value.minSal}` : queryString;
       queryString = this.positionForm.value.recruiter ? `${queryString ? queryString + '&' : ''}recruiter=${this.filterAttributes.recruiter_id}` : queryString;
-       queryString = queryString ? `${queryString}&offset=${this.filterAttributes.offset}` : `offset=${this.filterAttributes.offset}`;
-       queryString = queryString ? `${queryString}&limit=${this.filterAttributes.limit}` : `offset=${this.filterAttributes.limit}`;
+      queryString = queryString ? `${queryString}&offset=${this.filterAttributes.offset}` : `offset=${this.filterAttributes.offset}`;
+      queryString = queryString ? `${queryString}&limit=${this.filterAttributes.limit}` : `offset=${this.filterAttributes.limit}`;
       this.userSkillsList.forEach(skill => {
         queryString = queryString ? queryString + `&skills=${skill.skill_id}` : `skills=${skill.skill_id}`;
       });
-      queryString = this.positionForm.value.searchPosition ? `${queryString ? queryString + '&' : ''}position=${this.positionForm.value.searchPosition}` : queryString ;
-       queryString = this.positionForm.value.sortBy ? `${queryString ? queryString + '&' : ''}sort=${this.positionForm.value.sortBy}` : queryString;
+      queryString = this.positionForm.value.searchPosition ? `${queryString ? queryString + '&' : ''}position=${this.positionForm.value.searchPosition}` : queryString;
+      queryString = this.positionForm.value.sortBy ? `${queryString ? queryString + '&' : ''}sort=${this.positionForm.value.sortBy}` : queryString;
 
 
-    this.router.navigate(['/positions'], { queryParams: { search: queryString ?  queryString : ''} });
-      }
+      this.router.navigate(['/positions'], { queryParams: { search: queryString ? queryString : '' } });
+    }
     return queryString;
   }
   getJobData() {

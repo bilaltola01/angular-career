@@ -130,10 +130,20 @@ $status-bg-color: #f4f5f8;
                 width: 20px;
                 height: 20px;
             }
-        } 
+        }
     }
 }
 :host-context(.skill-prefer) .tag-container.tag-gray {
     background-color: transparent;
     border-color: rgba(map-get($md-cfgray, 500), 1);
   }
+  :host-context(.red-color-tag) .tag-container{
+    background-color: rgba(208, 83, 83, 0.10);
+    border-color: rgba(208, 83, 83, 0.10);
+  }
+  :host-context(.green-color-tag) .tag-container{
+    background-color: rgba(41, 204, 91, 0.10);
+    border-color: rgba(41, 204, 91, 0.10);
+  }
+
+

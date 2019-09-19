@@ -124,7 +124,7 @@ $profile-form-field-mt: 30px;
 
           & .skills-preferred-m {
             display: inline-block;
-            margin-right: 6px;
+            margin-right: 8px;
           }
           & .education-level-m {
             margin: 20px auto 0;
@@ -156,7 +156,7 @@ $profile-form-field-mt: 30px;
                 }
                 p {
                   font-size: 14px;
-                  opacity: 0.34;
+                  opacity: 0.84;
                   font-family: "Poppins", sans-serif;
                   font-weight: 400;
                   margin-top: 10px;
@@ -200,7 +200,7 @@ $profile-form-field-mt: 30px;
           &.position-schools-restriction {
             p {
               font-size: 14px;
-              opacity: 0.34;
+              opacity: 0.84;
               font-family: "Poppins", sans-serif;
               font-weight: 400;
               margin-top: 0px;
@@ -215,11 +215,16 @@ $profile-form-field-mt: 30px;
           }
           & .position-matched {
             p {
-              opacity: 0.54;
+              opacity: 0.84;
               margin-bottom: 0;
               font-size: 16px;
               line-height: 24px;
               color: #001d40;
+            }
+          }
+          & .position-qualification-skills{
+            & simple-tag{
+              margin-right:8px;
             }
           }
         }
@@ -329,7 +334,7 @@ $profile-form-field-mt: 30px;
 
               .skills-preferred-m {
                 @include inline-block-btn;
-                margin: 0 5px 7px 0;
+                margin: 0 8px 7px 0;
                 & simple-tag {
                   font-family: "Poppins", sans-serif;
                   color: rgba(map-get($md-cfaccent, 500), 0.05);
@@ -341,7 +346,7 @@ $profile-form-field-mt: 30px;
                 max-height: 30px;
 
                 &.skill-more-height {
-                  max-height: 135px;
+                  max-height: 153px;
                 }
               }
             }
@@ -494,9 +499,10 @@ $profile-form-field-mt: 30px;
               width: 60px;
               text-align: center;
               border: 1px solid #efefef;
+              overflow: hidden;
+              padding: 10px 0 4px;
               img {
                 width: 40px;
-                margin-top: 11px;
               }
             }
             h5 {
@@ -529,6 +535,19 @@ $profile-form-field-mt: 30px;
               margin-bottom: 2px;
               display: block;
               line-height: 20px;
+              &.company-address{
+                display: inline-block;
+                width:78%;
+                margin-left:8px;
+                margin-bottom: 18px;
+                font-size: 14px;
+              opacity: 0.84;
+              font-family: "Poppins", sans-serif;
+              font-weight: 400;
+              margin-bottom: 17px;
+              margin-top: 10px;
+              }
+
             }
             small {
               font-size: 14px;
@@ -536,6 +555,22 @@ $profile-form-field-mt: 30px;
               font-weight: 400;
               display: block;
               line-height: 19px;
+                li{
+                  display: inline-block;
+                  position: relative;
+                  margin-right: 10px;
+                  margin-top: 5px;
+
+                  &::after{
+                    position: absolute;
+                    content: ",";
+                    right: -6px;
+                    bottom: 0;
+                  }
+                  &:last-child::after{
+                    display: none;
+                  }
+                }
             }
           }
           & .show-button2 {
@@ -553,6 +588,9 @@ $profile-form-field-mt: 30px;
                 }
               }
             }
+          }
+          img{
+            display: inline-block;
           }
         }
 
@@ -580,6 +618,11 @@ $profile-form-field-mt: 30px;
               & mat-card {
                 p {
                   font-size: 13px;
+                  display: inline
+                }
+                span.company-address{
+                  font-size: 13px;
+                  width: 86%;
                 }
               }
             }
@@ -602,6 +645,11 @@ $profile-form-field-mt: 30px;
               li {
                 margin-right: 20px;
                 font-size: 13px;
+                span {
+                  font-family: "Poppins", sans-serif;
+                            font-weight: 400;
+                            display: inline;
+                }
               }
             }
           }
@@ -610,6 +658,7 @@ $profile-form-field-mt: 30px;
             h1 {
               font-size: 26px;
             }
+
             & .job-top-list {
               ul {
                 margin-top: 0% li {
@@ -621,6 +670,9 @@ $profile-form-field-mt: 30px;
             & .card {
               & .card-item {
                 width: 100%;
+                span{
+                  font-size: 13px;
+                }
               }
             }
           }
@@ -742,6 +794,9 @@ $profile-form-field-mt: 30px;
             .card {
               .card-item {
                 width: 100%;
+                span{
+                  font-size: 13px;
+                }
               }
             }
           }

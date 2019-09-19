@@ -1,4 +1,4 @@
-import { Component, OnInit,  } from '@angular/core';
+import { Component, OnInit, } from '@angular/core';
 import { PositionService, CartService, AlertsService, AlertType, ApplicationService, UserService, ScoreService, CompanyService } from 'src/app/services';
 import { ActivatedRoute } from '@angular/router';
 import { MatchingService } from 'src/app/services/matching.service';
@@ -26,8 +26,8 @@ export class PositionsDetailsComponent implements OnInit {
   matchedInterests = [];
   restrictedSchools;
   companyData = [];
-  recruiterData = [];
-  recruiterName;
+  recruiterData = {};
+  // recruiterName;
   Difference_In_Days;
   queryCallback;
   displayItemsLimit = 7;
@@ -76,7 +76,7 @@ export class PositionsDetailsComponent implements OnInit {
       error => {
         this.alertsService.show(error.message, AlertType.error);
       }
-      );
+    );
 
 
   }
@@ -92,7 +92,8 @@ export class PositionsDetailsComponent implements OnInit {
   getRecruiterData(recruterId) {
     this.userService.getGeneralInfo(recruterId).subscribe(
       dataJson => {
-        this.recruiterName = dataJson.data['first_name'];
+
+        this.recruiterData = dataJson.data;
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -219,7 +220,7 @@ export class PositionsDetailsComponent implements OnInit {
     this.scoreService.putSkillVector().subscribe(
       dataJson => {
         this.scoreService.getUpdatedfitscore(this.positionId).subscribe(
-           data => {
+          data => {
             this.updatedFitscoreData = [...data.data['fitscores']];
             this.updatedFitscore();
           });
@@ -229,6 +230,8 @@ export class PositionsDetailsComponent implements OnInit {
   updatedFitscore() {
     this.positionName[0].true_fitscore_info = this.updatedFitscoreData[0];
     this.calculatedQualificationLevel = this.calculateQualificationLevel(this.positionName[0].true_fitscore_info, this.positionName[0].minimum_skills);
+    this.getMatchedSkill();
+    this.getMissingSkill();
   }
   openSkillDescriptionDialog() {
     const dialogRef = this.dialog.open(SkillDescriptionPopupComponent, {
@@ -240,16 +243,16 @@ export class PositionsDetailsComponent implements OnInit {
     });
   }
   countDays() {
-const date2 = new Date(this.positionName[0].post_date).toLocaleString().split(',')[0];
-const postDate = new Date(date2);
-const date = new Date().toLocaleString().split(',')[0];
-const todayDate = new Date(date);
- const Difference_In_Time = todayDate.getTime() - postDate.getTime();
- this.Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+    const date2 = new Date(this.positionName[0].post_date).toLocaleString().split(',')[0];
+    const postDate = new Date(date2);
+    const date = new Date().toLocaleString().split(',')[0];
+    const todayDate = new Date(date);
+    const Difference_In_Time = todayDate.getTime() - postDate.getTime();
+    this.Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
   }
   scrollSmoothTo(elementId) {
     const element = document.getElementById(elementId);
-    element.scrollIntoView({ block: 'start',  behavior: 'smooth' });
+    element.scrollIntoView({ block: 'start', behavior: 'smooth' });
     this.filter_list = false;
   }
 }
