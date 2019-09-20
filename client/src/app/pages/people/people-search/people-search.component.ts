@@ -139,8 +139,8 @@ export class PeopleSearchComponent implements OnInit {
     const querySearchedSchoolId = this.route.snapshot.queryParamMap.get('schoolId') || null;
     const querySearchedMajor = this.route.snapshot.queryParamMap.get('major') || null;
     const querySearchedMajorId = this.route.snapshot.queryParamMap.get('majorId') || null;
-    const querySearchedSkill = this.route.snapshot.queryParamMap.get('skill') || null;
-    const querySearchedSkillId = this.route.snapshot.queryParamMap.get('skillId') || null;
+    const querySearchedSkillArray = this.route.snapshot.queryParams['skill'] || null;
+    const querySearchedSkillIdArray = this.route.snapshot.queryParams['skillId'] || null;
 
     this.peopleForm = new FormGroup({
       'searchPeople': new FormControl(querySearchedName),
@@ -152,16 +152,11 @@ export class PeopleSearchComponent implements OnInit {
       'major': new FormControl(querySearchedMajor)
     });
 
-    let splitedSkillNames = [];
-    let splitedSkillIds = [];
-    if (querySearchedSkill && querySearchedSkillId) {
-      splitedSkillNames = querySearchedSkill.split(',');
-      splitedSkillIds = querySearchedSkillId.split(',');
-
-      for (let i = 0; i < splitedSkillNames.length; i++) {
+    if (querySearchedSkillArray && querySearchedSkillIdArray) {
+      for (let i = 0; i < querySearchedSkillArray.length; i++) {
         const skillModel = {
-            skill: splitedSkillNames[i],
-            skill_id: splitedSkillIds[i]
+          skill: querySearchedSkillArray[i],
+          skill_id: Number(querySearchedSkillIdArray[i])
         };
 
         this.addSkills(skillModel);
@@ -319,12 +314,10 @@ export class PeopleSearchComponent implements OnInit {
     queryString = people ? `${queryString ? queryString + '&' : ''}name=${people}` : queryString;
 
     const skillIdQueryString = this.userSkillsList
-      .map(el => el.skill_id)
-      .join(',');
+      .map(el => el.skill_id);
 
     const skillNamesQueryString = this.userSkillsList
-      .map(el => el.skill)
-      .join(',');
+      .map(el => el.skill);
 
     const paramsInQuery = {
       'name': people,
@@ -337,8 +330,8 @@ export class PeopleSearchComponent implements OnInit {
       'schoolId': this.filterAttributes.school_id,
       'major': this.peopleForm.value.major,
       'majorId': this.filterAttributes.major_id,
-      'skillId': skillIdQueryString ? skillIdQueryString : null,
-      'skill': skillNamesQueryString ? skillNamesQueryString : null
+      'skill': skillNamesQueryString.length > 0 ? skillNamesQueryString : null,
+      'skillId': skillIdQueryString.length > 0 ? skillIdQueryString : null
     };
 
     this.router.navigate([], {
