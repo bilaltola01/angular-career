@@ -412,5 +412,222 @@
 <!-- Interests End -->
 
 <!-- Preferred Schools Start -->
+<div *ngIf="selectedPageIndex===6" class="container profile-skills">
+  <div class="container__full">
+    <div class="profile-form" [formGroup]="schoolRestrictionsForm">
+      <h3 class="profile-form__title">
+        School Restrictions
+      </h3>
+      <div class="profile-form__field search">
+        <h3>Applicants should be currently enrolled or alumni of the following schools.</h3>
+        <mat-form-field appearance="standard" class="search">
+          <mat-icon matSuffix>search</mat-icon>
+          <input matInput placeholder="Search school or university" type="text" [matAutocomplete]="autocompleteSchools" formControlName="search_preferred_school">
+          <mat-autocomplete #autocompleteSchools="matAutocomplete">
+            <mat-option *ngFor="let autocomplete_preferred_school of autocomplete_preferred_schools" [value]="autocomplete_preferred_school.school_name" (onSelectionChange)="onSelectPreferredSchool(autocomplete_preferred_school)">
+              <span>{{autocomplete_preferred_school.school_name}}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <div *ngIf="preferred_schools && preferred_schools.length > 0" class="skills">
+          <simple-tag *ngFor="let preferred_school of preferred_schools; let i = index" type="gray" removeTag="true" title="{{preferred_school.school_name}}" (click)="onRemovePreferredSchool(preferred_school, i)"></simple-tag>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container__full">
+    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
+  </div>
+</div>
+<!-- Preferred Schools End -->
 
+<!-- Postion Preview Start -->
+<div *ngIf="selectedPageIndex===7" class="container position-preview">  
+  <legend id="legend">
+    <div class="nav-title" (click)="onClickTogggle()">
+      <h3 class="section-title">{{current_tab}}</h3>
+      <mat-icon>menu</mat-icon>
+    </div>
+    <a (click)="backToEdit()">Edit</a> 
+  </legend>
+  <div class="main-section">
+    <div class="edit-title">
+    </div>
+    <div class="row" id="position-info">
+      <div class="position-row">
+        <div class="position-detail">
+          <div *ngIf="position_name">
+            <h1>{{position_name}}</h1>
+          </div>
+          <div class="position-info">
+            <small *ngIf="position_company">
+              <img src="assets/icons/ic_company.svg">
+              {{position_company.company_name}}
+            </small>
+            <small *ngIf="position_city || position_state || position_country">
+              <img src="assets/icons/ic_location.svg">
+              {{(position_city ? helperService.cityNameFromAutoComplete(position_city.city) : '') + (position_city && (position_state || position_country) ? ', ' : '') + (position_state ? position_state.state : '') + (position_state && position_country ? ', ' : '') + (position_country ? countries[position_country - 1] : '')}}
+            </small>
+          </div>
+        </div>
+        <div class="position-status">
+          <action-button type="flat" color="primary" [title]="company ? 'Published' : 'Publish'" (click)="onClickPublish()"></action-button>
+        </div>
+      </div>
+      <div class="position-row__details">
+        <div class="position-info">
+          <label>Position</label>
+          <p>{{ position_level ? position_level : 'None'}}</p>
+        </div>
+        <div class="position-info">
+          <label>Salary</label>
+          <p>{{ position_salary ? position_salary + ' USD' : 'None'}} </p>
+        </div>
+        <div class="position-info">
+          <label>Industry</label>
+          <p>Industry</p>
+        </div>
+        <div class="position-info">
+          <label>Recruiter</label>
+          <p >{{ position_recruiter ? position_recruiter.first_name + ' ' + position_recruiter.last_name : 'None'}}</p>
+        </div>
+        <div class="position-info">
+          <label>Application Type</label>
+          <p>{{position_application_type ? position_application_type : 'None'}}</p>
+        </div>
+        <div class="position-info">
+          <label>Position Type</label>
+          <p>{{position_type ? position_type : 'None'}}</p>
+        </div>
+        <div class="position-info">
+          <label>Application Deadline</label>
+          <p>{{position_application_deadline ? position_application_deadline : 'None'}}</p>
+        </div>
+        <div class="position-info">
+          <label>Education Level Required</label>
+          <p>Education</p>
+        </div>
+      </div>
+		</div>
+    <div *ngIf="position_desc" class="row" id="position-desc">
+      <h3>Job Description</h3>
+      <ng-container *ngIf="true; let short_desc">
+        <p *ngIf="position_desc" class="description" [class.short-desc]="short_desc && position_desc.length > helperService.shortDescLength">{{short_desc ? helperService.shortDescription(position_desc) : position_desc}}</p>
+        <a *ngIf="position_desc && position_desc.length > helperService.shortDescLength" (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
+      </ng-container>
+    </div>
+
+    <div *ngIf="(preferred_education_levels && preferred_education_levels.length > 0) || preferred_education_major || (preferred_education_major_categories && preferred_education_major_categories.length > 0)" class="row" id="position-edu">
+      <h3>Education Level</h3>
+      <ng-container *ngIf="preferred_education_levels && preferred_education_levels.length > 0">
+        <h5>Preferred Education Levels {{preferred_education_levels.length}}</h5>
+        <div class="skills" *ngIf="displayItemsLimit; let limit">
+          <ng-container *ngFor="let level of preferred_education_levels; let i = index">
+            <simple-tag *ngIf="i < limit" type="gray" title="{{level.education_level}}"></simple-tag>
+          </ng-container>
+          <img *ngIf="limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
+          <img *ngIf="limit < preferred_education_levels.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="preferred_education_major">
+        <h5>Preferred Major</h5>
+        <div class="skills">
+          <simple-tag type="gray" title="{{preferred_education_major.major_name}}"></simple-tag>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="preferred_education_major_categories && preferred_education_major_categories.length > 0">
+        <h5>Preferred Major Categories {{preferred_education_major_categories.length}}</h5>
+        <div class="skills" *ngIf="displayItemsLimit; let limit">
+          <ng-container *ngFor="let category of preferred_education_major_categories; let i = index">
+            <simple-tag *ngIf="i < limit" type="gray" title="{{category.cat_name}}"></simple-tag>
+          </ng-container>
+          <img *ngIf="limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
+          <img *ngIf="limit < preferred_education_major_categories.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
+        </div>
+      </ng-container>
+    </div>
+
+    <div *ngIf="preferred_work_experiences && preferred_work_experiences.length > 0" class="row" id="position-exp">
+      <h3>Preferred Experience</h3>
+      
+    </div>
+
+    <div *ngIf="(minimum_skills && minimum_skills.length > 0) || (preferred_skills && preferred_skills.length > 0)" class="row" id="position-skills">
+      <h3>Preferred & Required SKills</h3>
+      <ng-container *ngIf="minimum_skills.length > 0">
+        <h5>Skills Required {{minimum_skills.length}}</h5>
+        <div class="skills" *ngIf="displayItemsLimit; let limit">
+          <ng-container *ngFor="let skill of minimum_skills; let i = index">
+            <simple-tag *ngIf="i < limit" type="gray" title="{{skill.skill}}" ellipseTag="true" value="{{skill.skill_level}}"></simple-tag>
+          </ng-container>
+          <img *ngIf="limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
+          <img *ngIf="limit < minimum_skills.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
+        </div>
+      </ng-container>
+      <ng-container *ngIf="preferred_skills.length > 0">
+        <h5>Skills Preferred {{preferred_skills.length}}</h5>
+        <div class="skills" *ngIf="displayItemsLimit; let limit">
+          <ng-container *ngFor="let skill of preferred_skills; let i = index">
+            <simple-tag *ngIf="i < limit" type="gray" title="{{skill.skill}}" ellipseTag="true" value="{{skill.skill_level}}"></simple-tag>
+          </ng-container>
+          <img *ngIf="limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
+          <img *ngIf="limit < preferred_skills.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
+        </div>
+      </ng-container>
+    </div>
+
+    <div *ngIf="preferred_interests && preferred_interests.length > 0" class="row" id="position-interests">
+      <h3>Preferred Interests</h3>
+      <ng-container *ngIf="preferred_interests.length > 0">
+        <h5>Interests {{preferred_interests.length}}</h5>
+        <div class="skills" *ngIf="displayItemsLimit; let limit">
+          <ng-container *ngFor="let interest of preferred_interests; let i = index">
+            <simple-tag *ngIf="i < limit" type="gray" title="{{interest.interest}}"></simple-tag>
+          </ng-container>
+          <img *ngIf="limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
+          <img *ngIf="limit < preferred_interests.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
+        </div>
+      </ng-container>
+    </div>
+
+    <div *ngIf="preferred_schools && preferred_schools.length > 0" class="row" id="position-school">
+      <h3>School Restrictions</h3>
+      <ng-container *ngIf="preferred_schools.length > 0">
+        <h5>Applicants should be currently enrolled or alumni of the following schools.</h5>
+        <div class="skills" *ngIf="displayItemsLimit; let limit">
+          <ng-container *ngFor="let school of preferred_schools; let i = index">
+            <simple-tag *ngIf="i < limit" type="gray" title="{{school.school_name}}"></simple-tag>
+          </ng-container>
+          <img *ngIf="limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
+          <img *ngIf="limit < preferred_schools.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="nav-section" [class.nav-hidden]="!isNavMenuOpened">
+    <div class="nav-title">
+      <h3 class="section-title"></h3>
+    </div>
+    <nav>
+      <div class="navmenu-title active">
+        <h3>Contents</h3>
+        <ol>
+          <li *ngIf="position_desc" (click)="onSelectNavItem('position-info')">Position Information</li>
+          <li *ngIf="position_desc" (click)="onSelectNavItem('position-desc')">Job Description</li>
+          <li *ngIf="(preferred_education_levels && preferred_education_levels.length > 0) || preferred_education_major || (preferred_education_major_categories && preferred_education_major_categories.length > 0)" (click)="onSelectNavItem('position-edu')">Education Level</li>
+          <li *ngIf="preferred_work_experiences && preferred_work_experiences.length > 0" (click)="onSelectNavItem('position-exp')">Preferred Experience</li>
+          <li *ngIf="(minimum_skills && minimum_skills.length > 0) || (preferred_skills && preferred_skills.length > 0)" (click)="onSelectNavItem('position-skills')">Preferred & Required Skills</li>
+          <li *ngIf="preferred_interests && preferred_interests.length > 0" (click)="onSelectNavItem('position-interests')">Preferred Interests</li>
+          <li *ngIf="preferred_schools && preferred_schools.length > 0" (click)="onSelectNavItem('position-school')">School Restrictions</li>
+        </ol>
+      </div>
+      <div class="btn-section">
+        <action-button class="nav-btn" type="flat" title="Edit" color="primary" (click)="backToEdit()"></action-button>
+      </div>  
+    </nav>
+  </div>
+</div>
 <!-- Position Preview End -->

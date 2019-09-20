@@ -172,11 +172,22 @@ export class CreatePositionComponent implements OnInit {
     this.initializeFormsByPageIndex();
   }
 
+  onSelectNavItem(id: string) {
+    let height = 130;
+    if (document.getElementById('legend').clientHeight === 0) {
+      height = 70;
+    }
+    document.getElementById('sidenav-content').scrollTop = document.getElementById(id).offsetTop - height;
+  }
+
   onClickTogggle() {
     this.isNavMenuOpened = !this.isNavMenuOpened;
   }
 
   goToNextPage() {
+    if (this.selectedPageIndex === 0 && !this.position_name && !this.position_desc) {
+      return;
+    }
     ++this.selectedPageIndex;
     switch (this.selectedPageIndex) {
       case 1:
@@ -816,6 +827,8 @@ export class CreatePositionComponent implements OnInit {
   initSkillsForm() {
     this.autocomplete_minimum_skills = [];
     this.autocomplete_preferred_skills = [];
+    this.temp_minimum_skill = null;
+    this.temp_preferred_skill = null;
 
     this.skillsForm = new FormGroup({
       search_minimum_skill: new FormControl(''),
@@ -1045,6 +1058,12 @@ export class CreatePositionComponent implements OnInit {
     if (this.preferred_schools.length === 0) {
       this.preferred_schools = null;
     }
+  }
+
+  backToEdit() {
+    this.selectedPageIndex = 0;
+    this.isNavMenuOpened = false;
+    this.initializeFormsByPageIndex();
   }
 
 }
