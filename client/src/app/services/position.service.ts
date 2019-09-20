@@ -11,6 +11,7 @@ import { HelperService } from './helper.service';
 export class PositionService {
   private position_service_url = `${environment.serverUrl}/${environment.position_service}/api/${environment.api_version}/`;
   private school_url = `${environment.serverUrl}/${environment.position_service}/api/${environment.api_version}/position/`;
+  private position_management_service_url = `${environment.serverUrl}/${environment.position_management_service}/api/${environment.api_version}/`;
 
   constructor(private http: HttpClient, private helperService: HelperService) {
   }
@@ -36,6 +37,18 @@ export class PositionService {
         map(
           data => {
             return { success: true, message: 'Success!', data: data };
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
+  public postPosition(positionInfo: any): Observable<any> {
+    return this.http.post(this.position_management_service_url + 'position', positionInfo, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
           }
         ),
         catchError(this.handleError)
