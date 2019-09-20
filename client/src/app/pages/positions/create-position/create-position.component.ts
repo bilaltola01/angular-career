@@ -159,6 +159,7 @@ export class CreatePositionComponent implements OnInit {
 
   selectedPageIndex: number;
   isNavMenuOpened: boolean;
+  isTabMenuOpen: boolean;
 
   constructor(
     private alertsService: AlertsService,
@@ -167,8 +168,9 @@ export class CreatePositionComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.isTabMenuOpen = false;
     this.isNavMenuOpened = false;
-    this.selectedPageIndex = 0;
+    this.selectedPageIndex = 2;
     this.initializeFormsByPageIndex();
   }
 
@@ -184,8 +186,18 @@ export class CreatePositionComponent implements OnInit {
     this.isNavMenuOpened = !this.isNavMenuOpened;
   }
 
+  toggleTabMenuOpen() {
+    this.isTabMenuOpen = !this.isTabMenuOpen;
+  }
+
   goToNextPage() {
     if (this.selectedPageIndex === 0 && !this.position_name && !this.position_desc) {
+      return;
+    } else if (this.selectedPageIndex === 1 && !(this.positionBasicInfoForm.valid && this.onCheckCompanyValidation() && this.helperService.checkSpacesString(this.positionBasicInfoForm.value.position_company) && this.onCheckCityValidation() && this.onCheckStateValidation() && this.onCheckRecruiterValidation())) {
+      return;
+    } else if (this.selectedPageIndex === 2 && !(this.preferredEducationForm.valid && this.onCheckEducationMajorValidation())) {
+      return;
+    } else if (this.selectedPageIndex === 3 && !(this.preferredWorkExperienceFormArray.valid && this.onCheckAllIndustriesValidation())) {
       return;
     }
     ++this.selectedPageIndex;
@@ -217,8 +229,12 @@ export class CreatePositionComponent implements OnInit {
     if (this.selectedPageIndex === 0 && !this.position_name && !this.position_desc) {
       this.alertsService.show('Please fill out the position\'s name and description field.', AlertType.error);
       return;
+    } else if (this.selectedPageIndex === 1 && !this.position_company) {
+      this.alertsService.show('Please provide company information.', AlertType.error);
+      return;
     }
     this.selectedPageIndex = index;
+    this.isTabMenuOpen = false;
     this.isNavMenuOpened = false;
     this.initializeFormsByPageIndex();
   }
@@ -702,7 +718,7 @@ export class CreatePositionComponent implements OnInit {
     this.autocomplete_skills_trained.push([]);
 
     const experienceForm = new FormGroup({
-      industry: new FormControl(experience && experience.industry ? experience.industry.industry_name : ''),
+      industry: new FormControl(experience && experience.industry ? experience.industry.industry_name : '', [Validators.required]),
       years: new FormControl(experience && experience.years ? experience.years : ''),
       description: new FormControl(experience && experience.description ? experience.description : ''),
       skills_trained: new FormControl('')
@@ -784,6 +800,11 @@ export class CreatePositionComponent implements OnInit {
     }
   }
 
+  onExperienceYearSelect(date: any, index: number, datePicker: MatDatepicker<any>) {
+    datePicker.close();
+    this.preferredWorkExperienceFormArray.at(index).get('years').setValue(this.helperService.convertToFormattedString(date, 'YYYY'));
+  }
+
   onSelectSkillsTrained(formIndex: number, skill: Skill) {
     if (!this.preferred_work_experiences[formIndex].skills_trained) {
       this.preferred_work_experiences[formIndex].skills_trained = [skill];
@@ -806,18 +827,32 @@ export class CreatePositionComponent implements OnInit {
   }
 
   onAddPreferredWorkExperienceFormGroup() {
-    this.preferred_work_experiences.push({
-      industry: null,
-      years: null,
-      description: null,
-      skills_trained: null
-    });
-    this.addPreferredWorkExperienceFormGroup(null, this.preferred_work_experiences.length - 1);
+    if (this.preferredWorkExperienceFormArray.valid && this.onCheckAllIndustriesValidation()) {
+      this.preferred_work_experiences.push({
+        industry: null,
+        years: null,
+        description: null,
+        skills_trained: null
+      });
+      this.addPreferredWorkExperienceFormGroup(null, this.preferred_work_experiences.length - 1);
+    }
   }
 
   onRemovePreferredWorkExperienceFormGroup(arrIndex: number) {
     this.preferredWorkExperienceFormArray.removeAt(arrIndex);
     this.preferred_work_experiences.splice(arrIndex, 1);
+    this.autocomplete_industries.splice(arrIndex, 1);
+    this.autocomplete_skills_trained.splice(arrIndex, 1);
+  }
+
+  onCheckAllIndustriesValidation(): boolean {
+    let valid = true;
+    this.preferred_work_experiences.forEach((_, arrIndex) => {
+      if (!this.onCheckIndustryValidation(arrIndex)) {
+        valid = false;
+      }
+    });
+    return valid;
   }
 
 

@@ -57,8 +57,8 @@
       </h3>
       <div class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
-          <mat-label>Company</mat-label>
-          <input matInput placeholder="Company" type="text" [matAutocomplete]="autocompleteCompany" formControlName="position_company">
+          <mat-label>Company *</mat-label>
+          <input matInput placeholder="Company *" type="text" [matAutocomplete]="autocompleteCompany" formControlName="position_company">
           <mat-icon matSuffix *ngIf="positionBasicInfoForm.get('position_company').value && helperService.checkSpacesString(positionBasicInfoForm.get('position_company').value) && positionBasicInfoForm.get('position_company').valid && onCheckCompanyValidation()">done</mat-icon>
           <mat-icon matSuffix class="error-field" *ngIf="positionBasicInfoForm.get('position_company').value && helperService.checkSpacesString(positionBasicInfoForm.get('position_company').value) && !onCheckCompanyValidation() && positionBasicInfoForm.get('position_company').touched">close</mat-icon>
           <mat-autocomplete #autocompleteCompany="matAutocomplete" (closed)="onBlurCompany()">
@@ -164,7 +164,7 @@
     </div>
   </div>
   <div class="container__full">
-    <action-button class="btn-next" type="flat" title="Next" color="primary" [disabled]="!(positionBasicInfoForm.valid && onCheckCompanyValidation() && onCheckCityValidation() && onCheckStateValidation() && onCheckRecruiterValidation())" (click)="goToNextPage()"></action-button>
+    <action-button class="btn-next" type="flat" title="Next" color="primary" [disabled]="!(positionBasicInfoForm.valid && helperService.checkSpacesString(positionBasicInfoForm.value.position_company) &&  onCheckCompanyValidation() && onCheckCityValidation() && onCheckStateValidation() && onCheckRecruiterValidation())" (click)="goToNextPage()"></action-button>
   </div>
 </div>
   
@@ -262,10 +262,12 @@
       <ng-container *ngFor="let preferredWorkExperienceForm of preferredWorkExperienceFormArray.controls; let i = index" [formGroup]="preferredWorkExperienceFormArray.at(i)">
         <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
-            <mat-label>Industry</mat-label>
-            <input matInput placeholder="Industry" type="text" [matAutocomplete]="autocompleteWorkIndustry" formControlName="industry">
+            <mat-label>Industry *</mat-label>
+            <input matInput placeholder="Industry *" type="text" [matAutocomplete]="autocompleteWorkIndustry" formControlName="industry">
+            <mat-icon matSuffix *ngIf="preferredWorkExperienceFormArray.at(i).get('industry').value && helperService.checkSpacesString(preferredWorkExperienceFormArray.at(i).get('industry').value) && preferredWorkExperienceFormArray.at(i).get('industry').valid && onCheckIndustryValidation(i)">done</mat-icon>
+            <mat-icon matSuffix class="error-field" *ngIf="preferredWorkExperienceFormArray.at(i).get('industry').value && helperService.checkSpacesString(preferredWorkExperienceFormArray.at(i).get('industry').value) && !onCheckIndustryValidation(i) && preferredWorkExperienceFormArray.at(i).get('industry').touched">close</mat-icon>
             <mat-autocomplete #autocompleteWorkIndustry="matAutocomplete" (closed)="onBlurIndustry(i)">
-              <mat-option *ngFor="let autocomplete_industry of autocomplete_industries[i]" [value]="autocomplete_industries.industry_name" (onSelectionChange)="onSelectIndustry(autocomplete_industry, i)">
+              <mat-option *ngFor="let autocomplete_industry of autocomplete_industries[i]" [value]="autocomplete_industry.industry_name" (onSelectionChange)="onSelectIndustry(autocomplete_industry, i)">
                 <span>{{autocomplete_industry.industry_name}}</span>
               </mat-option>
             </mat-autocomplete>
@@ -316,12 +318,12 @@
         </div>
       </ng-container>
       <div class="profile-form__field btn">
-        <action-button type="stroked" title="Add Another" (click)="onAddPreferredWorkExperienceFormGroup()" [disabled]="!(preferredWorkExperienceFormArray.valid)"></action-button>
+        <action-button type="stroked" title="Add Another" (click)="onAddPreferredWorkExperienceFormGroup()" [disabled]="!(preferredWorkExperienceFormArray.valid && onCheckAllIndustriesValidation())"></action-button>
       </div>
     </div>
   </div>
   <div class="container__full">
-    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" ></action-button>
+    <action-button class="btn-next" type="flat" title="Next" color="primary" [disabled]="!(preferredWorkExperienceFormArray.valid && onCheckAllIndustriesValidation())" (click)="goToNextPage()" ></action-button>
   </div>
 </div>
 <!-- Preferred Work Experience End -->
