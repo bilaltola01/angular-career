@@ -262,7 +262,7 @@
                 <div class="skil-height-fix" [ngClass]="{'skill-more-height': info.showMoreFlag}"
                 *ngIf="matchedSkills?.length > 0; else noSkill">
                   <div class="skills-preferred-m green-color-tag" *ngFor="let matchSkill of matchedSkills ">
-                    <simple-tag type="green" title="{{matchSkill.skill}}" (click)="openSkilladdDialog(matchSkill)">
+                    <simple-tag type="green" title="{{matchSkill.skill}}" >
                     </simple-tag>
                   </div>
                 </div>
@@ -273,7 +273,7 @@
                 <div class="skil-height-fix" [ngClass]="{'skill-more-height': info.showMoreFlag}"
                   *ngIf="missingSkills?.length > 0; else noSkill">
                   <div class="skills-preferred-m red-color-tag" *ngFor="let skill of missingSkills ">
-                    <simple-tag type="red" title="{{skill.skill}}" (click)="openSkilladdDialog(skill)">
+                    <simple-tag type="red" title="{{skill.skill}}" >
                     </simple-tag>
 
                   </div>
@@ -388,7 +388,7 @@
                   <simple-tag type="gray" *ngIf="i < limit" title="{{min_skill.skill}}" ellipseTag="true"
                     value="{{min_skill.skill_level}}"
                     [matTooltip]="SkillLevelDescription[min_skill.skill_level].title + SkillLevelDescription[min_skill.skill_level].description"
-                    [matTooltipShowDelay]=500 (click)="openSkilladdDialog(min_skill)">
+                    [matTooltipShowDelay]=500 >
                   </simple-tag>
                 </div>
                 <img *ngIf="limit < jobData.minimum_skills?.length" (click)="limit = limit + displayItemsLimit"
@@ -408,7 +408,7 @@
                   <simple-tag *ngIf="i < limit" type="normal" title="{{preskill.skill}}" ellipseTag="true"
                     value="{{preskill.skill_level}}"
                     [matTooltip]="SkillLevelDescription[preskill.skill_level].title + SkillLevelDescription[preskill.skill_level].description"
-                    [matTooltipShowDelay]=500 (click)="openSkilladdDialog(preskill)">
+                    [matTooltipShowDelay]=500 >
                   </simple-tag>
                 </div>
 
