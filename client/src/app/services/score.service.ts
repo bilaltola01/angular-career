@@ -41,7 +41,6 @@ export class ScoreService {
 // to get the fitscore of position list array
   public getUpdatedfitscores(queryParam) {
     let queryUrl = `${this.fitscore_service_url}`;
-    console.log(queryUrl);
     if (queryParam) {
       queryUrl = `${queryUrl}?userId=${this.user_id}&${queryParam}`;
     }

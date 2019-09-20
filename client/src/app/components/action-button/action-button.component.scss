@@ -77,6 +77,14 @@
   font-size: 14px;
   font-family: "Poppins", sans-serif;
 }
+:host-context(.position-job-desc-btn) button {
+  line-height: initial;
+  padding: 15px 12px 5px 0 !important;
+  font-weight: 500;
+  font-size: 12px;
+  font-family: "Poppins", sans-serif;
+  text-align: left;
+}
 @media only screen and (max-width: $tablet-breakpoint) {
   :host-context(.position-search-reload-result)button {padding: 4px 13px !important;}
   }

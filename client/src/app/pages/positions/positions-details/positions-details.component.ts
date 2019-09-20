@@ -27,13 +27,13 @@ export class PositionsDetailsComponent implements OnInit {
   restrictedSchools;
   companyData = [];
   recruiterData = {};
-  // recruiterName;
-  Difference_In_Days;
+  differenceInDays;
   queryCallback;
   displayItemsLimit = 7;
   SkillLevelDescription = SkillLevelDescription;
   updatedFitscoreData;
   filter_list: boolean;
+  jobLowestEducationLevel;
 
   calculatedQualificationLevel: string;
 
@@ -71,14 +71,22 @@ export class PositionsDetailsComponent implements OnInit {
         this.getCompanyData(this.positionName[0].company_id);
         this.getRecruiterData(this.positionName[0].recruiter_id);
         this.countDays();
+        if (this.positionName[0].preferred_education_levels) {
+          this.getLowestEducationLevel(this.positionName[0].preferred_education_levels);
+        }
         this.calculatedQualificationLevel = this.calculateQualificationLevel(this.positionName[0].true_fitscore_info, this.positionName[0].minimum_skills);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
       }
     );
+  }
 
-
+  getLowestEducationLevel(lowestEducation) {
+    let educationLowestLevel = lowestEducation.map(level => level.level);
+    educationLowestLevel = Math.min(...educationLowestLevel);
+    const index = lowestEducation.findIndex(lowestLevel => lowestLevel.level === educationLowestLevel);
+     this.jobLowestEducationLevel = lowestEducation[index].education_level;
   }
   getCompanyData(comapnyId) {
     this.companyService.getCompanyData(comapnyId).subscribe(
@@ -247,8 +255,8 @@ export class PositionsDetailsComponent implements OnInit {
     const postDate = new Date(date2);
     const date = new Date().toLocaleString().split(',')[0];
     const todayDate = new Date(date);
-    const Difference_In_Time = todayDate.getTime() - postDate.getTime();
-    this.Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+    const differenceInTime = todayDate.getTime() - postDate.getTime();
+    this.differenceInDays = differenceInTime / (1000 * 3600 * 24);
   }
   scrollSmoothTo(elementId) {
     const element = document.getElementById(elementId);

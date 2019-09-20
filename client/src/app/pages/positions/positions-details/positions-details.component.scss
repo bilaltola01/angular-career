@@ -214,6 +214,11 @@ $profile-form-field-mt: 30px;
             margin-bottom: 10px;
           }
           & .position-matched {
+            max-height: 150px;
+            overflow: hidden;
+            &.skill-more-height{
+              max-height: initial;
+            }
             p {
               opacity: 0.84;
               margin-bottom: 0;
@@ -338,6 +343,7 @@ $profile-form-field-mt: 30px;
                 & simple-tag {
                   font-family: "Poppins", sans-serif;
                   color: rgba(map-get($md-cfaccent, 500), 0.05);
+                  cursor: pointer;
                 }
               }
 
@@ -469,11 +475,12 @@ $profile-form-field-mt: 30px;
       float: left;
       position: sticky;
       position: -webkit-sticky;
-      top: 80px;
+      top: 68px;
       overflow-y: scroll;
       height: calc(100vh - 70px);
       padding-bottom: 120px;
       box-sizing: border-box;
+      clear: both;
       &::-webkit-scrollbar {
         width: 0;
         background-color: transparent;
@@ -498,11 +505,19 @@ $profile-form-field-mt: 30px;
               height: 60px;
               width: 60px;
               text-align: center;
-              border: 1px solid #efefef;
               overflow: hidden;
               padding: 10px 0 4px;
+              position: relative;
               img {
-                width: 40px;
+                width: 50px;
+                &.image-upload{
+                  position: absolute;
+                  top:10px;
+                  left:0;
+                  right:0;
+                  text-align: center;
+                  margin:0 auto;
+                }
               }
             }
             h5 {
@@ -564,7 +579,7 @@ $profile-form-field-mt: 30px;
                   &::after{
                     position: absolute;
                     content: ",";
-                    right: -6px;
+                    right: -4px;
                     bottom: 0;
                   }
                   &:last-child::after{
