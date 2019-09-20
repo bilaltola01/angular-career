@@ -413,6 +413,14 @@ p {
           margin-bottom: 20px;
           display: inline-block;
         }
+        h4 {
+          font-family: 'Poppins', sans-serif;
+          font-weight: 400;
+          font-size: 16px;
+          line-height: 21px;
+          margin-top: 0;
+          margin-bottom: 0;
+        }
         h5 {
           color: rgba(map-get($md-cfaccent, 500), .34);
           margin-top: 15px;
@@ -537,6 +545,10 @@ p {
           margin: 10px 0 5px 10px;
           cursor: pointer;
         }
+      }
+      mat-divider {
+        margin: 20px 0;
+        border-color: rgba(#707070, 0.1);
       }
     }
   }

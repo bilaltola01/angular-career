@@ -170,7 +170,7 @@ export class CreatePositionComponent implements OnInit {
   ngOnInit() {
     this.isTabMenuOpen = false;
     this.isNavMenuOpened = false;
-    this.selectedPageIndex = 2;
+    this.selectedPageIndex = 0;
     this.initializeFormsByPageIndex();
   }
 
