@@ -110,13 +110,7 @@ export class PeopleSearchComponent implements OnInit {
   }
 
   toggleTabMenuOpen() {
-    this.isHandset$.subscribe(handsetFlag => {
-      if (handsetFlag) {
-        this.showFilterListFlag = !this.showFilterListFlag;
-      } else {
-        this.showFilterListFlag = true;
-      }
-    });
+    this.showFilterListFlag = !this.showFilterListFlag;
   }
 
   getCurrentUser() {
