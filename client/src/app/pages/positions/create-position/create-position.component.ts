@@ -11,7 +11,8 @@ import {
   HelperService,
   CompanyRecruiterService,
   CompanyAdminService,
-  UserStateService
+  UserStateService,
+  PositionService
 } from 'src/app/services';
 
 import {
@@ -161,10 +162,13 @@ export class CreatePositionComponent implements OnInit {
   isNavMenuOpened: boolean;
   isTabMenuOpen: boolean;
 
+  position: PositionInfoResponse;
+
   constructor(
     private alertsService: AlertsService,
     public helperService: HelperService,
-    public autoCompleteService: AutoCompleteService
+    public autoCompleteService: AutoCompleteService,
+    private positionService: PositionService
   ) { }
 
   ngOnInit() {
@@ -300,10 +304,10 @@ export class CreatePositionComponent implements OnInit {
       position_state: new FormControl(this.position_state ? this.position_state.state : null),
       position_country: new FormControl(this.position_country ? Countries[this.position_country - 1] : null),
       position_salary: new FormControl(this.position_salary ? this.position_salary : null),
-      position_level: new FormControl(this.position_level ? this.position_level : null),
-      position_type: new FormControl(this.position_type ? this.position_type : null),
+      position_level: new FormControl(this.position_level ? this.position_level : null, [Validators.required]),
+      position_type: new FormControl(this.position_type ? this.position_type : null, [Validators.required]),
       position_application_type: new FormControl(this.position_application_type ? this.position_application_type : null),
-      position_application_deadline: new FormControl(this.position_application_deadline ? this.position_application_deadline : null),
+      position_application_deadline: new FormControl(this.position_application_deadline ? this.helperService.convertStringToFormattedDateString(this.position_application_deadline, 'YYYY-MM-DD', 'L') : null),
       position_recruiter: new FormControl(this.position_recruiter ? `${this.position_recruiter.first_name} ${this.position_recruiter.last_name}` : null)
     });
 
@@ -412,7 +416,7 @@ export class CreatePositionComponent implements OnInit {
 
     this.positionBasicInfoForm.get('position_application_deadline').valueChanges.subscribe(
       (position_application_deadline) => {
-        this.position_application_deadline = position_application_deadline ? this.helperService.checkSpacesString(position_application_deadline) : null;
+        this.position_application_deadline = position_application_deadline && this.helperService.checkSpacesString(position_application_deadline) ? this.helperService.convertStringToFormattedDateString(position_application_deadline, 'L', 'YYYY-MM-DD') : null;
       }
     );
 
@@ -1092,6 +1096,40 @@ export class CreatePositionComponent implements OnInit {
     }
     if (this.preferred_schools.length === 0) {
       this.preferred_schools = null;
+    }
+  }
+
+  onClickPublish() {
+    if (!this.position) {
+      const position: PositionInfoRequest = {
+        position:	this.position_name,
+        company_id:	this.position_company.company_id,
+        level: this.position_level ? this.position_level : null,
+        type:	this.position_type ? this.position_type : null,
+        position_desc: this.position_desc,
+        start_date:	null,
+        end_date:	null,
+        position_filled: null,
+        pay: this.position_salary ? this.position_salary : null,
+        negotiable:	null,
+        repeat_post: null,
+        repeat_date: null,
+        cover_letter_req:	null,
+        recruiter_id:	this.position_recruiter ? this.position_recruiter.user_id : null,
+        department:	null,
+        open:	null,
+        openings:	null,
+        application_deadline:	this.position_application_deadline ? this.position_application_deadline : null
+      };
+
+      this.positionService.postPosition(position).subscribe(
+        dataJson => {
+          this.position = dataJson['data'];
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
     }
   }
 

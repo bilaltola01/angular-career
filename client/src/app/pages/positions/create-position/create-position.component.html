@@ -111,7 +111,7 @@
       </div>
       <div class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
-          <mat-label>Position Level</mat-label>
+          <mat-label>Position Level *</mat-label>
           <mat-select formControlName="position_level">
             <mat-option *ngFor="let positionLevel of positionLevels" value="{{positionLevel}}">{{positionLevel}}</mat-option>
           </mat-select>
@@ -119,7 +119,7 @@
       </div>
       <div class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
-          <mat-label>Position Type</mat-label>
+          <mat-label>Position Type *</mat-label>
           <mat-select formControlName="position_type">
             <mat-option *ngFor="let jobType of jobTypes" value="{{jobType}}">{{jobType}}</mat-option>
           </mat-select>
@@ -473,7 +473,7 @@
           </div>
         </div>
         <div class="position-status">
-          <action-button type="flat" color="primary" [title]="company ? 'Published' : 'Publish'" (click)="onClickPublish()"></action-button>
+          <action-button type="flat" color="primary" [title]="position ? 'Update' : 'Publish'" (click)="onClickPublish()"></action-button>
         </div>
       </div>
       <div class="position-row__details">
