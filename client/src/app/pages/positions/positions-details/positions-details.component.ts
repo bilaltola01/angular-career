@@ -135,7 +135,6 @@ export class PositionsDetailsComponent implements OnInit {
   getMatchedInterests() {
     this.matchingService.getinterests(this.positionId).subscribe(
       dataJson => {
-        console.log('datajson',dataJson)
         this.matchedInterests = dataJson.data['interests'];
       },
       error => {
