@@ -1125,12 +1125,176 @@ export class CreatePositionComponent implements OnInit {
       this.positionService.postPosition(position).subscribe(
         dataJson => {
           this.position = dataJson['data'];
+          const position_id = this.position.position_id;
+
+          if (this.position && this.position.position_id) {
+            if (this.preferred_education_levels && this.preferred_education_levels.length > 0) {
+              this.addPreferredEducationLevels(position_id);
+            }
+            if (this.preferred_education_major) {
+              this.addPreferredEducationMajor(position_id);
+            }
+            if (this.preferred_education_major_categories && this.preferred_education_major_categories.length > 0) {
+              this.addPreferredEducationMajorCategories(position_id);
+            }
+            if (this.preferred_work_experiences && this.preferred_work_experiences.length > 0) {
+              this.addPreferredWorkExperience(position_id);
+            }
+            if (this.minimum_skills && this.minimum_skills.length > 0) {
+              this.addMinimumSkills(position_id);
+            }
+            if (this.preferred_skills && this.preferred_skills.length > 0) {
+              this.addPreferredSkills(position_id);
+            }
+            if (this.preferred_interests && this.preferred_interests.length > 0) {
+              this.addPreferredInterests(position_id);
+            }
+            if (this.preferred_schools && this.preferred_schools.length > 0) {
+              this.addPreferredSchools(position_id);
+            }
+            if (this.position_city || this.position_state || this.position_country) {
+              this.addLocation(position_id);
+            }
+          }
         },
         error => {
           this.alertsService.show(error.message, AlertType.error);
         }
       );
     }
+  }
+
+  addPreferredEducationLevels(position_id: number) {
+    const info = {
+      position_id: position_id,
+      level_ids: this.preferred_education_levels.map((value) => value.level_id)
+    };
+    this.positionService.postPreferredEducation(info).subscribe(
+      dataJson => {
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  addPreferredEducationMajor(position_id: number) {
+    const info = {
+      position_id: position_id,
+      major_ids: [this.preferred_education_major.major_id]
+    };
+    this.positionService.postPreferredMajors(info).subscribe(
+      dataJson => {
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  addPreferredEducationMajorCategories(position_id: number) {
+    const info = {
+      position_id: position_id,
+      major_category_ids: this.preferred_education_major_categories.map(value => value.cat_id)
+    };
+    this.positionService.postPreferredMajorCategories(info).subscribe(
+      dataJson => {
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  addPreferredWorkExperience(position_id: number) {
+    this.preferred_work_experiences.forEach(experience => {
+      const info = {
+        position_id: position_id,
+        industry_id: experience.industry.industry_id,
+        preferred_years: experience.years,
+        exp_desc:	experience.description ? experience.description : null,
+        skills_trained_ids: experience.skills_trained && experience.skills_trained.length > 0 ? experience.skills_trained.map(value => value.skill_id) : null
+      };
+      this.positionService.postPreferredExperience(info).subscribe(
+        dataJson => {
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    });
+  }
+
+  addMinimumSkills(position_id: number) {
+    const info = {
+      position_id: position_id,
+      skills: this.minimum_skills
+    };
+    this.positionService.postMinimumSkills(info).subscribe(
+      dataJson => {
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  addPreferredSkills(position_id: number) {
+    const info = {
+      position_id: position_id,
+      skills: this.preferred_skills
+    };
+    this.positionService.postPreferredSkills(info).subscribe(
+      dataJson => {
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  addPreferredInterests(position_id: number) {
+    const info = {
+      position_id: position_id,
+      interest_ids: this.preferred_interests.map(value => value.interest_id)
+    };
+    this.positionService.postPreferredInterests(info).subscribe(
+      dataJson => {
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  addPreferredSchools(position_id: number) {
+    const info = {
+      position_id: position_id,
+      school_ids: this.preferred_schools.map(value => value.school_id)
+    };
+    this.positionService.postPreferredSchools(info).subscribe(
+      dataJson => {
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  addLocation(position_id: number) {
+    const info = {
+      position_id: position_id,
+      city_id: this.position_city ? this.position_city.city_id : null,
+      state_id:	this.position_state ? this.position_state.state_id : null,
+      country_id:	this.position_country ? this.position_country : null
+    };
+    this.positionService.postLocation(info).subscribe(
+      dataJson => {
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
   }
 
   backToEdit() {

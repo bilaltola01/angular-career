@@ -55,6 +55,114 @@ export class PositionService {
       );
   }
 
+  public postPreferredSkills(skillsInfo: any): Observable<any> {
+    return this.http.post(this.position_management_service_url + 'position/preferred-skills', skillsInfo, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
+  public postMinimumSkills(skillsInfo: any): Observable<any> {
+    return this.http.post(this.position_management_service_url + 'position/minimum-skills', skillsInfo, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
+  public postPreferredSchools(schoolsInfo: any): Observable<any> {
+    return this.http.post(this.position_management_service_url + 'position/preferred-schools', schoolsInfo, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
+  public postPreferredMajors(majorsInfo: any): Observable<any> {
+    return this.http.post(this.position_management_service_url + 'position/preferred-majors', majorsInfo, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
+  public postPreferredEducation(educationInfo: any): Observable<any> {
+    return this.http.post(this.position_management_service_url + 'position/preferred-education', educationInfo, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
+  public postPreferredMajorCategories(categoriesInfo: any): Observable<any> {
+    return this.http.post(this.position_management_service_url + 'position/preferred-major-categories', categoriesInfo, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
+  public postPreferredInterests(interestsInfo: any): Observable<any> {
+    return this.http.post(this.position_management_service_url + 'position/preferred-interests', interestsInfo, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
+  public postPreferredExperience(experienceInfo: any): Observable<any> {
+    return this.http.post(this.position_management_service_url + 'position/full-experience', experienceInfo, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
+  public postLocation(locationInfo: any): Observable<any> {
+    return this.http.post(this.position_management_service_url + 'position/location', locationInfo, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
   private handleError(error) {
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {
