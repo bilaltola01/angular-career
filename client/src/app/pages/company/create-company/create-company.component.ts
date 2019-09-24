@@ -644,7 +644,7 @@ export class CreateCompanyComponent implements OnInit {
   }
 
   onClickPublish() {
-    if (!this.company) {
+    // if (!this.company) {
       const company: CompanyInfoRequest = {
         company_logo: null,
         company_name: this.company_name,
@@ -680,7 +680,7 @@ export class CreateCompanyComponent implements OnInit {
           this.alertsService.show(error.message, AlertType.error);
         }
       );
-    }
+    // }
   }
 
   parseCompanySize(companySizeTypes: string): string {

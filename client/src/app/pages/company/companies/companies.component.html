@@ -1,1 +1,40 @@
-<p> Companies search working ... </p>
+<ng-container *ngIf="isLoadingResults">
+    <div class="loader">
+        <mat-spinner></mat-spinner>
+        <h4>Loading...</h4>
+    </div>
+</ng-container>
+ 
+
+<!-- Search Bar -->
+<form class="common_search_filter" [formGroup]="companiesForm" autocomplete="off"> 
+    <div class="filter-data">
+        <mat-icon (click)="toggleTabMenuOpen()" class="filter_icon">filter_list</mat-icon>
+    </div>
+    <div class="people-search-header">
+        <mat-form-field appearance="standard" class="search">
+        <mat-icon matSuffix (click)="onSearchCompany($event)">search</mat-icon>
+        <input  matInput 
+                placeholder="{{searchPlaceholderCopy}}"
+                type="text" 
+                [matAutocomplete]="autocompleteSearch"
+                formControlName="searchCompanies" 
+                (keyup.enter)="onSearchCompany($event)">
+        <mat-autocomplete #autocompleteSearch="matAutocomplete">
+            <a *ngFor="let company of autocomplete_searchcompanies | slice:0:4" 
+                routerLink="/company/{{company.company_id}}" 
+                [queryParams]="{showBackButton: 'true'}">
+                <mat-option [value]="company.company_name">
+                    <img [src]="company.company_logo ? company.company_logo : 'assets/icons/no_photo.png'">
+                    <span>{{company.company_name}}</span>
+                </mat-option>
+            </a>
+            <mat-option [value]="companiesForm.value.searchCompanies" 
+                        (click)="onSearchCompany($event)" 
+                        *ngIf="companiesForm.value.searchCompanies?.length > 0">
+                See all results for <b>{{companiesForm.value.searchCompanies}}</b>
+            </mat-option>
+        </mat-autocomplete>
+        </mat-form-field>
+    </div>
+</form>
