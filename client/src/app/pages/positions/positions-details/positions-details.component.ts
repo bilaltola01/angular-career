@@ -20,7 +20,9 @@ export class PositionsDetailsComponent implements OnInit {
   breakpoint: number;
   positionName = [];
   savedJobsMap = {};
+  savedJobs = [];
   appliedJobsMap = {};
+  appliedJobs = [];
   matchedSkills = [];
   missingSkills = [];
   matchedInterests = [];
@@ -51,6 +53,8 @@ export class PositionsDetailsComponent implements OnInit {
   ngOnInit() {
     this.positionId = this.route.snapshot.paramMap.get('position_id');
     this.getposition(this.positionId);
+    this.getAppliedJobs();
+    this.getSavedJobs();
     this.getMatchedSkill();
     this.getMissingSkill();
     this.getMatchedInterests();
@@ -131,6 +135,7 @@ export class PositionsDetailsComponent implements OnInit {
   getMatchedInterests() {
     this.matchingService.getinterests(this.positionId).subscribe(
       dataJson => {
+        console.log('datajson',dataJson)
         this.matchedInterests = dataJson.data['interests'];
       },
       error => {
@@ -149,7 +154,38 @@ export class PositionsDetailsComponent implements OnInit {
     );
 
   }
+  getSavedJobs() {
+    this.cartService.getSavedJobs()
+      .subscribe((data: any) => {
+        if (data.data && data.data.rows) {
+          this.savedJobs = data.data.rows;
+          for (const job of this.savedJobs) {
+            this.savedJobsMap[job.position_id] = job.position_id;
+          }
+        }
 
+
+      },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        });
+  }
+  getAppliedJobs() {
+    this.applicationService.getAppliedJobs()
+      .subscribe(data => {
+        if (data.data && data.data.data) {
+          this.appliedJobs = data.data.data;
+          for (const job of this.appliedJobs) {
+            this.appliedJobsMap[job.position_id] = job.application_id;
+
+          }
+        }
+
+      },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        });
+  }
   withdrawApplication(position_id) {
     const application_id = this.appliedJobsMap[position_id];
     this.applicationService.withdrawJobs(application_id).subscribe(data => {
@@ -263,4 +299,5 @@ export class PositionsDetailsComponent implements OnInit {
     element.scrollIntoView({ block: 'start', behavior: 'smooth' });
     this.filter_list = false;
   }
+
 }

@@ -23,8 +23,7 @@
 
           <mat-card>
             <div class="company-border">
-              <img alt="Company Logo" class="userimg" src="{{info?.company_logo ? info?.company_logo : 'assets/icons/ic_default_company_logo.svg'}}">
-              <img class="image-upload" alt="Upload Image" src="{{info?.company_logo ? info?.company_logo : 'assets/icons/ic_image_upload.svg'}}">
+              <img alt="Company Logo" class="userimg" src="{{info?.company_logo ? info?.company_logo : 'assets/icons/ic_company.svg'}}">
             </div>
             <h5>{{info.company_name}}</h5>
             <img src="assets/icons/ic_location.svg">
@@ -51,7 +50,8 @@
                 <li>
                   <span>Company Industries</span>
                   <small *ngIf="info.company_industries?.length > 0 ; else noIndustry">
-                <li *ngFor="let industry of info.company_industries">{{industry}} </li></small>
+                <li *ngFor="let industry of info.company_industries"><simple-tag type="gray" title="{{industry}}">
+                </simple-tag> </li></small>
                 <ng-template #noIndustry>
                   <li class="company-address">N/A</li>
                 </ng-template>
@@ -82,7 +82,8 @@
               <h4>Contents</h4>
               <ol *ngFor="let jobData of positionName">
                 <li (click)="scrollSmoothTo('information')"> Position Information</li>
-                <li (click)="scrollSmoothTo('qualification_level_breakdown')"> Qualification Level Estimate</li>
+                <li (click)="scrollSmoothTo('qualification_level_breakdown')" *ngIf="(jobData.minimum_skills?.length > 0 || jobData.preferred_skills?.length > 0) || (jobData.preferred_experience?.length > 0) || (jobData.preferred_education_levels?.length > 0 ||
+                    jobData.preferred_majors?.length > 0 || jobData.preferred_major_categories?.length > 0) || (matchedInterests?.length > 0) || (matchedSkills?.length > 0 || missingSkills?.length > 0)"> Qualification Level Estimate</li>
                 <li (click)="scrollSmoothTo('skills')" *ngIf="matchedSkills?.length > 0 || missingSkills?.length > 0"> Missing/Matching Skills</li>
                   <li (click)="scrollSmoothTo('matched_interest')" *ngIf="matchedInterests?.length > 0"> Matched Interest</li>
                 <li (click)="scrollSmoothTo('description')"*ngIf="jobData.position_desc" >Job Description</li>
@@ -104,7 +105,7 @@
 
       <div *ngFor="let info of positionName ">
 
-        <div class="row position-detail" id="information">
+        <section class="row position-detail" id="information">
 
           <h1>{{info.position}} </h1>
           <div class="position-right">
@@ -214,15 +215,16 @@
               </mat-grid-tile>
               <mat-grid-tile>
                 <div class="card-item">
-                  <span>Education Level Required</span>
+                  <span>Education Level</span>
                   <p>{{jobLowestEducationLevel ? jobLowestEducationLevel : 'N/A'}}</p>
                 </div>
               </mat-grid-tile>
             </mat-grid-list>
           </div>
-        </div>
+        </section>
 
-        <div class="row position-qualification-detail" id="qualification_level_breakdown" >
+        <div class="row position-qualification-detail" id="qualification_level_breakdown" *ngIf="(info.minimum_skills?.length > 0 || info.preferred_skills?.length > 0) || (info.preferred_experience?.length > 0) || (info.preferred_education_levels?.length > 0 ||
+            info.preferred_majors?.length > 0 || info.preferred_major_categories?.length > 0) || (matchedInterests?.length > 0) || (matchedSkills?.length > 0 || missingSkills?.length > 0)">
           <h3>Qualification Level Estimate Breakdown</h3>
           <div class="position-qualification-skills" *ngFor="let score of positionName">
             <simple-tag *ngIf="score.true_fitscore_info?.skills_weight" type="gray" title="Skills Match"
@@ -262,7 +264,7 @@
                 <div class="skil-height-fix" [ngClass]="{'skill-more-height': info.showMoreFlag}"
                 *ngIf="matchedSkills?.length > 0; else noSkill">
                   <div class="skills-preferred-m green-color-tag" *ngFor="let matchSkill of matchedSkills ">
-                    <simple-tag type="green" title="{{matchSkill.skill}}" >
+                    <simple-tag type="green" title="{{matchSkill.skill}}" (click)="openSkilladdDialog(matchSkill)">
                     </simple-tag>
                   </div>
                 </div>
@@ -273,9 +275,8 @@
                 <div class="skil-height-fix" [ngClass]="{'skill-more-height': info.showMoreFlag}"
                   *ngIf="missingSkills?.length > 0; else noSkill">
                   <div class="skills-preferred-m red-color-tag" *ngFor="let skill of missingSkills ">
-                    <simple-tag type="red" title="{{skill.skill}}" >
+                    <simple-tag type="red" title="{{skill.skill}}" (click)="openSkilladdDialog(skill)">
                     </simple-tag>
-
                   </div>
                 </div>
                 <ng-template #noSkill>
@@ -386,7 +387,7 @@
               <div class="skills" *ngIf="displayItemsLimit; let limit">
                 <div class="skills-preferred-m" *ngFor="let min_skill of jobData.minimum_skills; let i = index; ">
                   <simple-tag type="gray" *ngIf="i < limit" title="{{min_skill.skill}}" ellipseTag="true"
-                    value="{{min_skill.skill_level}}"
+                    value="{{min_skill.skill_level}}"  (click)="openSkilladdDialog(min_skill)"
                     [matTooltip]="SkillLevelDescription[min_skill.skill_level].title + SkillLevelDescription[min_skill.skill_level].description"
                     [matTooltipShowDelay]=500 >
                   </simple-tag>
@@ -406,7 +407,7 @@
               <div class="skills" *ngIf="displayItemsLimit; let limit">
                 <div class="skills-preferred-m" *ngFor="let preskill of jobData.preferred_skills; let i = index;">
                   <simple-tag *ngIf="i < limit" type="normal" title="{{preskill.skill}}" ellipseTag="true"
-                    value="{{preskill.skill_level}}"
+                    value="{{preskill.skill_level}}" (click)="openSkilladdDialog(preskill)"
                     [matTooltip]="SkillLevelDescription[preskill.skill_level].title + SkillLevelDescription[preskill.skill_level].description"
                     [matTooltipShowDelay]=500 >
                   </simple-tag>
