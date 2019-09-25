@@ -185,7 +185,12 @@ export class PositionSearchComponent implements OnInit {
       'level': this.urlParams['level'],
       'education': this.urlParams['education'],
       'job': this.urlParams['job_type'],
-      'company': this.urlParams['company']
+      'company': this.urlParams['company'],
+      'major': this.urlParams['majorName'],
+      'recruiter': this.urlParams['recruiterName'],
+      'school': this.urlParams['schoolName'],
+      'industry': this.urlParams['industryName'],
+      'city': this.urlParams['cityName']
     });
   }
 
@@ -314,15 +319,31 @@ export class PositionSearchComponent implements OnInit {
     this.filterAttributes['recruiter_id'] = recruiter.user_id;
   }
 
+
   addSkills(skillItem: Skill) {
-    this.positionForm.patchValue({ skill: '' });
-    if (this.userSkillsList.findIndex(skill => skillItem.skill_id === skill.skill_id) === -1) {
-      this.userSkillsList.push(skillItem);
+
+    if (this.skillUrlParams.length > 0) {
+      this.positionForm.patchValue({ skill: '' });
+      if (!(this.skillUrlParams.includes(skillItem.skill))) {
+        if (this.userSkillsList.findIndex(skill => skillItem.skill_id === skill.skill_id) === -1) {
+          this.userSkillsList.push(skillItem);
+        }
+      }
+    } else {
+      this.positionForm.patchValue({ skill: '' });
+      if (this.userSkillsList.findIndex(skill => skillItem.skill_id === skill.skill_id) === -1) {
+        this.userSkillsList.push(skillItem);
+      }
     }
+
 
   }
   removeUserSkillsData(index: number) {
     this.userSkillsList.splice(index, 1);
+  }
+  removeSkillUrlParams(index: number) {
+    this.skillUrlParams.splice(index, 1);
+    this.skillUrlIdParam.splice(index, 1);
   }
 
   generateQueryString(): string {
@@ -484,6 +505,7 @@ export class PositionSearchComponent implements OnInit {
 
   onSearchPosition(event) {
     this.prequeryFlag = true;
+    this.offsetFlag = false;
     this.filterAttributes.offset = 0;
     this.preLoadDataObject = {};
     this.getJobData();
@@ -492,6 +514,7 @@ export class PositionSearchComponent implements OnInit {
 
   applyFilter() {
     this.prequeryFlag = true;
+    this.offsetFlag = false;
     this.filterAttributes.offset = 0;
     this.toggleTabMenuOpen();
     this.preLoadDataObject = {};
@@ -614,6 +637,7 @@ export class PositionSearchComponent implements OnInit {
 
   pageClicked(pageNo) {
     this.prequeryFlag = true;
+    this.offsetFlag = false;
     document.getElementById('sidenav-content').scrollTo(0, 0);
     if (pageNo > 0 && pageNo <= this.paginationArr[this.paginationArr.length - 1]) {
       this.currentPageNumber = pageNo;

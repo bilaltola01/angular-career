@@ -326,9 +326,8 @@ export class PositionsDetailsComponent implements OnInit {
     const differenceInTime = todayDate.getTime() - postDate.getTime();
     this.differenceInDays = differenceInTime / (1000 * 3600 * 24);
   }
-  scrollSmoothTo(elementId) {
-    const elementDiv = document.getElementById(elementId);
-    elementDiv.scrollIntoView({ block: 'start', behavior: 'smooth' });
-    this.filter_list = false;
+  scrollSmoothTo(id) {
+    const height = 70;
+    document.getElementById('sidenav-content').scrollTop = document.getElementById(id).offsetTop - height;
   }
 }

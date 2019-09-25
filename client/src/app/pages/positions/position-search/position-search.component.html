@@ -55,11 +55,12 @@
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
-          <div *ngIf="userSkillsList.length > 0" class="skills">
-            <simple-tag *ngFor="let skillData of userSkillsList; let i = index" type="gray" removeTag="true"
-              title="{{skillData.skill}}" (click)="removeUserSkillsData(i)"></simple-tag>
-
-          </div>
+          <div *ngIf="userSkillsList.length > 0 ? userSkillsList.length > 0 : skillUrlParams.length > 0 " class="skills">
+              <simple-tag *ngFor="let skillData of userSkillsList; let i = index" type="gray" removeTag="true"
+                title="{{skillData.skill}}" (click)="removeUserSkillsData(i)"></simple-tag>
+                 <simple-tag *ngFor="let skillData of skillUrlParams; let i = index" type="gray" removeTag="true"
+                title="{{skillData}}" (click)="removeSkillUrlParams(i)"></simple-tag>
+            </div>
         </div>
         <div class="filter-card">
           <mat-form-field>
@@ -261,10 +262,13 @@
                 <li>
                   <img src="assets/icons/ic_location.svg">
                   <span class="image"
-                    *ngIf="job.hq_city_name && job.hq_state_name && job.hq_country_name; else noLocation">
-                    {{job.hq_city_name }},
-                    {{job.hq_state_name }},
-                    {{job.hq_country_name }}</span>
+                    *ngIf="job.locations; else noLocation">
+                    <span *ngFor="let location of job.locations">
+                    {{location.city }},
+                    {{location.state }},
+                    {{location.country }}
+                  </span>
+                </span>
                   <ng-template #noLocation>
                     <span>N/A</span>
                   </ng-template>

@@ -85,7 +85,7 @@
             <mat-card>
               <h4>Contents</h4>
               <ol *ngFor="let jobData of positionName">
-                <li (click)="scrollSmoothTo('information')"> Position Information</li>
+                <li (click)="scrollSmoothTo('information')" > Position Information</li>
                 <li (click)="scrollSmoothTo('qualification_level_breakdown')" *ngIf="(jobData.minimum_skills?.length > 0 || jobData.preferred_skills?.length > 0) || (jobData.preferred_experience?.length > 0) || (jobData.preferred_education_levels?.length > 0 ||
                     jobData.preferred_majors?.length > 0 || jobData.preferred_major_categories?.length > 0) || (matchedInterests?.length > 0) || (matchedSkills?.length > 0 || missingSkills?.length > 0)"> Qualification Level Estimate</li>
                 <li (click)="scrollSmoothTo('skills')" *ngIf="matchedSkills?.length > 0 || missingSkills?.length > 0"> Missing/Matching Skills</li>
@@ -149,12 +149,14 @@
                 </li>
                 <li>
                   <img src="assets/icons/ic_location.svg">
-                  <span class="image"
-                    *ngIf="info.hq_city_name && info.hq_state_name && info.hq_country_name; else noLocation">
-                    {{info.hq_city_name }},
-                    {{info.hq_state_name }},
-                    {{info.hq_country_name }}</span>
-                  <ng-template #noLocation>
+                  <span class="image" *ngIf="info.locations ; else noLocations" >
+                    <span *ngFor="let location of info.locations" >
+                    {{location.city }},
+                    {{location.state }},
+                    {{location.country }}
+                  </span>
+                </span>
+                <ng-template #noLocations>
                     <span class="noLocation">N/A</span>
                   </ng-template>
                 </li>
