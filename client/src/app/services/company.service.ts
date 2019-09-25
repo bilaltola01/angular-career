@@ -93,6 +93,22 @@ export class CompanyService {
       );
 
   }
+  getCompanyPositionData(queryParam) {
+    let queryUrl = `${this.company_url}`;
+    if (queryParam) {
+      queryUrl = `${queryUrl}/${queryParam}/position-count`;
+    }
+    return this.http.get(queryUrl, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return { success: true, message: 'Success!', data: data };
+          }
+        ),
+        catchError(this.handleError)
+      );
+
+  }
   private handleError(error) {
     if (!environment.production) {
       console.error(`UserService -> handleError -> error. Error Code: ${error.status}. Message: ${error.error.message ? error.error.message : error.statusText}. Details:`, error);

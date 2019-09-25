@@ -6,6 +6,7 @@ import { SkillLevelDescription } from 'src/app/models';
 import { MatDialog } from '@angular/material/dialog';
 import { SkillDescriptionPopupComponent } from 'src/app/components/skill-description-popup/skill-description-popup.component';
 import { AddSkillPopupComponent } from 'src/app/components/add-skill-popup/add-skill-popup.component';
+import { element } from 'protractor';
 
 
 @Component({
@@ -30,15 +31,19 @@ export class PositionsDetailsComponent implements OnInit {
   companyData = [];
   recruiterData = {};
   differenceInDays;
+  newPositionCount = [];
+  newCompanyPositions = {};
+  positionsAvailable = 0;
   queryCallback;
   displayItemsLimit = 7;
+  displayIndustryLimit = 3;
   SkillLevelDescription = SkillLevelDescription;
   updatedFitscoreData;
   filter_list: boolean;
   jobLowestEducationLevel;
 
   calculatedQualificationLevel: string;
-
+  Object = Object;
   constructor(private positionService: PositionService,
     private route: ActivatedRoute,
     private matchingService: MatchingService,
@@ -90,16 +95,44 @@ export class PositionsDetailsComponent implements OnInit {
     let educationLowestLevel = lowestEducation.map(level => level.level);
     educationLowestLevel = Math.min(...educationLowestLevel);
     const index = lowestEducation.findIndex(lowestLevel => lowestLevel.level === educationLowestLevel);
-     this.jobLowestEducationLevel = lowestEducation[index].education_level;
+    this.jobLowestEducationLevel = lowestEducation[index].education_level;
   }
   getCompanyData(comapnyId) {
     this.companyService.getCompanyData(comapnyId).subscribe(
       dataJson => {
         this.companyData.push(dataJson.data);
+        this.getPositionCount(comapnyId);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
       });
+  }
+  getPositionCount(comapnyId) {
+    this.companyService.getCompanyPositionData(comapnyId).subscribe(
+      dataJson => {
+        this.positionDataTransform(dataJson.data);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+  positionDataTransform(companyPositon) {
+    const companyPositionKeys = this.Object.keys(companyPositon);
+    const companyPositionValues = this.Object.values(companyPositon);
+    companyPositionKeys.pop();
+    for (const key of companyPositionKeys) {
+      const result = key.split('_');
+      result.pop();
+      const keyString = result.join(' ');
+      this.newPositionCount.push(keyString);
+    }
+    for (let i = 0; i < this.newPositionCount.length; i++) {
+      if (companyPositionValues[i] > 0) {
+        this.positionsAvailable++;
+      }
+      this.newCompanyPositions[this.newPositionCount[i]] = companyPositionValues[i];
+    }
   }
   getRecruiterData(recruterId) {
     this.userService.getGeneralInfo(recruterId).subscribe(
@@ -294,9 +327,8 @@ export class PositionsDetailsComponent implements OnInit {
     this.differenceInDays = differenceInTime / (1000 * 3600 * 24);
   }
   scrollSmoothTo(elementId) {
-    const element = document.getElementById(elementId);
-    element.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    const elementDiv = document.getElementById(elementId);
+    elementDiv.scrollIntoView({ block: 'start', behavior: 'smooth' });
     this.filter_list = false;
   }
-
 }

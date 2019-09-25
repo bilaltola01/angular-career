@@ -84,6 +84,14 @@ export class PositionSearchComponent implements OnInit {
   updatedFitscoreList = [];
   searchQueryParam;
   urlParams = {};
+  offsetFlag = false;
+  queryFlag = true;
+  prequeryFlag = false;
+  preLoadDataFlag = true;
+  offsetParam;
+  urlQueryParameter;
+  skillUrlParams = [];
+  skillUrlIdParam = [];
 
   constructor(private autoCompleteService: AutoCompleteService, private router: Router,
     private alertsService: AlertsService, private positionService: PositionService, private scoreService: ScoreService,
@@ -94,12 +102,24 @@ export class PositionSearchComponent implements OnInit {
     const urlParams = new URLSearchParams(window.location.search);
     this.searchQueryParam = urlParams.get('search');
     if (this.searchQueryParam) {
+      this.preLoadDataFlag = false;
+      this.offsetFlag = true;
       const urlObject = this.searchQueryParam.split('&');
+
       for (let i = 0; i < urlObject.length; i++) {
         const result = urlObject[i].split('=');
-        this.urlParams[result[0]] = result[1];
+
+        if (result[0] === 'skillName') {
+          this.skillUrlParams.push(result[1]);
+        } else if (result[0] === 'skills') {
+          this.skillUrlIdParam.push(result[1]);
+        } else {
+          this.urlParams[result[0]] = result[1];
+        }
       }
+      this.currentPageNumber = (this.urlParams['offset'] / this.urlParams['limit']) + 1;
     }
+
     this.initPositionFilterForm();
     this.getJobData();
     this.getSavedJobs();
@@ -305,44 +325,102 @@ export class PositionSearchComponent implements OnInit {
     this.userSkillsList.splice(index, 1);
   }
 
-
   generateQueryString(): string {
     let queryString;
+    let urlQueryParam;
+
     if (this.searchQueryParam) {
       queryString = this.searchQueryParam;
       this.searchQueryParam = null;
     } else {
-      queryString = this.positionForm.value.city ? `${queryString ? queryString + '&' : ''}city=${this.filterAttributes.city_id}` : queryString;
+      queryString = this.positionForm.value.city ? `${queryString ? queryString + '&' : ''}city=${this.filterAttributes.city_id ? this.filterAttributes.city_id : this.urlParams['city']}&cityName=${this.positionForm.value.city}` : queryString;
       queryString = this.positionForm.value.position ? `${queryString ? queryString + '&' : ''}level=${this.positionForm.value.position}` : queryString;
       queryString = this.positionForm.value.education ? `${queryString ? queryString + '&' : ''}education=${parseInt(this.positionForm.value.education, 10) + 1}` : queryString;
       queryString = this.positionForm.value.job ? `${queryString ? queryString + '&' : ''}job_type=${this.positionForm.value.job}` : queryString;
-      queryString = this.positionForm.value.school ? `${queryString ? queryString + '&' : ''}school=${this.filterAttributes.school_id}` : queryString;
-      queryString = this.positionForm.value.major ? `${queryString ? queryString + '&' : ''}major=${this.filterAttributes.major_id}` : queryString;
-      queryString = this.positionForm.value.industry ? `${queryString ? queryString + '&' : ''}industry=${this.filterAttributes.industry_id}` : queryString;
+      queryString = this.positionForm.value.school ? `${queryString ? queryString + '&' : ''}school=${this.filterAttributes.school_id ? this.filterAttributes.school_id : this.urlParams['school']}&schoolName=${this.positionForm.value.school}` : queryString;
+      queryString = this.positionForm.value.major ? `${queryString ? queryString + '&' : ''}major=${this.filterAttributes.major_id ? this.filterAttributes.major_id : this.urlParams['major']}&majorName=${this.positionForm.value.major}` : queryString;
+      queryString = this.positionForm.value.industry ? `${queryString ? queryString + '&' : ''}industry=${this.filterAttributes.industry_id ? this.filterAttributes.industry_id : this.urlParams['industry']}&industryName=${this.positionForm.value.industry}` : queryString;
       queryString = this.positionForm.value.company ? `${queryString ? queryString + '&' : ''}company=${this.positionForm.value.company}` : queryString;
       queryString = this.positionForm.value.minSal ? `${queryString ? queryString + '&' : ''}pay=${this.positionForm.value.minSal}` : queryString;
-      queryString = this.positionForm.value.recruiter ? `${queryString ? queryString + '&' : ''}recruiter=${this.filterAttributes.recruiter_id}` : queryString;
-      queryString = queryString ? `${queryString}&offset=${this.filterAttributes.offset}` : `offset=${this.filterAttributes.offset}`;
-      queryString = queryString ? `${queryString}&limit=${this.filterAttributes.limit}` : `offset=${this.filterAttributes.limit}`;
-      this.userSkillsList.forEach(skill => {
-        queryString = queryString ? queryString + `&skills=${skill.skill_id}` : `skills=${skill.skill_id}`;
-      });
+      queryString = this.positionForm.value.recruiter ? `${queryString ? queryString + '&' : ''}recruiter=${this.filterAttributes.recruiter_id ? this.filterAttributes.recruiter_id : this.urlParams['recruiter']}&recruiterName=${this.positionForm.value.recruiter}` : queryString;
+
+      if (this.offsetFlag) {
+        queryString = queryString ? `${queryString}&offset=${parseInt(this.urlParams['offset'], 10) + parseInt(this.urlParams['limit'], 10)}` : `offset=${parseInt(this.urlParams['offset'], 10) + this.filterAttributes.limit}`;
+        queryString = queryString ? `${queryString}&limit=${parseInt(this.urlParams['limit'], 10)}` : `offset=${parseInt(this.urlParams['limit'], 10)}`;
+        this.offsetFlag = false;
+      } else {
+        queryString = queryString ? `${queryString}&offset=${this.filterAttributes.offset}` : `offset=${this.filterAttributes.offset}`;
+        queryString = queryString ? `${queryString}&limit=${this.filterAttributes.limit}` : `offset=${this.filterAttributes.limit}`;
+
+      }
       queryString = this.positionForm.value.searchPosition ? `${queryString ? queryString + '&' : ''}position=${this.positionForm.value.searchPosition}` : queryString;
       queryString = this.positionForm.value.sortBy ? `${queryString ? queryString + '&' : ''}sort=${this.positionForm.value.sortBy}` : queryString;
 
+      urlQueryParam = this.positionForm.value.city ? `${urlQueryParam ? urlQueryParam + '&' : ''}city=${this.filterAttributes.city_id ? this.filterAttributes.city_id : this.urlParams['city']}&cityName=${this.positionForm.value.city}` : urlQueryParam;
+      urlQueryParam = this.positionForm.value.position ? `${urlQueryParam ? urlQueryParam + '&' : ''}level=${this.positionForm.value.position}` : urlQueryParam;
+      urlQueryParam = this.positionForm.value.education ? `${urlQueryParam ? urlQueryParam + '&' : ''}education=${parseInt(this.positionForm.value.education, 10) + 1}` : urlQueryParam;
+      urlQueryParam = this.positionForm.value.job ? `${urlQueryParam ? urlQueryParam + '&' : ''}job_type=${this.positionForm.value.job}` : urlQueryParam;
+      urlQueryParam = this.positionForm.value.school ? `${urlQueryParam ? urlQueryParam + '&' : ''}school=${this.filterAttributes.school_id ? this.filterAttributes.school_id : this.urlParams['school']}&schoolName=${this.positionForm.value.school}` : urlQueryParam;
+      urlQueryParam = this.positionForm.value.major ? `${urlQueryParam ? urlQueryParam + '&' : ''}major=${this.filterAttributes.major_id ? this.filterAttributes.major_id : this.urlParams['major']}&majorName=${this.positionForm.value.major}` : urlQueryParam;
+      urlQueryParam = this.positionForm.value.industry ? `${urlQueryParam ? urlQueryParam + '&' : ''}industry=${this.filterAttributes.industry_id ? this.filterAttributes.industry_id : this.urlParams['industry']}&industryName=${this.positionForm.value.industry}` : urlQueryParam;
+      urlQueryParam = this.positionForm.value.company ? `${urlQueryParam ? urlQueryParam + '&' : ''}company=${this.positionForm.value.company}` : urlQueryParam;
+      urlQueryParam = this.positionForm.value.minSal ? `${urlQueryParam ? urlQueryParam + '&' : ''}pay=${this.positionForm.value.minSal}` : urlQueryParam;
+      urlQueryParam = this.positionForm.value.recruiter ? `${urlQueryParam ? urlQueryParam + '&' : ''}recruiter=${this.filterAttributes.recruiter_id ? this.filterAttributes.recruiter_id : this.urlParams['recruiter']}&recruiterName=${this.positionForm.value.recruiter}` : urlQueryParam;
+      urlQueryParam = this.positionForm.value.searchPosition ? `${urlQueryParam ? urlQueryParam + '&' : ''}position=${this.positionForm.value.searchPosition}` : urlQueryParam;
 
-      this.router.navigate(['/positions'], { queryParams: { search: queryString ? queryString : '' } });
+      if (this.offsetParam || this.filterAttributes.offset === 0 || this.filterAttributes.offset === this.filterAttributes.limit) {
+        urlQueryParam = urlQueryParam ? `${urlQueryParam}&offset=${this.offsetParam ? this.offsetParam : 0}` : `offset=${this.offsetParam ? this.offsetParam : 0}`;
+        urlQueryParam = urlQueryParam ? `${urlQueryParam}&limit=${this.filterAttributes.limit}` : `offset=${this.filterAttributes.limit}`;
+        urlQueryParam = this.positionForm.value.sortBy ? `${urlQueryParam ? urlQueryParam + '&' : ''}sort=${this.positionForm.value.sortBy}` : urlQueryParam;
+
+      }
+
+
+      this.userSkillsList.forEach(skill => {
+        queryString = queryString ? queryString + `&skills=${skill.skill_id}&skillName=${skill.skill}` : `skills=${skill.skill_id}&skillName=${skill.skill}`;
+        urlQueryParam = urlQueryParam ? urlQueryParam + `&skills=${skill.skill_id}&skillName=${skill.skill}` : `skills=${skill.skill_id}&skillName=${skill.skill}`;
+
+      });
+
+
+
+
+      if (this.skillUrlIdParam.length > 0) {
+        this.skillUrlIdParam.forEach(skill => {
+          queryString = queryString ? queryString + `&skills=${skill}` : `skills=${skill}`;
+          urlQueryParam = urlQueryParam ? urlQueryParam + `&skills=${skill}` : `skills=${skill}`;
+
+        });
+      }
+      if (this.skillUrlParams.length > 0) {
+        this.skillUrlParams.forEach(skill => {
+          queryString = queryString ? queryString + `&skillName=${skill}` : `skillName=${skill}`;
+          urlQueryParam = urlQueryParam ? urlQueryParam + `&skillName=${skill}` : `skillName=${skill}`;
+
+        });
+      }
+
+
+
+
+      if (this.queryFlag || this.prequeryFlag) {
+        this.router.navigate(['/positions'], { queryParams: { search: urlQueryParam ? urlQueryParam : '' } });
+      }
+      this.urlQueryParameter = queryString;
+
     }
     return queryString;
   }
-  getJobData() {
+  getJobData(offset?) {
     this.selectedAllFlag = false;
+
     if (this.preLoadDataObject[this.currentPageNumber]) {
       this.positionList = this.preLoadDataObject[this.currentPageNumber].data.data;
-
       this.setPaginationValues(this.preLoadDataObject[this.currentPageNumber]);
       if (this.currentPageNumber < this.paginationArr[this.paginationArr.length - 1]) {
         this.preLoadNextPage(this.currentPageNumber + 1);
+      } else {
+        this.router.navigate(['/positions'], { queryParams: { param: this.urlQueryParameter ? this.urlQueryParameter : '' } });
       }
     } else {
       this.isJobLoading = true;
@@ -357,6 +435,7 @@ export class PositionSearchComponent implements OnInit {
             if (this.currentPageNumber < this.paginationArr[this.paginationArr.length - 1]) {
               this.preLoadNextPage(this.currentPageNumber + 1);
             }
+
           }
         },
         error => {
@@ -376,13 +455,14 @@ export class PositionSearchComponent implements OnInit {
       max = Math.ceil(dataJson.data.count / positionListLimit) <= 6 ? Math.ceil(dataJson.data.count / positionListLimit) + this.currentPageNumber - 1 : this.currentPageNumber + 6;
       min = max > 10 ? max - 9 : 1;
     } else {
+      if (this.offsetFlag) {
+        this.filterAttributes.offset = parseInt(this.urlParams['offset'], 10);
+      }
       max = Math.ceil((dataJson.data.count + this.filterAttributes.offset) / positionListLimit) < 10 ? Math.ceil((dataJson.data.count + this.filterAttributes.offset) / positionListLimit) : 10;
       min = 1;
     }
-
     this.paginationArr = Array(max - min + 1).fill(0).map((x, i) => i + min);
   }
-
   clearFilter() {
     const sortValue = this.positionForm.value.sortBy;
     const setPositionValue = this.positionForm.value.searchPosition;
@@ -403,6 +483,7 @@ export class PositionSearchComponent implements OnInit {
   }
 
   onSearchPosition(event) {
+    this.prequeryFlag = true;
     this.filterAttributes.offset = 0;
     this.preLoadDataObject = {};
     this.getJobData();
@@ -410,6 +491,7 @@ export class PositionSearchComponent implements OnInit {
   }
 
   applyFilter() {
+    this.prequeryFlag = true;
     this.filterAttributes.offset = 0;
     this.toggleTabMenuOpen();
     this.preLoadDataObject = {};
@@ -531,15 +613,18 @@ export class PositionSearchComponent implements OnInit {
   }
 
   pageClicked(pageNo) {
+    this.prequeryFlag = true;
     document.getElementById('sidenav-content').scrollTo(0, 0);
     if (pageNo > 0 && pageNo <= this.paginationArr[this.paginationArr.length - 1]) {
       this.currentPageNumber = pageNo;
       this.filterAttributes.offset = ((this.currentPageNumber - 1) * positionListLimit);
-      this.getJobData();
+      this.offsetParam = this.filterAttributes.offset;
+      this.getJobData(this.offsetParam);
 
     }
 
   }
+
 
 
   openSnackBarApplications() {
@@ -550,6 +635,7 @@ export class PositionSearchComponent implements OnInit {
   }
 
   preLoadNextPage(nextPageNumber) {
+    this.queryFlag = false;
     if (!this.preLoadDataObject[nextPageNumber]) {
       const previousOffset = this.filterAttributes.offset;
       this.filterAttributes.offset = this.filterAttributes.offset + positionListLimit;
@@ -568,6 +654,7 @@ export class PositionSearchComponent implements OnInit {
       );
     }
   }
+
 
   getPositionIds() {
     let positionIds = this.positionList.map(position => `positionList=${position.position_id}`);

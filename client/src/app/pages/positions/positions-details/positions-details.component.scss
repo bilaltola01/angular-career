@@ -124,7 +124,6 @@ $profile-form-field-mt: 30px;
 
           & .skills-preferred-m {
             display: inline-block;
-            margin-right: 8px;
           }
           & .education-level-m {
             margin: 20px auto 0;
@@ -212,11 +211,12 @@ $profile-form-field-mt: 30px;
           & simple-tag {
             display: inline-block;
             margin-bottom: 10px;
+            margin-right: 10px;
           }
           & .position-matched {
             max-height: 150px;
             overflow: hidden;
-            &.skill-more-height{
+            &.skill-more-height {
               max-height: initial;
             }
             p {
@@ -227,9 +227,9 @@ $profile-form-field-mt: 30px;
               color: #001d40;
             }
           }
-          & .position-qualification-skills{
-            & simple-tag{
-              margin-right:8px;
+          & .position-qualification-skills {
+            & simple-tag {
+              margin-right: 8px;
             }
           }
         }
@@ -467,7 +467,6 @@ $profile-form-field-mt: 30px;
           display: table;
         }
       }
-
     }
 
     .filter-container {
@@ -486,7 +485,6 @@ $profile-form-field-mt: 30px;
         background-color: transparent;
       }
 
-
       & .position-company-map {
         & .company-map {
           ul {
@@ -495,6 +493,15 @@ $profile-form-field-mt: 30px;
             li {
               list-style: none;
               margin-top: 15px;
+              overflow: hidden;
+              clear: both;
+              & .company-industry {
+                display: inline-block;
+                margin-right: 5px;
+              }
+              & .company-position {
+                display: inline-block;
+              }
             }
           }
           & mat-card {
@@ -509,14 +516,14 @@ $profile-form-field-mt: 30px;
               padding: 10px 0 4px;
               position: relative;
               img {
-                width: 50px;
-                &.image-upload{
+                width: 45px;
+                &.image-upload {
                   position: absolute;
-                  top:10px;
-                  left:0;
-                  right:0;
+                  top: 10px;
+                  left: 0;
+                  right: 0;
                   text-align: center;
-                  margin:0 auto;
+                  margin: 0 auto;
                 }
               }
             }
@@ -530,19 +537,26 @@ $profile-form-field-mt: 30px;
             }
             p {
               img {
-                width: 11px;
+                width: 26px;
                 vertical-align: top;
                 margin-right: 3px;
                 margin-top: 2px;
+                &.edu_img {
+                  margin-top: 3px;
+                  width: 30px;
+                }
               }
               font-size: 14px;
               opacity: 0.84;
               font-family: "Poppins", sans-serif;
               font-weight: 400;
-              margin-bottom: 17px;
-              margin-top: 10px;
+              margin-bottom: 0;
+              margin-top: 3px;
             }
             span {
+              span {
+                opacity: 0.84;
+              }
               font-size: 14px;
               opacity: 0.34;
               font-family: "Poppins", sans-serif;
@@ -550,19 +564,18 @@ $profile-form-field-mt: 30px;
               margin-bottom: 2px;
               display: block;
               line-height: 20px;
-              &.company-address{
+              &.company-address {
                 display: inline-block;
-                width:78%;
-                margin-left:8px;
+                width: 78%;
+                margin-left: 8px;
                 margin-bottom: 18px;
                 font-size: 14px;
-              opacity: 0.84;
-              font-family: "Poppins", sans-serif;
-              font-weight: 400;
-              margin-bottom: 17px;
-              margin-top: 10px;
+                opacity: 0.84;
+                font-family: "Poppins", sans-serif;
+                font-weight: 400;
+                margin-bottom: 17px;
+                margin-top: 10px;
               }
-
             }
             small {
               font-size: 14px;
@@ -570,22 +583,22 @@ $profile-form-field-mt: 30px;
               font-weight: 400;
               display: block;
               line-height: 19px;
-                li{
-                  display: inline-block;
-                  position: relative;
-                  margin-right: 10px;
-                  margin-top: 5px;
+              li {
+                display: inline-block;
+                position: relative;
+                margin-right: 10px;
+                margin-top: 5px;
+                margin-bottom: 8px;
 
-                  &::after{
-                    position: absolute;
-                    content: ",";
-                    right: -4px;
-                    bottom: 0;
-                  }
-                  &:last-child::after{
-                    display: none;
-                  }
+                &::after {
+                  position: absolute;
+                  right: -4px;
+                  bottom: 0;
                 }
+                &:last-child::after {
+                  display: none;
+                }
+              }
             }
           }
           & .show-button2 {
@@ -604,11 +617,10 @@ $profile-form-field-mt: 30px;
               }
             }
           }
-          img{
+          img {
             display: inline-block;
           }
         }
-
       }
     }
   }
@@ -633,9 +645,9 @@ $profile-form-field-mt: 30px;
               & mat-card {
                 p {
                   font-size: 13px;
-                  display: inline
+                  display: inline;
                 }
-                span.company-address{
+                span.company-address {
                   font-size: 13px;
                   width: 86%;
                 }
@@ -662,8 +674,8 @@ $profile-form-field-mt: 30px;
                 font-size: 13px;
                 span {
                   font-family: "Poppins", sans-serif;
-                            font-weight: 400;
-                            display: inline;
+                  font-weight: 400;
+                  display: inline;
                 }
               }
             }
@@ -685,14 +697,13 @@ $profile-form-field-mt: 30px;
             & .card {
               & .card-item {
                 width: 100%;
-                span{
+                span {
                   font-size: 13px;
                 }
               }
             }
           }
         }
-
       }
     }
   }
@@ -702,18 +713,18 @@ $profile-form-field-mt: 30px;
   :host {
     .career-main {
       .comman_search_filter {
-    position: fixed;
-    margin: 0;
-    width: 100%;
-    box-sizing: border-box;
-    flex-wrap: wrap;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    z-index: 100;
+        position: fixed;
+        margin: 0;
+        width: 100%;
+        box-sizing: border-box;
+        flex-wrap: wrap;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        z-index: 100;
         .postion-search-detail {
           padding: 12px 20px;
-           overflow: hidden;
+          overflow: hidden;
           .filter-data {
             float: right;
 
@@ -734,7 +745,6 @@ $profile-form-field-mt: 30px;
         padding-bottom: 60px;
         box-sizing: border-box;
         margin: 0 auto;
-
       }
       .position-main-container {
         padding-top: 54px;
@@ -769,17 +779,17 @@ $profile-form-field-mt: 30px;
             padding-top: 0;
             position: fixed;
 
-          &::after {
-            position: fixed;
-            padding: 10px 43px 30px 40px;
-            left: 0;
-            width: 90%;
-            background-color: rgba(0, 0, 0, 0.32);
-            top: 135px;
-            height: calc(103vh - 130px);
-            z-index: -1;
+            &::after {
+              position: fixed;
+              padding: 10px 43px 30px 40px;
+              left: 0;
+              width: 90%;
+              background-color: rgba(0, 0, 0, 0.32);
+              top: 135px;
+              height: calc(103vh - 130px);
+              z-index: -1;
+            }
           }
-        }
         }
 
         .position-list-container {
@@ -809,7 +819,7 @@ $profile-form-field-mt: 30px;
             .card {
               .card-item {
                 width: 100%;
-                span{
+                span {
                   font-size: 13px;
                 }
               }
@@ -831,15 +841,15 @@ $profile-form-field-mt: 30px;
   :host {
     .career-main {
       .comman_search_filter {
-    position: fixed;
-    margin: 0;
-    width: 100%;
-    box-sizing: border-box;
-    flex-wrap: wrap;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    z-index: 100;
+        position: fixed;
+        margin: 0;
+        width: 100%;
+        box-sizing: border-box;
+        flex-wrap: wrap;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        z-index: 100;
         .postion-search-detail {
           padding: 12px 20px;
           overflow: hidden;
@@ -886,17 +896,17 @@ $profile-form-field-mt: 30px;
             padding-top: 0;
             position: fixed;
 
-          &::after {
-            position: fixed;
-            padding: 10px 43px 30px 40px;
-            left: 0;
-            width: 80%;
-            background-color: rgba(0, 0, 0, 0.32);
-            top: 135px;
-            height: calc(103vh - 130px);
-            z-index: -1;
+            &::after {
+              position: fixed;
+              padding: 10px 43px 30px 40px;
+              left: 0;
+              width: 80%;
+              background-color: rgba(0, 0, 0, 0.32);
+              top: 135px;
+              height: calc(103vh - 130px);
+              z-index: -1;
+            }
           }
-        }
         }
 
         & .container__header {
@@ -915,7 +925,6 @@ $profile-form-field-mt: 30px;
               display: block;
               width: 100%;
               position: relative;
-
             }
           }
 
@@ -933,6 +942,14 @@ $profile-form-field-mt: 30px;
             text-align: center;
             & action-button {
               @include inline-block-btn;
+            }
+          }
+          .main-card {
+            ul {
+              li {
+                width: 100%;
+                margin-bottom: 10px;
+              }
             }
           }
 
@@ -991,14 +1008,6 @@ $profile-form-field-mt: 30px;
               }
               & mat-grid-tile {
                 border-right: 1px solid #f0f0f0;
-              }
-            }
-
-            .main-card {
-              ul {
-                li {
-                  width: 100%;
-                }
               }
             }
           }

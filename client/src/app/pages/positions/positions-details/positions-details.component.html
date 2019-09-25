@@ -44,21 +44,25 @@
                   <small>{{info.company_size ? info.company_size : 'N/A'}}</small>
                 </li>
                 <li>
-                  <span>verification Status</span>
-                  <small>{{info.verified}}</small>
-                </li>
-                <li>
-                  <span>Company Industries</span>
+                  <span class="company-industry">Company Industries</span><small class="company-position" *ngIf="info.company_industries?.length > 0">{{ info.company_industries?.length}}</small>
                   <small *ngIf="info.company_industries?.length > 0 ; else noIndustry">
-                <li *ngFor="let industry of info.company_industries"><simple-tag type="gray" title="{{industry}}">
-                </simple-tag> </li></small>
+                    <p *ngIf="displayIndustryLimit; let limit">
+                <li *ngFor="let industry of info.company_industries; let i = index"><simple-tag type="white" *ngIf="i < limit" title="{{industry}}">
+                </simple-tag> </li>
+                <img *ngIf="limit < info.company_industries?.length" class="edu_img"  (click)="limit = limit + displayIndustryLimit"
+                src="assets/icons/ic_more.svg" alt="See More">
+              </p>
+              </small>
                 <ng-template #noIndustry>
                   <li class="company-address">N/A</li>
                 </ng-template>
                 </li>
                 <li>
-                  <span>Positions Available</span>
-                  <small>N/A</small>
+                  <span class="company-industry">Positions Available</span><small class="company-position">{{positionsAvailable}}</small>
+                  <small >
+                  <li *ngFor="let position of newCompanyPositions | keyvalue" ><simple-tag type="white" *ngIf="position?.value" title="{{position.value}} {{position.key | titlecase}}">
+                    </simple-tag></li>
+                </small>
                 </li>
                 <li>
                   <span>About Company</span>
@@ -88,7 +92,7 @@
                   <li (click)="scrollSmoothTo('matched_interest')" *ngIf="matchedInterests?.length > 0"> Matched Interest</li>
                 <li (click)="scrollSmoothTo('description')"*ngIf="jobData.position_desc" >Job Description</li>
                 <li (click)="scrollSmoothTo('qualification')" *ngIf="jobData.preferred_education_levels?.length > 0 ||
-                  jobData.preferred_majors?.length > 0 || jobData.preferred_major_categories?.length > 0">Education Level</li>
+                  jobData.preferred_majors?.length > 0">Preferred Education</li>
                 <li (click)="scrollSmoothTo('experience')"*ngIf="jobData.preferred_experience?.length > 0" >Preferred Experience</li>
                 <li (click)="scrollSmoothTo('preferred_skills')" *ngIf="jobData.minimum_skills?.length > 0 || jobData.preferred_skills?.length > 0">Preferred Skills</li>
                 <li (click)="scrollSmoothTo('interest')" *ngIf="jobData.preferred_interests?.length > 0">Preferred Interests</li>
@@ -316,10 +320,10 @@
             </div>
           </div>
           <div class="row position-eductaion-detail position-required-skills-detail" id="qualification"
-          *ngIf="jobData.preferred_education_levels?.length > 0 || jobData.preferred_majors?.length > 0 || jobData.preferred_major_categories?.length > 0">
-            <h3>Education Level</h3>
+          *ngIf="jobData.preferred_education_levels?.length > 0 || jobData.preferred_majors?.length > 0">
+            <h3>Preferred Education</h3>
             <div class="education-level-m" *ngIf="jobData.preferred_education_levels?.length > 0">
-              <h5 for="skill_required">Preferred Education <span>{{ jobData.preferred_education_levels?.length}}</span>
+              <h5 for="skill_required">Preferred Education Level <span>{{ jobData.preferred_education_levels?.length}}</span>
               </h5>
               <div class="skil-height-fix"*ngIf="jobData.preferred_education_levels">
                 <div class="skills-preferred-m" *ngFor="let level of jobData.preferred_education_levels ">
@@ -339,19 +343,6 @@
                 <img *ngIf="limit < jobData.preferred_majors?.length" class="edu_img"  (click)="limit = limit + displayItemsLimit"
                   src="assets/icons/ic_more.svg" alt="See More">
               </div>
-            </div>
-            <div class="education-level-m"  >
-              <div *ngIf="jobData.preferred_major_categories?.length > 0">
-              <h5 for="skill_required">Preferred Major Categories
-                <span>{{ jobData.preferred_major_categories?.length}}</span>
-              </h5>
-              <div class="skil-height-fix" *ngIf="jobData.preferred_major_categories">
-                <div class="skills-preferred-m" *ngFor="let major_categories of jobData.preferred_major_categories ">
-                  <simple-tag type="gray" title="{{major_categories.cat_name}}">
-                  </simple-tag>
-                </div>
-              </div>
-            </div>
             </div>
           </div>
           <div class="row position-experience-detail" id="experience" *ngIf="jobData.preferred_experience?.length > 0" >
