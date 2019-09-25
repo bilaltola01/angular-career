@@ -139,7 +139,8 @@ export class PeopleSearchComponent implements OnInit {
     const querySearchedSchoolId = this.route.snapshot.queryParamMap.get('schoolId') || null;
     const querySearchedMajor = this.route.snapshot.queryParamMap.get('major') || null;
     const querySearchedMajorId = this.route.snapshot.queryParamMap.get('majorId') || null;
-    // const querySearchedSkill = this.route.snapshot.queryParamMap.get('skill') || null; // TODO: Skill
+    const querySearchedSkillArray = this.route.snapshot.queryParams['skill'] || null;
+    const querySearchedSkillIdArray = this.route.snapshot.queryParams['skillId'] || null;
 
     this.peopleForm = new FormGroup({
       'searchPeople': new FormControl(querySearchedName),
@@ -151,6 +152,17 @@ export class PeopleSearchComponent implements OnInit {
       'major': new FormControl(querySearchedMajor)
     });
 
+    if (querySearchedSkillArray && querySearchedSkillIdArray) {
+      for (let i = 0; i < querySearchedSkillArray.length; i++) {
+        const skillModel = {
+          skill: querySearchedSkillArray[i],
+          skill_id: Number(querySearchedSkillIdArray[i])
+        };
+
+        this.addSkills(skillModel);
+      }
+    }
+
     this.peopleForm.get('searchPeople').valueChanges.subscribe((searchPeople) => {
       searchPeople && this.helperService.checkSpacesString(searchPeople) ? this.onSearchPeopleValueChanges(searchPeople) : this.autocomplete_searchpeoples = [];
     });
@@ -161,8 +173,8 @@ export class PeopleSearchComponent implements OnInit {
       city && this.helperService.checkSpacesString(city) ? this.onCityValueChanges(city) : this.autocomplete_cities = [];
     });
     this.peopleForm.get('skill').valueChanges.subscribe((skill) => {
-        skill && this.helperService.checkSpacesString(skill) ? this.onSkillValueChanges(skill) : this.autocomplete_skills = [];
-      }
+      skill && this.helperService.checkSpacesString(skill) ? this.onSkillValueChanges(skill) : this.autocomplete_skills = [];
+    }
     );
     this.peopleForm.get('school').valueChanges.subscribe((school) => {
       school && this.helperService.checkSpacesString(school) ? this.onSchoolValueChanges(school) : this.autocomplete_school = [];
@@ -301,7 +313,12 @@ export class PeopleSearchComponent implements OnInit {
     const people = this.peopleForm.value.searchPeople && this.helperService.checkSpacesString(this.peopleForm.value.searchPeople) ? this.peopleForm.value.searchPeople.replace('+', '%2B') : null;
     queryString = people ? `${queryString ? queryString + '&' : ''}name=${people}` : queryString;
 
-    // TODO: Skill
+    const skillIdQueryString = this.userSkillsList
+      .map(el => el.skill_id);
+
+    const skillNamesQueryString = this.userSkillsList
+      .map(el => el.skill);
+
     const paramsInQuery = {
       'name': people,
       'state': this.peopleForm.value.state,
@@ -313,6 +330,8 @@ export class PeopleSearchComponent implements OnInit {
       'schoolId': this.filterAttributes.school_id,
       'major': this.peopleForm.value.major,
       'majorId': this.filterAttributes.major_id,
+      'skill': skillNamesQueryString.length > 0 ? skillNamesQueryString : null,
+      'skillId': skillIdQueryString.length > 0 ? skillIdQueryString : null
     };
 
     this.router.navigate([], {
@@ -342,11 +361,13 @@ export class PeopleSearchComponent implements OnInit {
             dataJson.data.data.forEach((data) => {
               // Remove duplicate majors
               let displayMajors = [];
-              data.education.forEach(educationalElement => {
-                displayMajors.push(educationalElement.major_name);
-                displayMajors.push(educationalElement.focus_major_name);
-              });
-              displayMajors = [ ...new Set(displayMajors)];
+              if (data.education) {
+                data.education.forEach(educationalElement => {
+                  displayMajors.push(educationalElement.major_name);
+                  displayMajors.push(educationalElement.focus_major_name);
+                });
+                displayMajors = [...new Set(displayMajors)];
+              }
 
               const peopleData: PeopleData = {
                 general_info: data,
@@ -466,7 +487,7 @@ export class PeopleSearchComponent implements OnInit {
                 displayMajors.push(educationalElement.major_name);
                 displayMajors.push(educationalElement.focus_major_name);
               });
-              displayMajors = [ ...new Set(displayMajors)];
+              displayMajors = [...new Set(displayMajors)];
 
               const peopleData: PeopleData = {
                 general_info: data,
@@ -530,8 +551,8 @@ export class PeopleSearchComponent implements OnInit {
     }
   }
 
-  onClickContactBtn( contacteeUser ) {
-    if ( contacteeUser.contact_status === ContactStatus.none) {
+  onClickContactBtn(contacteeUser) {
+    if (contacteeUser.contact_status === ContactStatus.none) {
       // Send a Contact Request
       this.userService.postOutgoingContactRequest(contacteeUser.general_info.user_id).subscribe(
         dataJson => {
@@ -544,7 +565,7 @@ export class PeopleSearchComponent implements OnInit {
           this.alertsService.show(error.message, AlertType.error);
         }
       );
-    } else if ( contacteeUser.contact_status === ContactStatus.pending) {
+    } else if (contacteeUser.contact_status === ContactStatus.pending) {
       // Remove previously sent Contact Request
       this.userService.deleteOutgoingContactRequest(contacteeUser.general_info.user_id).subscribe(
         dataJson => {
