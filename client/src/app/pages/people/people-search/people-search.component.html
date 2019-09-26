@@ -129,7 +129,7 @@
     <div class="people-list-container">
       <ng-container *ngIf="userList && userList.length > 0" >
         <div *ngFor="let user of userList; let i = index;" >
-          <div class="row">
+          <div class="row" *ngIf="true; let show_less">
             <div class="header-container">
               <div class="user-info">
                 <div class="image"><img [src]="user.general_info.photo ? user.general_info.photo : 'assets/icons/no_photo.png'"></div>
@@ -169,24 +169,28 @@
 
             <div *ngIf="user.general_info.skills && user.general_info.skills.length > 0" class="skills-container">
               <h5>Skills <span class="count">{{user.general_info.skills.length}}</span></h5>
-              <div class="skills" *ngIf="displayItemsLimit; let limit">
+              <div class="skills" [class.show-more]="!show_less">
                 <ng-container *ngFor="let skill of user.general_info.skills; let j = index;">
-                  <simple-tag *ngIf="j < limit" type="gray" [title]="skill.skill" ellipseTag="true" [value]="skill.skill_level"></simple-tag>
+                  <simple-tag type="gray" [title]="skill.skill" ellipseTag="true" [value]="skill.skill_level"></simple-tag>
                 </ng-container>
-                <img *ngIf="limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
-                <img *ngIf="limit < user.general_info.skills.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
               </div>
             </div>
 
             <div *ngIf="user.general_info.education && user.display_majors.length > 0" class="skills-container">
               <h5>Majors <span class="count">{{user.display_majors.length}}</span></h5>
-              <div class="skills" *ngIf="displayItemsLimit; let limit">
+              <div class="skills" [class.show-more]="!show_less">
                 <ng-container *ngFor="let educationName of user.display_majors; let j = index;">
-                  <simple-tag *ngIf="j < limit" type="gray" [title]="educationName"></simple-tag>
+                  <simple-tag type="gray" [title]="educationName"></simple-tag>
                 </ng-container>
-                <img *ngIf="limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
-                <img *ngIf="limit < user.display_majors.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
               </div>
+            </div>
+
+            <div class="show-button">
+              <action-button routerLink="." type="text" title="{{show_less ? 'Show More' :
+                'Show Less'}}" color="primary" (click)="show_less = !show_less"></action-button>
+              &nbsp;&nbsp;
+              <action-button type="text" title="Go to Profile Page" color="primary"
+                routerLink="/user/{{ user.general_info.user_id }}/profile" [queryParams]="{showBackButton: 'true'}" *ngIf="!show_less"></action-button>  
             </div>
 
           </div>
