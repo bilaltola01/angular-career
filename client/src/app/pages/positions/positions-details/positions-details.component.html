@@ -151,8 +151,8 @@
                   <img src="assets/icons/ic_location.svg">
                   <span class="image" *ngIf="info.locations ; else noLocations" >
                     <span *ngFor="let location of info.locations" >
-                    {{location.city }},
-                    {{location.state }},
+                    {{location.city }}
+                    {{location.state }}
                     {{location.country }}
                   </span>
                 </span>
@@ -314,10 +314,10 @@
           <div class="row position-interest-detail"  *ngIf="jobData.position_desc">
             <h3>Job Description</h3>
             <div class="position-matched" [ngClass]="{'skill-more-height': info.readMoreFlag}">
-              <p>{{jobData.position_desc}}</p>
+              <p>{{jobData.position_desc }}</p>
             </div>
             <div class="position-job-desc-btn">
-              <action-button routerLink="." type="text" title="{{!info.readMoreFlag ? 'Read More' :
+              <action-button routerLink="." *ngIf="jobDescription > 300" type="text" title="{{!info.readMoreFlag ? 'Read More' :
                   'Read Less'}}" color="primary" (click)="info.readMoreFlag = !info.readMoreFlag"></action-button>
             </div>
           </div>

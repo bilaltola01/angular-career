@@ -22,6 +22,7 @@ export class PositionsDetailsComponent implements OnInit {
   positionName = [];
   savedJobsMap = {};
   savedJobs = [];
+  jobDescription ;
   appliedJobsMap = {};
   appliedJobs = [];
   matchedSkills = [];
@@ -73,6 +74,7 @@ export class PositionsDetailsComponent implements OnInit {
   toggleTabOpen() {
     this.filter_list = !this.filter_list;
   }
+
   getposition(positionId) {
     this.positionService.getPosition(positionId).subscribe(
       dataJson => {
@@ -80,6 +82,7 @@ export class PositionsDetailsComponent implements OnInit {
         this.getCompanyData(this.positionName[0].company_id);
         this.getRecruiterData(this.positionName[0].recruiter_id);
         this.countDays();
+        this.countWords(this.positionName[0].position_desc);
         if (this.positionName[0].preferred_education_levels) {
           this.getLowestEducationLevel(this.positionName[0].preferred_education_levels);
         }
@@ -89,6 +92,11 @@ export class PositionsDetailsComponent implements OnInit {
         this.alertsService.show(error.message, AlertType.error);
       }
     );
+  }
+  countWords(description) {
+    if ( description) {
+      this.jobDescription = description.split(' ').length;
+    }
   }
 
   getLowestEducationLevel(lowestEducation) {
