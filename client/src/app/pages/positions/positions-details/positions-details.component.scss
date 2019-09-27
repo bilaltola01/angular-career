@@ -714,6 +714,7 @@ $profile-form-field-mt: 30px;
 @media only screen and (min-width: $min-tablet-breakpoint) and (max-width: $max-tablet-breakpoint) {
   :host {
     .career-main {
+      padding-bottom: 50px;
       .comman_search_filter {
         position: fixed;
         margin: 0;
@@ -754,10 +755,13 @@ $profile-form-field-mt: 30px;
         height: 100%;
         .content {
           mat-card {
-            width: 80%;
-            padding: 20px 20px;
-            box-shadow: none;
-            position: absolute;
+            width: 86%;
+    padding: 20px 20px;
+    box-shadow: none;
+    position: absolute;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
           }
           position: absolute;
           width: 100%;
@@ -774,12 +778,14 @@ $profile-form-field-mt: 30px;
           z-index: 1;
 
           &.open {
-            top: 290px;
+            top: 160px;
             transition: top 0.5s;
             transition-timing-function: ease;
             background-color: transparent;
             padding-top: 0;
             position: fixed;
+            display: block;
+            left: 0;
 
             &::after {
               position: fixed;
@@ -842,6 +848,7 @@ $profile-form-field-mt: 30px;
 @media only screen and (min-width: $min-mobile-breakpoint) and (max-width: $max-mobile-breakpoint) {
   :host {
     .career-main {
+      padding-bottom: 50px;
       .comman_search_filter {
         position: fixed;
         margin: 0;
@@ -891,12 +898,14 @@ $profile-form-field-mt: 30px;
           z-index: 1;
 
           &.open {
-            top: 286px;
+            top: 140px;
             transition: top 0.5s;
             transition-timing-function: ease;
             background-color: #f2f2f2;
             padding-top: 0;
             position: fixed;
+            display: block;
+            left: 5%;
 
             &::after {
               position: fixed;
@@ -907,6 +916,9 @@ $profile-form-field-mt: 30px;
               top: 135px;
               height: calc(103vh - 130px);
               z-index: -1;
+              top: 0;
+              height: 100%;
+
             }
           }
         }
