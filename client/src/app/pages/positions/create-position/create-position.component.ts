@@ -124,7 +124,6 @@ export class CreatePositionComponent implements OnInit {
   autocomplete_recruiters: User[] = [];
   autocomplete_majors: Major[] = [];
   autocomplete_major_categories: MajorCategory[] = [];
-  autocomplete_education_levels: Level[] = [];
   autocomplete_minimum_skills: Skill[] = [];
   autocomplete_preferred_skills: Skill[] = [];
   autocomplete_preferred_interests: Interest[] = [];
@@ -584,7 +583,6 @@ export class CreatePositionComponent implements OnInit {
    * Preferred Education Form
    */
   initPreferredEducationForm() {
-    this.autocomplete_education_levels = [];
     this.autocomplete_majors = [];
     this.autocomplete_major_categories = [];
 
@@ -592,14 +590,6 @@ export class CreatePositionComponent implements OnInit {
       search_eduaction_level: new FormControl(''),
       search_education_major: new FormControl(''),
       search_major_category: new FormControl('')
-    });
-
-    this.preferredEducationForm.get('search_eduaction_level').valueChanges.subscribe((search_eduaction_level) => {
-      if (search_eduaction_level && this.helperService.checkSpacesString(search_eduaction_level)) {
-       this.autocomplete_education_levels = this.education_levels.filter(value => value.education_level.includes(search_eduaction_level));
-      } else {
-        this.autocomplete_education_levels = [];
-      }
     });
 
     this.preferredEducationForm.get('search_education_major').valueChanges.subscribe((search_education_major) => {

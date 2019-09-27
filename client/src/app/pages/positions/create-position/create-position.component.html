@@ -179,21 +179,16 @@
       </h3>
       <div class="profile-form__field search">
         <h3>Preferred Education Level <span *ngIf="preferred_education_levels && preferred_education_levels.length > 0" class="count">{{preferred_education_levels.length}}</span></h3>
-        <mat-form-field appearance="standard" class="search">
-          <mat-icon matSuffix>search</mat-icon>
-          <input matInput 
-            placeholder="Search Eudaction Level" 
-            type="text" 
-            [matAutocomplete]="autocompleteEducationLevel" 
-            formControlName="search_eduaction_level">
-          <mat-autocomplete #autocompleteEducationLevel="matAutocomplete">
-            <mat-option *ngFor="let level of autocomplete_education_levels"
-              [value]="level.education_level" 
-              (onSelectionChange)="onSelectEducationLevel(level)">
-              <span>{{level.education_level}}</span>
-            </mat-option>
-          </mat-autocomplete>
+      </div>
+      <div class="profile-form__field margin-10">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Select Education Level</mat-label>
+          <mat-select formControlName="search_eduaction_level">
+            <mat-option *ngFor="let education_level of education_levels" value="{{education_level.education_level}}" (click)="onSelectEducationLevel(education_level)">{{education_level.education_level}}</mat-option>
+          </mat-select>
         </mat-form-field>
+      </div>
+      <div class="profile-form__field search margin-0">
         <div class="skills" *ngIf="preferred_education_levels && preferred_education_levels.length > 0">
           <simple-tag *ngFor="let level of preferred_education_levels; let j = index" 
             type="gray"
