@@ -60,8 +60,12 @@
                 <li>
                   <span class="company-industry">Positions Available</span><small class="company-position">{{positionsAvailable}}</small>
                   <small >
-                  <li *ngFor="let position of newCompanyPositions | keyvalue" ><simple-tag type="white" *ngIf="position?.value" title="{{position.value}} {{position.key | titlecase}}">
+                      <p *ngIf="displayIndustryLimit; let limit">
+                  <li *ngFor="let position of newCompanyPositions | keyvalue; let i = index" ><simple-tag type="white" *ngIf="i < limit && position?.value"  title="{{position.value}} {{position.key | titlecase}}">
                     </simple-tag></li>
+                    <img *ngIf="positionsAvailable > limit" class="edu_img"  (click)="limit = limit + displayIndustryLimit"
+                    src="assets/icons/ic_more.svg" alt="See More">
+                    </p>
                 </small>
                 </li>
                 <li>

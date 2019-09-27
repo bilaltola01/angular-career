@@ -181,6 +181,7 @@ $profile-form-field-mt: 30px;
               margin-top: 0;
               &.question-icon {
                 margin-top: 5px;
+                cursor: pointer;
               }
             }
             & .education-level-m {
@@ -288,7 +289,7 @@ $profile-form-field-mt: 30px;
             li {
               list-style: none;
               @include inline-block-btn;
-              margin-right: 100px;
+              margin-right: 85px;
               font-size: 14px;
               line-height: 16px;
               vertical-align: middle;
