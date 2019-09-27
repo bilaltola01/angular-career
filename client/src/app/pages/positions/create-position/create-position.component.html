@@ -128,7 +128,7 @@
       <div class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
           <mat-label>Application Type</mat-label>
-          <mat-select formControlName="position_type">
+          <mat-select formControlName="position_application_type">
             <mat-option *ngFor="let applicationType of applicationTypes" value="{{applicationType}}">{{applicationType}}</mat-option>
           </mat-select>
         </mat-form-field>
@@ -488,11 +488,11 @@
       <div class="position-row__details">
         <div class="position-info">
           <label>Position</label>
-          <p>{{ position_level ? position_level : 'None'}}</p>
+          <p>{{ position_level ? position_level : 'N/A'}}</p>
         </div>
         <div class="position-info">
           <label>Salary</label>
-          <p>{{ position_salary ? position_salary + ' USD' : 'None'}} </p>
+          <p>{{ position_salary ? position_salary + ' USD' : 'N/A'}} </p>
         </div>
         <div class="position-info">
           <label>Industry</label>
@@ -500,19 +500,19 @@
         </div>
         <div class="position-info">
           <label>Recruiter</label>
-          <p >{{ position_recruiter ? position_recruiter.first_name + ' ' + position_recruiter.last_name : 'None'}}</p>
+          <p >{{ position_recruiter ? position_recruiter.first_name + ' ' + position_recruiter.last_name : 'N/A'}}</p>
         </div>
         <div class="position-info">
           <label>Application Type</label>
-          <p>{{position_application_type ? position_application_type : 'None'}}</p>
+          <p>{{position_application_type ? position_application_type : 'N/A'}}</p>
         </div>
         <div class="position-info">
           <label>Position Type</label>
-          <p>{{position_type ? position_type : 'None'}}</p>
+          <p>{{position_type ? position_type : 'N/A'}}</p>
         </div>
         <div class="position-info">
           <label>Application Deadline</label>
-          <p>{{position_application_deadline ? position_application_deadline : 'None'}}</p>
+          <p>{{position_application_deadline ? position_application_deadline : 'N/A'}}</p>
         </div>
         <div class="position-info">
           <label>Education Level Required</label>
