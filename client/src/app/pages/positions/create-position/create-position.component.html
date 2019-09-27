@@ -34,14 +34,14 @@
 			</div>
 			<div class="profile-form__field textarea">
 				<mat-form-field>
-					<textarea matInput placeholder="Position Description *" rows="15" formControlName="position_desc"></textarea>
+					<textarea matInput placeholder="Position Description" rows="15" formControlName="position_desc"></textarea>
 				</mat-form-field>
 			</div>
 		</div>
 	</div>
 
 	<div class="container__full">
-		<action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!(nameOverviewForm.valid && helperService.checkSpacesString(nameOverviewForm.value.position_name) && helperService.checkSpacesString(nameOverviewForm.value.position_desc))">
+		<action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!(nameOverviewForm.valid && helperService.checkSpacesString(nameOverviewForm.value.position_name))">
 		</action-button>
 	</div>
 </div>

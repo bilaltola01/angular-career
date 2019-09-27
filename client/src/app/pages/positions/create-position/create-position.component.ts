@@ -195,7 +195,7 @@ export class CreatePositionComponent implements OnInit {
   }
 
   goToNextPage() {
-    if (this.selectedPageIndex === 0 && !this.position_name && !this.position_desc) {
+    if (this.selectedPageIndex === 0 && !this.position_name) {
       return;
     } else if (this.selectedPageIndex === 1 && !(this.positionBasicInfoForm.valid && this.onCheckCompanyValidation() && this.helperService.checkSpacesString(this.positionBasicInfoForm.value.position_company) && this.onCheckCityValidation() && this.onCheckStateValidation() && this.onCheckRecruiterValidation())) {
       return;
@@ -230,17 +230,21 @@ export class CreatePositionComponent implements OnInit {
   }
 
   goToPage(index: number) {
-    if (this.selectedPageIndex === 0 && !this.position_name && !this.position_desc) {
-      this.alertsService.show('Please fill out the position\'s name and description field.', AlertType.error);
-      return;
-    } else if (this.selectedPageIndex === 1 && !this.position_company) {
-      this.alertsService.show('Please provide company information.', AlertType.error);
-      return;
+    if (index > this.selectedPageIndex) {
+      if (this.selectedPageIndex === 0 && !this.position_name) {
+        this.alertsService.show('Please fill out the position\'s name.', AlertType.error);
+        return;
+      } else if (this.selectedPageIndex === 1 && !this.position_company) {
+        this.alertsService.show('Please provide company information.', AlertType.error);
+        return;
+      }
     }
-    this.selectedPageIndex = index;
-    this.isTabMenuOpen = false;
-    this.isNavMenuOpened = false;
-    this.initializeFormsByPageIndex();
+    if (index !== this.selectedPageIndex) {
+      this.selectedPageIndex = index;
+      this.isTabMenuOpen = false;
+      this.isNavMenuOpened = false;
+      this.initializeFormsByPageIndex();
+    }
   }
 
   initializeFormsByPageIndex() {
@@ -277,7 +281,7 @@ export class CreatePositionComponent implements OnInit {
   initNameOverviewForm() {
     this.nameOverviewForm = new FormGroup({
       position_name: new FormControl(this.position_name ? this.position_name : null, [Validators.required]),
-      position_desc: new FormControl(this.position_desc ? this.position_desc : null, [Validators.required]),
+      position_desc: new FormControl(this.position_desc ? this.position_desc : null),
     });
 
     this.nameOverviewForm.get('position_name').valueChanges.subscribe((position_name) => {
