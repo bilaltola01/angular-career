@@ -97,7 +97,8 @@ export class CreatePositionComponent implements OnInit {
       width: 100
     }
   ];
-  maxDate = new Date();
+  currentDate = new Date();
+  minDate = new Date();
   countries: string[] = Countries.slice();
   countries_sort: string[] = Countries.slice().sort();
   displayItemsLimit = 7;
@@ -172,6 +173,7 @@ export class CreatePositionComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.minDate.setDate(this.currentDate.getDate() + 1);
     this.isTabMenuOpen = false;
     this.isNavMenuOpened = false;
     this.selectedPageIndex = 0;

@@ -137,7 +137,7 @@
         <mat-form-field class="bg-transparent" appearance="fill">
           <mat-label>Application Deadline</mat-label>
           <input matInput placeholder="MM/DD/YYYY" formControlName="position_application_deadline" pattern="\d{1,2}/\d{1,2}/\d{4}">
-          <input class="hide" [matDatepicker]="deadline" [max]="maxDate" (dateChange)="onChangeApplicationDeadline($event)">
+          <input class="hide" [matDatepicker]="deadline" [min]="minDate" (dateChange)="onChangeApplicationDeadline($event)">
           <mat-datepicker-toggle matSuffix [for]="deadline"></mat-datepicker-toggle>
           <mat-datepicker
             touchUi
@@ -277,7 +277,7 @@
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>Years</mat-label>
             <input matInput placeholder="YYYY" type="text" formControlName="years" pattern="\d{4}">
-            <input class="hide" [matDatepicker]="experience_years" [max]="maxDate">
+            <input class="hide" [matDatepicker]="experience_years" [max]="currentDate">
             <mat-datepicker-toggle matSuffix [for]="experience_years"></mat-datepicker-toggle>
             <mat-datepicker
               touchUi
