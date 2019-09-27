@@ -25,7 +25,7 @@
             <div class="company-border">
               <img alt="Company Logo" class="userimg" src="{{info?.company_logo ? info?.company_logo : 'assets/icons/ic_company.svg'}}">
             </div>
-            <h5>{{info.company_name}}</h5>
+            <h5  routerLink="../company-page/{{info.company_id}}">{{info.company_name}}</h5>
             <img src="assets/icons/ic_location.svg">
             <span class="company-address"
               *ngIf="info.hq_city_name && info.hq_state_name && info.hq_country_name; else noLocation">
@@ -150,10 +150,11 @@
                 <li>
                   <img src="assets/icons/ic_location.svg">
                   <span class="image" *ngIf="info.locations ; else noLocations" >
-                    <span *ngFor="let location of info.locations" >
-                    {{location.city }}
-                    {{location.state }}
-                    {{location.country }}
+                    <span *ngFor="let location of info.locations  | slice : 0 : 1;" >
+                    {{location.city }},
+                    {{location.state }},
+                    {{location.country }} +
+                    {{info.locations?.length-1}} locations
                   </span>
                 </span>
                 <ng-template #noLocations>

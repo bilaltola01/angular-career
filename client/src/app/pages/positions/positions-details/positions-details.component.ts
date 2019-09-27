@@ -42,6 +42,7 @@ export class PositionsDetailsComponent implements OnInit {
   updatedFitscoreData;
   filter_list: boolean;
   jobLowestEducationLevel;
+  locationLength;
 
   calculatedQualificationLevel: string;
   Object = Object;
@@ -98,7 +99,6 @@ export class PositionsDetailsComponent implements OnInit {
       this.jobDescription = description.split(' ').length;
     }
   }
-
   getLowestEducationLevel(lowestEducation) {
     let educationLowestLevel = lowestEducation.map(level => level.level);
     educationLowestLevel = Math.min(...educationLowestLevel);
