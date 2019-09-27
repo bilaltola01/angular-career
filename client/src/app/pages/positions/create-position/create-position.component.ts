@@ -147,7 +147,7 @@ export class CreatePositionComponent implements OnInit {
   position_recruiter: User;
 
   preferred_education_levels: Level[];
-  preferred_education_major: Major;
+  preferred_education_majors: Major[];
   preferred_education_major_categories: MajorCategory[];
 
   minimum_skills: UserSkillItem[];
@@ -176,7 +176,7 @@ export class CreatePositionComponent implements OnInit {
     this.minDate.setDate(this.currentDate.getDate() + 1);
     this.isTabMenuOpen = false;
     this.isNavMenuOpened = false;
-    this.selectedPageIndex = 1;
+    this.selectedPageIndex = 2;
     this.initializeFormsByPageIndex();
   }
 
@@ -200,8 +200,6 @@ export class CreatePositionComponent implements OnInit {
     if (this.selectedPageIndex === 0 && !this.position_name) {
       return;
     } else if (this.selectedPageIndex === 1 && !(this.positionBasicInfoForm.valid && this.position_company && this.position_level && this.position_type && this.onCheckCityValidation() && this.onCheckStateValidation() && this.onCheckRecruiterValidation())) {
-      return;
-    } else if (this.selectedPageIndex === 2 && !(this.preferredEducationForm.valid && this.onCheckEducationMajorValidation())) {
       return;
     } else if (this.selectedPageIndex === 3 && !(this.preferredWorkExperienceFormArray.valid && this.onCheckAllIndustriesValidation())) {
       return;
@@ -238,8 +236,8 @@ export class CreatePositionComponent implements OnInit {
         return;
       } else if (this.selectedPageIndex === 1) {
         if (!this.position_company) {
-          return;
           this.alertsService.show('You must provide a company.', AlertType.error);
+          return;
         } else if (!this.position_level) {
           this.alertsService.show('You must select position\'s level.', AlertType.error);
           return;
@@ -592,7 +590,7 @@ export class CreatePositionComponent implements OnInit {
 
     this.preferredEducationForm = new FormGroup({
       search_eduaction_level: new FormControl(''),
-      education_major: new FormControl(this.preferred_education_major ? this.preferred_education_major.major_name : ''),
+      search_education_major: new FormControl(''),
       search_major_category: new FormControl('')
     });
 
@@ -604,9 +602,9 @@ export class CreatePositionComponent implements OnInit {
       }
     });
 
-    this.preferredEducationForm.get('education_major').valueChanges.subscribe((education_major) => {
-      if (education_major && this.helperService.checkSpacesString(education_major)) {
-        this.autoCompleteService.autoComplete(education_major, 'majors').subscribe(
+    this.preferredEducationForm.get('search_education_major').valueChanges.subscribe((search_education_major) => {
+      if (search_education_major && this.helperService.checkSpacesString(search_education_major)) {
+        this.autoCompleteService.autoComplete(search_education_major, 'majors').subscribe(
           dataJson => {
             if (dataJson['success']) {
               this.autocomplete_majors = dataJson['data'];
@@ -663,30 +661,23 @@ export class CreatePositionComponent implements OnInit {
   }
 
   onSelectEducationMajor(major: Major) {
-    this.preferred_education_major = major;
-  }
-
-  onBlurEducationMajor() {
-    const value = this.preferredEducationForm.value.education_major;
-    if (value && this.helperService.checkSpacesString(value)) {
-      if (this.preferred_education_major && value !== this.preferred_education_major.major_name) {
-        this.preferred_education_major = null;
-      }
+    if (!this.preferred_education_majors) {
+      this.preferred_education_majors = [major];
     } else {
-      this.preferred_education_major = null;
+      const filter = this.preferred_education_majors.filter(value => value.major_id === major.major_id);
+      if (filter.length === 0) {
+        this.preferred_education_majors.push(major);
+      }
     }
+    this.preferredEducationForm.patchValue({search_education_major: ''});
   }
 
-  onCheckEducationMajorValidation(): boolean {
-    const value = this.preferredEducationForm.value.education_major;
-    if (value && this.helperService.checkSpacesString(value)) {
-      if (this.preferred_education_major) {
-        return value === this.preferred_education_major.major_name ? true : false;
-      } else {
-        return false;
-      }
-    } else {
-      return true;
+  onRemoveEducationMajor(major: Major, arrIndex: number) {
+    if (this.preferred_education_majors[arrIndex].major_id === major.major_id) {
+      this.preferred_education_majors.splice(arrIndex, 1);
+    }
+    if (this.preferred_education_majors.length === 0) {
+      this.preferred_education_majors = null;
     }
   }
 
@@ -1149,7 +1140,7 @@ export class CreatePositionComponent implements OnInit {
             if (this.preferred_education_levels && this.preferred_education_levels.length > 0) {
               this.addPreferredEducationLevels(position_id);
             }
-            if (this.preferred_education_major) {
+            if (this.preferred_education_majors) {
               this.addPreferredEducationMajor(position_id);
             }
             if (this.preferred_education_major_categories && this.preferred_education_major_categories.length > 0) {
@@ -1199,7 +1190,7 @@ export class CreatePositionComponent implements OnInit {
   addPreferredEducationMajor(position_id: number) {
     const info = {
       position_id: position_id,
-      major_ids: [this.preferred_education_major.major_id]
+      major_ids: this.preferred_education_majors.map((value) => value.major_id)
     };
     this.positionService.postPreferredMajors(info).subscribe(
       dataJson => {
