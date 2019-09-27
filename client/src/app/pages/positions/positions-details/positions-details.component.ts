@@ -337,5 +337,6 @@ export class PositionsDetailsComponent implements OnInit {
   scrollSmoothTo(id) {
     const height = 70;
     document.getElementById('sidenav-content').scrollTop = document.getElementById(id).offsetTop - height;
+    this.filter_list = false;
   }
 }
