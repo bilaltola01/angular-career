@@ -23,6 +23,38 @@ class CompanySize {
   name: string;
 }
 
+export interface Company {
+  company_id: number;
+  company_name: string;
+  company_desc: string;
+  company_logo: string;
+  company_size: string;
+  hq_city: number;
+  hq_city_name: string;
+  hq_country: number;
+  hq_country_name: string;
+  hq_state: number;
+  hq_state_name: string;
+  main_industry: number;
+  founding_year: number;
+  main_industry_name: string;
+  school: number;
+  active: number;
+  verified: number;
+  website: string;
+  company_industries?: (string)[] | null;
+  company_industry_ids?: (number)[] | null;
+  position_levels: PositionLevels;
+}
+export interface PositionLevels {
+  entry_level_count: number;
+  senior_level_count: number;
+  manager_level_count: number;
+  executive_level_count: number;
+  total_count: number;
+}
+
+
 @Component({
   templateUrl: './companies.component.html',
   styleUrls: ['./companies.component.scss']
@@ -30,78 +62,30 @@ class CompanySize {
 
 export class CompaniesComponent implements OnInit {
 
-    companyList = [{
-        "company_id": 8,
-        "company_name": "werke",
-        "company_desc": "bmw",
-        "company_logo": "https://careerfair-images-development.s3.amazonaws.com/company-images/8/Screen Shot 2019-09-10 at 8.11.48 PM.png",
-        "company_size": "small",
-        "hq_city": 17,
-        "hq_city_name": "Delta",
-        "hq_country_name": "Saint Helena",
-        "hq_country": 3,
-        "founding_year": 2019,
-        "hq_state_name": "Alabama",
-        "hq_state": 1,
-        "main_industry": 162,
-        "main_industry_name": "Car Manufacturers",
-        "school": 0,
-        "active": 1,
-        "verified": 0,
-        "website": "das.com",
-        "company_industries": [
-            "Car Dealers, Imports",
-            "Car Manufacturers"
-        ],
-        "company_industry_ids": [
-            162,
-            176
-        ]
-    }, {
-        "company_id": 2,
-        "company_name": "Moodle",
-        "company_desc": "Development of Plugins\n",
-        "company_logo": "https://careerfair-images-development.s3.amazonaws.com/company-images/2/Screen Shot 2019-09-10 at 8.27.04 PM.png",
-        "company_size": "small",
-        "hq_city": 17484,
-        "hq_city_name": "Los Angeles",
-        "hq_country_name": "United States",
-        "hq_country": 43,
-        "founding_year": 2019,
-        "hq_state_name": "California",
-        "hq_state": 5,
-        "main_industry": 35,
-        "main_industry_name": "Computer Software",
-        "school": 0,
-        "active": 1,
-        "verified": 0,
-        "website": "moodle.com",
-        "company_industries": [
-            "Education",
-            "Research and Development",
-            "Schools/Education"
-        ],
-        "company_industry_ids": [
-            67,
-            70,
-            291
-        ]
-    }];
+    companyList: Company[]; // TODO: Make a company
 
     // FormGroup
     companiesForm: FormGroup;
-
     current_user: UserGeneralInfo;
 
     // Autocomplete List
     autocomplete_searchcompanies: Company[] = [];
-
     autocomplete_cities: City[] = [];
+    preLoadDataObject = {};
+    currentPageNumber = 1;
+    filterAttributes = {
+      city_id: null,
+      // major_id: null,
+      // school_id: null,
+      offset: 0,
+      limit: 7,
+    };
 
     // UI Variables
     isLoadingResults = true;
     showFilterListFlag = true;
     searchPlaceholderCopy = 'Search people by name or email.';
+    emptyResultsCopy = 'Use the search and filter to find companies.';
 
     constructor(
         private autoCompleteService: AutoCompleteService,
@@ -139,6 +123,10 @@ export class CompaniesComponent implements OnInit {
             'city': new FormControl(querySearchedCity),
         });
 
+        this.companiesForm.get('searchCompanies').valueChanges.subscribe((searchCompanies) => {
+          searchCompanies && this.helperService.checkSpacesString(searchCompanies) ? this.onSearchCompaniesValueChanges(searchCompanies) : this.autocomplete_searchcompanies = [];
+        });
+
         this.companiesForm.get('city').valueChanges.subscribe((city) => {
             city && this.helperService.checkSpacesString(city) ? this.onCityValueChanges(city) : this.autocomplete_cities = [];
         });
@@ -162,29 +150,64 @@ export class CompaniesComponent implements OnInit {
         );
     }
 
-    onSearchCompany(event) {
-        console.log("TCL: CompaniesComponent -> onSearchCompany -> event", event)
-        // this.emptyResultsCopy = 'No search results found.';
-        // this.filterAttributes.offset = 0;
-        // this.currentPageNumber = 1;
-        // this.preLoadDataObject = {};
-        // this.getCompaniesData();
-        event.stopPropagation();
+    onSearchCompaniesValueChanges(searchCompanies: string) {
+      if (!searchCompanies.includes('@')) {
+        this.autoCompleteService.autoComplete(searchCompanies, 'companies').subscribe(
+          dataJson => {
+            if (dataJson['success']) {
+              this.autocomplete_searchcompanies = dataJson['data'];
+            }
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+            this.autocomplete_searchcompanies = [];
+          }
+        );
+      } else {
+        this.autocomplete_searchcompanies = [];
       }
+    }
+
+    onSearchCompany(event) {
+      console.log("TCL: CompaniesComponent -> onSearchCompany -> event", event)
+      this.emptyResultsCopy = 'No search results found.';
+      this.filterAttributes.offset = 0;
+      this.currentPageNumber = 1;
+      this.preLoadDataObject = {};
+      this.getCompaniesData();
+      event.stopPropagation();
+    }
+
+    generateQueryString(): string {
+      let queryString;
+      queryString = this.companiesForm.value.city ? `${queryString ? queryString + '&' : ''}city=${this.filterAttributes.city_id}` : queryString;
+      queryString = queryString ? `${queryString}&offset=${this.filterAttributes.offset}` : `offset=${this.filterAttributes.offset}`;
+      queryString = queryString ? `${queryString}&limit=${this.filterAttributes.limit}` : `limit=${this.filterAttributes.limit}`;
+
+      const companies = this.companiesForm.value.searchCompanies && this.helperService.checkSpacesString(this.companiesForm.value.searchCompanies) ? this.companiesForm.value.searchCompanies.replace('+', '%2B') : null;
+
+      queryString = companies ? `${queryString ? queryString + '&' : ''}company=${companies}` : queryString;
+
+      return queryString;
+    }
 
     getCompaniesData() {
-        // const queryString = this.generateQueryString();
-        const queryString = 'offset=7&limit=7';
+        const queryString = this.generateQueryString();
+        // const queryString = 'offset=0&limit=70';
         this.isLoadingResults = false;
         this.companyService.getCompanies(queryString).subscribe(
             dataJson => {
                 console.log("TCL: CompaniesComponent -> getCompaniesData -> dataJson", dataJson)
-
+                this.companyList = dataJson.data.data;
             },
             error => {
 
             }
         );
+    }
+
+    onChangeCity(city: City) {
+      this.filterAttributes['city_id'] = city.city_id;
     }
 
     getCurrentUser() {
@@ -196,6 +219,9 @@ export class CompaniesComponent implements OnInit {
           });
     }
 
+    clearFilter() {
+      console.log("TCL: CompaniesComponent -> clearFilter -> clearFilter: TODO")
+    }
     // --- UI ---
 
     toggleTabMenuOpen() {

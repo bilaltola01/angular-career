@@ -4,37 +4,142 @@
         <h4>Loading...</h4>
     </div>
 </ng-container>
- 
+
 
 <!-- Search Bar -->
-<form class="common_search_filter" [formGroup]="companiesForm" autocomplete="off"> 
+<form class="common_search_filter" [formGroup]="companiesForm" autocomplete="off">
     <div class="filter-data">
         <mat-icon (click)="toggleTabMenuOpen()" class="filter_icon">filter_list</mat-icon>
     </div>
     <div class="people-search-header">
         <mat-form-field appearance="standard" class="search">
-        <mat-icon matSuffix (click)="onSearchCompany($event)">search</mat-icon>
-        <input  matInput 
-                placeholder="{{searchPlaceholderCopy}}"
-                type="text" 
-                [matAutocomplete]="autocompleteSearch"
-                formControlName="searchCompanies" 
-                (keyup.enter)="onSearchCompany($event)">
-        <mat-autocomplete #autocompleteSearch="matAutocomplete">
-            <a *ngFor="let company of autocomplete_searchcompanies | slice:0:4" 
-                routerLink="/company/{{company.company_id}}" 
-                [queryParams]="{showBackButton: 'true'}">
-                <mat-option [value]="company.company_name">
-                    <img [src]="company.company_logo ? company.company_logo : 'assets/icons/no_photo.png'">
-                    <span>{{company.company_name}}</span>
+            <mat-icon matSuffix (click)="onSearchCompany($event)">search</mat-icon>
+            <input matInput placeholder="{{searchPlaceholderCopy}}" type="text" [matAutocomplete]="autocompleteSearch"
+                formControlName="searchCompanies" (keyup.enter)="onSearchCompany($event)">
+            <mat-autocomplete #autocompleteSearch="matAutocomplete">
+                <a *ngFor="let company of autocomplete_searchcompanies | slice:0:4"
+                    routerLink="/company/{{company.company_id}}" 
+                    [queryParams]="{showBackButton: 'true'}">
+                    <mat-option [value]="company.company_name">
+                        <img [src]="company.company_logo ? company.company_logo : 'assets/icons/no_photo.png'">
+                        <span>{{company.company_name}}</span>
+                    </mat-option>
+                </a>
+                <mat-option [value]="companiesForm.value.searchCompanies" 
+                    (click)="onSearchCompany($event)"
+                    *ngIf="companiesForm.value.searchCompanies?.length > 0">
+                    See all results for <b>{{companiesForm.value.searchCompanies}}</b>
                 </mat-option>
-            </a>
-            <mat-option [value]="companiesForm.value.searchCompanies" 
-                        (click)="onSearchCompany($event)" 
-                        *ngIf="companiesForm.value.searchCompanies?.length > 0">
-                See all results for <b>{{companiesForm.value.searchCompanies}}</b>
-            </mat-option>
-        </mat-autocomplete>
+            </mat-autocomplete>
         </mat-form-field>
     </div>
 </form>
+
+<!-- Filter Side -->
+<form class="filter-container container__header tablet" [formGroup]="companiesForm" *ngIf="showFilterListFlag" autocomplete="off">
+        <ng-container>
+          <div class="nav-title">
+            <h3 class="section-title">Company Filters</h3>
+          </div>
+
+          <div class="filter-card">
+            <mat-form-field>
+              <mat-label>City</mat-label>
+              <input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity" formControlName="city">
+              <mat-autocomplete #autocompleteCity="matAutocomplete">
+                <mat-option *ngFor="let city of autocomplete_cities" [value]="(city.city)?.split(',')[0]" (onSelectionChange)="onChangeCity(city)">
+                  <span>{{city.city}}</span>
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+
+          <div class="filter-card">
+            <div class="side-filter-btn">
+              <action-button type="raised" color="primary" title="Apply Filters" (click)="applyFilter();">
+              </action-button>
+            </div>
+            <div class="clear-filter">
+              <action-button class="clear-btn" type="text" title="Clear Filters" (click)="clearFilter()" color="primary"></action-button>
+            </div>
+          </div>
+        </ng-container>
+      </form>
+      
+
+<!-- Results Side-->
+<div class="people-list-container">
+    <ng-container *ngIf="companyList && companyList.length > 0">
+        <div *ngFor="let company of companyList; let i = index;">
+            <div class="row">
+                <div class="header-container">
+                    <div class="user-info">
+                        <div class="image"><img
+                                [src]="company.company_logo ? company.company_logo: 'assets/icons/no_photo.png'"></div>
+                        <div class="info">
+                            <a routerLink="/company/{{ company.company_id }}/profile"
+                                [queryParams]="{showBackButton: 'true'}">
+                                <h2 class="name">{{company.company_name}}</h2>
+                            </a>
+                            <h3 *ngIf="company.hq_city || company.hq_state" class="title">
+                                <img src="assets/icons/ic_location.svg">
+                                {{company.hq_city_name}}, {{company.hq_state_name}}, {{company.hq_country_name}}
+                            </h3>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="sub-container">
+                    <div class="user-info" *ngIf="company.main_industry" >
+                        <div class="image secondary"><img src="assets/icons/ic_location_1.svg"></div>
+                        <div class="info">
+                            <h5 class="secondary-title">Industry</h5>
+                            <h4 class="secondary-title">{{company.main_industry_name}}</h4>
+                        </div>
+                    </div>
+
+                    <div class="user-info" *ngIf="company.company_size">
+                        <div class="image secondary"><img src="assets/icons/ic_location_1.svg"></div>
+                        <div class="info">
+                            <h5 class="secondary-title">Company Size</h5>
+                            <h4 class="secondary-title">{{company.company_size}}</h4>
+                            <!-- // TODO: Size id to words -->
+                        </div>
+                    </div>
+
+                    <div class="user-info" *ngIf="company.position_levels">
+                        <div class="image secondary"><img src="assets/icons/ic_location_1.svg"></div>
+                        <div class="info">
+                            <h5 class="secondary-title">Total Openings</h5>
+                            <h4 class="secondary-title">{{company.position_levels.total_count}} Positions</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <p>
+                    {{company.company_desc}}
+                </p>
+
+                <!-- // TODO: Show more -->
+
+            </div>
+        </div>
+    </ng-container>
+
+    <div *ngIf="!companyList || (companyList && companyList.length === 0)">
+        <div class="row no-people">
+            {{ emptyResultsCopy }}
+        </div>
+    </div>
+
+    <!-- <div class="pagination" *ngIf="companyList && companyList.length > 0">
+        <ul type="none">
+        <li class="large_pagination_button" (click)="pageClicked(currentPageNumber-1)">Prev Page</li>
+        <li *ngFor="let pageNo of paginationArr" [ngClass]="{'active': pageNo == currentPageNumber}"
+            (click)="pageClicked(pageNo)">{{ pageNo }}
+        </li>
+        <li class="large_pagination_button" (click)="pageClicked(currentPageNumber+1)">Next Page</li>
+        </ul>
+    </div> -->
+</div>
