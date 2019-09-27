@@ -176,7 +176,7 @@ export class CreatePositionComponent implements OnInit {
     this.minDate.setDate(this.currentDate.getDate() + 1);
     this.isTabMenuOpen = false;
     this.isNavMenuOpened = false;
-    this.selectedPageIndex = 0;
+    this.selectedPageIndex = 1;
     this.initializeFormsByPageIndex();
   }
 
@@ -199,7 +199,7 @@ export class CreatePositionComponent implements OnInit {
   goToNextPage() {
     if (this.selectedPageIndex === 0 && !this.position_name) {
       return;
-    } else if (this.selectedPageIndex === 1 && !(this.positionBasicInfoForm.valid && this.onCheckCompanyValidation() && this.helperService.checkSpacesString(this.positionBasicInfoForm.value.position_company) && this.onCheckCityValidation() && this.onCheckStateValidation() && this.onCheckRecruiterValidation())) {
+    } else if (this.selectedPageIndex === 1 && !(this.positionBasicInfoForm.valid && this.position_company && this.position_level && this.position_type && this.onCheckCityValidation() && this.onCheckStateValidation() && this.onCheckRecruiterValidation())) {
       return;
     } else if (this.selectedPageIndex === 2 && !(this.preferredEducationForm.valid && this.onCheckEducationMajorValidation())) {
       return;
@@ -236,9 +236,17 @@ export class CreatePositionComponent implements OnInit {
       if (this.selectedPageIndex === 0 && !this.position_name) {
         this.alertsService.show('Please fill out the position\'s name.', AlertType.error);
         return;
-      } else if (this.selectedPageIndex === 1 && !this.position_company) {
-        this.alertsService.show('Please provide company information.', AlertType.error);
-        return;
+      } else if (this.selectedPageIndex === 1) {
+        if (!this.position_company) {
+          return;
+          this.alertsService.show('You must provide a company.', AlertType.error);
+        } else if (!this.position_level) {
+          this.alertsService.show('You must select position\'s level.', AlertType.error);
+          return;
+        } else if (!this.position_type) {
+          this.alertsService.show('You must select position\'s type.', AlertType.error);
+          return;
+        }
       }
     }
     if (index !== this.selectedPageIndex) {
@@ -390,6 +398,10 @@ export class CreatePositionComponent implements OnInit {
       (position_country) => {
         if (position_country) {
           this.position_country = Countries.indexOf(position_country) + 1;
+          if (this.position_country !== 43) {
+            this.position_state = null;
+            this.positionBasicInfoForm.get('position_state').setValue('');
+          }
         } else {
           this.position_country = null;
         }

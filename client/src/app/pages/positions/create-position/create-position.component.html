@@ -70,18 +70,14 @@
       </div>
       <div class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
-          <mat-label>City</mat-label>
-          <input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity" formControlName="position_city">
-          <mat-icon matSuffix *ngIf="positionBasicInfoForm.get('position_city').value && helperService.checkSpacesString(positionBasicInfoForm.get('position_city').value) && positionBasicInfoForm.get('position_city').valid && onCheckCityValidation()">done</mat-icon>
-          <mat-icon matSuffix class="error-field" *ngIf="positionBasicInfoForm.get('position_city').value && helperService.checkSpacesString(positionBasicInfoForm.get('position_city').value) && !onCheckCityValidation() && positionBasicInfoForm.get('position_city').touched">close</mat-icon>
-          <mat-autocomplete #autocompleteCity="matAutocomplete" (closed)="onBlurCity()">
-            <mat-option *ngFor="let city of autocomplete_cities" [value]="helperService.cityNameFromAutoComplete(city.city)" (onSelectionChange)="onSelectCity(city)">
-              <span>{{city.city}}</span>
-            </mat-option>
-          </mat-autocomplete>
+          <mat-label>Country</mat-label>
+          <mat-select formControlName="position_country">
+          <mat-option value="{{null}}">{{null}}</mat-option>
+          <mat-option *ngFor="let country of countries_sort" value="{{country}}">{{country}}</mat-option>
+          </mat-select>
         </mat-form-field>
       </div>
-      <div class="profile-form__field">
+      <div *ngIf="position_country && position_country === 43" class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
           <mat-label>State</mat-label>
           <input matInput placeholder="State" type="text" [matAutocomplete]="autocompleteState" formControlName="position_state">
@@ -96,11 +92,15 @@
       </div>
       <div class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
-          <mat-label>Country</mat-label>
-          <mat-select formControlName="position_country">
-          <mat-option value="{{null}}">{{null}}</mat-option>
-          <mat-option *ngFor="let country of countries_sort" value="{{country}}">{{country}}</mat-option>
-          </mat-select>
+          <mat-label>City</mat-label>
+          <input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity" formControlName="position_city">
+          <mat-icon matSuffix *ngIf="positionBasicInfoForm.get('position_city').value && helperService.checkSpacesString(positionBasicInfoForm.get('position_city').value) && positionBasicInfoForm.get('position_city').valid && onCheckCityValidation()">done</mat-icon>
+          <mat-icon matSuffix class="error-field" *ngIf="positionBasicInfoForm.get('position_city').value && helperService.checkSpacesString(positionBasicInfoForm.get('position_city').value) && !onCheckCityValidation() && positionBasicInfoForm.get('position_city').touched">close</mat-icon>
+          <mat-autocomplete #autocompleteCity="matAutocomplete" (closed)="onBlurCity()">
+            <mat-option *ngFor="let city of autocomplete_cities" [value]="helperService.cityNameFromAutoComplete(city.city)" (onSelectionChange)="onSelectCity(city)">
+              <span>{{city.city}}</span>
+            </mat-option>
+          </mat-autocomplete>
         </mat-form-field>
       </div>
       <div class="profile-form__field">
@@ -164,7 +164,7 @@
     </div>
   </div>
   <div class="container__full">
-    <action-button class="btn-next" type="flat" title="Next" color="primary" [disabled]="!(positionBasicInfoForm.valid && helperService.checkSpacesString(positionBasicInfoForm.value.position_company) &&  onCheckCompanyValidation() && onCheckCityValidation() && onCheckStateValidation() && onCheckRecruiterValidation())" (click)="goToNextPage()"></action-button>
+    <action-button class="btn-next" type="flat" title="Next" color="primary" [disabled]="!(positionBasicInfoForm.valid && position_company && position_level && position_type &&  onCheckCompanyValidation() && onCheckCityValidation() && onCheckStateValidation() && onCheckRecruiterValidation())" (click)="goToNextPage()"></action-button>
   </div>
 </div>
   
