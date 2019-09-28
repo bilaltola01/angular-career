@@ -165,11 +165,13 @@ a {
     }
 
     .sub-container {
-      width: 100%;
       margin-bottom: 20px;
       display: inline-flex;
       flex-wrap: wrap;
-      .user-info {
+      border: 1px solid rgba(0, 29, 64, 0.15);
+      border-radius: 5px;
+
+      .company-info {
         margin-bottom: 10px;
         margin-right: 20px;
       }
@@ -211,7 +213,7 @@ a {
     }
   }
 
-  .user-info {
+  .company-info {
     display: grid;
     grid-template:
       " image info "auto / 60px minmax(min-content, max-content);
@@ -273,6 +275,44 @@ a {
       }
 
       h5.secondary-title {
+        font-family: 'Poppins-Medium', sans-serif;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        color: rgba(map-get($md-cfaccent, 500), .34);
+        margin: 0;
+      }
+    }
+  }
+
+  .company-info-box {
+    display: grid;
+    grid-template:
+      "info " auto minmax(min-content, max-content);
+    ;
+    grid-column-gap: 10px;
+    background-color: transparent;
+
+    padding: 10px 20px 10px 10px;
+    border-right: 1px solid rgba(0, 29, 64, 0.15);
+    
+
+    .info {
+      grid-area: info;
+      width: 100%;
+      @include flex(column, flex-start, center);
+
+      h4{
+        font-family: 'Roboto', sans-serif;
+        font-weight: 400;
+        font-style: normal;
+        font-size: 16px;
+        line-height: 17px;
+        color: rgba(map-get($md-cfaccent, 500), .84);
+        margin: 0;
+      }
+
+      h5 {
         font-family: 'Poppins-Medium', sans-serif;
         font-weight: 400;
         font-size: 14px;
@@ -369,10 +409,26 @@ a {
         action-button {
           margin: 10px auto;
         }
+
+      }
+      .sub-container {
+        border: none;
       }
     }
-    .user-info {
+    .company-info {
       width: 100%;
+      .info {
+        h2.name {
+          font-size: 20px;
+          line-height: 43px;
+        }
+      }
+    }
+
+    .company-info-box {
+      border: 1px solid rgba(0, 29, 64, 0.15);
+      border-radius: 5px;
+      margin: 5px;
       .info {
         h2.name {
           font-size: 20px;

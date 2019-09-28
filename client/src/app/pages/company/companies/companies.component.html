@@ -101,7 +101,7 @@
         <div *ngFor="let company of companyList; let i = index;">
             <div class="row">
                 <div class="header-container">
-                    <div class="user-info">
+                    <div class="company-info">
                         <div class="image"><img
                                 [src]="company.company_logo ? company.company_logo: 'assets/icons/no_photo.png'"></div>
                         <div class="info">
@@ -119,27 +119,22 @@
                 </div>
 
                 <div class="sub-container">
-                    <div class="user-info" *ngIf="company.main_industry" >
-                        <div class="image secondary"><img src="assets/icons/ic_location_1.svg"></div>
+                    <div class="company-info-box" *ngIf="company.main_industry" >
                         <div class="info">
-                            <h5 class="secondary-title">Industry</h5>
-                            <h4 class="secondary-title">{{company.main_industry_name}}</h4>
+                            <h5>Industry</h5>
+                            <h4>{{company.main_industry_name}}</h4>
                         </div>
                     </div>
-
-                    <div class="user-info" *ngIf="company.company_size">
-                        <div class="image secondary"><img src="assets/icons/ic_location_1.svg"></div>
+                    <div class="company-info-box" *ngIf="company.company_size">
                         <div class="info">
-                            <h5 class="secondary-title">Company Size</h5>
-                            <h4 class="secondary-title">{{company.company_size}}</h4>
+                            <h5>Company Size</h5>
+                            <h4>{{parseReverseCompanySize(company.company_size)}}</h4>
                         </div>
                     </div>
-
-                    <div class="user-info" *ngIf="company.position_levels">
-                        <div class="image secondary"><img src="assets/icons/ic_location_1.svg"></div>
+                    <div class="company-info-box" *ngIf="company.position_levels">
                         <div class="info">
-                            <h5 class="secondary-title">Total Openings</h5>
-                            <h4 class="secondary-title">{{company.position_levels.total_count}} Positions</h4>
+                            <h5>Total Openings</h5>
+                            <h4>{{company.position_levels.total_count}} Positions</h4>
                         </div>
                     </div>
                 </div>

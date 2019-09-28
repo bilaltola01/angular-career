@@ -229,6 +229,17 @@ export class CompaniesComponent implements OnInit {
     return company_size;
   }
 
+  parseReverseCompanySize(companySizeTypes: string): string {
+    let company_size = 'Small (1 - 49)';
+    if (companySizeTypes.includes('medium')) {
+      company_size = 'Medium (50 - 499)';
+    } else if (companySizeTypes.includes('large')) {
+      company_size = 'Large (500+)';
+    }
+
+    return company_size;
+  }
+
   generateQueryString(): string {
     let queryString;
     queryString = this.companiesForm.value.size ? `${queryString ? queryString + '&' : ''}size=${this.parseCompanySize(this.companiesForm.value.size)}` : queryString;
