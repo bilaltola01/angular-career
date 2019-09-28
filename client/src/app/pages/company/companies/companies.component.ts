@@ -62,7 +62,7 @@ export interface PositionLevels {
 
 export class CompaniesComponent implements OnInit {
 
-  companyList: Company[]; // TODO: Make a company?!
+  companyList: Company[];
 
   // FormGroup
   companiesForm: FormGroup;
@@ -112,7 +112,6 @@ export class CompaniesComponent implements OnInit {
     );
 
   ngOnInit() {
-    // this.company_size = CompanySizeTypes[0];
     this.initCompanyFilterForm();
     // Initial search
     this.applyFilter();
@@ -241,6 +240,21 @@ export class CompaniesComponent implements OnInit {
 
     queryString = companies ? `${queryString ? queryString + '&' : ''}company=${companies}` : queryString;
 
+    const paramsInQuery = {
+      'name': companies,
+      'city': this.companiesForm.value.city,
+      'cityId': this.filterAttributes.city_id,
+      'industry': this.companiesForm.value.industry,
+      'industryId': this.filterAttributes.industry_id,
+      'size': this.companiesForm.value.size,
+    };
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: paramsInQuery,
+      queryParamsHandling: 'merge',
+    });
+
     return queryString;
   }
 
@@ -293,7 +307,11 @@ export class CompaniesComponent implements OnInit {
   }
 
   clearFilter() {
-    console.log('TCL: CompaniesComponent -> clearFilter -> clearFilter: TODO');
+    const searchCompaniesValue = this.companiesForm.value.searchCompanies;
+    this.companiesForm.reset();
+    this.preLoadDataObject = {};
+    this.companiesForm.patchValue({ 'searchPeople': searchCompaniesValue });
+    this.toggleTabMenuOpen();
   }
   // --- UI ---
 
@@ -347,7 +365,6 @@ export class CompaniesComponent implements OnInit {
               count: dataJson.data.count
             };
             this.preLoadDataObject[nextPageNumber] = prelaodData;
-            // this.getUsersInfo(nextPageNumber); TODO: what?!
           }
           this.filterAttributes.offset = previousOffset;
         },
