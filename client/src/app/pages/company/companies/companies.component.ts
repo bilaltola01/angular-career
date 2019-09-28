@@ -88,6 +88,7 @@ export class CompaniesComponent implements OnInit {
   // UI Variables
   isLoadingResults = true;
   showFilterListFlag = true;
+  maxDescriptionLength = 220;
   searchPlaceholderCopy = 'Search companies by name.';
   emptyResultsCopy = 'Use the search and filter to find companies.';
 

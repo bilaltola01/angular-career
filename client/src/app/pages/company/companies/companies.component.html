@@ -144,9 +144,22 @@
                     </div>
                 </div>
                 <p>
-                    {{company.company_desc}}
+                    {{company.company_desc | slice:0:maxDescriptionLength}}<span *ngIf="company.company_desc.length>maxDescriptionLength">...</span>
                 </p>
-                <!-- // TODO: Show more -->
+                <div class="show-button">
+                    <action-button *ngIf="maxDescriptionLength === 220 && company.company_desc.length>220"
+                        routerLink="." 
+                        type="text" 
+                        title="Show More" 
+                        color="primary" 
+                        (click)="maxDescriptionLength=1000"></action-button>
+                    <action-button *ngIf="maxDescriptionLength === 1000"
+                        routerLink="." 
+                        type="text" 
+                        title="Show Less" 
+                        color="primary" 
+                        (click)="maxDescriptionLength=220"></action-button>
+                </div>
             </div>
         </div>
     </ng-container>
