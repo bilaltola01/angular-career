@@ -44,10 +44,38 @@
 
           <div class="filter-card">
             <mat-form-field>
+                <mat-label>Industry </mat-label>
+                <input matInput placeholder="Industry" type="text" [matAutocomplete]="autocompleteIndustry"
+                formControlName="industry">
+                <mat-autocomplete #autocompleteIndustry="matAutocomplete">
+                <mat-option *ngFor="let industry of autocomplete_industries" 
+                    [value]="industry.industry_name"
+                    (onSelectionChange)="onChangeIndustry(industry)">
+                    <span>{{industry.industry_name}}</span>
+                </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+          </div>
+
+          <div class="filter-card">
+            <mat-form-field>
+                <mat-label>Size</mat-label>
+                <mat-select class="arrow" formControlName="size">
+                    <mat-option value=''></mat-option>
+                    <mat-option *ngFor="let size of companySizeTypes" value="{{size}}">{{size}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            </div>
+
+          <div class="filter-card">
+            <mat-form-field>
               <mat-label>City</mat-label>
               <input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity" formControlName="city">
               <mat-autocomplete #autocompleteCity="matAutocomplete">
-                <mat-option *ngFor="let city of autocomplete_cities" [value]="(city.city)?.split(',')[0]" (onSelectionChange)="onChangeCity(city)">
+                <mat-option *ngFor="let city of autocomplete_cities" 
+                [value]="(city.city)?.split(',')[0]" 
+                (onSelectionChange)="onChangeCity(city)">
                   <span>{{city.city}}</span>
                 </mat-option>
               </mat-autocomplete>

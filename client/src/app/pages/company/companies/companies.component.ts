@@ -16,7 +16,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserGeneralInfo, City, Company } from 'src/app/models';
+import { UserGeneralInfo, City, Company, CompanySizeTypes, Industry } from 'src/app/models';
 
 class CompanySize {
   id: number;
@@ -67,24 +67,27 @@ export class CompaniesComponent implements OnInit {
     // FormGroup
     companiesForm: FormGroup;
     current_user: UserGeneralInfo;
+    company_size:	string;
 
     // Autocomplete List
     autocomplete_searchcompanies: Company[] = [];
     autocomplete_cities: City[] = [];
+    autocomplete_industries: Industry[] = [];
+
     preLoadDataObject = {};
     currentPageNumber = 1;
     filterAttributes = {
       city_id: null,
-      // major_id: null,
-      // school_id: null,
+      industry_id: null,
       offset: 0,
       limit: 7,
     };
+    companySizeTypes: string[] = CompanySizeTypes;
 
     // UI Variables
     isLoadingResults = true;
     showFilterListFlag = true;
-    searchPlaceholderCopy = 'Search people by name or email.';
+    searchPlaceholderCopy = 'Search companies by name.';
     emptyResultsCopy = 'Use the search and filter to find companies.';
 
     constructor(
@@ -108,6 +111,7 @@ export class CompaniesComponent implements OnInit {
         );
 
     ngOnInit() {
+        // this.company_size = CompanySizeTypes[0];
         this.initCompanyFilterForm();
         // Initial search
         this.applyFilter();
@@ -115,16 +119,25 @@ export class CompaniesComponent implements OnInit {
 
     initCompanyFilterForm() {
         const querySearchedName = this.route.snapshot.queryParamMap.get('name') || null;
+        const querySearchedIndustry = this.route.snapshot.queryParamMap.get('industry') || null;
+        const querySearchedIndustryId = this.route.snapshot.queryParamMap.get('industryId') || null;
         const querySearchedCity = this.route.snapshot.queryParamMap.get('city') || null;
         const querySearchedCityId = this.route.snapshot.queryParamMap.get('cityId') || null;
+        const querySearchedSize = this.route.snapshot.queryParamMap.get('size') || null;
 
         this.companiesForm = new FormGroup({
             'searchCompanies': new FormControl(querySearchedName),
+            'industry': new FormControl(querySearchedIndustry),
+            'size': new FormControl(querySearchedSize),
             'city': new FormControl(querySearchedCity),
         });
 
         this.companiesForm.get('searchCompanies').valueChanges.subscribe((searchCompanies) => {
           searchCompanies && this.helperService.checkSpacesString(searchCompanies) ? this.onSearchCompaniesValueChanges(searchCompanies) : this.autocomplete_searchcompanies = [];
+        });
+
+        this.companiesForm.get('industry').valueChanges.subscribe((industry) => {
+          industry ? this.onIndustryValueChanges(industry) : this.autocomplete_industries = [];
         });
 
         this.companiesForm.get('city').valueChanges.subscribe((city) => {
@@ -134,6 +147,10 @@ export class CompaniesComponent implements OnInit {
 
     applyFilter() {
         this.getCompaniesData();
+    }
+
+    onChangeCity(city: City) {
+      this.filterAttributes['city_id'] = city.city_id;
     }
 
     onCityValueChanges(city: string) {
@@ -148,6 +165,24 @@ export class CompaniesComponent implements OnInit {
             this.autocomplete_cities = [];
           }
         );
+    }
+
+    onChangeIndustry(industry) {
+      this.filterAttributes['industry_id'] = industry.industry_id;
+    }
+
+    onIndustryValueChanges(industry: string) {
+      this.autoCompleteService.autoComplete(industry, 'industries').subscribe(
+        dataJson => {
+          if (dataJson['success']) {
+            this.autocomplete_industries = dataJson['data'];
+          }
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+          this.autocomplete_industries = [];
+        }
+      );
     }
 
     onSearchCompaniesValueChanges(searchCompanies: string) {
@@ -169,7 +204,6 @@ export class CompaniesComponent implements OnInit {
     }
 
     onSearchCompany(event) {
-      console.log("TCL: CompaniesComponent -> onSearchCompany -> event", event)
       this.emptyResultsCopy = 'No search results found.';
       this.filterAttributes.offset = 0;
       this.currentPageNumber = 1;
@@ -178,8 +212,21 @@ export class CompaniesComponent implements OnInit {
       event.stopPropagation();
     }
 
+    parseCompanySize(companySizeTypes: string): string {
+      let company_size = 'small';
+      if (companySizeTypes.includes('Medium')) {
+        company_size = 'medium';
+      } else if (companySizeTypes.includes('Large')) {
+        company_size = 'large';
+      }
+
+      return company_size;
+    }
+
     generateQueryString(): string {
       let queryString;
+      queryString = this.companiesForm.value.size ? `${queryString ? queryString + '&' : ''}size=${this.parseCompanySize(this.companiesForm.value.size)}` : queryString;
+      queryString = this.companiesForm.value.industry ? `${queryString ? queryString + '&' : ''}industry=${this.filterAttributes.industry_id}` : queryString;
       queryString = this.companiesForm.value.city ? `${queryString ? queryString + '&' : ''}city=${this.filterAttributes.city_id}` : queryString;
       queryString = queryString ? `${queryString}&offset=${this.filterAttributes.offset}` : `offset=${this.filterAttributes.offset}`;
       queryString = queryString ? `${queryString}&limit=${this.filterAttributes.limit}` : `limit=${this.filterAttributes.limit}`;
@@ -206,9 +253,7 @@ export class CompaniesComponent implements OnInit {
         );
     }
 
-    onChangeCity(city: City) {
-      this.filterAttributes['city_id'] = city.city_id;
-    }
+
 
     getCurrentUser() {
         this.userStateService.getUser
