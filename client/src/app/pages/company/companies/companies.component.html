@@ -11,7 +11,7 @@
     <div class="filter-data">
         <mat-icon (click)="toggleTabMenuOpen()" class="filter_icon">filter_list</mat-icon>
     </div>
-    <div class="people-search-header">
+    <div class="companies-search-header">
         <mat-form-field appearance="standard" class="search">
             <mat-icon matSuffix (click)="onSearchCompany($event)">search</mat-icon>
             <input matInput placeholder="{{searchPlaceholderCopy}}" type="text" [matAutocomplete]="autocompleteSearch"
@@ -96,7 +96,7 @@
       
 
 <!-- Results Side-->
-<div class="people-list-container">
+<div class="companies-list-container">
     <ng-container *ngIf="companyList && companyList.length > 0">
         <div *ngFor="let company of companyList; let i = index;">
             <div class="row">
@@ -160,7 +160,7 @@
     </ng-container>
 
     <div *ngIf="!companyList || (companyList && companyList.length === 0)">
-        <div class="row no-people">
+        <div class="row no-companies">
             {{ emptyResultsCopy }}
         </div>
     </div>

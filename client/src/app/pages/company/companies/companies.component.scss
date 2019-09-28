@@ -25,7 +25,7 @@ a {
 
 .common_search_filter {
   grid-area: search;
-  .people-search-header {
+  .companies-search-header {
     background-color: $white;
     border: 1px solid #ddd;
     padding: 12px;
@@ -135,7 +135,7 @@ a {
   }
 }
 
-.people-list-container {
+.companies-list-container {
   grid-area: results;
   padding: 65px 20px;
 
@@ -150,7 +150,7 @@ a {
       text-decoration: none;
     }
 
-    &.no-people {
+    &.no-companies {
       @include btn-align-center;
     }
 
@@ -380,7 +380,7 @@ a {
   }
 
   .common_search_filter {
-    .people-search-header {
+    .companies-search-header {
       & mat-form-field {
         width: 90%;
         margin-right: -30px;
@@ -402,7 +402,7 @@ a {
     box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.3);
   }
 
-  .people-list-container {
+  .companies-list-container {
     padding: 5px;
     .row {
       .header-container {
