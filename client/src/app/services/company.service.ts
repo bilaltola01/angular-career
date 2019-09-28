@@ -23,19 +23,6 @@ export class CompanyService {
     }
   }
 
-  // public getCompanies(offset: number, limit: number, city: number, state: number, company: string, industry: number): Observable<any> {
-  //   return this.http.get(this.company_service_url + 
-  //     `companies?offset=${offset}&limit=${limit}&city=${city}&state=${state}&company=${company}&industry=${industry}`, this.authHttpOptions())
-  //     .pipe(
-  //       map(data => {
-  //         return {success: true, message: 'Success!', data: data};
-  //       }),
-  //       catchError(this.handleError)
-
-  //     );
-  // }
-
-  // TODO: query: string should be query: companiesQuery
   public getCompanies(query: string): Observable<any> {
     return this.http.get(this.company_service_url + `companies?${query}`, this.authHttpOptions())
       .pipe(
