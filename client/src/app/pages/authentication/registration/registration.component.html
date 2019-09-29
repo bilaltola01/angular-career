@@ -48,7 +48,7 @@
         <mat-icon matPrefix>lock_outline</mat-icon>
         <input matInput placeholder="Password" type="password" [formControl]="registrationForm.controls.password">
         <span matSuffix *ngIf="registrationForm.controls.password.valid" [class.weak]="passwordStrength==='weak'" [class.medium]="passwordStrength==='medium'">{{passwordStrength}}</span>
-        <mat-icon matSuffix class="error-field" *ngIf="!registrationForm.controls.emailAddress.valid && registrationForm.controls.emailAddress.touched">close</mat-icon>
+        <mat-icon matSuffix class="error-field" *ngIf="!registrationForm.controls.password.valid && registrationForm.controls.password.touched">close</mat-icon>
       </mat-form-field>
     </div>
     <div class="row__checkbox">

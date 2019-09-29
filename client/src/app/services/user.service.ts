@@ -81,6 +81,17 @@ export class UserService {
       );
   }
 
+  public resetPassword(newPasswordInfo: any): Observable<any> {
+    const token = localStorage.getItem('token');
+    return this.http.post(this.auth_service_url + `user/${this.user_id}/token/${token}/change-password`, newPasswordInfo, this.authHttpOptions())
+      .pipe(
+        map(data => {
+          return {success: true, message: 'Success!', data: data};
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   public getUsers(query: string): Observable<any> {
     return this.http.get(this.user_service_url + `users?${query}`, this.authHttpOptions())
       .pipe(

@@ -498,6 +498,12 @@ action-button {
       padding: 5px 25px !important;
     }
   }
+  &.reset-btn {
+    &>button {
+      padding: 10px 25px !important;
+      min-width: 130px;
+    }
+  }
 }
 
 .container {

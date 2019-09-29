@@ -3,7 +3,9 @@ import { LoginComponent } from './login/login.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { VerificationComponent } from './verification/verification.component';
 import { EmailSentComponent } from './email-sent/email-sent.component';
+import { PasswordComponent } from './password/password.component';
 import { UnauthGuard } from '../../guard/unauth.guard';
+import { AuthGuard } from '../../guard/auth.guard';
 
 export const authenticationRoutes: Routes = [
   {
@@ -31,5 +33,10 @@ export const authenticationRoutes: Routes = [
     path: 'email-sent',
     component: EmailSentComponent,
     canActivate: [UnauthGuard]
+  },
+  {
+    path: 'password/reset',
+    component: PasswordComponent,
+    canActivate: [AuthGuard]
   }
 ];
