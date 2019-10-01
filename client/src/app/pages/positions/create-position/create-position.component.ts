@@ -164,6 +164,8 @@ export class CreatePositionComponent implements OnInit {
 
   position: PositionInfoResponse;
 
+  integerRegex = new RegExp('^\d+$');
+
   constructor(
     private alertsService: AlertsService,
     public helperService: HelperService,
@@ -175,7 +177,7 @@ export class CreatePositionComponent implements OnInit {
     this.minDate.setDate(this.currentDate.getDate() + 1);
     this.isTabMenuOpen = false;
     this.isNavMenuOpened = false;
-    this.selectedPageIndex = 2;
+    this.selectedPageIndex = 3;
     this.initializeFormsByPageIndex();
   }
 
@@ -722,7 +724,7 @@ export class CreatePositionComponent implements OnInit {
 
     const experienceForm = new FormGroup({
       industry: new FormControl(experience && experience.industry ? experience.industry.industry_name : '', [Validators.required]),
-      years: new FormControl(experience && experience.years ? experience.years : ''),
+      years: new FormControl(experience && experience.years ? experience.years : '', [Validators.required]),
       description: new FormControl(experience && experience.description ? experience.description : ''),
       skills_trained: new FormControl('')
     });
@@ -746,7 +748,7 @@ export class CreatePositionComponent implements OnInit {
     });
     experienceForm.get('years').valueChanges.subscribe(
       (years) => {
-        this.preferred_work_experiences[arrIndex].years = years ? parseInt(years, 10) : null;
+        this.preferred_work_experiences[arrIndex].years = years && this.integerRegex.test(years) ? parseInt(years, 10) : null;
       }
     );
     experienceForm.get('description').valueChanges.subscribe(
@@ -801,11 +803,6 @@ export class CreatePositionComponent implements OnInit {
     } else {
       return true;
     }
-  }
-
-  onExperienceYearSelect(date: any, index: number, datePicker: MatDatepicker<any>) {
-    datePicker.close();
-    this.preferredWorkExperienceFormArray.at(index).get('years').setValue(this.helperService.convertToFormattedString(date, 'YYYY'));
   }
 
   onSelectSkillsTrained(formIndex: number, skill: Skill) {

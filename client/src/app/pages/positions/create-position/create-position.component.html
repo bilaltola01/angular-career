@@ -284,17 +284,10 @@
         </div>
         <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
-            <mat-label>Years</mat-label>
-            <input matInput placeholder="YYYY" type="text" formControlName="years" pattern="\d{4}">
-            <input class="hide" [matDatepicker]="experience_years" [max]="currentDate">
-            <mat-datepicker-toggle matSuffix [for]="experience_years"></mat-datepicker-toggle>
-            <mat-datepicker
-              touchUi
-              #experience_years
-              startView="multi-year"
-              (yearSelected)="onExperienceYearSelect($event, i, experience_years)"
-            >
-            </mat-datepicker>
+            <mat-label>Years *</mat-label>
+            <input matInput placeholder="Years *" type="text" formControlName="years" pattern="^\d+$">
+            <mat-icon matSuffix *ngIf="preferredWorkExperienceFormArray.at(i).get('years').valid">done</mat-icon>
+            <mat-icon matSuffix class="error-field" *ngIf="!preferredWorkExperienceFormArray.at(i).get('years').valid && preferredWorkExperienceFormArray.at(i).get('years').touched">close</mat-icon>
           </mat-form-field>
         </div>
         <div class="profile-form__field textarea">
