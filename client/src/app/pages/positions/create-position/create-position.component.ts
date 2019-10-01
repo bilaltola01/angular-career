@@ -202,7 +202,7 @@ export class CreatePositionComponent implements OnInit {
       return;
     } else if (this.selectedPageIndex === 1 && !(this.positionBasicInfoForm.valid && this.position_company && this.position_level && this.position_type && this.onCheckCityValidation() && this.onCheckStateValidation() && this.onCheckRecruiterValidation())) {
       return;
-    } else if (this.selectedPageIndex === 3 && !(this.preferredWorkExperienceFormArray.valid && this.onCheckAllIndustriesValidation())) {
+    } else if (this.selectedPageIndex === 3 && !((this.preferred_work_experiences && this.preferred_work_experiences.length === 1 && !this.preferredWorkExperienceFormArray.at(0).value.industry && !this.preferredWorkExperienceFormArray.at(0).value.years && !this.preferredWorkExperienceFormArray.at(0).value.description && !this.preferred_work_experiences[0].skills_trained) || (this.preferredWorkExperienceFormArray.valid && this.onCheckAllIndustriesValidation()))) {
       return;
     }
     ++this.selectedPageIndex;
