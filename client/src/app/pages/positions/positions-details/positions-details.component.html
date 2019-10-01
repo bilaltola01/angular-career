@@ -155,10 +155,11 @@
                   <img src="assets/icons/ic_location.svg">
                   <span class="image" *ngIf="info.locations ; else noLocations" >
                     <span *ngFor="let location of info.locations  | slice : 0 : 1;" >
-                    {{location.city }},
-                    {{location.state }},
-                    {{location.country }} +
-                    {{info.locations?.length-1}} locations
+                    <span *ngIf="location.city">{{location.city}},&nbsp;</span>
+                    <span *ngIf="location.state" >{{ location.state }},&nbsp;</span>
+                    <span>{{location.country }} <span *ngIf="info.locations?.length > 1"> +
+                    {{info.locations?.length-1}} locations </span>
+                    </span>
                   </span>
                 </span>
                 <ng-template #noLocations>
@@ -218,11 +219,8 @@
               <mat-grid-tile>
                 <div class="card-item" >
                   <span>Application Deadline</span>
-                  <p *ngIf="info.end_date; else noDate">{{info.end_date |  date: 'MMM d, y'}}</p>
+                  <p>{{info.application_deadline |  date: 'MMM d, y'}}</p>
                 </div>
-                <ng-template #noDate>
-                  <p class="noLocation">N/A</p>
-                </ng-template>
               </mat-grid-tile>
               <mat-grid-tile>
                 <div class="card-item">
@@ -437,11 +435,13 @@
           <h3>School Restrictions</h3>
           <div class="position-prefer-interest">
             <p>Applicants should be currently enrolled or alumni of the following schools.</p>
-            <div class="skil-height-fix">
-              <div class="skills-preferred-m" *ngFor="let res_school of restrictedSchools ">
-                <simple-tag type="gray" title="{{res_school.school_name}}">
+            <div class="skil-height-fix" *ngIf="displayIndustryLimit; let limit">
+              <div class="skills-preferred-m" *ngFor="let res_school of restrictedSchools; let i = index; ">
+                <simple-tag type="gray" *ngIf="i < limit"title="{{res_school.school_name}}">
                 </simple-tag>
               </div>
+              <img *ngIf="limit < restrictedSchools?.length" (click)="limit = limit + displayIndustryLimit"
+                  src="assets/icons/ic_more.svg" alt="See More">
             </div>
           </div>
         </div>

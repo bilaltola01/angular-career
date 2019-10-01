@@ -46,6 +46,8 @@ $profile-form-field-mt: 30px;
             border-top-left-radius: 5px;
             border-top-right-radius: 5px;
             padding: 30px 20px 20px;
+
+
           }
 
           & .job-top-list {
@@ -821,6 +823,7 @@ $profile-form-field-mt: 30px;
             }
           }
           .row {
+            padding: 30px 20px 30px;
             h1 {
               font-size: 26px;
             }
@@ -968,7 +971,10 @@ $profile-form-field-mt: 30px;
           }
 
           & .row {
-            padding: 25px 10px;
+            padding: 30px 10px;
+            &.position-detail{
+              padding: 30px 10px;
+            }
             h1 {
               font-size: 18px;
               margin-top: 3px;
@@ -978,6 +984,9 @@ $profile-form-field-mt: 30px;
               text-overflow: ellipsis;
               white-space: nowrap;
               // margin-bottom: 18px;
+            }
+            h3{
+              font-size: 18px;
             }
 
             & .position-right {
@@ -1008,6 +1017,9 @@ $profile-form-field-mt: 30px;
                   margin-bottom: 6px;
                   word-wrap: break-word;
                   display: block;
+                  span{
+                    display: initial;
+                  }
                 }
               }
             }
@@ -1015,8 +1027,12 @@ $profile-form-field-mt: 30px;
             & .card {
               & .card-item {
                 padding: 18px 5px 12px 5px;
-                min-height: 60px;
+                min-height: 70px;
                 & span {
+                  font-size: 12px;
+                  line-height: initial;
+                }
+                p{
                   font-size: 13px;
                 }
               }

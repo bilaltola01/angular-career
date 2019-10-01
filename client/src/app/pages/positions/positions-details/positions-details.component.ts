@@ -70,7 +70,7 @@ export class PositionsDetailsComponent implements OnInit {
     this.filter_list = false;
   }
   onResize(event) {
-    this.breakpoint = (event.target.innerWidth <= 500) ? 2 : 6;
+    this.breakpoint = (event.target.innerWidth <= 500) ? 2 : 4;
   }
   toggleTabOpen() {
     this.filter_list = !this.filter_list;
@@ -335,7 +335,7 @@ export class PositionsDetailsComponent implements OnInit {
     this.differenceInDays = differenceInTime / (1000 * 3600 * 24);
   }
   scrollSmoothTo(id) {
-    const height = 70;
+    const height = 90;
     document.getElementById('sidenav-content').scrollTop = document.getElementById(id).offsetTop - height;
     this.filter_list = false;
   }

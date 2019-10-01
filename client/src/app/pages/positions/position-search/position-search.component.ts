@@ -129,7 +129,7 @@ export class PositionSearchComponent implements OnInit {
   }
 
   onResize(event) {
-    this.breakpoint = (event.target.innerWidth <= 500) ? 2 : 6;
+    this.breakpoint = (event.target.innerWidth <= 500) ? 2 : 4;
   }
 
   toggleTabMenuOpen() {
@@ -190,7 +190,8 @@ export class PositionSearchComponent implements OnInit {
       'recruiter': this.urlParams['recruiterName'],
       'school': this.urlParams['schoolName'],
       'industry': this.urlParams['industryName'],
-      'city': this.urlParams['cityName']
+      'city': this.urlParams['cityName'],
+      'sortBy': this.urlParams['sort']
     });
   }
 

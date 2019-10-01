@@ -51,6 +51,7 @@ export class PositionService {
     return throwError({ success: false, message: errorMessage });
   }
 
+
   public getPosition(queryParam): Observable<any> {
     let queryUrl = `${this.position_service_url}full-position`;
     if (queryParam) {

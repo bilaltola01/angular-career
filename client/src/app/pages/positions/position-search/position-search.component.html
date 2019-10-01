@@ -264,9 +264,11 @@
                   <span class="image"
                     *ngIf="job.locations; else noLocation">
                     <span *ngFor="let location of job.locations | slice : 0 : 1;">
-                    {{location.city }},
-                    {{location.state }},
-                    {{location.country }} + {{job.locations?.length -1}} locations
+                      <span *ngIf="location.city">{{location.city}},&nbsp;</span>
+                      <span *ngIf="location.state" >{{ location.state }},&nbsp;</span>
+                      <span>{{location.country }} <span *ngIf="job.locations?.length > 1"> +
+                      {{job.locations?.length-1}} locations </span>
+                      </span>
                   </span>
                 </span>
                   <ng-template #noLocation>
