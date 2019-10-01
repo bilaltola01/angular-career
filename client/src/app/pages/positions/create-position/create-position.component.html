@@ -350,7 +350,7 @@
           </mat-autocomplete>
         </mat-form-field>
         <div *ngIf="temp_minimum_skill" class="skills">
-          <simple-tag type="gray" title="{{temp_minimum_skill.skillItem.skill}}" ellipseTag="true" isControl="true" value="{{temp_minimum_skill.skillItem.skill_level}}" (levelChanged)="onLevelChanged($event, temp_minimum_skill.index, true)" (removeClick)="onRemoveMinimumSkill(temp_skill.skillItem, temp_skill.index)"></simple-tag>
+          <simple-tag type="gray" title="{{temp_minimum_skill.skillItem.skill}}" ellipseTag="true" isControl="true" value="{{temp_minimum_skill.skillItem.skill_level}}" (levelChanged)="onLevelChanged($event, temp_minimum_skill.index, true)" (removeClick)="onRemoveMinimumSkill(temp_minimum_skill.skillItem, temp_minimum_skill.index)"></simple-tag>
           <mat-icon (click)="editSkillDone(true)">cancel</mat-icon>
         </div>
         <div *ngIf="!temp_minimum_skill && minimum_skills && minimum_skills.length > 0" class="skills">
@@ -370,7 +370,7 @@
           </mat-autocomplete>
         </mat-form-field>
         <div *ngIf="temp_preferred_skill" class="skills">
-          <simple-tag type="gray" title="{{temp_preferred_skill.skillItem.skill}}" ellipseTag="true" isControl="true" value="{{temp_preferred_skill.skillItem.skill_level}}" (levelChanged)="onLevelChanged($event, temp_preferred_skill.index, false)" (removeClick)="onRemovePreferredSkill(temp_skill.skillItem, temp_skill.index)"></simple-tag>
+          <simple-tag type="gray" title="{{temp_preferred_skill.skillItem.skill}}" ellipseTag="true" isControl="true" value="{{temp_preferred_skill.skillItem.skill_level}}" (levelChanged)="onLevelChanged($event, temp_preferred_skill.index, false)" (removeClick)="onRemovePreferredSkill(temp_preferred_skill.skillItem, temp_preferred_skill.index)"></simple-tag>
           <mat-icon (click)="editSkillDone(false)">cancel</mat-icon>
         </div>
         <div *ngIf="!temp_preferred_skill && preferred_skills && preferred_skills.length > 0" class="skills">

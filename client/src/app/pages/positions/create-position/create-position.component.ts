@@ -177,7 +177,7 @@ export class CreatePositionComponent implements OnInit {
     this.minDate.setDate(this.currentDate.getDate() + 1);
     this.isTabMenuOpen = false;
     this.isNavMenuOpened = false;
-    this.selectedPageIndex = 3;
+    this.selectedPageIndex = 4;
     this.initializeFormsByPageIndex();
   }
 
@@ -941,6 +941,7 @@ export class CreatePositionComponent implements OnInit {
     if (this.minimum_skills.length === 0) {
       this.minimum_skills = null;
     }
+    this.temp_minimum_skill = null;
   }
 
   onSelectPreferredSkill(skill: Skill) {
@@ -976,13 +977,20 @@ export class CreatePositionComponent implements OnInit {
     if (this.preferred_skills.length === 0) {
       this.preferred_skills = null;
     }
+    this.temp_preferred_skill = null;
   }
 
   onLevelChanged(level: number, index: number, is_minimum_skill: boolean) {
     if (is_minimum_skill) {
       this.minimum_skills[index].skill_level = level;
+      if (this.temp_minimum_skill) {
+        this.temp_minimum_skill.skillItem = this.minimum_skills[index];
+      }
     } else {
       this.preferred_skills[index].skill_level = level;
+      if (this.temp_preferred_skill) {
+        this.temp_preferred_skill.skillItem = this.preferred_skills[index];
+      }
     }
   }
 
