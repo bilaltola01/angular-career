@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {
   UserService,
   AlertsService,
-  AlertType,
-  HelperService
+  AlertType
 } from 'src/app/services';
 
 @Component({
@@ -18,20 +18,22 @@ export class PasswordComponent implements OnInit {
   passwordResetForm: FormGroup;
 
   passwordStrength: string;
+  is_done: Boolean;
 
   strongRegex = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})');
   mediumRegex = new RegExp('^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})');
 
 
   constructor (
+    private router: Router,
     private userService: UserService,
-    private alertsService: AlertsService,
-    private helperService: HelperService
+    private alertsService: AlertsService
   ) { }
 
   ngOnInit() {
     this.passwordStrength = 'weak';
     this.initPasswordResetForm();
+    this.is_done = false;
   }
 
   initPasswordResetForm() {
@@ -64,15 +66,23 @@ export class PasswordComponent implements OnInit {
       this.userService.resetPassword(newPasswordInfo).subscribe(
         data => {
           if (data['success']) {
-            console.log(data['message']);
+            this.is_done = true;
+            localStorage.removeItem('token');
           }
         },
         error => {
-          console.log(error['message']);
           this.alertsService.show(error.message, AlertType.error);
         }
       );
     }
+  }
+
+  clickCancel() {
+    this.router.navigate(['/']);
+  }
+
+  goToLoginPage() {
+    this.router.navigate(['/login']);
   }
 
 }
