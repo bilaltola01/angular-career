@@ -491,6 +491,8 @@ action-button {
   &.update-btn {
     margin-top: 20px;
     min-width: 150px;
+    margin-left: 10px;
+    margin-right: 10px;
   }
 
   &.contact-btn {
@@ -521,7 +523,7 @@ action-button {
     position: relative;
     border-radius: 20px;
     margin: 0 40px;
-    template-dialog,profile-dialog, add-skill-popup, app-skill-description-popup,
+    template-dialog,profile-dialog, create-position-dialog, add-skill-popup, app-skill-description-popup,
     dialog-content {
       width: 100%;
       @include flex(column, center, flex-start);

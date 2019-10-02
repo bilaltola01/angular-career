@@ -329,7 +329,7 @@
   </div>
   <div class="container__full">
     <action-button class="btn-next" type="flat" title="Next" color="primary" [disabled]="!((preferred_work_experiences && preferred_work_experiences.length ===1 && !preferredWorkExperienceFormArray.at(0).value.industry && !preferredWorkExperienceFormArray.at(0).value.years && !preferredWorkExperienceFormArray.at(0).value.description && !preferred_work_experiences[0].skills_trained) || (preferredWorkExperienceFormArray.valid && onCheckAllIndustriesValidation()))" (click)="goToNextPage()" ></action-button>
-    <action-button class="btn-next btn-quit" type="stroked" title="Quit" (click)="onClickQuit()"></action-button>
+    <action-button class="btn-next btn-quit" type="stroked" title="Quit" (click)="openDialog(false)"></action-button>
   </div>
 </div>
 <!-- Preferred Work Experience End -->

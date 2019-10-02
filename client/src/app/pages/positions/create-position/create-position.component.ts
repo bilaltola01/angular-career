@@ -1,7 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
-import {MatDatepicker} from '@angular/material/datepicker';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA
+} from '@angular/material/dialog';
 import {
   AutoCompleteService,
   CompanyService,
@@ -48,6 +52,10 @@ export interface PreferredWorkExperience {
 export interface EditSkillItem {
   index: number;
   skillItem: UserSkillItem;
+}
+
+export interface DialogData {
+  is_template: Boolean;
 }
 
 @Component({
@@ -165,10 +173,12 @@ export class CreatePositionComponent implements OnInit {
   position: PositionInfoResponse;
 
   constructor(
+    private router: Router,
     private alertsService: AlertsService,
     public helperService: HelperService,
     public autoCompleteService: AutoCompleteService,
-    private positionService: PositionService
+    private positionService: PositionService,
+    public dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -1306,7 +1316,57 @@ export class CreatePositionComponent implements OnInit {
   }
 
   onClickQuit() {
-    
+    this.openDialog(false);
   }
 
+  openDialog(is_template: Boolean) {
+    // tslint:disable-next-line: no-use-before-declare
+    const dialgoRef = this.dialog.open(CreatePositionDialogComponent, {
+      data: {
+        is_template: is_template
+      },
+      width: '100vw',
+      maxWidth: '880px',
+      minWidth: '280px',
+      panelClass: ['edit-dialog-container']
+    });
+    dialgoRef.afterClosed().subscribe(result => {
+      if (result) {
+        if (result.is_quit) {
+          this.router.navigate(['/positions']);
+        }
+      }
+    });
+  }
+
+}
+
+@Component({
+  selector: 'create-position-dialog',
+  templateUrl: './create-position-dialog.component.html',
+  styleUrls: ['./create-position-dialog.component.scss'],
+})
+
+export class CreatePositionDialogComponent {
+
+  constructor(
+    public dialogRef: MatDialogRef<CreatePositionDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData
+  ) {
+    if (data.is_template) {
+      this.initTemplateForm();
+    }
+  }
+
+  initTemplateForm() {
+
+  }
+
+  onClickQiut() {
+    this.dialogRef.close({is_quit: true});
+  }
+
+  onClose(): void {
+    this.dialogRef.close();
+  }
 }
