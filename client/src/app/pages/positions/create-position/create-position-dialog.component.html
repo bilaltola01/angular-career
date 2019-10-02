@@ -2,19 +2,27 @@
 <h3 mat-dialog-title>{{data.is_template ? 'Save as template' : 'Are you sure you want to quit?'}}</h3>
 
 
-<ng-container >
+<ng-container *ngIf="!data.is_template" >
   <mat-dialog-content>
-    <!-- <div class="form-field">
-      <mat-form-field class="bg-transparent" appearance="fill">
-        <mat-label>GPA</mat-label>
-        <input matInput placeholder="GPA" formControlName="gpa" type="text">
-      </mat-form-field>
-    </div> -->
     <p class="description">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore.</p>
   </mat-dialog-content>
   <mat-dialog-actions>
     <action-button class="update-btn" type="flat" color="primary" title="No" (click)="onClose()"></action-button>
     <action-button class="update-btn" type="stroked" title="Yes" (click)="onClickQiut()"></action-button>
+  </mat-dialog-actions>
+</ng-container>
+
+<ng-container *ngIf="data.is_template" [formGroup]="templateNameForm">
+  <mat-dialog-content>
+    <div class="form-field">
+      <mat-form-field class="bg-transparent" appearance="fill">
+        <mat-label>Template Name *</mat-label>
+        <input matInput placeholder="Template Name *" formControlName="template_name" type="text">
+      </mat-form-field>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <action-button class="update-btn" type="flat" color="primary" title="Save As Template" [disabled]="!(templateNameForm.valid && template_name)" (click)="onClickSave()"></action-button>
   </mat-dialog-actions>
 </ng-container>
 

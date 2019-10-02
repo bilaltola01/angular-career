@@ -163,7 +163,7 @@ export class PositionService {
       );
   }
 
-  public getPostTemplates(): Observable<any> {
+  public getPositionTemplates(): Observable<any> {
     return this.http.get(this.position_management_service_url + 'position-templates', this.authHttpOptions())
       .pipe(
         map(
@@ -175,7 +175,7 @@ export class PositionService {
       );
   }
 
-  public postPostTemplate(positionTemplateInfo: any): Observable<any> {
+  public postPositionTemplate(positionTemplateInfo: any): Observable<any> {
     return this.http.post(this.position_management_service_url + 'position-template', positionTemplateInfo, this.authHttpOptions())
       .pipe(
         map(
@@ -187,7 +187,7 @@ export class PositionService {
       );
   }
 
-  public patchPostTemplate(positionTemplateInfo: any): Observable<any> {
+  public patchPositionTemplate(positionTemplateInfo: any): Observable<any> {
     return this.http.patch(this.position_management_service_url + 'position-template', positionTemplateInfo, this.authHttpOptions())
       .pipe(
         map(
@@ -199,7 +199,7 @@ export class PositionService {
       );
   }
 
-  public getPostTemplatesById(positionTemplateId: number): Observable<any> {
+  public getPositionTemplatesById(positionTemplateId: number): Observable<any> {
     return this.http.get(this.position_management_service_url + `position-template/${positionTemplateId}`, this.authHttpOptions())
       .pipe(
         map(
@@ -211,7 +211,7 @@ export class PositionService {
       );
   }
 
-  public getPostTemplateInfoById(positionTemplateId: number): Observable<any> {
+  public getPositionTemplateInfoById(positionTemplateId: number): Observable<any> {
     return this.http.get(this.position_management_service_url + `position-template/${positionTemplateId}/template-info`, this.authHttpOptions())
       .pipe(
         map(

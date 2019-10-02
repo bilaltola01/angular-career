@@ -23,3 +23,22 @@ mat-dialog-actions {
   margin-top: 20px;
   color: rgba(map-get($md-cfaccent, 500), .84);
 }
+
+.form-field {
+  margin-top: 30px;
+  box-sizing: border-box;
+  width: 100%;
+  border: solid 1px $mat-form-border-color;
+  border-radius: 5px;
+  padding: 0;
+  mat-form-field {
+    width: 100%;
+    img {
+      width: 30px;
+      height: 30px;
+    }
+    input.hide {
+      display: none;
+    }
+  }
+}

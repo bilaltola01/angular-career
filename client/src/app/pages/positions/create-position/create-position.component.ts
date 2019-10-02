@@ -56,6 +56,7 @@ export interface EditSkillItem {
 
 export interface DialogData {
   is_template: Boolean;
+  template_name: string;
 }
 
 @Component({
@@ -1140,6 +1141,7 @@ export class CreatePositionComponent implements OnInit {
           const position_id = this.position.position_id;
 
           if (this.position && this.position.position_id) {
+            this.openDialog(true, this.position.position);
             if (this.preferred_education_levels && this.preferred_education_levels.length > 0) {
               this.addPreferredEducationLevels(position_id);
             }
@@ -1309,6 +1311,21 @@ export class CreatePositionComponent implements OnInit {
     );
   }
 
+  saveAsPositionTemplate(position_template_name: string) {
+    const info = {
+      position_id: this.position.position_id,
+      position_template_name: position_template_name
+    };
+    this.positionService.postPositionTemplate(info).subscribe(
+      dataJson => {
+        console.log(dataJson.data);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
   backToEdit() {
     this.selectedPageIndex = 0;
     this.isNavMenuOpened = false;
@@ -1319,11 +1336,12 @@ export class CreatePositionComponent implements OnInit {
     this.openDialog(false);
   }
 
-  openDialog(is_template: Boolean) {
+  openDialog(is_template: Boolean, template_name?: string) {
     // tslint:disable-next-line: no-use-before-declare
     const dialgoRef = this.dialog.open(CreatePositionDialogComponent, {
       data: {
-        is_template: is_template
+        is_template: is_template,
+        template_name: template_name ? template_name : null
       },
       width: '100vw',
       maxWidth: '880px',
@@ -1332,8 +1350,11 @@ export class CreatePositionComponent implements OnInit {
     });
     dialgoRef.afterClosed().subscribe(result => {
       if (result) {
-        if (result.is_quit) {
+        if (result.quit) {
           this.router.navigate(['/positions']);
+        }
+        if (result.save_template && result.template_name) {
+          this.saveAsPositionTemplate(result.template_name);
         }
       }
     });
@@ -1349,8 +1370,12 @@ export class CreatePositionComponent implements OnInit {
 
 export class CreatePositionDialogComponent {
 
+  templateNameForm: FormGroup;
+  template_name: string;
+
   constructor(
     public dialogRef: MatDialogRef<CreatePositionDialogComponent>,
+    private helperService: HelperService,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {
     if (data.is_template) {
@@ -1359,11 +1384,24 @@ export class CreatePositionDialogComponent {
   }
 
   initTemplateForm() {
+    this.template_name = this.data.template_name;
+    this.templateNameForm = new FormGroup({
+      template_name: new FormControl(this.data.template_name ? this.data.template_name : '')
+    });
 
+    this.templateNameForm.get('template_name').valueChanges.subscribe((template_name) => {
+      this.template_name = template_name && this.helperService.checkSpacesString(template_name) ? template_name : null;
+    });
+  }
+
+  onClickSave() {
+    if (this.templateNameForm.valid && this.template_name) {
+      this.dialogRef.close({save_template: true, template_name: this.template_name});
+    }
   }
 
   onClickQiut() {
-    this.dialogRef.close({is_quit: true});
+    this.dialogRef.close({quit: true});
   }
 
   onClose(): void {
