@@ -553,10 +553,10 @@
       </ng-container>
     </div>
 
-    <div *ngIf="preferred_work_experiences && preferred_work_experiences.length > 0" class="row" id="position-exp">
+    <div *ngIf="preferred_work_experiences && preferred_work_experiences.length > 0 && preferred_work_experiences[0].industry && preferred_work_experiences[0].years" class="row" id="position-exp">
       <h3>Preferred Experience</h3>
       <ng-container *ngFor="let experience of preferred_work_experiences; let i = index;">
-        <h4>{{experience.industry.industry_name}} {{experience.years ? '(since ' + experience.years + ')' : ''}}</h4>
+        <h4>{{experience.industry.industry_name}} {{'(' + experience.years + ' years)'}}</h4>
         
         <ng-container *ngIf="experience.skills_trained && experience.skills_trained.length > 0">
           <h5>Preferred Skills Trained {{experience.skills_trained.length}}</h5>
@@ -572,7 +572,7 @@
           <p *ngIf="experience.description" class="description"  [class.short-desc]="short_desc && experience.description.length > helperService.shortDescLength">{{short_desc ? helperService.shortDescription(experience.description) : experience.description }}</p>
           <a *ngIf="experience.description && experience.description.length > helperService.shortDescLength" (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
         </ng-container>
-        <mat-divider *ngIf="(i < preferred_work_experiences.length - 1) || editMode"></mat-divider>
+        <mat-divider *ngIf="(i < preferred_work_experiences.length - 1)"></mat-divider>
       </ng-container>
     </div>
 

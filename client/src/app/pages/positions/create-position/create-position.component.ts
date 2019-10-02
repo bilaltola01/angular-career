@@ -164,8 +164,6 @@ export class CreatePositionComponent implements OnInit {
 
   position: PositionInfoResponse;
 
-  integerRegex = new RegExp('^\d+$');
-
   constructor(
     private alertsService: AlertsService,
     public helperService: HelperService,
@@ -748,7 +746,7 @@ export class CreatePositionComponent implements OnInit {
     });
     experienceForm.get('years').valueChanges.subscribe(
       (years) => {
-        this.preferred_work_experiences[arrIndex].years = years && this.integerRegex.test(years) ? parseInt(years, 10) : null;
+        this.preferred_work_experiences[arrIndex].years = years && this.preferredWorkExperienceFormArray.at(arrIndex).get('years').valid ? parseInt(years, 10) : null;
       }
     );
     experienceForm.get('description').valueChanges.subscribe(
