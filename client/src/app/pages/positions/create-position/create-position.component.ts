@@ -1305,4 +1305,8 @@ export class CreatePositionComponent implements OnInit {
     this.initializeFormsByPageIndex();
   }
 
+  onClickQuit() {
+    
+  }
+
 }

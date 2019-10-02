@@ -42,7 +42,8 @@
 
 	<div class="container__full">
 		<action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!(nameOverviewForm.valid && helperService.checkSpacesString(nameOverviewForm.value.position_name))">
-		</action-button>
+    </action-button>
+    <action-button class="btn-next btn-quit" type="stroked" title="Quit" (click)="onClickQuit()"></action-button>
 	</div>
 </div>
 
@@ -165,6 +166,7 @@
   </div>
   <div class="container__full">
     <action-button class="btn-next" type="flat" title="Next" color="primary" [disabled]="!(positionBasicInfoForm.valid && position_company && position_level && position_type &&  onCheckCompanyValidation() && onCheckCityValidation() && onCheckStateValidation() && onCheckRecruiterValidation())" (click)="goToNextPage()"></action-button>
+    <action-button class="btn-next btn-quit" type="stroked" title="Quit" (click)="onClickQuit()"></action-button>
   </div>
 </div>
   
@@ -257,6 +259,7 @@
   </div>
   <div class="container__full">
     <action-button class="btn-next" type="flat" title="Next" color="primary" [disabled]="!preferredEducationForm.valid" (click)="goToNextPage()"></action-button>
+    <action-button class="btn-next btn-quit" type="stroked" title="Quit" (click)="onClickQuit()"></action-button>
   </div>
 </div>
 <!-- Perferred Education End -->
@@ -326,6 +329,7 @@
   </div>
   <div class="container__full">
     <action-button class="btn-next" type="flat" title="Next" color="primary" [disabled]="!((preferred_work_experiences && preferred_work_experiences.length ===1 && !preferredWorkExperienceFormArray.at(0).value.industry && !preferredWorkExperienceFormArray.at(0).value.years && !preferredWorkExperienceFormArray.at(0).value.description && !preferred_work_experiences[0].skills_trained) || (preferredWorkExperienceFormArray.valid && onCheckAllIndustriesValidation()))" (click)="goToNextPage()" ></action-button>
+    <action-button class="btn-next btn-quit" type="stroked" title="Quit" (click)="onClickQuit()"></action-button>
   </div>
 </div>
 <!-- Preferred Work Experience End -->
@@ -381,6 +385,7 @@
   </div>
   <div class="container__full">
     <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
+    <action-button class="btn-next btn-quit" type="stroked" title="Quit" (click)="onClickQuit()"></action-button>
   </div>
 </div>
 <!-- Skills End -->
@@ -411,6 +416,7 @@
   </div>
   <div class="container__full">
     <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
+    <action-button class="btn-next btn-quit" type="stroked" title="Quit" (click)="onClickQuit()"></action-button>
   </div>
 </div>
 <!-- Interests End -->
@@ -441,6 +447,7 @@
   </div>
   <div class="container__full">
     <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
+    <action-button class="btn-next btn-quit" type="stroked" title="Quit" (click)="onClickQuit()"></action-button>
   </div>
 </div>
 <!-- Preferred Schools End -->
@@ -640,7 +647,7 @@
           <li *ngIf="position_desc" (click)="onSelectNavItem('position-info')">Position Information</li>
           <li *ngIf="position_desc" (click)="onSelectNavItem('position-desc')">Job Description</li>
           <li *ngIf="(preferred_education_levels && preferred_education_levels.length > 0) || preferred_education_major || (preferred_education_major_categories && preferred_education_major_categories.length > 0)" (click)="onSelectNavItem('position-edu')">Education Level</li>
-          <li *ngIf="preferred_work_experiences && preferred_work_experiences.length > 0" (click)="onSelectNavItem('position-exp')">Preferred Experience</li>
+          <li *ngIf="preferred_work_experiences && preferred_work_experiences.length > 0 && preferred_work_experiences[0].industry && preferred_work_experiences[0].years" (click)="onSelectNavItem('position-exp')">Preferred Experience</li>
           <li *ngIf="(minimum_skills && minimum_skills.length > 0) || (preferred_skills && preferred_skills.length > 0)" (click)="onSelectNavItem('position-skills')">Preferred & Required Skills</li>
           <li *ngIf="preferred_interests && preferred_interests.length > 0" (click)="onSelectNavItem('position-interests')">Preferred Interests</li>
           <li *ngIf="preferred_schools && preferred_schools.length > 0" (click)="onSelectNavItem('position-school')">School Restrictions</li>
