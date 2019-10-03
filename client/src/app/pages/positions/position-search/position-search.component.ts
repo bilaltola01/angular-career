@@ -151,7 +151,9 @@ export class PositionSearchComponent implements OnInit {
       'school': new FormControl(null),
       'recruiter': new FormControl(null),
       'sortBy': new FormControl('qualification')
+
     });
+
     this.positionForm.get('searchPosition').valueChanges.subscribe((searchPosition) => {
       searchPosition ? this.onSearchPositionValueChanges(searchPosition) : this.autocomplete_searchposition = [];
     });
@@ -179,6 +181,7 @@ export class PositionSearchComponent implements OnInit {
     this.positionForm.get('recruiter').valueChanges.subscribe((recruiter) => {
       recruiter ? this.onRecruiterValueChanges(recruiter) : this.autocomplete_recruiter = [];
     });
+    if (this.searchQueryParam) {
     this.positionForm.patchValue({
       'searchPosition': this.urlParams['position'],
       'minSal': this.urlParams['pay'],
@@ -193,6 +196,7 @@ export class PositionSearchComponent implements OnInit {
       'city': this.urlParams['cityName'],
       'sortBy': this.urlParams['sort']
     });
+  }
   }
 
   onChangeCity(city) {
@@ -432,8 +436,11 @@ export class PositionSearchComponent implements OnInit {
 
     }
     return queryString;
+
   }
   getJobData(offset?) {
+    this.prequeryFlag = true;
+    this.offsetFlag = false;
     this.selectedAllFlag = false;
 
     if (this.preLoadDataObject[this.currentPageNumber]) {
