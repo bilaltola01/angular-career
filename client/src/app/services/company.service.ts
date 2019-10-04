@@ -34,6 +34,19 @@ export class CompanyService {
       );
   }
 
+  public getCompanyById(companyId: number): Observable<any> {
+    return this.http.get(this.company_service_url + `company/${companyId}`, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
+
   public postCompany(companyInfo: any): Observable<any> {
     return this.http.post(this.company_service_url + 'company', companyInfo, this.authHttpOptions())
       .pipe(

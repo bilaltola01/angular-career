@@ -39,7 +39,8 @@ import {
   Interest,
   School,
   Industry,
-  UserSkillItem
+  UserSkillItem,
+  CompanyInfoResponse
 } from 'src/app/models';
 
 export interface PreferredWorkExperience {
@@ -144,6 +145,7 @@ export class CreatePositionComponent implements OnInit {
   position_name: string;
   position_desc: string;
   position_company: Company;
+  position_company_info: CompanyInfoResponse;
   position_city: City;
   position_state: State;
   position_country: number;
@@ -179,6 +181,7 @@ export class CreatePositionComponent implements OnInit {
     public helperService: HelperService,
     public autoCompleteService: AutoCompleteService,
     private positionService: PositionService,
+    private companyService: CompanyService,
     public dialog: MatDialog
   ) { }
 
@@ -186,7 +189,7 @@ export class CreatePositionComponent implements OnInit {
     this.minDate.setDate(this.currentDate.getDate() + 1);
     this.isTabMenuOpen = false;
     this.isNavMenuOpened = false;
-    this.selectedPageIndex = 4;
+    this.selectedPageIndex = 0;
     this.initializeFormsByPageIndex();
   }
 
@@ -472,6 +475,16 @@ export class CreatePositionComponent implements OnInit {
 
   onSelectCompany(company: Company) {
     this.position_company = company;
+    this.companyService.getCompanyById(this.position_company.company_id).subscribe(
+      dataJson => {
+        if (dataJson['success']) {
+          this.position_company_info = dataJson['data'];
+        }
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
   }
 
   onBlurCompany() {
