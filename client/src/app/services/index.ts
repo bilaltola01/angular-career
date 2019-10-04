@@ -13,3 +13,5 @@ export * from './score.service';
 export * from './company.service';
 export * from './company-admin.service';
 export * from './company-recruiter.service';
+export * from './matching.service';
+

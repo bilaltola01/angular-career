@@ -12,8 +12,9 @@ export const environment = {
   application_service: 'application-service',
   position_service: 'position-service',
   cart_service: 'cart-service',
-  score_service: 'score-service',
+  matching_service: 'matching-service',
   company_service: 'companies-service',
+  score_service: 'score-service',
   recruiter_service: 'recruiter-service',
   company_admin_service: 'company-admin-service',
   api_version: 'v1'

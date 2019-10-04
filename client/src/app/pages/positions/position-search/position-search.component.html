@@ -13,10 +13,10 @@
     <div class="postion-search-header">
       <mat-form-field appearance="standard" class="search">
         <mat-icon matSuffix (click)="onSearchPosition($event)">search</mat-icon>
-        <input matInput placeholder="Search Position" type="text" [matAutocomplete]="autocompleteSearch"
-          formControlName="searchPosition" (keyup.enter)="onSearchPosition($event)">
+        <input matInput placeholder="Search Positions"  type="text" [matAutocomplete]="autocompleteSearch"
+          formControlName="searchPosition" (keyup.enter)="onSearchPosition($event)" >
         <mat-autocomplete #autocompleteSearch="matAutocomplete">
-          <mat-option *ngFor="let search of autocomplete_searchposition" [value]="search.position">
+          <mat-option *ngFor="let search of autocomplete_searchposition" [value]="search.position  ">
             <span>{{search.position}}</span>
           </mat-option>
         </mat-autocomplete>
@@ -34,7 +34,7 @@
         <div class="filter-card">
           <mat-form-field>
             <mat-label>City</mat-label>
-            <input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity" formControlName="city">
+            <input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity" formControlName="city" >
             <mat-autocomplete #autocompleteCity="matAutocomplete">
               <mat-option *ngFor="let city of autocomplete_cities" [value]="(city.city)?.split(',')[0]"
                 (onSelectionChange)="onChangeCity(city)">
@@ -47,7 +47,7 @@
           <mat-form-field>
             <mat-label>Skills</mat-label>
             <input matInput placeholder="Skills" type="text" [matAutocomplete]="autocompleteSkills"
-              formControlName="skill">
+              formControlName="skill" >
             <mat-autocomplete #autocompleteSkills="matAutocomplete">
               <mat-option *ngFor="let autocomplete_skill of autocomplete_skills" [value]="autocomplete_skill.skill"
                 (onSelectionChange)="addSkills(autocomplete_skill)">
@@ -55,22 +55,23 @@
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
-          <div *ngIf="userSkillsList.length > 0" class="skills">
-            <simple-tag *ngFor="let skillData of userSkillsList; let i = index" type="gray" removeTag="true"
-              title="{{skillData.skill}}" (click)="removeUserSkillsData(i)"></simple-tag>
-
-          </div>
+          <div *ngIf="userSkillsList.length > 0 ? userSkillsList.length > 0 : skillUrlParams.length > 0 " class="skills">
+              <simple-tag *ngFor="let skillData of userSkillsList; let i = index" type="gray" removeTag="true"
+                title="{{skillData.skill}}" (click)="removeUserSkillsData(i)"></simple-tag>
+                 <simple-tag *ngFor="let skillData of skillUrlParams; let i = index" type="gray" removeTag="true"
+                title="{{skillData}}" (click)="removeSkillUrlParams(i)"></simple-tag>
+            </div>
         </div>
         <div class="filter-card">
           <mat-form-field>
             <mat-label>Minimum Salary</mat-label>
-            <input matInput placeholder="Minimum Salary" type="number" formControlName="minSal">
+            <input matInput placeholder="Minimum Salary" type="number" formControlName="minSal" >
           </mat-form-field>
         </div>
         <div class="filter-card">
           <mat-form-field>
             <mat-label>Position Level</mat-label>
-            <mat-select class="arrow" formControlName="position">
+            <mat-select class="arrow" formControlName="position" >
               <mat-option value=''></mat-option>
               <mat-option *ngFor="let position of positionLevel" value="{{position}}">{{position}}
               </mat-option>
@@ -80,7 +81,7 @@
         <div class="filter-card">
           <mat-form-field>
             <mat-label>Education Level</mat-label>
-            <mat-select class="arrow" formControlName="education">
+            <mat-select class="arrow" formControlName="education"  >
               <mat-option value=''></mat-option>
               <mat-option *ngFor="let education of educationLevel" value="{{educationLevel.indexOf(education)}}">
                 {{education}}
@@ -91,7 +92,7 @@
         <div class="filter-card">
           <mat-form-field>
             <mat-label>Job Type</mat-label>
-            <mat-select class="arrow" formControlName="job">
+            <mat-select class="arrow" formControlName="job" >
               <mat-option value=''></mat-option>
               <mat-option *ngFor="let jobtype of jobType" value="{{jobtype}}">{{jobtype}}
               </mat-option>
@@ -115,7 +116,7 @@
           <mat-form-field>
             <mat-label>Industry </mat-label>
             <input matInput placeholder="Industry" type="text" [matAutocomplete]="autocompleteIndustry"
-              formControlName="industry">
+              formControlName="industry" >
             <mat-autocomplete #autocompleteIndustry="matAutocomplete">
               <mat-option *ngFor="let industry of autocomplete_additional_industries" [value]="industry.industry_name"
                 (onSelectionChange)="onChangeIndustry(industry)">
@@ -128,7 +129,7 @@
           <mat-form-field>
             <mat-label>Company </mat-label>
             <input matInput placeholder="Company" type="text" [matAutocomplete]="autocompleteCompany"
-              formControlName="company">
+              formControlName="company" >
             <mat-autocomplete #autocompleteCompany="matAutocomplete">
               <mat-option *ngFor="let company of autocomplete_companies" [value]="company.company_name">
                 <span>{{company.company_name}}</span>
@@ -140,7 +141,7 @@
           <mat-form-field>
             <mat-label>School</mat-label>
             <input matInput placeholder="School" type="text" [matAutocomplete]="autocompleteSchool"
-              formControlName="school">
+              formControlName="school" >
             <mat-autocomplete #autocompleteSchool="matAutocomplete">
               <mat-option *ngFor="let school of autocomplete_school" [value]="school.school_name"
                 (onSelectionChange)="onChangeSchool(school)">
@@ -153,7 +154,7 @@
           <mat-form-field>
             <mat-label>Recruiter</mat-label>
             <input matInput placeholder="Recruiter" type="text" [matAutocomplete]="autocompleterecruiter"
-              formControlName="recruiter">
+              formControlName="recruiter" >
             <mat-autocomplete #autocompleterecruiter="matAutocomplete">
               <mat-option *ngFor="let recruiter of autocomplete_recruiter"
                 value="{{recruiter.first_name }} {{  recruiter.last_name}}  "
@@ -223,7 +224,7 @@
         <div class="row" [ngClass]="{'selected': job.selected}">
           <round-checkbox id="test" [checked]="job.selected"
             (statusChange)="job.selected = !job.selected;selectedAllFlag=false;"></round-checkbox>
-          <h1 routerLink="../position/{{job.position_id}}">{{job.position}} </h1>
+          <h1  [routerLink]="['/positions/position-info/',job.position_id]" >{{job.position}} </h1>
           <div class="position-right">
             <div class="heart-icon">
               <img *ngIf="!appliedJobsMap[job.position_id] && !savedJobsMap[job.position_id]" (click)="saveJob([job])"
@@ -261,10 +262,15 @@
                 <li>
                   <img src="assets/icons/ic_location.svg">
                   <span class="image"
-                    *ngIf="job.hq_city_name && job.hq_state_name && job.hq_country_name; else noLocation">
-                    {{job.hq_city_name }},
-                    {{job.hq_state_name }},
-                    {{job.hq_country_name }}</span>
+                    *ngIf="job.locations; else noLocation">
+                    <span *ngFor="let location of job.locations | slice : 0 : 1;">
+                      <span *ngIf="location.city">{{location.city}},&nbsp;</span>
+                      <span *ngIf="location.state" >{{ location.state }},&nbsp;</span>
+                      <span>{{location.country }} <span *ngIf="job.locations?.length > 1"> +
+                      {{job.locations?.length-1}} locations </span>
+                      </span>
+                  </span>
+                </span>
                   <ng-template #noLocation>
                     <span>N/A</span>
                   </ng-template>
@@ -385,7 +391,7 @@
                     'Show Less'}}" color="primary" (click)="job.showMoreFlag = !job.showMoreFlag"></action-button>
             &nbsp;&nbsp;
             <action-button type="text" title="Go to Details Page" color="primary"
-              routerLink="../position/{{job.position_id}}" *ngIf="job.showMoreFlag"></action-button>
+            [routerLink]="['/positions/position-info/',job.position_id]" *ngIf="job.showMoreFlag"></action-button>
 
 
           </div>
