@@ -542,10 +542,12 @@
         </div>
       </ng-container>
 
-      <ng-container *ngIf="preferred_education_major">
+      <ng-container *ngIf="preferred_education_majors && preferred_education_majors.length > 0">
         <h5>Preferred Major</h5>
         <div class="skills">
-          <simple-tag type="gray" title="{{preferred_education_major.major_name}}"></simple-tag>
+          <ng-container *ngFor="let preferred_education_major of preferred_education_majors">
+            <simple-tag type="gray" title="{{preferred_education_major.major_name}}"></simple-tag>
+          </ng-container>
         </div>
       </ng-container>
 
