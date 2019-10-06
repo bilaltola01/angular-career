@@ -237,6 +237,9 @@ export class CreatePositionComponent implements OnInit {
       case 6:
         this.initSchoolRestrictionsForm();
         break;
+      case 7:
+        this.sortPreferredEducationLevels();
+        break;
       default:
         break;
     }
@@ -291,8 +294,17 @@ export class CreatePositionComponent implements OnInit {
       case 6:
         this.initSchoolRestrictionsForm();
         break;
+      case 7:
+        this.sortPreferredEducationLevels();
+        break;
       default:
         break;
+    }
+  }
+
+  sortPreferredEducationLevels() {
+    if (this.preferred_education_levels && this.preferred_education_levels.length > 2) {
+      this.preferred_education_levels.sort((a, b) => (a.level > b.level) ? 1 : ((b.level > a.level) ? -1 : 0));
     }
   }
 
