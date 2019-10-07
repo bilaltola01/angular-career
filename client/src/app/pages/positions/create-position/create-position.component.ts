@@ -56,7 +56,7 @@ export interface EditSkillItem {
 }
 
 export interface DialogData {
-  is_template: Boolean;
+  category: 'skip' | 'quit' | 'template';
   template_name: string;
 }
 
@@ -215,6 +215,9 @@ export class CreatePositionComponent implements OnInit {
     } else if (this.selectedPageIndex === 1 && !(this.positionBasicInfoForm.valid && this.position_company && this.position_level && this.position_type && this.onCheckCityValidation() && this.onCheckStateValidation() && this.onCheckRecruiterValidation())) {
       return;
     } else if (this.selectedPageIndex === 3 && !((this.preferred_work_experiences && this.preferred_work_experiences.length === 1 && !this.preferredWorkExperienceFormArray.at(0).value.industry && !this.preferredWorkExperienceFormArray.at(0).value.years && !this.preferredWorkExperienceFormArray.at(0).value.description && !this.preferred_work_experiences[0].skills_trained) || (this.preferredWorkExperienceFormArray.valid && this.onCheckAllIndustriesValidation()))) {
+      return;
+    } else if (this.selectedPageIndex === 4 && !this.minimum_skills && !this.preferred_skills) {
+      this.openDialog('skip');
       return;
     }
     ++this.selectedPageIndex;
@@ -1353,20 +1356,20 @@ export class CreatePositionComponent implements OnInit {
           dataJson => {
             count++;
             if (count === this.preferred_work_experiences.length) {
-              this.openDialog(true, this.position.position);
+              this.openDialog('tamplate', this.position.position);
             }
           },
           error => {
             this.alertsService.show(error.message, AlertType.error);
             count++;
             if (count === this.preferred_work_experiences.length) {
-              this.openDialog(true, this.position.position);
+              this.openDialog('tamplate', this.position.position);
             }
           }
         );
       });
     } else {
-      this.openDialog(true, this.position.position);
+      this.openDialog('tamplate', this.position.position);
     }
   }
 
@@ -1393,14 +1396,14 @@ export class CreatePositionComponent implements OnInit {
   }
 
   onClickQuit() {
-    this.openDialog(false);
+    this.openDialog('quit');
   }
 
-  openDialog(is_template: Boolean, template_name?: string) {
+  openDialog(category: string, template_name?: string) {
     // tslint:disable-next-line: no-use-before-declare
     const dialgoRef = this.dialog.open(CreatePositionDialogComponent, {
       data: {
-        is_template: is_template,
+        category: category,
         template_name: template_name ? template_name : null
       },
       width: '100vw',
@@ -1409,12 +1412,19 @@ export class CreatePositionComponent implements OnInit {
       panelClass: ['edit-dialog-container']
     });
     dialgoRef.afterClosed().subscribe(result => {
-      if (result) {
-        if (result.quit || !result.save_template) {
+      if (category === 'quit') {
+        if (result && result.quit) {
           this.router.navigate(['/positions']);
         }
-        if (result.save_template && result.template_name) {
+      } else if (category === 'template') {
+        if (result && result.save_template && result.template_name) {
           this.saveAsPositionTemplate(result.template_name);
+        } else {
+          this.router.navigate(['/positions']);
+        }
+      } else if (category === 'skip') {
+        if (result && result.skip) {
+          this.goToPage(5);
         }
       }
     });
@@ -1438,7 +1448,7 @@ export class CreatePositionDialogComponent {
     private helperService: HelperService,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {
-    if (data.is_template) {
+    if (data.category === 'template') {
       this.initTemplateForm();
     }
   }
@@ -1464,11 +1474,11 @@ export class CreatePositionDialogComponent {
     this.dialogRef.close({quit: true});
   }
 
+  onClickSkip() {
+    this.dialogRef.close({skip: true});
+  }
+
   onClose(): void {
-    if (this.data.is_template) {
-      this.dialogRef.close({quit: false});
-    } else {
-      this.dialogRef.close({save_template: false});
-    }
+    this.dialogRef.close();
   }
 }
