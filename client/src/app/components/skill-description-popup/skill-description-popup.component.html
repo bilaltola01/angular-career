@@ -1,3 +1,4 @@
+<div *ngIf="skillFlag">
 <mat-icon class="cancel" (click)="onClose()">cancel</mat-icon>
 <h3 class="title">Skill Level Description</h3>
 <mat-dialog-content>
@@ -11,4 +12,9 @@
     </div>
   </ul>
 </mat-dialog-content>
+</div>
 
+<div *ngIf="data.dialogFlag">
+    <mat-icon class="cancel" (click)="onClose()">cancel</mat-icon>
+          <h3>This indicates how interested a candidate is in a given position.</h3>
+  </div>

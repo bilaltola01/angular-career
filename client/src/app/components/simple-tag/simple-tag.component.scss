@@ -145,5 +145,22 @@ $status-bg-color: #f4f5f8;
     background-color: rgba(41, 204, 91, 0.10);
     border-color: rgba(41, 204, 91, 0.10);
   }
+  :host-context(.top-choices-tag) .tag-container{
+    border:none;
+
+  }
+  :host-context(.top-choices-tag) .tag-container.tag-ellipse{
+    padding: 0;
+  }
+  :host-context(.top-choices-tag) .tag-container .ellipse-container mat-icon{
+    font-size: 16.63px;
+    vertical-align: middle;
+  }
+  :host-context(.top-choices-tag) .tag-container .ellipse-container   mat-icon{
+    &.active{
+      color: #318BD6;
+    }
+  }
+
 
 

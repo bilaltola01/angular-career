@@ -48,6 +48,10 @@ export const routes: Routes = [
       .then(module => module.CareerFairModule)
 
   },
+  {
+    path: 'applications', loadChildren: () => import('./pages/application/applications.module')
+      .then(module => module.ApplicationsModule)
+  },
   // Use this route to redirect to /404 if we want to pop error page to the user
   // We cannot redirect to '**' so we shall use 404 instead
   { path: 'error/:status-code', component: ErrorPageComponent },

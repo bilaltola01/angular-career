@@ -464,6 +464,16 @@ export const EducationLevel = [
   'J.D.',
   'Ph.D.'
 ];
+export const ApplicationStatus = [
+  'accepted',
+  'in_review',
+  'interviewing',
+  'wait_listed',
+  'rejected',
+  'offer_sent',
+  'saved',
+  'All'
+];
 
 
 export const SortBy = [
@@ -472,6 +482,14 @@ export const SortBy = [
   { 'title': 'Popularity', 'value': 'popularity' }
 ];
 
+export const ApplicationSortBy = [
+  { 'title': 'Application Date', 'value': 'application_date' },
+  { 'title': 'Date Posted', 'value': 'salary' },
+  { 'title': 'Qualification Level', 'value': 'qualification_level' },
+  { 'title': 'Application Deadline', 'value': 'application_deadline' },
+  { 'title': 'Popularity', 'value': 'popularity' }
+
+];
 
 export const QualificationLevel = [
   { 'title': 'Unqualified', 'value': 'unqualified' },
@@ -481,9 +499,22 @@ export const QualificationLevel = [
   { 'title': 'Extermely Qualified', 'value': 'extremely_qualified' }
 
 ];
+export const interestLevel = [
+  '0',
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6'
+  ];
 
 export const positionListLimit = 7;
+<<<<<<< HEAD
 export const careerFairsListLimit = 7;
+=======
+export const applicationListLimit = 7;
+>>>>>>> Application page, few functionality added
 
 export const positionSearchMessages = {
   'APPLICATION_SAVE_SUCCESS': 'Application submission successful.',

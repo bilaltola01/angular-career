@@ -153,8 +153,13 @@ export class ApplicationService {
   }
 
 
-  public getAppliedJobs(): Observable<any> {
-    const queryUrl = `${this.application_service_url}applications`;
+  public getAppliedJobs(queryParam?): Observable<any> {
+    let queryUrl;
+    if (queryParam) {
+      queryUrl = `${this.application_service_url}applications?${queryParam}`;
+    } else {
+      queryUrl = `${this.application_service_url}applications`;
+    }
     return this.http.get(queryUrl, this.authHttpOptions())
       .pipe(
         map(
