@@ -1224,45 +1224,13 @@ export class CreatePositionComponent implements OnInit {
       };
       this.positionService.postPreferredMajorCategories(info).subscribe(
         dataJson => {
-          this.addPreferredWorkExperience(position_id);
+          this.addMinimumSkills(position_id);
         },
         error => {
           this.alertsService.show(error.message, AlertType.error);
-          this.addPreferredWorkExperience(position_id);
+          this.addMinimumSkills(position_id);
         }
       );
-    } else {
-      this.addPreferredWorkExperience(position_id);
-    }
-  }
-
-  addPreferredWorkExperience(position_id: number) {
-    if (this.preferred_work_experiences && this.preferred_work_experiences.length > 0 && this.preferred_work_experiences[0].industry && this.preferred_work_experiences[0].years) {
-      let count = 0;
-      this.preferred_work_experiences.forEach(experience => {
-        const info = {
-          position_id: position_id,
-          industry_id: experience.industry.industry_id,
-          preferred_years: experience.years,
-          exp_desc:	experience.description ? experience.description : null,
-          skills_trained_ids: experience.skills_trained && experience.skills_trained.length > 0 ? experience.skills_trained.map(value => value.skill_id) : null
-        };
-        this.positionService.postPreferredExperience(info).subscribe(
-          dataJson => {
-            count++;
-            if (count === this.preferred_work_experiences.length) {
-              this.addMinimumSkills(position_id);
-            }
-          },
-          error => {
-            this.alertsService.show(error.message, AlertType.error);
-            count++;
-            if (count === this.preferred_work_experiences.length) {
-              this.addMinimumSkills(position_id);
-            }
-          }
-        );
-      });
     } else {
       this.addMinimumSkills(position_id);
     }
@@ -1358,13 +1326,45 @@ export class CreatePositionComponent implements OnInit {
       };
       this.positionService.postLocation(info).subscribe(
         dataJson => {
-          this.openDialog(true, this.position.position);
+          this.addPreferredWorkExperience(position_id);
         },
         error => {
           this.alertsService.show(error.message, AlertType.error);
-          this.openDialog(true, this.position.position);
+          this.addPreferredWorkExperience(position_id);
         }
       );
+    } else {
+      this.addPreferredWorkExperience(position_id);
+    }
+  }
+
+  addPreferredWorkExperience(position_id: number) {
+    if (this.preferred_work_experiences && this.preferred_work_experiences.length > 0 && this.preferred_work_experiences[0].industry && this.preferred_work_experiences[0].years) {
+      let count = 0;
+      this.preferred_work_experiences.forEach(experience => {
+        const info = {
+          position_id: position_id,
+          industry_id: experience.industry.industry_id,
+          preferred_years: experience.years,
+          exp_desc:	experience.description ? experience.description : null,
+          skills_trained_ids: experience.skills_trained && experience.skills_trained.length > 0 ? experience.skills_trained.map(value => value.skill_id) : null
+        };
+        this.positionService.postPreferredExperience(info).subscribe(
+          dataJson => {
+            count++;
+            if (count === this.preferred_work_experiences.length) {
+              this.openDialog(true, this.position.position);
+            }
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+            count++;
+            if (count === this.preferred_work_experiences.length) {
+              this.openDialog(true, this.position.position);
+            }
+          }
+        );
+      });
     } else {
       this.openDialog(true, this.position.position);
     }
