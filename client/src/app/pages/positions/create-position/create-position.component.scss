@@ -155,6 +155,12 @@ p {
           &.search {
             border: none;
             padding: 0;
+            .question-container {
+              @include flex(row, flex-start, flex-start);
+              img.question {
+                margin: 5px 0 0 10px;
+              }
+            }        
             h3 {
               color: rgba(map-get($md-cfaccent, 500), 0.84);
             }

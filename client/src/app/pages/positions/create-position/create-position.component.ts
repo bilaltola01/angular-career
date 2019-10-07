@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import {
   MatDialog,
@@ -10,14 +10,11 @@ import {
   AutoCompleteService,
   CompanyService,
   AlertsService,
-  UserService,
   AlertType,
   HelperService,
-  CompanyRecruiterService,
-  CompanyAdminService,
-  UserStateService,
   PositionService
 } from 'src/app/services';
+import { SkillDescriptionPopupComponent } from 'src/app/components/skill-description-popup/skill-description-popup.component';
 
 import {
   PositionInfoRequest,
@@ -26,7 +23,6 @@ import {
   City,
   State,
   Countries,
-  UserGeneralInfo,
   PositionLevel,
   JobType,
   ApplicationType,
@@ -40,7 +36,8 @@ import {
   School,
   Industry,
   UserSkillItem,
-  CompanyInfoResponse
+  CompanyInfoResponse,
+  SkillLevelDescription
 } from 'src/app/models';
 
 export interface PreferredWorkExperience {
@@ -1400,6 +1397,16 @@ export class CreatePositionComponent implements OnInit {
 
   onClickQuit() {
     this.openDialog('quit');
+  }
+
+  openSkillDescriptionDialog() {
+    const dialogRef = this.dialog.open(SkillDescriptionPopupComponent, {
+      data: { skillDesc : SkillLevelDescription},
+      width:  '100vw',
+      maxWidth: '880px',
+      minWidth: '280px',
+      panelClass: ['edit-dialog-container']
+    });
   }
 
   openDialog(category: string, template_name?: string) {

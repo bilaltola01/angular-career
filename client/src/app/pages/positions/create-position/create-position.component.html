@@ -344,7 +344,10 @@
       </h3>
       <p class="headup">Increase search visibility and the quality of applicants by indicating your required and preferred skills.</p>
       <div class="profile-form__field search">
-        <h3>Minimum Skills <span *ngIf="minimum_skills &&  minimum_skills.length > 0" class="count">{{minimum_skills.length}}</span></h3>
+        <div class="question-container">
+          <h3>Minimum Skills <span *ngIf="minimum_skills &&  minimum_skills.length > 0" class="count">{{minimum_skills.length}}</span></h3>
+          <img src="assets/icons/ic_question.svg" class="question" (click)="openSkillDescriptionDialog()">
+        </div>
         <!-- <img src="assets/icons/ic_question.svg" (click)="openSkillDescriptionDialog()"> -->
         <mat-form-field appearance="standard" class="search">
           <mat-icon matSuffix>search</mat-icon>
@@ -364,8 +367,10 @@
         </div>
       </div>
       <div class="profile-form__field search">
-        <h3>Preferred Skills <span *ngIf="preferred_skills &&  preferred_skills.length > 0" class="count">{{preferred_skills.length}}</span></h3>
-        <!-- <img src="assets/icons/ic_question.svg" (click)="openSkillDescriptionDialog()"> -->
+        <div class="question-container">
+          <h3>Preferred Skills <span *ngIf="preferred_skills &&  preferred_skills.length > 0" class="count">{{preferred_skills.length}}</span></h3>
+          <img src="assets/icons/ic_question.svg" class="question" (click)="openSkillDescriptionDialog()">
+        </div>
         <mat-form-field appearance="standard" class="search">
           <mat-icon matSuffix>search</mat-icon>
           <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompletePreferredSkills" formControlName="search_preferred_skill">
