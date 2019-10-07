@@ -1155,7 +1155,7 @@ export class CreatePositionComponent implements OnInit {
         cover_letter_req:	null,
         recruiter_id:	this.position_recruiter ? this.position_recruiter.user_id : null,
         department:	null,
-        open:	null,
+        open:	1,
         openings:	null,
         application_deadline:	this.position_application_deadline ? this.position_application_deadline : null
       };
@@ -1184,19 +1184,19 @@ export class CreatePositionComponent implements OnInit {
       };
       this.positionService.postPreferredEducation(info).subscribe(
         dataJson => {
-          this.addPreferredEducationMajor(position_id);
+          this.addPreferredEducationMajors(position_id);
         },
         error => {
           this.alertsService.show(error.message, AlertType.error);
-          this.addPreferredEducationMajor(position_id);
+          this.addPreferredEducationMajors(position_id);
         }
       );
     } else {
-      this.addPreferredEducationMajor(position_id);
+      this.addPreferredEducationMajors(position_id);
     }
   }
 
-  addPreferredEducationMajor(position_id: number) {
+  addPreferredEducationMajors(position_id: number) {
     if (this.preferred_education_majors && this.preferred_education_majors.length > 0) {
       const info = {
         position_id: position_id,
@@ -1377,10 +1377,11 @@ export class CreatePositionComponent implements OnInit {
     };
     this.positionService.postPositionTemplate(info).subscribe(
       dataJson => {
-        console.log(dataJson.data);
+        this.router.navigate(['/positions']);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
+        this.router.navigate(['/positions']);
       }
     );
   }
@@ -1409,7 +1410,7 @@ export class CreatePositionComponent implements OnInit {
     });
     dialgoRef.afterClosed().subscribe(result => {
       if (result) {
-        if (result.quit) {
+        if (result.quit || !result.save_template) {
           this.router.navigate(['/positions']);
         }
         if (result.save_template && result.template_name) {
@@ -1464,6 +1465,10 @@ export class CreatePositionDialogComponent {
   }
 
   onClose(): void {
-    this.dialogRef.close();
+    if (this.data.is_template) {
+      this.dialogRef.close({quit: false});
+    } else {
+      this.dialogRef.close({save_template: false});
+    }
   }
 }
