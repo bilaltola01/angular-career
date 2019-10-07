@@ -133,7 +133,10 @@
   </div>
 
   <div *ngIf="(userSkillsList && userSkillsList.length > 0) || editMode" class="row" [class.edit-mode]="editMode" id="skills">
-    <h3> Skills </h3> <img src="assets/icons/ic_question.svg" class="question" *ngIf="editMode" (click)="openSkillDescriptionDialog()">
+    <div class="question-container">
+      <h3> Skills </h3>
+      <img src="assets/icons/ic_question.svg" class="question" *ngIf="editMode" (click)="openSkillDescriptionDialog()">
+    </div>
 
     <div *ngIf="editMode" class="form-field search" [formGroup]="skillsSearchForm">
       <mat-form-field appearance="standard" class="search">
