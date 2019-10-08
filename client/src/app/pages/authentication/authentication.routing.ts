@@ -4,6 +4,7 @@ import { RegistrationComponent } from './registration/registration.component';
 import { VerificationComponent } from './verification/verification.component';
 import { EmailSentComponent } from './email-sent/email-sent.component';
 import { PasswordComponent } from './password/password.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { UnauthGuard } from '../../guard/unauth.guard';
 import { AuthGuard } from '../../guard/auth.guard';
 
@@ -38,5 +39,10 @@ export const authenticationRoutes: Routes = [
     path: 'password/reset',
     component: PasswordComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'forgot-password',
+    component: ForgotPasswordComponent,
+    canActivate: [UnauthGuard]
   }
 ];
