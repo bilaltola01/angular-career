@@ -1144,7 +1144,7 @@ export class CreatePositionComponent implements OnInit {
         company_id:	this.position_company.company_id,
         level: this.position_level ? this.position_level : null,
         type:	this.position_type ? this.position_type : null,
-        position_desc: this.position_desc,
+        position_desc: this.position_desc ? this.position_desc : null,
         start_date:	null,
         end_date:	null,
         position_filled: null,
