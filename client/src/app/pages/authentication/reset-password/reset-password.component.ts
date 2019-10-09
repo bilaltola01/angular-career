@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, UrlTree, UrlSegmentGroup, UrlSegment } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {
   UserService,
@@ -8,11 +8,14 @@ import {
 } from 'src/app/services';
 
 @Component({
-  selector: 'app-password',
-  templateUrl: './password.component.html',
-  styleUrls: ['./password.component.scss']
+  selector: 'app-reset-password',
+  templateUrl: './reset-password.component.html',
+  styleUrls: ['./reset-password.component.scss']
 })
-export class PasswordComponent implements OnInit {
+export class ResetPasswordComponent implements OnInit {
+
+  user_id: string;
+  valid_token: string;
 
   // FormGroup
   passwordResetForm: FormGroup;
@@ -23,14 +26,21 @@ export class PasswordComponent implements OnInit {
   strongRegex = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})');
   mediumRegex = new RegExp('^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})');
 
-
-  constructor (
+  constructor(
     private router: Router,
     private userService: UserService,
     private alertsService: AlertsService
   ) { }
 
   ngOnInit() {
+    const tree: UrlTree = this.router.parseUrl(this.router.url);
+    const segmentGroup: UrlSegmentGroup = tree.root.children['primary'];
+    if (segmentGroup) {
+      const segments: UrlSegment[] = segmentGroup.segments;
+
+      this.user_id = segments[1].path;
+      this.valid_token = segments[3].path;
+    }
     this.passwordStrength = 'weak';
     this.initPasswordResetForm();
     this.is_done = false;
@@ -63,7 +73,7 @@ export class PasswordComponent implements OnInit {
         new_password: this.passwordResetForm.value.new_password
       };
 
-      this.userService.resetPassword(newPasswordInfo).subscribe(
+      this.userService.forgotPassword(newPasswordInfo, this.user_id, this.valid_token).subscribe(
         data => {
           if (data['success']) {
             this.is_done = true;

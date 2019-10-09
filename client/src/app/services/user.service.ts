@@ -81,10 +81,8 @@ export class UserService {
       );
   }
 
-  public resetPassword(newPasswordInfo: any): Observable<any> {
-    const token = localStorage.getItem('token');
-    const validation_token = this.helper.decodeToken(token).validation_token;
-    return this.http.post(this.auth_service_url + `user/${this.user_id}/token/${validation_token}/change-password`, newPasswordInfo, this.authHttpOptions())
+  public forgotPassword(newPasswordInfo: any, user_id: string, validation_token: string): Observable<any> {
+    return this.http.post(this.auth_service_url + `user/${user_id}/token/${validation_token}/change-password`, newPasswordInfo, this.httpOptions())
       .pipe(
         map(data => {
           return {success: true, message: 'Success!', data: data};
