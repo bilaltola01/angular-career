@@ -113,6 +113,12 @@ export class ResetPasswordComponent implements OnInit {
       this.userService.putPassword(newPasswordInfo).subscribe(
         data => {
           if (data['success']) {
+            this.alertsService.show(data.data.message, AlertType.success);
+            this.passwordResetForm.patchValue({
+              new_password: null,
+              old_password: null,
+              confirm_password: null
+            });
             const token = data.data.token;
             if (token) {
               localStorage.setItem('token', token);
