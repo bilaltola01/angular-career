@@ -81,6 +81,17 @@ export class UserService {
       );
   }
 
+  public putPassword(passwordInfo: any): Observable<any> {
+    passwordInfo.user_id = this.user_id;
+    return this.http.put(this.auth_service_url + `password`, passwordInfo, this.authHttpOptions())
+      .pipe(
+        map(data => {
+          return {success: true, message: 'Success!', data: data};
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   public forgotPassword(newPasswordInfo: any, user_id: string, validation_token: string): Observable<any> {
     return this.http.post(this.auth_service_url + `user/${user_id}/token/${validation_token}/change-password`, newPasswordInfo, this.httpOptions())
       .pipe(

@@ -11,7 +11,7 @@ describe('ResetPasswordComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports : [ MaterialModule, TestingModule ],
-      declarations: [ ResetPasswordComponent , ActionButtonComponent]
+      declarations: [ ResetPasswordComponent , ActionButtonComponent ]
     })
     .compileComponents();
   }));

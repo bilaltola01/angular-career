@@ -35,7 +35,7 @@ export const authenticationRoutes: Routes = [
     canActivate: [UnauthGuard]
   },
   {
-    path: 'change-password',
+    path: 'settings/change-password',
     component: ResetPasswordComponent,
     canActivate: [AuthGuard]
   },
@@ -49,4 +49,9 @@ export const authenticationRoutes: Routes = [
     component: ResetPasswordComponent,
     canActivate: [UnauthGuard]
   },
+  {
+    path: 'settings',
+    redirectTo: 'settings/change-password',
+    pathMatch: 'full',
+  }
 ];

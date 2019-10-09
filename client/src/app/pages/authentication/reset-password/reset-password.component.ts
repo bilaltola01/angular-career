@@ -16,12 +16,10 @@ export class ResetPasswordComponent implements OnInit {
 
   user_id: string;
   valid_token: string;
-
-  // FormGroup
   passwordResetForm: FormGroup;
-
   passwordStrength: string;
   is_done: Boolean;
+  is_forgot_password: Boolean;
 
   strongRegex = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})');
   mediumRegex = new RegExp('^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})');
@@ -33,21 +31,39 @@ export class ResetPasswordComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    const tree: UrlTree = this.router.parseUrl(this.router.url);
-    const segmentGroup: UrlSegmentGroup = tree.root.children['primary'];
-    if (segmentGroup) {
-      const segments: UrlSegment[] = segmentGroup.segments;
-
-      this.user_id = segments[1].path;
-      this.valid_token = segments[3].path;
-    }
     this.passwordStrength = 'weak';
-    this.initPasswordResetForm();
     this.is_done = false;
+
+    if (this.router.url.includes('change-password')) {
+      this.initPasswordChangeForm();
+      this.is_forgot_password = false;
+    } else {
+      const tree: UrlTree = this.router.parseUrl(this.router.url);
+      const segmentGroup: UrlSegmentGroup = tree.root.children['primary'];
+      if (segmentGroup) {
+        const segments: UrlSegment[] = segmentGroup.segments;
+        this.user_id = segments[1].path;
+        this.valid_token = segments[3].path;
+      }
+      this.initPasswordResetForm();
+      this.is_forgot_password = true;
+    }
   }
 
   initPasswordResetForm() {
     this.passwordResetForm = new FormGroup({
+      new_password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+      confirm_password: new FormControl('', [Validators.required, Validators.minLength(6)])
+    });
+
+    this.passwordResetForm.get('new_password').valueChanges.subscribe((password) => {
+      this.checkPasswordStrength(password);
+    });
+  }
+
+  initPasswordChangeForm() {
+    this.passwordResetForm = new FormGroup({
+      old_password: new FormControl('', [Validators.required, Validators.minLength(6)]),
       new_password: new FormControl('', [Validators.required, Validators.minLength(6)]),
       confirm_password: new FormControl('', [Validators.required, Validators.minLength(6)])
     });
@@ -78,6 +94,29 @@ export class ResetPasswordComponent implements OnInit {
           if (data['success']) {
             this.is_done = true;
             localStorage.removeItem('token');
+          }
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    }
+  }
+
+  changePassword() {
+    if (this.passwordResetForm.valid && this.passwordResetForm.value.new_password === this.passwordResetForm.value.confirm_password) {
+      const newPasswordInfo = {
+        old_password: this.passwordResetForm.value.old_password,
+        new_password: this.passwordResetForm.value.new_password
+      };
+
+      this.userService.putPassword(newPasswordInfo).subscribe(
+        data => {
+          if (data['success']) {
+            const token = data.data.token;
+            if (token) {
+              localStorage.setItem('token', token);
+            }
           }
         },
         error => {
