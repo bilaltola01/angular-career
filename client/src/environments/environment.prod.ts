@@ -13,5 +13,15 @@ export const environment = {
   company_service: 'companies-service',
   recruiter_service: 'recruiter-service',
   company_admin_service: 'company-admin-service',
-  api_version: 'v1'
+  api_version: 'v1',
+  firebase: {
+        apiKey: 'AIzaSyDixV2JhwZ6ztWJZvyibry_nvhy0lyXmlA',
+        authDomain: 'cf-chat-8efa4.firebaseapp.com',
+        databaseURL: 'https://cf-chat-8efa4.firebaseio.com',
+        projectId: 'cf-chat-8efa4',
+        storageBucket: 'cf-chat-8efa4.appspot.com',
+        messagingSenderId: '1008369027673',
+        appId: '1:1008369027673:web:88618bb4db6787f6053f48',
+        measurementId: 'G-MQ5MTB2RJV'
+  }
 };
