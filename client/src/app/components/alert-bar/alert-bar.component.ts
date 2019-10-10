@@ -49,7 +49,7 @@ export class AlertBarComponent implements OnInit, OnDestroy {
         this.show = state.show;
 
         // success alerts are shown for 1 second, others for 10 seconds
-        const showingAlertTimeout = (this.type === 'success' ? 1000 : 10000);
+        const showingAlertTimeout = (this.type === 'success' ? 5000 : 10000);
 
         setTimeout(() => {
           this.show = false;
