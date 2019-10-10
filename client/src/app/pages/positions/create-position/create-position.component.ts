@@ -260,6 +260,9 @@ export class CreatePositionComponent implements OnInit {
         } else if (!this.position_type) {
           this.alertsService.show('You must select position\'s type.', AlertType.error);
           return;
+        } else if (!this.position_application_deadline) {
+          this.alertsService.show('You must select application deadline', AlertType.error);
+          return;
         }
       }
     }
@@ -344,7 +347,7 @@ export class CreatePositionComponent implements OnInit {
       position_level: new FormControl(this.position_level ? this.position_level : null, [Validators.required]),
       position_type: new FormControl(this.position_type ? this.position_type : null, [Validators.required]),
       position_application_type: new FormControl(this.position_application_type ? this.position_application_type : null),
-      position_application_deadline: new FormControl(this.position_application_deadline ? this.helperService.convertStringToFormattedDateString(this.position_application_deadline, 'YYYY-MM-DD', 'L') : null),
+      position_application_deadline: new FormControl(this.position_application_deadline ? this.helperService.convertStringToFormattedDateString(this.position_application_deadline, 'YYYY-MM-DD', 'L') : null, [Validators.required]),
       position_recruiter: new FormControl(this.position_recruiter ? `${this.position_recruiter.first_name} ${this.position_recruiter.last_name}` : null)
     });
 

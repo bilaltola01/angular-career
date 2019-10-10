@@ -137,7 +137,7 @@
       </div>
       <div class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
-          <mat-label>Application Deadline</mat-label>
+          <mat-label>Application Deadline *</mat-label>
           <input matInput placeholder="MM/DD/YYYY" formControlName="position_application_deadline" pattern="\d{1,2}/\d{1,2}/\d{4}">
           <input class="hide" [matDatepicker]="deadline" [min]="minDate" (dateChange)="onChangeApplicationDeadline($event)">
           <mat-datepicker-toggle matSuffix [for]="deadline"></mat-datepicker-toggle>
