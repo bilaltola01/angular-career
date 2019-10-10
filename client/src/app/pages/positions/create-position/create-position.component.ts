@@ -196,12 +196,14 @@ export class CreatePositionComponent implements OnInit {
     this.isNavMenuOpened = false;
     this.selectedPageIndex = 0;
     this.initializeFormsByPageIndex();
-    this.position_recruiter = {
-      user_id: this.current_user.user_id,
-      first_name: this.current_user.first_name,
-      last_name: this.current_user.last_name,
-      photo: this.current_user.photo
-    };
+    if (this.current_user) {
+      this.position_recruiter = {
+        user_id: this.current_user.user_id,
+        first_name: this.current_user.first_name,
+        last_name: this.current_user.last_name,
+        photo: this.current_user.photo
+      };
+    }
   }
 
   getCurrentUserInfo() {
@@ -1424,25 +1426,22 @@ export class CreatePositionComponent implements OnInit {
     };
     this.positionService.postPositionTemplate(info).subscribe(
       dataJson => {
-        this.positionService.deletePosition(this.temp_position.position_id).subscribe(
-          data => {
-            this.temp_position = null;
-          },
-          error => {
-            this.alertsService.show(error.message, AlertType.error);
-          }
-        );
+        this.deleteTempPosition();
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
-        this.positionService.deletePosition(this.temp_position.position_id).subscribe(
-          data => {
-            this.temp_position = null;
-          },
-          err => {
-            this.alertsService.show(err.message, AlertType.error);
-          }
-        );
+        this.deleteTempPosition();
+      }
+    );
+  }
+
+  deleteTempPosition() {
+    this.positionService.deletePosition(this.temp_position.position_id).subscribe(
+      dataJson => {
+        this.temp_position = null;
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
       }
     );
   }
