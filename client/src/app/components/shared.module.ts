@@ -7,6 +7,7 @@ import { MaterialModule } from '../modules/material.module';
 import { AlertBarComponent } from './alert-bar/alert-bar.component';
 import { AddSkillPopupComponent } from './add-skill-popup/add-skill-popup.component';
 import { SkillDescriptionPopupComponent } from './skill-description-popup/skill-description-popup.component';
+import { InterestLevelPopupComponent } from './interest-level-popup/interest-level-popup.component';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { SkillDescriptionPopupComponent } from './skill-description-popup/skill-
   declarations: [
     ...sharedComponents,
     AddSkillPopupComponent,
-    SkillDescriptionPopupComponent
+    SkillDescriptionPopupComponent,
+    InterestLevelPopupComponent
   ],
   exports: [
     ...sharedComponents

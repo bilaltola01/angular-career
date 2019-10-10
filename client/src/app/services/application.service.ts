@@ -11,7 +11,7 @@ import { HelperService } from './helper.service';
 })
 export class ApplicationService {
 
-
+  getApplicationFlag = false;
   private user_id = -1;
   private application_service_url = `${environment.serverUrl}/${environment.application_service}/api/${environment.api_version}/`;
 
@@ -170,13 +170,9 @@ export class ApplicationService {
         catchError(this.handleError)
       );
   }
-
-  public withdrawJobs(position_id: number): Observable<any> {
-    const queryUrl = `${this.application_service_url}application/${position_id}`;
-    const headerOption = {
-      headers: this.authHttpOptions().headers
-    };
-    return this.http.delete(queryUrl, headerOption)
+  public patchInterestLevel(bodyQueryParam): Observable<any> {
+     const queryUrl = `${this.application_service_url}application`;
+    return this.http.patch(queryUrl, bodyQueryParam, this.authHttpOptions())
       .pipe(
         map(
           data => {
@@ -185,6 +181,39 @@ export class ApplicationService {
         ),
         catchError(this.handleError)
       );
+  }
+
+  public withdrawJobs(applicationData): Observable<any> {
+    let queryUrl;
+    const headerOption = {
+      headers: this.authHttpOptions().headers
+    };
+    if (typeof applicationData === 'number') {
+      queryUrl = `${this.application_service_url}application/${applicationData}`;
+      return this.http.delete(queryUrl, headerOption)
+      .pipe(
+        map(
+          data => {
+            return { success: true, message: 'Success!', data: data };
+          }
+        ),
+        catchError(this.handleError)
+      );
+    } else {
+      const observableArr = [];
+      for (let i = 0; i < applicationData.length; i++) {
+      queryUrl = `${this.application_service_url}application/${applicationData[i].application_id}`;
+      observableArr[i] = this.http.delete(queryUrl, this.authHttpOptions()).pipe(
+        map(
+          data => {
+            return data;
+          }
+        ),
+        catchError(this.handleError)
+      );
+      }
+      return forkJoin(observableArr);
+    }
 
   }
 }
