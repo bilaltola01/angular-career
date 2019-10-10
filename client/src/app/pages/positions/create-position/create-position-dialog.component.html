@@ -2,9 +2,6 @@
 
 <ng-container *ngIf="data.category === 'quit'" >
   <h3 mat-dialog-title>Are you sure you want to quit?</h3>
-  <mat-dialog-content>
-    <p class="description">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore.</p>
-  </mat-dialog-content>
   <mat-dialog-actions>
     <action-button class="update-btn" type="flat" color="primary" title="No" (click)="onClose()"></action-button>
     <action-button class="update-btn" type="stroked" title="Yes" (click)="onClickQiut()"></action-button>
