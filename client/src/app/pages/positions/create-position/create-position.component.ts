@@ -12,7 +12,8 @@ import {
   AlertsService,
   AlertType,
   HelperService,
-  PositionService
+  PositionService,
+  UserStateService
 } from 'src/app/services';
 import { SkillDescriptionPopupComponent } from 'src/app/components/skill-description-popup/skill-description-popup.component';
 
@@ -37,7 +38,8 @@ import {
   Industry,
   UserSkillItem,
   CompanyInfoResponse,
-  SkillLevelDescription
+  SkillLevelDescription,
+  UserGeneralInfo
 } from 'src/app/models';
 
 export interface PreferredWorkExperience {
@@ -172,6 +174,8 @@ export class CreatePositionComponent implements OnInit {
 
   position: PositionInfoResponse;
 
+  current_user: UserGeneralInfo;
+
   constructor(
     private router: Router,
     private alertsService: AlertsService,
@@ -179,15 +183,31 @@ export class CreatePositionComponent implements OnInit {
     public autoCompleteService: AutoCompleteService,
     private positionService: PositionService,
     private companyService: CompanyService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private userStateService: UserStateService
   ) { }
 
   ngOnInit() {
+    this.getCurrentUserInfo();
     this.minDate.setDate(this.currentDate.getDate() + 1);
     this.isTabMenuOpen = false;
     this.isNavMenuOpened = false;
     this.selectedPageIndex = 0;
     this.initializeFormsByPageIndex();
+    this.position_recruiter = {
+      user_id: this.current_user.user_id,
+      first_name: this.current_user.first_name,
+      last_name: this.current_user.last_name,
+      photo: this.current_user.photo
+    };
+  }
+
+  getCurrentUserInfo() {
+    this.userStateService.getUser.subscribe(user => {
+      this.current_user = user;
+    }, error => {
+      this.alertsService.show(error.message, AlertType.error);
+    });
   }
 
   onSelectNavItem(id: string) {
@@ -348,7 +368,7 @@ export class CreatePositionComponent implements OnInit {
       position_type: new FormControl(this.position_type ? this.position_type : null, [Validators.required]),
       position_application_type: new FormControl(this.position_application_type ? this.position_application_type : null),
       position_application_deadline: new FormControl(this.position_application_deadline ? this.helperService.convertStringToFormattedDateString(this.position_application_deadline, 'YYYY-MM-DD', 'L') : null, [Validators.required]),
-      position_recruiter: new FormControl(this.position_recruiter ? `${this.position_recruiter.first_name} ${this.position_recruiter.last_name}` : null)
+      position_recruiter: new FormControl(this.position_recruiter ? `${this.position_recruiter.first_name} ${this.position_recruiter.last_name}` + (this.position_recruiter.user_id === this.current_user.user_id ? ' (Me)' : '')  : null)
     });
 
     this.positionBasicInfoForm.get('position_company').valueChanges.subscribe((position_company) => {
@@ -589,8 +609,12 @@ export class CreatePositionComponent implements OnInit {
   onBlurRecruiter() {
     const value = this.positionBasicInfoForm.value.position_recruiter;
     if (value && this.helperService.checkSpacesString(value)) {
-      if (this.position_recruiter && value !== `${this.position_recruiter.first_name} ${this.position_recruiter.last_name}`) {
-        this.position_recruiter = null;
+      if (this.position_recruiter) {
+        if (this.position_recruiter.user_id !== this.current_user.user_id && value !== `${this.position_recruiter.first_name} ${this.position_recruiter.last_name}`) {
+          this.position_recruiter = null;
+        } else if (this.position_recruiter.user_id === this.current_user.user_id && value !== `${this.position_recruiter.first_name} ${this.position_recruiter.last_name} (Me)`) {
+          this.position_recruiter = null;
+        }
       }
     } else {
       this.position_recruiter = null;
@@ -601,7 +625,11 @@ export class CreatePositionComponent implements OnInit {
     const value = this.positionBasicInfoForm.value.position_recruiter;
     if (value && this.helperService.checkSpacesString(value)) {
       if (this.position_recruiter) {
-        return value === `${this.position_recruiter.first_name} ${this.position_recruiter.last_name}` ? true : false;
+        if (this.position_recruiter.user_id !== this.current_user.user_id) {
+          return value === `${this.position_recruiter.first_name} ${this.position_recruiter.last_name}` ? true : false;
+        } else {
+          return value === `${this.position_recruiter.first_name} ${this.position_recruiter.last_name} (Me)` ? true : false;
+        }
       } else {
         return false;
       }

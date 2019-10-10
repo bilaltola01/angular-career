@@ -155,9 +155,9 @@
           <mat-icon matSuffix *ngIf="positionBasicInfoForm.value.position_recruiter && helperService.checkSpacesString(positionBasicInfoForm.value.position_recruiter) && positionBasicInfoForm.get('position_recruiter').valid && onCheckRecruiterValidation()">done</mat-icon>
           <mat-icon matSuffix class="error-field" *ngIf="positionBasicInfoForm.get('position_recruiter').value && helperService.checkSpacesString(positionBasicInfoForm.get('position_recruiter').value) && !onCheckRecruiterValidation() && positionBasicInfoForm.get('position_recruiter').touched">close</mat-icon>
           <mat-autocomplete #autocompleteRecruiter="matAutocomplete" (closed)="onBlurRecruiter()">
-          <mat-option *ngFor="let recruiter of autocomplete_recruiters" [value]="recruiter.first_name + (recruiter.last_name ? ' ' + recruiter.last_name : '')"(onSelectionChange)="onSelectRecruiter(recruiter)">
+          <mat-option *ngFor="let recruiter of autocomplete_recruiters" [value]="recruiter.first_name + (recruiter.last_name ? ' ' + recruiter.last_name : '') + (recruiter.user_id === current_user.user_id ? ' (Me)' : '')" (onSelectionChange)="onSelectRecruiter(recruiter)">
             <img [src]="recruiter.photo ? recruiter.photo : 'assets/icons/no_photo.png'">
-            <span>{{recruiter.first_name + (recruiter.last_name ? ' ' + recruiter.last_name : '')}}</span>
+            <span>{{recruiter.first_name + (recruiter.last_name ? ' ' + recruiter.last_name : '') + (recruiter.user_id === current_user.user_id ? ' (Me)' : '')}}</span>
           </mat-option>
           </mat-autocomplete>
         </mat-form-field>
