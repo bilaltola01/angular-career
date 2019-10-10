@@ -55,6 +55,18 @@ export class PositionService {
       );
   }
 
+  public deletePosition(positionId: number): Observable<any> {
+    return this.http.delete(this.position_management_service_url + `position/${positionId}`, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
   public postPreferredSkills(skillsInfo: any): Observable<any> {
     return this.http.post(this.position_management_service_url + 'position/preferred-skills', skillsInfo, this.authHttpOptions())
       .pipe(

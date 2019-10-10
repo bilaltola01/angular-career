@@ -351,6 +351,10 @@ p {
         .btn-section {
           padding: 40px 0;
           text-align: center;
+          @include flex(column, normal, flex-start);
+          action-button {
+            margin-bottom: 10px;
+          }
         }
         
       }

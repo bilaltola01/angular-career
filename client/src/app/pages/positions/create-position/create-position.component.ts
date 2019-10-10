@@ -173,6 +173,8 @@ export class CreatePositionComponent implements OnInit {
   isTabMenuOpen: boolean;
 
   position: PositionInfoResponse;
+  temp_position: PositionInfoResponse;
+  temp_name: string;
 
   current_user: UserGeneralInfo;
 
@@ -1168,7 +1170,7 @@ export class CreatePositionComponent implements OnInit {
     }
   }
 
-  onClickPublish() {
+  onClickPublish(is_temp: Boolean) {
     if (!this.position) {
       const position: PositionInfoRequest = {
         position:	this.position_name,
@@ -1193,11 +1195,10 @@ export class CreatePositionComponent implements OnInit {
 
       this.positionService.postPosition(position).subscribe(
         dataJson => {
-          this.position = dataJson['data'];
-          const position_id = this.position.position_id;
+          is_temp ? this.temp_position = dataJson['data'] : this.position = dataJson['data'];
 
-          if (this.position && this.position.position_id) {
-            this.addPreferredEducationLevels(position_id);
+          if (dataJson['data'] && dataJson['data'].position_id) {
+            this.addPreferredEducationLevels(dataJson['data'].position_id);
           }
         },
         error => {
@@ -1373,7 +1374,11 @@ export class CreatePositionComponent implements OnInit {
     if (this.preferred_work_experiences && this.preferred_work_experiences.length > 0 && this.preferred_work_experiences[0].industry && this.preferred_work_experiences[0].years) {
       this.addPreferredWorkExperience(position_id, 0);
     } else {
-      this.openDialog('template', this.position.position);
+      if (!this.temp_position) {
+        this.router.navigate(['/positions']);
+      } else {
+        this.saveAsPositionTemplate();
+      }
     }
   }
 
@@ -1390,7 +1395,11 @@ export class CreatePositionComponent implements OnInit {
         if (arrIndex < this.preferred_work_experiences.length - 1) {
           this.addPreferredWorkExperience(position_id, arrIndex + 1);
         } else {
-          this.openDialog('template', this.position.position);
+          if (!this.temp_position) {
+            this.router.navigate(['/positions']);
+          } else {
+            this.saveAsPositionTemplate();
+          }
         }
       },
       error => {
@@ -1398,24 +1407,42 @@ export class CreatePositionComponent implements OnInit {
         if (arrIndex < this.preferred_work_experiences.length - 1) {
           this.addPreferredWorkExperience(position_id, arrIndex + 1);
         } else {
-          this.openDialog('template', this.position.position);
+          if (!this.temp_position) {
+            this.router.navigate(['/positions']);
+          } else {
+            this.saveAsPositionTemplate();
+          }
         }
       }
     );
   }
 
-  saveAsPositionTemplate(position_template_name: string) {
+  saveAsPositionTemplate() {
     const info = {
-      position_id: this.position.position_id,
-      position_template_name: position_template_name
+      position_id: this.temp_position.position_id,
+      position_template_name: this.temp_name
     };
     this.positionService.postPositionTemplate(info).subscribe(
       dataJson => {
-        this.router.navigate(['/positions']);
+        this.positionService.deletePosition(this.temp_position.position_id).subscribe(
+          data => {
+            this.temp_position = null;
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+          }
+        );
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
-        this.router.navigate(['/positions']);
+        this.positionService.deletePosition(this.temp_position.position_id).subscribe(
+          data => {
+            this.temp_position = null;
+          },
+          err => {
+            this.alertsService.show(err.message, AlertType.error);
+          }
+        );
       }
     );
   }
@@ -1459,9 +1486,9 @@ export class CreatePositionComponent implements OnInit {
         }
       } else if (category === 'template') {
         if (result && result.save_template && result.template_name) {
-          this.saveAsPositionTemplate(result.template_name);
-        } else {
-          this.router.navigate(['/positions']);
+          this.temp_name = result.template_name;
+          this.onClickPublish(true);
+          // this.saveAsPositionTemplate(result.template_name);
         }
       } else if (category === 'skip') {
         if (result && result.skip) {
