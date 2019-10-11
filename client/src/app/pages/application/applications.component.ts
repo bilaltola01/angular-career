@@ -16,12 +16,10 @@ import {
   positionSearchMessages,
   Major,
   City,
-  SortBy,
   Industry,
   Company,
   Skill,
   School,
-  Recruiter,
   positionListLimit,
   JobType,
   interestLevel,
@@ -82,6 +80,7 @@ export class ApplicationsComponent implements OnInit, DoCheck {
   mathFloor = Math.floor;
   filter_list: boolean;
   currentPageNumber = 1;
+  displaySkillsLimit = 3;
   paginationArr = [];
   appliedJobs = [];
   appliedJobsMap = {};
@@ -394,16 +393,7 @@ export class ApplicationsComponent implements OnInit, DoCheck {
     }
 
   }
-
-
-  openSnackBarApplications() {
-    this.alertsService.show(positionSearchMessages.APPLICATION_SAVE_SUCCESS, AlertType.success);
-  }
-  openSnackBarPosition() {
-    this.alertsService.show(positionSearchMessages.POSITION_APPLY_SUCCESS, AlertType.success);
-  }
-
-  preLoadNextPage(nextPageNumber) {
+    preLoadNextPage(nextPageNumber) {
     if (!this.preLoadDataObject[nextPageNumber]) {
       const previousOffset = this.filterAttributes.offset;
       this.filterAttributes.offset = this.filterAttributes.offset + applicationListLimit;
@@ -494,9 +484,20 @@ export class ApplicationsComponent implements OnInit, DoCheck {
     }
   }
   withdrawApplications() {
-    const selectedApplicationArr = this.applicationList.filter(position => position.selected === true);
+    const selectedApplicationArr = this.applicationList.filter(application => application.selected === true);
     this.withdrawApplication(selectedApplicationArr);
-
+  }
+  acceptOffers() {
+     const selectedAcceptOfferArr = this.applicationList.filter(application => application.selected === true && application.offer_sent);
+     if (selectedAcceptOfferArr.length > 0) {
+       this.acceptOffer(selectedAcceptOfferArr);
+     }
+  }
+  rejectOffers() {
+    const selectedRejectedOfferArr = this.applicationList.filter(application => application.selected === true && application.offer_sent);
+    if (selectedRejectedOfferArr.length > 0) {
+       this.rejectOffer(selectedRejectedOfferArr);
+    }
   }
   onLevelChanged(level: number, application_id) {
     const queryString = 'interest=' + level;
@@ -504,7 +505,7 @@ export class ApplicationsComponent implements OnInit, DoCheck {
       dataJson => {
         if (dataJson.data.count > 0) {
           if (!(dataJson.data.data[0].application_id === application_id)) {
-            this.openTestDialog(dataJson.data.data, level, application_id);
+            this.openInterestLevelDialog(dataJson.data.data, level, application_id);
           }
         } else {
           this.setInterestLevel(level, application_id);
@@ -523,10 +524,25 @@ export class ApplicationsComponent implements OnInit, DoCheck {
       });
 
   }
-  openTestDialog(data, level, application_id): void {
+  onClose(application_id, level) {
+    if (level > 0) {
+      const interestLevelQuery = {
+        'application_id': application_id,
+        'interest_level': 0
+      };
+      this.applicationService.patchInterestLevel(interestLevelQuery).subscribe(
+        () => {
+          this.getApplicationData();
+        });
+    }
+   }
+   openInterestLevelDialog(data, level, application_id): void {
     const dialogRef = this.dialog.open(InterestLevelPopupComponent, {
       data: { data, level, application_id },
-      width: '47%',
+      width:  '100vw',
+      maxWidth: '800px',
+      minWidth: '280px',
+      panelClass: ['edit-dialog-container']
     });
   }
   interestHeading(interest_level) {
@@ -545,6 +561,12 @@ export class ApplicationsComponent implements OnInit, DoCheck {
   } else if (interest_level === 6) {
     return 'First choice';
   }
+  }
+  acceptOffer(applicationData) {
+    this.applicationService.acceptOffer(applicationData).subscribe();
+  }
+  rejectOffer(applicationData) {
+    this.applicationService.rejectOffer(applicationData).subscribe();
   }
 }
 

@@ -323,9 +323,12 @@ $profile-form-field-mt: 30px;
                         }
                     }
                 }
+                & .show-button.more{
+                  text-align: right;
+                }
 
                 & .show-button {
-                    text-align: center;
+                     text-align: center;
 
                     action-button {
                         display: inline-block;
@@ -360,7 +363,14 @@ $profile-form-field-mt: 30px;
                 }
 
                 & .card {
-                    margin: 20px 0 10px;
+                    margin: 20px auto 0;
+                    &.second-card{
+                      margin-top:0;
+                      & mat-grid-tile{
+                        border-top:none;
+
+                      }
+                    }
                     & mat-grid-tile{
                         border: 1px solid #f0f0f0;
                         border-right: none;
@@ -395,6 +405,7 @@ $profile-form-field-mt: 30px;
                     overflow: hidden;
                     padding: 10px;
                     margin-bottom: 10px;
+                    margin-top: 10px;
                     & .application-top-choices-m{
                         float: left;
                         width: 60%;
@@ -403,7 +414,12 @@ $profile-form-field-mt: 30px;
                           margin-right: 20px;
                           vertical-align: middle;
                       }
+                      &  .cancel {
+                        color: gray;
+                        cursor: pointer;
+                      }
                         & .top-choice-content{
+
                             display: inline-block;
                             width: 30%;
                             vertical-align: middle;

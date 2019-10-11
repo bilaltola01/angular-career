@@ -47,10 +47,10 @@
     font-size: 14px;
     font-family: "Poppins", sans-serif;
     background-color: $secondary-bg-color;
-    color:gray;
+    color:#318BD6;
     border:none;
     &:hover{
-      color: gray;
+      color: #318BD6;
     }
 }
 :host-context(.application-interviewing ) button {
@@ -60,10 +60,10 @@
     font-size: 14px;
     font-family: "Poppins", sans-serif;
     background-color: $secondary-bg-color;
-    color: gray;
+    color: #318BD6;
     border:none;
     &:hover{
-      color:gray;
+      color:#318BD6;
     }
 }
 :host-context(.application-offer_sent) button {
@@ -73,10 +73,10 @@
     font-size: 14px;
     font-family: "Poppins", sans-serif;
     background-color: $secondary-bg-color;
-    color: gray;
+    color: #318BD6;
     border:none;
     &:hover{
-      color: gray;
+      color: #318BD6;
     }
 }
 :host-context(.application-rejected) button {
@@ -85,7 +85,7 @@
     padding: 12px 22px !important;
     font-size: 14px;
     font-family: "Poppins", sans-serif;
-    background-color: $secondary-bg-color;
+    background-color: $secondary-bg-color-reject-btn;
     color: red;
     border:none;
     &:hover{
@@ -99,10 +99,10 @@
     font-size: 14px;
     font-family: "Poppins", sans-serif;
     background-color: $secondary-bg-color;
-    color: gray;
+    color: #318BD6;
     border:none;
     &:hover{
-      color: gray;
+      color: #318BD6;
     }
 }
 :host-context(.application-saved) button {
@@ -112,19 +112,33 @@
     font-size: 14px;
     font-family: "Poppins", sans-serif;
     background-color: $secondary-bg-color;
-    color: gray;
+    color: #318BD6;
     border:none;
     &:hover{
-      color: gray;
+      color:  #318BD6;
     }
 }
-:host-context(.application-accept-btn ) button {
+:host-context(.application-submitted) button {
   line-height: 21px;
     font-weight: 500;
     padding: 12px 22px !important;
     font-size: 14px;
     font-family: "Poppins", sans-serif;
     background-color: $secondary-bg-color;
+    color: #318BD6;
+    border:none;
+    &:hover{
+      color: #318BD6;
+    }
+}
+
+:host-context(.application-accept-btn ) button {
+  line-height: 21px;
+    font-weight: 500;
+    padding: 12px 22px !important;
+    font-size: 14px;
+    font-family: "Poppins", sans-serif;
+    background-color:$secondary-bg-color-btn;
     color: rgb(64, 211, 28);
     border:none;
     &:hover{
@@ -180,13 +194,24 @@
 :host-context(.application-submit-btn) button {
  display: inline-block;
  width: auto;
+ line-height: 30px;
 }
 :host-context(.application-no-thanks-btn) button {
   display: inline-block;
   width: auto;
   background-color: rgba(0, 0, 0, 0.27);
-  margin:0 10px;
+  margin:0 5px;
+  line-height: 30px;
  }
 @media only screen and (max-width: $tablet-breakpoint) {
   :host-context(.position-search-reload-result)button {padding: 4px 13px !important;}
   }
+  @media only screen and (min-width:$min-mobile-breakpoint) and (max-width:$max-mobile-breakpoint) {
+    :host-context(.application-no-thanks-btn) button {
+      padding: 4px 13px !important;
+    }
+    :host-context(.application-submit-btn) button {
+      padding: 4px 13px !important;
+    }
+  }
+

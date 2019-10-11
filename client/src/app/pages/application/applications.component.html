@@ -190,8 +190,8 @@
             <mat-form-field>
               <mat-select>
                 <mat-option (click)="withdrawApplications()">Withdraw Application</mat-option>
-                <mat-option> Accept Offer</mat-option>
-                <mat-option> Reject Offer</mat-option>
+                <mat-option (click)="acceptOffers()"> Accept Offer</mat-option>
+                <mat-option (click)="rejectOffers()"> Reject Offer</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
@@ -212,28 +212,31 @@
         <div class="row" [ngClass]="{'selected': application.selected}">
           <round-checkbox id="test" [checked]="application.selected"
             (statusChange)="application.selected = !application.selected;selectedAllFlag=false;"></round-checkbox>
-          <h1 [routerLink]="['/positions/position-info/',application.position_id]">{{application.position}} </h1>
+          <h1 [routerLink]="['/applicationInformation']">{{application.position}} </h1>
           <div class="position-right">
             <span class="right-align">
               <action-button *ngIf="application.accepted" class="application-accept-btn" title="Accepted" type="stroked"
                 color="primary" disabled>
               </action-button>
-              <action-button *ngIf="application.in_review" class="application-in_review" title="In_review"
+              <action-button *ngIf="application.in_review" class="application-in_review" title="In Review"
                 type="stroked" color="primary" disabled>
               </action-button>
               <action-button *ngIf="application.interviewing" class="application-interviewing" title="Interviewing"
                 type="stroked" color="primary" disabled>
               </action-button>
-              <action-button *ngIf="application.offer_sent" class="application-offer_sent" title="Offer_sent"
+              <action-button *ngIf="application.offer_sent" class="application-offer_sent" title="Offer Sent"
                 type="stroked" color="primary" disabled>
               </action-button>
               <action-button *ngIf="application.rejected" class="application-rejected" title="Rejected" type="stroked"
                 color="primary" disabled>
               </action-button>
-              <action-button *ngIf="application.wait_listed" class="application-wait_listed" title="Wait_listed"
+              <action-button *ngIf="application.wait_listed" class="application-wait_listed" title="Wait Listed"
                 type="stroked" color="primary" disabled>
               </action-button>
               <action-button *ngIf="application.saved" class="application-saved" title="Saved"
+                type="stroked" color="primary" disabled>
+              </action-button>
+              <action-button *ngIf="!(application.accepted || application.in_review || application.interviewing || application.offer_sent || application.rejected || application.wait_listed || application.saved )" class="application-submitted" title="Submitted"
                 type="stroked" color="primary" disabled>
               </action-button>
 
@@ -355,6 +358,7 @@
                     removeActive="true" (levelChanged)="onLevelChanged($event, application.application_id)">
                   </simple-tag>
                 </div>
+                <mat-icon class="cancel" (click)="onClose(application.application_id,application.interest_level)">cancel</mat-icon>
                 <div class="top-choice-content">
                   <span>Interest In Position</span>
                   <p>{{interestHeading(application.interest_level)}}</p>
@@ -367,6 +371,11 @@
             <div class="main-card">
 
               <ul type="none">
+                  <div class="show-button more">
+                      <action-button routerLink="." type="text" title="{{!application.showMoreFlag ? 'See All' :
+                          'See Less'}}" color="primary" (click)="application.showMoreFlag = !application.showMoreFlag"
+                        *ngIf="application.minimum_skills?.length > 3 || application.preferred_skills?.length > 3"></action-button>
+                    </div>
                 <li>
                   <h5 for="skill_required">Skills Required<span>{{ application.minimum_skills?.length}}</span>
                   </h5>
@@ -409,7 +418,7 @@
             </div>
           </div>
           <div class="show-button">
-            <action-button type="text" title="See Application" color="primary"></action-button>
+            <action-button [routerLink]="['/applicationInformation']" type="text" title="See Application" color="primary"></action-button>
             &nbsp;&nbsp;
           </div>
         </div>
