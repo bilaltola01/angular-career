@@ -38,7 +38,7 @@
     </div>
     <div class="row__checkbox">
       <round-checkbox id="remember-me" title="Remember Me" [checked]="isRememberMe" (statusChange)="toggleRemember($event)"></round-checkbox>
-      <a mat-button disableRipple="true" routerLink="/login">Forgot Password?</a>
+      <a mat-button disableRipple="true" routerLink="/forgot-password">Forgot Password?</a>
     </div>
     <div class="row__buttons">
       <action-button type="flat" title="Login Now" color="primary" (click)="login()" [disabled]="!loginForm.valid"></action-button>
