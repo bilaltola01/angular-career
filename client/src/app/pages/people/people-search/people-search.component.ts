@@ -17,6 +17,7 @@ import {
   User,
   peopleListLimit,
   UserGeneralInfo,
+  SkillLevelDescription,
 } from 'src/app/models';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
@@ -70,6 +71,7 @@ export class PeopleSearchComponent implements OnInit {
   preLoadDataObject = {};
 
   userList: PeopleData[];
+  SkillLevelDescription = SkillLevelDescription;
 
   displayItemsLimit = 7;
   current_user: UserGeneralInfo;

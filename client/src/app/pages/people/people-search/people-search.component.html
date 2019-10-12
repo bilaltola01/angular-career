@@ -7,22 +7,22 @@
 
 <!-- Search Bar -->
 <div class="career-main">
-  <div class="common-search-filter" [formGroup]="peopleForm" autocomplete="off"> 
+  <div class="common-search-filter" [formGroup]="peopleForm" autocomplete="off">
     <div class="filter-data">
       <mat-icon (click)="toggleTabMenuOpen()" class="filter_icon">filter_list</mat-icon>
     </div>
     <div class="people-search-header">
       <mat-form-field appearance="standard" class="search">
         <mat-icon matSuffix (click)="onSearchUser($event)">search</mat-icon>
-        <input  matInput 
+        <input  matInput
                 placeholder="{{searchPlaceholderCopy}}"
-                type="text" 
+                type="text"
                 [matAutocomplete]="autocompleteSearch"
-                formControlName="searchPeople" 
+                formControlName="searchPeople"
                 (keyup.enter)="onSearchUser($event)">
         <mat-autocomplete #autocompleteSearch="matAutocomplete">
-            <a *ngFor="let people of autocomplete_searchpeoples | slice:0:4" 
-              routerLink="/user/{{people.user_id}}/profile" 
+            <a *ngFor="let people of autocomplete_searchpeoples | slice:0:4"
+              routerLink="/user/{{people.user_id}}/profile"
               [queryParams]="{showBackButton: 'true'}">
               <mat-option [value]="people.first_name + (people.last_name ? ' ' + people.last_name : '')">
                   <img [src]="people.photo ? people.photo : 'assets/icons/no_photo.png'">
@@ -141,10 +141,10 @@
                   <h3 *ngIf="user.general_info.title" class="title">{{user.general_info.title}}</h3>
                 </div>
               </div>
-              <action-button  class="contact-btn" 
-                              type="flat" 
-                              [title]="contactBtnTitle(user.contact_status)" 
-                              color="primary" 
+              <action-button  class="contact-btn"
+                              type="flat"
+                              [title]="contactBtnTitle(user.contact_status)"
+                              color="primary"
                               (click)="onClickContactBtn(user)"
                               disabled="{{user.contact_status === 'added' || !user.contact_status}}">
               </action-button>
@@ -168,10 +168,12 @@
             </div>
 
             <div *ngIf="user.general_info.skills && user.general_info.skills.length > 0" class="skills-container">
-              <h5>Skills <span class="count">{{user.general_info.skills.length}}</span></h5>
+              <h5>Skills<span class="count">{{user.general_info.skills.length}}</span></h5>
               <div class="skills" [class.show-more]="!show_less">
                 <ng-container *ngFor="let skill of user.general_info.skills; let j = index;">
-                  <simple-tag type="gray" [title]="skill.skill" ellipseTag="true" [value]="skill.skill_level"></simple-tag>
+                  <simple-tag type="gray" [title]="skill.skill" ellipseTag="true" [value]="skill.skill_level"
+                  [matTooltip]="SkillLevelDescription[skill.skill_level].title + SkillLevelDescription[skill.skill_level].description"
+                        [matTooltipShowDelay]=500></simple-tag>
                 </ng-container>
               </div>
             </div>
@@ -190,7 +192,7 @@
                 'Show Less'}}" color="primary" (click)="show_less = !show_less"></action-button>
               &nbsp;&nbsp;
               <action-button type="text" title="Go to Profile Page" color="primary"
-                routerLink="/user/{{ user.general_info.user_id }}/profile" [queryParams]="{showBackButton: 'true'}" *ngIf="!show_less"></action-button>  
+                routerLink="/user/{{ user.general_info.user_id }}/profile" [queryParams]="{showBackButton: 'true'}" *ngIf="!show_less"></action-button>
             </div>
 
           </div>
