@@ -22,7 +22,7 @@ export class PositionsDetailsComponent implements OnInit {
   positionName = [];
   savedJobsMap = {};
   savedJobs = [];
-  jobDescription ;
+  jobDescription;
   appliedJobsMap = {};
   appliedJobs = [];
   matchedSkills = [];
@@ -159,7 +159,7 @@ export class PositionsDetailsComponent implements OnInit {
   }
 
   countWords(description) {
-    if ( description) {
+    if (description) {
       this.jobDescription = description.split(' ').length;
     }
   }

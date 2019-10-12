@@ -182,21 +182,21 @@ export class PositionSearchComponent implements OnInit {
       recruiter ? this.onRecruiterValueChanges(recruiter) : this.autocomplete_recruiter = [];
     });
     if (this.searchQueryParam) {
-    this.positionForm.patchValue({
-      'searchPosition': this.urlParams['position'],
-      'minSal': this.urlParams['pay'],
-      'level': this.urlParams['level'],
-      'education': this.urlParams['education'],
-      'job': this.urlParams['job_type'],
-      'company': this.urlParams['company'],
-      'major': this.urlParams['majorName'],
-      'recruiter': this.urlParams['recruiterName'],
-      'school': this.urlParams['schoolName'],
-      'industry': this.urlParams['industryName'],
-      'city': this.urlParams['cityName'],
-      'sortBy': this.urlParams['sort']
-    });
-  }
+      this.positionForm.patchValue({
+        'searchPosition': this.urlParams['position'],
+        'minSal': this.urlParams['pay'],
+        'level': this.urlParams['level'],
+        'education': this.urlParams['education'],
+        'job': this.urlParams['job_type'],
+        'company': this.urlParams['company'],
+        'major': this.urlParams['majorName'],
+        'recruiter': this.urlParams['recruiterName'],
+        'school': this.urlParams['schoolName'],
+        'industry': this.urlParams['industryName'],
+        'city': this.urlParams['cityName'],
+        'sortBy': this.urlParams['sort']
+      });
+    }
   }
 
   onChangeCity(city) {

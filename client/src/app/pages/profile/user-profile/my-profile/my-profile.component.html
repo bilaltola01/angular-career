@@ -7,7 +7,7 @@
 <ng-container *ngIf="!isProfileLoading">
   <legend id="legend">
     <div class="nav-title" (click)="onClickTogggle()">
-      <h3 class="section-title">Profile</h3>
+      <h3 class="section-title">Profile </h3>
       <mat-icon>menu</mat-icon>
     </div>
     <ng-container *ngIf="currentPage === 'profile'">
@@ -22,7 +22,7 @@
     </ng-container>
   </legend>
   <router-outlet></router-outlet>
-  <nav-section 
+  <nav-section
     [headerFormValid]="headerFormValid" (clickUpdate)="onClickUpdate()"
     (selectedNavItem)="onSelectNavItem($event)" [isOpened]="isNavMenuOpened"
     [class.nav-hidden]="!((isHandset$ | async) && isNavMenuOpened)" id="nav-section"></nav-section>

@@ -393,7 +393,7 @@ export class ApplicationsComponent implements OnInit, DoCheck {
     }
 
   }
-    preLoadNextPage(nextPageNumber) {
+  preLoadNextPage(nextPageNumber) {
     if (!this.preLoadDataObject[nextPageNumber]) {
       const previousOffset = this.filterAttributes.offset;
       this.filterAttributes.offset = this.filterAttributes.offset + applicationListLimit;
@@ -488,15 +488,15 @@ export class ApplicationsComponent implements OnInit, DoCheck {
     this.withdrawApplication(selectedApplicationArr);
   }
   acceptOffers() {
-     const selectedAcceptOfferArr = this.applicationList.filter(application => application.selected === true && application.offer_sent);
-     if (selectedAcceptOfferArr.length > 0) {
-       this.acceptOffer(selectedAcceptOfferArr);
-     }
+    const selectedAcceptOfferArr = this.applicationList.filter(application => application.selected === true && application.offer_sent);
+    if (selectedAcceptOfferArr.length > 0) {
+      this.acceptOffer(selectedAcceptOfferArr);
+    }
   }
   rejectOffers() {
     const selectedRejectedOfferArr = this.applicationList.filter(application => application.selected === true && application.offer_sent);
     if (selectedRejectedOfferArr.length > 0) {
-       this.rejectOffer(selectedRejectedOfferArr);
+      this.rejectOffer(selectedRejectedOfferArr);
     }
   }
   onLevelChanged(level: number, application_id) {
@@ -535,32 +535,32 @@ export class ApplicationsComponent implements OnInit, DoCheck {
           this.getApplicationData();
         });
     }
-   }
-   openInterestLevelDialog(data, level, application_id): void {
+  }
+  openInterestLevelDialog(data, level, application_id): void {
     const dialogRef = this.dialog.open(InterestLevelPopupComponent, {
       data: { data, level, application_id },
-      width:  '100vw',
+      width: '100vw',
       maxWidth: '800px',
       minWidth: '280px',
       panelClass: ['edit-dialog-container']
     });
   }
   interestHeading(interest_level) {
-  if (interest_level === 0) {
-    return 'Interested but still looking';
-  } else if (interest_level === 1) {
-    return 'Interested';
-  } else if (interest_level === 2) {
-    return 'Extremely interested';
-  } else if (interest_level === 3) {
-    return 'Excited to apply';
-  } else if (interest_level === 4) {
-    return 'Among top choices';
-  } else if (interest_level === 5) {
-    return 'Second choice';
-  } else if (interest_level === 6) {
-    return 'First choice';
-  }
+    if (interest_level === 0) {
+      return 'Interested but still looking';
+    } else if (interest_level === 1) {
+      return 'Interested';
+    } else if (interest_level === 2) {
+      return 'Extremely interested';
+    } else if (interest_level === 3) {
+      return 'Excited to apply';
+    } else if (interest_level === 4) {
+      return 'Among top choices';
+    } else if (interest_level === 5) {
+      return 'Second choice';
+    } else if (interest_level === 6) {
+      return 'First choice';
+    }
   }
   acceptOffer(applicationData) {
     this.applicationService.acceptOffer(applicationData).subscribe();

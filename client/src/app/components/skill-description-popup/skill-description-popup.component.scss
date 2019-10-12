@@ -26,6 +26,10 @@ $profile-form-padding-desktop: 60px;
     text-align: center;
   }
   & mat-dialog-content {
+    width: auto;
+    max-width: 658px;
+    min-width: 280px;
+    box-sizing: border-box;
     .skill_level_desc {
       padding: 0;
       .key {
@@ -36,7 +40,7 @@ $profile-form-padding-desktop: 60px;
           align-content: flex-start;
           padding: 5px 0;
           border-radius: 18px;
-          width: 20%;
+          width: 15%;
           display: inline-block;
         }
         & li {
@@ -55,6 +59,7 @@ $profile-form-padding-desktop: 60px;
   :host {
     mat-dialog-content {
       .skill_level_desc {
+        //  width: auto;
         padding: 0;
         .key {
           .simpletag {
@@ -64,7 +69,36 @@ $profile-form-padding-desktop: 60px;
             align-content: flex-start;
             padding: 5px 0;
             border-radius: 18px;
-            width: 40%;
+            width: 30%;
+            display: inline-block;
+          }
+          & li {
+            line-height: 26px;
+            margin-bottom: 10px;
+            b.bold {
+              font-weight: 590;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@media only screen and (max-width: 720px) {
+  :host {
+    mat-dialog-content {
+      .skill_level_desc {
+        //  width: auto;
+        padding: 0;
+        .key {
+          .simpletag {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-content: flex-start;
+            padding: 5px 0;
+            border-radius: 18px;
+            width: auto;
             display: inline-block;
           }
           & li {

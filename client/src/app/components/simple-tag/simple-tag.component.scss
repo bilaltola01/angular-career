@@ -1,4 +1,4 @@
-@import './../../../styles/variables.scss';
+@import "./../../../styles/variables.scss";
 
 $tag-normal-color: map-get($md-cfaccent, 500);
 $tag-green-color: map-get($md-cdgreen, 500);
@@ -6,161 +6,157 @@ $tag-red-color: map-get($md-cfred, 500);
 $status-bg-color: #f4f5f8;
 
 @mixin tag-color($color) {
-    color: $color;
-    background-color: rgba($color, 0.05);
-    border-color: rgba($color, 0.05);
+  color: $color;
+  background-color: rgba($color, 0.05);
+  border-color: rgba($color, 0.05);
 }
 
 :host.status {
-    .tag-container {
-        background-color: $status-bg-color;
-    }
+  .tag-container {
+    background-color: $status-bg-color;
+  }
 }
 
 .tag-container {
-    position: relative;
-    background-color: transparent;
-    color: rgba($tag-normal-color, 0.84);
-    padding: 4px 15px;
-    border-radius: 500px;
-    text-transform: capitalize;
-    font-family: "Poppins", sans-serif;
-    font-size: 14px;
-    line-height: 16px;
-    font-weight: 400;
-    border: solid 1px rgba($tag-normal-color, 0.1);
-    background-clip: padding-box;
-    &.tag-green {
-        @include tag-color($tag-green-color);
+  position: relative;
+  background-color: transparent;
+  color: rgba($tag-normal-color, 0.84);
+  padding: 4px 15px;
+  border-radius: 500px;
+  text-transform: capitalize;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 400;
+  border: solid 1px rgba($tag-normal-color, 0.1);
+  background-clip: padding-box;
+  &.tag-green {
+    @include tag-color($tag-green-color);
+  }
+  &.tag-red {
+    @include tag-color($tag-red-color);
+  }
+  &.tag-gray {
+    background-color: rgba($tag-normal-color, 0.05);
+    border-color: rgba($tag-normal-color, 0.05);
+  }
+  &.tag-online {
+    display: flex;
+    align-items: center;
+    font-size: 1em;
+    font-weight: bold;
+    padding: 12px;
+    span {
+      margin: 0 10px;
     }
-    &.tag-red {
-        @include tag-color($tag-red-color);
+    .mat-icon {
+      font-size: 25px;
+      color: rgba($tag-normal-color, 0.2);
+      width: initial;
+      height: initial;
     }
-    &.tag-gray {
-        background-color: rgba($tag-normal-color, 0.05);
-        border-color: rgba($tag-normal-color, 0.05);
+    &.active {
+      .mat-icon {
+        color: $tag-green-color;
+      }
     }
-    &.tag-online {
-        display: flex;
-        align-items: center;
-        font-size: 1em;
-        font-weight: bold;
-        padding: 12px;
-        span {
-            margin: 0 10px;
-        }
-        .mat-icon {
-            font-size: 25px;
-            color: rgba($tag-normal-color, .2);
-            width: initial;
-            height: initial;
-        }
+  }
+  &.tag-ellipse {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: flex-start;
+    padding: 5px 16px;
+    border-radius: 18px;
+    .ellipse-container {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      height: 12px;
+      mat-icon {
+        font-size: 8px;
+        color: rgba(#000000, 0.2);
+        width: initial;
+        height: initial;
+        margin-right: 2px;
+        cursor: pointer;
         &.active {
-            .mat-icon {
-                color: $tag-green-color;
-            }
+          color: $tag-green-color;
         }
+      }
     }
-    &.tag-ellipse {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-content: flex-start;
-        padding: 5px 16px;
-        border-radius: 18px;
-        .ellipse-container {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            height: 12px;
-            mat-icon {
-                font-size: 8px;
-                color: rgba(#000000, 0.2);
-                width: initial;
-                height: initial;
-                margin-right: 2px;
-                cursor: pointer;
-                &.active {
-                    color: $tag-green-color;
-                }
-            }
-        }
-        mat-icon.remove-icon {
-            position: absolute;
-            top: 5px;
-            right: 10px;
-            font-size: 18px;
-            width: 18px;
-            height: 18px;
-            color: rgba(#000000, 0.2);
-            cursor: pointer;
-            &:hover {
-                color: $tag-red-color;
-            }
-        }
+    mat-icon.remove-icon {
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      color: rgba(#000000, 0.2);
+      cursor: pointer;
+      &:hover {
+        color: $tag-red-color;
+      }
     }
-    &.tag-control {
-        padding: 10px 30px 10px 20px;
-        border-radius: 25px;
-        .ellipse-container {
-            height: 16px;
-            mat-icon {
-                font-size: 12px;
-                margin-right: 3px;
-            }
-        }
+  }
+  &.tag-control {
+    padding: 10px 30px 10px 20px;
+    border-radius: 25px;
+    .ellipse-container {
+      height: 16px;
+      mat-icon {
+        font-size: 12px;
+        margin-right: 3px;
+      }
     }
+  }
+  .tag-remove {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    border-radius: 500px;
+    box-sizing: border-box;
+  }
+  &:hover {
     .tag-remove {
-        display: none;
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        border-radius: 500px;
-        box-sizing: border-box;
+      @include flex(row, center, center);
+      background-color: rgba($status-bg-color, 0.7);
+      mat-icon {
+        font-size: 20px;
+        color: $tag-red-color;
+        width: 20px;
+        height: 20px;
+      }
     }
-    &:hover {
-        .tag-remove {
-            @include flex(row, center, center);
-            background-color: rgba($status-bg-color, .7);
-            mat-icon {
-                font-size: 20px;
-                color: $tag-red-color;
-                width: 20px;
-                height: 20px;
-            }
-        }
-    }
+  }
 }
 :host-context(.skill-prefer) .tag-container.tag-gray {
-    background-color: transparent;
-    border-color: rgba(map-get($md-cfgray, 500), 1);
+  background-color: transparent;
+  border-color: rgba(map-get($md-cfgray, 500), 1);
+}
+:host-context(.red-color-tag) .tag-container {
+  background-color: rgba(208, 83, 83, 0.1);
+  border-color: rgba(208, 83, 83, 0.1);
+}
+:host-context(.green-color-tag) .tag-container {
+  background-color: rgba(41, 204, 91, 0.1);
+  border-color: rgba(41, 204, 91, 0.1);
+}
+:host-context(.top-choices-tag) .tag-container {
+  border: none;
+}
+:host-context(.top-choices-tag) .tag-container.tag-ellipse {
+  padding: 0;
+}
+:host-context(.top-choices-tag) .tag-container .ellipse-container mat-icon {
+  font-size: 16.63px;
+  vertical-align: middle;
+}
+:host-context(.top-choices-tag) .tag-container .ellipse-container mat-icon {
+  &.active {
+    color: #318bd6;
   }
-  :host-context(.red-color-tag) .tag-container{
-    background-color: rgba(208, 83, 83, 0.10);
-    border-color: rgba(208, 83, 83, 0.10);
-  }
-  :host-context(.green-color-tag) .tag-container{
-    background-color: rgba(41, 204, 91, 0.10);
-    border-color: rgba(41, 204, 91, 0.10);
-  }
-  :host-context(.top-choices-tag) .tag-container{
-    border:none;
-
-  }
-  :host-context(.top-choices-tag) .tag-container.tag-ellipse{
-    padding: 0;
-  }
-  :host-context(.top-choices-tag) .tag-container .ellipse-container mat-icon{
-    font-size: 16.63px;
-    vertical-align: middle;
-  }
-  :host-context(.top-choices-tag) .tag-container .ellipse-container   mat-icon{
-    &.active{
-      color: #318BD6;
-    }
-  }
-
-
-
+}
