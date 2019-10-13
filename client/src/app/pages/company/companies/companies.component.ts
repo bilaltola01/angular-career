@@ -87,7 +87,7 @@ export class CompaniesComponent implements OnInit {
 
   // UI Variables
   isLoadingResults = true;
-  showFilterListFlag = true;
+  showFilterListFlag = false;
   maxDescriptionLength = 220;
   searchPlaceholderCopy = 'Search companies by name.';
   emptyResultsCopy = 'Use the search and filter to find companies.';
@@ -107,7 +107,7 @@ export class CompaniesComponent implements OnInit {
   }
 
   isHandset$: Observable<boolean> = this.breakpointObserver
-    .observe(['(max-width: 991px)'])
+    .observe(['(max-width: 1300px)'])
     .pipe(
       map(result => result.matches)
     );
@@ -332,7 +332,7 @@ export class CompaniesComponent implements OnInit {
       if (handsetFlag) {
         this.showFilterListFlag = !this.showFilterListFlag;
       } else {
-        this.showFilterListFlag = true;
+        this.showFilterListFlag = false;
       }
     });
   }
