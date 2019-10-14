@@ -341,7 +341,7 @@
               </mat-grid-tile>
               <mat-grid-tile>
                 <div class="card-item">
-                  <span>Education Level</span>
+                  <span>Department</span>
                   <p *ngIf="application.preferred_education_levels ; else noEducationLevel">
                     {{getLowestEducationLevel(application.preferred_education_levels)}}</p>
                   <ng-template #noEducationLevel>

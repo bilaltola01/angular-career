@@ -148,6 +148,9 @@ $profile-form-field-mt: 30px;
           img {
             vertical-align: middle;
             margin-right: 8px;
+            &.align-more-img{
+              margin-top: -7px;
+            }
           }
 
           h3 {
@@ -161,6 +164,7 @@ $profile-form-field-mt: 30px;
 
           & .skills-preferred-m {
             display: inline-block;
+            vertical-align: middle;
           }
           & .education-level-m {
             margin: 20px auto 0;
@@ -216,6 +220,10 @@ $profile-form-field-mt: 30px;
             img {
               margin-left: 8px;
               margin-top: 0;
+              &.align-more-img{
+                margin-top: -7px;
+                margin-left:0;
+              }
               &.question-icon {
                 margin-top: 5px;
                 cursor: pointer;
@@ -226,8 +234,10 @@ $profile-form-field-mt: 30px;
                 margin-left: 0;
                 margin-top: 15px;
                 &.edu_img {
-                  margin-top: 0;
+                  margin-top: -4px;
+
                 }
+
               }
             }
           }
