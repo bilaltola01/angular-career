@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
+import { ChatService, ChatRoom } from 'src/app/services/chat.service';
+
 
 @Component({
   selector: 'app-chat-viewer',
@@ -7,20 +10,39 @@ import { AngularFirestore } from '@angular/fire/firestore';
   styleUrls: ['./chat-viewer.component.scss']
 })
 export class ChatViewerComponent implements OnInit {
+  // chatRoom$: Observable<ChatRoom>;
+  chatRoom$: Observable<any>;
+  chatId: string;
+  newMessage: string;
 
-  constructor(private afs: AngularFirestore,) {
-    const things = afs.collection('chats').valueChanges();
-    things.subscribe(console.log);
+  things$: Observable<any>;
+
+  constructor(private afs: AngularFirestore, private chatService: ChatService) {
+    // const things = afs.collection('chats').valueChanges();
+    // things.subscribe(console.log);
   }
 
   ngOnInit() {
+  
   }
 
-  demoAdd() {
-    console.log("TCL: ChatViewerComponent -> demoAdd -> demoAdd");
-
-    const docRef = this.afs.collection('chats').add({test: 'delete me'});
+  joinRoom() {
+    this.chatRoom$ = this.chatService.get(this.chatId);
   }
+
+  createRoom() {
+    this.chatService.create();
+  }
+
+  sendMessage() {
+    this.chatService.sendMessage(this.chatId, this.newMessage);
+    this.newMessage = '';
+
+  }
+
+  trackByCreated(i, msg) {
+    return msg.createdAt;
+}
 
 }
 

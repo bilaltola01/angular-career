@@ -1,3 +1,34 @@
-<p>chat-viewer works!</p>
+<!-- <p>chat-viewer works!</p>
 
-<button (click)="demoAdd()"> Demo Add </button>
+<button (click)="demoAdd()"> Demo Add </button> -->
+
+<div class="chat-input">
+    <mat-form-field appearance="fill">
+        <mat-label>Chat Id</mat-label>
+        <input matInput placeholder="id" type="text" [(ngModel)]="chatId" required> 
+    </mat-form-field>
+    <action-button type="raised" title="Join" color="primary" (click)="joinRoom()"></action-button>
+    <action-button type="raised" title="Create" color="primary" (click)="createRoom()"></action-button>
+</div>
+
+<main autocomplete="off" *ngIf="chatRoom$ | async as chat">
+    <div class="chat">
+        <div class="msg" *ngFor="let msg of chat.messages; trackBy: trackByCreated">
+
+            <!-- <div class="user">
+                <img [src]="msg.user?.photoURL">
+                <div>{{ msg.user?.displayName }}</div>
+            </div> -->
+    
+            <p>user:{{msg.uid}}: message:{{ msg.content }}</p>
+
+        </div>
+    </div>
+
+    <div class="messsage-form">
+        <mat-form-field floatLabel="never">
+            <input matInput placeholder="Type a message..." type="text" [(ngModel)]="newMessage" autocomplete="off"> 
+        </mat-form-field>
+        <action-button type="raised" title="Send" color="primary" (click)="sendMessage()"></action-button>
+    </div>
+</main>

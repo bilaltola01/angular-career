@@ -1,0 +1,27 @@
+.chat-input{
+    width: 400px;
+    display: grid;
+    grid-template-columns: 1fr 200px;
+    grid-gap: 20px;
+}
+
+main {
+    background: #ffffff;
+    padding: 10px 18px;
+    border-bottom: 1px solid #e0e4e8;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    margin: 50px;
+
+    .chat {
+        height: 70vh;
+    }
+    .messsage-form {
+        display: grid;
+        grid-template-columns: 1fr 200px;
+        grid-gap: 20px;
+
+        padding-top: 10px;
+        border-top: 1px solid lightgray;
+    }
+}
