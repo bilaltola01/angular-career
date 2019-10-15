@@ -345,6 +345,15 @@ export const UserRoles = [
   'applicant',
   'recruiter'
 ];
+export const saveJobSortBy = [
+  { 'title': 'post-date', 'value': 'post-date' },
+  { 'title': 'employee-count', 'value': 'employee-count' },
+  { 'title': 'location', 'value': 'location' },
+  { 'title': 'available-positions', 'value': 'available-positions' },
+  { 'title': 'qualification', 'value': 'qualification' },
+  { 'title': 'popularity', 'value': 'popularity' },
+  { 'title': 'application-deadline', 'value': 'application-deadline' }
+];
 
 export const NavMenus = {
   profile: [

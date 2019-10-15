@@ -32,6 +32,10 @@ export const routes: Routes = [
       .then(module => module.PositionModule)
   },
   {
+    path: 'saved-jobs', loadChildren: () => import('./pages/saved-jobs/saved-jobs.module')
+      .then(module => module.SavedJobsModule)
+  },
+  {
     path: 'people', loadChildren: () => import('./pages/people/people.module')
       .then(module => module.PeopleModule)
   },
