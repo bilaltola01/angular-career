@@ -148,6 +148,7 @@ export class UserService {
 
   // General Information Services
   public getGeneralInfo(userId: number = this.user_id): Observable<any> {
+  console.log("TCL: UserService -> userId", userId)
     return this.http.get(this.user_service_url + `user/${userId}`, this.authHttpOptions())
       .pipe(
         map(data => {

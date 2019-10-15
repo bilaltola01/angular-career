@@ -19,8 +19,8 @@
                 <img [src]="msg.user?.photoURL">
                 <div>{{ msg.user?.displayName }}</div>
             </div> -->
-    
-            <p>user:{{msg.uid}}: message:{{ msg.content }}</p>
+            <p> json : {{msg | json }}</p>
+            <p>{{msg.user.first_name}}:{{ msg.content }}</p>
 
         </div>
     </div>

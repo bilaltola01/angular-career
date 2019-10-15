@@ -54,12 +54,14 @@ export class ChatService {
       );
   }
 
-  async create() {
+  async create() { // TODO: Add title
     // const { uid } = await this.auth.getUser();
 
     this.userService.getGeneralInfo().subscribe( async info => {
 
-      const chatMember: ChatMember = {
+      console.log("TCL: ChatService -> create -> info", info)
+
+      const chatMember: ChatMember = { // TODO: Maybe not needeeed
         id: info.data.user_id,
         photo_url: info.data.photo,
         first_name: info.data.first_name,
@@ -68,7 +70,6 @@ export class ChatService {
       };
 
       const chatData: ChatRoom = {
-        // uuid: chatId,
         title: 'Delete Room',
         createdAt: Date.now(),
         participant1: chatMember,
@@ -84,20 +85,57 @@ export class ChatService {
   }
 
   async sendMessage(chatId, content) {
-    const uid  = this.userService.user_id;
+    const user_id  = this.userService.user_id; // TODO: Get User ID function
 
     const data = {
-      uid,
+      user_id,
       content,
       createdAt: Date.now()
     };
 
-    if (uid) {
+    if (user_id) {
       const ref = this.afs.collection('ChatRooms').doc(chatId);
       return ref.update({
         messages: firestore.FieldValue.arrayUnion(data)
       });
     }
+  }
+
+  joinUsers(chat$: Observable<any>) {
+    let chat;
+    const joinKeys = {};
+  
+    return chat$.pipe(
+      switchMap(c => {
+        // Unique User IDs
+        chat = c;
+        const user_ids = Array.from(new Set(c.messages.map(v => v.user_id)));
+  
+        // Firestore User Doc Reads
+        const userDocs = user_ids.map(u =>
+          this.userService.getGeneralInfo(u as number)
+        );
+  
+        return userDocs.length ? combineLatest(userDocs) : of([]);
+      }),
+      map(arr => {
+        console.log("TCL: ChatService -> joinUsers -> arr", arr)
+        arr.forEach(v => {
+          console.log("TCL: ChatService -> joinUsers -> v", v)
+          joinKeys[(<any>v).data.user_id] = v.data;
+        });
+
+        console.log("TCL: ChatService -> joinUsers -> joinKeys", joinKeys)
+
+        chat.messages = chat.messages.map(v => {
+        console.log("TCL: ChatService -> joinUsers -> v", v)
+          
+          return { ...v, user: joinKeys[v.user_id] };
+        });
+  
+        return chat;
+      })
+    );
   }
 
 }
