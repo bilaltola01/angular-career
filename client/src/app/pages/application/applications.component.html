@@ -248,11 +248,11 @@
               <mat-menu #menu="matMenu">
                 <button mat-menu-item routerLink="../application/{{this.appliedJobsMap[application.position_id]}}">See
                   Application</button>
-                <button mat-menu-item (click)="withdrawApplication(application.application_id)">Withdraw
+                <button mat-menu-item (click)="withdrawApplication([application])">Withdraw
                   Application</button>
                 <div *ngIf="application.offer_sent">
-                  <button mat-menu-item (click)="acceptOffer(application.application_id)">Accept Offer</button>
-                  <button mat-menu-item (click)="rejectOffer(application.application_id)">Reject Offer</button>
+                  <button mat-menu-item (click)="acceptOffer([application])">Accept Offer</button>
+                  <button mat-menu-item (click)="rejectOffer([application])">Reject Offer</button>
                 </div>
               </mat-menu>
             </span>

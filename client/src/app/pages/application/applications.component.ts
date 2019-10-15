@@ -344,7 +344,6 @@ export class ApplicationsComponent implements OnInit, DoCheck {
       return job;
     });
   }
-
   onSearchPosition(event) {
     this.filterAttributes.offset = 0;
     this.preLoadDataObject = {};
@@ -428,6 +427,9 @@ export class ApplicationsComponent implements OnInit, DoCheck {
       dataJson => {
         this.updatedFitscoreList = [...dataJson.data['fitscores']];
         this.updatedFitscore();
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
       });
   }
   updatedFitscore() {
@@ -521,6 +523,9 @@ export class ApplicationsComponent implements OnInit, DoCheck {
     this.applicationService.patchInterestLevel(interestLevelQuery).subscribe(
       () => {
         this.getApplicationData();
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
       });
 
   }
@@ -533,6 +538,9 @@ export class ApplicationsComponent implements OnInit, DoCheck {
       this.applicationService.patchInterestLevel(interestLevelQuery).subscribe(
         () => {
           this.getApplicationData();
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
         });
     }
   }

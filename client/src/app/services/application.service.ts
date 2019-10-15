@@ -183,30 +183,13 @@ export class ApplicationService {
       );
   }
   public acceptOffer(queryParam): Observable<any> {
-    let queryUrl;
-    if (typeof queryParam === 'number') {
-      queryUrl = `${this.application_service_url}application`;
-      const queryBody = {
-        'application_id': queryParam,
-        'accepted': 1
-      };
-      return this.http.patch(queryUrl, queryBody, this.authHttpOptions())
-        .pipe(
-          map(
-            data => {
-              return { success: true, message: 'Success!', data: data };
-            }
-          ),
-          catchError(this.handleError)
-        );
-    } else {
       const observableArr = [];
       for (let i = 0; i < queryParam.length; i++) {
         const queryBody = {
           'application_id': queryParam[i].application_id,
           'accepted': 1
         };
-        queryUrl = `${this.application_service_url}application`;
+      const queryUrl = `${this.application_service_url}application`;
         observableArr[i] = this.http.patch(queryUrl, queryBody, this.authHttpOptions()).pipe(
           map(
             data => {
@@ -216,36 +199,16 @@ export class ApplicationService {
           catchError(this.handleError)
         );
       }
-      return forkJoin(observableArr);
-
-    }
-  }
+      return forkJoin(observableArr); }
 
   public rejectOffer(queryParam): Observable<any> {
-    let queryUrl;
-    if (typeof queryParam === 'number') {
-      queryUrl = `${this.application_service_url}application`;
-      const queryBody = {
-        'application_id': queryParam,
-        'rejected': 1
-      };
-      return this.http.patch(queryUrl, queryBody, this.authHttpOptions())
-        .pipe(
-          map(
-            data => {
-              return { success: true, message: 'Success!', data: data };
-            }
-          ),
-          catchError(this.handleError)
-        );
-    } else {
       const observableArr = [];
       for (let i = 0; i < queryParam.length; i++) {
         const queryBody = {
           'application_id': queryParam[i].application_id,
           'rejected': 1
         };
-        queryUrl = `${this.application_service_url}application`;
+      const queryUrl = `${this.application_service_url}application`;
         observableArr[i] = this.http.patch(queryUrl, queryBody, this.authHttpOptions()).pipe(
           map(
             data => {
@@ -256,30 +219,16 @@ export class ApplicationService {
         );
       }
       return forkJoin(observableArr);
-    }
   }
 
 
   public withdrawJobs(applicationData): Observable<any> {
-    let queryUrl;
     const headerOption = {
       headers: this.authHttpOptions().headers
     };
-    if (typeof applicationData === 'number') {
-      queryUrl = `${this.application_service_url}application/${applicationData}`;
-      return this.http.delete(queryUrl, headerOption)
-        .pipe(
-          map(
-            data => {
-              return { success: true, message: 'Success!', data: data };
-            }
-          ),
-          catchError(this.handleError)
-        );
-    } else {
       const observableArr = [];
       for (let i = 0; i < applicationData.length; i++) {
-        queryUrl = `${this.application_service_url}application/${applicationData[i].application_id}`;
+      const queryUrl = `${this.application_service_url}application/${applicationData[i].application_id}`;
         observableArr[i] = this.http.delete(queryUrl, this.authHttpOptions()).pipe(
           map(
             data => {
@@ -290,7 +239,5 @@ export class ApplicationService {
         );
       }
       return forkJoin(observableArr);
-    }
-
   }
 }
