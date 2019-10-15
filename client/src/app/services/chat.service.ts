@@ -104,35 +104,26 @@ export class ChatService {
   joinUsers(chat$: Observable<any>) {
     let chat;
     const joinKeys = {};
-  
+
     return chat$.pipe(
       switchMap(c => {
         // Unique User IDs
         chat = c;
         const user_ids = Array.from(new Set(c.messages.map(v => v.user_id)));
-  
-        // Firestore User Doc Reads
+
         const userDocs = user_ids.map(u =>
           this.userService.getGeneralInfo(u as number)
         );
-  
         return userDocs.length ? combineLatest(userDocs) : of([]);
       }),
       map(arr => {
-        console.log("TCL: ChatService -> joinUsers -> arr", arr)
         arr.forEach(v => {
-          console.log("TCL: ChatService -> joinUsers -> v", v)
           joinKeys[(<any>v).data.user_id] = v.data;
         });
-
-        console.log("TCL: ChatService -> joinUsers -> joinKeys", joinKeys)
-
         chat.messages = chat.messages.map(v => {
-        console.log("TCL: ChatService -> joinUsers -> v", v)
-          
           return { ...v, user: joinKeys[v.user_id] };
         });
-  
+
         return chat;
       })
     );

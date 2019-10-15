@@ -1,8 +1,9 @@
 .chat-input{
-    width: 400px;
-    display: grid;
-    grid-template-columns: 1fr 200px;
-    grid-gap: 20px;
+    // width: 400px;
+    // display: grid;
+    // grid-template-columns: 1fr 200px;
+    // grid-gap: 20px;
+    display: inline-flex;
 }
 
 main {
@@ -15,6 +16,18 @@ main {
 
     .chat {
         height: 70vh;
+        p {
+            display: inline-flex;
+            align-items: center;
+        }
+        img {
+            width: 25px;
+            height: 25px;
+            margin-right: 5px;
+            border-radius: 50%;
+            -o-object-fit: cover;
+            object-fit: cover;
+        }
     }
     .messsage-form {
         display: grid;
