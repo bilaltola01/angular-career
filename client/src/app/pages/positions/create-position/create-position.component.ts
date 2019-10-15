@@ -149,6 +149,7 @@ export class CreatePositionComponent implements OnInit {
   position_state: State;
   position_country: number;
   position_salary: number;
+  position_department: string;
   position_level: string;
   position_type: string;
   position_application_type: string;
@@ -368,6 +369,7 @@ export class CreatePositionComponent implements OnInit {
       position_state: new FormControl(this.position_state ? this.position_state.state : null),
       position_country: new FormControl(this.position_country ? Countries[this.position_country - 1] : null),
       position_salary: new FormControl(this.position_salary ? this.position_salary : null),
+      position_department: new FormControl(this.position_department ? this.position_department : null),
       position_level: new FormControl(this.position_level ? this.position_level : null, [Validators.required]),
       position_type: new FormControl(this.position_type ? this.position_type : null, [Validators.required]),
       position_application_type: new FormControl(this.position_application_type ? this.position_application_type : null),
@@ -461,6 +463,12 @@ export class CreatePositionComponent implements OnInit {
     this.positionBasicInfoForm.get('position_salary').valueChanges.subscribe(
       (position_salary) => {
         this.position_salary = position_salary ? parseInt(position_salary, 10) : null;
+      }
+    );
+
+    this.positionBasicInfoForm.get('position_department').valueChanges.subscribe(
+      (position_department) => {
+        this.position_department = position_department ? this.helperService.checkSpacesString(position_department) : null;
       }
     );
 
@@ -1189,7 +1197,7 @@ export class CreatePositionComponent implements OnInit {
         repeat_date: null,
         cover_letter_req:	null,
         recruiter_id:	this.position_recruiter ? this.position_recruiter.user_id : null,
-        department:	null,
+        department:	this.position_department ? this.position_department : null,
         open:	1,
         openings:	null,
         application_deadline:	this.position_application_deadline ? this.position_application_deadline : null
