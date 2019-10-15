@@ -41,7 +41,6 @@ export class PositionsDetailsComponent implements OnInit {
   SkillLevelDescription = SkillLevelDescription;
   updatedFitscoreData;
   filter_list: boolean;
-  jobLowestEducationLevel;
   locationLength;
 
   calculatedQualificationLevel: string;
@@ -93,9 +92,6 @@ export class PositionsDetailsComponent implements OnInit {
         this.getCompanyData(this.positionName[0].company_id);
         this.getRecruiterData(this.positionName[0].recruiter_id);
         this.countWords(this.positionName[0].position_desc);
-        if (this.positionName[0].preferred_education_levels) {
-          this.getLowestEducationLevel(this.positionName[0].preferred_education_levels);
-        }
         this.calculatedQualificationLevel = this.calculateQualificationLevel(this.positionName[0].true_fitscore_info, this.positionName[0].minimum_skills);
         this.initPreferredSkillsSearchForm();
         this.initRequiredSkillsSearchForm();
@@ -162,12 +158,6 @@ export class PositionsDetailsComponent implements OnInit {
     if (description) {
       this.jobDescription = description.split(' ').length;
     }
-  }
-  getLowestEducationLevel(lowestEducation) {
-    let educationLowestLevel = lowestEducation.map(level => level.level);
-    educationLowestLevel = Math.min(...educationLowestLevel);
-    const index = lowestEducation.findIndex(lowestLevel => lowestLevel.level === educationLowestLevel);
-    this.jobLowestEducationLevel = lowestEducation[index].education_level;
   }
   getCompanyData(comapnyId) {
     this.companyService.getCompanyData(comapnyId).subscribe(
