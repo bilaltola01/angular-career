@@ -73,6 +73,7 @@ export class ProfileSectionComponent implements OnInit {
   userInterestsList: UserInterestItem[];
   userProjectsList: UserProjectItem[];
   userPublicationsList: UserPublicationItem[];
+  SkillLevelDescription = SkillLevelDescription;
   externalResourcesList: UserExternalResourcesItem[];
   editMode: boolean;
   skillLevelDescription = SkillLevelDescription;

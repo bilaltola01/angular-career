@@ -1,4 +1,4 @@
-@import './../../../../../styles/variables.scss';
+@import "./../../../../../styles/variables.scss";
 
 :host {
   grid-area: main;
@@ -27,7 +27,7 @@
       cursor: pointer;
     }
   }
-  
+
   .row {
     background: white;
     padding: 25px 20px;
@@ -49,7 +49,7 @@
       margin-bottom: 20px;
       display: inline-block;
     }
-    
+
     h4 {
       margin-top: 10px;
       &.name-field {
@@ -99,34 +99,34 @@
   }
   h3 {
     margin-top: 0;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
   }
   h4 {
     margin-bottom: 0;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
   }
   h5 {
     margin: 10px 0;
-    color: rgba(map-get($md-cfaccent, 500), .34);
+    color: rgba(map-get($md-cfaccent, 500), 0.34);
   }
   small {
     font-size: 14px;
-    color: rgba(map-get($md-cfaccent, 500), .84);
+    color: rgba(map-get($md-cfaccent, 500), 0.84);
   }
   mat-divider {
     margin: 20px 0;
     border-color: rgba(#707070, 0.1);
   }
   p {
-    color: rgba(map-get($md-cfaccent, 500), .74);
+    color: rgba(map-get($md-cfaccent, 500), 0.74);
     &.short-desc {
-      color: rgba(map-get($md-cfaccent, 500), .74);
+      color: rgba(map-get($md-cfaccent, 500), 0.74);
     }
   }
   .detail-info {
     width: 100%;
     display: inline-grid;
-    grid-template: 
+    grid-template:
       "left-top right-all" auto
       "left-middle right-all" auto
       "left-bottom right-all" auto
@@ -149,10 +149,10 @@
   .editor-container {
     width: 100%;
     display: inline-grid;
-    grid-template: 
+    grid-template:
       " name-field btn-edit btn-delete " auto
       / auto 24px 24px;
-      grid-gap: 0 10px;
+    grid-gap: 0 10px;
     .name-field {
       grid-area: name-field;
     }
@@ -170,7 +170,7 @@
     border: solid 3px $secondary-bg-color;
     border-radius: 38px;
     display: inline-grid;
-    grid-template: 
+    grid-template:
       "image title" 35px
       "image info" 35px
       / 70px auto;
@@ -197,6 +197,10 @@
       padding-right: 20px;
     }
   }
+  .question {
+    margin-left: 12px;
+    margin-bottom: -3px;
+  }
   .form-field {
     width: 80%;
     max-width: 615px;
@@ -220,7 +224,7 @@
   .temp-skill {
     margin-top: 10px;
     @include flex(row, center, flex-start);
-    & > *  {
+    & > * {
       margin-top: 20px;
       margin-right: 15px;
     }
@@ -251,7 +255,6 @@
       width: 330px;
     }
   }
-  
 }
 @media only screen and (max-width: 480px) {
   :host {
