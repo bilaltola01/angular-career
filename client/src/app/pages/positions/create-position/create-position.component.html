@@ -583,8 +583,8 @@
         <ng-container *ngIf="experience.skills_trained && experience.skills_trained.length > 0">
           <h5>Preferred Skills Trained {{experience.skills_trained.length}}</h5>
           <div class="skills" *ngIf="displayItemsLimit; let limit">
-            <ng-container *ngFor="let skill_trained of experience.skills_trained">
-              <simple-tag type="gray" title="{{skill_trained.skill}}"></simple-tag>
+            <ng-container *ngFor="let skill_trained of experience.skills_trained; let j = index;">
+              <simple-tag *ngIf="j < limit" type="gray" title="{{skill_trained.skill}}"></simple-tag>
             </ng-container>
             <img *ngIf="limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
             <img *ngIf="limit < experience.skills_trained.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
