@@ -56,8 +56,7 @@ export interface EditSkillItem {
 }
 
 export interface DialogData {
-  category: 'skip' | 'quit' | 'template';
-  template_name: string;
+  category: 'skip' | 'quit';
 }
 
 @Component({
@@ -175,8 +174,6 @@ export class CreatePositionComponent implements OnInit {
   isTabMenuOpen: boolean;
 
   position: PositionInfoResponse;
-  temp_position: PositionInfoResponse;
-  temp_name: string;
 
   current_user: UserGeneralInfo;
 
@@ -1182,7 +1179,7 @@ export class CreatePositionComponent implements OnInit {
     }
   }
 
-  onClickPublish(is_temp: Boolean) {
+  onClickPublish() {
     if (!this.position) {
       const position: PositionInfoRequest = {
         position:	this.position_name,
@@ -1207,7 +1204,7 @@ export class CreatePositionComponent implements OnInit {
 
       this.positionService.postPosition(position).subscribe(
         dataJson => {
-          is_temp ? this.temp_position = dataJson['data'] : this.position = dataJson['data'];
+          this.position = dataJson['data'];
 
           if (dataJson['data'] && dataJson['data'].position_id) {
             this.addPreferredEducationLevels(dataJson['data'].position_id);
@@ -1420,46 +1417,11 @@ export class CreatePositionComponent implements OnInit {
   updatePositionVectors(position_id: number) {
     this.scoreService.putPositionVectors(position_id).subscribe(
       dataJson => {
-        if (!this.temp_position) {
-          this.router.navigate(['/positions']);
-        } else {
-          this.saveAsPositionTemplate();
-        }
+        this.router.navigate(['/positions']);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
-        if (!this.temp_position) {
-          this.router.navigate(['/positions']);
-        } else {
-          this.saveAsPositionTemplate();
-        }
-      }
-    );
-  }
-
-  saveAsPositionTemplate() {
-    const info = {
-      position_id: this.temp_position.position_id,
-      position_template_name: this.temp_name
-    };
-    this.positionService.postPositionTemplate(info).subscribe(
-      dataJson => {
-        this.deleteTempPosition();
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-        this.deleteTempPosition();
-      }
-    );
-  }
-
-  deleteTempPosition() {
-    this.positionService.deletePosition(this.temp_position.position_id).subscribe(
-      dataJson => {
-        this.temp_position = null;
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
+        this.router.navigate(['/positions']);
       }
     );
   }
@@ -1484,12 +1446,11 @@ export class CreatePositionComponent implements OnInit {
     });
   }
 
-  openDialog(category: string, template_name?: string) {
+  openDialog(category: string) {
     // tslint:disable-next-line: no-use-before-declare
     const dialgoRef = this.dialog.open(CreatePositionDialogComponent, {
       data: {
-        category: category,
-        template_name: template_name ? template_name : null
+        category: category
       },
       width: '100vw',
       maxWidth: '880px',
@@ -1500,12 +1461,6 @@ export class CreatePositionComponent implements OnInit {
       if (category === 'quit') {
         if (result && result.quit) {
           this.router.navigate(['/positions']);
-        }
-      } else if (category === 'template') {
-        if (result && result.save_template && result.template_name) {
-          this.temp_name = result.template_name;
-          this.onClickPublish(true);
-          // this.saveAsPositionTemplate(result.template_name);
         }
       } else if (category === 'skip') {
         if (result && result.skip) {
@@ -1525,35 +1480,10 @@ export class CreatePositionComponent implements OnInit {
 
 export class CreatePositionDialogComponent {
 
-  templateNameForm: FormGroup;
-  template_name: string;
-
   constructor(
     public dialogRef: MatDialogRef<CreatePositionDialogComponent>,
-    private helperService: HelperService,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
-  ) {
-    if (data.category === 'template') {
-      this.initTemplateForm();
-    }
-  }
-
-  initTemplateForm() {
-    this.template_name = this.data.template_name;
-    this.templateNameForm = new FormGroup({
-      template_name: new FormControl(this.data.template_name ? this.data.template_name : '')
-    });
-
-    this.templateNameForm.get('template_name').valueChanges.subscribe((template_name) => {
-      this.template_name = template_name && this.helperService.checkSpacesString(template_name) ? template_name : null;
-    });
-  }
-
-  onClickSave() {
-    if (this.templateNameForm.valid && this.template_name) {
-      this.dialogRef.close({save_template: true, template_name: this.template_name});
-    }
-  }
+  ) { }
 
   onClickQiut() {
     this.dialogRef.close({quit: true});

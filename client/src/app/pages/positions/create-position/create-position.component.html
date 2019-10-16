@@ -495,7 +495,7 @@
           </div>
         </div>
         <div class="position-status">
-          <action-button type="flat" color="primary" [title]="position ? 'Published' : 'Publish'" (click)="onClickPublish(false)"></action-button>
+          <action-button type="flat" color="primary" [title]="position ? 'Published' : 'Publish'" (click)="onClickPublish()"></action-button>
         </div>
       </div>
       <div class="position-row__details">
@@ -671,7 +671,6 @@
       <div class="btn-section">
         <action-button class="nav-btn" type="stroked" title="Edit" (click)="backToEdit()"></action-button>
         <action-button class="nav-btn" type="stroked"  title="Quit" (click)="onClickQuit()"></action-button>
-        <action-button class="nav-btn" type="flat" title="Save as Template" color="primary" (click)="openDialog('template', position_name)"></action-button>
       </div>  
     </nav>
   </div>
