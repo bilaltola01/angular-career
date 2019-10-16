@@ -71,7 +71,7 @@
       </div>
       <div class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
-          <mat-label>Country</mat-label>
+          <mat-label>Country *</mat-label>
           <mat-select formControlName="position_country">
           <mat-option value="{{null}}">{{null}}</mat-option>
           <mat-option *ngFor="let country of countries_sort" value="{{country}}">{{country}}</mat-option>
@@ -80,8 +80,8 @@
       </div>
       <div *ngIf="position_country && position_country === 43" class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
-          <mat-label>State</mat-label>
-          <input matInput placeholder="State" type="text" [matAutocomplete]="autocompleteState" formControlName="position_state">
+          <mat-label>State *</mat-label>
+          <input matInput placeholder="State *" type="text" [matAutocomplete]="autocompleteState" formControlName="position_state">
           <mat-icon matSuffix *ngIf="positionBasicInfoForm.value.position_state && helperService.checkSpacesString(positionBasicInfoForm.value.position_state) && positionBasicInfoForm.get('position_state').valid && onCheckStateValidation()">done</mat-icon>
           <mat-icon matSuffix class="error-field" *ngIf="positionBasicInfoForm.get('position_state').value && helperService.checkSpacesString(positionBasicInfoForm.get('position_state').value) && !onCheckStateValidation() && positionBasicInfoForm.get('position_state').touched">close</mat-icon>
           <mat-autocomplete #autocompleteState="matAutocomplete" (closed)="onBlurState()">
@@ -93,8 +93,8 @@
       </div>
       <div class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
-          <mat-label>City</mat-label>
-          <input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity" formControlName="position_city">
+          <mat-label>City *</mat-label>
+          <input matInput placeholder="City *" type="text" [matAutocomplete]="autocompleteCity" formControlName="position_city">
           <mat-icon matSuffix *ngIf="positionBasicInfoForm.get('position_city').value && helperService.checkSpacesString(positionBasicInfoForm.get('position_city').value) && positionBasicInfoForm.get('position_city').valid && onCheckCityValidation()">done</mat-icon>
           <mat-icon matSuffix class="error-field" *ngIf="positionBasicInfoForm.get('position_city').value && helperService.checkSpacesString(positionBasicInfoForm.get('position_city').value) && !onCheckCityValidation() && positionBasicInfoForm.get('position_city').touched">close</mat-icon>
           <mat-autocomplete #autocompleteCity="matAutocomplete" (closed)="onBlurCity()">

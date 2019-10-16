@@ -278,6 +278,9 @@ export class CreatePositionComponent implements OnInit {
         if (!this.position_company) {
           this.alertsService.show('You must provide a company.', AlertType.error);
           return;
+        } else if (!this.position_country || !this.position_city || (this.positionBasicInfoForm.get('position_city').valid && !this.onCheckCityValidation()) || (this.position_country === 43 && !this.position_state || (this.positionBasicInfoForm.get('position_state').value && this.helperService.checkSpacesString(this.positionBasicInfoForm.get('position_state').value) && !this.onCheckStateValidation()))) {
+          this.alertsService.show('You must provide the location information.', AlertType.error);
+          return;
         } else if (!this.position_level) {
           this.alertsService.show('You must select position\'s level.', AlertType.error);
           return;
@@ -364,9 +367,9 @@ export class CreatePositionComponent implements OnInit {
 
     this.positionBasicInfoForm = new FormGroup({
       position_company: new FormControl(this.position_company ? this.position_company.company_name : null, [Validators.required]),
-      position_city: new FormControl(this.position_city ? this.helperService.cityNameFromAutoComplete(this.position_city.city) : null),
+      position_city: new FormControl(this.position_city ? this.helperService.cityNameFromAutoComplete(this.position_city.city) : null, [Validators.required]),
       position_state: new FormControl(this.position_state ? this.position_state.state : null),
-      position_country: new FormControl(this.position_country ? Countries[this.position_country - 1] : null),
+      position_country: new FormControl(this.position_country ? Countries[this.position_country - 1] : null, [Validators.required]),
       position_salary: new FormControl(this.position_salary ? this.position_salary : null),
       position_department: new FormControl(this.position_department ? this.position_department : null),
       position_level: new FormControl(this.position_level ? this.position_level : null, [Validators.required]),
