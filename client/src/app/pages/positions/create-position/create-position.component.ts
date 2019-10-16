@@ -13,7 +13,8 @@ import {
   AlertType,
   HelperService,
   PositionService,
-  UserStateService
+  UserStateService,
+  ScoreService
 } from 'src/app/services';
 import { SkillDescriptionPopupComponent } from 'src/app/components/skill-description-popup/skill-description-popup.component';
 
@@ -187,7 +188,8 @@ export class CreatePositionComponent implements OnInit {
     private positionService: PositionService,
     private companyService: CompanyService,
     public dialog: MatDialog,
-    private userStateService: UserStateService
+    private userStateService: UserStateService,
+    private scoreService: ScoreService
   ) { }
 
   ngOnInit() {
@@ -1384,11 +1386,7 @@ export class CreatePositionComponent implements OnInit {
     if (this.preferred_work_experiences && this.preferred_work_experiences.length > 0 && this.preferred_work_experiences[0].industry && this.preferred_work_experiences[0].years) {
       this.addPreferredWorkExperience(position_id, 0);
     } else {
-      if (!this.temp_position) {
-        this.router.navigate(['/positions']);
-      } else {
-        this.saveAsPositionTemplate();
-      }
+      this.updatePositionVectors(position_id);
     }
   }
 
@@ -1405,11 +1403,7 @@ export class CreatePositionComponent implements OnInit {
         if (arrIndex < this.preferred_work_experiences.length - 1) {
           this.addPreferredWorkExperience(position_id, arrIndex + 1);
         } else {
-          if (!this.temp_position) {
-            this.router.navigate(['/positions']);
-          } else {
-            this.saveAsPositionTemplate();
-          }
+          this.updatePositionVectors(position_id);
         }
       },
       error => {
@@ -1417,11 +1411,27 @@ export class CreatePositionComponent implements OnInit {
         if (arrIndex < this.preferred_work_experiences.length - 1) {
           this.addPreferredWorkExperience(position_id, arrIndex + 1);
         } else {
-          if (!this.temp_position) {
-            this.router.navigate(['/positions']);
-          } else {
-            this.saveAsPositionTemplate();
-          }
+          this.updatePositionVectors(position_id);
+        }
+      }
+    );
+  }
+
+  updatePositionVectors(position_id: number) {
+    this.scoreService.putPositionVectors(position_id).subscribe(
+      dataJson => {
+        if (!this.temp_position) {
+          this.router.navigate(['/positions']);
+        } else {
+          this.saveAsPositionTemplate();
+        }
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+        if (!this.temp_position) {
+          this.router.navigate(['/positions']);
+        } else {
+          this.saveAsPositionTemplate();
         }
       }
     );

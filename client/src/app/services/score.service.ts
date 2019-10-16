@@ -11,6 +11,7 @@ export class ScoreService {
   private user_id = -1;
   helper = new JwtHelperService();
 
+  private score_service_url = `${environment.serverUrl}/${environment.score_service}/api/${environment.api_version}/`;
   private fitscore_service_url = `${environment.serverUrl}/${environment.score_service}/api/${environment.api_version}/user/positions/calculated-fitscores`;
   private skill_vector_url = `${environment.serverUrl}/${environment.score_service}/api/${environment.api_version}/user`;
   constructor(private http: HttpClient) {
@@ -62,6 +63,20 @@ export class ScoreService {
       queryUrl = `${queryUrl}?userId=${this.user_id}&positionList=${queryParam}`;
     }
     return this.http.get(queryUrl, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return { success: true, message: 'Success!', data: data };
+          }
+        ),
+        catchError(this.handleError)
+      );
+
+  }
+
+  // to update the vectors of position
+  public putPositionVectors(positionId: number) {
+    return this.http.put(this.score_service_url + `position/${positionId}/vectors`, null, this.authHttpOptions())
       .pipe(
         map(
           data => {
