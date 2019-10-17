@@ -7,23 +7,13 @@ import { Observable, combineLatest, of } from 'rxjs';
 import { UserService } from './user.service';
 
 export interface ChatRoom {
-  // uuid: string;
   createdAt: number;
   title: string;
-  // participants: ChatMember[];
-  participant1?: ChatMember;
-  participant2?: ChatMember;
   messages?: ChatMessage[];
 }
-export interface ChatMember {
-  id: number; // Only ID for now
-  photo_url: string;
-  first_name: string;
-  last_name: string;
-  isRecruiter: number; // 0 false, 1 true
-}
+
 export interface ChatMessage {
-  uid: number;
+  user_id: number;
   content: string;
   createdAt: number;
   type: MessageType.Simple;
@@ -54,30 +44,19 @@ export class ChatService {
       );
   }
 
-  async create() { // TODO: Add title
-    // const { uid } = await this.auth.getUser();
+  async create() { // TODO: Add title as a parameter
 
     this.userService.getGeneralInfo().subscribe( async info => {
-
-      console.log("TCL: ChatService -> create -> info", info)
-
-      const chatMember: ChatMember = { // TODO: Maybe not needeeed
-        id: info.data.user_id,
-        photo_url: info.data.photo,
-        first_name: info.data.first_name,
-        last_name: info.data.last_name,
-        isRecruiter: info.data.recruiter
-      };
 
       const chatData: ChatRoom = {
         title: 'Delete Room',
         createdAt: Date.now(),
-        participant1: chatMember,
+        messages: []
       };
 
       const docRef = await this.afs.collection('ChatRooms').add(chatData);
-      console.log("TCL: ChatService -> create -> docRef.id", docRef.id)
 
+      console.log("TCL: ChatService -> create -> docRef.id", docRef.id)
       return docRef.id;
 
     });
@@ -85,12 +64,13 @@ export class ChatService {
   }
 
   async sendMessage(chatId, content) {
-    const user_id  = this.userService.user_id; // TODO: Get User ID function
+    const user_id  = this.userService.user_id; // TODO: Make a Get User ID function
 
-    const data = {
+    const data: ChatMessage = {
       user_id,
       content,
-      createdAt: Date.now()
+      createdAt: Date.now(),
+      type: MessageType.Simple
     };
 
     if (user_id) {
@@ -111,15 +91,18 @@ export class ChatService {
         chat = c;
         const user_ids = Array.from(new Set(c.messages.map(v => v.user_id)));
 
+        // Firestore User Doc Reads
         const userDocs = user_ids.map(u =>
           this.userService.getGeneralInfo(u as number)
         );
+
         return userDocs.length ? combineLatest(userDocs) : of([]);
       }),
       map(arr => {
         arr.forEach(v => {
           joinKeys[(<any>v).data.user_id] = v.data;
         });
+
         chat.messages = chat.messages.map(v => {
           return { ...v, user: joinKeys[v.user_id] };
         });
