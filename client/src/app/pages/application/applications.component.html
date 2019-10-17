@@ -343,7 +343,7 @@
                 <div class="card-item">
                   <span>Department</span>
                   <p *ngIf="application.preferred_education_levels ; else noEducationLevel">
-                    {{getLowestEducationLevel(application.preferred_education_levels)}}</p>
+                    {{application.department}}</p>
                   <ng-template #noEducationLevel>
                     <p>
                       N/A

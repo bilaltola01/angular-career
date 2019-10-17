@@ -34,7 +34,6 @@ export class PositionsDetailsComponent implements OnInit {
   differenceInDays;
   newPositionCount = [];
   newCompanyPositions = {};
-  positionsAvailable = 0;
   queryCallback;
   displayItemsLimit = 7;
   displayIndustryLimit = 3;
@@ -191,9 +190,9 @@ export class PositionsDetailsComponent implements OnInit {
     }
     for (let i = 0; i < this.newPositionCount.length; i++) {
       if (companyPositionValues[i] > 0) {
-        this.positionsAvailable++;
+        this.newCompanyPositions[this.newPositionCount[i]] = companyPositionValues[i];
       }
-      this.newCompanyPositions[this.newPositionCount[i]] = companyPositionValues[i];
+
     }
   }
   getRecruiterData(recruterId) {

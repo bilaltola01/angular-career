@@ -182,10 +182,8 @@
     <!-- Job Position Card -->
 
     <div class="position-list-container">
-
       <div class="select-style">
         <div class="selectall">
-
           <round-checkbox id="test" title="Select All" [checked]="selectedAllFlag" (statusChange)="selectAll($event)">
           </round-checkbox>
           <action-button class="position-search-reload-result" color="primary" title="Apply Selected"
@@ -207,8 +205,6 @@
               </mat-menu>
             </span>
           </div>
-
-
         </div>
         <div class="sort-item">
           <mat-label>Sort by</mat-label>&nbsp;
@@ -219,17 +215,15 @@
           </mat-form-field>
         </div>
       </div>
-
       <div *ngFor="let job of positionList ">
-
         <div class="row" [ngClass]="{'selected': job.selected}">
           <round-checkbox id="test" [checked]="job.selected"
             (statusChange)="job.selected = !job.selected;selectedAllFlag=false;"></round-checkbox>
-<<<<<<< HEAD
+
           <h1  [routerLink]="['/position-info/',job.position_id]" >{{job.position}} </h1>
 =======
-          <h1 [routerLink]="['/positions/position-info/',job.position_id]">{{job.position}} </h1>
->>>>>>> 1d1f7656... UI and functionality bugs fixes
+          <!-- <h1 [routerLink]="['/positions/position-info/',job.position_id]">{{job.position}} </h1> -->
+
           <div class="position-right">
             <div class="heart-icon">
               <img *ngIf="!appliedJobsMap[job.position_id] && !savedJobsMap[job.position_id]" (click)="saveJob([job])"
@@ -312,7 +306,6 @@
               </mat-grid-tile>
             </mat-grid-list>
             <div class="main-card">
-
               <ul type="none">
                 <li>
                   <h5 for="skill_required">Skills Required<span>{{ job.minimum_skills?.length}}</span>
@@ -321,14 +314,11 @@
                     *ngIf="job.minimum_skills; else noSkills">
                     <div class="skills-preferred-m" *ngFor="let min_skill of job.minimum_skills ">
                       <simple-tag type="gray" title="{{min_skill.skill}}" ellipseTag="true"
-                        value="{{min_skill.skill_level}}" (click)="openSkilladdDialog(min_skill)">
+                        value="{{min_skill.skill_level}}" (click)="openSkilladdDialog(min_skill)"[matTooltip]="SkillLevelDescription[min_skill.skill_level].title + SkillLevelDescription[min_skill.skill_level].description"
+                        [matTooltipShowDelay]=500>
                       </simple-tag>
-
                     </div>
-
                   </div>
-
-
                 </li>
                 <li class="skill-chips">
                   <h5 class="skill-label" for="skill_preferred">Skills Preferred
@@ -337,11 +327,11 @@
                     *ngIf="job.preferred_skills; else noSkills">
                     <div class="skills-preferred-m skill-prefer" *ngFor="let preskill of job.preferred_skills">
                       <simple-tag type="gray" title="{{preskill.skill}}" ellipseTag="true"
-                        value="{{preskill.skill_level}}" (click)="openSkilladdDialog(preskill)">
+                        value="{{preskill.skill_level}}" (click)="openSkilladdDialog(preskill)"[matTooltip]="SkillLevelDescription[preskill.skill_level].title + SkillLevelDescription[preskill.skill_level].description"
+                        [matTooltipShowDelay]=500>
                       </simple-tag>
                     </div>
                   </div>
-
                 </li>
               </ul>
               <ng-template #noSkills>
@@ -350,11 +340,9 @@
                 </ul>
               </ng-template>
             </div>
-
             <div *ngIf="job.showMoreFlag">
               <div class="qualification-level-m">
                 <h5>Qualification Level Estimate Breakdown</h5>
-
                 <simple-tag *ngIf="job.true_fitscore_info?.skills_weight" type="gray" title="Skills Match"
                   ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.skills_fitscore)}}">
                 </simple-tag>
@@ -370,22 +358,17 @@
                 <simple-tag *ngIf="job.minimum_skills" type="gray" title="Required Skills Match" ellipseTag="true"
                   value="{{mathFloor(6*job.true_fitscore_info?.required_skills_fitscore)}}">
                 </simple-tag>
-
                 <p
                   *ngIf="!job.true_fitscore_info ||  (job.true_fitscore_info && !job.true_fitscore_info.skills_weight && !job.true_fitscore_info.experience_weight && !job.true_fitscore_info.education_weight && !job.true_fitscore_info.interests_weight && !job.minimum_skills)">
                   N/A
                 </p>
               </div>
-
-
               <div class="jobdesc-space">
-
                 <h5>Job Description</h5>
                 <p>
                   {{job.position_desc}}
                 </p>
               </div>
-
             </div>
           </div>
           <div class="show-button">
@@ -413,5 +396,4 @@
       </div>
     </div>
   </div>
-
 </div>
