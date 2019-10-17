@@ -46,8 +46,6 @@ export class ChatService {
 
   async create() { // TODO: Add title as a parameter
 
-    this.userService.getGeneralInfo().subscribe( async info => {
-
       const chatData: ChatRoom = {
         title: 'Delete Room',
         createdAt: Date.now(),
@@ -56,10 +54,7 @@ export class ChatService {
 
       const docRef = await this.afs.collection('ChatRooms').add(chatData);
 
-      console.log("TCL: ChatService -> create -> docRef.id", docRef.id)
       return docRef.id;
-
-    });
 
   }
 
@@ -93,6 +88,7 @@ export class ChatService {
 
         // Firestore User Doc Reads
         const userDocs = user_ids.map(u =>
+          // TODO: This should be cached somehow to reduce the number of GETs
           this.userService.getGeneralInfo(u as number)
         );
 

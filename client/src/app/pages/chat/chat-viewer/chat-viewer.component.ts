@@ -28,8 +28,8 @@ export class ChatViewerComponent implements OnInit {
     this.chatRoom$ = this.chatService.joinUsers(source);
   }
 
-  createRoom() {
-    this.chatService.create(); // TODO: Get and store chat ID
+  async createRoom() {
+     this.chatId = await this.chatService.create(); // TODO: Get and store chat ID
   }
 
   sendMessage() {
