@@ -46,24 +46,49 @@ export class CartService {
     return forkJoin(observableArr);
   }
 
-  public unSaveJob(position_id: number): Observable<any> {
-    const queryUrl = `${this.cart_service_url}/user/cart`;
-    const headerOption = {
-      headers: this.authHttpOptions().headers,
-      body: {
-        'positionId': position_id,
-        'userId': this.helperService.extractUserId()
-      }
-    };
-    return this.http.delete(queryUrl, headerOption)
-      .pipe(
-        map(
-          data => {
-            return { success: true, message: 'Success!', data: data };
+  public unSaveJob(positiondata): Observable<any> {
+    let queryUrl;
+    if (typeof positiondata === 'number') {
+      queryUrl = `${this.cart_service_url}/user/cart`;
+      const headerOption = {
+        headers: this.authHttpOptions().headers,
+        body: {
+          'positionId': positiondata,
+          'userId': this.helperService.extractUserId()
+        }
+      };
+      return this.http.delete(queryUrl, headerOption)
+        .pipe(
+          map(
+            data => {
+              return { success: true, message: 'Success!', data: data };
+            }
+          ),
+          catchError(this.handleError)
+        );
+    } else {
+      const observableArr = [];
+      for (let i = 0; i < positiondata.length; i++) {
+        const headerOption = {
+          headers: this.authHttpOptions().headers,
+          body: {
+            'positionId': positiondata[i].position_id,
+            'userId': this.helperService.extractUserId()
           }
-        ),
-        catchError(this.handleError)
-      );
+        };
+        queryUrl = `${this.cart_service_url}/user/cart`;
+        observableArr[i] = this.http.delete(queryUrl, headerOption).pipe(
+          map(
+            data => {
+              return data;
+            }
+          ),
+          catchError(this.handleError)
+        );
+      }
+      return forkJoin(observableArr);
+
+    }
   }
 
   public getSavedJobs(): Observable<any> {
