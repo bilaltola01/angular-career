@@ -373,12 +373,6 @@
             <div class="main-card">
 
               <ul type="none">
-                <div class="show-button more">
-                  <action-button routerLink="." type="text" title="{{!application.showMoreFlag ? 'See All' :
-                          'See Less'}}" color="primary" (click)="application.showMoreFlag = !application.showMoreFlag"
-                    *ngIf="application.minimum_skills?.length > 3 || application.preferred_skills?.length > 3">
-                  </action-button>
-                </div>
                 <li>
                   <h5 for="skill_required">Skills Required<span>{{ application.minimum_skills?.length}}</span>
                   </h5>
