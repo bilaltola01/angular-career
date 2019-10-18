@@ -539,6 +539,10 @@ calculateQualificationLevel(fitscoreInfo, minimum_skills) {
       this.alertsService.show(error.message, AlertType.error);
     });
 }
+unSaveSelected() {
+  const selectedPositionArr = this.positionList.filter(position => position.selected === true);
+  this.unSaveJob(selectedPositionArr);
+}
 applyJob(positionArr) {
   this.applicationService.applyJob(positionArr)
     .subscribe(data => {
