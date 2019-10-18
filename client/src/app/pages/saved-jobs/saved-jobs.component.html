@@ -191,7 +191,7 @@
           <action-button class="position-search-reload-result" color="primary" title="Apply Selected"
             (click)="applySelected()">
           </action-button>
-          <action-button class="position-search-reload-result" color="primary" title="Unsave Job"
+          <action-button class="position-search-reload-result" color="primary" title="Unsave selected"
             (click)="unSaveSelected()">
           </action-button>
           <action-button class="position-search-reload-result" color="primary" title="Reload Results"
@@ -202,7 +202,7 @@
               </button>
               <mat-menu #menu="matMenu">
                 <button mat-menu-item (click)="applySelected()">Apply Selected</button>
-                <button mat-menu-item (click)="unSaveSelected()">Unsave Job</button>
+                <button mat-menu-item (click)="unSaveSelected()">Unsave Selected</button>
                 <button mat-menu-item (click)="reloadResult()">Reload Results</button>
               </mat-menu>
             </span>
