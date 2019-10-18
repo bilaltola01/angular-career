@@ -66,10 +66,10 @@ export class PositionsDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.positionId = this.route.snapshot.paramMap.get('position_id');
-    this.getposition(this.positionId);
     this.getAppliedJobs();
     this.getSavedJobs();
+    this.positionId = this.route.snapshot.paramMap.get('position_id');
+    this.getposition(this.positionId);
     this.getMatchedSkill();
     this.getMissingSkill();
     this.getMatchedInterests();
@@ -317,9 +317,9 @@ export class PositionsDetailsComponent implements OnInit {
       });
   }
 
-  unSaveJob(position) {
-    this.cartService.unSaveJob(position.position_id).subscribe(data => {
-      delete this.savedJobsMap[position.position_id];
+  unSaveJob(positionData) {
+    this.cartService.unSaveJob(positionData).subscribe(data => {
+      delete this.savedJobsMap[positionData[0].position_id];
     },
       error => {
         this.alertsService.show(error.message, AlertType.error);

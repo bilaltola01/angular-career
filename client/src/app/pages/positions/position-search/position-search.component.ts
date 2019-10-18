@@ -121,9 +121,9 @@ export class PositionSearchComponent implements OnInit {
     }
 
     this.initPositionFilterForm();
-    this.getJobData();
     this.getSavedJobs();
     this.getAppliedJobs();
+    this.getJobData();
     this.breakpoint = (window.innerWidth <= 500) ? 2 : 4;
 
   }
@@ -437,7 +437,7 @@ export class PositionSearchComponent implements OnInit {
     }
     return queryString;
   }
-  getJobData(offset?) {
+  getJobData() {
     this.queryFlag = true;
     this.selectedAllFlag = false;
     if (this.searchQueryParam) {
@@ -523,6 +523,13 @@ export class PositionSearchComponent implements OnInit {
     this.getJobData();
     event.stopPropagation();
   }
+  reloadResult() {
+    this.prequeryFlag = true;
+    this.offsetFlag = false;
+    this.filterAttributes.offset = 0;
+    this.preLoadDataObject = {};
+    this.getJobData();
+  }
 
   applyFilter() {
     this.prequeryFlag = true;
@@ -597,9 +604,9 @@ export class PositionSearchComponent implements OnInit {
       });
   }
 
-  unSaveJob(position) {
-    this.cartService.unSaveJob(position.position_id).subscribe(data => {
-      delete this.savedJobsMap[position.position_id];
+  unSaveJob(positionData) {
+    this.cartService.unSaveJob(positionData).subscribe(data => {
+      delete this.savedJobsMap[positionData[0].position_id];
     },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -655,7 +662,7 @@ export class PositionSearchComponent implements OnInit {
       this.currentPageNumber = pageNo;
       this.filterAttributes.offset = ((this.currentPageNumber - 1) * positionListLimit);
       this.offsetParam = this.filterAttributes.offset;
-      this.getJobData(this.offsetParam);
+      this.getJobData();
 
     }
 

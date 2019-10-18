@@ -193,7 +193,7 @@
             (click)="saveSelected()">
           </action-button>
           <action-button class="position-search-reload-result" color="primary" title="Reload Results"
-            (click)="preLoadDataObject = {}; getJobData()"></action-button>
+            (click)="reloadResult()"></action-button>
           <div class="drop-buttons">
             <span class="dot-icon">
               <button mat-button [matMenuTriggerFor]="menu" disableRipple><img src="assets/icons/ic_more_vertical.svg">
@@ -201,7 +201,7 @@
               <mat-menu #menu="matMenu">
                 <button mat-menu-item (click)="applySelected()">Apply Selected</button>
                 <button mat-menu-item (click)="saveSelected();">Save Selected</button>
-                <button mat-menu-item (click)="getJobData()">Reload Results</button>
+                <button mat-menu-item (click)="reloadResult()">Reload Results</button>
               </mat-menu>
             </span>
           </div>
@@ -228,7 +228,7 @@
             <div class="heart-icon">
               <img *ngIf="!appliedJobsMap[job.position_id] && !savedJobsMap[job.position_id]" (click)="saveJob([job])"
                 title="Save Job" src="assets/icons/ic_heart.svg" class="before-heart-icon">
-              <img *ngIf="!appliedJobsMap[job.position_id] && savedJobsMap[job.position_id]" (click)="unSaveJob(job);"
+              <img *ngIf="!appliedJobsMap[job.position_id] && savedJobsMap[job.position_id]" (click)="unSaveJob([job]);"
                 title="Saved Job" src="assets/icons/ic_heart_circle.svg" class="after-heart-icon">
             </div>
             <span class="right-align">
