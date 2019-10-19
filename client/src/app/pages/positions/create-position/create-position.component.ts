@@ -1403,7 +1403,8 @@ export class CreatePositionComponent implements OnInit {
         if (arrIndex < this.preferred_work_experiences.length - 1) {
           this.addPreferredWorkExperience(position_id, arrIndex + 1);
         } else {
-          this.updatePositionVectors(position_id);
+          // this.updatePositionVectors(position_id);
+          this.router.navigate(['/positions']);
         }
       },
       error => {
@@ -1411,7 +1412,8 @@ export class CreatePositionComponent implements OnInit {
         if (arrIndex < this.preferred_work_experiences.length - 1) {
           this.addPreferredWorkExperience(position_id, arrIndex + 1);
         } else {
-          this.updatePositionVectors(position_id);
+          // this.updatePositionVectors(position_id);
+          this.router.navigate(['/positions']);
         }
       }
     );
