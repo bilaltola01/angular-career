@@ -199,6 +199,18 @@ export class PositionService {
       );
   }
 
+  public patchLocation(locationInfo: any): Observable<any> {
+    return this.http.patch(this.position_management_service_url + 'position/location', locationInfo, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
   public getPositionTemplates(): Observable<any> {
     return this.http.get(this.position_management_service_url + 'position-templates', this.authHttpOptions())
       .pipe(
