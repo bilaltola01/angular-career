@@ -55,6 +55,30 @@ export class PositionService {
       );
   }
 
+  public putPosition(positionId: number, positionInfo: any): Observable<any> {
+    return this.http.put(this.position_management_service_url + `position/${positionId}`, positionInfo, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
+  public patchPosition(positionId: number, positionInfo: any): Observable<any> {
+    return this.http.patch(this.position_management_service_url + `position/${positionId}`, positionInfo, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
   public deletePosition(positionId: number): Observable<any> {
     return this.http.delete(this.position_management_service_url + `position/${positionId}`, this.authHttpOptions())
       .pipe(
