@@ -290,6 +290,9 @@ export class CreatePositionComponent implements OnInit {
         } else if (!this.position_application_deadline) {
           this.alertsService.show('You must select application deadline', AlertType.error);
           return;
+        } else if (!this.position) {
+          this.alertsService.show('Please click "next" button.', AlertType.error);
+          return;
         }
       }
     }
@@ -1182,7 +1185,7 @@ export class CreatePositionComponent implements OnInit {
     }
   }
 
-  onClickPublish() {
+  createPosition() {
     if (!this.position) {
       const position: PositionInfoRequest = {
         position:	this.position_name,
@@ -1208,6 +1211,63 @@ export class CreatePositionComponent implements OnInit {
       this.positionService.postPosition(position).subscribe(
         dataJson => {
           this.position = dataJson['data'];
+          this.addLocation(this.position.position_id);
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    } else {
+
+    }
+  }
+
+  addLocation(position_id: number) {
+    if (this.position_city || this.position_state || this.position_country) {
+      const info = {
+        position_id: position_id,
+        city_id: this.position_city ? this.position_city.city_id : null,
+        state_id:	this.position_state ? this.position_state.state_id : null,
+        country_id:	this.position_country ? this.position_country : null
+      };
+      this.positionService.postLocation(info).subscribe(
+        dataJson => {
+          this.goToNextPage();
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+          this.goToNextPage();
+        }
+      );
+    }
+  }
+
+  onClickPublish() {
+    if (this.position) {
+      const position: PositionInfoRequest = {
+        position:	this.position_name,
+        company_id:	this.position_company.company_id,
+        level: this.position_level ? this.position_level : null,
+        type:	this.position_type ? this.position_type : null,
+        position_desc: this.position_desc ? this.position_desc : null,
+        start_date:	null,
+        end_date:	null,
+        position_filled: null,
+        pay: this.position_salary ? this.position_salary : null,
+        negotiable:	null,
+        repeat_post: null,
+        repeat_date: null,
+        cover_letter_req:	null,
+        recruiter_id:	this.position_recruiter ? this.position_recruiter.user_id : null,
+        department:	this.position_department ? this.position_department : null,
+        open:	1,
+        openings:	null,
+        application_deadline:	this.position_application_deadline ? this.position_application_deadline : null
+      };
+
+      this.positionService.patchPosition(this.position.position_id, position).subscribe(
+        dataJson => {
+          this.position = dataJson['data'];
 
           if (dataJson['data'] && dataJson['data'].position_id) {
             this.addPreferredEducationLevels(dataJson['data'].position_id);
@@ -1217,6 +1277,13 @@ export class CreatePositionComponent implements OnInit {
           this.alertsService.show(error.message, AlertType.error);
         }
       );
+    }
+  }
+
+  addPositionEducationInfo() {
+    if (this.position) {
+      const position_id = this.position.position_id;
+      this.addPreferredEducationLevels(position_id);
     }
   }
 
@@ -1268,14 +1335,21 @@ export class CreatePositionComponent implements OnInit {
       };
       this.positionService.postPreferredMajorCategories(info).subscribe(
         dataJson => {
-          this.addMinimumSkills(position_id);
+          this.goToNextPage();
         },
         error => {
           this.alertsService.show(error.message, AlertType.error);
-          this.addMinimumSkills(position_id);
+          this.goToNextPage();
         }
       );
     } else {
+      this.goToNextPage();
+    }
+  }
+
+  addPositionSkillsInfo() {
+    if (this.position) {
+      const position_id = this.position.position_id;
       this.addMinimumSkills(position_id);
     }
   }
@@ -1308,14 +1382,21 @@ export class CreatePositionComponent implements OnInit {
       };
       this.positionService.postPreferredSkills(info).subscribe(
         dataJson => {
-          this.addPreferredInterests(position_id);
+          this.goToNextPage();
         },
         error => {
           this.alertsService.show(error.message, AlertType.error);
-          this.addPreferredInterests(position_id);
+          this.goToNextPage();
         }
       );
     } else {
+      this.goToNextPage();
+    }
+  }
+
+  addPositionInterestsInfo() {
+    if (this.position) {
+      const position_id = this.position.position_id;
       this.addPreferredInterests(position_id);
     }
   }
@@ -1328,14 +1409,21 @@ export class CreatePositionComponent implements OnInit {
       };
       this.positionService.postPreferredInterests(info).subscribe(
         dataJson => {
-          this.addPreferredSchools(position_id);
+          this.goToNextPage();
         },
         error => {
           this.alertsService.show(error.message, AlertType.error);
-          this.addPreferredSchools(position_id);
+          this.goToNextPage();
         }
       );
     } else {
+      this.goToNextPage();
+    }
+  }
+
+  addPositionSchoolsInfo() {
+    if (this.position) {
+      const position_id = this.position.position_id;
       this.addPreferredSchools(position_id);
     }
   }
@@ -1348,36 +1436,21 @@ export class CreatePositionComponent implements OnInit {
       };
       this.positionService.postPreferredSchools(info).subscribe(
         dataJson => {
-          this.addLocation(position_id);
+          this.goToNextPage();
         },
         error => {
           this.alertsService.show(error.message, AlertType.error);
-          this.addLocation(position_id);
+          this.goToNextPage();
         }
       );
     } else {
-      this.addLocation(position_id);
+      this.goToNextPage();
     }
   }
 
-  addLocation(position_id: number) {
-    if (this.position_city || this.position_state || this.position_country) {
-      const info = {
-        position_id: position_id,
-        city_id: this.position_city ? this.position_city.city_id : null,
-        state_id:	this.position_state ? this.position_state.state_id : null,
-        country_id:	this.position_country ? this.position_country : null
-      };
-      this.positionService.postLocation(info).subscribe(
-        dataJson => {
-          this.addPreferredWorkExperiences(position_id);
-        },
-        error => {
-          this.alertsService.show(error.message, AlertType.error);
-          this.addPreferredWorkExperiences(position_id);
-        }
-      );
-    } else {
+  addPositionWorkExperienceInfo() {
+    if (this.position) {
+      const position_id = this.position.position_id;
       this.addPreferredWorkExperiences(position_id);
     }
   }
@@ -1386,7 +1459,7 @@ export class CreatePositionComponent implements OnInit {
     if (this.preferred_work_experiences && this.preferred_work_experiences.length > 0 && this.preferred_work_experiences[0].industry && this.preferred_work_experiences[0].years) {
       this.addPreferredWorkExperience(position_id, 0);
     } else {
-      this.updatePositionVectors(position_id);
+      this.goToNextPage();
     }
   }
 
@@ -1403,8 +1476,7 @@ export class CreatePositionComponent implements OnInit {
         if (arrIndex < this.preferred_work_experiences.length - 1) {
           this.addPreferredWorkExperience(position_id, arrIndex + 1);
         } else {
-          // this.updatePositionVectors(position_id);
-          this.router.navigate(['/positions']);
+          this.goToNextPage();
         }
       },
       error => {
@@ -1412,8 +1484,7 @@ export class CreatePositionComponent implements OnInit {
         if (arrIndex < this.preferred_work_experiences.length - 1) {
           this.addPreferredWorkExperience(position_id, arrIndex + 1);
         } else {
-          // this.updatePositionVectors(position_id);
-          this.router.navigate(['/positions']);
+          this.goToNextPage();
         }
       }
     );
