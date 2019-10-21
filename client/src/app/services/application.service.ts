@@ -170,6 +170,20 @@ export class ApplicationService {
         catchError(this.handleError)
       );
   }
+  public getApplication(queryParam) {
+    const queryUrl = `${this.application_service_url}application/${queryParam}`;
+    return this.http.get(queryUrl, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return { success: true, message: 'Success!', data: data };
+          }
+        ),
+        catchError(this.handleError)
+      );
+
+  }
+
   public patchInterestLevel(bodyQueryParam): Observable<any> {
     const queryUrl = `${this.application_service_url}application`;
     return this.http.patch(queryUrl, bodyQueryParam, this.authHttpOptions())
@@ -181,6 +195,18 @@ export class ApplicationService {
         ),
         catchError(this.handleError)
       );
+  }
+  public patchCoverLetter(bodyQueryParam) {
+    const queryUrl = `${this.application_service_url}application`;
+    return this.http.patch(queryUrl, bodyQueryParam, this.authHttpOptions())
+    .pipe(
+      map(
+        data => {
+          return { success: true, message: 'Success!', data: data };
+        }
+      ),
+      catchError(this.handleError)
+    );
   }
   public acceptOffer(queryParam): Observable<any> {
     const observableArr = [];

@@ -1,6 +1,6 @@
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, Inject } from '@angular/core';
-import { DialogData } from '../../pages/application/applications.component';
+import { DialogData } from '../../pages/application/application-search-page/applications.component';
 import { ApplicationService } from 'src/app/services';
 @Component({
   selector: 'app-interest-level-popup',

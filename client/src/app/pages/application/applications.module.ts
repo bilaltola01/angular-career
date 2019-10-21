@@ -8,6 +8,7 @@ import { applicationComponents } from './index';
 import { SharedModule } from '../../components/shared.module';
 import { AddSkillPopupComponent } from 'src/app/components/add-skill-popup/add-skill-popup.component';
 import { InterestLevelPopupComponent } from 'src/app/components/interest-level-popup/interest-level-popup.component';
+import { ApplicationCoverLettrComponent } from './application-detail/application-cover-lettr/application-cover-lettr.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { InterestLevelPopupComponent } from 'src/app/components/interest-level-p
     SharedModule,
   ],
   declarations: [
-    ...applicationComponents
+    ...applicationComponents,
+    ApplicationCoverLettrComponent
   ],
   entryComponents: [
     AddSkillPopupComponent,

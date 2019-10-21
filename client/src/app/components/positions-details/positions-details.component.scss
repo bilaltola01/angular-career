@@ -218,15 +218,15 @@ $profile-form-field-mt: 30px;
               margin-top: -22px;
             }
             img {
-              margin-left: 8px;
-              margin-top: 0;
+              margin-top: -3px;
               &.align-more-img{
                 margin-top: -7px;
                 margin-left:0;
               }
               &.question-icon {
-                margin-top: 5px;
+                margin-top: 4px;
                 cursor: pointer;
+                margin-left: 5px;
               }
             }
             & .education-level-m {
@@ -387,7 +387,6 @@ $profile-form-field-mt: 30px;
 
               .skills-preferred-m {
                 @include inline-block-btn;
-                margin: 0 8px 7px 0;
                 & simple-tag {
                   font-family: "Poppins", sans-serif;
                   color: rgba(map-get($md-cfaccent, 500), 0.05);
@@ -397,7 +396,6 @@ $profile-form-field-mt: 30px;
 
               & .skil-height-fix {
                 overflow: hidden;
-                max-height: 30px;
 
                 &.skill-more-height {
                   max-height: 153px;
@@ -1010,6 +1008,9 @@ $profile-form-field-mt: 30px;
               li {
                 width: 100%;
                 margin-bottom: 10px;
+                & .skills-preferred-m{
+                  margin-bottom: 4px;
+                }
               }
             }
           }

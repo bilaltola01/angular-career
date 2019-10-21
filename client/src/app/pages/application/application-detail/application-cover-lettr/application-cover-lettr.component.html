@@ -1,0 +1,86 @@
+<ng-container *ngIf="isJobLoading">
+  <div class="loading">
+      <mat-spinner></mat-spinner>
+      <h4>Loading...</h4>
+  </div>
+</ng-container>
+<!-- Search Bar -->
+<div class="application-page">
+  <div class="application-detail-header">
+      <div class="application-detail-heading">
+          <h2>Application Information</h2>
+      </div>
+      <div class="application-header-btn-style">
+          <div class="application-header-choice">
+              <simple-tag  title="" class="top-choices-tag" ellipseTag="true" [value]="applicationData.interest_level">
+              </simple-tag>
+              <div class="top-choice-content">
+                  <span>Interest In Position</span>
+                  <p>Among top choices</p>
+              </div>
+          </div>
+          <div class="application-header-review">
+                  <div class="top-choice-content">
+                      <span>Application Status</span>
+                      <p>In Review</p>
+                  </div>
+                  <div class="application-action">
+                          <action-button title="Take Action" class="job-apply-btn">
+                          </action-button>
+                  </div>
+              </div>
+      </div>
+  </div>
+  <div  class="application-main-container">
+      <!-- Position Filter Card -->
+      <div class="filter-container container__header tablet" [class.open]="filter_list">
+          <nav>
+              <div class="nav-section active">
+                  <h3>Cover Letter</h3>
+                  <img src="assets/icons/ic_arrow_right.svg">
+              </div>
+              <div class="nav-section">
+                  <h3>Profile Information</h3>
+                  <img src="assets/icons/ic_arrow_right.svg">
+              </div>
+              <div class="nav-section">
+                  <h3>Template Information</h3>
+                  <img src="assets/icons/ic_arrow_right.svg">
+              </div>
+              <div class="nav-section">
+                  <h3>References</h3>
+                  <img src="assets/icons/ic_arrow_right.svg">
+              </div>
+              <div class="nav-section">
+                  <h3>Messages</h3>
+                  <img src="assets/icons/ic_arrow_right.svg">
+              </div>
+              <div class="nav-section">
+                  <h3>Position Information</h3>
+                  <img src="assets/icons/ic_arrow_right.svg">
+              </div>
+          </nav>
+      </div>
+
+      <!-- Job Position Card -->
+
+      <div class="application-coverletter">
+          <div class="row">
+              <h3>Cover Letter</h3>
+              <div class="application-edit">
+                  <action-button title="Edit" *ngIf="!editMode" class="job-apply-btn" (click)="setEdit()" color="primary">
+                  </action-button>
+                  <action-button title="Update" *ngIf="editMode" (click)="updateCoverLetter(applicationCoverLetter, applicationId)"   class="job-apply-btn" color="primary">
+                  </action-button>
+              </div>
+              <div class="application-content-detail" [formGroup]="coverLetterForm">
+                      <mat-form-field class="full-width" *ngIf="editMode">
+                          <textarea matInput formControlName="letter" rows="15" [class.edit-mode]="editMode" [(ngModel)]="applicationCoverLetter" ></textarea>
+                      </mat-form-field>
+                      <p *ngIf="!editMode">{{applicationCoverLetter}}</p>
+              </div>
+          </div>
+      </div>
+  </div>
+
+</div>

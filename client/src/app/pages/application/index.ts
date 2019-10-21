@@ -1,4 +1,7 @@
-import { ApplicationsComponent} from './applications.component';
+import { ApplicationsComponent} from '../application/application-search-page/applications.component';
+import { ApplicationCoverLettrComponent } from './application-detail/application-cover-lettr/application-cover-lettr.component';
+
 export const applicationComponents = [
-  ApplicationsComponent
+  ApplicationsComponent,
+  ApplicationCoverLettrComponent
 ];

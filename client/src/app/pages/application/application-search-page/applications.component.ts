@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import {
   PositionService, AlertsService, AlertType,
   AutoCompleteService, CartService, ApplicationService, ScoreService
-} from '../../services/index';
+} from '../../../services/index';
 
 
 import {

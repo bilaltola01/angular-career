@@ -277,6 +277,9 @@
               matTooltip="Required Skills Match: {{(score.true_fitscore_info?.required_skills_fitscore*100) | number : '2.0' }}%"
               [matTooltipShowDelay]=500>
             </simple-tag>
+            <simple-tag *ngIf="score.minimum_skills" type="gray" title="Required Skills Match" ellipseTag="true"
+            value="{{mathFloor(6*score.true_fitscore_info?.required_skills_fitscore)}}">
+          </simple-tag>
             <simple-tag *ngIf="score.true_fitscore_info?.experience_weight" type="gray" title="Experience Match"
               ellipseTag="true" value="{{mathFloor(6*score.true_fitscore_info?.experience_fitscore)}}"
               matTooltip="Experience Match: {{(score.true_fitscore_info?.experience_fitscore*100)| number : '2.0'}}%"
@@ -307,7 +310,6 @@
                 *ngIf="matchedSkills?.length > 2 || missingSkills?.length > 2"></action-button>
             </div>
             <h3>Matched Skills</h3>
-
             <ul>
               <li>
                 <h5 for="skill_required">Matched Preferred Skills<span
@@ -321,7 +323,13 @@
                       <simple-tag type="green" title="{{matchSkill.skill}}" (click)="openSkilladdDialog(matchSkill)">
                       </simple-tag>
                     </div>
+
                   </div>
+                  <img *ngIf="lessFlag && limit > displayItemsLimit && matchedSkills?.length > displayItemsLimit" class="edu_img"
+                    (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
+                  <img *ngIf="limit < matchedSkills?.length" class="edu_img"
+                    (click)="limit = limit + displayItemsLimit" (click)="lessFlag = true"
+                    src="assets/icons/ic_see_more.svg" alt="See More">
                 </div>
               </li>
               <li>
@@ -336,6 +344,11 @@
                       </simple-tag>
                     </div>
                   </div>
+                  <img *ngIf="lessFlag && limit > displayItemsLimit && missingSkills?.length > displayItemsLimit" class="edu_img"
+                    (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
+                  <img *ngIf="limit < missingSkills?.length" class="edu_img"
+                    (click)="limit = limit + displayItemsLimit" (click)="lessFlag = true"
+                    src="assets/icons/ic_see_more.svg" alt="See More">
                 </div>
                 <ng-template #noSkill>
                   <ul>
@@ -344,11 +357,8 @@
                 </ng-template>
               </li>
             </ul>
-
           </div>
-
         </div>
-
         <div class="row position-interest-detail" id="matched_interest" *ngIf="matchedInterests?.length > 0">
           <h3>Matched Interests</h3>
           <div class="position-matched">

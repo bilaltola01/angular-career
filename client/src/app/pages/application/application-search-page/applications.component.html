@@ -212,7 +212,7 @@
         <div class="row" [ngClass]="{'selected': application.selected}">
           <round-checkbox id="test" [checked]="application.selected"
             (statusChange)="application.selected = !application.selected;selectedAllFlag=false;"></round-checkbox>
-          <h1 [routerLink]="['/applicationInformation']">{{application.position}} </h1>
+          <h1 [routerLink]="['/applications/application-detail/',application.application_id]">{{application.position}} </h1>
           <div class="position-right">
             <span class="right-align">
               <action-button *ngIf="application.accepted" class="application-accept-btn" title="Accepted" type="stroked"
