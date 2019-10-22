@@ -176,6 +176,7 @@ export class CreatePositionComponent implements OnInit {
   position: PositionInfoResponse;
 
   current_user: UserGeneralInfo;
+  is_loading: Boolean;
 
   constructor(
     private router: Router,
@@ -194,6 +195,7 @@ export class CreatePositionComponent implements OnInit {
     this.minDate.setDate(this.currentDate.getDate() + 1);
     this.isTabMenuOpen = false;
     this.isNavMenuOpened = false;
+    this.is_loading = false;
     this.selectedPageIndex = 0;
     this.initializeFormsByPageIndex();
     if (this.current_user) {
@@ -307,10 +309,18 @@ export class CreatePositionComponent implements OnInit {
   initializeFormsByPageIndex() {
     switch (this.selectedPageIndex) {
       case 0:
-        this.initNameOverviewForm();
+        if (this.position && this.position.position_id) {
+          this.getPositionInfo();
+        } else {
+          this.initNameOverviewForm();
+        }
         break;
       case 1:
-        this.initPositionBasicInfoForm();
+        if (this.position && this.position.position_id) {
+          this.getPositionInfo();
+        } else {
+          this.initPositionBasicInfoForm();
+        }
         break;
       case 2:
         this.initPreferredEducationForm();
@@ -335,6 +345,31 @@ export class CreatePositionComponent implements OnInit {
     }
   }
 
+  getPositionInfo() {
+    if (this.position && this.position.position_id) {
+      this.is_loading = true;
+      this.positionService.getPosition(this.position.position_id).subscribe(
+        dataJson => {
+          this.position = dataJson['data'];
+          this.is_loading = false;
+          switch (this.selectedPageIndex) {
+            case 0:
+              this.initNameOverviewForm();
+              break;
+            case 1:
+              this.initPositionBasicInfoForm();
+              break;
+            default:
+              break;
+          }
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    }
+  }
+
   sortPreferredEducationLevels() {
     if (this.preferred_education_levels && this.preferred_education_levels.length > 2) {
       this.preferred_education_levels.sort((a, b) => (a.level > b.level) ? 1 : ((b.level > a.level) ? -1 : 0));
@@ -345,6 +380,10 @@ export class CreatePositionComponent implements OnInit {
    * Position Name and Overview Form
    */
   initNameOverviewForm() {
+    if (this.position) {
+      this.position_name = this.position.position;
+      this.position_desc = this.position.position_desc;
+    }
     this.nameOverviewForm = new FormGroup({
       position_name: new FormControl(this.position_name ? this.position_name : null, [Validators.required]),
       position_desc: new FormControl(this.position_desc ? this.position_desc : null),
@@ -368,6 +407,32 @@ export class CreatePositionComponent implements OnInit {
     this.autocomplete_states = [];
     this.autocomplete_recruiters = [];
 
+    if (this.position) {
+      this.position_company = {
+        company_id: this.position.company_id,
+        company_name: this.position.company_name,
+        company_logo: null
+      };
+      this.position_city = this.position.locations && this.position.locations.length > 0 ? {
+        city_id: this.position.locations[0].city_id,
+        city: this.position.locations[0].city
+      } : null;
+      this.position_state = this.position.locations && this.position.locations.length > 0 ? {
+        state_id: this.position.locations[0].state_id,
+        state: this.position.locations[0].state
+      } : null;
+      this.position_country = this.position.locations && this.position.locations.length > 0 ? this.position.locations[0].country_id : null;
+      this.position_salary = this.position.pay ? this.position.pay : null;
+      this.position_department = this.position.department ? this.position.department : null;
+      this.position_level = this.position.level ? this.position.level : null;
+      this.position_type = this.position.type ? this.position.type : null;
+      this.position_application_type = this.position.application_type ? this.position.application_type : null;
+      this.position_application_deadline = this.position.application_deadline ? this.helperService.convertToFormattedString(this.position.application_deadline, 'YYYY-MM-DD') : null;
+      if (this.position.recruiter_id && this.position.recruiter_name) {
+        this.position_recruiter.user_id = this.position.recruiter_id;
+      }
+    }
+
     this.positionBasicInfoForm = new FormGroup({
       position_company: new FormControl(this.position_company ? this.position_company.company_name : null, [Validators.required]),
       position_city: new FormControl(this.position_city ? this.helperService.cityNameFromAutoComplete(this.position_city.city) : null, [Validators.required]),
@@ -379,7 +444,7 @@ export class CreatePositionComponent implements OnInit {
       position_type: new FormControl(this.position_type ? this.position_type : null, [Validators.required]),
       position_application_type: new FormControl(this.position_application_type ? this.position_application_type : null),
       position_application_deadline: new FormControl(this.position_application_deadline ? this.helperService.convertStringToFormattedDateString(this.position_application_deadline, 'YYYY-MM-DD', 'L') : null, [Validators.required]),
-      position_recruiter: new FormControl(this.position_recruiter ? `${this.position_recruiter.first_name} ${this.position_recruiter.last_name}` + (this.position_recruiter.user_id === this.current_user.user_id ? ' (Me)' : '')  : null)
+      position_recruiter: new FormControl(this.position_recruiter ? (this.position && this.position_recruiter.user_id === this.position.recruiter_id ? this.position.recruiter_name : `${this.position_recruiter.first_name} ${this.position_recruiter.last_name}`) + (this.position_recruiter.user_id === this.current_user.user_id ? ' (Me)' : '')  : null)
     });
 
     this.positionBasicInfoForm.get('position_company').valueChanges.subscribe((position_company) => {
@@ -1185,61 +1250,123 @@ export class CreatePositionComponent implements OnInit {
     }
   }
 
+  /**
+   * Create new position.
+   * poistion is still inactive, won't be published yet. open: 0
+   * if new position already created, then update the position with the latest infomation.
+   * Once position has been created or updated, location for current position should be updated.
+   */
   createPosition() {
-    if (!this.position) {
-      const position: PositionInfoRequest = {
-        position:	this.position_name,
-        company_id:	this.position_company.company_id,
-        level: this.position_level ? this.position_level : null,
-        type:	this.position_type ? this.position_type : null,
-        position_desc: this.position_desc ? this.position_desc : null,
-        start_date:	null,
-        end_date:	null,
-        position_filled: null,
-        pay: this.position_salary ? this.position_salary : null,
-        negotiable:	null,
-        repeat_post: null,
-        repeat_date: null,
-        cover_letter_req:	null,
-        recruiter_id:	this.position_recruiter ? this.position_recruiter.user_id : null,
-        department:	this.position_department ? this.position_department : null,
-        open:	1,
-        openings:	null,
-        application_deadline:	this.position_application_deadline ? this.position_application_deadline : null
-      };
+    // request data
+    const positionInfo: PositionInfoRequest = {
+      position:	this.position_name,
+      company_id:	this.position_company.company_id,
+      level: this.position_level ? this.position_level : null,
+      type:	this.position_type ? this.position_type : null,
+      position_desc: this.position_desc ? this.position_desc : null,
+      start_date:	null,
+      end_date:	null,
+      position_filled: null,
+      pay: this.position_salary ? this.position_salary : null,
+      negotiable:	null,
+      repeat_post: null,
+      repeat_date: null,
+      cover_letter_req:	null,
+      recruiter_id:	this.position_recruiter ? this.position_recruiter.user_id : null,
+      department:	this.position_department ? this.position_department : null,
+      open:	0,
+      openings:	null,
+      application_deadline:	this.position_application_deadline ? this.position_application_deadline : null
+    };
 
-      this.positionService.postPosition(position).subscribe(
+    if (this.position && this.position.position_id) {
+      // If position has already created, then current position should be updated with the latest data.
+      this.positionService.patchPosition(this.position.position_id, positionInfo).subscribe(
         dataJson => {
           this.position = dataJson['data'];
-          this.addLocation(this.position.position_id);
+          this.addPositionLocationInfo(this.position.position_id);
         },
         error => {
           this.alertsService.show(error.message, AlertType.error);
         }
       );
     } else {
-
+      // Create new position
+      this.positionService.postPosition(positionInfo).subscribe(
+        dataJson => {
+          this.position = dataJson['data'];
+          this.addPositionLocationInfo(this.position.position_id);
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
     }
   }
 
-  addLocation(position_id: number) {
+  /**
+   *  Add Position Location Info
+   * @param position_id - position's id
+   *
+   * If location already exist for current position, delete it and add a new location
+   * state is selectable for USA only.
+   */
+  addPositionLocationInfo(position_id: number) {
     if (this.position_city || this.position_state || this.position_country) {
-      const info = {
+
+      let location = null;
+      const locationInfo = {
         position_id: position_id,
         city_id: this.position_city ? this.position_city.city_id : null,
         state_id:	this.position_state ? this.position_state.state_id : null,
         country_id:	this.position_country ? this.position_country : null
       };
-      this.positionService.postLocation(info).subscribe(
-        dataJson => {
+
+      // if location info already exist for current position
+      if (this.position.locations && this.position.locations.length > 0) {
+        location = this.position.locations[0];
+
+        if (location && location.city_id === locationInfo.city_id && location.state_id === locationInfo.state_id && location.country_id === locationInfo.country_id) {
+          // if Location is same, go to next page without API call.
           this.goToNextPage();
-        },
-        error => {
-          this.alertsService.show(error.message, AlertType.error);
-          this.goToNextPage();
+        } else {
+          // if locaiton is not same, delete current location, and add new location.
+          if (location.city_id && location.country_id) {
+            this.positionService.deletePositionLocations(position_id, location.city_id, location.country_id).subscribe(
+              dataJson => {
+                this.addLocation(this.position.position_id, locationInfo);
+              },
+              error => {
+                this.alertsService.show(error.message, AlertType.error);
+                this.goToNextPage();
+              }
+            );
+          }
         }
-      );
+      } else {
+        // if location is not exist for current position, add new location.
+        this.addLocation(this.position.position_id, locationInfo);
+      }
+    } else {
+      this.goToNextPage();
     }
+  }
+
+  /**
+   * Add position's location.
+   * @param position_id - position id
+   * @param locationInfo - request data
+   */
+  addLocation(position_id: number, locationInfo: any) {
+    this.positionService.postLocation(locationInfo).subscribe(
+      dataJson => {
+        this.goToNextPage();
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+        this.goToNextPage();
+      }
+    );
   }
 
   onClickPublish() {
@@ -1280,10 +1407,30 @@ export class CreatePositionComponent implements OnInit {
     }
   }
 
-  addPositionEducationInfo() {
-    if (this.position) {
-      const position_id = this.position.position_id;
-      this.addPreferredEducationLevels(position_id);
+  addPositionInfo(form_name: string) {
+    if (this.position && this.position.position_id) {
+      switch (form_name) {
+        case 'education':
+          this.addPreferredEducationLevels(this.position.position_id);
+          break;
+        case 'work_experience':
+          this.addPreferredWorkExperiences(this.position.position_id);
+          break;
+        case 'skills':
+          this.addMinimumSkills(this.position.position_id);
+          break;
+        case 'interests':
+          this.addPreferredInterests(this.position.position_id);
+          break;
+        case 'schools':
+          this.addPreferredSchools(this.position.position_id);
+          break;
+        default:
+          break;
+      }
+    } else {
+      this.alertsService.show('unknown error!', AlertType.error);
+      this.goToPage(0);
     }
   }
 
@@ -1347,13 +1494,6 @@ export class CreatePositionComponent implements OnInit {
     }
   }
 
-  addPositionSkillsInfo() {
-    if (this.position) {
-      const position_id = this.position.position_id;
-      this.addMinimumSkills(position_id);
-    }
-  }
-
   addMinimumSkills(position_id: number) {
     if (this.minimum_skills && this.minimum_skills.length > 0) {
       const info = {
@@ -1394,13 +1534,6 @@ export class CreatePositionComponent implements OnInit {
     }
   }
 
-  addPositionInterestsInfo() {
-    if (this.position) {
-      const position_id = this.position.position_id;
-      this.addPreferredInterests(position_id);
-    }
-  }
-
   addPreferredInterests(position_id: number) {
     if (this.preferred_interests && this.preferred_interests.length > 0) {
       const info = {
@@ -1421,13 +1554,6 @@ export class CreatePositionComponent implements OnInit {
     }
   }
 
-  addPositionSchoolsInfo() {
-    if (this.position) {
-      const position_id = this.position.position_id;
-      this.addPreferredSchools(position_id);
-    }
-  }
-
   addPreferredSchools(position_id: number) {
     if (this.preferred_schools && this.preferred_schools.length > 0) {
       const info = {
@@ -1445,13 +1571,6 @@ export class CreatePositionComponent implements OnInit {
       );
     } else {
       this.goToNextPage();
-    }
-  }
-
-  addPositionWorkExperienceInfo() {
-    if (this.position) {
-      const position_id = this.position.position_id;
-      this.addPreferredWorkExperiences(position_id);
     }
   }
 

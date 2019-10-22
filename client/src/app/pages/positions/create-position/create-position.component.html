@@ -172,7 +172,7 @@
     </div>
   </div>
   <div class="container__full">
-    <action-button class="btn-next" type="flat" title="Next" color="primary" [disabled]="!(positionBasicInfoForm.valid && position_company && position_level && position_type &&  onCheckCompanyValidation() && onCheckCityValidation() && onCheckStateValidation() && onCheckRecruiterValidation())" (click)="goToNextPage()"></action-button>
+    <action-button class="btn-next" type="flat" title="Next" color="primary" [disabled]="!(positionBasicInfoForm.valid && position_company && position_level && position_type &&  onCheckCompanyValidation() && onCheckCityValidation() && onCheckStateValidation() && onCheckRecruiterValidation())" (click)="createPosition()"></action-button>
     <action-button class="btn-next btn-quit" type="stroked" title="Quit" (click)="onClickQuit()"></action-button>
   </div>
 </div>
