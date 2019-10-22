@@ -1281,15 +1281,28 @@ export class CreatePositionComponent implements OnInit {
 
     if (this.position && this.position.position_id) {
       // If position has already created, then current position should be updated with the latest data.
-      this.positionService.patchPosition(this.position.position_id, positionInfo).subscribe(
-        dataJson => {
-          this.position = dataJson['data'];
-          this.addPositionLocationInfo(this.position.position_id);
-        },
-        error => {
-          this.alertsService.show(error.message, AlertType.error);
-        }
-      );
+      if ( positionInfo.position === this.position.position
+        && positionInfo.position_desc === this.position.position_desc
+        && positionInfo.company_id === this.position.company_id
+        && positionInfo.level === this.position.level
+        && positionInfo.type === this.position.type
+        && positionInfo.pay === this.position.pay
+        && positionInfo.recruiter_id === this.position.recruiter_id
+        && positionInfo.department === this.position.department
+        && positionInfo.application_deadline === this.helperService.convertToFormattedString(this.position.application_deadline, 'YYYY-MM-DD')
+      ) {
+        this.addPositionLocationInfo(this.position.position_id);
+      } else {
+        this.positionService.patchPosition(this.position.position_id, positionInfo).subscribe(
+          dataJson => {
+            this.position = dataJson['data'];
+            this.addPositionLocationInfo(this.position.position_id);
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+          }
+        );
+      }
     } else {
       // Create new position
       this.positionService.postPosition(positionInfo).subscribe(
