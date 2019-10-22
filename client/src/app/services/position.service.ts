@@ -199,6 +199,30 @@ export class PositionService {
       );
   }
 
+  public getPositionLocations(positionId: number): Observable<any> {
+    return this.http.get(this.position_service_url + `position/${positionId}/locations`, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
+  public deletePositionLocations(positionId: number, cityId: number, countryId: number): Observable<any> {
+    return this.http.delete(this.position_service_url + `position/${positionId}/city/${cityId}/country/${countryId}`, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
   public patchLocation(locationInfo: any): Observable<any> {
     return this.http.patch(this.position_management_service_url + 'position/location', locationInfo, this.authHttpOptions())
       .pipe(
