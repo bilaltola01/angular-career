@@ -38,6 +38,8 @@ export class HelperService {
     let city;
     if (cityValue.includes(', ')) {
       city = cityValue.split(', ')[0];
+    } else {
+      city = cityValue;
     }
     return city;
   }
