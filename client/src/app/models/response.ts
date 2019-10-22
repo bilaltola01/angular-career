@@ -161,6 +161,8 @@ export interface PositionInfoResponse {
   open:	number;
   openings:	number;
   recruiter_name:	string;
+  application_deadline: any;
+  application_type: string;
   locations: any[];
   preferred_skills:	any[];
   minimum_skills:	any[];
