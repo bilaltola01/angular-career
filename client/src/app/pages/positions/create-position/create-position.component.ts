@@ -348,7 +348,7 @@ export class CreatePositionComponent implements OnInit {
   getPositionInfo() {
     if (this.position && this.position.position_id) {
       this.is_loading = true;
-      this.positionService.getPosition(this.position.position_id).subscribe(
+      this.positionService.getPositionById(this.position.position_id).subscribe(
         dataJson => {
           this.position = dataJson['data'];
           this.is_loading = false;
@@ -1420,6 +1420,10 @@ export class CreatePositionComponent implements OnInit {
     }
   }
 
+  /**
+   * Add position's information. This method should be called when user click "next" button.
+   * @param form_name - form name
+   */
   addPositionInfo(form_name: string) {
     if (this.position && this.position.position_id) {
       switch (form_name) {
