@@ -43,6 +43,18 @@ export class PositionService {
       );
   }
 
+  public getPositionById(positionId: number): Observable<any> {
+    return this.http.get(this.position_management_service_url + `position/${positionId}`, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
   public postPosition(positionInfo: any): Observable<any> {
     return this.http.post(this.position_management_service_url + 'position', positionInfo, this.authHttpOptions())
       .pipe(
@@ -212,7 +224,7 @@ export class PositionService {
   }
 
   public deletePositionLocations(positionId: number, cityId: number, countryId: number): Observable<any> {
-    return this.http.delete(this.position_service_url + `position/${positionId}/city/${cityId}/country/${countryId}`, this.authHttpOptions())
+    return this.http.delete(this.position_management_service_url + `position/${positionId}/city/${cityId}/country/${countryId}`, this.authHttpOptions())
       .pipe(
         map(
           data => {
