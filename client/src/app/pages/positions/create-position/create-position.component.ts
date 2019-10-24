@@ -1216,6 +1216,10 @@ export class CreatePositionComponent implements OnInit {
   initInterestsForm() {
     this.autocomplete_preferred_interests = [];
 
+    if (this.position && this.position.position_id) {
+      this.preferred_interests = this.position.preferred_interests && this.position.preferred_interests.length > 0 ? this.position.preferred_interests.slice() : null;
+    }
+
     this.interestsForm = new FormGroup({
       search_preferred_interest: new FormControl('')
     });
@@ -1239,6 +1243,10 @@ export class CreatePositionComponent implements OnInit {
     });
   }
 
+  /**
+   * Select interest from autocomplete list, add to array
+   * @param interest
+   */
   onSelectPreferredInterest(interest: Interest) {
     if (!this.preferred_interests) {
       this.preferred_interests = [interest];
@@ -1248,15 +1256,25 @@ export class CreatePositionComponent implements OnInit {
         this.preferred_interests.push(interest);
       }
     }
-    this.interestsForm.get('search_preferred_interest').setValue('');
+    this.interestsForm.patchValue({search_preferred_interest: ''});
   }
 
+  /**
+   * Remove from array
+   * @param interest
+   * @param arrIndex
+   */
   onRemovePreferredInterest(interest: Interest, arrIndex: number) {
     if (this.preferred_interests[arrIndex].interest_id === interest.interest_id) {
       this.preferred_interests.splice(arrIndex, 1);
     }
     if (this.preferred_interests.length === 0) {
       this.preferred_interests = null;
+    }
+
+    const index = this.position.preferred_interests.findIndex(value => value.interest_id === interest.interest_id);
+    if (index !== -1) {
+      this.removePreferredInterest(this.position.position_id, interest.interest_id, index);
     }
   }
 
@@ -1265,6 +1283,10 @@ export class CreatePositionComponent implements OnInit {
    */
   initSchoolRestrictionsForm() {
     this.autocomplete_preferred_schools = [];
+
+    if (this.position && this.position.position_id) {
+      this.preferred_schools = this.position.preferred_schools && this.position.preferred_schools.length > 0 ? this.position.preferred_schools.slice() : null;
+    }
 
     this.schoolRestrictionsForm = new FormGroup({
       search_preferred_school: new FormControl('')
@@ -1289,6 +1311,10 @@ export class CreatePositionComponent implements OnInit {
     });
   }
 
+  /**
+   * Select school from autocomplete list, add to array
+   * @param school
+   */
   onSelectPreferredSchool(school: School) {
     if (!this.preferred_schools) {
       this.preferred_schools = [school];
@@ -1298,15 +1324,25 @@ export class CreatePositionComponent implements OnInit {
         this.preferred_schools.push(school);
       }
     }
-    this.schoolRestrictionsForm.get('search_preferred_school').setValue('');
+    this.schoolRestrictionsForm.patchValue({search_preferred_school: ''});
   }
 
+  /**
+   * Remove from array
+   * @param school
+   * @param arrIndex
+   */
   onRemovePreferredSchool(school: School, arrIndex: number) {
     if (this.preferred_schools[arrIndex].school_id === school.school_id) {
       this.preferred_schools.splice(arrIndex, 1);
     }
     if (this.preferred_schools.length === 0) {
       this.preferred_schools = null;
+    }
+
+    const index = this.position.preferred_schools.findIndex(value => value.school_id === school.school_id);
+    if (index !== -1) {
+      this.removePreferredSchool(this.position.position_id, school.school_id, index);
     }
   }
 
@@ -1693,11 +1729,28 @@ export class CreatePositionComponent implements OnInit {
     }
   }
 
+  /**
+   * Add preferred Interests in current position
+   * @param position_id
+   */
   addPreferredInterests(position_id: number) {
+    let temp_arr;
     if (this.preferred_interests && this.preferred_interests.length > 0) {
+      if (this.position.preferred_interests && this.position.preferred_interests.length > 0) {
+        temp_arr = this.preferred_interests.filter((local_value) => {
+          return !(this.position.preferred_interests.some(value => {
+            return value.interest_id === local_value.interest_id;
+          }));
+        });
+      } else {
+        temp_arr = this.preferred_interests;
+      }
+    }
+
+    if (temp_arr && temp_arr.length > 0) {
       const info = {
         position_id: position_id,
-        interest_ids: this.preferred_interests.map(value => value.interest_id)
+        interest_ids: temp_arr.map(value => value.interest_id)
       };
       this.positionService.postPreferredInterests(info).subscribe(
         dataJson => {
@@ -1713,11 +1766,45 @@ export class CreatePositionComponent implements OnInit {
     }
   }
 
+  /**
+   * Remove selected Interest from database
+   * @param position_id
+   * @param interest_id
+   * @param arrIndex
+   */
+  removePreferredInterest(position_id: number, interest_id: number, arrIndex: number) {
+    this.positionService.deletePreferredInterest(position_id, interest_id).subscribe(
+      dataJson => {
+        this.position.preferred_interests.splice(arrIndex, 1);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  /**
+   * Add Preferred Schools in current position
+   * @param position_id
+   */
   addPreferredSchools(position_id: number) {
+    let temp_arr;
     if (this.preferred_schools && this.preferred_schools.length > 0) {
+      if (this.position.preferred_schools && this.position.preferred_schools.length > 0) {
+        temp_arr = this.preferred_schools.filter((local_value) => {
+          return !(this.position.preferred_schools.some(value => {
+            return value.school_id === local_value.school_id;
+          }));
+        });
+      } else {
+        temp_arr = this.preferred_schools;
+      }
+    }
+
+    if (temp_arr && temp_arr.length > 0) {
       const info = {
         position_id: position_id,
-        school_ids: this.preferred_schools.map(value => value.school_id)
+        school_ids: temp_arr.map(value => value.school_id)
       };
       this.positionService.postPreferredSchools(info).subscribe(
         dataJson => {
@@ -1731,6 +1818,17 @@ export class CreatePositionComponent implements OnInit {
     } else {
       this.goToNextPage();
     }
+  }
+
+  removePreferredSchool(position_id: number, school_id: number, arrIndex: number) {
+    this.positionService.deletePreferredSchool(position_id, school_id).subscribe(
+      dataJson => {
+        this.position.preferred_schools.splice(arrIndex, 1);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
   }
 
   addPreferredWorkExperiences(position_id: number) {

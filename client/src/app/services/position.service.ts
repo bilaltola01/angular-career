@@ -139,6 +139,18 @@ export class PositionService {
       );
   }
 
+  public deletePreferredSchool(positionId: number, schoolId: number): Observable<any> {
+    return this.http.delete(this.position_management_service_url + `position/${positionId}/preferred-school/${schoolId}`, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
   public postPreferredMajors(majorsInfo: any): Observable<any> {
     return this.http.post(this.position_management_service_url + 'position/preferred-majors', majorsInfo, this.authHttpOptions())
       .pipe(
@@ -213,6 +225,18 @@ export class PositionService {
 
   public postPreferredInterests(interestsInfo: any): Observable<any> {
     return this.http.post(this.position_management_service_url + 'position/preferred-interests', interestsInfo, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
+  public deletePreferredInterest(positionId: number, interestId: number): Observable<any> {
+    return this.http.delete(this.position_management_service_url + `position/${positionId}/preferred-interests/${interestId}`, this.authHttpOptions())
       .pipe(
         map(
           data => {
