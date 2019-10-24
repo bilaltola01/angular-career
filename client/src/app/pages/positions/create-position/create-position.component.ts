@@ -307,41 +307,37 @@ export class CreatePositionComponent implements OnInit {
   }
 
   initializeFormsByPageIndex() {
-    switch (this.selectedPageIndex) {
-      case 0:
-        if (this.position && this.position.position_id) {
-          this.getPositionInfo();
-        } else {
+    if (this.position && this.position.position_id) {
+      this.getPositionInfo();
+    } else {
+      switch (this.selectedPageIndex) {
+        case 0:
           this.initNameOverviewForm();
-        }
-        break;
-      case 1:
-        if (this.position && this.position.position_id) {
-          this.getPositionInfo();
-        } else {
+          break;
+        case 1:
           this.initPositionBasicInfoForm();
-        }
-        break;
-      case 2:
-        this.initPreferredEducationForm();
-        break;
-      case 3:
-        this.initPreferredWorkExperienceFormArray();
-        break;
-      case 4:
-        this.initSkillsForm();
-        break;
-      case 5:
-        this.initInterestsForm();
-        break;
-      case 6:
-        this.initSchoolRestrictionsForm();
-        break;
-      case 7:
-        this.sortPreferredEducationLevels();
-        break;
-      default:
-        break;
+          break;
+        case 2:
+          this.initPreferredEducationForm();
+          break;
+        case 3:
+          this.initPreferredWorkExperienceFormArray();
+          break;
+        case 4:
+          this.initSkillsForm();
+          break;
+        case 5:
+          this.initInterestsForm();
+          break;
+        case 6:
+          this.initSchoolRestrictionsForm();
+          break;
+        case 7:
+          this.sortPreferredEducationLevels();
+          break;
+        default:
+          break;
+      }
     }
   }
 
@@ -358,6 +354,21 @@ export class CreatePositionComponent implements OnInit {
               break;
             case 1:
               this.initPositionBasicInfoForm();
+              break;
+            case 2:
+              this.initPreferredEducationForm();
+              break;
+            case 3:
+              this.initPreferredWorkExperienceFormArray();
+              break;
+            case 4:
+              this.initSkillsForm();
+              break;
+            case 5:
+              this.initInterestsForm();
+              break;
+            case 6:
+              this.initSchoolRestrictionsForm();
               break;
             default:
               break;
@@ -735,6 +746,12 @@ export class CreatePositionComponent implements OnInit {
     this.autocomplete_majors = [];
     this.autocomplete_major_categories = [];
 
+    if (this.position && this.position.position_id) {
+      this.preferred_education_levels = this.position.preferred_education_levels && this.position.preferred_education_levels.length > 0 ? this.position.preferred_education_levels.slice() : null;
+      this.preferred_education_majors = this.position.preferred_majors && this.position.preferred_majors.length > 0 ? this.position.preferred_majors.slice() : null;
+      this.preferred_education_major_categories = this.position.preferred_major_categories && this.position.preferred_major_categories.length > 0 ? this.position.preferred_major_categories.slice() : null;
+    }
+
     this.preferredEducationForm = new FormGroup({
       search_eduaction_level: new FormControl(''),
       search_education_major: new FormControl(''),
@@ -778,10 +795,16 @@ export class CreatePositionComponent implements OnInit {
     });
   }
 
+  /**
+   * Select Education Level from dropdown list, add current eduaction Level to array.
+   * @param level - education level
+   */
   onSelectEducationLevel(level: Level) {
+    // if array is null, create a new array.
     if (!this.preferred_education_levels) {
       this.preferred_education_levels = [level];
     } else {
+      // current education level is not in array, add it.
       const filter = this.preferred_education_levels.filter(value => value.level_id === level.level_id);
       if (filter.length === 0) {
         this.preferred_education_levels.push(level);
@@ -790,6 +813,11 @@ export class CreatePositionComponent implements OnInit {
     this.preferredEducationForm.patchValue({search_eduaction_level: ''});
   }
 
+  /**
+   * Remove Education level from array
+   * @param level - education level
+   * @param arrIndex - array Index
+   */
   onRemoveEducationLevel(level: Level, arrIndex: number) {
     if (this.preferred_education_levels[arrIndex].level_id === level.level_id) {
       this.preferred_education_levels.splice(arrIndex, 1);
@@ -797,8 +825,17 @@ export class CreatePositionComponent implements OnInit {
     if (this.preferred_education_levels.length === 0) {
       this.preferred_education_levels = null;
     }
+    // if the current education level exists in database, remove it from database.
+    const index = this.position.preferred_education_levels.findIndex(value => value.level_id === level.level_id);
+    if (index !== -1) {
+      this.removePreferredEducationLevel(this.position.position_id, level.level_id, index);
+    }
   }
 
+  /**
+   * Select Education Major from autocomplete list, add current major to array
+   * @param major - major
+   */
   onSelectEducationMajor(major: Major) {
     if (!this.preferred_education_majors) {
       this.preferred_education_majors = [major];
@@ -811,6 +848,11 @@ export class CreatePositionComponent implements OnInit {
     this.preferredEducationForm.patchValue({search_education_major: ''});
   }
 
+  /**
+   * Remove current major from array
+   * @param major - major
+   * @param arrIndex - array Index
+   */
   onRemoveEducationMajor(major: Major, arrIndex: number) {
     if (this.preferred_education_majors[arrIndex].major_id === major.major_id) {
       this.preferred_education_majors.splice(arrIndex, 1);
@@ -818,8 +860,16 @@ export class CreatePositionComponent implements OnInit {
     if (this.preferred_education_majors.length === 0) {
       this.preferred_education_majors = null;
     }
+    const index = this.position.preferred_majors.findIndex(value => value.major_id === major.major_id);
+    if (index !== -1) {
+      this.removePreferredEducationMajor(this.position.position_id, major.major_id, index);
+    }
   }
 
+  /**
+   * Select Education Major Category from autocomplete list, add to array.
+   * @param major_category
+   */
   onSelectEducationMajorCategory(major_category: MajorCategory) {
     if (!this.preferred_education_major_categories) {
       this.preferred_education_major_categories = [major_category];
@@ -832,12 +882,22 @@ export class CreatePositionComponent implements OnInit {
     this.preferredEducationForm.patchValue({search_major_category: ''});
   }
 
+  /**
+   * Remove from array
+   * @param major_category
+   * @param arrIndex
+   */
   onRemoveEducationMajorCategory(major_category: MajorCategory, arrIndex: number) {
     if (this.preferred_education_major_categories[arrIndex].cat_id === major_category.cat_id) {
       this.preferred_education_major_categories.splice(arrIndex, 1);
     }
     if (this.preferred_education_major_categories.length === 0) {
       this.preferred_education_major_categories = null;
+    }
+
+    const index = this.position.preferred_major_categories.findIndex(value => value.cat_id === major_category.cat_id);
+    if (index !== -1) {
+      this.removePreferredEducationMajorCategory(this.position.position_id, major_category.cat_id, index);
     }
   }
 
@@ -1451,11 +1511,28 @@ export class CreatePositionComponent implements OnInit {
     }
   }
 
+  /**
+   * Add preferred educaiton levels in current position.
+   * @param position_id - position id
+   */
   addPreferredEducationLevels(position_id: number) {
+    let temp_arr;
     if (this.preferred_education_levels && this.preferred_education_levels.length > 0) {
+      if (this.position.preferred_education_levels && this.position.preferred_education_levels.length > 0) {
+        temp_arr = this.preferred_education_levels.filter((local_value) => {
+          return !(this.position.preferred_education_levels.some(value => {
+            return value.level_id === local_value.level_id;
+          }));
+        });
+      } else {
+        temp_arr = this.preferred_education_levels;
+      }
+    }
+
+    if (temp_arr && temp_arr.length > 0) {
       const info = {
         position_id: position_id,
-        level_ids: this.preferred_education_levels.map((value) => value.level_id)
+        level_ids: temp_arr.map((value) => value.level_id)
       };
       this.positionService.postPreferredEducation(info).subscribe(
         dataJson => {
@@ -1471,11 +1548,41 @@ export class CreatePositionComponent implements OnInit {
     }
   }
 
+  /**
+   * Remove selected Education level from database.
+   * @param position_id - position id
+   * @param level_id - education level id
+   * @param arrIndex - Index of array
+   */
+  removePreferredEducationLevel(position_id: number, level_id: number, arrIndex: number) {
+    this.positionService.deletePreferredEducation(position_id, level_id).subscribe(
+      dataJson => {
+        this.position.preferred_education_levels.splice(arrIndex, 1);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
   addPreferredEducationMajors(position_id: number) {
+    let temp_arr;
     if (this.preferred_education_majors && this.preferred_education_majors.length > 0) {
+      if (this.position.preferred_majors && this.position.preferred_majors.length > 0) {
+        temp_arr = this.preferred_education_majors.filter((local_value) => {
+          return !(this.position.preferred_majors.some(value => {
+            return value.major_id === local_value.major_id;
+          }));
+        });
+      } else {
+        temp_arr = this.preferred_education_majors;
+      }
+    }
+
+    if (temp_arr && temp_arr.length > 0) {
       const info = {
         position_id: position_id,
-        major_ids: this.preferred_education_majors.map((value) => value.major_id)
+        major_ids: temp_arr.map((value) => value.major_id)
       };
       this.positionService.postPreferredMajors(info).subscribe(
         dataJson => {
@@ -1491,11 +1598,35 @@ export class CreatePositionComponent implements OnInit {
     }
   }
 
+  removePreferredEducationMajor(position_id: number, major_id: number, arrIndex: number) {
+    this.positionService.deletePreferredMajor(position_id, major_id).subscribe(
+      dataJson => {
+        this.position.preferred_majors.splice(arrIndex, 1);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
   addPreferredEducationMajorCategories(position_id: number) {
+    let temp_arr;
     if (this.preferred_education_major_categories && this.preferred_education_major_categories.length > 0) {
+      if (this.position.preferred_major_categories && this.position.preferred_major_categories.length > 0) {
+        temp_arr = this.preferred_education_major_categories.filter((local_value) => {
+          return !(this.position.preferred_major_categories.some(value => {
+            return value.cat_id === local_value.cat_id;
+          }));
+        });
+      } else {
+        temp_arr = this.preferred_education_major_categories;
+      }
+    }
+
+    if (temp_arr && temp_arr.length > 0) {
       const info = {
         position_id: position_id,
-        major_category_ids: this.preferred_education_major_categories.map(value => value.cat_id)
+        major_category_ids: temp_arr.map(value => value.cat_id)
       };
       this.positionService.postPreferredMajorCategories(info).subscribe(
         dataJson => {
@@ -1509,6 +1640,17 @@ export class CreatePositionComponent implements OnInit {
     } else {
       this.goToNextPage();
     }
+  }
+
+  removePreferredEducationMajorCategory(position_id: number, category_id: number, arrIndex: number) {
+    this.positionService.deletePreferredMajorCategory(position_id, category_id).subscribe(
+      dataJson => {
+        this.position.preferred_major_categories.splice(arrIndex, 1);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
   }
 
   addMinimumSkills(position_id: number) {

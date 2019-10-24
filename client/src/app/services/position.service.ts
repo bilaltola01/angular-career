@@ -151,6 +151,18 @@ export class PositionService {
       );
   }
 
+  public deletePreferredMajor(positionId: number, majorId: number): Observable<any> {
+    return this.http.delete(this.position_management_service_url + `position/${positionId}/preferred-major/${majorId}`, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
   public postPreferredEducation(educationInfo: any): Observable<any> {
     return this.http.post(this.position_management_service_url + 'position/preferred-education', educationInfo, this.authHttpOptions())
       .pipe(
@@ -163,8 +175,32 @@ export class PositionService {
       );
   }
 
+  public deletePreferredEducation(positionId: number, educationLevelId: number): Observable<any> {
+    return this.http.delete(this.position_management_service_url + `position/${positionId}/preferred-education/${educationLevelId}`, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
   public postPreferredMajorCategories(categoriesInfo: any): Observable<any> {
     return this.http.post(this.position_management_service_url + 'position/preferred-major-categories', categoriesInfo, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
+  public deletePreferredMajorCategory(positionId: number, majorCategoryId: number): Observable<any> {
+    return this.http.delete(this.position_management_service_url + `position/${positionId}/preferred-major-category/${majorCategoryId}`, this.authHttpOptions())
       .pipe(
         map(
           data => {
