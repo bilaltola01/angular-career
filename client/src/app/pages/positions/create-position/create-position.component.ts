@@ -307,6 +307,7 @@ export class CreatePositionComponent implements OnInit {
   }
 
   initializeFormsByPageIndex() {
+    // this.getPositionInfo();
     if (this.position && this.position.position_id) {
       this.getPositionInfo();
     } else {
@@ -344,6 +345,7 @@ export class CreatePositionComponent implements OnInit {
   getPositionInfo() {
     if (this.position && this.position.position_id) {
       this.is_loading = true;
+      // this.positionService.getPositionById(18).subscribe(
       this.positionService.getPositionById(this.position.position_id).subscribe(
         dataJson => {
           this.position = dataJson['data'];
@@ -1072,6 +1074,11 @@ export class CreatePositionComponent implements OnInit {
     this.temp_minimum_skill = null;
     this.temp_preferred_skill = null;
 
+    if (this.position && this.position.position_id) {
+      this.preferred_skills = this.position.preferred_skills && this.position.preferred_skills.length > 0 ? this.position.preferred_skills.slice() : null;
+      this.minimum_skills = this.position.minimum_skills && this.position.minimum_skills.length > 0 ? this.position.minimum_skills.slice() : null;
+    }
+
     this.skillsForm = new FormGroup({
       search_minimum_skill: new FormControl(''),
       search_preferred_skill: new FormControl('')
@@ -1114,6 +1121,10 @@ export class CreatePositionComponent implements OnInit {
     });
   }
 
+  /**
+   * select skill from autocomplete list, add to array
+   * @param skill
+   */
   onSelectMinimumSkill(skill: Skill) {
     const skillItemData = {
       skill_id: skill.skill_id,
@@ -1125,22 +1136,26 @@ export class CreatePositionComponent implements OnInit {
     if (!this.minimum_skills) {
       this.minimum_skills = [skillItemData];
     } else {
-      const filter = this.minimum_skills.filter(value => value.skill_id === skill.skill_id);
-      if (filter.length === 0) {
+      arrIndex = this.minimum_skills.findIndex(value => value.skill_id === skill.skill_id);
+      if (arrIndex === -1) {
         this.minimum_skills.push(skillItemData);
         arrIndex = this.minimum_skills.length - 1;
       } else {
-        arrIndex = this.minimum_skills.indexOf(filter[0]);
-        skillItemData.skill_level = filter[0].skill_level;
+        skillItemData.skill_level = this.minimum_skills[arrIndex].skill_level;
       }
     }
     this.temp_minimum_skill = {
       index: arrIndex,
       skillItem: skillItemData
     };
-    this.skillsForm.get('search_minimum_skill').setValue('');
+    this.skillsForm.patchValue({search_minimum_skill: ''});
   }
 
+  /**
+   * Remove from array
+   * @param skill
+   * @param arrIndex
+   */
   onRemoveMinimumSkill(skill: Skill, arrIndex: number) {
     if (this.minimum_skills[arrIndex].skill_id === skill.skill_id) {
       this.minimum_skills.splice(arrIndex, 1);
@@ -1149,6 +1164,10 @@ export class CreatePositionComponent implements OnInit {
       this.minimum_skills = null;
     }
     this.temp_minimum_skill = null;
+    const index = this.position.minimum_skills.findIndex(value => value.skill_id === skill.skill_id);
+    if (index !== -1) {
+      this.removeMinimumSkill(this.position.position_id, skill.skill_id, index);
+    }
   }
 
   onSelectPreferredSkill(skill: Skill) {
@@ -1161,20 +1180,19 @@ export class CreatePositionComponent implements OnInit {
     if (!this.preferred_skills) {
       this.preferred_skills = [skillItemData];
     } else {
-      const filter = this.preferred_skills.filter(value => value.skill_id === skill.skill_id);
-      if (filter.length === 0) {
+      arrIndex = this.preferred_skills.findIndex(value => value.skill_id === skill.skill_id);
+      if (arrIndex === -1) {
         this.preferred_skills.push(skillItemData);
         arrIndex = this.preferred_skills.length - 1;
       } else {
-        arrIndex = this.preferred_skills.indexOf(filter[0]);
-        skillItemData.skill_level = filter[0].skill_level;
+        skillItemData.skill_level = this.preferred_skills[arrIndex].skill_level;
       }
     }
     this.temp_preferred_skill = {
       index: arrIndex,
       skillItem: skillItemData
     };
-    this.skillsForm.get('search_preferred_skill').setValue('');
+    this.skillsForm.patchValue({search_preferred_skill: ''});
   }
 
   onRemovePreferredSkill(skill: Skill, arrIndex: number) {
@@ -1185,15 +1203,28 @@ export class CreatePositionComponent implements OnInit {
       this.preferred_skills = null;
     }
     this.temp_preferred_skill = null;
+    const index = this.position.preferred_skills.findIndex(value => value.skill_id === skill.skill_id);
+    if (index !== -1) {
+      this.removePreferredSkill(this.position.position_id, skill.skill_id, index);
+    }
   }
 
   onLevelChanged(level: number, index: number, is_minimum_skill: boolean) {
+    let arrIndex;
     if (is_minimum_skill) {
+      arrIndex = this.position.minimum_skills.findIndex(value => value.skill_id === this.minimum_skills[index].skill_id);
+      if (arrIndex !== -1 && this.position.minimum_skills[arrIndex].skill_level !== level) {
+        this.patchMimimumSkill(this.position.position_id, this.position.minimum_skills[arrIndex].skill_id, level, arrIndex);
+      }
       this.minimum_skills[index].skill_level = level;
       if (this.temp_minimum_skill) {
         this.temp_minimum_skill.skillItem = this.minimum_skills[index];
       }
     } else {
+      arrIndex = this.position.preferred_skills.findIndex(value => value.skill_id === this.preferred_skills[index].skill_id);
+      if (arrIndex !== -1 && this.position.preferred_skills[arrIndex].skill_level !== level) {
+        this.patchPreferredSkill(this.position.position_id, this.position.preferred_skills[arrIndex].skill_id, level, arrIndex);
+      }
       this.preferred_skills[index].skill_level = level;
       if (this.temp_preferred_skill) {
         this.temp_preferred_skill.skillItem = this.preferred_skills[index];
@@ -1689,11 +1720,28 @@ export class CreatePositionComponent implements OnInit {
     );
   }
 
+  /**
+   * Add minimum skills in current position
+   * @param position_id
+   */
   addMinimumSkills(position_id: number) {
+    let temp_arr;
     if (this.minimum_skills && this.minimum_skills.length > 0) {
+      if (this.position.minimum_skills && this.position.minimum_skills.length > 0) {
+        temp_arr = this.minimum_skills.filter((local_value) => {
+          return !(this.position.minimum_skills.some(value => {
+            return value.skill_id === local_value.skill_id;
+          }));
+        });
+      } else {
+        temp_arr = this.minimum_skills;
+      }
+    }
+
+    if (temp_arr && temp_arr.length > 0) {
       const info = {
         position_id: position_id,
-        skills: this.minimum_skills
+        skills: temp_arr
       };
       this.positionService.postMinimumSkills(info).subscribe(
         dataJson => {
@@ -1709,11 +1757,64 @@ export class CreatePositionComponent implements OnInit {
     }
   }
 
+  /**
+   * Remove minimum skill from database
+   * @param position_id
+   * @param skill_id
+   * @param arrIndex
+   */
+  removeMinimumSkill(position_id: number, skill_id: number, arrIndex: number) {
+    this.positionService.deleteMinimumSkill(position_id, skill_id).subscribe(
+      dataJson => {
+        this.position.minimum_skills.splice(arrIndex, 1);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  /**
+   * Update skill level from database
+   * @param position_id
+   * @param skill_id
+   * @param skill_level
+   * @param arrIndex
+   */
+  patchMimimumSkill(position_id: number, skill_id: number, skill_level: number, arrIndex: number) {
+    const info = {
+      position_id: position_id,
+      skill_id: skill_id,
+      skill_level: skill_level
+    };
+    this.positionService.patchMinimumSkill(info).subscribe(
+      dataJson => {
+        this.position.minimum_skills[arrIndex].skill_level = skill_level;
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
   addPreferredSkills(position_id: number) {
+    let temp_arr;
     if (this.preferred_skills && this.preferred_skills.length > 0) {
+      if (this.position.preferred_skills && this.position.preferred_skills.length > 0) {
+        temp_arr = this.preferred_skills.filter((local_value) => {
+          return !(this.position.preferred_skills.some(value => {
+            return value.skill_id === local_value.skill_id;
+          }));
+        });
+      } else {
+        temp_arr = this.preferred_skills;
+      }
+    }
+
+    if (temp_arr && temp_arr.length > 0) {
       const info = {
         position_id: position_id,
-        skills: this.preferred_skills
+        skills: temp_arr
       };
       this.positionService.postPreferredSkills(info).subscribe(
         dataJson => {
@@ -1727,6 +1828,33 @@ export class CreatePositionComponent implements OnInit {
     } else {
       this.goToNextPage();
     }
+  }
+
+  removePreferredSkill(position_id: number, skill_id: number, arrIndex: number) {
+    this.positionService.deletePreferredSkill(position_id, skill_id).subscribe(
+      dataJson => {
+        this.position.preferred_skills.splice(arrIndex, 1);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  patchPreferredSkill(position_id: number, skill_id: number, skill_level: number, arrIndex) {
+    const info = {
+      position_id: position_id,
+      skill_id: skill_id,
+      skill_level: skill_level
+    };
+    this.positionService.patchPreferredSkill(info).subscribe(
+      dataJson => {
+        this.position.preferred_skills[arrIndex].skill_level = skill_level;
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
   }
 
   /**
