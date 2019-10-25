@@ -115,8 +115,56 @@ export class PositionService {
       );
   }
 
+  public patchPreferredSkill(skillInfo: any): Observable<any> {
+    return this.http.patch(this.position_management_service_url + 'position/preferred-skill', skillInfo, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
+  public deletePreferredSkill(positionId: number, skillId: number): Observable<any> {
+    return this.http.delete(this.position_management_service_url + `position/${positionId}/preferred-skill/${skillId}`, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
   public postMinimumSkills(skillsInfo: any): Observable<any> {
     return this.http.post(this.position_management_service_url + 'position/minimum-skills', skillsInfo, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
+  public patchMinimumSkill(skillInfo: any): Observable<any> {
+    return this.http.patch(this.position_management_service_url + 'position/minimum-skill', skillInfo, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
+  public deleteMinimumSkill(positionId: number, skillId: number): Observable<any> {
+    return this.http.delete(this.position_management_service_url + `position/${positionId}/minimum-skill/${skillId}`, this.authHttpOptions())
       .pipe(
         map(
           data => {
