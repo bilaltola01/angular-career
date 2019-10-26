@@ -307,6 +307,66 @@ export class PositionService {
       );
   }
 
+  public patchPreferredExperience(experienceInfo: any): Observable<any> {
+    return this.http.patch(this.position_management_service_url + 'position/preferred-experience', experienceInfo, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
+  public deletePreferredExperience(positionId: number, experienceId: number): Observable<any> {
+    return this.http.delete(this.position_management_service_url + `position/${positionId}/preferred-experience/${experienceId}`, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
+  public postPreferredExperienceSkillsTrained(skillsInfo: any): Observable<any> {
+    return this.http.post(this.position_management_service_url + 'experience/preferred-skills-trained', skillsInfo, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
+  public postPreferredExperienceSkillTrained(skillInfo: any): Observable<any> {
+    return this.http.post(this.position_management_service_url + 'experience/preferred-skill-trained', skillInfo, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
+  public deletePreferredExperienceSkillTrained(experienceId: number, skillId: number): Observable<any> {
+    return this.http.delete(this.position_management_service_url + `experience/${experienceId}/preferred-skill-trained/${skillId}`, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
   public postLocation(locationInfo: any): Observable<any> {
     return this.http.post(this.position_management_service_url + 'position/location', locationInfo, this.authHttpOptions())
       .pipe(
