@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import {
   MatDialog,
@@ -181,6 +181,7 @@ export class CreatePositionComponent implements OnInit {
   is_loading: Boolean;
 
   constructor(
+    private route: ActivatedRoute,
     private router: Router,
     private alertsService: AlertsService,
     public helperService: HelperService,
@@ -199,6 +200,11 @@ export class CreatePositionComponent implements OnInit {
     this.isNavMenuOpened = false;
     this.is_loading = false;
     this.selectedPageIndex = 0;
+    if (this.route.snapshot.queryParams.type && this.route.snapshot.queryParams.id) {
+      if (this.route.snapshot.queryParams.type === 'position') {
+        this.selectedPageIndex = 7;
+      }
+    }
     this.initializeFormsByPageIndex();
     if (this.current_user) {
       this.position_recruiter = {
@@ -311,7 +317,7 @@ export class CreatePositionComponent implements OnInit {
 
   initializeFormsByPageIndex() {
     // this.getPositionInfo();
-    if (this.position && this.position.position_id) {
+    if ((this.position && this.position.position_id) || (this.route.snapshot.queryParams.type && this.route.snapshot.queryParams.type === 'position')) {
       this.getPositionInfo();
     } else {
       switch (this.selectedPageIndex) {
@@ -346,10 +352,11 @@ export class CreatePositionComponent implements OnInit {
   }
 
   getPositionInfo() {
-    if (this.position && this.position.position_id) {
+    if ((this.position && this.position.position_id) || (this.route.snapshot.queryParams.type && this.route.snapshot.queryParams.type === 'position')) {
+      const position_id = (this.route.snapshot.queryParams.type && this.route.snapshot.queryParams.id && this.route.snapshot.queryParams.type === 'position') ? this.route.snapshot.queryParams.id : this.position.position_id;
       this.is_loading = true;
       // this.positionService.getPositionById(18).subscribe(
-      this.positionService.getPositionById(this.position.position_id).subscribe(
+      this.positionService.getPositionById(position_id).subscribe(
         dataJson => {
           this.position = dataJson['data'];
           this.is_loading = false;

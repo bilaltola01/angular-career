@@ -50,7 +50,7 @@
 <!-- Position Name & Overview end -->
 
 <!-- Position Information start -->
-<div *ngIf="selectedPageIndex===1" class="container profile-basic">
+<div *ngIf="selectedPageIndex===1 && !is_loading" class="container profile-basic">
   <div class="container__full">
     <div class="profile-form" [formGroup]="positionBasicInfoForm">
       <h3 class="profile-form__title">
@@ -180,7 +180,7 @@
 <!-- Position Information end -->
 
 <!-- Preferred Education Start -->
-<div *ngIf="selectedPageIndex===2" class="container profile-skills">
+<div *ngIf="selectedPageIndex===2 && !is_loading" class="container profile-skills">
   <div class="container__full">
     <div class="profile-form" [formGroup]="preferredEducationForm">
       <h3 class="profile-form__title">
@@ -272,7 +272,7 @@
 <!-- Perferred Education End -->
 
 <!-- Preferred Work Experience Start -->
-<div *ngIf="selectedPageIndex===3" class="container profile-basic">
+<div *ngIf="selectedPageIndex===3 && !is_loading" class="container profile-basic">
   <div class="container__full">
     <div class="profile-form">
       <h3 class="profile-form__title">
@@ -342,7 +342,7 @@
 <!-- Preferred Work Experience End -->
 
 <!-- Skills Start -->
-<div *ngIf="selectedPageIndex===4" class="container profile-skills">
+<div *ngIf="selectedPageIndex===4 && !is_loading" class="container profile-skills">
   <div class="container__full">
     <div class="profile-form" [formGroup]="skillsForm">
       <h3 class="profile-form__title">
@@ -404,7 +404,7 @@
 <!-- Skills End -->
 
 <!-- Interests Start -->
-<div *ngIf="selectedPageIndex===5" class="container profile-skills">
+<div *ngIf="selectedPageIndex===5 && !is_loading" class="container profile-skills">
   <div class="container__full">
     <div class="profile-form" [formGroup]="interestsForm">
       <h3 class="profile-form__title">
@@ -435,7 +435,7 @@
 <!-- Interests End -->
 
 <!-- Preferred Schools Start -->
-<div *ngIf="selectedPageIndex===6" class="container profile-skills">
+<div *ngIf="selectedPageIndex===6 && !is_loading" class="container profile-skills">
   <div class="container__full">
     <div class="profile-form" [formGroup]="schoolRestrictionsForm">
       <h3 class="profile-form__title">
@@ -466,7 +466,7 @@
 <!-- Preferred Schools End -->
 
 <!-- Postion Preview Start -->
-<div *ngIf="selectedPageIndex===7" class="container position-preview">  
+<div *ngIf="selectedPageIndex===7 && !is_loading" class="container position-preview">  
   <legend id="legend">
     <div class="nav-title" (click)="onClickTogggle()">
       <h3 class="section-title">{{current_tab}}</h3>
@@ -480,13 +480,13 @@
     <div class="row" id="position-info">
       <div class="position-row">
         <div class="position-detail">
-          <div *ngIf="position_name">
-            <h1>{{position_name}}</h1>
+          <div *ngIf="position.position">
+            <h1>{{position.position}}</h1>
           </div>
           <div class="position-info">
-            <small *ngIf="position_company">
+            <small *ngIf="position.company_id">
               <img src="assets/icons/ic_company.svg">
-              {{position_company.company_name}}
+              {{position.company_name}}
             </small>
             <small *ngIf="position.locations && position.locations.length > 0">
               <img src="assets/icons/ic_location.svg">
@@ -509,7 +509,7 @@
         </div>
         <div class="position-info">
           <label>Industry</label>
-          <p>{{position.company_id ? position_company_info.main_industry_name : 'N/A'}}</p>
+          <p>{{position.company_id && position_company_info ? position_company_info.main_industry_name : 'N/A'}}</p>
         </div>
         <div class="position-info">
           <label>Recruiter</label>
