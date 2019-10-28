@@ -296,6 +296,18 @@ export class PositionService {
   }
 
   public postPreferredExperience(experienceInfo: any): Observable<any> {
+    return this.http.post(this.position_management_service_url + 'position/preferred-experience', experienceInfo, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
+  public postFullPreferredExperience(experienceInfo: any): Observable<any> {
     return this.http.post(this.position_management_service_url + 'position/full-experience', experienceInfo, this.authHttpOptions())
       .pipe(
         map(

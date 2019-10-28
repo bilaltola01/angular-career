@@ -307,7 +307,7 @@
         </div>
 
         <div class="profile-form__field search">
-          <h3>Skills Trained <span *ngIf="preferred_work_experiences[i].skills_trained &&  preferred_work_experiences[i].skills_trained.length > 0" class="count">{{preferred_work_experiences[i].skills_trained.length}}</span></h3>
+          <h3>Skills Trained <span *ngIf="preferred_work_experiences[i].preferred_skills_trained &&  preferred_work_experiences[i].preferred_skills_trained.length > 0" class="count">{{preferred_work_experiences[i].preferred_skills_trained.length}}</span></h3>
           <mat-form-field appearance="standard" class="search">
             <mat-icon matSuffix>search</mat-icon>
             <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompleteSkillsTrained" formControlName="skills_trained">
@@ -317,8 +317,8 @@
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
-          <div class="skills" *ngIf="preferred_work_experiences[i].skills_trained && preferred_work_experiences[i].skills_trained.length > 0">
-            <simple-tag *ngFor="let skill of preferred_work_experiences[i].skills_trained; let j = index" type="gray" title="{{skill.skill}}" removeTag="true" (click)="onRemoveSkillsTrained(i, skill, j)"></simple-tag>
+          <div class="skills" *ngIf="preferred_work_experiences[i].preferred_skills_trained && preferred_work_experiences[i].preferred_skills_trained.length > 0">
+            <simple-tag *ngFor="let skill of preferred_work_experiences[i].preferred_skills_trained; let j = index" type="gray" title="{{skill.skill}}" removeTag="true" (click)="onRemoveSkillsTrained(i, skill, j)"></simple-tag>
           </div>
         </div>
 

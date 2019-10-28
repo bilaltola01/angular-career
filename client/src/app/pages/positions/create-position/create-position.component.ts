@@ -44,10 +44,12 @@ import {
 } from 'src/app/models';
 
 export interface PreferredWorkExperience {
-  industry: Industry;
-  years: number;
-  description: string;
-  skills_trained: Skill[];
+  preferred_exp_id: number;
+  industry_id: number;
+  industry_name: string;
+  preferred_years: number;
+  exp_desc: string;
+  preferred_skills_trained: Skill[];
 }
 
 export interface EditSkillItem {
@@ -237,7 +239,7 @@ export class CreatePositionComponent implements OnInit {
       return;
     } else if (this.selectedPageIndex === 1 && !(this.positionBasicInfoForm.valid && this.position_company && this.position_level && this.position_type && this.onCheckCityValidation() && this.onCheckStateValidation() && this.onCheckRecruiterValidation())) {
       return;
-    } else if (this.selectedPageIndex === 3 && !((this.preferred_work_experiences && this.preferred_work_experiences.length === 1 && !this.preferredWorkExperienceFormArray.at(0).value.industry && !this.preferredWorkExperienceFormArray.at(0).value.years && !this.preferredWorkExperienceFormArray.at(0).value.description && !this.preferred_work_experiences[0].skills_trained) || (this.preferredWorkExperienceFormArray.valid && this.onCheckAllIndustriesValidation()))) {
+    } else if (this.selectedPageIndex === 3 && !((this.preferred_work_experiences && this.preferred_work_experiences.length === 1 && !this.preferredWorkExperienceFormArray.at(0).value.industry && !this.preferredWorkExperienceFormArray.at(0).value.years && !this.preferredWorkExperienceFormArray.at(0).value.description && !this.preferred_work_experiences[0].preferred_skills_trained) || (this.preferredWorkExperienceFormArray.valid && this.onCheckAllIndustriesValidation()))) {
       return;
     } else if (this.selectedPageIndex === 4 && !this.minimum_skills && !this.preferred_skills) {
       this.openDialog('skip');
@@ -910,31 +912,40 @@ export class CreatePositionComponent implements OnInit {
     this.autocomplete_industries = [];
     this.autocomplete_skills_trained = [];
 
+    if (this.position && this.position.position_id && this.position.preferred_experience && this.position.preferred_experience.length > 0) {
+      const data = {experiences: this.position.preferred_experience};
+      this.preferred_work_experiences = JSON.parse(JSON.stringify(data)).experiences;
+    }
+
     this.preferredWorkExperienceFormArray = new FormArray([]);
 
     if (!this.preferred_work_experiences || this.preferred_work_experiences.length === 0) {
       this.preferred_work_experiences = [{
-        industry: null,
-        years: null,
-        description: null,
-        skills_trained: null
+        preferred_exp_id: null,
+        industry_id: null,
+        industry_name: null,
+        preferred_years: null,
+        exp_desc: null,
+        preferred_skills_trained: null
       }];
-      this.addPreferredWorkExperienceFormGroup(null, 0);
+      this.addPreferredWorkExperienceFormGroup(null);
     } else {
-      this.preferred_work_experiences.forEach((experience, index) => {
-        this.addPreferredWorkExperienceFormGroup(experience, index);
+      this.preferred_work_experiences.forEach((experience) => {
+        this.addPreferredWorkExperienceFormGroup(experience);
       });
     }
   }
 
-  addPreferredWorkExperienceFormGroup(experience: PreferredWorkExperience, arrIndex: number) {
+  addPreferredWorkExperienceFormGroup(experience: PreferredWorkExperience) {
     this.autocomplete_industries.push([]);
     this.autocomplete_skills_trained.push([]);
 
+    const arrIndex = this.autocomplete_industries.length - 1;
+
     const experienceForm = new FormGroup({
-      industry: new FormControl(experience && experience.industry ? experience.industry.industry_name : '', [Validators.required]),
-      years: new FormControl(experience && experience.years ? experience.years : '', [Validators.required]),
-      description: new FormControl(experience && experience.description ? experience.description : ''),
+      industry: new FormControl(experience && experience.industry_id ? experience.industry_name : '', [Validators.required]),
+      years: new FormControl(experience && experience.preferred_years ? experience.preferred_years : '', [Validators.required]),
+      description: new FormControl(experience && experience.exp_desc ? experience.exp_desc : ''),
       skills_trained: new FormControl('')
     });
 
@@ -957,12 +968,12 @@ export class CreatePositionComponent implements OnInit {
     });
     experienceForm.get('years').valueChanges.subscribe(
       (years) => {
-        this.preferred_work_experiences[arrIndex].years = years && this.preferredWorkExperienceFormArray.at(arrIndex).get('years').valid ? parseInt(years, 10) : null;
+        this.preferred_work_experiences[arrIndex].preferred_years = years && this.preferredWorkExperienceFormArray.at(arrIndex).get('years').valid ? parseInt(years, 10) : null;
       }
     );
     experienceForm.get('description').valueChanges.subscribe(
       (description) => {
-        this.preferred_work_experiences[arrIndex].description = description ? this.helperService.checkSpacesString(description) : null;
+        this.preferred_work_experiences[arrIndex].exp_desc = description ? this.helperService.checkSpacesString(description) : null;
       }
     );
     experienceForm.get('skills_trained').valueChanges.subscribe((skills_trained) => {
@@ -987,25 +998,28 @@ export class CreatePositionComponent implements OnInit {
   }
 
   onSelectIndustry(industry: Industry, arrIndex: number) {
-    this.preferred_work_experiences[arrIndex].industry = industry;
+    this.preferred_work_experiences[arrIndex].industry_id = industry.industry_id;
+    this.preferred_work_experiences[arrIndex].industry_name = industry.industry_name;
   }
 
   onBlurIndustry(arrIndex: number) {
     const value = this.preferredWorkExperienceFormArray.value[arrIndex].industry;
     if (value && this.helperService.checkSpacesString(value)) {
-      if (this.preferred_work_experiences[arrIndex].industry && value !== this.preferred_work_experiences[arrIndex].industry.industry_name) {
-        this.preferred_work_experiences[arrIndex].industry = null;
+      if (this.preferred_work_experiences[arrIndex].industry_id && value !== this.preferred_work_experiences[arrIndex].industry_name) {
+        this.preferred_work_experiences[arrIndex].industry_id = null;
+        this.preferred_work_experiences[arrIndex].industry_name = null;
       }
     } else {
-      this.preferred_work_experiences[arrIndex].industry = null;
+      this.preferred_work_experiences[arrIndex].industry_id = null;
+      this.preferred_work_experiences[arrIndex].industry_name = null;
     }
   }
 
   onCheckIndustryValidation(arrIndex: number): boolean {
     const value = this.preferredWorkExperienceFormArray.value[arrIndex].industry;
     if (value && this.helperService.checkSpacesString(value)) {
-      if (this.preferred_work_experiences[arrIndex].industry) {
-        return value === this.preferred_work_experiences[arrIndex].industry.industry_name ? true : false;
+      if (this.preferred_work_experiences[arrIndex].industry_id) {
+        return value === this.preferred_work_experiences[arrIndex].industry_name ? true : false;
       } else {
         return false;
       }
@@ -1015,39 +1029,54 @@ export class CreatePositionComponent implements OnInit {
   }
 
   onSelectSkillsTrained(formIndex: number, skill: Skill) {
-    if (!this.preferred_work_experiences[formIndex].skills_trained) {
-      this.preferred_work_experiences[formIndex].skills_trained = [skill];
+    if (!this.preferred_work_experiences[formIndex].preferred_skills_trained) {
+      this.preferred_work_experiences[formIndex].preferred_skills_trained = [skill];
     } else {
-      const filter = this.preferred_work_experiences[formIndex].skills_trained.filter(value => value.skill_id === skill.skill_id);
+      const filter = this.preferred_work_experiences[formIndex].preferred_skills_trained.filter(value => value.skill_id === skill.skill_id);
       if (filter.length === 0) {
-        this.preferred_work_experiences[formIndex].skills_trained.push(skill);
+        this.preferred_work_experiences[formIndex].preferred_skills_trained.push(skill);
       }
     }
     this.preferredWorkExperienceFormArray.at(formIndex).get('skills_trained').setValue('');
   }
 
   onRemoveSkillsTrained(formIndex: number, skill: Skill, arrIndex: number) {
-    if (this.preferred_work_experiences[formIndex].skills_trained[arrIndex].skill_id === skill.skill_id) {
-      this.preferred_work_experiences[formIndex].skills_trained.splice(arrIndex, 1);
+    if (this.preferred_work_experiences[formIndex].preferred_skills_trained[arrIndex].skill_id === skill.skill_id) {
+      this.preferred_work_experiences[formIndex].preferred_skills_trained.splice(arrIndex, 1);
     }
-    if (this.preferred_work_experiences[formIndex].skills_trained.length === 0) {
-      this.preferred_work_experiences[formIndex].skills_trained = null;
+    if (this.preferred_work_experiences[formIndex].preferred_skills_trained.length === 0) {
+      this.preferred_work_experiences[formIndex].preferred_skills_trained = null;
+    }
+    if (this.preferred_work_experiences[formIndex].preferred_exp_id) {
+      const exp_index = this.position.preferred_experience.findIndex(value => value.preferred_exp_id === this.preferred_work_experiences[formIndex].preferred_exp_id);
+      if (exp_index !== -1) {
+        const skill_index = this.position.preferred_experience[exp_index].preferred_skills_trained.findIndex(value => value.skill_id === skill.skill_id);
+        if (skill_index !== -1) {
+          this.removePreferredWorkExperienceSkillTrained(this.preferred_work_experiences[formIndex].preferred_exp_id, skill.skill_id, exp_index, skill_index);
+        }
+      }
     }
   }
 
   onAddPreferredWorkExperienceFormGroup() {
     if (this.preferredWorkExperienceFormArray.valid && this.onCheckAllIndustriesValidation()) {
       this.preferred_work_experiences.push({
-        industry: null,
-        years: null,
-        description: null,
-        skills_trained: null
+        preferred_exp_id: null,
+        industry_id: null,
+        industry_name: null,
+        preferred_years: null,
+        exp_desc: null,
+        preferred_skills_trained: null
       });
-      this.addPreferredWorkExperienceFormGroup(null, this.preferred_work_experiences.length - 1);
+      this.addPreferredWorkExperienceFormGroup(null);
     }
   }
 
   onRemovePreferredWorkExperienceFormGroup(arrIndex: number) {
+    if (this.preferred_work_experiences[arrIndex].preferred_exp_id) {
+      const index = this.position.preferred_experience.findIndex(value => value.preferred_exp_id === this.preferred_work_experiences[arrIndex].preferred_exp_id);
+      this.removePreferredWorkExperience(this.position.position_id, this.preferred_work_experiences[arrIndex].preferred_exp_id, index);
+    }
     this.preferredWorkExperienceFormArray.removeAt(arrIndex);
     this.preferred_work_experiences.splice(arrIndex, 1);
     this.autocomplete_industries.splice(arrIndex, 1);
@@ -1960,7 +1989,7 @@ export class CreatePositionComponent implements OnInit {
   }
 
   addPreferredWorkExperiences(position_id: number) {
-    if (this.preferred_work_experiences && this.preferred_work_experiences.length > 0 && this.preferred_work_experiences[0].industry && this.preferred_work_experiences[0].years) {
+    if (this.preferred_work_experiences && this.preferred_work_experiences.length > 0 && this.preferred_work_experiences[0].industry_id && this.preferred_work_experiences[0].preferred_years) {
       this.addPreferredWorkExperience(position_id, 0);
     } else {
       this.goToNextPage();
@@ -1968,28 +1997,143 @@ export class CreatePositionComponent implements OnInit {
   }
 
   addPreferredWorkExperience(position_id: number, arrIndex: number) {
-    const info = {
-      position_id: position_id,
-      industry_id: this.preferred_work_experiences[arrIndex].industry.industry_id,
-      preferred_years: this.preferred_work_experiences[arrIndex].years,
-      exp_desc:	this.preferred_work_experiences[arrIndex].description ? this.preferred_work_experiences[arrIndex].description : null,
-      skills_trained_ids: this.preferred_work_experiences[arrIndex].skills_trained && this.preferred_work_experiences[arrIndex].skills_trained.length > 0 ? this.preferred_work_experiences[arrIndex].skills_trained.map(value => value.skill_id) : null
-    };
-    this.positionService.postPreferredExperience(info).subscribe(
-      dataJson => {
+    // If experience already exists in database, update. otherwise add a new experience.
+    if (this.preferred_work_experiences[arrIndex].preferred_exp_id) {
+      const index = this.position.preferred_experience.findIndex(value => value.preferred_exp_id === this.preferred_work_experiences[arrIndex].preferred_exp_id);
+
+      if (index !== -1) {
+        let temp_arr;
+        if (this.preferred_work_experiences[arrIndex].preferred_skills_trained && this.preferred_work_experiences[arrIndex].preferred_skills_trained.length > 0) {
+          if (this.position.preferred_experience[index].preferred_skills_trained && this.position.preferred_experience[index].preferred_skills_trained.length > 0) {
+            temp_arr = this.preferred_work_experiences[arrIndex].preferred_skills_trained.filter((local_value) => {
+              return !(this.position.preferred_experience[index].preferred_skills_trained.some(value => {
+                return value.skill_id === local_value.skill_id;
+              }));
+            });
+          } else {
+            temp_arr = this.preferred_work_experiences[arrIndex].preferred_skills_trained;
+          }
+        }
+        console.log('___', temp_arr, this.preferred_work_experiences[arrIndex].preferred_skills_trained, this.position.preferred_experience[index].preferred_skills_trained);
+
+        const info = {
+          position_id: position_id,
+          preferred_exp_id: this.preferred_work_experiences[arrIndex].preferred_exp_id,
+          industry_id: this.preferred_work_experiences[arrIndex].industry_id,
+          preferred_years: this.preferred_work_experiences[arrIndex].preferred_years,
+          exp_desc:	this.preferred_work_experiences[arrIndex].exp_desc ? this.preferred_work_experiences[arrIndex].exp_desc : null
+        };
+
+        this.positionService.patchPreferredExperience(info).subscribe(
+          dataJson => {
+            if (temp_arr && temp_arr.length > 0) {
+              const skills_trained_info = {
+                preferred_exp_id: this.preferred_work_experiences[arrIndex].preferred_exp_id,
+                skill_ids: temp_arr.map(value => value.skill_id)
+              };
+              this.positionService.postPreferredExperienceSkillsTrained(skills_trained_info).subscribe(
+                data => {
+                  this.position.preferred_experience[index].preferred_skills_trained = this.preferred_work_experiences[arrIndex].preferred_skills_trained.slice();
+                  if (arrIndex < this.preferred_work_experiences.length - 1) {
+                    this.addPreferredWorkExperience(position_id, arrIndex + 1);
+                  } else {
+                    this.goToNextPage();
+                  }
+                },
+                error => {
+                  this.alertsService.show(error.message, AlertType.error);
+                }
+              );
+            } else {
+              if (arrIndex < this.preferred_work_experiences.length - 1) {
+                this.addPreferredWorkExperience(position_id, arrIndex + 1);
+              } else {
+                this.goToNextPage();
+              }
+            }
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+            if (arrIndex < this.preferred_work_experiences.length - 1) {
+              this.addPreferredWorkExperience(position_id, arrIndex + 1);
+            } else {
+              this.goToNextPage();
+            }
+          }
+        );
+      } else {
         if (arrIndex < this.preferred_work_experiences.length - 1) {
           this.addPreferredWorkExperience(position_id, arrIndex + 1);
         } else {
           this.goToNextPage();
         }
+      }
+    } else {
+      const info = {
+        position_id: position_id,
+        industry_id: this.preferred_work_experiences[arrIndex].industry_id,
+        preferred_years: this.preferred_work_experiences[arrIndex].preferred_years,
+        exp_desc:	this.preferred_work_experiences[arrIndex].exp_desc ? this.preferred_work_experiences[arrIndex].exp_desc : null
+      };
+      if (this.preferred_work_experiences[arrIndex].preferred_skills_trained && this.preferred_work_experiences[arrIndex].preferred_skills_trained.length > 0) {
+        info['skills_trained_ids'] = this.preferred_work_experiences[arrIndex].preferred_skills_trained.map(value => value.skill_id);
+        this.positionService.postFullPreferredExperience(info).subscribe(
+          dataJson => {
+            if (arrIndex < this.preferred_work_experiences.length - 1) {
+              this.addPreferredWorkExperience(position_id, arrIndex + 1);
+            } else {
+              this.goToNextPage();
+            }
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+            if (arrIndex < this.preferred_work_experiences.length - 1) {
+              this.addPreferredWorkExperience(position_id, arrIndex + 1);
+            } else {
+              this.goToNextPage();
+            }
+          }
+        );
+      } else {
+        this.positionService.postPreferredExperience(info).subscribe(
+          dataJson => {
+            if (arrIndex < this.preferred_work_experiences.length - 1) {
+              this.addPreferredWorkExperience(position_id, arrIndex + 1);
+            } else {
+              this.goToNextPage();
+            }
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+            if (arrIndex < this.preferred_work_experiences.length - 1) {
+              this.addPreferredWorkExperience(position_id, arrIndex + 1);
+            } else {
+              this.goToNextPage();
+            }
+          }
+        );
+      }
+    }
+  }
+
+  removePreferredWorkExperience(position_id: number, preferred_exp_id: number, arrIndex: number)  {
+    this.positionService.deletePreferredExperience(position_id, preferred_exp_id).subscribe(
+      dataJson => {
+        this.position.preferred_experience.splice(arrIndex, 1);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
-        if (arrIndex < this.preferred_work_experiences.length - 1) {
-          this.addPreferredWorkExperience(position_id, arrIndex + 1);
-        } else {
-          this.goToNextPage();
-        }
+      }
+    );
+  }
+
+  removePreferredWorkExperienceSkillTrained(preferred_exp_id: number, skill_id: number, exp_index: number, skill_index: number) {
+    this.positionService.deletePreferredExperienceSkillTrained(preferred_exp_id, skill_id).subscribe(
+      dataJson => {
+        this.position.preferred_experience[exp_index].preferred_skills_trained.splice(skill_index, 1);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
       }
     );
   }
