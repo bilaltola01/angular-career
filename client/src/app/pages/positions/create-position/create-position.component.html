@@ -488,9 +488,9 @@
               <img src="assets/icons/ic_company.svg">
               {{position_company.company_name}}
             </small>
-            <small *ngIf="position_city || position_state || position_country">
+            <small *ngIf="position.locations && position.locations.length > 0">
               <img src="assets/icons/ic_location.svg">
-              {{(position_city ? helperService.cityNameFromAutoComplete(position_city.city) : '') + (position_city && (position_state || position_country) ? ', ' : '') + (position_state ? position_state.state : '') + (position_state && position_country ? ', ' : '') + (position_country ? countries[position_country - 1] : '')}}
+              {{(position.locations[0].city_id ? position.locations[0].city : '') + (position.locations[0].city_id && (position.locations[0].state_id || position.locations[0].country_id) ? ', ' : '') + (position.locations[0].state_id ? position.locations[0].state : '') + (position.locations[0].state_id && position.locations[0].country_id ? ', ' : '') + (position.locations[0].country_id ? position.locations[0].country : '')}}
             </small>
           </div>
         </div>
@@ -501,151 +501,151 @@
       <div class="position-row__details">
         <div class="position-info">
           <label>Position</label>
-          <p>{{ position_level ? position_level : 'N/A'}}</p>
+          <p>{{ position.level ? position.level : 'N/A'}}</p>
         </div>
         <div class="position-info">
           <label>Salary</label>
-          <p>{{ position_salary ? position_salary + ' USD' : 'N/A'}} </p>
+          <p>{{ position.pay ? position.pay + ' USD' : 'N/A'}} </p>
         </div>
         <div class="position-info">
           <label>Industry</label>
-          <p>{{position_company ? position_company_info.main_industry_name : 'N/A'}}</p>
+          <p>{{position.company_id ? position_company_info.main_industry_name : 'N/A'}}</p>
         </div>
         <div class="position-info">
           <label>Recruiter</label>
-          <p >{{ position_recruiter ? position_recruiter.first_name + ' ' + position_recruiter.last_name : 'N/A'}}</p>
+          <p >{{ position.recruiter_name ? position.recruiter_name : 'N/A'}}</p>
         </div>
         <div class="position-info">
           <label>Application Type</label>
-          <p>{{position_application_type ? position_application_type : 'N/A'}}</p>
+          <p>{{position.application_type ? position.application_type : 'N/A'}}</p>
         </div>
         <div class="position-info">
           <label>Position Type</label>
-          <p>{{position_type ? position_type : 'N/A'}}</p>
+          <p>{{position.type ? position.type : 'N/A'}}</p>
         </div>
         <div class="position-info">
           <label>Application Deadline</label>
-          <p>{{position_application_deadline ? position_application_deadline : 'N/A'}}</p>
+          <p>{{position.application_deadline ? helperService.convertToFormattedString(position.application_deadline, 'YYYY-MM-DD') : 'N/A'}}</p>
         </div>
         <div class="position-info">
           <label>Department</label>
-          <p>{{position_department ? position_department : 'N/A'}}</p>
+          <p>{{position.department ? position.department : 'N/A'}}</p>
         </div>
       </div>
 		</div>
-    <div *ngIf="position_desc" class="row" id="position-desc">
+    <div *ngIf="position.position_desc" class="row" id="position-desc">
       <h3>Job Description</h3>
       <ng-container *ngIf="true; let short_desc">
-        <p *ngIf="position_desc" class="description" [class.short-desc]="short_desc && position_desc.length > helperService.shortDescLength">{{short_desc ? helperService.shortDescription(position_desc) : position_desc}}</p>
-        <a *ngIf="position_desc && position_desc.length > helperService.shortDescLength" (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
+        <p *ngIf="position.position_desc" class="description" [class.short-desc]="short_desc && position.position_desc.length > helperService.shortDescLength">{{short_desc ? helperService.shortDescription(position.position_desc) : position.position_desc}}</p>
+        <a *ngIf="position.position_desc && position.position_desc.length > helperService.shortDescLength" (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
       </ng-container>
     </div>
 
-    <div *ngIf="(preferred_education_levels && preferred_education_levels.length > 0) || preferred_education_major || (preferred_education_major_categories && preferred_education_major_categories.length > 0)" class="row" id="position-edu">
+    <div *ngIf="(position.preferred_education_levels && position.preferred_education_levels.length > 0) || (position.preferred_majors && position.preferred_majors.length > 0) || (position.preferred_major_categories && position.preferred_major_categories.length > 0)" class="row" id="position-edu">
       <h3>Education Level</h3>
-      <ng-container *ngIf="preferred_education_levels && preferred_education_levels.length > 0">
-        <h5>Preferred Education Levels {{preferred_education_levels.length}}</h5>
+      <ng-container *ngIf="position.preferred_education_levels && position.preferred_education_levels.length > 0">
+        <h5>Preferred Education Levels {{position.preferred_education_levels.length}}</h5>
         <div class="skills" *ngIf="displayItemsLimit; let limit">
-          <ng-container *ngFor="let level of preferred_education_levels; let i = index">
+          <ng-container *ngFor="let level of position.preferred_education_levels; let i = index">
             <simple-tag *ngIf="i < limit" type="gray" title="{{level.education_level}}"></simple-tag>
           </ng-container>
           <img *ngIf="limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
-          <img *ngIf="limit < preferred_education_levels.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
+          <img *ngIf="limit < position.preferred_education_levels.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
         </div>
       </ng-container>
 
-      <ng-container *ngIf="preferred_education_majors && preferred_education_majors.length > 0">
+      <ng-container *ngIf="position.preferred_majors && position.preferred_majors.length > 0">
         <h5>Preferred Majors</h5>
         <div class="skills">
-          <ng-container *ngFor="let preferred_education_major of preferred_education_majors">
+          <ng-container *ngFor="let preferred_education_major of position.preferred_majors">
             <simple-tag type="gray" title="{{preferred_education_major.major_name}}"></simple-tag>
           </ng-container>
         </div>
       </ng-container>
 
-      <ng-container *ngIf="preferred_education_major_categories && preferred_education_major_categories.length > 0">
-        <h5>Preferred Major Categories {{preferred_education_major_categories.length}}</h5>
+      <ng-container *ngIf="position.preferred_major_categories && position.preferred_major_categories.length > 0">
+        <h5>Preferred Major Categories {{position.preferred_major_categories.length}}</h5>
         <div class="skills" *ngIf="displayItemsLimit; let limit">
-          <ng-container *ngFor="let category of preferred_education_major_categories; let i = index">
+          <ng-container *ngFor="let category of position.preferred_major_categories; let i = index">
             <simple-tag *ngIf="i < limit" type="gray" title="{{category.cat_name}}"></simple-tag>
           </ng-container>
           <img *ngIf="limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
-          <img *ngIf="limit < preferred_education_major_categories.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
+          <img *ngIf="limit < position.preferred_major_categories.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
         </div>
       </ng-container>
     </div>
 
-    <div *ngIf="preferred_work_experiences && preferred_work_experiences.length > 0 && preferred_work_experiences[0].industry && preferred_work_experiences[0].years" class="row" id="position-exp">
+    <div *ngIf="position.preferred_experience && position.preferred_experience.length > 0" class="row" id="position-exp">
       <h3>Preferred Experience</h3>
-      <ng-container *ngFor="let experience of preferred_work_experiences; let i = index;">
-        <h4>{{experience.industry.industry_name}} {{'(' + experience.years + ' years)'}}</h4>
+      <ng-container *ngFor="let experience of position.preferred_experience; let i = index;">
+        <h4>{{experience.industry_name}} {{'(' + experience.preferred_years + ' years)'}}</h4>
         
-        <ng-container *ngIf="experience.skills_trained && experience.skills_trained.length > 0">
-          <h5>Preferred Skills Trained {{experience.skills_trained.length}}</h5>
+        <ng-container *ngIf="experience.preferred_skills_trained && experience.preferred_skills_trained.length > 0">
+          <h5>Preferred Skills Trained {{experience.preferred_skills_trained.length}}</h5>
           <div class="skills" *ngIf="displayItemsLimit; let limit">
-            <ng-container *ngFor="let skill_trained of experience.skills_trained; let j = index;">
+            <ng-container *ngFor="let skill_trained of experience.preferred_skills_trained; let j = index;">
               <simple-tag *ngIf="j < limit" type="gray" title="{{skill_trained.skill}}"></simple-tag>
             </ng-container>
             <img *ngIf="limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
-            <img *ngIf="limit < experience.skills_trained.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
+            <img *ngIf="limit < experience.preferred_skills_trained.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
           </div>
         </ng-container>
         <ng-container *ngIf="true; let short_desc">
-          <p *ngIf="experience.description" class="description"  [class.short-desc]="short_desc && experience.description.length > helperService.shortDescLength">{{short_desc ? helperService.shortDescription(experience.description) : experience.description }}</p>
-          <a *ngIf="experience.description && experience.description.length > helperService.shortDescLength" (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
+          <p *ngIf="experience.exp_desc" class="description"  [class.short-desc]="short_desc && experience.exp_desc.length > helperService.shortDescLength">{{short_desc ? helperService.shortDescription(experience.exp_desc) : experience.exp_desc }}</p>
+          <a *ngIf="experience.exp_desc && experience.exp_desc.length > helperService.shortDescLength" (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
         </ng-container>
-        <mat-divider *ngIf="(i < preferred_work_experiences.length - 1)"></mat-divider>
+        <mat-divider *ngIf="(i < position.preferred_experience.length - 1)"></mat-divider>
       </ng-container>
     </div>
 
-    <div *ngIf="(minimum_skills && minimum_skills.length > 0) || (preferred_skills && preferred_skills.length > 0)" class="row" id="position-skills">
+    <div *ngIf="(position.minimum_skills && position.minimum_skills.length > 0) || (position.preferred_skills && position.preferred_skills.length > 0)" class="row" id="position-skills">
       <h3>Preferred & Required SKills</h3>
-      <ng-container *ngIf="minimum_skills.length > 0">
-        <h5>Skills Required {{minimum_skills.length}}</h5>
+      <ng-container *ngIf="position.minimum_skills.length > 0">
+        <h5>Skills Required {{position.minimum_skills.length}}</h5>
         <div class="skills" *ngIf="displayItemsLimit; let limit">
-          <ng-container *ngFor="let skill of minimum_skills; let i = index">
+          <ng-container *ngFor="let skill of position.minimum_skills; let i = index">
             <simple-tag *ngIf="i < limit" type="gray" title="{{skill.skill}}" ellipseTag="true" value="{{skill.skill_level}}"></simple-tag>
           </ng-container>
           <img *ngIf="limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
-          <img *ngIf="limit < minimum_skills.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
+          <img *ngIf="limit < position.minimum_skills.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
         </div>
       </ng-container>
-      <ng-container *ngIf="preferred_skills.length > 0">
-        <h5>Skills Preferred {{preferred_skills.length}}</h5>
+      <ng-container *ngIf="position.preferred_skills.length > 0">
+        <h5>Skills Preferred {{position.preferred_skills.length}}</h5>
         <div class="skills" *ngIf="displayItemsLimit; let limit">
-          <ng-container *ngFor="let skill of preferred_skills; let i = index">
+          <ng-container *ngFor="let skill of position.preferred_skills; let i = index">
             <simple-tag *ngIf="i < limit" type="gray" title="{{skill.skill}}" ellipseTag="true" value="{{skill.skill_level}}"></simple-tag>
           </ng-container>
           <img *ngIf="limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
-          <img *ngIf="limit < preferred_skills.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
+          <img *ngIf="limit < position.preferred_skills.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
         </div>
       </ng-container>
     </div>
 
-    <div *ngIf="preferred_interests && preferred_interests.length > 0" class="row" id="position-interests">
+    <div *ngIf="position.preferred_interests && position.preferred_interests.length > 0" class="row" id="position-interests">
       <h3>Preferred Interests</h3>
-      <ng-container *ngIf="preferred_interests.length > 0">
-        <h5>Interests {{preferred_interests.length}}</h5>
+      <ng-container *ngIf="position.preferred_interests.length > 0">
+        <h5>Interests {{position.preferred_interests.length}}</h5>
         <div class="skills" *ngIf="displayItemsLimit; let limit">
-          <ng-container *ngFor="let interest of preferred_interests; let i = index">
+          <ng-container *ngFor="let interest of position.preferred_interests; let i = index">
             <simple-tag *ngIf="i < limit" type="gray" title="{{interest.interest}}"></simple-tag>
           </ng-container>
           <img *ngIf="limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
-          <img *ngIf="limit < preferred_interests.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
+          <img *ngIf="limit < position.preferred_interests.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
         </div>
       </ng-container>
     </div>
 
-    <div *ngIf="preferred_schools && preferred_schools.length > 0" class="row" id="position-school">
+    <div *ngIf="position.preferred_schools && position.preferred_schools.length > 0" class="row" id="position-school">
       <h3>School Restrictions</h3>
-      <ng-container *ngIf="preferred_schools.length > 0">
+      <ng-container *ngIf="position.preferred_schools.length > 0">
         <h5>Applicants should be currently enrolled or alumni of the following schools.</h5>
         <div class="skills" *ngIf="displayItemsLimit; let limit">
-          <ng-container *ngFor="let school of preferred_schools; let i = index">
+          <ng-container *ngFor="let school of position.preferred_schools; let i = index">
             <simple-tag *ngIf="i < limit" type="gray" title="{{school.school_name}}"></simple-tag>
           </ng-container>
           <img *ngIf="limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
-          <img *ngIf="limit < preferred_schools.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
+          <img *ngIf="limit < position.preferred_schools.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
         </div>
       </ng-container>
     </div>
@@ -659,13 +659,13 @@
       <div class="navmenu-title active">
         <h3>Contents</h3>
         <ol>
-          <li *ngIf="position_desc" (click)="onSelectNavItem('position-info')">Position Information</li>
-          <li *ngIf="position_desc" (click)="onSelectNavItem('position-desc')">Job Description</li>
-          <li *ngIf="(preferred_education_levels && preferred_education_levels.length > 0) || preferred_education_major || (preferred_education_major_categories && preferred_education_major_categories.length > 0)" (click)="onSelectNavItem('position-edu')">Education Level</li>
-          <li *ngIf="preferred_work_experiences && preferred_work_experiences.length > 0 && preferred_work_experiences[0].industry && preferred_work_experiences[0].years" (click)="onSelectNavItem('position-exp')">Preferred Experience</li>
-          <li *ngIf="(minimum_skills && minimum_skills.length > 0) || (preferred_skills && preferred_skills.length > 0)" (click)="onSelectNavItem('position-skills')">Preferred & Required Skills</li>
-          <li *ngIf="preferred_interests && preferred_interests.length > 0" (click)="onSelectNavItem('position-interests')">Preferred Interests</li>
-          <li *ngIf="preferred_schools && preferred_schools.length > 0" (click)="onSelectNavItem('position-school')">School Restrictions</li>
+          <li *ngIf="position.position" (click)="onSelectNavItem('position-info')">Position Information</li>
+          <li *ngIf="position.position_desc" (click)="onSelectNavItem('position-desc')">Job Description</li>
+          <li *ngIf="(position.preferred_education_levels && position.preferred_education_levels.length > 0) || (position.preferred_majors && position.preferred_majors.length > 0) || (position.preferred_major_categories && position.preferred_major_categories.length > 0)" (click)="onSelectNavItem('position-edu')">Education Level</li>
+          <li *ngIf="position.preferred_experience && position.preferred_experience.length > 0" (click)="onSelectNavItem('position-exp')">Preferred Experience</li>
+          <li *ngIf="(position.minimum_skills && position.minimum_skills.length > 0) || (position.preferred_skills && position.preferred_skills.length > 0)" (click)="onSelectNavItem('position-skills')">Preferred & Required Skills</li>
+          <li *ngIf="position.preferred_interests && position.preferred_interests.length > 0" (click)="onSelectNavItem('position-interests')">Preferred Interests</li>
+          <li *ngIf="position.preferred_schools && position.preferred_schools.length > 0" (click)="onSelectNavItem('position-school')">School Restrictions</li>
         </ol>
       </div>
       <div class="btn-section">

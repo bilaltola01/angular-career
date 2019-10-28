@@ -267,6 +267,7 @@ export class CreatePositionComponent implements OnInit {
         break;
       case 7:
         this.sortPreferredEducationLevels();
+        this.getCompanyInfo(this.position.company_id);
         break;
       default:
         break;
@@ -373,6 +374,9 @@ export class CreatePositionComponent implements OnInit {
               break;
             case 6:
               this.initSchoolRestrictionsForm();
+              break;
+            case 7:
+              this.getCompanyInfo(this.position.company_id);
               break;
             default:
               break;
@@ -607,7 +611,11 @@ export class CreatePositionComponent implements OnInit {
 
   onSelectCompany(company: Company) {
     this.position_company = company;
-    this.companyService.getCompanyById(this.position_company.company_id).subscribe(
+    this.getCompanyInfo(this.position_company.company_id);
+  }
+
+  getCompanyInfo(company_id: number) {
+    this.companyService.getCompanyById(company_id).subscribe(
       dataJson => {
         if (dataJson['success']) {
           this.position_company_info = dataJson['data'];
