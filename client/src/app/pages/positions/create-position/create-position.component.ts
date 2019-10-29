@@ -1559,8 +1559,8 @@ export class CreatePositionComponent implements OnInit {
         dataJson => {
           this.position = dataJson['data'];
 
-          if (dataJson['data'] && dataJson['data'].open === 1) {
-            this.router.navigate(['/positions']);
+          if (this.position && this.position.position_id && this.position.open === 1) {
+            this.router.navigate(['/position-info/', this.position.position_id]);
           }
         },
         error => {
@@ -1568,7 +1568,7 @@ export class CreatePositionComponent implements OnInit {
         }
       );
     } else {
-      this.router.navigate(['/positions']);
+      this.router.navigate(['/position-info/', this.position.position_id]);
     }
   }
 
