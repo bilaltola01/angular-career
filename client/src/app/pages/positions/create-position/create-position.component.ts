@@ -198,7 +198,6 @@ export class CreatePositionComponent implements OnInit {
     this.minDate.setDate(this.currentDate.getDate() + 1);
     this.isTabMenuOpen = false;
     this.isNavMenuOpened = false;
-    this.is_loading = false;
     this.selectedPageIndex = 0;
     if (this.route.snapshot.queryParams.type && this.route.snapshot.queryParams.id) {
       if (this.route.snapshot.queryParams.type === 'position') {
@@ -252,32 +251,7 @@ export class CreatePositionComponent implements OnInit {
       return;
     }
     ++this.selectedPageIndex;
-    switch (this.selectedPageIndex) {
-      case 1:
-        this.initPositionBasicInfoForm();
-        break;
-      case 2:
-        this.initPreferredEducationForm();
-        break;
-      case 3:
-        this.initPreferredWorkExperienceFormArray();
-        break;
-      case 4:
-        this.initSkillsForm();
-        break;
-      case 5:
-        this.initInterestsForm();
-        break;
-      case 6:
-        this.initSchoolRestrictionsForm();
-        break;
-      case 7:
-        this.sortPreferredEducationLevels();
-        this.getCompanyInfo(this.position.company_id);
-        break;
-      default:
-        break;
-    }
+    this.initializeFormsByPageIndex();
   }
 
   goToPage(index: number) {
@@ -318,8 +292,10 @@ export class CreatePositionComponent implements OnInit {
   initializeFormsByPageIndex() {
     // this.getPositionInfo();
     if ((this.position && this.position.position_id) || (this.route.snapshot.queryParams.type && this.route.snapshot.queryParams.type === 'position')) {
+      this.is_loading = true;
       this.getPositionInfo();
     } else {
+      this.is_loading = false;
       switch (this.selectedPageIndex) {
         case 0:
           this.initNameOverviewForm();
@@ -359,6 +335,9 @@ export class CreatePositionComponent implements OnInit {
       this.positionService.getPositionById(position_id).subscribe(
         dataJson => {
           this.position = dataJson['data'];
+          if (this.position && this.position.open === 1) {
+            this.selectedPageIndex = 7;
+          }
           this.is_loading = false;
           switch (this.selectedPageIndex) {
             case 0:
@@ -1554,40 +1533,42 @@ export class CreatePositionComponent implements OnInit {
   }
 
   onClickPublish() {
-    if (this.position) {
+    if (this.position && this.position.open === 0) {
       const position: PositionInfoRequest = {
-        position:	this.position_name,
-        company_id:	this.position_company.company_id,
-        level: this.position_level ? this.position_level : null,
-        type:	this.position_type ? this.position_type : null,
-        position_desc: this.position_desc ? this.position_desc : null,
+        position:	this.position.position,
+        company_id:	this.position.company_id,
+        level: this.position.level,
+        type:	this.position.type,
+        position_desc: this.position.position_desc,
         start_date:	null,
         end_date:	null,
         position_filled: null,
-        pay: this.position_salary ? this.position_salary : null,
+        pay: this.position.pay,
         negotiable:	null,
         repeat_post: null,
         repeat_date: null,
         cover_letter_req:	null,
-        recruiter_id:	this.position_recruiter ? this.position_recruiter.user_id : null,
-        department:	this.position_department ? this.position_department : null,
+        recruiter_id:	this.position.recruiter_id,
+        department:	this.position.department,
         open:	1,
         openings:	null,
-        application_deadline:	this.position_application_deadline ? this.position_application_deadline : null
+        application_deadline: this.position.application_deadline ? this.helperService.convertToFormattedString(this.position.application_deadline, 'YYYY-MM-DD') : null
       };
 
       this.positionService.patchPosition(this.position.position_id, position).subscribe(
         dataJson => {
           this.position = dataJson['data'];
 
-          if (dataJson['data'] && dataJson['data'].position_id) {
-            this.addPreferredEducationLevels(dataJson['data'].position_id);
+          if (dataJson['data'] && dataJson['data'].open === 1) {
+            this.router.navigate(['/positions']);
           }
         },
         error => {
           this.alertsService.show(error.message, AlertType.error);
         }
       );
+    } else {
+      this.router.navigate(['/positions']);
     }
   }
 
@@ -2029,7 +2010,6 @@ export class CreatePositionComponent implements OnInit {
             temp_arr = this.preferred_work_experiences[arrIndex].preferred_skills_trained;
           }
         }
-        console.log('___', temp_arr, this.preferred_work_experiences[arrIndex].preferred_skills_trained, this.position.preferred_experience[index].preferred_skills_trained);
 
         const info = {
           position_id: position_id,

@@ -19,7 +19,7 @@
 
 <!-- Position Name & Overview start -->
 
-<div *ngIf="selectedPageIndex===0" class="container profile-basic">
+<div *ngIf="selectedPageIndex===0 && !is_loading" class="container profile-basic">
 	<div class="container__full">
 		<div class="profile-form" [formGroup]="nameOverviewForm">
 			<h3 class="profile-form__title">
@@ -495,7 +495,7 @@
           </div>
         </div>
         <div class="position-status">
-          <action-button type="flat" color="primary" [title]="position ? 'Published' : 'Publish'" (click)="onClickPublish()"></action-button>
+          <action-button type="flat" color="primary" [title]="position && position.open === 0 ? 'Publish' : 'View'" (click)="onClickPublish()"></action-button>
         </div>
       </div>
       <div class="position-row__details">
@@ -669,8 +669,8 @@
         </ol>
       </div>
       <div class="btn-section">
-        <action-button class="nav-btn" type="stroked" title="Edit" (click)="backToEdit()"></action-button>
-        <action-button class="nav-btn" type="stroked"  title="Quit" (click)="onClickQuit()"></action-button>
+        <action-button *ngIf="position && position.open === 0" class="nav-btn" type="stroked" title="Edit" (click)="backToEdit()"></action-button>
+        <action-button *ngIf="position && position.open === 0" class="nav-btn" type="stroked"  title="Quit" (click)="onClickQuit()"></action-button>
       </div>  
     </nav>
   </div>
