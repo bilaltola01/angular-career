@@ -71,8 +71,7 @@ a {
         .row {
           background: $white;
           padding: 10px 18px;
-          border-bottom: 1px solid map-get($md-cfaccent, 50);
-          margin-bottom: 5px;
+          margin-bottom: 10px;
           border-radius: 5px;
 
           h5.about-company {
@@ -93,7 +92,7 @@ a {
             font-size: 14px;
             line-height: 22px;
             margin-top: 0;
-            margin-bottom: 10px;
+            margin-bottom: 0;
             color: rgba(map-get($md-cfaccent, 500), .54);
           }
       
