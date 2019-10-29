@@ -141,7 +141,8 @@
                                 </div>
                             </div>
                         </div>
-                        <p>
+                        <h5 class="about-company">About Company</h5>
+                        <p class="about-company">
                             {{company.company_desc | slice:0:maxDescriptionLength}}<span *ngIf="company.company_desc.length>maxDescriptionLength">...</span>
                         </p>
                         <div class="show-button">
