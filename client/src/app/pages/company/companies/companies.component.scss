@@ -238,14 +238,14 @@ a {
         .company-info-box {
           display: grid;
           grid-template:
-            "info " auto minmax(min-content, max-content);
+            "info " minmax(min-content, max-content);
           ;
           grid-column-gap: 10px;
           background-color: transparent;
       
-          padding: 10px 35px 10px 10px;
+          padding: 10px 20px 10px 15px;
           border-right: 1px solid rgba(0, 29, 64, 0.15);
-          
+          min-width: 230px;
       
           .info {
             grid-area: info;
@@ -503,6 +503,14 @@ a {
           width: 450px;
         }
       }
+
+      .companies-main-container {
+        .companies-list-container {
+          .company-info-box {
+            min-width: 180px;
+          }
+        }
+      }
     }
   }
 }
@@ -552,6 +560,7 @@ a {
             border: 1px solid rgba(0, 29, 64, 0.15);
             border-radius: 5px;
             margin: 5px;
+            min-width: 160px;
             .info {
               h2.name {
                 font-size: 20px;
