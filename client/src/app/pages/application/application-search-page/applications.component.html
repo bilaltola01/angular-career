@@ -24,8 +24,9 @@
     </div>
 
   </div>
+  <!-- Position Filter Card -->
+
   <div [formGroup]="applicationForm" class="application-main-container">
-    <!-- Position Filter Card -->
     <div class="filter-container container__header tablet" [class.open]="filter_list">
       <ng-container>
         <div class="nav-title">
@@ -55,9 +56,12 @@
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
-          <div *ngIf="userSkillsList.length > 0" class="skills">
+          <div *ngIf="userSkillsList.length > 0 ? userSkillsList.length > 0 : skillUrlParams.length > 0 "
+            class="skills">
             <simple-tag *ngFor="let skillData of userSkillsList; let i = index" type="gray" removeTag="true"
               title="{{skillData.skill}}" (click)="removeUserSkillsData(i)"></simple-tag>
+            <simple-tag *ngFor="let skillData of skillUrlParams; let i = index" type="gray" removeTag="true"
+              title="{{skillData}}" (click)="removeSkillUrlParams(i)"></simple-tag>
           </div>
         </div>
         <div class="filter-card">
@@ -178,13 +182,10 @@
     <!-- Job application Card -->
 
     <div class="application-list-container">
-
       <div class="select-style">
         <div class="selectall">
-
           <round-checkbox id="test" title="Select All" [checked]="selectedAllFlag" (statusChange)="selectAll($event)">
           </round-checkbox>
-
           <div class="application_modify">
             <mat-label>Modify Status</mat-label>&nbsp;
             <mat-form-field>
@@ -195,7 +196,6 @@
               </mat-select>
             </mat-form-field>
           </div>
-
         </div>
         <div class="sort-item">
           <mat-label>Sort by</mat-label>&nbsp;
@@ -206,13 +206,12 @@
           </mat-form-field>
         </div>
       </div>
-
       <div *ngFor="let application of applicationList ">
-
         <div class="row" [ngClass]="{'selected': application.selected}">
           <round-checkbox id="test" [checked]="application.selected"
             (statusChange)="application.selected = !application.selected;selectedAllFlag=false;"></round-checkbox>
-          <h1 [routerLink]="['/applications/application-detail/',application.application_id]">{{application.position}} </h1>
+          <h1 (click)="routerNavigate(application.application_id,application.position_id)">{{application.position}}
+          </h1>
           <div class="position-right">
             <span class="right-align">
               <action-button *ngIf="application.accepted" class="application-accept-btn" title="Accepted" type="stroked"
@@ -240,7 +239,6 @@
                 *ngIf="!(application.accepted || application.in_review || application.interviewing || application.offer_sent || application.rejected || application.wait_listed || application.saved )"
                 class="application-submitted" title="Submitted" type="stroked" color="primary" disabled>
               </action-button>
-
             </span>
             <span class="dot-icon">
               <button mat-button [matMenuTriggerFor]="menu" disableRipple><img src="assets/icons/ic_more_vertical.svg">
@@ -326,7 +324,7 @@
                   <p *ngIf="!(application.application_cover_letter == 'null'); else noCoverLetter">{{'Yes'}} </p>
                 </div>
                 <ng-template #noCoverLetter>
-                  <p class="noLocation">N/A</p>
+                  <p class="noLocation">No</p>
                 </ng-template>
               </mat-grid-tile>
               <mat-grid-tile>
@@ -342,13 +340,8 @@
               <mat-grid-tile>
                 <div class="card-item">
                   <span>Department</span>
-                  <p *ngIf="application.preferred_education_levels ; else noEducationLevel">
-                    {{application.department}}</p>
-                  <ng-template #noEducationLevel>
-                    <p>
-                      N/A
-                    </p>
-                  </ng-template>
+                  <p>
+                    {{application.department ? application.department : 'N/A'}}</p>
                 </div>
               </mat-grid-tile>
             </mat-grid-list>
@@ -436,9 +429,5 @@
         </ul>
       </div>
     </div>
-
-
-
   </div>
-
 </div>

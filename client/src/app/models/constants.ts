@@ -407,6 +407,86 @@ export const NavMenus = {
     }
   ]
 };
+export const ApplicationNavMenus = {
+  application: [
+    {
+      id: 'letter',
+      title: 'Cover Letter',
+      items: []
+    },
+    {
+      id: 'profile',
+      title: 'Profile Information',
+      items: [
+        {
+          id: 'gen-info',
+          title: 'General Information',
+        },
+        {
+          id: 'qualification-level',
+          title: 'Qualification Level Estimate',
+        },
+        {
+          id: 'Matched-skills',
+          title: 'Matched Skills',
+        },
+        {
+          id: 'Matched-interest',
+          title: 'Matched Interests',
+        },
+        {
+          id: 'intro',
+          title: 'Introduction',
+        },
+        {
+          id: 'education',
+          title: 'Education',
+        },
+        {
+          id: 'work',
+          title: 'Work Experience',
+        },
+        {
+          id: 'skills',
+          title: 'Skills',
+        },
+        {
+          id: 'interest',
+          title: 'Interests',
+        },
+        {
+          id: 'publications',
+          title: 'Publications',
+        },
+        {
+          id: 'project',
+          title: 'Projects',
+        }
+      ]
+    },
+    {
+      id: 'template-information',
+      title: 'Template Information',
+      items: []
+    },
+    {
+      id: 'references',
+      title: 'References',
+      items: []
+    },
+    {
+      id: 'message',
+      title: 'Messages',
+      items: []
+    }
+    ,
+    {
+      id: 'position-info',
+      title: 'Position Information',
+      items: []
+    }
+  ]
+};
 export const ITEMS_LIMIT = 100;
 
 
@@ -471,8 +551,7 @@ export const ApplicationStatus = [
   'wait_listed',
   'rejected',
   'offer_sent',
-  'saved',
-  'All'
+  'saved'
 ];
 
 
@@ -484,7 +563,7 @@ export const SortBy = [
 
 export const ApplicationSortBy = [
   { 'title': 'Application Date', 'value': 'application_date' },
-  { 'title': 'Date Posted', 'value': 'salary' },
+  { 'title': 'Salary', 'value': 'salary' },
   { 'title': 'Qualification Level', 'value': 'qualification_level' },
   { 'title': 'Application Deadline', 'value': 'application_deadline' },
   { 'title': 'Popularity', 'value': 'popularity' }

@@ -8,7 +8,11 @@ import { applicationComponents } from './index';
 import { SharedModule } from '../../components/shared.module';
 import { AddSkillPopupComponent } from 'src/app/components/add-skill-popup/add-skill-popup.component';
 import { InterestLevelPopupComponent } from 'src/app/components/interest-level-popup/interest-level-popup.component';
-import { ApplicationCoverLettrComponent } from './application-detail/application-cover-lettr/application-cover-lettr.component';
+import { ApplicationCoverLetterComponent } from './application-detail/application-cover-letter/application-cover-letter.component';
+import { ApplicationNavSectionComponent } from './application-detail/application-nav-section/application-nav-section.component';
+import { ApplicationHeaderSectionComponent } from './application-detail/application-header-section/application-header-section.component';
+import { ApplicationTemplateInformationComponent } from './application-detail/application-template-information/application-template-information.component';
+import { ApplicationReferencesComponent } from './application-detail/application-references/application-references.component';
 
 
 @NgModule({
@@ -22,7 +26,11 @@ import { ApplicationCoverLettrComponent } from './application-detail/application
   ],
   declarations: [
     ...applicationComponents,
-    ApplicationCoverLettrComponent
+    ApplicationCoverLetterComponent,
+    ApplicationNavSectionComponent,
+    ApplicationHeaderSectionComponent,
+    ApplicationTemplateInformationComponent,
+    ApplicationReferencesComponent
   ],
   entryComponents: [
     AddSkillPopupComponent,

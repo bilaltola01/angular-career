@@ -10,6 +10,7 @@ import { element } from 'protractor';
 import { FormGroup, FormControl } from '@angular/forms';
 
 
+
 @Component({
   selector: 'app-positions-details',
   templateUrl: './positions-details.component.html',
@@ -17,6 +18,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 })
 export class PositionsDetailsComponent implements OnInit {
   positionId;
+
   mathFloor = Math.floor;
   breakpoint: number;
   positionName = [];
@@ -41,7 +43,7 @@ export class PositionsDetailsComponent implements OnInit {
   updatedFitscoreData;
   filter_list: boolean;
   locationLength;
-
+  isJobLoading = true;
   calculatedQualificationLevel: string;
   Object = Object;
 
@@ -85,8 +87,10 @@ export class PositionsDetailsComponent implements OnInit {
   }
 
   getposition(positionId) {
+    this.isJobLoading = true;
     this.positionService.getPosition(positionId).subscribe(
       dataJson => {
+        this.isJobLoading = false;
         this.positionName.push(dataJson.data);
         this.getCompanyData(this.positionName[0].company_id);
         this.getRecruiterData(this.positionName[0].recruiter_id);
@@ -159,8 +163,10 @@ export class PositionsDetailsComponent implements OnInit {
     }
   }
   getCompanyData(comapnyId) {
+    this.isJobLoading = true;
     this.companyService.getCompanyData(comapnyId).subscribe(
       dataJson => {
+        this.isJobLoading = false;
         this.companyData.push(dataJson.data);
         this.getPositionCount(comapnyId);
       },
@@ -237,8 +243,10 @@ export class PositionsDetailsComponent implements OnInit {
     );
   }
   getRestrcitedSchoolData(positionId) {
+    this.isJobLoading = true;
     this.positionService.getRestrictedSchool(positionId).subscribe(
       dataJson => {
+        this.isJobLoading = false;
         this.restrictedSchools = dataJson.data['data'];
       },
       error => {
@@ -248,8 +256,10 @@ export class PositionsDetailsComponent implements OnInit {
 
   }
   getSavedJobs() {
+    this.isJobLoading = true;
     this.cartService.getSavedJobs()
       .subscribe((data: any) => {
+        this.isJobLoading = false;
         if (data.data && data.data.rows) {
           this.savedJobs = data.data.rows;
           for (const job of this.savedJobs) {
@@ -264,8 +274,10 @@ export class PositionsDetailsComponent implements OnInit {
         });
   }
   getAppliedJobs() {
+    this.isJobLoading = true;
     this.applicationService.getAppliedJobs()
       .subscribe(data => {
+        this.isJobLoading = false;
         if (data.data && data.data.data) {
           this.appliedJobs = data.data.data;
           for (const job of this.appliedJobs) {
@@ -280,8 +292,10 @@ export class PositionsDetailsComponent implements OnInit {
         });
   }
   withdrawApplication(position_id) {
+    this.isJobLoading = true;
     const application_id = this.appliedJobsMap[position_id];
     this.applicationService.withdrawJobs(application_id).subscribe(data => {
+      this.isJobLoading = false;
       delete this.appliedJobsMap[position_id];
     },
       error => {
@@ -290,8 +304,10 @@ export class PositionsDetailsComponent implements OnInit {
   }
 
   applyJob(positionArr) {
+    this.isJobLoading = true;
     this.applicationService.applyJob(positionArr)
       .subscribe(data => {
+        this.isJobLoading = false;
         for (const application of data) {
           this.appliedJobsMap[application.position_id] = application.application_id;
         }
@@ -307,7 +323,9 @@ export class PositionsDetailsComponent implements OnInit {
     }
   }
   saveJob(positionArr) {
+    this.isJobLoading = true;
     this.cartService.saveJob(positionArr).subscribe(data => {
+      this.isJobLoading = false;
       for (const position of positionArr) {
         this.savedJobsMap[position.position_id] = position.position_id;
       }
@@ -318,7 +336,9 @@ export class PositionsDetailsComponent implements OnInit {
   }
 
   unSaveJob(positionData) {
+    this.isJobLoading = true;
     this.cartService.unSaveJob(positionData).subscribe(data => {
+      this.isJobLoading = false;
       delete this.savedJobsMap[positionData[0].position_id];
     },
       error => {

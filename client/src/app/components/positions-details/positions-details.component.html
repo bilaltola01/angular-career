@@ -76,7 +76,6 @@
                 <li *ngFor="let position of newCompanyPositions | keyvalue; let i = index">
                   <simple-tag type="white" *ngIf="i < limit" class="industry-tag"
                     title="{{position.value}} {{position.key | titlecase}}">
-
                   </simple-tag>
                 </li>
                 <img *ngIf="lessFlag && limit > displayIndustryLimit" class="edu_img"
@@ -560,3 +559,4 @@
     </div>
   </div>
 </div>
+

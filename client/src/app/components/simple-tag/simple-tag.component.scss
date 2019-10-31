@@ -155,6 +155,12 @@ $status-bg-color: #f4f5f8;
   font-size: 16.63px;
   vertical-align: middle;
 }
+:host-context(.industry-tag) .tag-container {
+  margin-right:8px;
+ }
+:host-context(.industry-tag) .tag-container {
+ margin-right:8px;
+}
 :host-context(.top-choices-tag) .tag-container .ellipse-container mat-icon {
   &.active {
     color: #318bd6;

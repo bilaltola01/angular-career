@@ -40,7 +40,7 @@ export class NavSectionComponent implements OnInit {
       this.navMenu[0]['title'] = 'Profile';
       this.navMenu.splice(2, 1);
     }
-    this.checkNavMenuItemsVisibility();
+     this.checkNavMenuItemsVisibility();
     this.parseRouterUrl(router.url);
     router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {

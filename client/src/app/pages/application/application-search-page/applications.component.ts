@@ -86,6 +86,17 @@ export class ApplicationsComponent implements OnInit, DoCheck {
   appliedJobsMap = {};
   preLoadDataObject = {};
   updatedFitscoreList = [];
+  searchQueryParam;
+  preLoadDataFlag = true;
+  queryFlag = true;
+  offsetParam;
+  prequeryFlag = false;
+  offsetFlag = false;
+  urlParams = {};
+  urlQueryParameter;
+  skillUrlParams = [];
+  skillUrlIdParam = [];
+  applicationParam;
 
   constructor(private autoCompleteService: AutoCompleteService, private router: Router,
     private alertsService: AlertsService, private positionService: PositionService, private scoreService: ScoreService,
@@ -93,6 +104,23 @@ export class ApplicationsComponent implements OnInit, DoCheck {
     this.updateSkillCallback = this.updateSkillCallback.bind(this);
   }
   ngOnInit() {
+    const urlParams = new URLSearchParams(window.location.search);
+    this.searchQueryParam = urlParams.get('search');
+    if (this.searchQueryParam) {
+      this.preLoadDataFlag = false;
+      this.offsetFlag = true;
+      const urlObject = this.searchQueryParam.split('&');
+      for (let i = 0; i < urlObject.length; i++) {
+        const result = urlObject[i].split('=');
+        if (result[0] === 'skillName') {
+          this.skillUrlParams.push(result[1]);
+        } else if (result[0] === 'skills') {
+          this.skillUrlIdParam.push(result[1]);
+        } else {
+          this.urlParams[result[0]] = result[1];
+        }
+      }
+    }
     this.initPositionFilterForm();
     this.getApplicationData();
     this.breakpoint = (window.innerWidth <= 500) ? 2 : 4;
@@ -152,6 +180,25 @@ export class ApplicationsComponent implements OnInit, DoCheck {
     this.applicationForm.get('school').valueChanges.subscribe((school) => {
       school ? this.onSchoolValueChanges(school) : this.autocomplete_school = [];
     });
+    if (this.searchQueryParam) {
+      this.applicationForm.patchValue({
+        'searchPosition': this.urlParams['position'],
+        'minSal': this.urlParams['pay'],
+        'position': this.urlParams['level'],
+        'education': this.urlParams['education'],
+        'job': this.urlParams['job_type'],
+        'company': this.urlParams['company'],
+        'major': this.urlParams['majorName'],
+        'recruiter': this.urlParams['recruiterName'],
+        'interest': this.urlParams['interest'],
+        'applicationStatus': this.urlParams['filter'],
+        'post': this.urlParams['post'],
+        'school': this.urlParams['schoolName'],
+        'industry': this.urlParams['industryName'],
+        'city': this.urlParams['cityName'],
+        'sortBy': this.urlParams['sort']
+      });
+    }
   }
 
   onChangeCity(city) {
@@ -260,51 +307,128 @@ export class ApplicationsComponent implements OnInit, DoCheck {
     );
   }
   addSkills(skillItem: Skill) {
-    this.applicationForm.patchValue({ skill: '' });
-    if (this.userSkillsList.findIndex(skill => skillItem.skill_id === skill.skill_id) === -1) {
-      this.userSkillsList.push(skillItem);
+    if (this.skillUrlParams.length > 0) {
+      this.applicationForm.patchValue({ skill: '' });
+      if (!(this.skillUrlParams.includes(skillItem.skill))) {
+        if (this.userSkillsList.findIndex(skill => skillItem.skill_id === skill.skill_id) === -1) {
+          this.userSkillsList.push(skillItem);
+        }
+      }
+    } else {
+      this.applicationForm.patchValue({ skill: '' });
+      if (this.userSkillsList.findIndex(skill => skillItem.skill_id === skill.skill_id) === -1) {
+        this.userSkillsList.push(skillItem);
+      }
     }
-
   }
   removeUserSkillsData(index: number) {
     this.userSkillsList.splice(index, 1);
   }
 
+  removeSkillUrlParams(index: number) {
+    this.skillUrlParams.splice(index, 1);
+    this.skillUrlIdParam.splice(index, 1);
+  }
   generateQueryString(): string {
     let queryString;
-    queryString = this.applicationForm.value.city ? `${queryString ? queryString + '&' : ''}city=${this.filterAttributes.city_id}` : queryString;
-    queryString = this.applicationForm.value.position ? `${queryString ? queryString + '&' : ''}level=${this.applicationForm.value.position}` : queryString;
-    queryString = this.applicationForm.value.education ? `${queryString ? queryString + '&' : ''}education=${parseInt(this.applicationForm.value.education, 10) + 1}` : queryString;
-    queryString = this.applicationForm.value.job ? `${queryString ? queryString + '&' : ''}job_type=${this.applicationForm.value.job}` : queryString;
-    queryString = this.applicationForm.value.interest ? `${queryString ? queryString + '&' : ''}interest=${this.applicationForm.value.interest}` : queryString;
-    queryString = this.applicationForm.value.applicationStatus ? `${queryString ? queryString + '&' : ''}filter=${this.applicationForm.value.applicationStatus}` : queryString;
-    queryString = this.applicationForm.value.school ? `${queryString ? queryString + '&' : ''}school=${this.filterAttributes.school_id}` : queryString;
-    queryString = this.applicationForm.value.major ? `${queryString ? queryString + '&' : ''}major=${this.filterAttributes.major_id}` : queryString;
-    queryString = this.applicationForm.value.industry ? `${queryString ? queryString + '&' : ''}industry=${this.filterAttributes.industry_id}` : queryString;
-    queryString = this.applicationForm.value.company ? `${queryString ? queryString + '&' : ''}company=${this.applicationForm.value.company}` : queryString;
-    queryString = this.applicationForm.value.minSal ? `${queryString ? queryString + '&' : ''}pay=${this.applicationForm.value.minSal}` : queryString;
-    queryString = queryString ? `${queryString}&offset=${this.filterAttributes.offset}` : `offset=${this.filterAttributes.offset}`;
-    queryString = queryString ? `${queryString}&limit=${this.filterAttributes.limit}` : `offset=${this.filterAttributes.limit}`;
-    this.userSkillsList.forEach(skill => {
-      queryString = queryString ? queryString + `&skills=${skill.skill_id}` : `skills=${skill.skill_id}`;
-    });
-    queryString = this.applicationForm.value.searchPosition ? `${queryString ? queryString + '&' : ''}position=${this.applicationForm.value.searchPosition}` : queryString;
-    queryString = this.applicationForm.value.sortBy ? `${queryString ? queryString + '&' : ''}sort=${this.applicationForm.value.sortBy}` : queryString;
+    let urlQueryParam;
+    if (this.searchQueryParam) {
+      queryString = this.searchQueryParam;
+      this.searchQueryParam = null;
+    } else {
+      queryString = this.applicationForm.value.city ? `${queryString ? queryString + '&' : ''}city=${this.filterAttributes.city_id ? this.filterAttributes.city_id : this.urlParams['city']}` : queryString;
+      queryString = this.applicationForm.value.position ? `${queryString ? queryString + '&' : ''}level=${this.applicationForm.value.position}` : queryString;
+      queryString = this.applicationForm.value.education ? `${queryString ? queryString + '&' : ''}education=${parseInt(this.applicationForm.value.education, 10) + 1}` : queryString;
+      queryString = this.applicationForm.value.job ? `${queryString ? queryString + '&' : ''}job_type=${this.applicationForm.value.job}` : queryString;
+      queryString = this.applicationForm.value.interest ? `${queryString ? queryString + '&' : ''}interest=${this.applicationForm.value.interest}` : queryString;
+      queryString = this.applicationForm.value.applicationStatus ? `${queryString ? queryString + '&' : ''}filter=${this.applicationForm.value.applicationStatus}` : queryString;
+      queryString = this.applicationForm.value.school ? `${queryString ? queryString + '&' : ''}school=${this.filterAttributes.school_id ? this.filterAttributes.school_id : this.urlParams['school']}` : queryString;
+      queryString = this.applicationForm.value.major ? `${queryString ? queryString + '&' : ''}major=${this.filterAttributes.major_id ? this.filterAttributes.major_id : this.urlParams['major']}` : queryString;
+      queryString = this.applicationForm.value.industry ? `${queryString ? queryString + '&' : ''}industry=${this.filterAttributes.industry_id ? this.filterAttributes.industry_id : this.urlParams['industry']}` : queryString;
+      queryString = this.applicationForm.value.company ? `${queryString ? queryString + '&' : ''}company=${this.applicationForm.value.company}` : queryString;
+      queryString = this.applicationForm.value.minSal ? `${queryString ? queryString + '&' : ''}pay=${this.applicationForm.value.minSal}` : queryString;
+      if (this.offsetFlag) {
+        queryString = queryString ? `${queryString}&offset=${parseInt(this.urlParams['offset'], 10) + parseInt(this.urlParams['limit'], 10)}` : `offset=${parseInt(this.urlParams['offset'], 10) + this.filterAttributes.limit}`;
+        queryString = queryString ? `${queryString}&limit=${parseInt(this.urlParams['limit'], 10)}` : `offset=${parseInt(this.urlParams['limit'], 10)}`;
+        this.offsetFlag = false;
+      } else {
+        queryString = queryString ? `${queryString}&offset=${this.filterAttributes.offset}` : `offset=${this.filterAttributes.offset}`;
+        queryString = queryString ? `${queryString}&limit=${this.filterAttributes.limit}` : `offset=${this.filterAttributes.limit}`;
+      }
+      urlQueryParam = this.applicationForm.value.city ? `${urlQueryParam ? urlQueryParam + '&' : ''}city=${this.filterAttributes.city_id ? this.filterAttributes.city_id : this.urlParams['city']}&cityName=${this.applicationForm.value.city}` : urlQueryParam;
+      urlQueryParam = this.applicationForm.value.position ? `${urlQueryParam ? urlQueryParam + '&' : ''}level=${this.applicationForm.value.position}` : urlQueryParam;
+      urlQueryParam = this.applicationForm.value.education ? `${urlQueryParam ? urlQueryParam + '&' : ''}education=${parseInt(this.applicationForm.value.education, 10) + 1}` : urlQueryParam;
+      urlQueryParam = this.applicationForm.value.job ? `${urlQueryParam ? urlQueryParam + '&' : ''}job_type=${this.applicationForm.value.job}` : urlQueryParam;
+      urlQueryParam = this.applicationForm.value.interest ? `${urlQueryParam ? urlQueryParam + '&' : ''}interest=${this.applicationForm.value.interest}` : urlQueryParam;
+      urlQueryParam = this.applicationForm.value.applicationStatus ? `${urlQueryParam ? urlQueryParam + '&' : ''}filter=${this.applicationForm.value.applicationStatus}` : urlQueryParam;
+      urlQueryParam = this.applicationForm.value.school ? `${urlQueryParam ? urlQueryParam + '&' : ''}school=${this.filterAttributes.school_id ? this.filterAttributes.school_id : this.urlParams['school']}&schoolName=${this.applicationForm.value.school}` : urlQueryParam;
+      urlQueryParam = this.applicationForm.value.major ? `${urlQueryParam ? urlQueryParam + '&' : ''}major=${this.filterAttributes.major_id ? this.filterAttributes.major_id : this.urlParams['major']}&majorName=${this.applicationForm.value.major}` : urlQueryParam;
+      urlQueryParam = this.applicationForm.value.industry ? `${urlQueryParam ? urlQueryParam + '&' : ''}industry=${this.filterAttributes.industry_id ? this.filterAttributes.industry_id : this.urlParams['industry']}&industryName=${this.applicationForm.value.industry}` : urlQueryParam;
+      urlQueryParam = this.applicationForm.value.company ? `${urlQueryParam ? urlQueryParam + '&' : ''}company=${this.applicationForm.value.company}` : urlQueryParam;
+      urlQueryParam = this.applicationForm.value.minSal ? `${urlQueryParam ? urlQueryParam + '&' : ''}pay=${this.applicationForm.value.minSal}` : urlQueryParam;
+      urlQueryParam = this.applicationForm.value.searchPosition ? `${urlQueryParam ? urlQueryParam + '&' : ''}position=${this.applicationForm.value.searchPosition}` : urlQueryParam;
+
+      if (this.offsetParam || this.filterAttributes.offset === 0 || this.filterAttributes.offset === this.filterAttributes.limit) {
+        urlQueryParam = urlQueryParam ? `${urlQueryParam}&offset=${this.filterAttributes.offset === 0 || this.filterAttributes.offset === this.filterAttributes.limit ? 0 : this.offsetParam}` : `offset=${this.filterAttributes.offset === 0 || this.filterAttributes.offset === this.filterAttributes.limit ? 0 : this.offsetParam}`;
+        urlQueryParam = urlQueryParam ? `${urlQueryParam}&limit=${this.filterAttributes.limit}` : `offset=${this.filterAttributes.limit}`;
+        urlQueryParam = this.applicationForm.value.sortBy ? `${urlQueryParam ? urlQueryParam + '&' : ''}sort=${this.applicationForm.value.sortBy}` : urlQueryParam;
+
+      }
+
+
+      this.userSkillsList.forEach(skill => {
+        queryString = queryString ? queryString + `&skills=${skill.skill_id}` : `skills=${skill.skill_id}&skillName=${skill.skill}`;
+        urlQueryParam = urlQueryParam ? urlQueryParam + `&skills=${skill.skill_id}&skillName=${skill.skill}` : `skills=${skill.skill_id}&skillName=${skill.skill}`;
+      });
+      if (this.skillUrlIdParam.length > 0) {
+        this.skillUrlIdParam.forEach(skill => {
+          queryString = queryString ? queryString + `&skills=${skill}` : `skills=${skill}`;
+          urlQueryParam = urlQueryParam ? urlQueryParam + `&skills=${skill}` : `skills=${skill}`;
+
+        });
+      }
+      if (this.skillUrlParams.length > 0) {
+        this.skillUrlParams.forEach(skill => {
+          queryString = queryString ? queryString + `&skillName=${skill}` : `skillName=${skill}`;
+          urlQueryParam = urlQueryParam ? urlQueryParam + `&skillName=${skill}` : `skillName=${skill}`;
+
+        });
+      }
+      queryString = this.applicationForm.value.searchPosition ? `${queryString ? queryString + '&' : ''}position=${this.applicationForm.value.searchPosition}` : queryString;
+      queryString = this.applicationForm.value.sortBy ? `${queryString ? queryString + '&' : ''}sort=${this.applicationForm.value.sortBy}` : queryString;
+
+      if (this.queryFlag || this.prequeryFlag) {
+        this.router.navigate(['/applications'], { queryParams: { search: urlQueryParam ? urlQueryParam : '' } });
+        this.applicationParam = urlQueryParam;
+      }
+      this.urlQueryParameter = queryString;
+    }
+
+
     return queryString;
   }
   getApplicationData() {
+    this.queryFlag = true;
     this.applicationService.getApplicationFlag = false;
     this.selectedAllFlag = false;
+    if (this.searchQueryParam) {
+      this.currentPageNumber = (this.urlParams['offset'] / this.urlParams['limit']) + 1;
+    } else {
+      this.currentPageNumber = (this.filterAttributes.offset / this.filterAttributes.limit) + 1;
+    }
     if (this.preLoadDataObject[this.currentPageNumber]) {
       this.applicationList = this.preLoadDataObject[this.currentPageNumber].data.data;
       this.setPaginationValues(this.preLoadDataObject[this.currentPageNumber]);
       if (this.currentPageNumber < this.paginationArr[this.paginationArr.length - 1]) {
         this.preLoadNextPage(this.currentPageNumber + 1);
+      } else {
+        this.router.navigate(['/applications'], { queryParams: { param: this.urlQueryParameter ? this.urlQueryParameter : '' } });
       }
     } else {
       this.isJobLoading = true;
-      const queryString = this.generateQueryString();
-      this.applicationService.getAppliedJobs(queryString).subscribe(
+      let queryParameters;
+      queryParameters = this.generateQueryString();
+      this.applicationService.getAppliedJobs(queryParameters).subscribe(
         dataJson => {
           this.isJobLoading = false;
           if (dataJson['success'] && dataJson.data.data) {
@@ -330,6 +454,9 @@ export class ApplicationsComponent implements OnInit, DoCheck {
     const sortValue = this.applicationForm.value.sortBy;
     const setPositionValue = this.applicationForm.value.searchPosition;
     this.applicationForm.reset();
+    this.preLoadDataObject = {};
+    this.skillUrlIdParam = [];
+    this.skillUrlParams = [];
     this.userSkillsList = [];
     this.preLoadDataObject = {};
     this.applicationForm.patchValue({ 'sortBy': sortValue });
@@ -345,6 +472,8 @@ export class ApplicationsComponent implements OnInit, DoCheck {
     });
   }
   onSearchPosition(event) {
+    this.prequeryFlag = true;
+    this.offsetFlag = false;
     this.filterAttributes.offset = 0;
     this.preLoadDataObject = {};
     this.getApplicationData();
@@ -352,6 +481,8 @@ export class ApplicationsComponent implements OnInit, DoCheck {
   }
 
   applyFilter() {
+    this.prequeryFlag = true;
+    this.offsetFlag = false;
     this.filterAttributes.offset = 0;
     this.toggleTabMenuOpen();
     this.preLoadDataObject = {};
@@ -383,10 +514,13 @@ export class ApplicationsComponent implements OnInit, DoCheck {
       });
   }
   pageClicked(pageNo) {
+    this.prequeryFlag = true;
+    this.offsetFlag = false;
     document.getElementById('sidenav-content').scrollTo(0, 0);
     if (pageNo > 0 && pageNo <= this.paginationArr[this.paginationArr.length - 1]) {
       this.currentPageNumber = pageNo;
       this.filterAttributes.offset = ((this.currentPageNumber - 1) * applicationListLimit);
+      this.offsetParam = this.filterAttributes.offset;
       this.getApplicationData();
 
     }
@@ -470,6 +604,9 @@ export class ApplicationsComponent implements OnInit, DoCheck {
       max = Math.ceil(dataJson.data.count / positionListLimit) <= 6 ? Math.ceil(dataJson.data.count / positionListLimit) + this.currentPageNumber - 1 : this.currentPageNumber + 6;
       min = max > 10 ? max - 9 : 1;
     } else {
+      if (this.offsetFlag) {
+        this.filterAttributes.offset = parseInt(this.urlParams['offset'], 10);
+      }
       max = Math.ceil((dataJson.data.count + this.filterAttributes.offset) / positionListLimit) < 10 ? Math.ceil((dataJson.data.count + this.filterAttributes.offset) / positionListLimit) : 10;
       min = 1;
     }
@@ -575,6 +712,9 @@ export class ApplicationsComponent implements OnInit, DoCheck {
   }
   rejectOffer(applicationData) {
     this.applicationService.rejectOffer(applicationData).subscribe();
+  }
+  routerNavigate(application_id, position_id) {
+    this.router.navigate(['/applications/application-detail/', application_id, position_id], { queryParams: { query: this.applicationParam ? this.applicationParam : '' } });
   }
 }
 

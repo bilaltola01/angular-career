@@ -5,6 +5,7 @@ import { Observable, throwError, forkJoin } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { HelperService } from './helper.service';
+import { query } from '@angular/animations';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,6 @@ export class ApplicationService {
     if (token) {
       this.user_id = this.helper.decodeToken(token).user_id;
     }
-
   }
 
   private authHttpOptions() {
@@ -53,6 +53,19 @@ export class ApplicationService {
       );
   }
 
+  public getApplicationWorkAuth(queryParam): Observable<any> {
+    let queryUrl = `${this.application_service_url}application`;
+    if ( queryParam ) {
+      queryUrl = `${this.application_service_url}application/${queryParam}/work-auth`;
+    }
+    return this.http.get(queryUrl, this.authHttpOptions())
+      .pipe(
+        map(data => {
+          return { success: true, message: 'Success!', data: data };
+        }),
+        catchError(this.handleError)
+      );
+  }
   public postWorkAuth(postWorkAuthInfo: any): Observable<any> {
     return this.http.post(this.application_service_url + 'work-auth', postWorkAuthInfo, this.authHttpOptions())
       .pipe(
@@ -82,7 +95,32 @@ export class ApplicationService {
         catchError(this.handleError)
       );
   }
-
+  public getApplicationMilitaryInfo(queryParam): Observable<any> {
+    let queryUrl = `${this.application_service_url}application`;
+    if (queryParam) {
+      queryUrl = `${this.application_service_url}application/${queryParam}/military-info`;
+    }
+    return this.http.get(queryUrl, this.authHttpOptions())
+      .pipe(
+        map(data => {
+          return { success: true, message: 'Success!', data: data };
+        }),
+        catchError(this.handleError)
+      );
+  }
+  public getApplicationReferences(queryParam): Observable<any> {
+    let queryUrl = `${this.application_service_url}application`;
+    if (queryParam) {
+      queryUrl = `${this.application_service_url}application/${queryParam}/employee-references`;
+    }
+    return this.http.get(queryUrl, this.authHttpOptions())
+      .pipe(
+        map(data => {
+          return { success: true, message: 'Success!', data: data };
+        }),
+        catchError(this.handleError)
+      );
+  }
   public postMilitaryInfo(postMilitaryInfo: any): Observable<any> {
     return this.http.post(this.application_service_url + 'military-info', postMilitaryInfo, this.authHttpOptions())
       .pipe(
@@ -94,7 +132,21 @@ export class ApplicationService {
   }
 
   public getCriminalHistory(): Observable<any> {
+
     return this.http.get(this.application_service_url + 'criminal-history', this.authHttpOptions())
+      .pipe(
+        map(data => {
+          return { success: true, message: 'Success!', data: data };
+        }),
+        catchError(this.handleError)
+      );
+  }
+  public getApplicationCriminalHistory(queryParam): Observable<any> {
+    let queryUrl = `${this.application_service_url}application`;
+    if (queryParam) {
+      queryUrl = `${this.application_service_url}application/${queryParam}/criminal-history`;
+    }
+    return this.http.get(queryUrl, this.authHttpOptions())
       .pipe(
         map(data => {
           return { success: true, message: 'Success!', data: data };

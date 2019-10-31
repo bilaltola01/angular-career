@@ -203,6 +203,24 @@
   margin:0 5px;
   line-height: 30px;
  }
+ :host-context(.take-action-btn) button {
+  line-height: initial;
+  padding: 12px 15px!important;
+  font-weight: 500;
+  font-size: 12px;
+  font-family: "Poppins", sans-serif;
+  display: inline-block;
+  width: auto;
+}
+ :host-context(.take-action-btn) button {
+  line-height: initial;
+  padding: 12px 15px!important;
+  font-weight: 500;
+  font-size: 12px;
+  font-family: "Poppins", sans-serif;
+  display: inline-block;
+  width: auto;
+}
 @media only screen and (max-width: $tablet-breakpoint) {
   :host-context(.position-search-reload-result)button {padding: 4px 13px !important;}
   }
