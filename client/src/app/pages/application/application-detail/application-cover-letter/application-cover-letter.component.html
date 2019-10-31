@@ -1,0 +1,24 @@
+<ng-container *ngIf="isJobLoading">
+  <div class="loading">
+      <mat-spinner></mat-spinner>
+      <h4>Loading...</h4>
+  </div>
+</ng-container>
+      <div class="application-coverletter">
+          <div class="row">
+              <h3>Cover Letter</h3>
+              <div class="application-edit">
+                  <action-button title="Edit" *ngIf="!editMode" class="job-apply-btn" (click)="setEdit()" color="primary">
+                  </action-button>
+                  <action-button title="Update" *ngIf="editMode" (click)="updateCoverLetter(applicationCoverLetter)"   class="job-apply-btn" color="primary">
+                  </action-button>
+              </div>
+              <div class="application-content-detail" [formGroup]="coverLetterForm">
+                      <mat-form-field class="full-width" *ngIf="editMode">
+                          <textarea matInput formControlName="letter" rows="15" [class.edit-mode]="editMode" [(ngModel)]="applicationCoverLetter" ></textarea>
+                      </mat-form-field>
+                      <p *ngIf="!editMode">{{applicationCoverLetter}}</p>
+              </div>
+          </div>
+      </div>
+

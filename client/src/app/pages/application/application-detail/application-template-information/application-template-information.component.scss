@@ -1,0 +1,233 @@
+@import './../../../../../styles/variables.scss';
+
+:host {
+  grid-area: main;
+  margin: 0 40px 0 0;
+  padding-top: 0;
+  padding-bottom: 80px;
+  border-radius: 5px;
+  background-color: transparent;
+  .application-edit-template{
+    float: right;
+    width: 70.3%;
+    padding-bottom: 80px;
+
+    .edit-title {
+      height: 60px;
+      @include flex(row, center, flex-end);
+      float: right;
+      .a {
+        font-size: 12px;
+        color: map-get($md-cfprimary, 500);
+        @include disable-select();
+        cursor: pointer;
+      }
+    }
+    h1.title {
+      margin-top: 0;
+      font-size: 30px;
+      opacity: 0.84;
+      line-height: 46px;
+      color: #001D40;
+      font-weight: 600;
+      display: inline-block;
+    }
+    p {
+      margin-top: 10px;
+      margin-bottom: 10px;
+      font-size: 16px;
+      line-height: 24px;
+      color: #001D40;
+      opacity: 0.54;
+      font-weight: 400;
+      &.response {
+        color: map-get($md-cfaccent, 500);
+        opacity: 0.84;
+      }
+    }
+      h3 {
+        font-weight: 600;
+        font-size: 20px;
+        line-height: 30px;
+        margin-bottom: 20px
+      }
+
+  .loading {
+    width: 100%;
+    height: 100%;
+    @include flex(column, center, center);
+  }
+  :nth-child(4) {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+  }
+  :last-child {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom: none;
+  }
+
+
+
+
+  .row {
+    background: white;
+    padding: 25px 20px;
+    border-bottom: 1px solid map-get($md-cfaccent, 50);
+    .btn-container {
+      text-align: center;
+      padding: 10px 0;
+    }
+
+    h4 {
+      margin-top: 10px;
+      &.name-field {
+        margin-top: 0;
+      }
+    }
+    h5 {
+      margin-top: 15px;
+      margin-bottom: 0;
+      font-size: 14px;
+      line-height: 21px;
+    }
+
+    }
+    &.edit-mode {
+      border-bottom: none;
+      margin-bottom: 10px;
+    }
+  }
+  ul.criminal {
+    padding-left: 20px;
+    & > li {
+      list-style: decimal;
+    }
+  }
+  simple-tag {
+    display: inline-flex;
+    margin: 10px 10px 5px 0;
+  }
+  action-button {
+    display: inline-flex;
+    margin-right: 20px;
+    &.edit-btn {
+      margin-right: 0;
+      width: 190px;
+    }
+  }
+  a {
+    font-size: 14px;
+    line-height: 21px;
+    color: map-get($md-cfprimary, 500);
+    text-decoration: none;
+    cursor: pointer;
+    &.title {
+      color: map-get($md-cfaccent, 500);
+      font-size: inherit;
+      line-height: inherit;
+    }
+  }
+  h3 {
+    margin-top: 0;
+    font-family: 'Poppins', sans-serif;
+  }
+  h4 {
+    margin-bottom: 0;
+    font-family: 'Poppins', sans-serif;
+  }
+  h5 {
+    margin: 10px 0;
+    color: rgba(map-get($md-cfaccent, 500), .34);
+  }
+  small {
+    font-size: 14px;
+    color: rgba(map-get($md-cfaccent, 500), .84);
+  }
+  mat-divider {
+    margin: 20px 0;
+    border-color: rgba(#707070, 0.1);
+  }
+  p {
+    color: rgba(map-get($md-cfaccent, 500), .74);
+    &.short-desc {
+      color: rgba(map-get($md-cfaccent, 500), .74);
+    }
+  }
+  .detail-info {
+    width: 100%;
+    display: inline-grid;
+    grid-template:
+      "left-top right-all" auto
+      "left-middle right-all" auto
+      "left-bottom right-all" auto
+      / auto 70px;
+    grid-gap: 0 10px;
+    &__left-top {
+      grid-area: left-top;
+    }
+    &__left-middle {
+      grid-area: left-middle;
+    }
+    &__left-bottom {
+      grid-area: left-bottom;
+    }
+    &__right_all {
+      grid-area: right-all;
+      text-align: right;
+    }
+  }
+  .editor-container {
+    width: 100%;
+    display: inline-grid;
+    grid-template:
+      " name-field btn-edit btn-delete " auto
+      / auto 24px 24px;
+      grid-gap: 0 10px;
+    .name-field {
+      grid-area: name-field;
+    }
+    .btn-edit {
+      grid-area: btn-edit;
+      color: map-get($md-cfprimary, 300);
+    }
+    .btn-delete {
+      grid-area: btn-delete;
+      color: map-get($md-cfred, 400);
+    }
+  }
+
+
+
+}
+
+@media only screen and (min-width: $min-mobile-breakpoint) and (max-width: $max-mobile-breakpoint) {
+  :host {
+    .application-edit-template{
+      float: none;
+      width: 90%;
+      padding-bottom: 0px;
+      margin: 0 auto;
+      h1.title {
+        margin-top: 5px;
+        font-size: 18px;
+    }
+    p {
+      font-size: 14px;
+  }
+  }
+  }
+}
+@media only screen and (min-width: $min-tablet-breakpoint) and (max-width: $max-tablet-breakpoint) {
+  :host {
+    .application-edit-template{
+      float: none;
+      width: 95%;
+      padding-bottom: 0px;
+      margin: 0 auto;
+  }
+  }
+}
+@media only screen and (min-width: $min-mini-desktop-breakpoint) and (max-width: $max-mini-desktop-breakpoint) {
+}
+
