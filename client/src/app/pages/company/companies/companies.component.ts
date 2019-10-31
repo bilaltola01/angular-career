@@ -126,6 +126,13 @@ export class CompaniesComponent implements OnInit {
     const querySearchedCityId = this.route.snapshot.queryParamMap.get('cityId') || null;
     const querySearchedSize = this.route.snapshot.queryParamMap.get('size') || null;
 
+    if (querySearchedCityId) {
+      this.filterAttributes['city_id'] = querySearchedCityId;
+    }
+    if (querySearchedIndustryId) {
+      this.filterAttributes['industry_id'] = querySearchedIndustryId;
+    }
+
     this.companiesForm = new FormGroup({
       'searchCompanies': new FormControl(querySearchedName),
       'industry': new FormControl(querySearchedIndustry),
