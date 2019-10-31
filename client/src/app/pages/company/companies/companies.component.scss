@@ -1,6 +1,10 @@
 @import '../../../../styles/variables';
 $profile-form-field-mt: 30px;
 
+img.company-autocomplete-logo {
+  border-radius: initial !important;
+}
+
 a {
   text-decoration: none;
 }

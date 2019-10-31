@@ -326,6 +326,9 @@ export class CompaniesComponent implements OnInit {
   }
 
   clearFilter() {
+    this.filterAttributes['city_id'] = null;
+    this.filterAttributes['industry_id'] = null;
+
     const searchCompaniesValue = this.companiesForm.value.searchCompanies;
     this.companiesForm.reset();
     this.preLoadDataObject = {};

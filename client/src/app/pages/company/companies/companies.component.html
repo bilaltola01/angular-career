@@ -22,7 +22,7 @@
                         routerLink="/company/{{company.company_id}}" 
                         [queryParams]="{showBackButton: 'true'}">
                         <mat-option [value]="company.company_name">
-                            <img [src]="company.company_logo ? company.company_logo : 'assets/icons/no_photo.png'">
+                            <img class="company-autocomplete-logo" [src]="company.company_logo ? company.company_logo : 'assets/icons/ic_default_company_logo.svg'">
                             <span>{{company.company_name}}</span>
                         </mat-option>
                     </a>
