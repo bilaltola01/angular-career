@@ -23,6 +23,16 @@ export class CompanyService {
     }
   }
 
+  public getCompanies(query: string): Observable<any> {
+    return this.http.get(this.company_service_url + `companies?${query}`, this.authHttpOptions())
+      .pipe(
+        map(data => {
+          return {success: true, message: 'Success!', data: data};
+        }),
+        catchError(this.handleError)
+
+      );
+  }
 
   public postCompany(companyInfo: any): Observable<any> {
     return this.http.post(this.company_service_url + 'company', companyInfo, this.authHttpOptions())

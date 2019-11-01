@@ -493,5 +493,6 @@ export const positionSearchMessages = {
 };
 
 export const peopleListLimit = 7;
+export const companyListLimit = 7;
 
 

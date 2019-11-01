@@ -4,8 +4,9 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../../modules/material.module';
 import { companyRoutes } from './company.routing';
-import { companyComponents } from './index';
+import { companyComponents, companiesComponents } from './index';
 import { SharedModule } from '../../components/shared.module';
+
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { SharedModule } from '../../components/shared.module';
     SharedModule
   ],
   declarations: [
-    ...companyComponents
+    ...companyComponents,
+    ...companiesComponents
   ]
 })
 
