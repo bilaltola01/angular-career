@@ -175,3 +175,40 @@ export interface PositionInfoResponse {
   preferred_experience:	any[];
 }
 
+export interface PositionTemplateInfoResponse {
+  position_popularity: number;
+  position_id: number;
+  position:	string;
+  level: string;
+  type:	string;
+  position_desc: string;
+  start_date:	any;
+  end_date:	any;
+  position_filled: number;
+  pay: number;
+  negotiable:	number;
+  repeat_post: number;
+  repeat_date: any;
+  cover_letter_req:	number;
+  application_type:	string;
+  application_deadline: any;
+  recruiter_id: number;
+  company_id: number;
+  company_name: string;
+  post_date: any;
+  department: string;
+  open:	number;
+  openings:	number;
+  recruiter_name: string;
+  locations: any[];
+  preferred_skills:	any[];
+  minimum_skills:	any[];
+  preferred_schools: any[];
+  preferred_majors:	any[];
+  preferred_education_levels:	any[];
+  preferred_major_categories:	any[];
+  preferred_languages: any[];
+  preferred_interests: any[];
+  preferred_experience:	any[];
+}
+

@@ -40,7 +40,8 @@ import {
   UserSkillItem,
   CompanyInfoResponse,
   SkillLevelDescription,
-  UserGeneralInfo
+  UserGeneralInfo,
+  PositionTemplateInfoResponse
 } from 'src/app/models';
 
 export interface PreferredWorkExperience {
@@ -59,6 +60,12 @@ export interface EditSkillItem {
 
 export interface DialogData {
   category: 'skip' | 'quit';
+}
+
+export enum CreatePositionType {
+  NewPosition = 0, // Create new position from scracth
+  InactivePosition = 1, // Inactive position
+  TemplatePosition = 2 // Create new position from position template
 }
 
 @Component({
@@ -176,9 +183,13 @@ export class CreatePositionComponent implements OnInit {
   isTabMenuOpen: boolean;
 
   position: PositionInfoResponse;
+  position_template: PositionTemplateInfoResponse;
+  position_template_process: Boolean[];
 
   current_user: UserGeneralInfo;
   is_loading: Boolean;
+
+  create_position_type: number;
 
   constructor(
     private route: ActivatedRoute,
@@ -199,9 +210,15 @@ export class CreatePositionComponent implements OnInit {
     this.isTabMenuOpen = false;
     this.isNavMenuOpened = false;
     this.selectedPageIndex = 0;
+    this.create_position_type = CreatePositionType.NewPosition;
+    this.position_template_process = [true, true, true, true, true, true];
     if (this.route.snapshot.queryParams.type && this.route.snapshot.queryParams.id) {
       if (this.route.snapshot.queryParams.type === 'position') {
+        this.create_position_type = CreatePositionType.InactivePosition;
         this.selectedPageIndex = 7;
+      } else if (this.route.snapshot.queryParams.type === 'template') {
+        this.create_position_type = CreatePositionType.TemplatePosition;
+        this.position_template_process = [false, false, false, false, false, false];
       }
     }
     this.initializeFormsByPageIndex();
@@ -250,6 +267,7 @@ export class CreatePositionComponent implements OnInit {
       this.openDialog('skip');
       return;
     }
+    this.position_template_process[this.selectedPageIndex] = true;
     ++this.selectedPageIndex;
     this.initializeFormsByPageIndex();
   }
@@ -291,9 +309,12 @@ export class CreatePositionComponent implements OnInit {
 
   initializeFormsByPageIndex() {
     // this.getPositionInfo();
-    if ((this.position && this.position.position_id) || (this.route.snapshot.queryParams.type && this.route.snapshot.queryParams.type === 'position')) {
+    if ((this.position && this.position.position_id) || this.create_position_type === CreatePositionType.InactivePosition) {
       this.is_loading = true;
       this.getPositionInfo();
+    } else if (this.create_position_type === CreatePositionType.TemplatePosition && !this.position_template) {
+      this.is_loading = true;
+      this.getPositionTemplateInfo();
     } else {
       this.is_loading = false;
       switch (this.selectedPageIndex) {
@@ -375,6 +396,24 @@ export class CreatePositionComponent implements OnInit {
     }
   }
 
+  getPositionTemplateInfo() {
+    if (!this.position_template && this.create_position_type === CreatePositionType.TemplatePosition) {
+      const position_template_id = this.route.snapshot.queryParams.id;
+      this.is_loading = true;
+      // this.positionService.getPositionById(18).subscribe(
+      this.positionService.getPositionTemplateInfoById(position_template_id).subscribe(
+        dataJson => {
+          this.position_template = dataJson['data'];
+          this.is_loading = false;
+          this.initNameOverviewForm();
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    }
+  }
+
   sortPreferredEducationLevels() {
     if (this.preferred_education_levels && this.preferred_education_levels.length > 2) {
       this.preferred_education_levels.sort((a, b) => (a.level > b.level) ? 1 : ((b.level > a.level) ? -1 : 0));
@@ -385,7 +424,11 @@ export class CreatePositionComponent implements OnInit {
    * Position Name and Overview Form
    */
   initNameOverviewForm() {
-    if (this.position) {
+    if (this.position_template && this.create_position_type === CreatePositionType.TemplatePosition && !this.position_template_process[0]) {
+      this.position_name = this.position_template.position;
+      this.position_desc = this.position_template.position_desc;
+    }
+    if (this.position && this.position_template_process[0]) {
       this.position_name = this.position.position;
       this.position_desc = this.position.position_desc;
     }
@@ -412,7 +455,26 @@ export class CreatePositionComponent implements OnInit {
     this.autocomplete_states = [];
     this.autocomplete_recruiters = [];
 
-    if (this.position) {
+    if (this.position_template && this.create_position_type === CreatePositionType.TemplatePosition && !this.position_template_process[1])  {
+      // Note: Position template doesn't include company and recuriter information.
+      this.position_city = this.position_template.locations && this.position_template.locations.length > 0 ? {
+        city_id: this.position_template.locations[0].city_id,
+        city: this.position_template.locations[0].city
+      } : null;
+      this.position_state = this.position_template.locations && this.position_template.locations.length > 0 ? {
+        state_id: this.position_template.locations[0].state_id,
+        state: this.position_template.locations[0].state
+      } : null;
+      this.position_country = this.position_template.locations && this.position_template.locations.length > 0 ? this.position_template.locations[0].country_id : null;
+      this.position_salary = this.position_template.pay ? this.position_template.pay : null;
+      this.position_department = this.position_template.department ? this.position_template.department : null;
+      this.position_level = this.position_template.level ? this.position_template.level : null;
+      this.position_type = this.position_template.type ? this.position_template.type : null;
+      this.position_application_type = this.position_template.application_type ? this.position_template.application_type : null;
+      this.position_application_deadline = this.position_template.application_deadline ? this.helperService.convertToFormattedString(this.position_template.application_deadline, 'YYYY-MM-DD') : null;
+    }
+
+    if (this.position && this.position_template_process[1]) {
       this.position_company = {
         company_id: this.position.company_id,
         company_name: this.position.company_name,
@@ -744,7 +806,13 @@ export class CreatePositionComponent implements OnInit {
     this.autocomplete_majors = [];
     this.autocomplete_major_categories = [];
 
-    if (this.position && this.position.position_id) {
+    if (this.position_template && this.create_position_type === CreatePositionType.TemplatePosition && !this.position_template_process[2])  {
+      this.preferred_education_levels = this.position_template.preferred_education_levels && this.position_template.preferred_education_levels.length > 0 ? this.position_template.preferred_education_levels.slice() : null;
+      this.preferred_education_majors = this.position_template.preferred_majors && this.position_template.preferred_majors.length > 0 ? this.position_template.preferred_majors.slice() : null;
+      this.preferred_education_major_categories = this.position_template.preferred_major_categories && this.position_template.preferred_major_categories.length > 0 ? this.position_template.preferred_major_categories.slice() : null;
+    }
+
+    if (this.position && this.position.position_id && this.position_template_process[2]) {
       this.preferred_education_levels = this.position.preferred_education_levels && this.position.preferred_education_levels.length > 0 ? this.position.preferred_education_levels.slice() : null;
       this.preferred_education_majors = this.position.preferred_majors && this.position.preferred_majors.length > 0 ? this.position.preferred_majors.slice() : null;
       this.preferred_education_major_categories = this.position.preferred_major_categories && this.position.preferred_major_categories.length > 0 ? this.position.preferred_major_categories.slice() : null;
@@ -824,7 +892,7 @@ export class CreatePositionComponent implements OnInit {
       this.preferred_education_levels = null;
     }
     // if the current education level exists in database, remove it from database.
-    const index = this.position.preferred_education_levels.findIndex(value => value.level_id === level.level_id);
+    const index = this.position && this.position.preferred_education_levels ? this.position.preferred_education_levels.findIndex(value => value.level_id === level.level_id) : -1;
     if (index !== -1) {
       this.removePreferredEducationLevel(this.position.position_id, level.level_id, index);
     }
@@ -858,7 +926,7 @@ export class CreatePositionComponent implements OnInit {
     if (this.preferred_education_majors.length === 0) {
       this.preferred_education_majors = null;
     }
-    const index = this.position.preferred_majors.findIndex(value => value.major_id === major.major_id);
+    const index = this.position && this.position.preferred_majors ? this.position.preferred_majors.findIndex(value => value.major_id === major.major_id) : -1;
     if (index !== -1) {
       this.removePreferredEducationMajor(this.position.position_id, major.major_id, index);
     }
@@ -893,7 +961,7 @@ export class CreatePositionComponent implements OnInit {
       this.preferred_education_major_categories = null;
     }
 
-    const index = this.position.preferred_major_categories.findIndex(value => value.cat_id === major_category.cat_id);
+    const index = this.position && this.position.preferred_major_categories ? this.position.preferred_major_categories.findIndex(value => value.cat_id === major_category.cat_id) : -1;
     if (index !== -1) {
       this.removePreferredEducationMajorCategory(this.position.position_id, major_category.cat_id, index);
     }
@@ -906,7 +974,12 @@ export class CreatePositionComponent implements OnInit {
     this.autocomplete_industries = [];
     this.autocomplete_skills_trained = [];
 
-    if (this.position && this.position.position_id && this.position.preferred_experience && this.position.preferred_experience.length > 0) {
+    if (this.position_template && this.create_position_type === CreatePositionType.TemplatePosition && !this.position_template_process[3] && this.position_template.preferred_experience && this.position_template.preferred_experience.length > 0)  {
+      const data = {experiences: this.position_template.preferred_experience};
+      this.preferred_work_experiences = JSON.parse(JSON.stringify(data)).experiences;
+    }
+
+    if (this.position && this.position.position_id && this.position_template_process[3] && this.position.preferred_experience && this.position.preferred_experience.length > 0) {
       const data = {experiences: this.position.preferred_experience};
       this.preferred_work_experiences = JSON.parse(JSON.stringify(data)).experiences;
     }
@@ -1042,9 +1115,9 @@ export class CreatePositionComponent implements OnInit {
       this.preferred_work_experiences[formIndex].preferred_skills_trained = null;
     }
     if (this.preferred_work_experiences[formIndex].preferred_exp_id) {
-      const exp_index = this.position.preferred_experience.findIndex(value => value.preferred_exp_id === this.preferred_work_experiences[formIndex].preferred_exp_id);
+      const exp_index = this.position && this.position.preferred_experience ? this.position.preferred_experience.findIndex(value => value.preferred_exp_id === this.preferred_work_experiences[formIndex].preferred_exp_id) : -1;
       if (exp_index !== -1) {
-        const skill_index = this.position.preferred_experience[exp_index].preferred_skills_trained.findIndex(value => value.skill_id === skill.skill_id);
+        const skill_index = this.position.preferred_experience[exp_index].preferred_skills_trained ? this.position.preferred_experience[exp_index].preferred_skills_trained.findIndex(value => value.skill_id === skill.skill_id) : -1;
         if (skill_index !== -1) {
           this.removePreferredWorkExperienceSkillTrained(this.preferred_work_experiences[formIndex].preferred_exp_id, skill.skill_id, exp_index, skill_index);
         }
@@ -1068,7 +1141,7 @@ export class CreatePositionComponent implements OnInit {
 
   onRemovePreferredWorkExperienceFormGroup(arrIndex: number) {
     if (this.preferred_work_experiences[arrIndex].preferred_exp_id) {
-      const index = this.position.preferred_experience.findIndex(value => value.preferred_exp_id === this.preferred_work_experiences[arrIndex].preferred_exp_id);
+      const index = this.position && this.position.preferred_experience ? this.position.preferred_experience.findIndex(value => value.preferred_exp_id === this.preferred_work_experiences[arrIndex].preferred_exp_id) : -1;
       this.removePreferredWorkExperience(this.position.position_id, this.preferred_work_experiences[arrIndex].preferred_exp_id, index);
     }
     this.preferredWorkExperienceFormArray.removeAt(arrIndex);
@@ -1097,7 +1170,12 @@ export class CreatePositionComponent implements OnInit {
     this.temp_minimum_skill = null;
     this.temp_preferred_skill = null;
 
-    if (this.position && this.position.position_id) {
+    if (this.position_template && this.create_position_type === CreatePositionType.TemplatePosition && !this.position_template_process[4])  {
+      this.preferred_skills = this.position_template.preferred_skills && this.position_template.preferred_skills.length > 0 ? this.position_template.preferred_skills.slice() : null;
+      this.minimum_skills = this.position_template.minimum_skills && this.position_template.minimum_skills.length > 0 ? this.position_template.minimum_skills.slice() : null;
+    }
+
+    if (this.position && this.position.position_id && this.position_template_process[4]) {
       this.preferred_skills = this.position.preferred_skills && this.position.preferred_skills.length > 0 ? this.position.preferred_skills.slice() : null;
       this.minimum_skills = this.position.minimum_skills && this.position.minimum_skills.length > 0 ? this.position.minimum_skills.slice() : null;
     }
@@ -1187,7 +1265,7 @@ export class CreatePositionComponent implements OnInit {
       this.minimum_skills = null;
     }
     this.temp_minimum_skill = null;
-    const index = this.position.minimum_skills.findIndex(value => value.skill_id === skill.skill_id);
+    const index = this.position && this.position.minimum_skills ? this.position.minimum_skills.findIndex(value => value.skill_id === skill.skill_id) : -1;
     if (index !== -1) {
       this.removeMinimumSkill(this.position.position_id, skill.skill_id, index);
     }
@@ -1226,7 +1304,7 @@ export class CreatePositionComponent implements OnInit {
       this.preferred_skills = null;
     }
     this.temp_preferred_skill = null;
-    const index = this.position.preferred_skills.findIndex(value => value.skill_id === skill.skill_id);
+    const index = this.position && this.position.preferred_skills ? this.position.preferred_skills.findIndex(value => value.skill_id === skill.skill_id) : -1;
     if (index !== -1) {
       this.removePreferredSkill(this.position.position_id, skill.skill_id, index);
     }
@@ -1270,7 +1348,11 @@ export class CreatePositionComponent implements OnInit {
   initInterestsForm() {
     this.autocomplete_preferred_interests = [];
 
-    if (this.position && this.position.position_id) {
+    if (this.position_template && this.create_position_type === CreatePositionType.TemplatePosition && !this.position_template_process[5])  {
+      this.preferred_interests = this.position_template.preferred_interests && this.position_template.preferred_interests.length > 0 ? this.position_template.preferred_interests.slice() : null;
+    }
+
+    if (this.position && this.position.position_id && this.position_template_process[5]) {
       this.preferred_interests = this.position.preferred_interests && this.position.preferred_interests.length > 0 ? this.position.preferred_interests.slice() : null;
     }
 
@@ -1326,7 +1408,7 @@ export class CreatePositionComponent implements OnInit {
       this.preferred_interests = null;
     }
 
-    const index = this.position.preferred_interests.findIndex(value => value.interest_id === interest.interest_id);
+    const index = this.position && this.position.preferred_interests ? this.position.preferred_interests.findIndex(value => value.interest_id === interest.interest_id) : -1;
     if (index !== -1) {
       this.removePreferredInterest(this.position.position_id, interest.interest_id, index);
     }
@@ -1338,7 +1420,11 @@ export class CreatePositionComponent implements OnInit {
   initSchoolRestrictionsForm() {
     this.autocomplete_preferred_schools = [];
 
-    if (this.position && this.position.position_id) {
+    if (this.position_template && this.create_position_type === CreatePositionType.TemplatePosition && !this.position_template_process[6])  {
+      this.preferred_schools = this.position_template.preferred_schools && this.position_template.preferred_schools.length > 0 ? this.position_template.preferred_schools.slice() : null;
+    }
+
+    if (this.position && this.position.position_id && this.position_template_process[6]) {
       this.preferred_schools = this.position.preferred_schools && this.position.preferred_schools.length > 0 ? this.position.preferred_schools.slice() : null;
     }
 
@@ -1394,7 +1480,7 @@ export class CreatePositionComponent implements OnInit {
       this.preferred_schools = null;
     }
 
-    const index = this.position.preferred_schools.findIndex(value => value.school_id === school.school_id);
+    const index = this.position && this.position.preferred_schools ? this.position.preferred_schools.findIndex(value => value.school_id === school.school_id) : -1;
     if (index !== -1) {
       this.removePreferredSchool(this.position.position_id, school.school_id, index);
     }
