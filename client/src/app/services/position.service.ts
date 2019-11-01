@@ -463,7 +463,7 @@ export class PositionService {
       );
   }
 
-  public getPositionTemplatesById(positionTemplateId: number): Observable<any> {
+  public getPositionTemplateById(positionTemplateId: number): Observable<any> {
     return this.http.get(this.position_management_service_url + `position-template/${positionTemplateId}`, this.authHttpOptions())
       .pipe(
         map(
