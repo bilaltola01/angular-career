@@ -212,3 +212,25 @@ export interface PositionTemplateInfoResponse {
   preferred_experience:	any[];
 }
 
+export interface PositionTemplateResponse {
+  template_id: number;
+  user_id: number;
+  position_template_name:	string;
+  position:	string;
+  level: string;
+  type:	string;
+  position_desc: string;
+  start_date:	any;
+  end_date:	any;
+  position_filled: number;
+  pay: number;
+  negotiable:	number;
+  repeat_post: number;
+  repeat_date: any;
+  cover_letter_req:	number;
+  cover_letter_pref: number;
+  department:	string;
+  application_type:	string;
+  application_deadline:	any;
+}
+
