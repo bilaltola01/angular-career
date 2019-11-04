@@ -427,11 +427,11 @@ export const ApplicationNavMenus = {
           title: 'Qualification Level Estimate',
         },
         {
-          id: 'Matched-skills',
+          id: 'matched-skills',
           title: 'Matched Skills',
         },
         {
-          id: 'Matched-interest',
+          id: 'matched-interest',
           title: 'Matched Interests',
         },
         {
@@ -478,12 +478,52 @@ export const ApplicationNavMenus = {
       id: 'message',
       title: 'Messages',
       items: []
-    }
-    ,
+    },
     {
       id: 'position-info',
       title: 'Position Information',
-      items: []
+      items: [
+        {
+          id: 'information',
+          title: 'Position Information',
+        },
+        {
+          id: 'qualification_level_breakdown',
+          title: 'Qualification Level Estimate',
+        },
+        {
+          id: 'skills',
+          title: 'Missing/Matching Skills',
+        },
+        {
+          id: 'matched_interest',
+          title: 'Matched Interest',
+        },
+        {
+          id: 'description',
+          title: 'Job Description',
+        },
+        {
+          id: 'qualification',
+          title: 'Preferred Education',
+        },
+        {
+          id: 'experience',
+          title: 'Preferred Experience',
+        },
+        {
+          id: 'preferred_skills',
+          title: 'Skills',
+        },
+        {
+          id: 'interest',
+          title: 'Preferred Interests',
+        },
+        {
+          id: 'school',
+          title: 'School Restrictions',
+        }
+      ]
     }
   ]
 };

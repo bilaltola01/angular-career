@@ -56,7 +56,7 @@
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
-          <div *ngIf="userSkillsList.length > 0 ? userSkillsList.length > 0 : skillUrlParams.length > 0 "
+          <div *ngIf="userSkillsList?.length > 0 ? userSkillsList?.length > 0 : skillUrlParams?.length > 0 "
             class="skills">
             <simple-tag *ngFor="let skillData of userSkillsList; let i = index" type="gray" removeTag="true"
               title="{{skillData.skill}}" (click)="removeUserSkillsData(i)"></simple-tag>
@@ -408,7 +408,7 @@
             </div>
           </div>
           <div class="show-button">
-            <action-button [routerLink]="['/applicationInformation']" type="text" title="See Application"
+            <action-button (click)="routerNavigate(application.application_id,application.position_id)" type="text" title="See Application"
               color="primary"></action-button>
             &nbsp;&nbsp;
           </div>

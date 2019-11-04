@@ -1,8 +1,6 @@
 import { Component, OnInit, EventEmitter, Output, DoCheck } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
-import {
-  AlertsService, AlertType, ApplicationService
-} from '../../../../services/index';
+import { AlertsService, AlertType, ApplicationService } from '../../../../services/index';
 import { MatDialog } from '@angular/material/dialog';
 import { InterestLevelPopupComponent } from 'src/app/components/interest-level-popup/interest-level-popup.component';
 
@@ -20,14 +18,12 @@ export class ApplicationHeaderSectionComponent implements OnInit, DoCheck {
   applicationNavMenu: any[];
   applicationNavIndex: number;
   applicationData = {};
-  editMode: boolean;
-  userId: number;
   applicationId;
   positionId;
   searchQueryParam;
-  edit = false;
   isJobLoading: boolean;
   @Output() selectedNavItem = new EventEmitter();
+  isNavMenuOpened: boolean;
 
   constructor(private alertsService: AlertsService,
     private router: Router,
@@ -50,6 +46,7 @@ export class ApplicationHeaderSectionComponent implements OnInit, DoCheck {
   }
 
   ngOnInit() {
+    this.isNavMenuOpened = false;
   }
   parseRouterUrl(url: string) {
     if (!(url.includes('application-template-information' || 'application-references' || 'profile-information' || 'application-references'))) {
@@ -72,8 +69,11 @@ export class ApplicationHeaderSectionComponent implements OnInit, DoCheck {
     }
   }
   onSelectNavItem(id: string) {
-    this.selectedNavItem.emit(id);
+    const height = 100;
+    document.getElementById('sidenav-content').scrollTop = document.getElementById(id).offsetTop - height;
+    this.isNavMenuOpened = false;
   }
+
   getApplicationData(applicationId) {
     this.isJobLoading = true;
     this.applicationService.getApplicationFlag = false;

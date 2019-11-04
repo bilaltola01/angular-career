@@ -1,0 +1,385 @@
+<ng-container *ngIf="isJobLoading">
+  <div class="loading">
+    <mat-spinner></mat-spinner>
+    <h4>Loading...</h4>
+  </div>
+</ng-container>
+
+<!-- Position-Details -->
+<div class="career-main">
+  <div class="position-main-container">
+
+    <div class="position-list-container">
+      <div *ngFor="let info of positionName ">
+        <section class="row position-detail" id="information">
+          <h1>{{info.position}} </h1>
+          <div>
+            <div class="job-top-list">
+              <ul>
+                <li>
+                  <img class="img-style" src="assets/icons/ic_company.svg">
+                  <span class="image" routerLink="../company-page/{{info.company_id}}">
+                    {{info.company_name}}</span>
+                </li>
+                <li>
+                  <img src="assets/icons/ic_location.svg">
+                  <span class="image" *ngIf="info.locations ; else noLocations">
+                    <span *ngFor="let location of info.locations  | slice : 0 : 1;">
+                      <span *ngIf="location.city">{{location.city}},&nbsp;</span>
+                      <span *ngIf="location.state">{{ location.state }},&nbsp;</span>
+                      <span>{{location.country }} <span *ngIf="info.locations?.length > 1"> +
+                          {{info.locations?.length-1}} locations </span>
+                      </span>
+                    </span>
+                  </span>
+                  <ng-template #noLocations>
+                    <span class="noLocation">N/A</span>
+                  </ng-template>
+                </li>
+                <li>
+                  <img src="assets/icons/ic_clock.svg">
+                  <span class="image"> {{helperService.convertToDays(info.post_date)}} days ago</span>
+                </li>
+                <li>
+                  <span class="recruiter-text">Recruiter</span>&nbsp;
+                  <span class="image">{{recruiterData['first_name']}} {{recruiterData['last_name']}}</span>
+                </li>
+              </ul>
+            </div>
+            <mat-grid-list [cols]="breakpoint" rowHeight="60px" (window:resize)="onResize($event)" class="card">
+              <mat-grid-tile>
+                <div class="card-item">
+                  <span>Qualification Level</span>
+                  <p>{{calculatedQualificationLevel}}</p>
+                </div>
+              </mat-grid-tile>
+              <mat-grid-tile>
+                <div class="card-item">
+                  <span>Salary</span>
+                  <p>{{info.pay ? info.pay + ' USD' : 'N/A' }}</p>
+                </div>
+              </mat-grid-tile>
+              <mat-grid-tile>
+                <div class="card-item">
+                  <span>Industry</span>
+                  <p>{{info.main_industry_name ? info.main_industry_name : 'N/A'}}</p>
+                </div>
+              </mat-grid-tile>
+              <mat-grid-tile>
+                <div class="card-item">
+                  <span>Position Level</span>
+                  <p>{{info.level ? info.level : 'N/A'}}</p>
+                </div>
+              </mat-grid-tile>
+            </mat-grid-list>
+            <mat-grid-list [cols]="breakpoint" rowHeight="60px" (window:resize)="onResize($event)"
+              class="card second-card">
+              <mat-grid-tile>
+                <div class="card-item">
+                  <span>Application Type</span>
+                  <p>{{info.application_type ? info.application_type : 'N/A'}}</p>
+                </div>
+              </mat-grid-tile>
+              <mat-grid-tile>
+                <div class="card-item">
+                  <span>Position Type</span>
+                  <p>{{info.type ? info.type : 'N/A' }} </p>
+                </div>
+              </mat-grid-tile>
+              <mat-grid-tile>
+                <div class="card-item">
+                  <span>Application Deadline</span>
+                  <p>{{info.application_deadline |  date: 'MMM d, y'}}</p>
+                </div>
+              </mat-grid-tile>
+              <mat-grid-tile>
+                <div class="card-item">
+                  <span>Department</span>
+                  <p>{{info.department ? info.department : 'N/A'}}</p>
+                </div>
+              </mat-grid-tile>
+            </mat-grid-list>
+          </div>
+        </section>
+
+        <div class="row position-qualification-detail" id="qualification_level_breakdown"
+          *ngIf="(info.minimum_skills?.length > 0 || info.preferred_skills?.length > 0) || (info.preferred_experience?.length > 0) || (info.preferred_education_levels?.length > 0 ||
+            info.preferred_majors?.length > 0 || info.preferred_major_categories?.length > 0) || (matchedInterests?.length > 0) || (matchedSkills?.length > 0 || missingSkills?.length > 0)">
+          <h3>Qualification Level Estimate Breakdown</h3>
+          <div class="position-qualification-skills" *ngFor="let score of positionName">
+            <simple-tag *ngIf="score.true_fitscore_info?.skills_weight" type="gray" title="Skills Match"
+              ellipseTag="true" value="{{mathFloor(6*score.true_fitscore_info?.skills_fitscore)}}">
+            </simple-tag>
+            <simple-tag *ngIf="score.minimum_skills" type="gray" title="Required Skills Match" ellipseTag="true"
+              value="{{mathFloor(6*score.true_fitscore_info?.required_skills_fitscore)}}">
+            </simple-tag>
+            <simple-tag *ngIf="score.true_fitscore_info?.experience_weight" type="gray" title="Experience Match"
+              ellipseTag="true" value="{{mathFloor(6*score.true_fitscore_info?.experience_fitscore)}}">
+            </simple-tag>
+            <simple-tag *ngIf="score.true_fitscore_info?.education_weight" type="gray" title="Education Match"
+              ellipseTag="true" value="{{mathFloor(6*score.true_fitscore_info?.education_fitscore)}}">
+            </simple-tag>
+            <simple-tag *ngIf="score.true_fitscore_info?.interests_weight" type="gray" title="Interests Match"
+              ellipseTag="true" value="{{mathFloor(6*score.true_fitscore_info?.interests_fitscore)}}">
+            </simple-tag>
+
+            <p
+              *ngIf="!score.true_fitscore_info ||  (score.true_fitscore_info && !score.true_fitscore_info.skills_weight && !score.true_fitscore_info.experience_weight && !score.true_fitscore_info.education_weight && !score.true_fitscore_info.interests_weight && !score.minimum_skills)">
+              N/A
+            </p>
+          </div>
+        </div>
+        <div id="skills" *ngIf="matchedSkills?.length > 0 || missingSkills?.length > 0">
+          <div class="row position-required-skills-detail main-card">
+            <h3>Matched Skills</h3>
+
+            <ul>
+              <li>
+                <h5 for="skill_required">Matched Preferred Skills<span
+                    *ngIf="matchedSkills?.length > 0">{{ matchedSkills?.length}}</span>
+                </h5>
+                <div *ngIf="matchedSkills?.length; else noSkill">
+                  <div class="skil-height-fix" *ngIf="displayItemsLimit; let limit">
+                    <div class="skills-preferred-m green-color-tag"
+                      *ngFor="let matchSkill of matchedSkills; let i = index; ">
+                      <simple-tag type="green" *ngIf="i < limit" title="{{matchSkill.skill}}">
+                      </simple-tag>
+                    </div>
+                    <img *ngIf="lessFlag && limit > displayItemsLimit && matchedSkills?.length > displayItemsLimit"
+                      class="edu_img" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg"
+                      alt="See Less">
+                    <img *ngIf="limit < matchedSkills?.length" class="edu_img"
+                      (click)="limit = limit + displayItemsLimit" (click)="lessFlag = true"
+                      src="assets/icons/ic_see_more.svg" alt="See More">
+                  </div>
+                </div>
+              </li>
+              <li>
+                <h5 for="skill_required">Missing/Insufficient Preferred Skills<span
+                    *ngIf="missingSkills?.length > 0">{{ missingSkills?.length}}</span>
+                </h5>
+                <div *ngIf="missingSkills?.length; else noSkill">
+                  <div class="skil-height-fix" *ngIf="displayItemsLimit; let limit">
+                    <div class="skills-preferred-m red-color-tag" *ngFor="let skill of missingSkills ; let i = index; ">
+                      <simple-tag type="red" *ngIf="i < limit" title="{{skill.skill}}">
+                      </simple-tag>
+                    </div>
+                    <img *ngIf="lessFlag && limit > displayItemsLimit && missingSkills?.length > displayItemsLimit"
+                      class="edu_img" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg"
+                      alt="See Less">
+                    <img *ngIf="limit < missingSkills?.length" class="edu_img"
+                      (click)="limit = limit + displayItemsLimit" (click)="lessFlag = true"
+                      src="assets/icons/ic_see_more.svg" alt="See More">
+                  </div>
+                </div>
+                <ng-template #noSkill>
+                  <ul>
+                    <li>N/A</li>
+                  </ul>
+                </ng-template>
+              </li>
+            </ul>
+
+          </div>
+
+        </div>
+
+        <div class="row position-interest-detail" id="matched_interest" *ngIf="matchedInterests?.length > 0">
+          <h3>Matched Interests</h3>
+          <div class="position-matched">
+            <h5 for="skill_required">Matched Interests <span
+                *ngIf="matchedInterests?.length > 0">{{ matchedInterests?.length}}</span>
+            </h5>
+            <div class="skil-height-fix" *ngIf="matchedInterests;">
+              <div class="skills-preferred-m" *ngFor="let matched_interest of matchedInterests ">
+                <simple-tag type="green" title="{{matched_interest.interest}}">
+                </simple-tag>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="comman" *ngFor="let jobData of positionName" id="description">
+          <div class="row position-interest-detail" *ngIf="jobData.position_desc">
+            <h3>Job Description</h3>
+            <div class="position-matched" [ngClass]="{'skill-more-height': info.readMoreFlag}">
+              <p>{{jobData.position_desc }}</p>
+            </div>
+            <div class="position-job-desc-btn">
+              <action-button routerLink="." *ngIf="jobDescription > 300" type="text" title="{{!info.readMoreFlag ? 'Read More' :
+                  'Read Less'}}" color="primary" (click)="info.readMoreFlag = !info.readMoreFlag"></action-button>
+            </div>
+          </div>
+          <div class="row position-eductaion-detail position-required-skills-detail" id="qualification"
+            *ngIf="jobData.preferred_education_levels?.length > 0 || jobData.preferred_majors?.length > 0 || jobData.preferred_major_categories?.length > 0">
+            <h3>Preferred Education</h3>
+            <div class="education-level-m" *ngIf="jobData.preferred_education_levels?.length > 0">
+              <h5 for="skill_required">Preferred Education Level
+                <span>{{ jobData.preferred_education_levels?.length}}</span>
+              </h5>
+              <div class="skills" *ngIf="displayItemsLimit; let limit">
+                <div class="skil-height-fix">
+                  <div class="skills-preferred-m"
+                    *ngFor="let level of jobData.preferred_education_levels; let i = index; ">
+                    <simple-tag type="gray" *ngIf="i < limit" title="{{level.education_level}}">
+                    </simple-tag>
+                  </div>
+                  <img *ngIf="lessFlag && limit > displayItemsLimit" class="edu_img"
+                    (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
+                  <img *ngIf="limit < jobData.preferred_education_levels?.length" class="edu_img"
+                    (click)="limit = limit + displayItemsLimit" (click)="lessFlag = true"
+                    src="assets/icons/ic_see_more.svg" alt="See More">
+                </div>
+              </div>
+            </div>
+            <div class="education-level-m" *ngIf="jobData.preferred_majors?.length > 0">
+              <h5 for="skill_required">Preferred Majors <span>{{ jobData.preferred_majors?.length}}</span>
+              </h5>
+              <div class="skills" *ngIf="displayItemsLimit; let limit">
+                <div class="skills-preferred-m" *ngFor="let major of jobData.preferred_majors; let i = index; ">
+                  <simple-tag type="gray" *ngIf="i < limit" title="{{major.major_name}}">
+                  </simple-tag>
+                </div>
+                <img *ngIf="lessFlag && limit > displayItemsLimit" class="edu_img"
+                  (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
+                <img *ngIf="limit < jobData.preferred_majors?.length" class="edu_img"
+                  (click)="limit = limit + displayItemsLimit" (click)="lessFlag = true"
+                  src="assets/icons/ic_see_more.svg" alt="See More">
+              </div>
+            </div>
+            <div class="education-level-m" *ngIf="jobData.preferred_major_categories?.length > 0">
+              <h5 for="skill_required">Preferred Majors Categories
+                <span>{{ jobData.preferred_major_categories?.length}}</span>
+              </h5>
+              <div class="skills" *ngIf="displayItemsLimit; let limit">
+                <div class="skills-preferred-m"
+                  *ngFor="let major of jobData.preferred_major_categories; let i = index; ">
+                  <simple-tag type="gray" *ngIf="i < limit" title="{{major.cat_name}}">
+                  </simple-tag>
+                </div>
+                <img *ngIf="lessFlag && limit > displayItemsLimit" class="edu_img"
+                  (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
+                <img *ngIf="limit < jobData.preferred_major_categories?.length" class="edu_img"
+                  (click)="limit = limit + displayItemsLimit" (click)="lessFlag = true"
+                  src="assets/icons/ic_see_more.svg" alt="See More">
+              </div>
+            </div>
+
+          </div>
+          <div class="row position-experience-detail" id="experience" *ngIf="jobData.preferred_experience?.length > 0">
+            <h3>Preferred Experience</h3>
+            <ul>
+              <li *ngFor="let experience of jobData.preferred_experience">
+                <h6 *ngIf="experience.industry_name">{{experience.industry_name}} ({{experience.preferred_years}}
+                  years)</h6>
+                <div class="education-level-m">
+                  <p *ngIf="experience.exp_desc">{{experience.exp_desc}}</p>
+                  <h5 for="skill_required" *ngIf="experience.preferred_skills_trained?.length > 0"> Preferred Skills
+                    Trained
+                    <span>{{ experience.preferred_skills_trained?.length}}</span>
+                  </h5>
+                  <div class="skills" *ngIf="displayItemsLimit; let limit">
+                    <div class="skills-preferred-m"
+                      *ngFor="let skill of experience.preferred_skills_trained; let i = index;">
+                      <simple-tag type="gray" *ngIf="i < limit" title="{{skill.skill}}">
+                      </simple-tag>
+                    </div>
+                    <img *ngIf="lessFlag && limit > displayItemsLimit" class="edu_img align-more-img"
+                      (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
+                    <img *ngIf="limit < experience.preferred_skills_trained?.length" class="edu_img align-more-img"
+                      (click)="limit = limit + displayItemsLimit" (click)="lessFlag = true"
+                      src="assets/icons/ic_see_more.svg" alt="See More">
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="row position-required-skills-detail" id="preferred_skills"
+            *ngIf="jobData.minimum_skills?.length > 0 || jobData.preferred_skills?.length > 0">
+            <h3>Preferred & Required Skills</h3><img class="question-icon" src="assets/icons/ic_question.svg"
+              (click)="openSkillDescriptionDialog()">
+            <div class="education-level-m">
+              <h5 for="skill_required">Skills Required <span
+                  *ngIf="jobData.minimum_skills?.length > 0">{{ jobData.minimum_skills?.length}}</span>
+              </h5>
+              <div *ngIf="jobData.minimum_skills; else noSkill">
+                <div class="skills" *ngIf="displayItemsLimit; let limit">
+                  <div class="skills-preferred-m" *ngFor="let min_skill of jobData.minimum_skills; let i = index; ">
+                    <simple-tag type="gray" *ngIf="i < limit" title="{{min_skill.skill}}" ellipseTag="true"
+                      value="{{min_skill.skill_level}}" [matTooltip]="SkillLevelDescription[min_skill.skill_level].title + SkillLevelDescription[min_skill.skill_level].description"
+                      [matTooltipShowDelay]=500>
+                    </simple-tag>
+                  </div>
+                  <img *ngIf="lessFlag && limit > displayItemsLimit" class="edu_img"
+                    (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
+                  <img *ngIf="limit < jobData.minimum_skills?.length" class="edu_img"
+                    (click)="limit = limit + displayItemsLimit" (click)="lessFlag = true"
+                    src="assets/icons/ic_see_more.svg" alt="See More">
+                </div>
+              </div>
+              <ng-template #noSkill>
+                <span>N/A</span>
+              </ng-template>
+            </div>
+            <div class="education-level-m">
+              <h5 for="skill_required">Skills Preferred <span
+                  *ngIf="jobData.preferred_skills?.length > 0">{{ jobData.preferred_skills?.length}}</span>
+              </h5>
+              <div *ngIf="jobData.preferred_skills; else noSkill">
+                <div class="skills" *ngIf="displayItemsLimit; let limit">
+                  <div class="skills-preferred-m" *ngFor="let preskill of jobData.preferred_skills; let i = index;">
+                    <simple-tag *ngIf="i < limit" type="normal" title="{{preskill.skill}}" ellipseTag="true"
+                      value="{{preskill.skill_level}}"[matTooltip]="SkillLevelDescription[preskill.skill_level].title + SkillLevelDescription[preskill.skill_level].description"
+                      [matTooltipShowDelay]=500>
+                    </simple-tag>
+                  </div>
+                  <img *ngIf="lessFlag && limit > displayItemsLimit" class="edu_img"
+                    (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
+                  <img *ngIf="limit < jobData.preferred_skills?.length" class="edu_img"
+                    (click)="limit = limit + displayItemsLimit" (click)="lessFlag = true"
+                    src="assets/icons/ic_see_more.svg" alt="See More">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row position-required-skills-detail" id="interest"
+            *ngIf="jobData.preferred_interests?.length > 0">
+            <h3>Preferred Interests</h3>
+            <div class="position-prefer-interest">
+              <h5 for="skill_required">Interest <span>{{ jobData.preferred_interests?.length}}</span>
+              </h5>
+              <div class="skills" *ngIf="displayItemsLimit; let limit">
+                <div class="skills-preferred-m" *ngFor="let preferred of jobData.preferred_interests; let i = index; ">
+                  <simple-tag type="gray" *ngIf="i < limit" title="{{preferred.interest}}">
+                  </simple-tag>
+                </div>
+                <img *ngIf="lessFlag && limit > displayItemsLimit" class="edu_img align-more-img"
+                  (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
+                <img *ngIf="limit < jobData.preferred_interests?.length" class="edu_img align-more-img"
+                  (click)="limit = limit + displayItemsLimit" (click)="lessFlag = true"
+                  src="assets/icons/ic_see_more.svg" alt="See More">
+              </div>
+            </div>
+          </div>
+
+          <div class="row position-schools-restriction" id="school" *ngIf="restrictedSchools?.length > 0">
+            <h3>School Restrictions</h3>
+            <div class="position-prefer-interest">
+              <p>Applicants should be currently enrolled or alumni of the following schools.</p>
+              <div class="skil-height-fix" *ngIf="displayIndustryLimit; let limit">
+                <div class="skills-preferred-m" *ngFor="let res_school of restrictedSchools; let i = index; ">
+                  <simple-tag type="gray" *ngIf="i < limit" title="{{res_school.school_name}}">
+                  </simple-tag>
+                </div>
+                <img *ngIf="lessFlag && limit > displayIndustryLimit" class="edu_img"
+                  (click)="limit = limit - displayIndustryLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
+                <img *ngIf="limit < restrictedSchools?.length" class="edu_img"
+                  (click)="limit = limit + displayIndustryLimit" (click)="lessFlag = true"
+                  src="assets/icons/ic_see_more.svg" alt="See More">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

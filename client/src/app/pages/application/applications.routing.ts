@@ -5,6 +5,8 @@ import { ApplicationCoverLetterComponent } from './application-detail/applicatio
 import { ApplicationHeaderSectionComponent } from './application-detail/application-header-section/application-header-section.component';
 import { ApplicationTemplateInformationComponent } from './application-detail/application-template-information/application-template-information.component';
 import { ApplicationReferencesComponent } from './application-detail/application-references/application-references.component';
+import { ApplicationPositionInformationComponent } from './application-detail/application-position-information/application-position-information.component';
+import { ProfileInformationComponent } from './application-detail/profile-information/profile-information.component';
 
 
 export const applicationsRoutes: Routes = [
@@ -37,12 +39,17 @@ export const applicationsRoutes: Routes = [
         path: 'application-references',
         component: ApplicationReferencesComponent,
         // canActivate: [AuthGuard]
+      },
+      {
+          path: 'position-information',
+          component: ApplicationPositionInformationComponent,
+          // canActivate: [AuthGuard]
+        },
+      {
+        path: 'profile-information',
+        component: ProfileInformationComponent,
+        // canActivate: [AuthGuard]
       }
-      // {
-      //   path: 'profile-information',
-      //   component: ProfileInformationComponent,
-      //   // canActivate: [AuthGuard]
-      // }
     ]
   },
 ];

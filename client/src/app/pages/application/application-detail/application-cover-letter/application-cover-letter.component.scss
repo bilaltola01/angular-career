@@ -24,7 +24,12 @@ $profile-form-field-mt: 30px;
         float: left;
       }
       & .application-edit {
-        float: right;
+        display: flex;
+        //float: right;
+        justify-content: flex-end;
+        .job-apply-btn {
+          margin: 0 5px;
+        }
       }
       & .application-content-detail {
         padding-top: 25px;
@@ -607,6 +612,17 @@ $profile-form-field-mt: 30px;
       width: 96%;
       margin: 0 auto;
       float: none;
+      padding-top: 10px;
+      .row{
+        h3{
+          float: none;
+          margin-bottom: 0px;
+        }
+        .application-edit{
+          float: left;
+          margin-bottom: 10px;
+        }
+      }
     }
   }
 }

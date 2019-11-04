@@ -16,6 +16,7 @@ export class ApplicationCoverLetterComponent implements OnInit {
   coverLetterForm: FormGroup;
   applicationId;
   applicationData = {};
+  originalText;
   applicationCoverLetter;
   isJobLoading: boolean;
 
@@ -65,7 +66,12 @@ export class ApplicationCoverLetterComponent implements OnInit {
     this.editMode = false;
   }
   setEdit() {
+    this.originalText = this.applicationCoverLetter;
     this.editMode = true;
+  }
+  cancelText() {
+    this.editMode = false;
+    this.applicationCoverLetter = this.originalText;
   }
 }
 

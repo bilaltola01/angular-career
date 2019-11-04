@@ -53,7 +53,7 @@
     </div>
   </div>
   <div class="application-main-container">
-    <app-application-nav-section>
+    <app-application-nav-section (selectedNavItem)="onSelectNavItem($event)" [class.nav-hidden]="!(isNavMenuOpened)" id="app-application-nav-section">
     </app-application-nav-section>
   </div>
 

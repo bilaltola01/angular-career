@@ -22,8 +22,15 @@ export class HelperService {
   }
   convertToFormattedString(date: string, format: string): string {
     return moment.utc(new Date(date)).format(format);
-  }
 
+  }
+  convertToyears(date1: string, date2: string) {
+    const startDate = moment(date1);
+    const  endDate = moment(date2);
+    return moment.duration(moment(startDate).diff(moment(endDate)));
+
+
+  }
   convertStringToFormattedDateString(date: string, origin_format: string, format: string): string {
     return moment.utc(date, origin_format).format(format);
   }

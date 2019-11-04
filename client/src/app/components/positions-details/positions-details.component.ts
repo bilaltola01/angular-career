@@ -61,9 +61,12 @@ export class PositionsDetailsComponent implements OnInit {
     private matchingService: MatchingService,
     private cartService: CartService,
     private alertsService: AlertsService,
-    private applicationService: ApplicationService, private helperService: HelperService,
-    public dialog: MatDialog, private scoreService: ScoreService, private companyService: CompanyService,
-    private userService: UserService) {
+    private applicationService: ApplicationService,
+    public dialog: MatDialog,
+     private scoreService: ScoreService,
+      private companyService: CompanyService,
+       private helperService: HelperService,
+       private userService: UserService) {
     this.updateSkillCallback = this.updateSkillCallback.bind(this);
   }
 
@@ -78,6 +81,9 @@ export class PositionsDetailsComponent implements OnInit {
     this.getRestrcitedSchoolData(this.positionId);
     this.breakpoint = (window.innerWidth <= 500) ? 2 : 4;
     this.filter_list = false;
+  }
+  getDate(post_date) {
+    this.helperService.convertToDays(post_date);
   }
   onResize(event) {
     this.breakpoint = (event.target.innerWidth <= 500) ? 2 : 4;

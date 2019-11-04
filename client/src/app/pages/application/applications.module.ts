@@ -13,6 +13,8 @@ import { ApplicationNavSectionComponent } from './application-detail/application
 import { ApplicationHeaderSectionComponent } from './application-detail/application-header-section/application-header-section.component';
 import { ApplicationTemplateInformationComponent } from './application-detail/application-template-information/application-template-information.component';
 import { ApplicationReferencesComponent } from './application-detail/application-references/application-references.component';
+import { ApplicationPositionInformationComponent } from './application-detail/application-position-information/application-position-information.component';
+import { ProfileInformationComponent } from './application-detail/profile-information/profile-information.component';
 
 
 @NgModule({
@@ -30,7 +32,9 @@ import { ApplicationReferencesComponent } from './application-detail/application
     ApplicationNavSectionComponent,
     ApplicationHeaderSectionComponent,
     ApplicationTemplateInformationComponent,
-    ApplicationReferencesComponent
+    ApplicationReferencesComponent,
+    ApplicationPositionInformationComponent,
+    ProfileInformationComponent
   ],
   entryComponents: [
     AddSkillPopupComponent,
