@@ -1313,7 +1313,7 @@ export class CreatePositionComponent implements OnInit {
   onLevelChanged(level: number, index: number, is_minimum_skill: boolean) {
     let arrIndex;
     if (is_minimum_skill) {
-      arrIndex = this.position.minimum_skills.findIndex(value => value.skill_id === this.minimum_skills[index].skill_id);
+      arrIndex = this.position && this.position.minimum_skills ? this.position.minimum_skills.findIndex(value => value.skill_id === this.minimum_skills[index].skill_id) : -1;
       if (arrIndex !== -1 && this.position.minimum_skills[arrIndex].skill_level !== level) {
         this.patchMimimumSkill(this.position.position_id, this.position.minimum_skills[arrIndex].skill_id, level, arrIndex);
       }
@@ -1322,7 +1322,7 @@ export class CreatePositionComponent implements OnInit {
         this.temp_minimum_skill.skillItem = this.minimum_skills[index];
       }
     } else {
-      arrIndex = this.position.preferred_skills.findIndex(value => value.skill_id === this.preferred_skills[index].skill_id);
+      arrIndex = this.position && this.position.preferred_skills ? this.position.preferred_skills.findIndex(value => value.skill_id === this.preferred_skills[index].skill_id) : -1;
       if (arrIndex !== -1 && this.position.preferred_skills[arrIndex].skill_level !== level) {
         this.patchPreferredSkill(this.position.position_id, this.position.preferred_skills[arrIndex].skill_id, level, arrIndex);
       }

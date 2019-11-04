@@ -600,7 +600,7 @@
 
     <div *ngIf="(position.minimum_skills && position.minimum_skills.length > 0) || (position.preferred_skills && position.preferred_skills.length > 0)" class="row" id="position-skills">
       <h3>Preferred & Required SKills</h3>
-      <ng-container *ngIf="position.minimum_skills.length > 0">
+      <ng-container *ngIf="position.minimum_skills && position.minimum_skills.length > 0">
         <h5>Skills Required {{position.minimum_skills.length}}</h5>
         <div class="skills" *ngIf="displayItemsLimit; let limit">
           <ng-container *ngFor="let skill of position.minimum_skills; let i = index">
@@ -610,7 +610,7 @@
           <img *ngIf="limit < position.minimum_skills.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
         </div>
       </ng-container>
-      <ng-container *ngIf="position.preferred_skills.length > 0">
+      <ng-container *ngIf="position.preferred_skills && position.preferred_skills.length > 0">
         <h5>Skills Preferred {{position.preferred_skills.length}}</h5>
         <div class="skills" *ngIf="displayItemsLimit; let limit">
           <ng-container *ngFor="let skill of position.preferred_skills; let i = index">
