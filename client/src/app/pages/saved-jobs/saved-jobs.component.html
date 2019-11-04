@@ -225,7 +225,7 @@
         <div class="row" [ngClass]="{'selected': job.selected}">
           <round-checkbox id="test" [checked]="job.selected"
             (statusChange)="job.selected = !job.selected;selectedAllFlag=false;"></round-checkbox>
-          <h1 [routerLink]="['/positions/position-info/',job.position_id]">{{job.position}} </h1>
+          <h1 [routerLink]="['position-info/',job.position_id]">{{job.position}} </h1>
           <div class="position-right">
             <div class="heart-icon">
               <img title="Saved Job" src="assets/icons/ic_heart_circle.svg" class="after-heart-icon"

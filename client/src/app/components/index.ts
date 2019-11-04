@@ -4,6 +4,7 @@ import { RoundCheckboxComponent } from './round-checkbox/round-checkbox.componen
 import { SimpleTagComponent } from './simple-tag/simple-tag.component';
 import { MainToolbarComponent } from './main-toolbar/main-toolbar.component';
 import { ErrorPageComponent } from './error-page/error-page.component';
+import { PositionsDetailsComponent } from './positions-details/positions-details.component';
 
 export const sharedComponents = [
   ActionButtonComponent,
@@ -11,5 +12,6 @@ export const sharedComponents = [
   RoundCheckboxComponent,
   SimpleTagComponent,
   MainToolbarComponent,
-  ErrorPageComponent
+  ErrorPageComponent,
+  PositionsDetailsComponent
 ];
