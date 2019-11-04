@@ -34,7 +34,7 @@ export class NavSectionComponent implements OnInit {
     private alertsService: AlertsService,
     private userProfileStateService: UserProfileStateService
   ) {
-    this.navMenu = NavMenus.profile;
+    this.navMenu = NavMenus.profile.slice();
     if (router.url.includes('user')) {
       this.userId = parseInt(router.url.split('/')[2], 10);
       this.navMenu[0]['title'] = 'Profile';
