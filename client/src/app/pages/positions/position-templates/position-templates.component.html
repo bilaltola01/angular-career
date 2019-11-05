@@ -1,1 +1,122 @@
-<p>position-templates works!</p>
+<ng-container *ngIf="is_loading_templates || is_loading_templates">
+  <div class="loader">
+    <mat-spinner></mat-spinner>
+    <h4>Loading...</h4>
+  </div>
+</ng-container>
+
+<div class="career-main">
+  <div class="positions-main-container">
+    <!-- position templates start -->
+    <div class="templates-list-container">
+      <ng-container *ngIf="position_templates && position_templates.length > 0">
+        <h1 class="title">Position templates</h1>
+        <div class="row" *ngFor="let template of position_templates; let i = index;">
+          <div class="header-container">
+            <div class="template-detail">
+              <div *ngIf="template.position">
+                <h1>{{template.position}}</h1>
+              </div>
+            </div>
+            <div class="template-select">
+              <action-button type="flat" color="primary" title="Select Template" (click)="selectTemplate(i)"></action-button>
+            </div>
+          </div>
+
+          <div class="sub-container">
+            <div class="template-info" >
+              <label>Position</label>
+              <p>{{ template.level ? template.level : 'N/A'}}</p>
+            </div>
+            <div class="template-info">
+              <label>Salary</label>
+              <p>{{ template.pay ? template.pay + ' USD' : 'N/A'}} </p>
+            </div>
+            <div class="template-info">
+              <label>Application Type</label>
+              <p>{{template.application_type ? template.application_type : 'N/A'}}</p>
+            </div>
+            <div class="template-info">
+              <label>Position Type</label>
+              <p>{{template.type ? template.type : 'N/A'}}</p>
+            </div>
+            <div class="template-info">
+              <label>Application Deadline</label>
+              <p>{{template.application_deadline ? helperService.convertToFormattedString(template.application_deadline, 'YYYY-MM-DD') : 'N/A'}}</p>
+            </div>
+            <div class="template-info">
+              <label>Department</label>
+              <p>{{template.department ? template.department : 'N/A'}}</p>
+            </div>
+          </div>
+          <ng-container *ngIf="true; let short_desc">
+            <p *ngIf="template.position_desc" class="description"
+              [class.short-desc]="short_desc && template.position_desc.length > helperService.shortDescLength">
+              {{short_desc ? helperService.shortDescription(template.position_desc) : template.position_desc}}
+            </p>
+            <div class="show-more" *ngIf="template.position_desc && template.position_desc.length > helperService.shortDescLength">
+              <a (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
+            </div>            
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+    <!-- position templates end -->
+
+    <!-- inactive positions start -->
+    <div class="templates-list-container">
+      <ng-container *ngIf="inactive_positions && inactive_positions.length > 0">
+        <h1 class="title">Inactive Positions</h1>
+        <div class="row" *ngFor="let position of inactive_positions; let i = index;">
+          <div class="header-container">
+            <div class="template-detail">
+              <div *ngIf="position.position">
+                <h1>{{position.position}}</h1>
+              </div>
+            </div>
+            <div class="template-select">
+              <action-button type="flat" color="primary" title="Select Position" (click)="selectPosition(i)"></action-button>
+            </div>
+          </div>
+
+          <div class="sub-container">
+            <div class="template-info" >
+              <label>Position</label>
+              <p>{{ position.level ? position.level : 'N/A'}}</p>
+            </div>
+            <div class="template-info">
+              <label>Salary</label>
+              <p>{{ position.pay ? position.pay + ' USD' : 'N/A'}} </p>
+            </div>
+            <div class="template-info">
+              <label>Application Type</label>
+              <p>{{position.application_type ? position.application_type : 'N/A'}}</p>
+            </div>
+            <div class="template-info">
+              <label>Position Type</label>
+              <p>{{position.type ? position.type : 'N/A'}}</p>
+            </div>
+            <div class="template-info">
+              <label>Application Deadline</label>
+              <p>{{position.application_deadline ? helperService.convertToFormattedString(position.application_deadline, 'YYYY-MM-DD') : 'N/A'}}</p>
+            </div>
+            <div class="template-info">
+              <label>Department</label>
+              <p>{{position.department ? position.department : 'N/A'}}</p>
+            </div>
+          </div>
+          <ng-container *ngIf="true; let short_desc">
+            <p *ngIf="position.position_desc" class="description"
+              [class.short-desc]="short_desc && position.position_desc.length > helperService.shortDescLength">
+              {{short_desc ? helperService.shortDescription(position.position_desc) : position.position_desc}}
+            </p>
+            <div class="show-more" *ngIf="position.position_desc && position.position_desc.length > helperService.shortDescLength">
+              <a (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
+            </div>            
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+    <!-- inactive positions end -->
+  </div>
+</div>

@@ -4,7 +4,8 @@ import {
   PositionService,
   AlertsService,
   AlertType,
-  UserStateService
+  UserStateService,
+  HelperService
 } from 'src/app/services';
 import {
   PositionTemplateResponse,
@@ -33,18 +34,22 @@ export class PositionTemplatesComponent implements OnInit {
     private router: Router,
     private alertsService: AlertsService,
     private positionService: PositionService,
-    private userStateService: UserStateService
+    private userStateService: UserStateService,
+    private helperService: HelperService
   ) { }
 
   ngOnInit() {
     this.getCurrentUserInfo();
     this.offset = 0;
     this.limit = positionListLimit;
-    this.open = 0;
+    this.open = 0; // open=0 means inactive position
     this.getPositionTemplates();
     this.getInactivePositions();
   }
 
+  /**
+   * Get Current user infomation.
+   */
   getCurrentUserInfo() {
     this.userStateService.getUser.subscribe(user => {
       this.current_user = user;
@@ -53,6 +58,9 @@ export class PositionTemplatesComponent implements OnInit {
     });
   }
 
+  /**
+   * Get Position templates list from server.
+   */
   getPositionTemplates() {
     this.is_loading_templates = true;
     this.positionService.getPositionTemplates().subscribe(
@@ -66,6 +74,10 @@ export class PositionTemplatesComponent implements OnInit {
     );
   }
 
+  /**
+   * Get Inactive positions list from the server.
+   * current user is a recruiter for these positions.
+   */
   getInactivePositions() {
     let queryString;
     queryString = `offset=${this.offset}`;
@@ -75,13 +87,29 @@ export class PositionTemplatesComponent implements OnInit {
     this.is_loading_positions = true;
     this.positionService.getRecruiterPositions(this.current_user.user_id, queryString).subscribe(
       dataJson => {
-        this.inactive_positions = dataJson['data'];
+        this.inactive_positions = dataJson['data']['data'];
         this.is_loading_positions = false;
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
       }
     );
+  }
+
+  /**
+   * Create a Position with template
+   * @param index - array Index
+   */
+  selectTemplate(index: number) {
+    this.router.navigate(['create-position'], { queryParams: { type: 'template', id: this.position_templates[index].template_id } });
+  }
+
+  /**
+   * Publish an inactive position
+   * @param index - array Index
+   */
+  selectPosition(index: number) {
+    this.router.navigate(['create-position'], { queryParams: { type: 'position', id: this.inactive_positions[index].position_id } });
   }
 
 }
