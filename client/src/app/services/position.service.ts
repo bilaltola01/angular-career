@@ -43,6 +43,22 @@ export class PositionService {
       );
   }
 
+  public getRecruiterPositions(recuriterId: number, queryString?: string): Observable<any> {
+    let queryUrl = `${this.position_service_url}recruiter/${recuriterId}/positions`;
+    if (queryString) {
+      queryUrl = `${queryUrl}?${queryString}`;
+    }
+    return this.http.get(queryUrl, this.authHttpOptions())
+    .pipe(
+        map(
+          data => {
+            return { success: true, message: 'Success!', data: data };
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
   public getPositionById(positionId: number): Observable<any> {
     return this.http.get(this.position_management_service_url + `position/${positionId}`, this.authHttpOptions())
       .pipe(
