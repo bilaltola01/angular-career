@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PositionTemplatesComponent } from './position-templates.component';
+import { TestingModule, MaterialModule } from 'src/app/modules';
+import { ActionButtonComponent } from 'src/app/components/action-button/action-button.component';
 
 describe('PositionTemplatesComponent', () => {
   let component: PositionTemplatesComponent;
@@ -8,7 +10,8 @@ describe('PositionTemplatesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PositionTemplatesComponent ]
+      imports : [ MaterialModule, TestingModule ],
+      declarations: [ PositionTemplatesComponent, ActionButtonComponent ]
     })
     .compileComponents();
   }));
