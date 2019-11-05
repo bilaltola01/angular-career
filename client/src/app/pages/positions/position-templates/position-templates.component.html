@@ -6,6 +6,10 @@
 </ng-container>
 
 <div class="career-main">
+  <div class="menu-container">
+    <action-button class="back-btn" type="stroked" title="Go Back" (click)="backToPositionsPage()"></action-button>
+    <action-button class="new-position" type="stroked" title="Create New Position" (click)="newPosition()"></action-button>
+  </div>
   <div class="positions-main-container">
     <!-- position templates start -->
     <div class="templates-list-container">

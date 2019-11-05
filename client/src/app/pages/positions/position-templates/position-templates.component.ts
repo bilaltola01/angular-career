@@ -162,6 +162,20 @@ export class PositionTemplatesComponent implements OnInit {
     this.router.navigate(['create-position'], { queryParams: { type: 'position', id: this.inactive_positions[index].position_id } });
   }
 
+  /**
+   * Create a new position
+   */
+  newPosition() {
+    this.router.navigate(['create-position']);
+  }
+
+  /**
+   * Back to positions search page
+   */
+  backToPositionsPage() {
+    this.router.navigate(['positions']);
+  }
+
   pageClicked(currentPageNumber: number) {
     if (currentPageNumber > 0 && currentPageNumber <= this.paginationArr[this.paginationArr.length - 1]) {
       this.currentPageNumber = currentPageNumber;

@@ -506,6 +506,22 @@ action-button {
       min-width: 130px;
     }
   }
+  &.back-btn {
+    &>button {
+      padding: 4px 19px !important;
+      font-size: 14px;
+      font-family: 'Poppins-Regular', sans-serif;
+      line-height: 1.5;
+    }
+  }
+  &.new-position {
+    &>button {
+      padding: 18px 21px !important;
+      font-size: 14px;
+      font-family: 'Poppins-Medium', sans-serif;
+      line-height: 1.5;
+    }
+  }
 }
 
 .container {
