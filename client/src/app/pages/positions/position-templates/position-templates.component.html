@@ -117,6 +117,16 @@
         </div>
       </ng-container>
     </div>
+
+    <div class="pagination" *ngIf="paginationArr && paginationArr.length > 0">
+      <ul type="none">
+        <li class="large_pagination_button" (click)="pageClicked(currentPageNumber-1)">Prev Page</li>
+        <li *ngFor="let pageNo of paginationArr" [ngClass]="{'active': pageNo == currentPageNumber}"
+          (click)="pageClicked(pageNo)">{{ pageNo }}
+        </li>
+        <li class="large_pagination_button" (click)="pageClicked(currentPageNumber+1)">Next Page</li>
+      </ul>
+    </div>
     <!-- inactive positions end -->
   </div>
 </div>

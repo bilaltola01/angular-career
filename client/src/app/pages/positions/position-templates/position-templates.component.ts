@@ -29,6 +29,9 @@ export class PositionTemplatesComponent implements OnInit {
   offset: number;
   limit: number;
   open: number;
+  currentPageNumber: number;
+  paginationArr: number[];
+  preLoadDataObject: object;
 
   constructor(
     private router: Router,
@@ -43,6 +46,9 @@ export class PositionTemplatesComponent implements OnInit {
     this.offset = 0;
     this.limit = positionListLimit;
     this.open = 0; // open=0 means inactive position
+    this.currentPageNumber = 1;
+    this.paginationArr = [];
+    this.preLoadDataObject = {};
     this.getPositionTemplates();
     this.getInactivePositions();
   }
@@ -79,21 +85,65 @@ export class PositionTemplatesComponent implements OnInit {
    * current user is a recruiter for these positions.
    */
   getInactivePositions() {
-    let queryString;
-    queryString = `offset=${this.offset}`;
-    queryString += `&limit=${this.limit}`;
-    queryString += `&open=${this.open}`;
-
-    this.is_loading_positions = true;
-    this.positionService.getRecruiterPositions(this.current_user.user_id, queryString).subscribe(
-      dataJson => {
-        this.inactive_positions = dataJson['data']['data'];
-        this.is_loading_positions = false;
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
+    if (this.preLoadDataObject[this.currentPageNumber]) {
+      this.inactive_positions = this.preLoadDataObject[this.currentPageNumber].data;
+      this.setPaginationValues(this.preLoadDataObject[this.currentPageNumber].count);
+      if (this.currentPageNumber < this.paginationArr[this.paginationArr.length - 1]) {
+        this.preLoadNextPage(this.currentPageNumber + 1);
       }
-    );
+    } else {
+      let queryString;
+      queryString = `offset=${this.offset}`;
+      queryString += `&limit=${this.limit}`;
+      queryString += `&open=${this.open}`;
+
+      this.is_loading_positions = true;
+      this.positionService.getRecruiterPositions(this.current_user.user_id, queryString).subscribe(
+        dataJson => {
+          if (dataJson['success'] && dataJson.data.data) {
+            this.inactive_positions = dataJson.data.data;
+            const prelaodData = {
+              data: this.inactive_positions.slice(),
+              count: dataJson.data.count
+            };
+
+            this.setPaginationValues(dataJson.data.count);
+            this.is_loading_positions = false;
+            this.preLoadDataObject[this.currentPageNumber] = prelaodData;
+            if (this.currentPageNumber < this.paginationArr[this.paginationArr.length - 1]) {
+              this.preLoadNextPage(this.currentPageNumber + 1);
+            }
+          }
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    }
+  }
+
+  preLoadNextPage(nextPageNumber) {
+    if (!this.preLoadDataObject[nextPageNumber]) {
+      let queryString;
+      queryString = `offset=${this.offset + this.limit}`;
+      queryString += `&limit=${this.limit}`;
+      queryString += `&open=${this.open}`;
+
+      this.positionService.getRecruiterPositions(this.current_user.user_id, queryString).subscribe(
+        dataJson => {
+          if (dataJson['success'] && dataJson.data.data) {
+            const prelaodData = {
+              data: dataJson.data.data,
+              count: dataJson.data.count
+            };
+            this.preLoadDataObject[nextPageNumber] = prelaodData;
+          }
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    }
   }
 
   /**
@@ -110,6 +160,28 @@ export class PositionTemplatesComponent implements OnInit {
    */
   selectPosition(index: number) {
     this.router.navigate(['create-position'], { queryParams: { type: 'position', id: this.inactive_positions[index].position_id } });
+  }
+
+  pageClicked(currentPageNumber: number) {
+    if (currentPageNumber > 0 && currentPageNumber <= this.paginationArr[this.paginationArr.length - 1]) {
+      this.currentPageNumber = currentPageNumber;
+      this.offset = this.limit * (this.currentPageNumber - 1);
+      this.getInactivePositions();
+    }
+  }
+
+  setPaginationValues(count: number) {
+    let max;
+    let min;
+    if (this.currentPageNumber >= 5) {
+      max = Math.ceil(count / this.limit) <= 6 ? Math.ceil(count / this.limit) + this.currentPageNumber - 1 : this.currentPageNumber + 6;
+      min = max > 10 ? max - 9 : 1;
+    } else {
+      max = Math.ceil((count + this.offset) / this.limit) < 10 ? Math.ceil((count + this.offset) / this.limit) : 10;
+      min = 1;
+    }
+
+    this.paginationArr = Array(max - min + 1).fill(0).map((x, i) => i + min);
   }
 
 }

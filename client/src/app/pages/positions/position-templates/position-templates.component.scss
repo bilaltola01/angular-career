@@ -143,6 +143,49 @@ a {
         }
       }
     }
+    .pagination {
+      float: right;
+      ul {
+        padding: 3px 10px;
+        border-radius: 50px;
+        background-color: map-get($md-cfgray, 500);
+        ;
+        @include inline-block-btn;
+
+        li {
+          @include inline-block-btn;
+          height: 15px;
+          width: 15px;
+          font-size: 14px;
+          text-align: center;
+          border-radius: 100%;
+          padding: 8px;
+          overflow: hidden;
+          vertical-align: middle;
+          color: $header-color;
+          cursor: pointer;
+          font-family: "Poppins", sans-serif;
+          font-weight: 500;
+          line-height: 21px;
+
+          &.active {
+            background-color: $white;
+          }
+
+          &.large_pagination_button {
+            height: auto;
+            width: auto;
+            margin-top: 4px;
+          }
+
+          & span {
+            vertical-align: middle;
+            @include inline-block-btn;
+          }
+
+        }
+      }
+    }
   }
 }
 
