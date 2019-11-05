@@ -181,6 +181,10 @@ $profile-form-field-mt: 30px;
           font-weight: 600;
           color: #001d40;
           opacity: 0.84;
+          line-height: 30px;
+        }
+        .heading-row {
+          margin-bottom: 10px;
         }
         h4 {
           font-size: 16px;
@@ -188,6 +192,7 @@ $profile-form-field-mt: 30px;
           margin-top: 0px;
           margin-bottom: 5px;
           opacity: 0.84;
+          line-height: 25px;
           &.detail-info__left-top {
             float: left;
           }

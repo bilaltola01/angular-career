@@ -2,7 +2,7 @@
 $profile-form-field-mt: 30px;
 
 :host {
-   .filter-container {
+  .filter-container {
     width: 26%;
     float: left;
     position: sticky;
@@ -415,11 +415,6 @@ $profile-form-field-mt: 30px;
       height: auto;
       padding-bottom: 15px;
       padding: 0px 20px;
-      .nav-section {
-        h3 {
-          font-size: 16px;
-        }
-      }
     }
 
     //cvr-letter

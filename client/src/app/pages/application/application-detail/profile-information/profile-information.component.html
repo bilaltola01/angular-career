@@ -65,6 +65,16 @@
     <div>
       <div class="row position-qualification-detail" id="qualification-level">
         <h3>Qualification Level Estimate Breakdown</h3>
+        <div class="heading-row">
+          <h5>Candidate Qualification Level Estimate</h5>
+          <div *ngFor="let level of positionName">
+            <simple-tag type="gray"  title="{{calculateQualificationLevel(level.true_fitscore_info, level.minimum_skills)}}">
+            </simple-tag>
+          </div>
+        </div>
+
+        <div>
+          <h5>Qualification Level Estimate Breakdown</h5>
         <div class="position-qualification-skills" *ngFor="let score of positionName">
           <simple-tag *ngIf="score.true_fitscore_info?.skills_weight" type="gray" title="Skills Match" ellipseTag="true"
             value="{{mathFloor(6*score.true_fitscore_info?.skills_fitscore)}}">

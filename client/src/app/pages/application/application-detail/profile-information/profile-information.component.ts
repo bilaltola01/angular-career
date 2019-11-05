@@ -87,6 +87,23 @@ export class ProfileInformationComponent implements OnInit {
       }
     );
   }
+  calculateQualificationLevel(fitscoreInfo, minimum_skills) {
+    if (!fitscoreInfo || (minimum_skills === null && fitscoreInfo.education_weight === 0 && fitscoreInfo.experience_weight === 0 && fitscoreInfo.interests_weight === 0 && fitscoreInfo.skills_weight === 0)) {
+      return 'Unknown';
+    } else if (fitscoreInfo.fitscore <= 0.2) {
+      return 'Unqualified';
+    } else if (fitscoreInfo.fitscore > 0.2 && fitscoreInfo.fitscore <= 0.6) {
+      return 'Nascent';
+    } else if (fitscoreInfo.fitscore > 0.6 && fitscoreInfo.fitscore <= 0.8) {
+      return 'Qualified';
+    } else if (fitscoreInfo.fitscore > 0.8 && fitscoreInfo.fitscore <= 0.9) {
+      return 'Highly Qualified';
+    } else if (fitscoreInfo.fitscore > 0.9 && fitscoreInfo.fitscore <= 1.0) {
+      return 'Extremely Qualified';
+    } else {
+      return 'Unknown';
+    }
+  }
   getMatchedSkill() {
     this.matchingService.getMatchedSkills(this.positionId).subscribe(
       dataJson => {

@@ -36,7 +36,7 @@
       margin-top: 10px;
       margin-bottom: 10px;
       font-size: 16px;
-      line-height: 24px;
+      line-height: 25px;
       color: #001D40;
       opacity: 0.54;
       font-weight: 400;
@@ -117,8 +117,8 @@
     }
   }
   a {
-    font-size: 14px;
-    line-height: 21px;
+    font-size: 12px;
+    line-height: 18px;
     color: map-get($md-cfprimary, 500);
     text-decoration: none;
     cursor: pointer;
@@ -208,14 +208,14 @@
       width: 90%;
       padding-bottom: 0px;
       margin: 0 auto;
+      .edit-title{
+        justify-content: end;
+        width: 100%;
+      }
       h1.title {
         margin-top: 5px;
-        font-size: 18px;
+      }
     }
-    p {
-      font-size: 14px;
-  }
-  }
   }
 }
 @media only screen and (min-width: $min-tablet-breakpoint) and (max-width: $max-tablet-breakpoint) {
