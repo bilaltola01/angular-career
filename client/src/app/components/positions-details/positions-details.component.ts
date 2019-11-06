@@ -1,5 +1,5 @@
 import { Component, OnInit, } from '@angular/core';
-import { PositionService, CartService, AlertsService, AlertType, ApplicationService, UserService, ScoreService, CompanyService } from 'src/app/services';
+import { PositionService, CartService, AlertsService, AlertType, ApplicationService, UserService, ScoreService, CompanyService, HelperService } from 'src/app/services';
 import { ActivatedRoute } from '@angular/router';
 import { MatchingService } from 'src/app/services/matching.service';
 import { SkillLevelDescription } from 'src/app/models';
@@ -17,7 +17,6 @@ import { element } from 'protractor';
 export class PositionsDetailsComponent implements OnInit {
   positionId;
   mathFloor = Math.floor;
-  today = new Date();
   breakpoint: number;
   positionName = [];
   savedJobsMap = {};
@@ -51,7 +50,7 @@ export class PositionsDetailsComponent implements OnInit {
     private matchingService: MatchingService,
     private cartService: CartService,
     private alertsService: AlertsService,
-    private applicationService: ApplicationService,
+    private applicationService: ApplicationService, private helperService: HelperService,
     public dialog: MatDialog, private scoreService: ScoreService, private companyService: CompanyService,
     private userService: UserService) {
     this.updateSkillCallback = this.updateSkillCallback.bind(this);
@@ -82,7 +81,6 @@ export class PositionsDetailsComponent implements OnInit {
         this.positionName.push(dataJson.data);
         this.getCompanyData(this.positionName[0].company_id);
         this.getRecruiterData(this.positionName[0].recruiter_id);
-        this.countDays();
         this.countWords(this.positionName[0].position_desc);
         if (this.positionName[0].preferred_education_levels) {
           this.getLowestEducationLevel(this.positionName[0].preferred_education_levels);
@@ -325,14 +323,6 @@ export class PositionsDetailsComponent implements OnInit {
       minWidth: '280px',
       panelClass: ['edit-dialog-container']
     });
-  }
-  countDays() {
-    const date2 = new Date(this.positionName[0].post_date).toLocaleString().split(',')[0];
-    const postDate = new Date(date2);
-    const date = new Date().toLocaleString().split(',')[0];
-    const todayDate = new Date(date);
-    const differenceInTime = todayDate.getTime() - postDate.getTime();
-    this.differenceInDays = differenceInTime / (1000 * 3600 * 24);
   }
   scrollSmoothTo(id) {
     const height = 90;
