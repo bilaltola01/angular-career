@@ -11,6 +11,12 @@ export class HelperService {
   helper = new JwtHelperService();
 
   constructor() { }
+  convertToDays(date: string) {
+    const PostDate = moment(date);
+    const result = PostDate.fromNow();
+    return result;
+
+  }
 
   convertToFormattedString(date: string, format: string): string {
     return moment.utc(new Date(date)).format(format);
