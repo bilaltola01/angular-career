@@ -216,7 +216,7 @@ $profile-form-field-mt: 30px;
           font-weight: 400;
           color: #001d40;
           opacity: 0.54;
-          margin: 10px 0 0;
+          margin: 10px 0 13px;
         }
 
         & .skills-preferred-m {
@@ -226,13 +226,6 @@ $profile-form-field-mt: 30px;
         & .education-level-m {
           margin: 20px auto 0;
           clear: both;
-          &.work-section{
-            border-bottom: 1px solid rgba(112, 112, 112, 0.1);
-            padding-bottom: 15px;
-            &:nth-last-child(1){
-              border-bottom: 0px;
-            }
-          }
           h6 {
             font-size: 14px;
             line-height: 21px;
@@ -482,270 +475,6 @@ $profile-form-field-mt: 30px;
           }
         }
       }
-
-      & .show-button {
-        text-align: center;
-
-        action-button {
-          display: inline-block;
-          position: relative;
-          cursor: pointer;
-          &::after {
-            position: absolute;
-            right: -47px;
-            color: rgba(0, 29, 64, 0.1);
-            height: 100%;
-            width: 100%;
-            content: "|";
-            top: 20px;
-          }
-          &:last-child::after {
-            display: none;
-          }
-          &:focus {
-            outline: none;
-          }
-        }
-      }
-
-      & .qualification-level-m {
-        & simple-tag {
-          @include inline-block-btn;
-          margin: 12px 5px 22px 0px;
-          font-family: "Poppins", sans-serif;
-          font-weight: 400;
-        }
-      }
-
-      & .card {
-        margin: 0;
-        & mat-grid-tile {
-          border: 1px solid #f0f0f0;
-          border-right: none;
-          &:last-child {
-            border-right: 1px solid #f0f0f0;
-          }
-        }
-        & .card-item {
-          @include inline-block-btn;
-          width: 100%;
-          padding: 9px 15px 9px 15px;
-          vertical-align: middle;
-
-          span {
-            color: rgba(map-get($md-cfaccent, 500), 0.44);
-            font-size: 14px;
-            font-family: "Poppins", sans-serif;
-            font-weight: 400;
-          }
-
-          p {
-            margin: 3px 0 0;
-            font-size: 14px;
-            line-height: 16px;
-          }
-        }
-        &.second-card {
-          & mat-grid-tile {
-            border-top: none;
-          }
-        }
-      }
-    }
-    & .content {
-      & mat-card {
-        padding: 20px 20px;
-        box-shadow: none;
-        h4 {
-          font-size: 20px;
-          font-family: "Poppins", sans-serif;
-          font-weight: 400;
-          display: block;
-          line-height: 26px;
-          margin-bottom: 0;
-        }
-        ol {
-          margin-top: 5px;
-          padding-left: 14px;
-
-          li {
-            font-size: 14px;
-            font-family: "Poppins", sans-serif;
-            font-weight: 400;
-            line-height: 30px;
-            &:hover {
-              color: map-get($md-cfprimary, 500);
-              cursor: pointer;
-            }
-          }
-        }
-      }
-      &::after {
-        content: "";
-        display: table;
-        clear: both;
-      }
-
-      &::before {
-        content: "";
-        display: table;
-      }
-    }
-  }
-
-  .filter-container {
-    width: 26%;
-    float: left;
-    position: sticky;
-    position: -webkit-sticky;
-    top: 68px;
-    overflow-y: scroll;
-    height: calc(100vh - 70px);
-    padding-bottom: 120px;
-    box-sizing: border-box;
-    clear: both;
-    &::-webkit-scrollbar {
-      width: 0;
-      background-color: transparent;
-    }
-
-    & .position-company-map {
-      & .company-map {
-        ul {
-          padding: 0;
-          margin: 0 auto;
-          li {
-            list-style: none;
-            margin-top: 15px;
-            overflow: hidden;
-            clear: both;
-            & .company-industry {
-              display: inline-block;
-              margin-right: 5px;
-            }
-            & .company-position {
-              display: inline-block;
-            }
-          }
-        }
-        & mat-card {
-          margin-bottom: 10px;
-          padding: 30px 20px 10px;
-          box-shadow: none;
-          & .company-border {
-            height: 60px;
-            width: 60px;
-            text-align: center;
-            overflow: hidden;
-            padding: 10px 0 4px;
-            position: relative;
-            img {
-              width: 45px;
-              &.image-upload {
-                position: absolute;
-                top: 10px;
-                left: 0;
-                right: 0;
-                text-align: center;
-                margin: 0 auto;
-              }
-            }
-          }
-          h5 {
-            font-size: 20px;
-            font-family: "Poppins", sans-serif;
-            font-weight: 600;
-            margin: 10px 0;
-            line-height: 30px;
-            opacity: 0.84;
-            cursor: pointer;
-          }
-          p {
-            img {
-              width: 26px;
-              vertical-align: top;
-              margin-right: 3px;
-              margin-top: 2px;
-              &.edu_img {
-                margin-top: 3px;
-                width: 30px;
-                margin-left: 0;
-              }
-            }
-            font-size: 14px;
-            opacity: 0.84;
-            font-family: "Poppins", sans-serif;
-            font-weight: 400;
-            margin-bottom: 0;
-            margin-top: 3px;
-          }
-          span {
-            span {
-              opacity: 0.84;
-            }
-            font-size: 14px;
-            opacity: 0.34;
-            font-family: "Poppins", sans-serif;
-            font-weight: 400;
-            margin-bottom: 2px;
-            display: block;
-            line-height: 20px;
-            &.company-address {
-              display: inline-block;
-              width: 78%;
-              margin-left: 8px;
-              margin-bottom: 18px;
-              font-size: 14px;
-              opacity: 0.84;
-              font-family: "Poppins", sans-serif;
-              font-weight: 400;
-              margin-bottom: 17px;
-              margin-top: 10px;
-            }
-          }
-          small {
-            font-size: 14px;
-            font-family: "Poppins", sans-serif;
-            font-weight: 400;
-            display: block;
-            line-height: 19px;
-            li {
-              display: inline-block;
-              position: relative;
-              margin-top: 5px;
-              margin-bottom: 0;
-
-              &::after {
-                position: absolute;
-                right: -4px;
-                bottom: 0;
-              }
-              &:last-child::after {
-                display: none;
-              }
-            }
-          }
-        }
-        & .show-button2 {
-          text-align: center;
-          & action-button {
-            &.company-go-detail {
-              position: relative;
-              &::after {
-                position: absolute;
-                content: "|";
-                left: 0;
-                top: 0;
-                color: #001d40;
-                opacity: 0.1;
-              }
-            }
-          }
-        }
-        img {
-          display: inline-block;
-        }
-      }
     }
   }
 
@@ -755,6 +484,10 @@ $profile-form-field-mt: 30px;
     height: calc(100% - 70px);
     @include flex(column, center, center);
   }
+  .mat-divider {
+    margin: 20px 0;
+    border-color: rgba(112, 112, 112, 0.1);
+}
 }
 
 @media only screen and (min-width: $min-mini-desktop-breakpoint) and (max-width: $max-mini-desktop-breakpoint) {

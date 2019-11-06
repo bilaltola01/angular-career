@@ -97,6 +97,7 @@
           </p>
         </div>
       </div>
+    </div>
       <div id="matched-skills" *ngIf="matchedSkills?.length > 0 || missingSkills?.length > 0">
         <div class="row position-required-skills-detail main-card">
           <h3>Matched Skills</h3>
@@ -203,7 +204,7 @@
         </div>
         <div class="row position-eductaion-detail position-required-skills-detail" id="work" *ngIf="experienceList">
           <h3>Work Experience</h3>
-          <div class="education-level-m work-section" *ngFor=" let experience of experienceList">
+          <div class="education-level-m work-section" *ngFor=" let experience of experienceList; let i = index;">
             <h6 for="skill_required">{{experience.user_specified_company_name}}</h6>
             <h4 class="detail-info__right_all">{{getYears(experience.end_date,experience.start_date)}}</h4>
             <h4>{{experience.job}}</h4>
@@ -220,12 +221,12 @@
               <h5>Skills Trained <span>{{experience.skills_trained.length}}</span></h5>
               <div class="skills" *ngIf="displayItemsLimit; let limit">
                 <ng-container *ngFor="let skill_trained of experience.skills_trained; let i = index;">
-                  <simple-tag *ngIf="(!editMode && i < limit) || editMode" type="gray" title="{{skill_trained.skill}}">
+                  <simple-tag *ngIf="(i < limit)" type="gray" title="{{skill_trained.skill}}">
                   </simple-tag>
                 </ng-container>
-                <img *ngIf="!editMode && limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit"
+                <img *ngIf="limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit"
                   src="assets/icons/ic_see_less.svg" alt="See Less">
-                <img *ngIf="!editMode && limit < experience.skills_trained.length"
+                <img *ngIf="limit < experience.skills_trained.length"
                   (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
 
               </div>
@@ -236,9 +237,9 @@
                 <simple-tag *ngFor="let industry of experience.industries" type="gray"
                   title="{{industry.industry_name}}">
                 </simple-tag>
-                <img *ngIf="!editMode && limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit"
+                <img *ngIf="limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit"
                   src="assets/icons/ic_see_less.svg" alt="See Less">
-                <img *ngIf="!editMode && limit < experience.industries.length"
+                <img *ngIf="limit < experience.industries.length"
                   (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
               </div>
             </ng-container>
@@ -246,16 +247,17 @@
               <h5> Additional Industry Exposure <span>{{experience.add_industries.length}}</span></h5>
               <div class="skills" *ngIf="displayItemsLimit; let limit">
                 <ng-container *ngFor="let add_industry of experience.add_industries; let i = index;">
-                  <simple-tag *ngIf="(!editMode && i < limit) || editMode" type="gray"
+                  <simple-tag *ngIf="(i < limit)" type="gray"
                     title="{{add_industry.industry_name}}">
                   </simple-tag>
                 </ng-container>
-                <img *ngIf="!editMode && limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit"
+                <img *ngIf="limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit"
                   src="assets/icons/ic_see_less.svg" alt="See Less">
-                <img *ngIf="!editMode && limit < experience.add_industries?.length"
+                <img *ngIf="limit < experience.add_industries?.length"
                   (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
-              </div>
-            </ng-container>
+                </div>
+              </ng-container>
+              <mat-divider *ngIf="( i < experienceList.length - 1)"></mat-divider>
 
           </div>
 
@@ -314,8 +316,8 @@
                 <a *ngIf="publication.description && publication.description?.length > helperService.shortDescLength"
                   (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
               </ng-container>
-              <mat-divider *ngIf="(i < userPublicationsList?.length - 1)"></mat-divider>
             </ng-container>
+            <mat-divider *ngIf="(i < userPublicationsList?.length - 1)"></mat-divider>
           </div>
         </div>
         <div class="row position-eductaion-detail position-required-skills-detail" id="project"
@@ -336,7 +338,7 @@
                 <p *ngIf="project.description" class="description"
                   [class.short-desc]="short_desc && project.description?.length > helperService.shortDescLength">
                   {{short_desc ? helperService.shortDescription(project.description) : project.description}}</p>
-                <a *ngIf="short_desc && project.description && project.description?.length > helperService.shortDescLength"
+                <a *ngIf="project.description && project.description?.length > helperService.shortDescLength"
                   (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
               </ng-container>
               <mat-divider *ngIf="(i < userProjectsList?.length - 1)"></mat-divider>
@@ -344,6 +346,6 @@
           </div>
         </div>
       </div>
-    </div>
+
   </div>
 </div>
