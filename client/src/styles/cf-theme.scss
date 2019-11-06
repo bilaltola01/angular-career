@@ -516,10 +516,18 @@ action-button {
   }
   &.new-position {
     &>button {
-      padding: 18px 21px !important;
+      padding: 16px 21px !important;
       font-size: 14px;
       font-family: 'Poppins-Medium', sans-serif;
       line-height: 1.5;
+    }
+  }
+  &.select-template {
+    &>button {
+      padding: 14px 20px !important;
+      font-size: 14px;
+      font-family: 'Poppins-Medium', sans-serif;
+      line-height: 1.15;
     }
   }
 }
