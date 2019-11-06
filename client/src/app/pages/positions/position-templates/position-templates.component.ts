@@ -92,33 +92,35 @@ export class PositionTemplatesComponent implements OnInit {
         this.preLoadNextPage(this.currentPageNumber + 1);
       }
     } else {
-      let queryString;
-      queryString = `offset=${this.offset}`;
-      queryString += `&limit=${this.limit}`;
-      queryString += `&open=${this.open}`;
+      if (this.current_user) {
+        let queryString;
+        queryString = `offset=${this.offset}`;
+        queryString += `&limit=${this.limit}`;
+        queryString += `&open=${this.open}`;
 
-      this.is_loading_positions = true;
-      this.positionService.getRecruiterPositions(this.current_user.user_id, queryString).subscribe(
-        dataJson => {
-          if (dataJson['success'] && dataJson.data.data) {
-            this.inactive_positions = dataJson.data.data;
-            const prelaodData = {
-              data: this.inactive_positions.slice(),
-              count: dataJson.data.count
-            };
+        this.is_loading_positions = true;
+        this.positionService.getRecruiterPositions(this.current_user.user_id, queryString).subscribe(
+          dataJson => {
+            if (dataJson['success'] && dataJson.data.data) {
+              this.inactive_positions = dataJson.data.data;
+              const prelaodData = {
+                data: this.inactive_positions.slice(),
+                count: dataJson.data.count
+              };
 
-            this.setPaginationValues(dataJson.data.count);
-            this.is_loading_positions = false;
-            this.preLoadDataObject[this.currentPageNumber] = prelaodData;
-            if (this.currentPageNumber < this.paginationArr[this.paginationArr.length - 1]) {
-              this.preLoadNextPage(this.currentPageNumber + 1);
+              this.setPaginationValues(dataJson.data.count);
+              this.is_loading_positions = false;
+              this.preLoadDataObject[this.currentPageNumber] = prelaodData;
+              if (this.currentPageNumber < this.paginationArr[this.paginationArr.length - 1]) {
+                this.preLoadNextPage(this.currentPageNumber + 1);
+              }
             }
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
           }
-        },
-        error => {
-          this.alertsService.show(error.message, AlertType.error);
-        }
-      );
+        );
+      }
     }
   }
 
