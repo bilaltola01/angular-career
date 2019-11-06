@@ -2,7 +2,7 @@ import { PositionSearchComponent } from './position-search/position-search.compo
 import { CreatePositionComponent } from './create-position/create-position.component';
 import { AuthGuard } from '../../guard/auth.guard';
 import { Routes } from '@angular/router';
-import { PositionsDetailsComponent } from './positions-details/positions-details.component';
+import { PositionsDetailsComponent } from 'src/app/components/positions-details/positions-details.component';
 import { PositionTemplatesComponent } from './position-templates/position-templates.component';
 
 export const positionRoutes: Routes = [
