@@ -166,7 +166,7 @@
         <p *ngIf="project.description" class="description"
           [class.short-desc]="short_desc && project.description.length > helperService.shortDescLength">
           {{short_desc ? helperService.shortDescription(project.description) : project.description}}</p>
-        <a *ngIf="short_desc && project.description && project.description.length > helperService.shortDescLength"
+        <a *ngIf="project.description && project.description.length > helperService.shortDescLength"
           (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
       </ng-container>
       <mat-divider *ngIf="(i < userProjectsList.length - 1) || editMode"></mat-divider>
