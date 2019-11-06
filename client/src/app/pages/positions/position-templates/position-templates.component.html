@@ -19,7 +19,7 @@
           <div class="header-container">
             <div class="template-detail">
               <div *ngIf="template.position">
-                <h1>{{template.position}}</h1>
+                <h1>{{template.position_template_name}} ({{template.position}})</h1>
               </div>
             </div>
             <div class="template-select">
@@ -63,6 +63,10 @@
             </div>            
           </ng-container>
         </div>
+      </ng-container>
+
+      <ng-container *ngIf="!position_templates || position_templates.length === 0">
+          <h3 class="no-found">No position templates found.</h3>
       </ng-container>
     </div>
     <!-- position templates end -->
@@ -119,6 +123,10 @@
             </div>            
           </ng-container>
         </div>
+      </ng-container>
+
+      <ng-container *ngIf="!inactive_positions || inactive_positions.length === 0">
+          <h3 class="no-found">No inactive positions found.</h3>
       </ng-container>
     </div>
 

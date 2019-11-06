@@ -54,6 +54,17 @@ a {
           color: rgba(map-get($md-cfaccent, 500), .84);
         }
 
+        h3.no-found {
+          font-family: 'Poppins-Medium', sans-serif;
+          font-size: 25px;
+          line-height: 1.15;
+          font-weight: 500;
+          margin-top: 40px;
+          margin-bottom: 20px;
+          color: rgba(map-get($md-cfaccent, 500), .84);
+          text-align: center;
+        }
+
         .row {
           background: $white;
           padding: 15px 20px;
@@ -216,6 +227,11 @@ a {
         .templates-list-container {
           h1.title {
             font-size: 25px;
+            margin-top: 30px;
+            margin-bottom: 20px;
+          }
+          h3.no-found {
+            font-size: 20px;
             margin-top: 30px;
             margin-bottom: 20px;
           }
