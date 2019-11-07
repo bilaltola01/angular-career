@@ -103,8 +103,7 @@
         </section>
 
         <div class="row position-qualification-detail" id="qualification_level_breakdown"
-          *ngIf="(info.minimum_skills?.length > 0 || info.preferred_skills?.length > 0) || (info.preferred_experience?.length > 0) || (info.preferred_education_levels?.length > 0 ||
-            info.preferred_majors?.length > 0 || info.preferred_major_categories?.length > 0) || (matchedInterests?.length > 0) || (matchedSkills?.length > 0 || missingSkills?.length > 0)">
+        *ngIf=" positionName[0]?.minimum_skills?.length > 0 || positionName[0]?.true_fitscore_info?.skills_weight > 0 || positionName[0]?.true_fitscore_info?.education_weight > 0 || positionName[0]?.true_fitscore_info?.experience_weight > 0 || positionName[0]?.true_fitscore_info?.interests_weight > 0 ">
           <h3>Qualification Level Estimate Breakdown</h3>
           <div class="position-qualification-skills" *ngFor="let score of positionName">
             <simple-tag *ngIf="score.true_fitscore_info?.skills_weight" type="gray" title="Skills Match"

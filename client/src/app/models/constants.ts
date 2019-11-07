@@ -547,13 +547,13 @@ export const MILITARY_STATUS_OPTIONS = [
 
 
 export const SkillLevelDescription = {
- 0 : {'title': 'No proficiency: ', 'description' : 'no training and no experience'},
- 1 : {'title': 'Limited proficiency: ' , 'description' : 'some training or some experience'},
- 2 : {'title': 'Moderately proficient: ', 'description' : 'moderate training and moderate experience, though not enough to be considered competent (if someone were to hire you based on this skill you might need substantial training/assistance)'},
- 3 : {'title': 'Proficient: ', 'description' : 'sufficient training or experience to be considered competent (if someone were to hire you based on this skill you might need moderate training/assistance)'},
- 4 : {'title': 'Highly proficient: ', 'description' : 'substantial training or experience (if someone were to hire you based on this skill, you would need minimal training/assistance)'},
- 5 : {'title': 'Extremely proficient: ', 'description' : 'substantial training and experience in the subject, familiarity with industry standards, and some understanding of abstract or esoteric subject matter'},
- 6 : {'title': 'Specialized: ', 'description' :  'extensive training, possible research experience, and substantial work experience. This level is usually reserved for people with at least 5 years of academic or industry experience or with MS or Ph.D levels of understanding'}
+  0: { 'title': 'No proficiency: ', 'description': 'no training and no experience' },
+  1: { 'title': 'Limited proficiency: ', 'description': 'some training or some experience' },
+  2: { 'title': 'Moderately proficient: ', 'description': 'moderate training and moderate experience, though not enough to be considered competent (if someone were to hire you based on this skill you might need substantial training/assistance)' },
+  3: { 'title': 'Proficient: ', 'description': 'sufficient training or experience to be considered competent (if someone were to hire you based on this skill you might need moderate training/assistance)' },
+  4: { 'title': 'Highly proficient: ', 'description': 'substantial training or experience (if someone were to hire you based on this skill, you would need minimal training/assistance)' },
+  5: { 'title': 'Extremely proficient: ', 'description': 'substantial training and experience in the subject, familiarity with industry standards, and some understanding of abstract or esoteric subject matter' },
+  6: { 'title': 'Specialized: ', 'description': 'extensive training, possible research experience, and substantial work experience. This level is usually reserved for people with at least 5 years of academic or industry experience or with MS or Ph.D levels of understanding' }
 };
 
 export const PositionLevel = [
@@ -585,13 +585,13 @@ export const EducationLevel = [
   'Ph.D.'
 ];
 export const ApplicationStatus = [
-  'accepted',
-  'in_review',
-  'interviewing',
-  'wait_listed',
-  'rejected',
-  'offer_sent',
-  'saved'
+  { 'title': 'Accepted', 'value': 'accepted' },
+  { 'title': 'In Review', 'value': 'in_review' },
+  { 'title': 'Interviewing', 'value': 'interviewing' },
+  { 'title': 'Wait Listed', 'value': 'wait_listed' },
+  { 'title': 'Rejected', 'value': 'rejected' },
+  { 'title': 'Offer Sent', 'value': 'offer_sent' },
+  { 'title': 'Saved', 'value': 'saved' }
 ];
 
 
@@ -619,14 +619,14 @@ export const QualificationLevel = [
 
 ];
 export const interestLevel = [
-  '0',
-  '1',
-  '2',
-  '3',
-  '4',
-  '5',
-  '6'
-  ];
+  { 'title': '0 - Interested but still looking', 'value': '0' },
+  { 'title': '1 - Interested', 'value': '1' },
+  { 'title': '2 - Extremely interested', 'value': '2' },
+  { 'title': '3 - Excited to apply', 'value': '3' },
+  { 'title': '4 - Among top choices', 'value': '4' },
+  { 'title': '5 - Second choice', 'value': '5' },
+  { 'title': '6 - First choice', 'value': '6' }
+];
 
 export const positionListLimit = 7;
 <<<<<<< HEAD

@@ -452,7 +452,7 @@ export class PositionSearchComponent implements OnInit {
       if (this.currentPageNumber < this.paginationArr[this.paginationArr.length - 1]) {
         this.preLoadNextPage(this.currentPageNumber + 1);
       } else {
-        this.router.navigate(['/positions'], { queryParams: { param: this.urlQueryParameter ? this.urlQueryParameter : '' } });
+        this.router.navigate(['/positions'], { queryParams: { search: this.urlQueryParameter ? this.urlQueryParameter : '' } });
       }
     } else {
       this.isJobLoading = true;

@@ -100,7 +100,7 @@
             <mat-label>Interest Level</mat-label>
             <mat-select class="arrow" formControlName="interest">
               <mat-option value=''></mat-option>
-              <mat-option *ngFor="let level of interest" value="{{level}}">{{level}}
+              <mat-option *ngFor="let level of interest" value="{{level.value}}">{{level.title}}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -110,7 +110,7 @@
             <mat-label>Application Status</mat-label>
             <mat-select class="arrow" formControlName="applicationStatus">
               <mat-option value=''></mat-option>
-              <mat-option *ngFor="let status of applicationStatus" value="{{status}}">{{status}}
+              <mat-option *ngFor="let status of applicationStatus" value="{{status.value}}">{{status.title}}
               </mat-option>
             </mat-select>
           </mat-form-field>

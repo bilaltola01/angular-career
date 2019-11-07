@@ -54,8 +54,8 @@ export class ApplicationsComponent implements OnInit, DoCheck {
   // Autocomplete list
 
   jobType = JobType;
-  interest = interestLevel;
-  applicationStatus = ApplicationStatus;
+  interest: object[] = interestLevel;
+  applicationStatus: object[] = ApplicationStatus;
   autocomplete_skills: Skill[] = [];
   autocomplete_school: School[][] = [];
   autocomplete_additional_industries: Industry[][] = [];
@@ -334,6 +334,7 @@ export class ApplicationsComponent implements OnInit, DoCheck {
     let urlQueryParam;
     if (this.searchQueryParam) {
       queryString = this.searchQueryParam;
+      this.applicationParam = this.searchQueryParam;
       this.searchQueryParam = null;
     } else {
       queryString = this.applicationForm.value.city ? `${queryString ? queryString + '&' : ''}city=${this.filterAttributes.city_id ? this.filterAttributes.city_id : this.urlParams['city']}` : queryString;
@@ -422,7 +423,7 @@ export class ApplicationsComponent implements OnInit, DoCheck {
       if (this.currentPageNumber < this.paginationArr[this.paginationArr.length - 1]) {
         this.preLoadNextPage(this.currentPageNumber + 1);
       } else {
-        this.router.navigate(['/applications'], { queryParams: { param: this.urlQueryParameter ? this.urlQueryParameter : '' } });
+        this.router.navigate(['/applications'], { queryParams: { search: this.urlQueryParameter ? this.urlQueryParameter : '' } });
       }
     } else {
       this.isJobLoading = true;
@@ -546,7 +547,7 @@ export class ApplicationsComponent implements OnInit, DoCheck {
     }
   }
 
-  getPositionIds() {
+  getApplicationIds() {
     let positionIds = this.applicationList.map(position => `positionList=${position.position_id}`);
     if (this.preLoadDataObject[this.currentPageNumber + 1] && this.preLoadDataObject[this.currentPageNumber + 1].data.data) {
       const preLoadData = this.preLoadDataObject[this.currentPageNumber + 1].data.data.map(position => `applicationList=${position.position_id}`);
@@ -556,7 +557,7 @@ export class ApplicationsComponent implements OnInit, DoCheck {
   }
   updateSkillCallback() {
     this.scoreService.putSkillVector().subscribe();
-    const positionIds = this.getPositionIds();
+    const positionIds = this.getApplicationIds();
     this.scoreService.getUpdatedfitscores(positionIds).subscribe(
       dataJson => {
         this.updatedFitscoreList = [...dataJson.data['fitscores']];
@@ -639,6 +640,7 @@ export class ApplicationsComponent implements OnInit, DoCheck {
     }
   }
   onLevelChanged(level: number, application_id) {
+    this.offsetFlag = false;
     const queryString = 'interest=' + level;
     this.applicationService.getAppliedJobs(queryString).subscribe(
       dataJson => {
