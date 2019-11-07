@@ -198,7 +198,7 @@ export class ApplicationNavSectionComponent implements OnInit {
     // Project Data
     this.userService.getProjectsInfo(user.user_id).subscribe(
       userProjectsList => {
-        this.applicationNavMenu[1].items[10].visible = userProjectsList['data'] && userProjectsList['data'].length > 0 ? true : false;
+        this.applicationNavMenu[1].items[10].visible = userProjectsList['data'] && userProjectsList.data.data.length > 0 ? true : false;
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
