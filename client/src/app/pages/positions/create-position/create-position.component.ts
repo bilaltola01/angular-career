@@ -1618,6 +1618,9 @@ export class CreatePositionComponent implements OnInit {
     );
   }
 
+  /**
+   * Publish the current position
+   */
   onClickPublish() {
     if (this.position && this.position.open === 0) {
       const position: PositionInfoRequest = {
@@ -1655,6 +1658,24 @@ export class CreatePositionComponent implements OnInit {
       );
     } else {
       this.router.navigate(['/position-info/', this.position.position_id]);
+    }
+  }
+
+  /**
+   * Delete the current position
+   */
+  onClickDelete() {
+    if (this.position && this.position.open === 0) {
+      this.positionService.deletePosition(this.position.position_id).subscribe(
+        dataJson => {
+          this.alertsService.show(dataJson.data.message, AlertType.success);
+
+          this.router.navigate(['/position-templates/']);
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
     }
   }
 
