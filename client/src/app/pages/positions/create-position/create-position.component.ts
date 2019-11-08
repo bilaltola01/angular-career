@@ -2144,8 +2144,10 @@ export class CreatePositionComponent implements OnInit {
           exp_desc:	this.preferred_work_experiences[arrIndex].exp_desc ? this.preferred_work_experiences[arrIndex].exp_desc : null
         };
 
+        // Update existing work expereince
         this.positionService.patchPreferredExperience(info).subscribe(
           dataJson => {
+            // if new skills strained are exist, add those skills into current work experience.
             if (temp_arr && temp_arr.length > 0) {
               const skills_trained_info = {
                 preferred_exp_id: this.preferred_work_experiences[arrIndex].preferred_exp_id,
@@ -2154,14 +2156,29 @@ export class CreatePositionComponent implements OnInit {
               this.positionService.postPreferredExperienceSkillsTrained(skills_trained_info).subscribe(
                 data => {
                   this.position.preferred_experience[index].preferred_skills_trained = this.preferred_work_experiences[arrIndex].preferred_skills_trained.slice();
-                  if (arrIndex < this.preferred_work_experiences.length - 1) {
-                    this.addPreferredWorkExperience(position_id, arrIndex + 1);
-                  } else {
-                    this.goToNextPage();
-                  }
+
+                  // Add new skills trained into preferreds skills. skill level is 3 as default.
+                  const skillsInfo = {
+                    position_id: position_id,
+                    skills: temp_arr.map(value => {
+                      return {skill_id: value.skill_id, skill_level: 3};
+                    })
+                  };
+                  this.positionService.postPreferredSkills(skillsInfo).subscribe(
+                    dataSklls => {
+                      if (arrIndex < this.preferred_work_experiences.length - 1) {
+                        this.addPreferredWorkExperience(position_id, arrIndex + 1);
+                      } else {
+                        this.goToNextPage();
+                      }
+                    },
+                    postPreferredSkillsError => {
+                      this.alertsService.show(postPreferredSkillsError.message, AlertType.error);
+                    }
+                  );
                 },
-                error => {
-                  this.alertsService.show(error.message, AlertType.error);
+                postSkillsTrainedError => {
+                  this.alertsService.show(postSkillsTrainedError.message, AlertType.error);
                 }
               );
             } else {
@@ -2172,8 +2189,8 @@ export class CreatePositionComponent implements OnInit {
               }
             }
           },
-          error => {
-            this.alertsService.show(error.message, AlertType.error);
+          patchExperienceError => {
+            this.alertsService.show(patchExperienceError.message, AlertType.error);
             if (arrIndex < this.preferred_work_experiences.length - 1) {
               this.addPreferredWorkExperience(position_id, arrIndex + 1);
             } else {
@@ -2199,14 +2216,27 @@ export class CreatePositionComponent implements OnInit {
         info['skills_trained_ids'] = this.preferred_work_experiences[arrIndex].preferred_skills_trained.map(value => value.skill_id);
         this.positionService.postFullPreferredExperience(info).subscribe(
           dataJson => {
-            if (arrIndex < this.preferred_work_experiences.length - 1) {
-              this.addPreferredWorkExperience(position_id, arrIndex + 1);
-            } else {
-              this.goToNextPage();
-            }
+            const skillsInfo = {
+              position_id: position_id,
+              skills: info['skills_trained_ids'].map(value => {
+                return {skill_id: value, skill_level: 3};
+              })
+            };
+            this.positionService.postPreferredSkills(skillsInfo).subscribe(
+              dataSklls => {
+                if (arrIndex < this.preferred_work_experiences.length - 1) {
+                  this.addPreferredWorkExperience(position_id, arrIndex + 1);
+                } else {
+                  this.goToNextPage();
+                }
+              },
+              postPreferredSkillsError => {
+                this.alertsService.show(postPreferredSkillsError.message, AlertType.error);
+              }
+            );
           },
-          error => {
-            this.alertsService.show(error.message, AlertType.error);
+          postExperienceError => {
+            this.alertsService.show(postExperienceError.message, AlertType.error);
             if (arrIndex < this.preferred_work_experiences.length - 1) {
               this.addPreferredWorkExperience(position_id, arrIndex + 1);
             } else {
