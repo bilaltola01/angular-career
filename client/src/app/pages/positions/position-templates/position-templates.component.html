@@ -13,8 +13,8 @@
   <div class="positions-main-container">
     <!-- position templates start -->
     <div class="templates-list-container">
+      <h1 class="title">Position templates</h1>
       <ng-container *ngIf="position_templates && position_templates.length > 0">
-        <h1 class="title">Position templates</h1>
         <div class="row" *ngFor="let template of position_templates; let i = index;">
           <div class="header-container">
             <div class="template-detail">
@@ -66,15 +66,15 @@
       </ng-container>
 
       <ng-container *ngIf="!position_templates || position_templates.length === 0">
-          <h3 class="no-found">No position templates found.</h3>
+        <h3 class="no-found">No position templates found.</h3>
       </ng-container>
     </div>
     <!-- position templates end -->
 
     <!-- inactive positions start -->
     <div class="templates-list-container">
+      <h1 class="title">Inactive Positions</h1>
       <ng-container *ngIf="inactive_positions && inactive_positions.length > 0">
-        <h1 class="title">Inactive Positions</h1>
         <div class="row" *ngFor="let position of inactive_positions; let i = index;">
           <div class="header-container">
             <div class="template-detail">
@@ -126,7 +126,7 @@
       </ng-container>
 
       <ng-container *ngIf="!inactive_positions || inactive_positions.length === 0">
-          <h3 class="no-found">No inactive positions found.</h3>
+        <h3 class="no-found">No inactive positions found.</h3>
       </ng-container>
     </div>
 
