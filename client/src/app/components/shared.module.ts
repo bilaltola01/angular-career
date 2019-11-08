@@ -8,6 +8,7 @@ import { AlertBarComponent } from './alert-bar/alert-bar.component';
 import { AddSkillPopupComponent } from './add-skill-popup/add-skill-popup.component';
 import { SkillDescriptionPopupComponent } from './skill-description-popup/skill-description-popup.component';
 import { InterestLevelPopupComponent } from './interest-level-popup/interest-level-popup.component';
+import { RequestResponsePopupComponent } from './request-response-popup/request-response-popup.component';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { InterestLevelPopupComponent } from './interest-level-popup/interest-lev
     ...sharedComponents,
     AddSkillPopupComponent,
     SkillDescriptionPopupComponent,
-    InterestLevelPopupComponent
+    InterestLevelPopupComponent,
+    RequestResponsePopupComponent
   ],
   exports: [
     ...sharedComponents

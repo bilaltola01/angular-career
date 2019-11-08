@@ -1,6 +1,6 @@
 // Custom Theming for Angular Material
-@import '~@angular/material/theming';
-@import './variables.scss';
+@import "~@angular/material/theming";
+@import "./variables.scss";
 
 $btn-text-color: rgba(map-get($md-cfaccent, 500), 0.84);
 
@@ -38,7 +38,7 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
   &.mat-warn,
   &[disabled] {
     &[disabled] {
-      $palette: if($property=='color', $foreground, $background);
+      $palette: if($property== "color", $foreground, $background);
       #{$property}: mat-color($palette, disabled-button);
     }
   }
@@ -55,7 +55,7 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
     color: $btn-text-color;
     background: transparent;
 
-    @include _mat-button-theme-property($theme, 'color', default);
+    @include _mat-button-theme-property($theme, "color", default);
     @include _mat-button-focus-overlay-color($theme);
 
     .mat-ripple-element {
@@ -68,7 +68,7 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
     color: $btn-text-color;
     background: transparent;
 
-    @include _mat-button-theme-property($theme, 'color', default);
+    @include _mat-button-theme-property($theme, "color", default);
 
     .mat-button-focus-overlay {
       background-color: transparent;
@@ -90,7 +90,7 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
     background: transparent;
     outline-color: map-get($md-cfgray, 500);
 
-    @include _mat-button-theme-property($theme, 'color', default);
+    @include _mat-button-theme-property($theme, "color", default);
     @include _mat-button-focus-overlay-color($theme);
 
     .mat-button-focus-overlay {
@@ -106,7 +106,7 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
   .mat-stroked-button:hover,
   .mat-stroked-button:active {
     color: map-get($md-cfprimary, 500);
-    @include _mat-button-theme-property($theme, 'color', default);
+    @include _mat-button-theme-property($theme, "color", default);
   }
 
   .mat-button-focus-overlay {
@@ -114,15 +114,15 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
   }
 
   .mat-stroked-button:not([disabled]) {
-    border-color: rgba(map-get($md-cfprimary, 500), .2);
+    border-color: rgba(map-get($md-cfprimary, 500), 0.2);
   }
 
   .mat-raised-button {
     color: $btn-text-color;
     background-color: mat-color($background, raised-button);
 
-    @include _mat-button-theme-property($theme, 'color', default-contrast, 0.84);
-    @include _mat-button-theme-property($theme, 'background-color', default);
+    @include _mat-button-theme-property($theme, "color", default-contrast, 0.84);
+    @include _mat-button-theme-property($theme, "background-color", default);
     @include _mat-button-ripple-color($theme, default-contrast);
   }
 
@@ -132,8 +132,8 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
     color: $btn-text-color;
     background-color: mat-color($background, raised-button);
 
-    @include _mat-button-theme-property($theme, 'color', default-contrast);
-    @include _mat-button-theme-property($theme, 'background-color', default);
+    @include _mat-button-theme-property($theme, "color", default-contrast);
+    @include _mat-button-theme-property($theme, "background-color", default);
     @include _mat-button-ripple-color($theme, default-contrast);
   }
 
@@ -169,7 +169,6 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
 
   .mat-raised-button,
   .mat-flat-button {
-
     &:not([disabled]):hover,
     &:not([disabled]):active {
       .mat-button-focus-overlay {
@@ -209,7 +208,7 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
         }
 
         .mat-form-field-suffix {
-          color: rgba(map-get($md-cfaccent, 500), .34);
+          color: rgba(map-get($md-cfaccent, 500), 0.34);
         }
       }
 
@@ -420,9 +419,8 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
 
 @include angular-material-theme($client-theme);
 
-
-@import url('https://fonts.googleapis.com/css?family=Poppins|Roboto&display=swap');
-@import url('//fonts.googleapis.com/icon?family=Material+Icons');
+@import url("https://fonts.googleapis.com/css?family=Poppins|Roboto&display=swap");
+@import url("//fonts.googleapis.com/icon?family=Material+Icons");
 
 html,
 body {
@@ -431,7 +429,7 @@ body {
 
 body {
   margin: 0;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   background-color: $bg-color-1;
 }
 
@@ -442,18 +440,18 @@ h1,
 h2,
 h3,
 h4 {
-  font-family: 'Poppins-Bold', sans-serif;
+  font-family: "Poppins-Bold", sans-serif;
   color: map-get($md-cfaccent, 500);
 }
 
 h5,
 h6 {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   color: map-get($md-cfaccent, 500);
 }
 
 p {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   color: map-get($md-cfaccent, 400);
 
   &.description {
@@ -463,7 +461,7 @@ p {
 }
 
 li {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   color: map-get($md-cfaccent, 400);
 }
 
@@ -472,13 +470,13 @@ img.autocomplete-company-logo {
 }
 
 action-button {
-  &>button {
+  & > button {
     border-radius: 500px !important;
     padding: 10px 40px !important;
   }
 
   &.link-btn {
-    &>button {
+    & > button {
       border-radius: 0 !important;
       border: none !important;
       padding: 0 !important;
@@ -486,7 +484,7 @@ action-button {
   }
 
   &.nav-btn {
-    &>button {
+    & > button {
       max-width: 170px;
       padding: 10px 0 !important;
     }
@@ -500,12 +498,12 @@ action-button {
   }
 
   &.contact-btn {
-    &>button {
+    & > button {
       padding: 5px 25px !important;
     }
   }
   &.reset-btn {
-    &>button {
+    & > button {
       padding: 10px 25px !important;
       min-width: 130px;
     }
@@ -557,7 +555,12 @@ action-button {
     position: relative;
     border-radius: 20px;
     margin: 0 40px;
-    template-dialog,profile-dialog, create-position-dialog, add-skill-popup, app-skill-description-popup,
+
+    template-dialog,
+    profile-dialog,create-position-dialog,
+    add-skill-popup,
+    app-skill-description-popup,
+    app-request-response-popup,
     dialog-content {
       width: 100%;
       @include flex(column, center, flex-start);
@@ -592,8 +595,6 @@ action-button {
               line-height: 26px;
               margin-bottom: 10px;
             }
-
-
           }
         }
       }
@@ -623,17 +624,30 @@ action-button {
     }
   }
 }
-.cdk-overlay-pane{
-  mat-option{
-      .mat-option-text{
-          img{
-            width: 35px;
-            height: 35px;
-            margin-right: 10px;
-            vertical-align: middle;
-            border-radius: 100%;
-          }
-
+.cdk-overlay-pane {
+  mat-option {
+    .mat-option-text {
+      img {
+        width: 35px;
+        height: 35px;
+        margin-right: 10px;
+        vertical-align: middle;
+        border-radius: 100%;
       }
+    }
+  }
+}
+.edit-dialog-container {
+  mat-dialog-container {
+    app-request-response-popup {
+      .overlay {
+        mat-icon {
+          &.cancel {
+            position: relative;
+            top: 0;
+          }
+        }
+      }
+    }
   }
 }

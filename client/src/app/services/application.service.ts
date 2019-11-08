@@ -260,6 +260,18 @@ export class ApplicationService {
       catchError(this.handleError)
     );
   }
+  public postReferenceRequest(bodyQueryParam) {
+    const queryUrl = `${this.application_service_url}application/employee-reference/request`;
+    return this.http.post(queryUrl, bodyQueryParam, this.authHttpOptions())
+    .pipe(
+      map(
+        data => {
+          return { success: true, message: 'Success!', data: data };
+        }
+      ),
+      catchError(this.handleError)
+    );
+  }
   public acceptOffer(queryParam): Observable<any> {
     const observableArr = [];
     for (let i = 0; i < queryParam.length; i++) {

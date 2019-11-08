@@ -149,6 +149,7 @@ export class ApplicationNavSectionComponent implements OnInit {
     );
     //  for Profile Information
     this.applicationNavMenu[1].items[0].visible = user ? true : false;
+    // user introduction
     this.applicationNavMenu[1].items[4].visible = user.user_intro  ? true : false;
     // Education data
     this.userService.getEducationInfo(user.user_id).subscribe(
@@ -198,7 +199,7 @@ export class ApplicationNavSectionComponent implements OnInit {
     // Project Data
     this.userService.getProjectsInfo(user.user_id).subscribe(
       userProjectsList => {
-        this.applicationNavMenu[1].items[10].visible = userProjectsList['data'] && userProjectsList.data.data.length > 0 ? true : false;
+        this.applicationNavMenu[1].items[10].visible = userProjectsList.data.data && userProjectsList.data.data.length > 0 ? true : false;
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);

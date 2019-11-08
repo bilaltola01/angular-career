@@ -932,11 +932,12 @@ $profile-form-field-mt: 30px;
       }
 
       .user-row {
-        text-align: left;
+        text-align: center;
         .user-detail {
           display: block;
-          margin-left: 0;
+          margin-left: 30%;
           clear: both;
+          text-align: left;
           .user-info{
             ul{
               li{
@@ -952,6 +953,7 @@ $profile-form-field-mt: 30px;
         }
         .user-photo{
           float: none;
+          margin-bottom: 0;
         }
 
       }

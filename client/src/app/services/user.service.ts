@@ -174,6 +174,15 @@ export class UserService {
         catchError(this.handleError)
       );
   }
+  public getUserContact(): Observable<any> {
+    return this.http.get(this.user_service_url + `user/${this.user_id}/contacts`, this.authHttpOptions())
+      .pipe(
+        map(data => {
+          return {success: true, message: 'Success!', data: data};
+        }),
+        catchError(this.handleError)
+      );
+  }
   public getSignedPhotoUrl(file: File): Observable<any> {
     const requestUrl =
       `${this.user_service_url}user/${this.user_id}/sign-s3?file-name=${file.name}&file-type=${file.type}`;
