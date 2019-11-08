@@ -19,4 +19,20 @@
   </mat-dialog-actions>
 </ng-container>
 
+<ng-container *ngIf="data.category === 'template'" [formGroup]="templateNameForm">
+  <mat-dialog-content>
+    <div class="form-field">
+      <mat-form-field class="bg-transparent" appearance="fill">
+        <mat-label>Template Name *</mat-label>
+        <input matInput placeholder="Template Name *" formControlName="template_name" type="text">
+      </mat-form-field>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <action-button class="update-btn" type="stroked" title="No" (click)="onClose()"></action-button>
+    <action-button class="update-btn" type="flat" color="primary" title="Save As Template" [disabled]="!(templateNameForm.valid && template_name)" (click)="onClickSave()"></action-button>
+  </mat-dialog-actions>
+</ng-container>
+  
+
 

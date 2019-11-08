@@ -669,8 +669,9 @@
         </ol>
       </div>
       <div class="btn-section">
+        <action-button *ngIf="position && position.open === 0" class="nav-btn" color="primary" title="Save as template" (click)="openDialog('template')"></action-button>
         <action-button *ngIf="position && position.open === 0" class="nav-btn" type="stroked" title="Edit" (click)="backToEdit()"></action-button>
-        <action-button *ngIf="position && position.open === 0" class="nav-btn" color="warn"  title="Delete" (click)="onClickDelete()"></action-button>
+        <action-button *ngIf="position && position.open === 0" class="nav-btn" color="warn" title="Delete" (click)="onClickDelete()"></action-button>
         <action-button *ngIf="position && position.open === 0" class="nav-btn" type="stroked"  title="Quit" (click)="onClickQuit()"></action-button>
       </div>  
     </nav>
