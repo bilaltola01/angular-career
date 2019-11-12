@@ -12,33 +12,41 @@
       <input matInput placeholder="Search People" type="text" [matAutocomplete]="autocompleteSearchUser"
         formControlName="searchUser">
       <mat-autocomplete #autocompleteSearchUser="matAutocomplete">
-        <mat-option *ngFor="let people of autocomplete_searchUser" [value]="people.first_name + (people.last_name ? ' ' + people.last_name : '')"
+        <mat-option *ngFor="let people of autocomplete_searchUser"
+          [value]="people.first_name + (people.last_name ? ' ' + people.last_name : '')"
           (onSelectionChange)="addUser(people)">
           <img [src]="people.photo ? people.photo : 'assets/icons/no_photo.png'">
           <span>{{people.first_name + (people.last_name ? ' ' + people.last_name : '')}}</span>
         </mat-option>
-        <mat-option [value]="searchForm.value.searchUser" (click)="onSearchUser($event)" *ngIf="searchForm.value.searchUser?.length > 0">
-          See all results for <b>{{searchForm.value.searchUser}}</b>
-      </mat-option>
       </mat-autocomplete>
     </mat-form-field>
   </div>
 </div>
 <div class="application-references refer-pop-app">
-    <mat-icon class="cancel" (click)="onClose()">cancel</mat-icon>
-  <div class="row app-pop-refer">
-
-       <h1 *ngIf="userContactList.length > 0" class="title">References</h1>
-          <div class="refer-pop-width">
-            <div *ngFor="let contact of userContactList; let i = index;" class="img-tag">
-              <img src="{{ contact.photo ? contact.photo : 'assets/icons/no_photo.png' }}">
-              <label>{{ contact.first_name + ' ' + contact.last_name }}</label>
-              <a>{{(contact.city_id ? contact.city : '') + (contact.city_id && (contact.state_id || contact.country_id) ? ', ' : '') + (contact.state_id ? contact.state : '') + (contact.state_id && contact.country_id ? ', ' : '') + (contact.country_id ? contact.country : '')}}</a>
-              <div class="overlay">
-                <mat-icon class="accept" (click)="acceptContactRequest(i,contact)">check_circle</mat-icon>
-                <mat-icon class="cancel" (click)="deleteContactRequest(i)">cancel</mat-icon>
+  <mat-icon class="cancel" (click)="onClose()">cancel</mat-icon>
+  <h1 *ngIf="userContactList.length > 0" class="title">References</h1>
+  <div class="people-list-container">
+    <ng-container>
+      <div *ngFor="let user of userContactList; let i = index;">
+        <div class="row" *ngIf="true; let show_less">
+          <div class="header-container">
+            <div class="user-info">
+              <div class="image"><img [src]="user.photo ? user.photo : 'assets/icons/no_photo.png'"></div>
+              <div class="info">
+                <h2 class="name">{{user.first_name}} {{user.last_name}}</h2>
               </div>
             </div>
+            <div class="send-btn">
+              <action-button class="contact-btn" type="flat" color="primary" title={{user.status}}
+                (click)="sendReferenceRequest(i,user)" disabled="{{user.status === 'Sent'}}">
+              </action-button>
+              <action-button class="contact-btn" type="flat" color="primary" title="Cancel"
+                (click)="deleteContactRequest(i)" color="warn">
+              </action-button>
+            </div>
           </div>
-    </div>
+        </div>
+      </div>
+    </ng-container>
   </div>
+</div>

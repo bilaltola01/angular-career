@@ -17,6 +17,7 @@ export class ApplicationService {
   private application_service_url = `${environment.serverUrl}/${environment.application_service}/api/${environment.api_version}/`;
 
   helper = new JwtHelperService();
+  public redirectUrl: string;
 
   constructor(private http: HttpClient, private helperService: HelperService) {
     const token = localStorage.getItem('token');
@@ -64,6 +65,16 @@ export class ApplicationService {
           return { success: true, message: 'Success!', data: data };
         }),
         catchError(this.handleError)
+      );
+  }
+  public findExistingEmployeeReference(applicationid, employeeId) {
+    const queryUrl = `${this.application_service_url}application/${applicationid}/requesting-user/${this.user_id}/employee/${employeeId}/employee-reference/request`;
+    return this.http.get(queryUrl, this.authHttpOptions())
+      .pipe(
+        map(data => {
+          return { success: true, message: 'Success!', data: data };
+        }),
+        // catchError(this.handleError)
       );
   }
   public postWorkAuth(postWorkAuthInfo: any): Observable<any> {

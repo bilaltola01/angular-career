@@ -16,7 +16,7 @@ export class ApplicationReferencesComponent implements OnInit {
   referenceData;
   isJobLoading: boolean;
 
-  constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog,  private applicationService: ApplicationService, private alertsService: AlertsService, ) { }
+  constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private applicationService: ApplicationService, private alertsService: AlertsService, ) { }
 
   ngOnInit() {
     const urlObject = this.router.url.split('/');

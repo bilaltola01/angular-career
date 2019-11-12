@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserGeneralInfo, ProfileStatuses } from 'src/app/models';
+import { UserGeneralInfo, ProfileStatuses, DisplayItemsLimit} from 'src/app/models';
 import { Router, ActivatedRoute } from '@angular/router';
 import { PositionService, CartService, HelperService, UserStateService, AlertsService, AlertType, ApplicationService, UserService, ScoreService, CompanyService } from 'src/app/services';
 import { MatchingService } from 'src/app/services/matching.service';
@@ -14,7 +14,7 @@ import { SkillDescriptionPopupComponent } from 'src/app/components/skill-descrip
 })
 export class ProfileInformationComponent implements OnInit {
   positionId;
-  displayItemsLimit = 7;
+  displayItemsLimit = DisplayItemsLimit;
   mathFloor = Math.floor;
   breakpoint: number;
   positionName = [];

@@ -396,6 +396,7 @@ $profile-form-field-mt: 30px;
 
               & .skil-height-fix {
                 overflow: hidden;
+                max-height: 30px;
 
                 &.skill-more-height {
                   max-height: 153px;
@@ -1007,10 +1008,6 @@ $profile-form-field-mt: 30px;
             ul {
               li {
                 width: 100%;
-                margin-bottom: 10px;
-                & .skills-preferred-m{
-                  margin-bottom: 4px;
-                }
               }
             }
           }

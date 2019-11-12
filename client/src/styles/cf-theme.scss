@@ -567,6 +567,7 @@ action-button {
 
       mat-icon.cancel {
         position: absolute;
+        cursor: pointer;
         top: 10px;
         right: 10px;
         color: map-get($md-cfprimary, 500);
@@ -633,6 +634,7 @@ action-button {
         margin-right: 10px;
         vertical-align: middle;
         border-radius: 100%;
+        pointer-events: auto;
       }
     }
   }

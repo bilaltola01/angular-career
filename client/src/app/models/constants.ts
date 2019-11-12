@@ -648,3 +648,6 @@ export const ApplicationType = [
   'Regular Decision'
 ];
 
+export const DisplayItemsLimit = 7;
+
+

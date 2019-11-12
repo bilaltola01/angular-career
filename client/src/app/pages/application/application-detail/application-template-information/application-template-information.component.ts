@@ -7,13 +7,6 @@ import {
 } from 'src/app/services';
 import { Router, ActivatedRoute } from '@angular/router';
 
-
-
-export interface DialogData {
-  category: 'Criminal History';
-  data: any;
-  editIndex: number;
-}
 @Component({
   selector: 'app-application-template-information',
   templateUrl: './application-template-information.component.html',

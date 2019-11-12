@@ -308,6 +308,7 @@
                       'See Less'}}" color="primary" (click)="info.showMoreFlag = !info.showMoreFlag"
                 *ngIf="matchedSkills?.length > 2 || missingSkills?.length > 2"></action-button>
             </div>
+
             <h3>Matched Skills</h3>
             <ul>
               <li>
@@ -322,13 +323,7 @@
                       <simple-tag type="green" title="{{matchSkill.skill}}" (click)="openSkilladdDialog(matchSkill)">
                       </simple-tag>
                     </div>
-
                   </div>
-                  <img *ngIf="lessFlag && limit > displayItemsLimit && matchedSkills?.length > displayItemsLimit" class="edu_img"
-                    (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
-                  <img *ngIf="limit < matchedSkills?.length" class="edu_img"
-                    (click)="limit = limit + displayItemsLimit" (click)="lessFlag = true"
-                    src="assets/icons/ic_see_more.svg" alt="See More">
                 </div>
               </li>
               <li>
@@ -343,11 +338,6 @@
                       </simple-tag>
                     </div>
                   </div>
-                  <img *ngIf="lessFlag && limit > displayItemsLimit && missingSkills?.length > displayItemsLimit" class="edu_img"
-                    (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
-                  <img *ngIf="limit < missingSkills?.length" class="edu_img"
-                    (click)="limit = limit + displayItemsLimit" (click)="lessFlag = true"
-                    src="assets/icons/ic_see_more.svg" alt="See More">
                 </div>
                 <ng-template #noSkill>
                   <ul>

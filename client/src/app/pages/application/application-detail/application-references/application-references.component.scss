@@ -15,11 +15,12 @@
       padding: 25px 20px;
       border-bottom: 1px solid map-get($md-cfaccent, 50);
       .edit-title {
-        height: 60px;
+        margin-top: 10px;
         @include flex(row, center, flex-end);
         float: right;
         a {
           font-size: 12px;
+          cursor: pointer;
           color: map-get($md-cfprimary, 500);
           @include disable-select();
           cursor: pointer;
@@ -71,12 +72,12 @@
           & .application-references-img {
             float: left;
             height: 70px;
-            width: 70px;
+            width: 66px;
             overflow: hidden;
             border-radius: 100%;
             margin-right: 10px;
             background-color: #fff;
-            margin-top: 1px;
+            margin-top: 3px;
             img {
               max-width: 100%;
             }
@@ -118,6 +119,8 @@
           height: auto;
           float: none;
           justify-content: end;
+          margin-bottom: 12px;
+          margin-top: 0px;
         }
 
         .references-detail {

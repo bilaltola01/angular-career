@@ -130,6 +130,11 @@
         </div>
         <div id="skills" *ngIf="matchedSkills?.length > 0 || missingSkills?.length > 0">
           <div class="row position-required-skills-detail main-card">
+              <div class="show-button">
+                  <action-button routerLink="." type="text" title="{{!info.showMoreFlag ? 'See All' :
+                      'See Less'}}" color="primary" (click)="info.showMoreFlag = !info.showMoreFlag"
+                    *ngIf="matchedSkills?.length > 2 || missingSkills?.length > 2"></action-button>
+                </div>
             <h3>Matched Skills</h3>
 
             <ul>
@@ -138,18 +143,18 @@
                     *ngIf="matchedSkills?.length > 0">{{ matchedSkills?.length}}</span>
                 </h5>
                 <div *ngIf="matchedSkills?.length; else noSkill">
-                  <div class="skil-height-fix" *ngIf="displayItemsLimit; let limit">
+                  <div class="skil-height-fix" [ngClass]="{'skill-more-height': info.showMoreFlag}" *ngIf="displayItemsLimit; let limit">
                     <div class="skills-preferred-m green-color-tag"
                       *ngFor="let matchSkill of matchedSkills; let i = index; ">
                       <simple-tag type="green" *ngIf="i < limit" title="{{matchSkill.skill}}">
                       </simple-tag>
                     </div>
-                    <img *ngIf="lessFlag && limit > displayItemsLimit && matchedSkills?.length > displayItemsLimit"
+                    <!-- <img *ngIf="lessFlag && limit > displayItemsLimit && matchedSkills?.length > displayItemsLimit"
                       class="edu_img" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg"
                       alt="See Less">
                     <img *ngIf="limit < matchedSkills?.length" class="edu_img"
                       (click)="limit = limit + displayItemsLimit" (click)="lessFlag = true"
-                      src="assets/icons/ic_see_more.svg" alt="See More">
+                      src="assets/icons/ic_see_more.svg" alt="See More"> -->
                   </div>
                 </div>
               </li>
@@ -158,17 +163,17 @@
                     *ngIf="missingSkills?.length > 0">{{ missingSkills?.length}}</span>
                 </h5>
                 <div *ngIf="missingSkills?.length; else noSkill">
-                  <div class="skil-height-fix" *ngIf="displayItemsLimit; let limit">
+                  <div class="skil-height-fix" [ngClass]="{'skill-more-height': info.showMoreFlag}" *ngIf="displayItemsLimit; let limit">
                     <div class="skills-preferred-m red-color-tag" *ngFor="let skill of missingSkills ; let i = index; ">
                       <simple-tag type="red" *ngIf="i < limit" title="{{skill.skill}}">
                       </simple-tag>
                     </div>
-                    <img *ngIf="lessFlag && limit > displayItemsLimit && missingSkills?.length > displayItemsLimit"
+                    <!-- <img *ngIf="lessFlag && limit > displayItemsLimit && missingSkills?.length > displayItemsLimit"
                       class="edu_img" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg"
                       alt="See Less">
                     <img *ngIf="limit < missingSkills?.length" class="edu_img"
                       (click)="limit = limit + displayItemsLimit" (click)="lessFlag = true"
-                      src="assets/icons/ic_see_more.svg" alt="See More">
+                      src="assets/icons/ic_see_more.svg" alt="See More"> -->
                   </div>
                 </div>
                 <ng-template #noSkill>

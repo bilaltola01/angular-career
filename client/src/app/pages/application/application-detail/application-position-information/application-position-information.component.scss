@@ -314,6 +314,7 @@ $profile-form-field-mt: 30px;
 
               & .skil-height-fix {
                 overflow: hidden;
+                max-height: 30px;
 
                 &.skill-more-height {
                   max-height: 153px;
