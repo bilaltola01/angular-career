@@ -9,7 +9,7 @@ $profile-form-field-mt: 30px;
   background-color: transparent;
   .profile-form {
     action-button {
-      min-width: 150px;
+      min-width: 60px;
     }
     &__title {
       margin-top: $profile-form-field-mt;
@@ -48,7 +48,7 @@ $profile-form-field-mt: 30px;
       color: rgba(map-get($md-cfaccent, 500), 0.84);
     }
     .people-list-container {
-      padding-top: 10px;
+      padding-top: 40px;
       width: 100%;
       padding-bottom: 80px;
       max-height: 18vh;

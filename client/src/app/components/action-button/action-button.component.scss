@@ -221,6 +221,22 @@
   display: inline-block;
   width: auto;
 }
+:host-context(.contact-btn) button {
+  line-height: initial;
+  padding: 12px 20px!important;
+  font-weight: 500;
+  font-size: 12px;
+  font-family: "Poppins", sans-serif;
+  display: inline-block;
+}
+:host-context(.contact-btn1) button {
+  line-height: initial;
+  padding: 12px 15px!important;
+  font-weight: 500;
+  font-size: 12px;
+  font-family: "Poppins", sans-serif;
+  display: inline-block;
+}
 @media only screen and (max-width: $tablet-breakpoint) {
   :host-context(.position-search-reload-result)button {padding: 4px 13px !important;}
   }
