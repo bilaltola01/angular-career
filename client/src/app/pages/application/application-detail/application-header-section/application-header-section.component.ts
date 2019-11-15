@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, DoCheck } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { AlertsService, AlertType, ApplicationService } from '../../../../services/index';
 import { MatDialog } from '@angular/material/dialog';
@@ -12,7 +12,7 @@ export interface DialogData {
   templateUrl: './application-header-section.component.html',
   styleUrls: ['./application-header-section.component.scss']
 })
-export class ApplicationHeaderSectionComponent implements OnInit, DoCheck {
+export class ApplicationHeaderSectionComponent implements OnInit {
 
 
   applicationNavMenu: any[];
@@ -22,6 +22,7 @@ export class ApplicationHeaderSectionComponent implements OnInit, DoCheck {
   positionId;
   searchQueryParam;
   isJobLoading: boolean;
+
   @Output() selectedNavItem = new EventEmitter();
   isNavMenuOpened: boolean;
 
@@ -29,6 +30,7 @@ export class ApplicationHeaderSectionComponent implements OnInit, DoCheck {
     private router: Router,
     private route: ActivatedRoute,
     private applicationService: ApplicationService, public dialog: MatDialog) {
+    this.updateInterestLevel = this.updateInterestLevel.bind(this);
     const urlParams = new URLSearchParams(window.location.search);
     this.searchQueryParam = urlParams.get('query');
     this.applicationId = this.route.snapshot.paramMap.get('application_id');
@@ -66,11 +68,6 @@ export class ApplicationHeaderSectionComponent implements OnInit, DoCheck {
 
     }
   }
-  ngDoCheck() {
-    if (this.applicationService.getApplicationFlag) {
-      this.getApplicationData(this.applicationId);
-    }
-  }
   onSelectNavItem(id: string) {
     const height = 100;
     document.getElementById('sidenav-content').scrollTop = document.getElementById(id).offsetTop - height;
@@ -79,7 +76,6 @@ export class ApplicationHeaderSectionComponent implements OnInit, DoCheck {
 
   getApplicationData(applicationId) {
     this.isJobLoading = true;
-    this.applicationService.getApplicationFlag = false;
     this.applicationService.getApplication(applicationId).subscribe(
       dataJson => {
         this.isJobLoading = false;
@@ -106,13 +102,16 @@ export class ApplicationHeaderSectionComponent implements OnInit, DoCheck {
   }
   openInterestLevelDialog(data, level, application_id): void {
     const dialogRef = this.dialog.open(InterestLevelPopupComponent, {
-      data: { data, level, application_id }
+      data: { data, level, application_id, callback: this.updateInterestLevel }
       ,
       width: '100vw',
       maxWidth: '800px',
       minWidth: '280px',
       panelClass: ['edit-dialog-container']
     });
+  }
+  updateInterestLevel() {
+    this.getApplicationData(this.applicationId);
   }
   setInterestLevel(level: number, application_id) {
     this.isJobLoading = true;
@@ -158,10 +157,15 @@ export class ApplicationHeaderSectionComponent implements OnInit, DoCheck {
       });
   }
   acceptOffer(applicationData) {
-    this.applicationService.acceptOffer(applicationData).subscribe();
+    this.applicationService.acceptOffer(applicationData).subscribe(
+      (dataJson) => {
+        this.getApplicationData(dataJson[0].application_id);
+      });
   }
   rejectOffer(applicationData) {
-    this.applicationService.rejectOffer(applicationData).subscribe();
+    this.applicationService.rejectOffer(applicationData).subscribe((dataJson) => {
+      this.getApplicationData(dataJson[0].application_id);
+    });
   }
   interestHeading(interest_level) {
     if (interest_level === 0) {

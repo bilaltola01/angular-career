@@ -1,4 +1,4 @@
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { Component, Inject } from '@angular/core';
 import { DialogData } from '../../pages/application/application-search-page/applications.component';
 import { ApplicationService } from 'src/app/services';
@@ -9,12 +9,14 @@ import { ApplicationService } from 'src/app/services';
 })
 export class InterestLevelPopupComponent {
   interestLevelData;
+  updateInterestLevel;
 
 
-  constructor(private applicationService: ApplicationService,
+  constructor(private applicationService: ApplicationService, public dialog: MatDialog,
     public dialogRef: MatDialogRef<InterestLevelPopupComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {
-    this.interestLevelData = data;
+      this.updateInterestLevel = this.data['callback'];
+      this.interestLevelData = data;
   }
 
   onNoClick(): void {
@@ -40,7 +42,7 @@ export class InterestLevelPopupComponent {
     };
     this.applicationService.patchInterestLevel(interestLevelQuery).subscribe(
       () => {
-        this.applicationService.getApplicationFlag = true;
+         this.updateInterestLevel();
       });
 
   }

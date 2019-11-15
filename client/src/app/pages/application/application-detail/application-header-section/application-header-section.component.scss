@@ -56,7 +56,32 @@ $profile-form-field-mt: 30px;
           width: 344px;
           & .top-choice-content {
             p {
-              color: #bea800;
+              color: #318bd6;
+            }
+          }
+          &.rejectStatus {
+            .top-choice-content {
+              p.rejected {
+                line-height: 21px;
+                font-weight: 500;
+                font-size: 14px;
+                font-family: "Poppins", sans-serif;
+                color: red;
+                border: none;
+              }
+            }
+          }
+
+          &.acceptStatus {
+            .top-choice-content {
+              p.accepted {
+                line-height: 21px;
+                font-weight: 500;
+                font-size: 14px;
+                font-family: "Poppins", sans-serif;
+                color: rgb(64, 211, 28);
+                border: none;
+              }
             }
           }
           & .application-action {

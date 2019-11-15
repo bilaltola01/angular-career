@@ -22,16 +22,16 @@
           <p>{{interestHeading(applicationData.interest_level)}}</p>
         </div>
       </div>
-      <div class="application-header-review">
-        <div class="top-choice-content">
+      <div class="application-header-review acceptStatus rejectStatus">
+        <div class="top-choice-content" >
           <span>Application Status</span>
-          <p *ngIf="applicationData.accepted">Accepted</p>
+          <p *ngIf="applicationData.accepted" class="accepted">Accepted</p>
           <p *ngIf="applicationData.in_review">In Review</p>
-          <p *ngIf="applicationData.interviewing">Interviewing</p>
-          <p *ngIf="applicationData.offer_sent">Offer Sent</p>
-          <p *ngIf="applicationData.rejected">Rejected</p>
-          <p *ngIf="applicationData.wait_listed">Wait Listed</p>
-          <p *ngIf="applicationData.saved">Saved</p>
+          <p *ngIf="applicationData.interviewing" >Interviewing</p>
+          <p *ngIf="applicationData.offer_sent" >Offer Sent</p>
+          <p *ngIf="applicationData.rejected"  class="rejected">Rejected</p>
+          <p *ngIf="applicationData.wait_listed" >Wait Listed</p>
+          <p *ngIf="applicationData.saved" >Saved</p>
           <p
             *ngIf="!(applicationData.accepted || applicationData.in_review || applicationData.interviewing || applicationData.offer_sent || applicationData.rejected || applicationData.wait_listed || applicationData.saved )">
             Submitted</p>

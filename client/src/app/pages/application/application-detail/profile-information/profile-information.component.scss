@@ -41,42 +41,6 @@ $profile-form-field-mt: 30px;
           line-height: 21px;
           margin-bottom: 20px;
         }
-
-        .user-info {
-          display: inline-block;
-          padding-top: 10px;
-          ul {
-            padding: 0;
-            margin: 0 auto;
-            li {
-              display: inline-block;
-              width: 49%;
-              small {
-                font-size: 14px;
-                margin-bottom: 10px;
-                display: block;
-                label {
-                  color: rgba(0, 29, 64, 0.34);
-                }
-                .valid {
-                  margin-left: 7px;
-                  vertical-align: middle;
-                  margin-right: 0;
-                  width: 15px;
-                }
-
-                img {
-                  margin-right: 5px;
-                  &.valid {
-                    margin-left: 10px;
-                    vertical-align: middle;
-                    margin-right: 0;
-                  }
-                }
-              }
-            }
-          }
-        }
       }
       .user-status {
         float: right;
@@ -303,8 +267,6 @@ $profile-form-field-mt: 30px;
           }
           & .education-level-m {
             & img {
-              // margin-left: 0;
-              // margin-top: 15px;
               width: 30px;
               height: 29px;
               margin: 7px 0 5px 10px;
@@ -514,7 +476,37 @@ $profile-form-field-mt: 30px;
   .mat-divider {
     margin: 20px 0;
     border-color: rgba(112, 112, 112, 0.1);
-}
+  }
+  .profile-info {
+    display: inline-flex;
+    .profile-box {
+      .profile-text {
+        display: flex;
+        align-items: center;
+        padding-right: 25px;
+        margin-bottom: 10px;
+        img {
+          margin-right: 5px;
+        }
+        p {
+          font-family: "Poppins", sans-serif;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 16px;
+          color: rgba(0, 29, 64, 0.84);
+          margin: 0px;
+          padding: 0px;
+        }
+        label {
+          color: rgba(0, 29, 64, 0.34);
+        }
+        .valid {
+          margin-left: 5px;
+          height: 16px;
+        }
+      }
+    }
+  }
 }
 
 @media only screen and (min-width: $min-mini-desktop-breakpoint) and (max-width: $max-mini-desktop-breakpoint) {
@@ -528,15 +520,6 @@ $profile-form-field-mt: 30px;
         .user-detail {
           margin-left: 12px;
           width: 46%;
-          .user-info {
-            ul {
-              li {
-                small {
-                  font-size: 11px;
-                }
-              }
-            }
-          }
         }
       }
 
@@ -887,7 +870,6 @@ $profile-form-field-mt: 30px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            // margin-bottom: 18px;
           }
           h3 {
             font-size: 20px;
@@ -955,33 +937,30 @@ $profile-form-field-mt: 30px;
           }
         }
       }
-
       .user-row {
         text-align: center;
         .user-detail {
           display: block;
-          margin-left: 30%;
+          margin-left: 25%;
           clear: both;
           text-align: left;
-          .user-info{
-            ul{
-              li{
-                width: 100%;
-              }
-            }
+          h1 {
+            text-align: center;
           }
-                }
+        }
         .user-status {
           float: none;
           margin-top: 10px;
           display: inline-block;
         }
-        .user-photo{
+        .user-photo {
           float: none;
           margin-bottom: 0;
         }
-
       }
     }
+  }
+  .profile-info {
+    flex-direction: column;
   }
 }

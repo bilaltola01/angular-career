@@ -41,6 +41,7 @@ export class ApplicationCoverLetterComponent implements OnInit {
     this.coverLetterForm.patchValue({
       'letter': this.applicationCoverLetter
     });
+
   }
   getApplicationData(applicationId) {
     this.isJobLoading = true;
@@ -49,6 +50,10 @@ export class ApplicationCoverLetterComponent implements OnInit {
         this.isJobLoading = false;
         this.applicationData = dataJson.data;
         this.applicationCoverLetter = dataJson.data['application_cover_letter'];
+        if (this.applicationCoverLetter === 'null') {
+          this.applicationCoverLetter = '';
+        }
+
       }
     );
   }

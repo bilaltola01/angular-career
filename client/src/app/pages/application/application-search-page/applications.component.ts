@@ -1,4 +1,4 @@
-import { Component, OnInit, DoCheck } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import {
@@ -40,7 +40,7 @@ export interface DialogData {
   templateUrl: './applications.component.html',
   styleUrls: ['./applications.component.scss']
 })
-export class ApplicationsComponent implements OnInit, DoCheck {
+export class ApplicationsComponent implements OnInit {
 
   // Constants
   breakpoint: number;
@@ -102,6 +102,7 @@ export class ApplicationsComponent implements OnInit, DoCheck {
     private alertsService: AlertsService, private positionService: PositionService, private scoreService: ScoreService,
     private cartService: CartService, private applicationService: ApplicationService, public dialog: MatDialog) {
     this.updateSkillCallback = this.updateSkillCallback.bind(this);
+    this.updateInterestLevel = this.updateInterestLevel.bind(this);
   }
   ngOnInit() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -125,11 +126,6 @@ export class ApplicationsComponent implements OnInit, DoCheck {
     this.getApplicationData();
     this.breakpoint = (window.innerWidth <= 500) ? 2 : 4;
 
-  }
-  ngDoCheck() {
-    if (this.applicationService.getApplicationFlag) {
-      this.getApplicationData();
-    }
   }
   onResize(event) {
     this.breakpoint = (event.target.innerWidth <= 500) ? 2 : 4;
@@ -410,7 +406,6 @@ export class ApplicationsComponent implements OnInit, DoCheck {
   }
   getApplicationData() {
     this.queryFlag = true;
-    this.applicationService.getApplicationFlag = false;
     this.selectedAllFlag = false;
     if (this.searchQueryParam) {
       this.currentPageNumber = (this.urlParams['offset'] / this.urlParams['limit']) + 1;
@@ -578,16 +573,6 @@ export class ApplicationsComponent implements OnInit, DoCheck {
       }
     }
   }
-
-  openSkilladdDialog(skillData) {
-    const dialogRef = this.dialog.open(AddSkillPopupComponent, {
-      data: { skillData, callback: this.updateSkillCallback },
-      width: '100vw',
-      maxWidth: '880px',
-      minWidth: '280px',
-      panelClass: ['edit-dialog-container']
-    });
-  }
   openDialog() {
     const dialogFlag = true;
     const dialogRef = this.dialog.open(SkillDescriptionPopupComponent, {
@@ -668,6 +653,7 @@ export class ApplicationsComponent implements OnInit, DoCheck {
       });
 
   }
+
   onClose(application_id, level) {
     if (level > 0) {
       const interestLevelQuery = {
@@ -683,14 +669,26 @@ export class ApplicationsComponent implements OnInit, DoCheck {
         });
     }
   }
-  openInterestLevelDialog(data, level, application_id): void {
+  openInterestLevelDialog(data, level, application_id) {
     const dialogRef = this.dialog.open(InterestLevelPopupComponent, {
-      data: { data, level, application_id },
+      data: { data, level, application_id, callback: this.updateInterestLevel },
       width: '100vw',
       maxWidth: '800px',
       minWidth: '280px',
       panelClass: ['edit-dialog-container']
     });
+  }
+  openSkilladdDialog(skillData) {
+    const dialogRef = this.dialog.open(AddSkillPopupComponent, {
+      data: { skillData, callback: this.updateSkillCallback },
+      width: '100vw',
+      maxWidth: '880px',
+      minWidth: '280px',
+      panelClass: ['edit-dialog-container']
+    });
+  }
+  updateInterestLevel() {
+    this.getApplicationData();
   }
   interestHeading(interest_level) {
     if (interest_level === 0) {
@@ -710,10 +708,19 @@ export class ApplicationsComponent implements OnInit, DoCheck {
     }
   }
   acceptOffer(applicationData) {
-    this.applicationService.acceptOffer(applicationData).subscribe();
+    this.applicationService.acceptOffer(applicationData).subscribe(
+      () => {
+        this.getApplicationData();
+      }
+    );
   }
   rejectOffer(applicationData) {
-    this.applicationService.rejectOffer(applicationData).subscribe();
+    this.applicationService.rejectOffer(applicationData).subscribe(
+      () => {
+        this.getApplicationData();
+
+      }
+    );
   }
   routerNavigate(application_id, position_id) {
     this.router.navigate(['/applications/application-detail/', application_id, position_id], { queryParams: { query: this.applicationParam ? this.applicationParam : '' } });

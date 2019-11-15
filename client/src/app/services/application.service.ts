@@ -12,7 +12,6 @@ import { query } from '@angular/animations';
 })
 export class ApplicationService {
 
-  getApplicationFlag = false;
   private user_id = -1;
   private application_service_url = `${environment.serverUrl}/${environment.application_service}/api/${environment.api_version}/`;
 
