@@ -126,6 +126,9 @@ export class ProfileSectionComponent implements OnInit {
       }
     } else {
       this.editMode = false;
+      if (url.includes('profile')) {
+        this.initSkillsSearchForm();
+      }
     }
   }
 
@@ -524,21 +527,25 @@ export class ProfileSectionComponent implements OnInit {
     this.skillsSearchForm.get('skills').valueChanges.subscribe(
       (skill) => {
         if (skill && this.helperService.checkSpacesString(skill)) {
-          if (!this.prevent_skills_autocomplete) {
-            this.autoCompleteService.autoComplete(skill, 'skills').subscribe(
-              dataJson => {
-                if (dataJson['success']) {
-                  this.autocomplete_skills = dataJson['data'];
+          if (this.editMode) {
+            if (!this.prevent_skills_autocomplete) {
+              this.autoCompleteService.autoComplete(skill, 'skills').subscribe(
+                dataJson => {
+                  if (dataJson['success']) {
+                    this.autocomplete_skills = dataJson['data'];
+                  }
+                },
+                error => {
+                  this.alertsService.show(error.message, AlertType.error);
+                  this.autocomplete_skills = [];
                 }
-              },
-              error => {
-                this.alertsService.show(error.message, AlertType.error);
-                this.autocomplete_skills = [];
-              }
-            );
+              );
+            } else {
+              this.autocomplete_skills = [];
+              this.prevent_skills_autocomplete = false;
+            }
           } else {
-            this.autocomplete_skills = [];
-            this.prevent_skills_autocomplete = false;
+            this.autocomplete_skills = this.userSkillsList.filter(value => value.skill.toLocaleLowerCase().includes(skill));
           }
         } else {
           this.autocomplete_skills = [];
@@ -547,23 +554,38 @@ export class ProfileSectionComponent implements OnInit {
     );
   }
 
+  /**
+   * Select skillItem from autocomplete list.
+   * edit mode
+   *  - if new skill, add it to skills list
+   * @param skillItem
+   */
   addSkills(skillItem: Skill) {
-    const skillItemData = {
-      skill_id: skillItem.skill_id,
-      skill: skillItem.skill,
-      skill_level: 1
-    };
-    const filterList = this.userSkillsList.filter(value => value.skill_id === skillItemData.skill_id);
-    if (filterList.length === 0) {
-      this.addUserSkillsData(skillItemData);
+    if (this.editMode) {
+      const skillItemData = {
+        skill_id: skillItem.skill_id,
+        skill: skillItem.skill,
+        skill_level: 1
+      };
+      const filterList = this.userSkillsList.filter(value => value.skill_id === skillItemData.skill_id);
+      if (filterList.length === 0) {
+        this.addUserSkillsData(skillItemData);
+      } else {
+        this.temp_skill = {
+          index: this.userSkillsList.indexOf(filterList[0]),
+          skillItem: filterList[0]
+        };
+      }
+      this.skillsSearchForm.get('skills').setValue('');
+      this.prevent_skills_autocomplete = true;
     } else {
+      const filterList = this.userSkillsList.filter(value => value.skill_id === skillItem.skill_id);
       this.temp_skill = {
         index: this.userSkillsList.indexOf(filterList[0]),
         skillItem: filterList[0]
       };
+      this.skillsSearchForm.get('skills').setValue('');
     }
-    this.skillsSearchForm.get('skills').setValue('');
-    this.prevent_skills_autocomplete = true;
   }
   onLevelChanged(level: number, index: number) {
     const skillItemData = {
