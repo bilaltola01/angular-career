@@ -30,7 +30,7 @@ $profile-form-field-mt: 30px;
         float: right;
         .application-header-choice {
           background-color: rgba(49, 139, 214, 0.1);
-          padding: 10px 20px;
+          padding: 6px 20px;
           border-radius: 40px;
           display: inline-block;
           width: 344px;
@@ -50,7 +50,7 @@ $profile-form-field-mt: 30px;
         }
         & .application-header-review {
           background-color: rgba(221, 198, 30, 0.15);
-          padding: 10px 20px;
+          padding: 6px 10px 6px 20px;
           border-radius: 40px;
           display: inline-block;
           width: 344px;
@@ -64,6 +64,7 @@ $profile-form-field-mt: 30px;
             }
           }
           &.rejectStatus {
+            background-color: $secondary-bg-color-reject-btn;
             .top-choice-content {
               p.rejected {
                 line-height: 21px;
@@ -77,6 +78,7 @@ $profile-form-field-mt: 30px;
           }
 
           &.acceptStatus {
+            background-color: $secondary-bg-color-btn;
             .top-choice-content {
               p.accepted {
                 line-height: 21px;
@@ -90,7 +92,6 @@ $profile-form-field-mt: 30px;
           }
           & .application-action {
             float: right;
-            width: 39%;
           }
         }
         & .top-choice-content {
@@ -242,7 +243,7 @@ $profile-form-field-mt: 30px;
           }
           .application-header-choice {
             width: 304px;
-            padding: 10px;
+            padding: 6px 10px;
           }
           .application-header-review {
             width: 304px;
@@ -336,6 +337,7 @@ $profile-form-field-mt: 30px;
       }
       .application-detail-header {
         padding: 50px 30px 20px;
+        text-align: center;
         .application-detail-heading {
           float: none;
           width: 100%;
@@ -347,7 +349,6 @@ $profile-form-field-mt: 30px;
         .application-header-btn-style {
           float: none;
           margin: 20px auto 0;
-          text-align: center;
           .top-choice-content {
             width: 44%;
             text-align: left;
@@ -368,6 +369,7 @@ $profile-form-field-mt: 30px;
           }
           .application-header-review {
             width: 304px;
+            text-align: left;
           }
         }
       }
