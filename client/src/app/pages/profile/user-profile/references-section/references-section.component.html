@@ -1,0 +1,26 @@
+<ng-container>
+  <div class="edit-title">
+    <!-- <a *ngIf="currentPage === 'references' && !userId" (click)="navigateToIncomingRequests()">Incoming Requests</a> -->
+    <a *ngIf="currentPage === 'incoming-requests' && !userId" (click)="navigateToContacts()">Contacts</a>
+  </div>
+
+  <div *ngIf="userReferenceList" class="row">
+    <div>
+      <div *ngFor="let reference of userReferenceList; let i = index;" class="img-tag">
+        <img src="{{ reference.photo ? reference.photo : 'assets/icons/no_photo.png' }}">
+        <label>{{ reference.requesting_first_name + ' ' + reference.requesting_last_name }}</label>
+        <mat-icon *ngIf="currentPage === 'contacts' && !userId" class="remove">highlight_off</mat-icon>
+        <div *ngIf="currentPage === 'incoming-requests' && !userId" class="overlay">
+          <mat-icon class="accept" >check_circle</mat-icon>
+          <mat-icon class="cancel" >cancel</mat-icon>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="loadMore" class="load-more">
+      <action-button type="text" title="See More" color="primary" ></action-button>
+    </div>
+  </div>
+  <div *ngIf="!userReferenceList || userReferenceList.length === 0" class="row">
+    <p>{{ currentPage === 'references' ? 'No contacts' : 'No reference requests' }}</p>
+  </div>
+</ng-container>

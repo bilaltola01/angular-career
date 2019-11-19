@@ -404,6 +404,11 @@ export const NavMenus = {
       id: 'application-template',
       title: 'Application Template',
       items: []
+    },
+    {
+      id: 'references',
+      title: 'References',
+      items: []
     }
   ]
 };

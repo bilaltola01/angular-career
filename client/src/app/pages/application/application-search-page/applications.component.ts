@@ -52,7 +52,7 @@ export class ApplicationsComponent implements OnInit {
   // FormGroup
   applicationForm: FormGroup;
   // Autocomplete list
-
+  applicationSearchParam;
   jobType = JobType;
   interest: object[] = interestLevel;
   applicationStatus: object[] = ApplicationStatus;
@@ -330,7 +330,7 @@ export class ApplicationsComponent implements OnInit {
     let urlQueryParam;
     if (this.searchQueryParam) {
       queryString = this.searchQueryParam;
-      this.applicationParam = this.searchQueryParam;
+      this.applicationSearchParam = this.searchQueryParam;
       this.searchQueryParam = null;
     } else {
       queryString = this.applicationForm.value.city ? `${queryString ? queryString + '&' : ''}city=${this.filterAttributes.city_id ? this.filterAttributes.city_id : this.urlParams['city']}` : queryString;
@@ -723,7 +723,8 @@ export class ApplicationsComponent implements OnInit {
     );
   }
   routerNavigate(application_id, position_id) {
-    this.router.navigate(['/applications/application-detail/', application_id, position_id], { queryParams: { query: this.applicationParam ? this.applicationParam : '' } });
+    this.router.navigate([`/applications/${application_id}/application-detail/`, position_id], { queryParams: { search: this.applicationParam ? this.applicationParam :  this.applicationSearchParam } });
+
   }
 }
 

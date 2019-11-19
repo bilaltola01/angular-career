@@ -16,7 +16,7 @@ export const applicationsRoutes: Routes = [
     // canActivate: [AuthGuard]
   },
   {
-    path: 'application-detail/:application_id/:position_id',
+    path: ':application_id/application-detail/:position_id',
     component: ApplicationHeaderSectionComponent,
     // canActivate: [AuthGuard],
     children: [

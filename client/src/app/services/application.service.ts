@@ -243,7 +243,6 @@ export class ApplicationService {
         ),
         catchError(this.handleError)
       );
-
   }
 
   public patchInterestLevel(bodyQueryParam): Observable<any> {
@@ -273,6 +272,18 @@ export class ApplicationService {
   public postReferenceRequest(bodyQueryParam) {
     const queryUrl = `${this.application_service_url}application/employee-reference/request`;
     return this.http.post(queryUrl, bodyQueryParam, this.authHttpOptions())
+    .pipe(
+      map(
+        data => {
+          return { success: true, message: 'Success!', data: data };
+        }
+      ),
+      catchError(this.handleError)
+    );
+  }
+  getreferencerequest() {
+    const queryUrl = `${this.application_service_url}application/employee-reference/requests`;
+    return this.http.get(queryUrl, this.authHttpOptions())
     .pipe(
       map(
         data => {

@@ -277,7 +277,7 @@
               [matTooltipShowDelay]=500>
             </simple-tag>
             <simple-tag *ngIf="score.minimum_skills" type="gray" title="Required Skills Match" ellipseTag="true"
-            value="{{mathFloor(6*score.true_fitscore_info?.required_skills_fitscore)}}">
+            value="{{mathFloor(6*score.true_fitscore_info?.required_skills_fitscore)}}"matTooltip="{{score.true_fitscore_info?.required_skills_fitscore*100}}% of required skills match" [matTooltipShowDelay]=500>
           </simple-tag>
             <simple-tag *ngIf="score.true_fitscore_info?.experience_weight" type="gray" title="Experience Match"
               ellipseTag="true" value="{{mathFloor(6*score.true_fitscore_info?.experience_fitscore)}}"
@@ -293,6 +293,7 @@
               ellipseTag="true" value="{{mathFloor(6*score.true_fitscore_info?.interests_fitscore)}}"
               matTooltip="Interests Match: {{(score.true_fitscore_info?.interests_fitscore*100)| number : '2.0'}}%"
               [matTooltipShowDelay]=500>
+
             </simple-tag>
 
             <p

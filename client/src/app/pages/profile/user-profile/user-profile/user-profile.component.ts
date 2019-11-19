@@ -74,6 +74,8 @@ export class UserProfileComponent implements OnInit {
       }
     } else  if (url.includes('template')) {
       this.currentPage = 'template';
+    } else  if (url.includes('references')) {
+      this.currentPage = 'references';
     }
   }
 

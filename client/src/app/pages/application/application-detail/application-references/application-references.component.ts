@@ -21,7 +21,7 @@ export class ApplicationReferencesComponent implements OnInit {
   ngOnInit() {
     const urlObject = this.router.url.split('/');
     for (let i = 0; i < urlObject.length; i++) {
-      if (i === 3) {
+      if (i === 2) {
         this.applicationId = parseInt(urlObject[i], 10);
       }
     }
