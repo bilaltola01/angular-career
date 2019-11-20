@@ -106,7 +106,7 @@ export class ApplicationsComponent implements OnInit {
   }
   ngOnInit() {
     const urlParams = new URLSearchParams(window.location.search);
-    this.searchQueryParam = urlParams.get('search');
+    this.searchQueryParam = urlParams.get('filter');
     if (this.searchQueryParam) {
       this.preLoadDataFlag = false;
       this.offsetFlag = true;
@@ -395,7 +395,7 @@ export class ApplicationsComponent implements OnInit {
       queryString = this.applicationForm.value.sortBy ? `${queryString ? queryString + '&' : ''}sort=${this.applicationForm.value.sortBy}` : queryString;
 
       if (this.queryFlag || this.prequeryFlag) {
-        this.router.navigate(['/applications'], { queryParams: { search: urlQueryParam ? urlQueryParam : '' } });
+        this.router.navigate(['/applications'], { queryParams: { filter: urlQueryParam ? urlQueryParam : '' } });
         this.applicationParam = urlQueryParam;
       }
       this.urlQueryParameter = queryString;
@@ -418,7 +418,7 @@ export class ApplicationsComponent implements OnInit {
       if (this.currentPageNumber < this.paginationArr[this.paginationArr.length - 1]) {
         this.preLoadNextPage(this.currentPageNumber + 1);
       } else {
-        this.router.navigate(['/applications'], { queryParams: { search: this.urlQueryParameter ? this.urlQueryParameter : '' } });
+        this.router.navigate(['/applications'], { queryParams: { filter: this.urlQueryParameter ? this.urlQueryParameter : '' } });
       }
     } else {
       this.isJobLoading = true;
@@ -723,7 +723,7 @@ export class ApplicationsComponent implements OnInit {
     );
   }
   routerNavigate(application_id, position_id) {
-    this.router.navigate([`/applications/${application_id}/application-detail/`, position_id], { queryParams: { search: this.applicationParam ? this.applicationParam :  this.applicationSearchParam } });
+    this.router.navigate([`/applications/${application_id}/application-detail/`, position_id], { queryParams: { filter: this.applicationParam ? this.applicationParam :  this.applicationSearchParam } });
 
   }
 }

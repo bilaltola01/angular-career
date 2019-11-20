@@ -32,7 +32,7 @@ export class ApplicationHeaderSectionComponent implements OnInit {
     private applicationService: ApplicationService, public dialog: MatDialog) {
     this.updateInterestLevel = this.updateInterestLevel.bind(this);
     const urlParams = new URLSearchParams(window.location.search);
-    this.searchQueryParam = urlParams.get('search');
+    this.searchQueryParam = urlParams.get('filter');
     this.applicationId = this.route.snapshot.paramMap.get('application_id');
     this.positionId = this.route.snapshot.paramMap.get('position_id');
     this.parseRouterUrl(router.url);
@@ -40,8 +40,8 @@ export class ApplicationHeaderSectionComponent implements OnInit {
     this.getApplicationData(this.applicationId);
     router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
-        if (val.url.includes('search')) {
-          this.router.navigate(['/applications'], { queryParams: { search: this.searchQueryParam ? this.searchQueryParam : '' } });
+        if (val.url.includes('filter')) {
+          this.router.navigate(['/applications'], { queryParams: { filter: this.searchQueryParam ? this.searchQueryParam : '' } });
         }
       }
     });
