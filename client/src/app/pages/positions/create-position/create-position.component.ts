@@ -1688,7 +1688,7 @@ export class CreatePositionComponent implements OnInit {
 
       this.positionService.postPositionTemplate(info).subscribe(
         dataJson => {
-          this.alertsService.show(dataJson.data.message, AlertType.success);
+          this.alertsService.show('Saved as a template.', AlertType.success);
         },
         error => {
           this.alertsService.show(error.message, AlertType.error);
