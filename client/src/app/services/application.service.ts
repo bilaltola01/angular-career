@@ -55,7 +55,7 @@ export class ApplicationService {
 
   public getApplicationWorkAuth(queryParam): Observable<any> {
     let queryUrl = `${this.application_service_url}application`;
-    if ( queryParam ) {
+    if (queryParam) {
       queryUrl = `${this.application_service_url}application/${queryParam}/work-auth`;
     }
     return this.http.get(queryUrl, this.authHttpOptions())
@@ -73,7 +73,7 @@ export class ApplicationService {
         map(data => {
           return { success: true, message: 'Success!', data: data };
         }),
-        // catchError(this.handleError)
+        catchError(this.handleError)
       );
   }
   public postWorkAuth(postWorkAuthInfo: any): Observable<any> {
@@ -260,38 +260,59 @@ export class ApplicationService {
   public patchCoverLetter(bodyQueryParam) {
     const queryUrl = `${this.application_service_url}application`;
     return this.http.patch(queryUrl, bodyQueryParam, this.authHttpOptions())
-    .pipe(
-      map(
-        data => {
-          return { success: true, message: 'Success!', data: data };
-        }
-      ),
-      catchError(this.handleError)
-    );
+      .pipe(
+        map(
+          data => {
+            return { success: true, message: 'Success!', data: data };
+          }
+        ),
+        catchError(this.handleError)
+      );
   }
   public postReferenceRequest(bodyQueryParam) {
     const queryUrl = `${this.application_service_url}application/employee-reference/request`;
     return this.http.post(queryUrl, bodyQueryParam, this.authHttpOptions())
-    .pipe(
-      map(
-        data => {
-          return { success: true, message: 'Success!', data: data };
-        }
-      ),
-      catchError(this.handleError)
-    );
+      .pipe(
+        map(
+          data => {
+            return { success: true, message: 'Success!', data: data };
+          }
+        ),
+        catchError(this.handleError)
+      );
   }
-  getreferencerequest() {
+  public getreferencerequest() {
     const queryUrl = `${this.application_service_url}application/employee-reference/requests`;
     return this.http.get(queryUrl, this.authHttpOptions())
-    .pipe(
-      map(
-        data => {
+      .pipe(
+        map(
+          data => {
+            return { success: true, message: 'Success!', data: data };
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+  public postUserReference(bodyQueryParam) {
+    const queryUrl = `${this.application_service_url}application/${bodyQueryParam}/employee-reference`;
+    return this.http.post(queryUrl, bodyQueryParam, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return { success: true, message: 'Success!', data: data };
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+  public deleteRequest(applicationId, userId, employeeId) {
+    return this.http.delete(this.application_service_url + `application/${applicationId}/requesting-user/${userId}/employee/${employeeId}/employee-reference/request`, this.authHttpOptions())
+      .pipe(
+        map(data => {
           return { success: true, message: 'Success!', data: data };
-        }
-      ),
-      catchError(this.handleError)
-    );
+        }),
+        catchError(this.handleError)
+      );
   }
   public acceptOffer(queryParam): Observable<any> {
     const observableArr = [];

@@ -20,6 +20,7 @@
       <a *ngIf="!editMode" (click)="onClickEdit()">Edit Template</a>
       <a *ngIf="editMode" [class.disabled]="false" (click)="onClickUpdate()">Update</a>
     </ng-container>
+    <a *ngIf="!editMode && currentPage === 'references'" (click)="navigateToReferences()">References</a>
   </legend>
   <router-outlet></router-outlet>
   <nav-section

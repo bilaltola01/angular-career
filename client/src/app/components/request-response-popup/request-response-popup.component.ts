@@ -19,6 +19,7 @@ export class RequestResponsePopupComponent implements OnInit {
   allContanctList = [];
   autocomplete_searchUser: User[] = [];
   applicationId;
+  existingReferenceData;
   contact_status = false;
 
   constructor(
@@ -29,10 +30,12 @@ export class RequestResponsePopupComponent implements OnInit {
     private applicationService: ApplicationService,
     public dialogRef: MatDialogRef<RequestResponsePopupComponent>, @Inject(MAT_DIALOG_DATA) public data,
     public dialog: MatDialog) {
-    this.applicationId = data;
+      this.applicationId = data.applicationId;
+      if ( this.existingReferenceData) {
+    this.existingReferenceData = data;
   }
+}
   ngOnInit() {
-    // this.getUserContact();
     this.initSearchForm();
 
   }
@@ -66,7 +69,16 @@ export class RequestResponsePopupComponent implements OnInit {
     }
   }
   addUser(people) {
-
+    if (this.existingReferenceData) {
+      const filterData = this.existingReferenceData.filter(value => value.employee_id === people.user_id);
+      if (filterData.length !== 0) {
+        const filterList = this.userContactList.filter(value => value.user_id === people.user_id);
+        if ( filterList.length === 0 ) {
+          this.userContactList.unshift(people);
+        }
+        people.status = 'Accepted';
+      }
+    } else {
     this.applicationService.findExistingEmployeeReference(this.applicationId, people.user_id).subscribe(
       dataJson => {
         if (dataJson) {
@@ -93,6 +105,7 @@ export class RequestResponsePopupComponent implements OnInit {
         }
       }
     );
+    }
   }
   sendReferenceRequest(i, contact) {
     const userData = {

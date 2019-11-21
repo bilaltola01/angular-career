@@ -3,7 +3,7 @@
 :host {
   grid-area: main;
   margin: 0 40px 0 0;
-  padding-top: 0;
+  padding-top: 60px;
   padding-bottom: 80px;
   border-radius: 5px;
   background-color: transparent;
@@ -16,26 +16,9 @@
     border-bottom-right-radius: 5px;
     border-bottom: none !important;
   }
-
-  .edit-title {
-    height: 60px;
-    @include flex(row, center, flex-end);
-    a {
-      font-size: 12px;
-      color: map-get($md-cfprimary, 500);
-      @include disable-select();
-      cursor: pointer;
-    }
-  }
-
   .row {
     background: white;
-    padding: 25px 20px;
-    border-bottom: 1px solid map-get($md-cfaccent, 50);
-    .load-more {
-      text-align: center;
-      margin: 20px 0;
-    }
+    padding: 11px 20px;
     .btn-container {
       text-align: center;
       padding: 10px 0;
@@ -59,10 +42,10 @@
       line-height: 21px;
     }
     p {
-      margin-top: 10px;
-      margin-bottom: 10px;
-      font-size: 16px;
-      line-height: 24px;
+      margin-top: 0px;
+    margin-bottom: 24px;
+    font-size: 16px;
+    line-height: 24px;
     }
     &.edit-mode {
       border-bottom: none;
@@ -221,20 +204,6 @@
         }
       }
     }
-    .remove {
-      position: absolute;
-      font-size: 30px;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      color: rgba(map-get($md-cfaccent, 500), .1);
-      top: 5px;
-      right: 15px;
-      cursor: pointer;
-      &:hover {
-        color: map-get($md-cfred, 500);
-      }
-    }
     &:hover {
       .overlay {
         @include flex(row, center, center);
@@ -293,9 +262,6 @@
     margin: 0 40px;
     padding-top: 40px;
     padding-bottom: 40px;
-    .edit-title {
-      display: none;
-    }
     .img-tag {
       width: 330px;
     }

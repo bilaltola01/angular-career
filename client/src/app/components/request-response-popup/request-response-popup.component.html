@@ -38,8 +38,11 @@
               </div>
             </div>
             <div class="send-btn">
-              <action-button class="contact-btn" type="flat" color="primary" title={{user.status}}
-                (click)="sendReferenceRequest(i,user)" disabled="{{user.status === 'Sent'}}">
+              <action-button class="contact-btn" *ngIf="!(user.status === 'Sent' || user.status === 'Accepted')" type="flat" color="primary" title={{user.status}}
+                (click)="sendReferenceRequest(i,user)">
+              </action-button>
+              <action-button class="contact-btn" type="flat"  *ngIf="!(user.status === 'send') && (user.status === 'Sent' || user.status === 'Accepted')" color="primary" title={{user.status}}
+                disabled>
               </action-button>
               <action-button class="contact-btn1" type="flat" color="primary" title="Cancel"
                 (click)="deleteContactRequest(i)" color="warn">

@@ -106,6 +106,8 @@ export class MyProfileComponent implements OnInit {
       }
     } else  if (url.includes('template')) {
       this.currentPage = 'template';
+    } else  if (url.includes('references')) {
+      this.currentPage = 'references';
     }
   }
 
@@ -132,6 +134,9 @@ export class MyProfileComponent implements OnInit {
 
   navigateToContacts() {
     this.router.navigate(['/my-contacts'], { relativeTo: this.route });
+  }
+  navigateToReferences() {
+    this.router.navigate(['/my-references'], { relativeTo: this.route });
   }
 
   navigateToIncomingRequests() {

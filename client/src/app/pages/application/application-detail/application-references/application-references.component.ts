@@ -39,9 +39,10 @@ export class ApplicationReferencesComponent implements OnInit {
       }
     );
   }
-  openInterestLevelDialog(): void {
+  openReferenceRequestDialog(): void {
+    const applicationId = this.applicationId;
     const dialogRef = this.dialog.open(RequestResponsePopupComponent, {
-      data: this.applicationId,
+      data: {data : this.referenceData, applicationId},
       width: '100vw',
       maxWidth: '800px',
       minWidth: '280px',

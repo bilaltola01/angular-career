@@ -38,7 +38,7 @@ export class NavSectionComponent implements OnInit {
     if (router.url.includes('user')) {
       this.userId = parseInt(router.url.split('/')[2], 10);
       this.navMenu[0]['title'] = 'Profile';
-      this.navMenu.splice(2, 1);
+      this.navMenu.splice(2, 2);
     }
      this.checkNavMenuItemsVisibility();
     this.parseRouterUrl(router.url);

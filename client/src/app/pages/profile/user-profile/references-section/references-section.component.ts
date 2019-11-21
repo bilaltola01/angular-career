@@ -19,7 +19,7 @@ import { UserGeneralInfo } from 'src/app/models';
 export class ReferencesSectionComponent implements OnInit {
 
   userId: number;
-  userReferenceList ;
+  userReferenceList;
   limit = 8;
   loadMore: boolean;
   offset: number;
@@ -71,20 +71,38 @@ export class ReferencesSectionComponent implements OnInit {
       this.getReferenceList();
     }
   }
-
   getReferenceList() {
-    this.applicationService.getreferencerequest().subscribe(
-      dataJSON => {
-          this.userReferenceList = dataJSON.data['employee_reference_requests'];
-    });
+    if (this.currentPage === 'references') {
+      this.applicationService.getreferencerequest().subscribe(
+        dataJson => {
+          this.userReferenceList = dataJson.data['employee_reference_requests'];
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    }
   }
 
-  navigateToContacts() {
-    this.router.navigate([this.userId ? `/user/${this.userId}/references` : '/my-references'], { relativeTo: this.route });
+  acceptReferenceRequest(reference, i) {
+    this.applicationService.postUserReference(reference.application_id).subscribe(
+      dataJson => {
+        this.deleteReferenceRequest(reference, i);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
   }
-  navigateToIncomingRequests() {
-    this.router.navigate(['/my-references', 'incoming-requests'], { relativeTo: this.route });
+  deleteReferenceRequest(reference, i) {
+    this.applicationService.deleteRequest(reference.application_id, reference.requesting_user_id, reference.employee_id).subscribe(
+      dataJson => {
+        this.userReferenceList.splice(i, 1);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+
   }
-
-
 }
