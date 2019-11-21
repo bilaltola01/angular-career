@@ -220,7 +220,7 @@
         </div>
       </div>
 
-      <div *ngFor="let job of positionList ">
+      <div *ngFor="let job of savedPositionList ">
 
         <div class="row" [ngClass]="{'selected': job.selected}">
           <round-checkbox id="test" [checked]="job.selected"
@@ -340,19 +340,24 @@
                 <h5>Qualification Level Estimate Breakdown</h5>
 
                 <simple-tag *ngIf="job.true_fitscore_info?.skills_weight" type="gray" title="Skills Match"
-                  ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.skills_fitscore)}}">
+                  ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.skills_fitscore)}}"
+                  matTooltip="{{job.true_fitscore_info?.skills_fitscore*100}}% of skills match" [matTooltipShowDelay]=500>
                 </simple-tag>
                 <simple-tag *ngIf="job.minimum_skills" type="gray" title="Required Skills Match" ellipseTag="true"
-                  value="{{mathFloor(6*job.true_fitscore_info?.required_skills_fitscore)}}">
+                  value="{{mathFloor(6*job.true_fitscore_info?.required_skills_fitscore)}}"
+                  matTooltip="{{job.true_fitscore_info?.required_skills_fitscore*100}}% of required skills match" [matTooltipShowDelay]=500>
                 </simple-tag>
                 <simple-tag *ngIf="job.true_fitscore_info?.experience_weight" type="gray" title="Experience Match"
-                  ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.experience_fitscore)}}">
+                  ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.experience_fitscore)}}"
+                  matTooltip="{{job.true_fitscore_info?.experience_fitscore*100}}% of experience match" [matTooltipShowDelay]=500>
                 </simple-tag>
                 <simple-tag *ngIf="job.true_fitscore_info?.education_weight" type="gray" title="Education Match"
-                  ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.education_fitscore)}}">
+                  ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.education_fitscore)}}"
+                  matTooltip="{{job.true_fitscore_info?.education_fitscore*100}}% of education match" [matTooltipShowDelay]=500>
                 </simple-tag>
                 <simple-tag *ngIf="job.true_fitscore_info?.interests_weight" type="gray" title="Interests Match"
-                  ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.interests_fitscore)}}">
+                  ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.interests_fitscore)}}"
+                  matTooltip="{{job.true_fitscore_info?.interests_fitscore*100}}% of interests match" [matTooltipShowDelay]=500>
                 </simple-tag>
 
 
@@ -384,12 +389,12 @@
           </div>
         </div>
       </div>
-      <div *ngIf="!positionList || positionList.length == 0">
+      <div *ngIf="!savedPositionList || savedPositionList.length == 0">
         <div class="row no-job">
           No search results found.
         </div>
       </div>
-      <div class="pagination" *ngIf="positionList.length > 0">
+      <div class="pagination" *ngIf="savedPositionList.length > 0">
         <ul type="none">
           <li class="large_pagination_button" (click)="pageClicked(currentPageNumber-1)">Prev. Page</li>
           <li *ngFor="let pageNo of paginationArr" [ngClass]="{'active': pageNo == currentPageNumber}"
