@@ -491,6 +491,18 @@ export class PositionService {
       );
   }
 
+  public deletePositionTemplateById(positionTemplateId: number): Observable<any> {
+    return this.http.delete(this.position_management_service_url + `position-template/${positionTemplateId}`, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
   public getPositionTemplateInfoById(positionTemplateId: number): Observable<any> {
     return this.http.get(this.position_management_service_url + `position-template/${positionTemplateId}/template-info`, this.authHttpOptions())
       .pipe(

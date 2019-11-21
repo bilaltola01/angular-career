@@ -157,6 +157,21 @@ export class PositionTemplatesComponent implements OnInit {
   }
 
   /**
+   * Delete a position template
+   * @param index - array Index
+   */
+  deleteTemplate(index: number) {
+    this.positionService.deletePositionTemplateById(this.position_templates[index].template_id).subscribe(
+      dataJson => {
+        this.position_templates.splice(index, 1);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  /**
    * Publish an inactive position
    * @param index - array Index
    */
