@@ -1,5 +1,42 @@
 @import "../../../styles/variables.scss";
 $profile-form-field-mt: 30px;
+
+.form-field {
+  width: 100%;
+  max-width: 615px;
+  border: solid 1px $mat-form-border-color;
+  border-radius: 5px;
+  padding: 0;
+  box-sizing: border-box;
+  &.search {
+    border: none;
+    padding: 0;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    mat-form-field {
+      width: 100%;
+      background-color: $third-bg-color;
+      border-radius: 25px;
+      mat-icon {
+        margin-right: 0 !important;
+      }
+    }
+  }
+}
+
+.temp-skill {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  @include flex(row, center, flex-start);
+  & > simple-tag {
+    margin-top: 10px !important;
+    margin-right: 10px !important;
+  }
+  mat-icon {
+    color: map-get($md-cfaccent, 100);
+  }
+}
+
 :host {
   .career-main {
     background-color: $bg-color-1;
