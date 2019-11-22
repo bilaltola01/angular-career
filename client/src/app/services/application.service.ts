@@ -76,6 +76,16 @@ export class ApplicationService {
         catchError(this.handleError)
       );
   }
+  public deleteEmployeeRequest(applicationid, employeeId) {
+    const queryUrl = `${this.application_service_url}application/${applicationid}/requesting-user/${this.user_id}/employee/${employeeId}/employee-reference/request`;
+    return this.http.delete(queryUrl, this.authHttpOptions())
+      .pipe(
+        map(data => {
+          return { success: true, message: 'Success!', data: data };
+        }),
+        catchError(this.handleError)
+      );
+  }
   public postWorkAuth(postWorkAuthInfo: any): Observable<any> {
     return this.http.post(this.application_service_url + 'work-auth', postWorkAuthInfo, this.authHttpOptions())
       .pipe(

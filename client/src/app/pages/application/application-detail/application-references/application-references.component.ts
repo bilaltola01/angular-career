@@ -41,8 +41,9 @@ export class ApplicationReferencesComponent implements OnInit {
   }
   openReferenceRequestDialog(): void {
     const applicationId = this.applicationId;
+    const referenceData = this.referenceData;
     const dialogRef = this.dialog.open(RequestResponsePopupComponent, {
-      data: {data : this.referenceData, applicationId},
+      data: {data : referenceData, applicationId},
       width: '100vw',
       maxWidth: '800px',
       minWidth: '280px',

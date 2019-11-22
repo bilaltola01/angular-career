@@ -44,8 +44,11 @@
               <action-button class="contact-btn" type="flat"  *ngIf="!(user.status === 'send') && (user.status === 'Sent' || user.status === 'Accepted')" color="primary" title={{user.status}}
                 disabled>
               </action-button>
-              <action-button class="contact-btn1" type="flat" color="primary" title="Cancel"
-                (click)="deleteContactRequest(i)" color="warn">
+              <action-button class="contact-btn1" type="flat" color="primary" *ngIf="!(user.status === 'Sent')" title="Cancel"
+                (click)="cancelContact(i)" color="warn">
+              </action-button>
+              <action-button class="contact-btn1" type="flat" color="primary" *ngIf="(user.status === 'Sent')" title="Delete Request"
+                (click)="deleteContactRequest(i,user)" color="warn">
               </action-button>
             </div>
           </div>

@@ -30,11 +30,11 @@ export class RequestResponsePopupComponent implements OnInit {
     private applicationService: ApplicationService,
     public dialogRef: MatDialogRef<RequestResponsePopupComponent>, @Inject(MAT_DIALOG_DATA) public data,
     public dialog: MatDialog) {
-      this.applicationId = data.applicationId;
-      if ( this.existingReferenceData) {
-    this.existingReferenceData = data;
+    this.applicationId = data.applicationId;
+    if (data.data) {
+      this.existingReferenceData = data.data;
+    }
   }
-}
   ngOnInit() {
     this.initSearchForm();
 
@@ -69,20 +69,30 @@ export class RequestResponsePopupComponent implements OnInit {
     }
   }
   addUser(people) {
-    if (this.existingReferenceData) {
-      const filterData = this.existingReferenceData.filter(value => value.employee_id === people.user_id);
-      if (filterData.length !== 0) {
-        const filterList = this.userContactList.filter(value => value.user_id === people.user_id);
-        if ( filterList.length === 0 ) {
-          this.userContactList.unshift(people);
-        }
-        people.status = 'Accepted';
+    const filterData = this.existingReferenceData.filter(value => value.employee_id === people.user_id);
+    if (filterData.length !== 0) {
+      const filterList = this.userContactList.filter(value => value.user_id === people.user_id);
+      if (filterList.length === 0) {
+        this.userContactList.unshift(people);
       }
+      people.status = 'Accepted';
     } else {
-    this.applicationService.findExistingEmployeeReference(this.applicationId, people.user_id).subscribe(
-      dataJson => {
-        if (dataJson) {
-          people.status = 'Sent';
+      this.applicationService.findExistingEmployeeReference(this.applicationId, people.user_id).subscribe(
+        dataJson => {
+          if (dataJson) {
+            people.status = 'Sent';
+            if (this.userContactList.length === 0) {
+              this.userContactList.push(people);
+            } else {
+              const filterList = this.userContactList.filter(value => value.user_id === people.user_id);
+              if (filterList.length === 0) {
+                this.userContactList.unshift(people);
+              }
+            }
+          }
+        },
+        error => {
+          people.status = 'Send';
           if (this.userContactList.length === 0) {
             this.userContactList.push(people);
           } else {
@@ -92,19 +102,7 @@ export class RequestResponsePopupComponent implements OnInit {
             }
           }
         }
-      },
-      error => {
-        people.status = 'Send';
-        if (this.userContactList.length === 0) {
-          this.userContactList.push(people);
-        } else {
-          const filterList = this.userContactList.filter(value => value.user_id === people.user_id);
-          if (filterList.length === 0) {
-            this.userContactList.unshift(people);
-          }
-        }
-      }
-    );
+      );
     }
   }
   sendReferenceRequest(i, contact) {
@@ -115,9 +113,23 @@ export class RequestResponsePopupComponent implements OnInit {
     this.applicationService.postReferenceRequest(userData).subscribe(
       dataJSON => {
         this.userContactList.splice(i, 1);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
       });
   }
-  deleteContactRequest(i) {
+  deleteContactRequest(i, contact) {
+    if (contact.status === 'Sent') {
+      this.applicationService.deleteEmployeeRequest(this.applicationId, contact.user_id).subscribe(
+        dataJson => {
+          this.userContactList.splice(i, 1);
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        });
+    }
+  }
+  cancelContact(i) {
     this.userContactList.splice(i, 1);
   }
 }
