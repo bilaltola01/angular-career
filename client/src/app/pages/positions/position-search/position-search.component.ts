@@ -737,7 +737,9 @@ export class PositionSearchComponent implements OnInit {
       panelClass: ['edit-dialog-container']
     });
   }
-
+  routerNavigate(application_id, position_id) {
+    this.router.navigate([`/applications/${application_id}/application-detail/`, position_id], { queryParams: {search: this.urlQueryParameter ? this.urlQueryParameter : ''  }});
+  }
 }
 
 

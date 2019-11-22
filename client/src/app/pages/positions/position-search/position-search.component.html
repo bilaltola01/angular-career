@@ -242,7 +242,7 @@
               <button mat-button [matMenuTriggerFor]="menu" disableRipple><img src="assets/icons/ic_more_vertical.svg">
               </button>
               <mat-menu #menu="matMenu">
-                <button mat-menu-item routerLink="../application/{{this.appliedJobsMap[job.position_id]}}">See
+                <button mat-menu-item (click)="routerNavigate(this.appliedJobsMap[job.position_id], job.position_id)">See
                   Application</button>
                 <button mat-menu-item (click)="withdrawApplication(job.position_id)">Withdraw
                   Application</button>

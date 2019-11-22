@@ -21,6 +21,8 @@ export class ApplicationHeaderSectionComponent implements OnInit {
   applicationId;
   positionId;
   searchQueryParam;
+  filterQueryParam;
+  positionInfoQueryParam;
   isJobLoading: boolean;
 
   @Output() selectedNavItem = new EventEmitter();
@@ -32,7 +34,12 @@ export class ApplicationHeaderSectionComponent implements OnInit {
     private applicationService: ApplicationService, public dialog: MatDialog) {
     this.updateInterestLevel = this.updateInterestLevel.bind(this);
     const urlParams = new URLSearchParams(window.location.search);
-    this.searchQueryParam = urlParams.get('filter');
+
+    // store queryParams from Application , Position-info and Position search page
+
+    this.filterQueryParam = urlParams.get('filter');
+    this.positionInfoQueryParam = urlParams.get('positionId');
+    this.searchQueryParam = urlParams.get('search');
     this.applicationId = this.route.snapshot.paramMap.get('application_id');
     this.positionId = this.route.snapshot.paramMap.get('position_id');
     this.parseRouterUrl(router.url);
@@ -41,7 +48,11 @@ export class ApplicationHeaderSectionComponent implements OnInit {
     router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
         if (val.url.includes('filter')) {
-          this.router.navigate(['/applications'], { queryParams: { filter: this.searchQueryParam ? this.searchQueryParam : '' } });
+          this.router.navigate(['/applications'], { queryParams: { filter: this.filterQueryParam ? this.filterQueryParam : '' } });
+        } else if (val.url.includes('positionId')) {
+          this.router.navigate([`/positions/position-info/${this.positionInfoQueryParam}`]);
+        } else if (val.url.includes('search')) {
+          this.router.navigate(['/positions'], {queryParams : { search: this.searchQueryParam ? this.searchQueryParam : ''}});
         }
       }
     });

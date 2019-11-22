@@ -1,6 +1,6 @@
 import { Component, OnInit, } from '@angular/core';
 import { PositionService, CartService, AlertsService, AlertType, ApplicationService, UserService, ScoreService, CompanyService, HelperService } from 'src/app/services';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatchingService } from 'src/app/services/matching.service';
 import { SkillLevelDescription, Skill } from 'src/app/models';
 import { MatDialog } from '@angular/material/dialog';
@@ -62,6 +62,7 @@ export class PositionsDetailsComponent implements OnInit {
     private cartService: CartService,
     private alertsService: AlertsService,
     private applicationService: ApplicationService,
+    private router: Router,
     public dialog: MatDialog,
      private scoreService: ScoreService,
       private companyService: CompanyService,
@@ -409,5 +410,8 @@ export class PositionsDetailsComponent implements OnInit {
     const height = 90;
     document.getElementById('sidenav-content').scrollTop = document.getElementById(id).offsetTop - height;
     this.filter_list = false;
+  }
+  routerNavigate(application_id, position_id) {
+    this.router.navigate([`/applications/${application_id}/application-detail/`, position_id], { queryParams: { positionId : position_id ? position_id :  '' } });
   }
 }
