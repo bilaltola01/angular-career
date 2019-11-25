@@ -95,12 +95,12 @@ export class ApplicationNavSectionComponent implements OnInit {
       .subscribe(positionInfo => {
         this.applicationNavMenu[5].items[0].visible = positionInfo.data.position ? true : false;
         //  For Position Information
-        this.applicationNavMenu[1].items[1].visible =  true;
+        this.applicationNavMenu[1].items[1].visible = true;
         //  For Profile Information
-        this.applicationNavMenu[5].items[1].visible = !(positionInfo.data.minimum_skills == null) || positionInfo.data.true_fitscore_info.skills_weight > 0 || positionInfo.data.true_fitscore_info.education_weight > 0 || positionInfo.data.true_fitscore_info.experience_weight > 0 || positionInfo.data.true_fitscore_info.interests_weight > 0  ? true : false;
+        this.applicationNavMenu[5].items[1].visible = !(positionInfo.data.minimum_skills == null) || positionInfo.data.true_fitscore_info.skills_weight > 0 || positionInfo.data.true_fitscore_info.education_weight > 0 || positionInfo.data.true_fitscore_info.experience_weight > 0 || positionInfo.data.true_fitscore_info.interests_weight > 0 ? true : false;
         this.applicationNavMenu[5].items[4].visible = positionInfo.data.position_desc ? true : false;
         this.applicationNavMenu[5].items[5].visible = ((positionInfo.data.preferred_education_levels && positionInfo.data.preferred_education_levels.length > 0) ||
-          (positionInfo.data.preferred_majors && positionInfo.data.preferred_majors.length > 0) || (positionInfo.data.preferred_major_categories && positionInfo.data.preferred_major_categories.length > 0 )) ? true : false;
+          (positionInfo.data.preferred_majors && positionInfo.data.preferred_majors.length > 0) || (positionInfo.data.preferred_major_categories && positionInfo.data.preferred_major_categories.length > 0)) ? true : false;
         this.applicationNavMenu[5].items[6].visible = positionInfo.data.preferred_experience && positionInfo.data.preferred_experience.length > 0 ? true : false;
         this.applicationNavMenu[5].items[7].visible = ((positionInfo.data.minimum_skills && positionInfo.data.minimum_skills.length > 0) || (positionInfo.data.preferred_skills && positionInfo.data.preferred_skills.length > 0)) ? true : false;
         this.applicationNavMenu[5].items[8].visible = positionInfo.data.preferred_interests && positionInfo.data.preferred_interests.length > 0 ? true : false;
@@ -116,27 +116,27 @@ export class ApplicationNavSectionComponent implements OnInit {
         this.alertsService.show(error.message, AlertType.error);
       }
     );
+
     this.matchingService.getMissingSkills(this.positionId).subscribe(
       dataJson => {
-        matchedSkills = dataJson.data['skills'];
-        this.applicationNavMenu[5].items[2].visible = matchedSkills.length > 0 ? true : this.applicationNavMenu[5].items[2].visible === true ? true : false;
-        this.applicationNavMenu[1].items[2].visible = matchedSkills.length > 0 ? true : this.applicationNavMenu[1].items[2].visible === true ? true : false;
-      },
-      error => {
-        this.alertsService.show(error.message, AlertType.error);
-      }
-    );
-    this.matchingService['getMatchedSkills'](this.positionId).subscribe(
-      dataJson => {
         missingSkills = dataJson.data['skills'];
-        this.applicationNavMenu[5].items[2].visible = missingSkills && missingSkills.length > 0 ? true : this.applicationNavMenu[5].items[2].visible === true ? true : false;
-        this.applicationNavMenu[1].items[2].visible = missingSkills && missingSkills.length > 0 ? true : this.applicationNavMenu[1].items[2].visible === true ? true : false;
+        this.applicationNavMenu[5].items[2].visible = missingSkills && missingSkills.length > 0 ? true : (this.applicationNavMenu[5].items[2].visible) === true ? true : false;
+        this.applicationNavMenu[1].items[2].visible = missingSkills && missingSkills.length > 0 ? true : (this.applicationNavMenu[1].items[2].visible) === true ? true : false;
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
       }
     );
-
+    this.matchingService.getMatchedSkills(this.positionId).subscribe(
+      dataJson => {
+        matchedSkills = dataJson.data['skills'];
+        this.applicationNavMenu[5].items[2].visible = matchedSkills.length > 0 ? true : (this.applicationNavMenu[5].items[2].visible) === true ? true : false;
+        this.applicationNavMenu[1].items[2].visible = matchedSkills.length > 0 ? true : (this.applicationNavMenu[1].items[2].visible) === true ? true : false;
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
     this.matchingService.getinterests(this.positionId).subscribe(
       dataJson => {
         const matchedInterests = dataJson.data['interests'];
@@ -150,7 +150,7 @@ export class ApplicationNavSectionComponent implements OnInit {
     //  for Profile Information
     this.applicationNavMenu[1].items[0].visible = user ? true : false;
     // user introduction
-    this.applicationNavMenu[1].items[4].visible = user.user_intro  ? true : false;
+    this.applicationNavMenu[1].items[4].visible = user.user_intro ? true : false;
     // Education data
     this.userService.getEducationInfo(user.user_id).subscribe(
       educationList => {

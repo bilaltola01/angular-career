@@ -118,7 +118,7 @@
                   *ngIf="displayItemsLimit; let limit">
                   <div class="skills-preferred-m green-color-tag"
                     *ngFor="let matchSkill of matchedSkills; let i = index; ">
-                    <simple-tag type="green" *ngIf="i < limit" title="{{matchSkill.skill}}">
+                    <simple-tag type="green" title="{{matchSkill.skill}}">
                     </simple-tag>
                   </div>
                 </div>
@@ -132,7 +132,7 @@
                 <div class="skil-height-fix" [ngClass]="{'skill-more-height': showMoreFlag}"
                   *ngIf="displayItemsLimit; let limit">
                   <div class="skills-preferred-m red-color-tag" *ngFor="let skill of missingSkills ; let i = index; ">
-                    <simple-tag type="red" *ngIf="i < limit" title="{{skill.skill}}">
+                    <simple-tag type="red" title="{{skill.skill}}">
                     </simple-tag>
                   </div>
                 </div>

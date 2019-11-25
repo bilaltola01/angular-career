@@ -58,6 +58,7 @@ $profile-form-field-mt: 30px;
           display: inline-block;
         }
         .filter-data {
+          display: none;
           & .filter_icon {
             display: none;
           }
@@ -148,7 +149,7 @@ $profile-form-field-mt: 30px;
           img {
             vertical-align: middle;
             margin-right: 8px;
-            &.align-more-img{
+            &.align-more-img {
               margin-top: -7px;
             }
           }
@@ -219,9 +220,9 @@ $profile-form-field-mt: 30px;
             }
             img {
               margin-top: -3px;
-              &.align-more-img{
+              &.align-more-img {
                 margin-top: -7px;
-                margin-left:0;
+                margin-left: 0;
               }
               &.question-icon {
                 margin-top: 4px;
@@ -235,9 +236,7 @@ $profile-form-field-mt: 30px;
                 margin-top: 15px;
                 &.edu_img {
                   margin-top: -4px;
-
                 }
-
               }
             }
           }
@@ -399,7 +398,7 @@ $profile-form-field-mt: 30px;
                 max-height: 30px;
 
                 &.skill-more-height {
-                  max-height: 153px;
+                  max-height: 100%;
                 }
               }
             }
@@ -592,7 +591,7 @@ $profile-form-field-mt: 30px;
                 &.edu_img {
                   margin-top: 3px;
                   width: 30px;
-                  margin-left: 0
+                  margin-left: 0;
                 }
               }
               font-size: 14px;
@@ -772,13 +771,26 @@ $profile-form-field-mt: 30px;
         justify-content: space-between;
         z-index: 100;
         .postion-search-detail {
-          padding: 12px 20px;
+          padding: 4px 10px;
           overflow: hidden;
+          border-bottom: 1px solid #e0e4e8;
           .filter-data {
-            float: right;
-
-            .filter_icon {
-              display: block;
+            display: flex;
+            padding: 10px 29px;
+            align-items: center;
+            h3 {
+              color: #318bd6;
+              margin: 0;
+              font-size: 20px;
+              font-family: "Poppins", sans-serif;
+              font-weight: 700;
+              display: inline;
+            }
+            & .filter_icon {
+              font-size: 20px;
+              margin: 2px 0 0 10px;
+              color: #318bd6;
+              display: inline;
             }
           }
         }
@@ -907,14 +919,36 @@ $profile-form-field-mt: 30px;
         justify-content: space-between;
         z-index: 100;
         .postion-search-detail {
-          padding: 12px 20px;
+          padding: 14px 20px;
           overflow: hidden;
-          .filter-data {
-            float: right;
-            margin-top: 0;
+          // background-color: #f2f2f4;
+          border-bottom: 1px solid #e0e4e8;
+          // .filter-data {
+          //   float: right;
+          //   margin-top: 0;
 
+          //   & .filter_icon {
+          //     display: block;
+          //   }
+          // }
+          .filter-data {
+            display: flex;
+            padding: 0px 0px;
+            align-items: center;
+            h3 {
+              color: #318bd6;
+              margin: 0;
+              font-size: 20px;
+              font-family: "Poppins", sans-serif;
+              display: inline;
+            }
             & .filter_icon {
-              display: block;
+              font-size: 20px;
+              margin: 2px 0 0 10px;
+              // margin-top: 2px;
+              color: #318bd6;
+              display: inline;
+              // margin-left: 10px;
             }
           }
         }

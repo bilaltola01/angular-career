@@ -277,8 +277,10 @@
               [matTooltipShowDelay]=500>
             </simple-tag>
             <simple-tag *ngIf="score.minimum_skills" type="gray" title="Required Skills Match" ellipseTag="true"
-            value="{{mathFloor(6*score.true_fitscore_info?.required_skills_fitscore)}}"matTooltip="{{score.true_fitscore_info?.required_skills_fitscore*100}}% of required skills match" [matTooltipShowDelay]=500>
-          </simple-tag>
+              value="{{mathFloor(6*score.true_fitscore_info?.required_skills_fitscore)}}"
+              matTooltip="{{score.true_fitscore_info?.required_skills_fitscore*100}}% of required skills match"
+              [matTooltipShowDelay]=500>
+            </simple-tag>
             <simple-tag *ngIf="score.true_fitscore_info?.experience_weight" type="gray" title="Experience Match"
               ellipseTag="true" value="{{mathFloor(6*score.true_fitscore_info?.experience_fitscore)}}"
               matTooltip="Experience Match: {{(score.true_fitscore_info?.experience_fitscore*100)| number : '2.0'}}%"
@@ -293,9 +295,7 @@
               ellipseTag="true" value="{{mathFloor(6*score.true_fitscore_info?.interests_fitscore)}}"
               matTooltip="Interests Match: {{(score.true_fitscore_info?.interests_fitscore*100)| number : '2.0'}}%"
               [matTooltipShowDelay]=500>
-
             </simple-tag>
-
             <p
               *ngIf="!score.true_fitscore_info ||  (score.true_fitscore_info && !score.true_fitscore_info.skills_weight && !score.true_fitscore_info.experience_weight && !score.true_fitscore_info.education_weight && !score.true_fitscore_info.interests_weight && !score.minimum_skills)">
               N/A
@@ -309,7 +309,6 @@
                       'See Less'}}" color="primary" (click)="info.showMoreFlag = !info.showMoreFlag"
                 *ngIf="matchedSkills?.length > 2 || missingSkills?.length > 2"></action-button>
             </div>
-
             <h3>Matched Skills</h3>
             <ul>
               <li>
@@ -550,4 +549,7 @@
     </div>
   </div>
 </div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> Bugs resolved.

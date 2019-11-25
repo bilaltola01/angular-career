@@ -188,18 +188,6 @@ $profile-form-field-mt: 30px;
             }
           }
         }
-
-        .filter-data {
-          float: left;
-          background-color: $white;
-          margin-top: 20px;
-          margin-left: 28px;
-
-          & .filter_icon {
-            display: block;
-            cursor: pointer;
-          }
-        }
       }
       .position-main-container {
         width: 100%;
@@ -315,18 +303,6 @@ $profile-form-field-mt: 30px;
             }
           }
         }
-
-        .filter-data {
-          float: left;
-          background-color: $white;
-          margin-top: 20px;
-          margin-left: 28px;
-
-          & .filter_icon {
-            display: block;
-            cursor: pointer;
-          }
-        }
       }
       .position-main-container {
         width: 100%;
@@ -411,7 +387,6 @@ $profile-form-field-mt: 30px;
     //filter-container
     .filter-container {
       width: 100%;
-      //position: static;
       height: auto;
       padding-bottom: 15px;
       padding: 0px 20px;
@@ -447,20 +422,33 @@ $profile-form-field-mt: 30px;
 
     .postion-search-detail {
       position: fixed;
-      top: 69px;
+      top: 70px;
       width: 100%;
       background-color: $filter-menu-bg-color;
       left: 0;
+      height: 38px;
       padding: 10px 0px;
       line-height: 0px;
       z-index: 2;
-      border: 1px solid #ddd;
+      background-color: #f2f2f4;
+      border-bottom: 1px solid #e0e4e8;
       cursor: pointer;
       .filter-data {
-        // text-align: right;
-        // margin-right: 10px;
-        display: block;
-        padding: 0px 20px;
+        display: flex;
+        padding: 10px 30px;
+        align-items: center;
+        h3 {
+          color: #318bd6;
+          margin: 0px 10px 0px;
+          font-size: 20px;
+          font-family: "Poppins", sans-serif;
+        }
+        .filter_icon {
+          font-size: 20px;
+          color: #318bd6;
+          height: 20px;
+          width: 20px;
+        }
       }
     }
   }
@@ -488,17 +476,6 @@ $profile-form-field-mt: 30px;
             mat-icon {
               cursor: pointer;
             }
-          }
-        }
-
-        .filter-data {
-          float: left;
-          background-color: $white;
-          margin-top: 20px;
-          margin-left: 14px;
-
-          & .filter_icon {
-            display: block;
           }
         }
       }
@@ -613,7 +590,6 @@ $profile-form-field-mt: 30px;
               overflow: hidden;
               text-overflow: ellipsis;
               white-space: nowrap;
-              // margin-bottom: 18px;
             }
 
             & .position-right {
@@ -730,19 +706,32 @@ $profile-form-field-mt: 30px;
 
     .postion-search-detail {
       position: fixed;
-      top: 69px;
+      top: 70px;
       width: 100%;
       background-color: $filter-menu-bg-color;
       left: 0;
-      padding: 10px 0px;
+      padding: 20px 0px;
       line-height: 0px;
       z-index: 2;
-      border: 1px solid #ddd;
+      background-color: #f2f2f4;
+      border-bottom: 1px solid #e0e4e8;
       cursor: pointer;
       .filter-data {
-        display: block;
-        padding: 0px 20px;
-        float: left;
+        display: flex;
+        padding: 0px 10px;
+        align-items: center;
+        h3 {
+          color: #318bd6;
+          margin: 0px 10px 0px;
+          font-size: 20px;
+          font-family: "Poppins", sans-serif;
+        }
+        .filter_icon {
+          font-size: 20px;
+          color: #318bd6;
+          height: 20px;
+          width: 20px;
+        }
       }
     }
   }

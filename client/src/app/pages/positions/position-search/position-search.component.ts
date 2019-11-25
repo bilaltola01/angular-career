@@ -93,6 +93,7 @@ export class PositionSearchComponent implements OnInit {
   urlQueryParameter;
   skillUrlParams = [];
   skillUrlIdParam = [];
+  applicationUrlParams;
 
   constructor(private autoCompleteService: AutoCompleteService, private router: Router,
     private alertsService: AlertsService, private positionService: PositionService, private scoreService: ScoreService,
@@ -357,6 +358,7 @@ export class PositionSearchComponent implements OnInit {
 
     if (this.searchQueryParam) {
       queryString = this.searchQueryParam;
+      this.applicationUrlParams = this.searchQueryParam;
       this.searchQueryParam = null;
     } else {
       queryString = this.positionForm.value.city ? `${queryString ? queryString + '&' : ''}city=${this.filterAttributes.city_id ? this.filterAttributes.city_id : this.urlParams['city']}` : queryString;
@@ -430,6 +432,7 @@ export class PositionSearchComponent implements OnInit {
 
 
       if (this.queryFlag || this.prequeryFlag) {
+        this.applicationUrlParams = urlQueryParam;
         this.router.navigate(['/positions'], { queryParams: { search: urlQueryParam ? urlQueryParam : '' } });
       }
       this.urlQueryParameter = queryString;
@@ -738,7 +741,7 @@ export class PositionSearchComponent implements OnInit {
     });
   }
   routerNavigate(application_id, position_id) {
-    this.router.navigate([`/applications/${application_id}/application-detail/`, position_id], { queryParams: {search: this.urlQueryParameter ? this.urlQueryParameter : ''  }});
+    this.router.navigate([`/applications/${application_id}/application-detail/`, position_id], { queryParams: { search: this.applicationUrlParams ? this.applicationUrlParams : this.urlQueryParameter } });
   }
 }
 
