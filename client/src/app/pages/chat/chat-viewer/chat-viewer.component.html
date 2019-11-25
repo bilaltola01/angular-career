@@ -1,19 +1,38 @@
 <div class="chat-input">
-    <mat-form-field appearance="fill">
-        <mat-label>Chat Id</mat-label>
-        <input matInput placeholder="id" type="text" [(ngModel)]="chatId" required> 
-    </mat-form-field>
-    <action-button type="raised" title="Join" color="primary" (click)="joinRoom()"></action-button>
-    <action-button type="raised" title="Create" color="primary" (click)="createRoom()"></action-button>
+    <div class="one-line">
+        <mat-form-field appearance="fill">
+            <mat-label>Chat Id</mat-label>
+            <input matInput placeholder="id" type="text" [(ngModel)]="chatId" required> 
+        </mat-form-field>
+        <action-button type="raised" title="Join" color="primary" (click)="joinRoom()"></action-button>
+    </div>
+        
+    <div class="one-line">
+        <mat-form-field appearance="fill">
+            <mat-label>Chat Title</mat-label>
+            <input matInput placeholder="id" type="text" [(ngModel)]="chatTitle" required> 
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Chat Other User</mat-label>
+            <input matInput placeholder="id" type="text" [(ngModel)]="chatOtherUserId" required> 
+        </mat-form-field>
+        <action-button type="raised" title="Create" color="primary" (click)="createRoom()"></action-button>
+    </div>
+    <br><br>
+    <div class="one-line">
+        <action-button type="raised" title="Get Rooms" color="primary" (click)="getMyRooms()"></action-button>
+        <div *ngFor="let room of someRooms">
+            ID [ {{room.charRoomId }} ] <br>
+            Title [ {{room.chatRoomTitle}} ]
+        </div>
+    </div>
 </div>
 
 <main autocomplete="off" *ngIf="chatRoom$ | async as chat">
-    <div class="chat">
+    <div class="chat" #chatbox>
         <div class="msg" *ngFor="let msg of chat.messages; trackBy: trackByCreated">
-
             <!-- <p> json : {{msg | json }}</p> -->
-            <p> <img [src]="msg.user?.photo"> <b>{{msg.user.first_name}}</b>:{{ msg.content }}</p>
-
+            <p> <img [src]="msg.user?.photo"> <b class="bold-name">{{msg.user.first_name}}: </b> {{ msg.content }}</p>
         </div>
     </div>
 
@@ -21,6 +40,6 @@
         <mat-form-field floatLabel="never">
             <input matInput placeholder="Type a message..." type="text" [(ngModel)]="newMessage" autocomplete="off"> 
         </mat-form-field>
-        <action-button type="raised" title="Send" color="primary" (click)="sendMessage()"></action-button>
+        <action-button type="raised" title="Send" color="primary" (click)="sendMessage()" (window:keyup.enter)="sendMessage()"></action-button>
     </div>
 </main>

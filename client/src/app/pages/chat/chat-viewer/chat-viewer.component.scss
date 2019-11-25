@@ -1,7 +1,9 @@
 .chat-input{
-    display: inline-flex;
     .mat-form-field { 
         width: 300px;
+    }
+    .one-line {
+        display: inline-flex;
     }
 }
 
@@ -15,6 +17,7 @@ main {
 
     .chat {
         height: 70vh;
+        overflow: auto;
         p {
             display: inline-flex;
             align-items: center;
@@ -26,6 +29,9 @@ main {
             border-radius: 50%;
             -o-object-fit: cover;
             object-fit: cover;
+        }
+        .bold-name {
+            margin-right: 5px;
         }
     }
     .messsage-form {

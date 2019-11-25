@@ -1,9 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Router } from '@angular/router';
 import { firestore } from 'firebase/app';
 import { map, switchMap } from 'rxjs/operators';
-import { Observable, combineLatest, of } from 'rxjs';
+import { Observable, combineLatest, of, merge } from 'rxjs';
 import { UserService } from './user.service';
 
 export interface ChatRoom {
@@ -25,12 +24,14 @@ enum MessageType {
 @Injectable({
   providedIn: 'root'
 })
-export class ChatService {
+export class ChatService implements OnInit {
+
   constructor(
     private afs: AngularFirestore,
-    // private auth: AuthService,
     private userService: UserService,
   ) {}
+
+  ngOnInit() { }
 
   get(chatId) {
     return this.afs
@@ -44,18 +45,36 @@ export class ChatService {
       );
   }
 
-  async create() { // TODO: Add title as a parameter
-
-      const chatData: ChatRoom = {
-        title: 'Delete Room',
+  async create(roomTitle: string = 'Room Title', otherUserId: number) {
+      const chatRoomData: ChatRoom = {
+        title: roomTitle,
         createdAt: Date.now(),
         messages: []
       };
 
-      const docRef = await this.afs.collection('ChatRooms').add(chatData);
+      const docRef = await this.afs.collection('ChatRooms').add(chatRoomData);
+
+
+      const chatRoomPairs = {
+        userRecruiterId: otherUserId,
+        userApplicantId: this.userService.user_id,
+        charRoomId: docRef.id,
+        chatRoomTitle: roomTitle,
+      };
+
+      const docRefPairs = await this.afs.collection('chatRoomPairs').add(chatRoomPairs);
 
       return docRef.id;
+  }
 
+  getMyRooms() {
+    const user_id  = this.userService.user_id;
+    const applicantRooms = this.afs.collection('chatRoomPairs', ref => ref.where('userRecruiterId', '==', user_id)).get();
+    const recruiterRooms = this.afs.collection('chatRoomPairs', ref => ref.where('userApplicantId', '==', user_id)).get();
+
+    const mergedRooms = merge(applicantRooms, recruiterRooms);
+
+    return mergedRooms;
   }
 
   async sendMessage(chatId, content) {
