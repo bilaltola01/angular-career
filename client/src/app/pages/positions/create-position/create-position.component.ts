@@ -1172,7 +1172,11 @@ export class CreatePositionComponent implements OnInit {
     this.temp_preferred_skill = null;
 
     if (this.position_template && this.create_position_type === CreatePositionType.TemplatePosition && !this.position_template_process[4])  {
-      this.preferred_skills = this.position_template.preferred_skills && this.position_template.preferred_skills.length > 0 ? this.position_template.preferred_skills.slice() : null;
+      this.preferred_skills = this.position_template.preferred_skills && this.position_template.preferred_skills.length > 0 ? (this.position.preferred_skills && this.position.preferred_skills.length > 0 ? this.position.preferred_skills.slice().concat(this.position_template.preferred_skills.slice().filter((local_value) => {
+        return !(this.position.preferred_skills.some(value => {
+          return value.skill_id === local_value.skill_id;
+        }));
+      })) : this.position_template.preferred_skills.slice()) : (this.position.preferred_skills && this.position.preferred_skills.length > 0 ? this.position.preferred_skills.slice() : null);
       this.minimum_skills = this.position_template.minimum_skills && this.position_template.minimum_skills.length > 0 ? this.position_template.minimum_skills.slice() : null;
     }
 
