@@ -311,6 +311,7 @@
               <input matInput placeholder="Company Name" type="text" [matAutocomplete]="autocompleteCompany" formControlName="company_name">
               <mat-autocomplete #autocompleteCompany="matAutocomplete" (closed)="onBlurCompany(i)">
                 <mat-option *ngFor="let autocomplete_company of autocomplete_companies[i]" [value]="autocomplete_company.company_name" (onSelectionChange)="onSelectCompany(i, autocomplete_company)">
+                  <img class="autocomplete-company-logo" alt="Company Logo" src="{{autocomplete_company.company_logo ? autocomplete_company.company_logo : 'assets/icons/ic_default_company_logo.svg'}}">
                   <span>{{autocomplete_company.company_name}}</span>
                 </mat-option>
               </mat-autocomplete>
