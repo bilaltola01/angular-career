@@ -1,0 +1,680 @@
+<div *ngIf="selectedPageIndex < 7" class="profile-completion">
+	<div class="container">
+		<ng-container *ngFor="let page_title of page_titles; let i = index">
+			<action-button *ngIf="page_title" class="link-btn desktop" type="text" title="{{page_title}}" (click)="goToPage(i)" [done]="selectedPageIndex > i" [disabled]="selectedPageIndex < i"></action-button>
+		</ng-container>
+		<mat-icon (click)="toggleTabMenuOpen()">{{isTabMenuOpen ? 'close' : 'menu'}}</mat-icon>
+		<span class="progress-label tablet">{{page_titles[selectedPageIndex]}}</span>
+		<span class="progress-label"
+			[class.done]="selectedPageIndex===7">{{progressWidth[selectedPageIndex].label}}%</span>
+		<div class="progress-bar" [style.width.%]="progressWidth[selectedPageIndex].width"></div>
+		<div class="container__header tablet" [class.open]="isTabMenuOpen">
+			<ng-container *ngFor="let page_title of page_titles; let i = index">
+				<action-button *ngIf="page_title" class="link-btn" type="text" title="{{page_title}}" (click)="goToPage(i)" [done]="selectedPageIndex > i" [disabled]="selectedPageIndex < i">
+				</action-button>
+			</ng-container>
+		</div>
+	</div>
+</div>
+
+<!-- Position Name & Overview start -->
+
+<div *ngIf="selectedPageIndex===0 && !is_loading" class="container profile-basic">
+	<div class="container__full">
+		<div class="profile-form" [formGroup]="nameOverviewForm">
+			<h3 class="profile-form__title">
+				Position Name & Overview
+			</h3>
+
+			<div class="profile-form__field">
+				<mat-form-field class="bg-transparent" appearance="fill">
+					<mat-label>Position Name *</mat-label>
+					<input matInput placeholder="Position Name *" type="text" formControlName="position_name">
+				</mat-form-field>
+			</div>
+			<div class="profile-form__field textarea">
+				<mat-form-field>
+					<textarea matInput placeholder="Position Description" rows="15" formControlName="position_desc"></textarea>
+				</mat-form-field>
+			</div>
+		</div>
+	</div>
+
+	<div class="container__full">
+		<action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()" [disabled]="!(nameOverviewForm.valid && helperService.checkSpacesString(nameOverviewForm.value.position_name))">
+    </action-button>
+    <action-button class="btn-next btn-quit" type="stroked" title="Quit" (click)="onClickQuit()"></action-button>
+	</div>
+</div>
+
+<!-- Position Name & Overview end -->
+
+<!-- Position Information start -->
+<div *ngIf="selectedPageIndex===1 && !is_loading" class="container profile-basic">
+  <div class="container__full">
+    <div class="profile-form" [formGroup]="positionBasicInfoForm">
+      <h3 class="profile-form__title">
+        Position Information
+      </h3>
+      <div class="profile-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Company *</mat-label>
+          <input matInput placeholder="Company *" type="text" [matAutocomplete]="autocompleteCompany" formControlName="position_company">
+          <mat-icon matSuffix *ngIf="positionBasicInfoForm.get('position_company').value && helperService.checkSpacesString(positionBasicInfoForm.get('position_company').value) && positionBasicInfoForm.get('position_company').valid && onCheckCompanyValidation()">done</mat-icon>
+          <mat-icon matSuffix class="error-field" *ngIf="positionBasicInfoForm.get('position_company').value && helperService.checkSpacesString(positionBasicInfoForm.get('position_company').value) && !onCheckCompanyValidation() && positionBasicInfoForm.get('position_company').touched">close</mat-icon>
+          <mat-autocomplete #autocompleteCompany="matAutocomplete" (closed)="onBlurCompany()">
+            <mat-option *ngFor="let company of autocomplete_companies" [value]="company.company_name" (onSelectionChange)="onSelectCompany(company)">
+              <span>{{company.company_name}}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <div class="profile-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Country *</mat-label>
+          <mat-select formControlName="position_country">
+          <mat-option value="{{null}}">{{null}}</mat-option>
+          <mat-option *ngFor="let country of countries_sort" value="{{country}}">{{country}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div *ngIf="position_country && position_country === 43" class="profile-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>State *</mat-label>
+          <input matInput placeholder="State *" type="text" [matAutocomplete]="autocompleteState" formControlName="position_state">
+          <mat-icon matSuffix *ngIf="positionBasicInfoForm.value.position_state && helperService.checkSpacesString(positionBasicInfoForm.value.position_state) && positionBasicInfoForm.get('position_state').valid && onCheckStateValidation()">done</mat-icon>
+          <mat-icon matSuffix class="error-field" *ngIf="positionBasicInfoForm.get('position_state').value && helperService.checkSpacesString(positionBasicInfoForm.get('position_state').value) && !onCheckStateValidation() && positionBasicInfoForm.get('position_state').touched">close</mat-icon>
+          <mat-autocomplete #autocompleteState="matAutocomplete" (closed)="onBlurState()">
+          <mat-option *ngFor="let state of autocomplete_states" [value]="state.state" (onSelectionChange)="onSelectState(state)">
+            <span>{{state.state}}</span>
+          </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <div class="profile-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>City *</mat-label>
+          <input matInput placeholder="City *" type="text" [matAutocomplete]="autocompleteCity" formControlName="position_city">
+          <mat-icon matSuffix *ngIf="positionBasicInfoForm.get('position_city').value && helperService.checkSpacesString(positionBasicInfoForm.get('position_city').value) && positionBasicInfoForm.get('position_city').valid && onCheckCityValidation()">done</mat-icon>
+          <mat-icon matSuffix class="error-field" *ngIf="positionBasicInfoForm.get('position_city').value && helperService.checkSpacesString(positionBasicInfoForm.get('position_city').value) && !onCheckCityValidation() && positionBasicInfoForm.get('position_city').touched">close</mat-icon>
+          <mat-autocomplete #autocompleteCity="matAutocomplete" (closed)="onBlurCity()">
+            <mat-option *ngFor="let city of autocomplete_cities" [value]="helperService.cityNameFromAutoComplete(city.city)" (onSelectionChange)="onSelectCity(city)">
+              <span>{{city.city}}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <div class="profile-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Salary</mat-label>
+          <span matPrefix>$</span>
+          <input matInput placeholder="Salary" type="text" formControlName="position_salary">
+        </mat-form-field>
+      </div>
+      <div class="profile-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Department</mat-label>
+          <input matInput placeholder="Department" type="text" formControlName="position_department">
+        </mat-form-field>
+      </div>
+      <div class="profile-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Position Level *</mat-label>
+          <mat-select formControlName="position_level">
+            <mat-option *ngFor="let positionLevel of positionLevels" value="{{positionLevel}}">{{positionLevel}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="profile-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Position Type *</mat-label>
+          <mat-select formControlName="position_type">
+            <mat-option *ngFor="let jobType of jobTypes" value="{{jobType}}">{{jobType}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="profile-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Application Type</mat-label>
+          <mat-select formControlName="position_application_type">
+            <mat-option *ngFor="let applicationType of applicationTypes" value="{{applicationType}}">{{applicationType}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="profile-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Application Deadline *</mat-label>
+          <input matInput placeholder="MM/DD/YYYY" formControlName="position_application_deadline" pattern="\d{1,2}/\d{1,2}/\d{4}">
+          <input class="hide" [matDatepicker]="deadline" [min]="minDate" (dateChange)="onChangeApplicationDeadline($event)">
+          <mat-datepicker-toggle matSuffix [for]="deadline"></mat-datepicker-toggle>
+          <mat-datepicker
+            touchUi
+            #deadline
+          >
+          </mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="profile-form__field">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Recruiter</mat-label>
+          <input matInput placeholder="Recruiter" type="text" [matAutocomplete]="autocompleteRecruiter" formControlName="position_recruiter">
+          <mat-icon matSuffix *ngIf="positionBasicInfoForm.value.position_recruiter && helperService.checkSpacesString(positionBasicInfoForm.value.position_recruiter) && positionBasicInfoForm.get('position_recruiter').valid && onCheckRecruiterValidation()">done</mat-icon>
+          <mat-icon matSuffix class="error-field" *ngIf="positionBasicInfoForm.get('position_recruiter').value && helperService.checkSpacesString(positionBasicInfoForm.get('position_recruiter').value) && !onCheckRecruiterValidation() && positionBasicInfoForm.get('position_recruiter').touched">close</mat-icon>
+          <mat-autocomplete #autocompleteRecruiter="matAutocomplete" (closed)="onBlurRecruiter()">
+          <mat-option *ngFor="let recruiter of autocomplete_recruiters" [value]="recruiter.first_name + (recruiter.last_name ? ' ' + recruiter.last_name : '') + (recruiter.user_id === current_user.user_id ? ' (Me)' : '')" (onSelectionChange)="onSelectRecruiter(recruiter)">
+            <img [src]="recruiter.photo ? recruiter.photo : 'assets/icons/no_photo.png'">
+            <span>{{recruiter.first_name + (recruiter.last_name ? ' ' + recruiter.last_name : '') + (recruiter.user_id === current_user.user_id ? ' (Me)' : '')}}</span>
+          </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <p class="headup">In order to change the recruiter, you must provide a valid company first.</p>
+    </div>
+  </div>
+  <div class="container__full">
+    <action-button class="btn-next" type="flat" title="Next" color="primary" [disabled]="!(positionBasicInfoForm.valid && position_company && position_level && position_type &&  onCheckCompanyValidation() && onCheckCityValidation() && onCheckStateValidation() && onCheckRecruiterValidation())" (click)="createPosition()"></action-button>
+    <action-button class="btn-next btn-quit" type="stroked" title="Quit" (click)="onClickQuit()"></action-button>
+  </div>
+</div>
+  
+<!-- Position Information end -->
+
+<!-- Preferred Education Start -->
+<div *ngIf="selectedPageIndex===2 && !is_loading" class="container profile-skills">
+  <div class="container__full">
+    <div class="profile-form" [formGroup]="preferredEducationForm">
+      <h3 class="profile-form__title">
+        Preferred Education
+      </h3>
+      <div class="profile-form__field search">
+        <h3>Preferred Education Level <span *ngIf="preferred_education_levels && preferred_education_levels.length > 0" class="count">{{preferred_education_levels.length}}</span></h3>
+      </div>
+      <div class="profile-form__field margin-10">
+        <mat-form-field class="bg-transparent" appearance="fill">
+          <mat-label>Select Education Level</mat-label>
+          <mat-select formControlName="search_eduaction_level">
+            <mat-option *ngFor="let education_level of education_levels" value="{{education_level.education_level}}" (click)="onSelectEducationLevel(education_level)">{{education_level.education_level}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="profile-form__field search margin-0">
+        <div class="skills" *ngIf="preferred_education_levels && preferred_education_levels.length > 0">
+          <simple-tag *ngFor="let level of preferred_education_levels; let j = index" 
+            type="gray"
+            title="{{level.education_level}}" 
+            removeTag="true" 
+            (click)="onRemoveEducationLevel(level, j)">
+          </simple-tag>
+        </div>
+      </div>
+
+      <div class="profile-form__field search">
+        <h3>Preferred Majors <span *ngIf="preferred_education_majors && preferred_education_majors.length > 0" class="count">{{preferred_education_majors.length}}</span><span *ngIf="preferred_education_majors && preferred_education_majors.length === 3" class="count"> (max)</span></h3>
+        <mat-form-field appearance="standard" class="search">
+          <mat-icon matSuffix>search</mat-icon>
+          <input matInput
+            [attr.disabled]="preferred_education_majors && preferred_education_majors.length === 3 ? '' : null"
+            placeholder="Search Eudaction Major" 
+            type="text" 
+            [matAutocomplete]="autocompleteEducationMajor" 
+            formControlName="search_education_major">
+          <mat-autocomplete #autocompleteEducationMajor="matAutocomplete">
+            <mat-option *ngFor="let major of autocomplete_majors"
+              [value]="major.major_name" 
+              (onSelectionChange)="onSelectEducationMajor(major)">
+              <span>{{major.major_name}}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <div class="skills" *ngIf="preferred_education_majors && preferred_education_majors.length > 0">
+          <simple-tag *ngFor="let major of preferred_education_majors; let j = index" 
+            type="gray"
+            title="{{major.major_name}}" 
+            removeTag="true" 
+            (click)="onRemoveEducationMajor(major, j)">
+          </simple-tag>
+        </div>
+      </div>
+
+      <div class="profile-form__field search">
+        <h3>Preferred Major Categories <span *ngIf="preferred_education_major_categories && preferred_education_major_categories.length > 0" class="count">{{preferred_education_major_categories.length}}</span></h3>
+        <mat-form-field appearance="standard" class="search">
+          <mat-icon matSuffix>search</mat-icon>
+          <input matInput 
+            placeholder="Search Major Category" 
+            type="text" 
+            [matAutocomplete]="autocompleteMajorCategory" 
+            formControlName="search_major_category">
+          <mat-autocomplete #autocompleteMajorCategory="matAutocomplete">
+            <mat-option *ngFor="let major_category of autocomplete_major_categories"
+              [value]="major_category.cat_name" 
+              (onSelectionChange)="onSelectEducationMajorCategory(major_category)">
+              <span>{{major_category.cat_name}}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <div class="skills" *ngIf="preferred_education_major_categories && preferred_education_major_categories.length > 0">
+          <simple-tag *ngFor="let major_category of preferred_education_major_categories; let j = index" 
+            type="gray"
+            title="{{major_category.cat_name}}" 
+            removeTag="true" 
+            (click)="onRemoveEducationMajorCategory(major_category, j)">
+          </simple-tag>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container__full">
+    <action-button class="btn-next" type="flat" title="Next" color="primary" [disabled]="!preferredEducationForm.valid" (click)="addPositionInfo('education')"></action-button>
+    <action-button class="btn-next btn-quit" type="stroked" title="Quit" (click)="onClickQuit()"></action-button>
+  </div>
+</div>
+<!-- Perferred Education End -->
+
+<!-- Preferred Work Experience Start -->
+<div *ngIf="selectedPageIndex===3 && !is_loading" class="container profile-basic">
+  <div class="container__full">
+    <div class="profile-form">
+      <h3 class="profile-form__title">
+        PREFERRED WORK EXPERIENCE
+      </h3>
+      <ng-container *ngFor="let preferredWorkExperienceForm of preferredWorkExperienceFormArray.controls; let i = index" [formGroup]="preferredWorkExperienceFormArray.at(i)">
+        <div class="profile-form__field">
+          <mat-form-field class="bg-transparent" appearance="fill">
+            <mat-label>Industry *</mat-label>
+            <input matInput placeholder="Industry *" type="text" [matAutocomplete]="autocompleteWorkIndustry" formControlName="industry">
+            <mat-icon matSuffix *ngIf="preferredWorkExperienceFormArray.at(i).get('industry').value && helperService.checkSpacesString(preferredWorkExperienceFormArray.at(i).get('industry').value) && preferredWorkExperienceFormArray.at(i).get('industry').valid && onCheckIndustryValidation(i)">done</mat-icon>
+            <mat-icon matSuffix class="error-field" *ngIf="preferredWorkExperienceFormArray.at(i).get('industry').value && helperService.checkSpacesString(preferredWorkExperienceFormArray.at(i).get('industry').value) && !onCheckIndustryValidation(i) && preferredWorkExperienceFormArray.at(i).get('industry').touched">close</mat-icon>
+            <mat-autocomplete #autocompleteWorkIndustry="matAutocomplete" (closed)="onBlurIndustry(i)">
+              <mat-option *ngFor="let autocomplete_industry of autocomplete_industries[i]" [value]="autocomplete_industry.industry_name" (onSelectionChange)="onSelectIndustry(autocomplete_industry, i)">
+                <span>{{autocomplete_industry.industry_name}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="profile-form__field">
+          <mat-form-field class="bg-transparent" appearance="fill">
+            <mat-label>Years *</mat-label>
+            <input matInput placeholder="Years *" type="text" formControlName="years" pattern="^\d+$">
+            <mat-icon matSuffix *ngIf="preferredWorkExperienceFormArray.at(i).get('years').valid">done</mat-icon>
+            <mat-icon matSuffix class="error-field" *ngIf="preferredWorkExperienceFormArray.at(i).get('years').value && !preferredWorkExperienceFormArray.at(i).get('years').valid && preferredWorkExperienceFormArray.at(i).get('years').touched">close</mat-icon>
+          </mat-form-field>
+        </div>
+        <div class="profile-form__field textarea">
+          <mat-form-field>
+            <textarea matInput placeholder="Description" rows="15" formControlName="description"></textarea>
+          </mat-form-field>
+        </div>
+
+        <div class="profile-form__field search">
+          <h3>Skills Trained <span *ngIf="preferred_work_experiences[i].preferred_skills_trained &&  preferred_work_experiences[i].preferred_skills_trained.length > 0" class="count">{{preferred_work_experiences[i].preferred_skills_trained.length}}</span></h3>
+          <mat-form-field appearance="standard" class="search">
+            <mat-icon matSuffix>search</mat-icon>
+            <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompleteSkillsTrained" formControlName="skills_trained">
+            <mat-autocomplete #autocompleteSkillsTrained="matAutocomplete">
+              <mat-option *ngFor="let autocomplete_skill_trained of autocomplete_skills_trained[i]" [value]="autocomplete_skill_trained.skill" (onSelectionChange)="onSelectSkillsTrained(i, autocomplete_skill_trained)">
+                <span>{{autocomplete_skill_trained.skill}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <div class="skills" *ngIf="preferred_work_experiences[i].preferred_skills_trained && preferred_work_experiences[i].preferred_skills_trained.length > 0">
+            <simple-tag *ngFor="let skill of preferred_work_experiences[i].preferred_skills_trained; let j = index" type="gray" title="{{skill.skill}}" removeTag="true" (click)="onRemoveSkillsTrained(i, skill, j)"></simple-tag>
+          </div>
+        </div>
+
+        
+        <div class="profile-form__field btn">
+          <action-button title="Remove" color="warn" (click)="onRemovePreferredWorkExperienceFormGroup(i)"></action-button>
+        </div>
+        <div class="profile-form__field border">
+        </div>
+      </ng-container>
+      <div class="profile-form__field btn">
+        <action-button type="stroked" title="Add Another" (click)="onAddPreferredWorkExperienceFormGroup()" [disabled]="!(preferredWorkExperienceFormArray.valid && onCheckAllIndustriesValidation())"></action-button>
+      </div>
+    </div>
+  </div>
+  <div class="container__full">
+    <action-button class="btn-next" type="flat" title="Next" color="primary" [disabled]="!((preferred_work_experiences && preferred_work_experiences.length ===1 && !preferredWorkExperienceFormArray.at(0).value.industry && !preferredWorkExperienceFormArray.at(0).value.years && !preferredWorkExperienceFormArray.at(0).value.description && !preferred_work_experiences[0].skills_trained) || (preferredWorkExperienceFormArray.valid && onCheckAllIndustriesValidation()))" (click)="addPositionInfo('work_experience')" ></action-button>
+    <action-button class="btn-next btn-quit" type="stroked" title="Quit" (click)="onClickQuit()"></action-button>
+  </div>
+</div>
+<!-- Preferred Work Experience End -->
+
+<!-- Skills Start -->
+<div *ngIf="selectedPageIndex===4 && !is_loading" class="container profile-skills">
+  <div class="container__full">
+    <div class="profile-form" [formGroup]="skillsForm">
+      <h3 class="profile-form__title">
+        SKILLS
+      </h3>
+      <p class="headup">Increase search visibility and the quality of applicants by indicating your required and preferred skills. Note that if an applicant doesn't match all required skills they are considered unqualified regardless of if they have all preferred skills.</p>
+      <div class="profile-form__field search">
+        <div class="question-container">
+          <h3>Minimum Skills <span *ngIf="minimum_skills &&  minimum_skills.length > 0" class="count">{{minimum_skills.length}}</span></h3>
+          <img src="assets/icons/ic_question.svg" class="question" (click)="openSkillDescriptionDialog()">
+        </div>
+        <!-- <img src="assets/icons/ic_question.svg" (click)="openSkillDescriptionDialog()"> -->
+        <mat-form-field appearance="standard" class="search">
+          <mat-icon matSuffix>search</mat-icon>
+          <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompleteMinimumSkills" formControlName="search_minimum_skill">
+          <mat-autocomplete #autocompleteMinimumSkills="matAutocomplete">
+            <mat-option *ngFor="let autocomplete_skill of autocomplete_minimum_skills" [value]="autocomplete_skill.skill" (onSelectionChange)="onSelectMinimumSkill(autocomplete_skill)">
+              <span>{{autocomplete_skill.skill}}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <div *ngIf="temp_minimum_skill" class="skills">
+          <simple-tag type="gray" title="{{temp_minimum_skill.skillItem.skill}}" ellipseTag="true" isControl="true" value="{{temp_minimum_skill.skillItem.skill_level}}" (levelChanged)="onLevelChanged($event, temp_minimum_skill.index, true)" (removeClick)="onRemoveMinimumSkill(temp_minimum_skill.skillItem, temp_minimum_skill.index)"></simple-tag>
+          <mat-icon (click)="editSkillDone(true)">cancel</mat-icon>
+        </div>
+        <div *ngIf="!temp_minimum_skill && minimum_skills && minimum_skills.length > 0" class="skills">
+          <simple-tag *ngFor="let minimum_skill of minimum_skills; let i = index" type="gray" title="{{minimum_skill.skill}}" ellipseTag="true" value="{{minimum_skill.skill_level}}" isControl="true" (levelChanged)="onLevelChanged($event, i, true)" (removeClick)="onRemoveMinimumSkill(minimum_skill, i)"></simple-tag>
+        </div>
+      </div>
+      <div class="profile-form__field search">
+        <div class="question-container">
+          <h3>Preferred Skills <span *ngIf="preferred_skills &&  preferred_skills.length > 0" class="count">{{preferred_skills.length}}</span></h3>
+          <img src="assets/icons/ic_question.svg" class="question" (click)="openSkillDescriptionDialog()">
+        </div>
+        <mat-form-field appearance="standard" class="search">
+          <mat-icon matSuffix>search</mat-icon>
+          <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompletePreferredSkills" formControlName="search_preferred_skill">
+          <mat-autocomplete #autocompletePreferredSkills="matAutocomplete">
+            <mat-option *ngFor="let autocomplete_skill of autocomplete_preferred_skills" [value]="autocomplete_skill.skill" (onSelectionChange)="onSelectPreferredSkill(autocomplete_skill)">
+              <span>{{autocomplete_skill.skill}}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <div *ngIf="temp_preferred_skill" class="skills">
+          <simple-tag type="gray" title="{{temp_preferred_skill.skillItem.skill}}" ellipseTag="true" isControl="true" value="{{temp_preferred_skill.skillItem.skill_level}}" (levelChanged)="onLevelChanged($event, temp_preferred_skill.index, false)" (removeClick)="onRemovePreferredSkill(temp_preferred_skill.skillItem, temp_preferred_skill.index)"></simple-tag>
+          <mat-icon (click)="editSkillDone(false)">cancel</mat-icon>
+        </div>
+        <div *ngIf="!temp_preferred_skill && preferred_skills && preferred_skills.length > 0" class="skills">
+          <simple-tag *ngFor="let preferred_skill of preferred_skills; let i = index" type="gray" title="{{preferred_skill.skill}}" ellipseTag="true" value="{{preferred_skill.skill_level}}" isControl="true" (levelChanged)="onLevelChanged($event, i, false)" (removeClick)="onRemovePreferredSkill(preferred_skill, i)"></simple-tag>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container__full">
+    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="addPositionInfo('skills')"></action-button>
+    <action-button class="btn-next btn-quit" type="stroked" title="Quit" (click)="onClickQuit()"></action-button>
+  </div>
+</div>
+<!-- Skills End -->
+
+<!-- Interests Start -->
+<div *ngIf="selectedPageIndex===5 && !is_loading" class="container profile-skills">
+  <div class="container__full">
+    <div class="profile-form" [formGroup]="interestsForm">
+      <h3 class="profile-form__title">
+        INTERESTS
+      </h3>
+      <div class="profile-form__field search">
+        <h3>Preferred Interests <span *ngIf="preferred_interests && preferred_interests.length > 0" class="count">{{preferred_interests.length}}</span></h3>
+        <mat-form-field appearance="standard" class="search">
+          <mat-icon matSuffix>search</mat-icon>
+          <input matInput placeholder="Search Interests" type="text" [matAutocomplete]="autocompleteInterests" formControlName="search_preferred_interest">
+          <mat-autocomplete #autocompleteInterests="matAutocomplete">
+            <mat-option *ngFor="let autocomplete_interest of autocomplete_preferred_interests" [value]="autocomplete_interest.interest" (onSelectionChange)="onSelectPreferredInterest(autocomplete_interest)">
+              <span>{{autocomplete_interest.interest}}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <div *ngIf="preferred_interests && preferred_interests.length > 0" class="skills">
+          <simple-tag *ngFor="let interestData of preferred_interests; let i = index" type="gray" removeTag="true" title="{{interestData.interest}}" (click)="onRemovePreferredInterest(interestData, i)"></simple-tag>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container__full">
+    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="addPositionInfo('interests')"></action-button>
+    <action-button class="btn-next btn-quit" type="stroked" title="Quit" (click)="onClickQuit()"></action-button>
+  </div>
+</div>
+<!-- Interests End -->
+
+<!-- Preferred Schools Start -->
+<div *ngIf="selectedPageIndex===6 && !is_loading" class="container profile-skills">
+  <div class="container__full">
+    <div class="profile-form" [formGroup]="schoolRestrictionsForm">
+      <h3 class="profile-form__title">
+        School Restrictions
+      </h3>
+      <div class="profile-form__field search">
+        <h3>Applicants should be currently enrolled or alumni of the following schools.</h3>
+        <mat-form-field appearance="standard" class="search">
+          <mat-icon matSuffix>search</mat-icon>
+          <input matInput placeholder="Search school or university" type="text" [matAutocomplete]="autocompleteSchools" formControlName="search_preferred_school">
+          <mat-autocomplete #autocompleteSchools="matAutocomplete">
+            <mat-option *ngFor="let autocomplete_preferred_school of autocomplete_preferred_schools" [value]="autocomplete_preferred_school.school_name" (onSelectionChange)="onSelectPreferredSchool(autocomplete_preferred_school)">
+              <span>{{autocomplete_preferred_school.school_name}}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <div *ngIf="preferred_schools && preferred_schools.length > 0" class="skills">
+          <simple-tag *ngFor="let preferred_school of preferred_schools; let i = index" type="gray" removeTag="true" title="{{preferred_school.school_name}}" (click)="onRemovePreferredSchool(preferred_school, i)"></simple-tag>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container__full">
+    <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="addPositionInfo('schools')"></action-button>
+    <action-button class="btn-next btn-quit" type="stroked" title="Quit" (click)="onClickQuit()"></action-button>
+  </div>
+</div>
+<!-- Preferred Schools End -->
+
+<!-- Postion Preview Start -->
+<div *ngIf="selectedPageIndex===7 && !is_loading" class="container position-preview">  
+  <legend id="legend">
+    <div class="nav-title" (click)="onClickTogggle()">
+      <h3 class="section-title">{{current_tab}}</h3>
+      <mat-icon>menu</mat-icon>
+    </div>
+    <a (click)="backToEdit()">Edit</a> 
+  </legend>
+  <div class="main-section">
+    <div class="edit-title">
+    </div>
+    <div class="row" id="position-info">
+      <div class="position-row">
+        <div class="position-detail">
+          <div *ngIf="position.position">
+            <h1>{{position.position}}</h1>
+          </div>
+          <div class="position-info">
+            <small *ngIf="position.company_id">
+              <img src="assets/icons/ic_company.svg">
+              {{position.company_name}}
+            </small>
+            <small *ngIf="position.locations && position.locations.length > 0">
+              <img src="assets/icons/ic_location.svg">
+              {{(position.locations[0].city_id ? position.locations[0].city : '') + (position.locations[0].city_id && (position.locations[0].state_id || position.locations[0].country_id) ? ', ' : '') + (position.locations[0].state_id ? position.locations[0].state : '') + (position.locations[0].state_id && position.locations[0].country_id ? ', ' : '') + (position.locations[0].country_id ? position.locations[0].country : '')}}
+            </small>
+          </div>
+        </div>
+        <div class="position-status">
+          <action-button type="flat" color="primary" [title]="position && position.open === 0 ? 'Publish' : 'View'" (click)="onClickPublish()"></action-button>
+        </div>
+      </div>
+      <div class="position-row__details">
+        <div class="position-info">
+          <label>Position</label>
+          <p>{{ position.level ? position.level : 'N/A'}}</p>
+        </div>
+        <div class="position-info">
+          <label>Salary</label>
+          <p>{{ position.pay ? position.pay + ' USD' : 'N/A'}} </p>
+        </div>
+        <div class="position-info">
+          <label>Industry</label>
+          <p>{{position.company_id && position_company_info ? position_company_info.main_industry_name : 'N/A'}}</p>
+        </div>
+        <div class="position-info">
+          <label>Recruiter</label>
+          <p >{{ position.recruiter_name ? position.recruiter_name : 'N/A'}}</p>
+        </div>
+        <div class="position-info">
+          <label>Application Type</label>
+          <p>{{position.application_type ? position.application_type : 'N/A'}}</p>
+        </div>
+        <div class="position-info">
+          <label>Position Type</label>
+          <p>{{position.type ? position.type : 'N/A'}}</p>
+        </div>
+        <div class="position-info">
+          <label>Application Deadline</label>
+          <p>{{position.application_deadline ? helperService.convertToFormattedString(position.application_deadline, 'YYYY-MM-DD') : 'N/A'}}</p>
+        </div>
+        <div class="position-info">
+          <label>Department</label>
+          <p>{{position.department ? position.department : 'N/A'}}</p>
+        </div>
+      </div>
+		</div>
+    <div *ngIf="position.position_desc" class="row" id="position-desc">
+      <h3>Job Description</h3>
+      <ng-container *ngIf="true; let short_desc">
+        <p *ngIf="position.position_desc" class="description" [class.short-desc]="short_desc && position.position_desc.length > helperService.shortDescLength">{{short_desc ? helperService.shortDescription(position.position_desc) : position.position_desc}}</p>
+        <a *ngIf="position.position_desc && position.position_desc.length > helperService.shortDescLength" (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
+      </ng-container>
+    </div>
+
+    <div *ngIf="(position.preferred_education_levels && position.preferred_education_levels.length > 0) || (position.preferred_majors && position.preferred_majors.length > 0) || (position.preferred_major_categories && position.preferred_major_categories.length > 0)" class="row" id="position-edu">
+      <h3>Education Level</h3>
+      <ng-container *ngIf="position.preferred_education_levels && position.preferred_education_levels.length > 0">
+        <h5>Preferred Education Levels {{position.preferred_education_levels.length}}</h5>
+        <div class="skills" *ngIf="displayItemsLimit; let limit">
+          <ng-container *ngFor="let level of position.preferred_education_levels; let i = index">
+            <simple-tag *ngIf="i < limit" type="gray" title="{{level.education_level}}"></simple-tag>
+          </ng-container>
+          <img *ngIf="limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
+          <img *ngIf="limit < position.preferred_education_levels.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="position.preferred_majors && position.preferred_majors.length > 0">
+        <h5>Preferred Majors</h5>
+        <div class="skills">
+          <ng-container *ngFor="let preferred_education_major of position.preferred_majors">
+            <simple-tag type="gray" title="{{preferred_education_major.major_name}}"></simple-tag>
+          </ng-container>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="position.preferred_major_categories && position.preferred_major_categories.length > 0">
+        <h5>Preferred Major Categories {{position.preferred_major_categories.length}}</h5>
+        <div class="skills" *ngIf="displayItemsLimit; let limit">
+          <ng-container *ngFor="let category of position.preferred_major_categories; let i = index">
+            <simple-tag *ngIf="i < limit" type="gray" title="{{category.cat_name}}"></simple-tag>
+          </ng-container>
+          <img *ngIf="limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
+          <img *ngIf="limit < position.preferred_major_categories.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
+        </div>
+      </ng-container>
+    </div>
+
+    <div *ngIf="position.preferred_experience && position.preferred_experience.length > 0" class="row" id="position-exp">
+      <h3>Preferred Experience</h3>
+      <ng-container *ngFor="let experience of position.preferred_experience; let i = index;">
+        <h4>{{experience.industry_name}} {{'(' + experience.preferred_years + ' years)'}}</h4>
+        
+        <ng-container *ngIf="experience.preferred_skills_trained && experience.preferred_skills_trained.length > 0">
+          <h5>Preferred Skills Trained {{experience.preferred_skills_trained.length}}</h5>
+          <div class="skills" *ngIf="displayItemsLimit; let limit">
+            <ng-container *ngFor="let skill_trained of experience.preferred_skills_trained; let j = index;">
+              <simple-tag *ngIf="j < limit" type="gray" title="{{skill_trained.skill}}"></simple-tag>
+            </ng-container>
+            <img *ngIf="limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
+            <img *ngIf="limit < experience.preferred_skills_trained.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
+          </div>
+        </ng-container>
+        <ng-container *ngIf="true; let short_desc">
+          <p *ngIf="experience.exp_desc" class="description"  [class.short-desc]="short_desc && experience.exp_desc.length > helperService.shortDescLength">{{short_desc ? helperService.shortDescription(experience.exp_desc) : experience.exp_desc }}</p>
+          <a *ngIf="experience.exp_desc && experience.exp_desc.length > helperService.shortDescLength" (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
+        </ng-container>
+        <mat-divider *ngIf="(i < position.preferred_experience.length - 1)"></mat-divider>
+      </ng-container>
+    </div>
+
+    <div *ngIf="(position.minimum_skills && position.minimum_skills.length > 0) || (position.preferred_skills && position.preferred_skills.length > 0)" class="row" id="position-skills">
+      <h3>Preferred & Required SKills</h3>
+      <ng-container *ngIf="position.minimum_skills && position.minimum_skills.length > 0">
+        <h5>Skills Required {{position.minimum_skills.length}}</h5>
+        <div class="skills" *ngIf="displayItemsLimit; let limit">
+          <ng-container *ngFor="let skill of position.minimum_skills; let i = index">
+            <simple-tag *ngIf="i < limit" type="gray" title="{{skill.skill}}" ellipseTag="true" value="{{skill.skill_level}}"></simple-tag>
+          </ng-container>
+          <img *ngIf="limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
+          <img *ngIf="limit < position.minimum_skills.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
+        </div>
+      </ng-container>
+      <ng-container *ngIf="position.preferred_skills && position.preferred_skills.length > 0">
+        <h5>Skills Preferred {{position.preferred_skills.length}}</h5>
+        <div class="skills" *ngIf="displayItemsLimit; let limit">
+          <ng-container *ngFor="let skill of position.preferred_skills; let i = index">
+            <simple-tag *ngIf="i < limit" type="gray" title="{{skill.skill}}" ellipseTag="true" value="{{skill.skill_level}}"></simple-tag>
+          </ng-container>
+          <img *ngIf="limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
+          <img *ngIf="limit < position.preferred_skills.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
+        </div>
+      </ng-container>
+    </div>
+
+    <div *ngIf="position.preferred_interests && position.preferred_interests.length > 0" class="row" id="position-interests">
+      <h3>Preferred Interests</h3>
+      <ng-container *ngIf="position.preferred_interests.length > 0">
+        <h5>Interests {{position.preferred_interests.length}}</h5>
+        <div class="skills" *ngIf="displayItemsLimit; let limit">
+          <ng-container *ngFor="let interest of position.preferred_interests; let i = index">
+            <simple-tag *ngIf="i < limit" type="gray" title="{{interest.interest}}"></simple-tag>
+          </ng-container>
+          <img *ngIf="limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
+          <img *ngIf="limit < position.preferred_interests.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
+        </div>
+      </ng-container>
+    </div>
+
+    <div *ngIf="position.preferred_schools && position.preferred_schools.length > 0" class="row" id="position-school">
+      <h3>School Restrictions</h3>
+      <ng-container *ngIf="position.preferred_schools.length > 0">
+        <h5>Applicants should be currently enrolled or alumni of the following schools.</h5>
+        <div class="skills" *ngIf="displayItemsLimit; let limit">
+          <ng-container *ngFor="let school of position.preferred_schools; let i = index">
+            <simple-tag *ngIf="i < limit" type="gray" title="{{school.school_name}}"></simple-tag>
+          </ng-container>
+          <img *ngIf="limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
+          <img *ngIf="limit < position.preferred_schools.length" (click)="limit = limit + displayItemsLimit" src="assets/icons/ic_see_more.svg" alt="See More">
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="nav-section" [class.nav-hidden]="!isNavMenuOpened">
+    <div class="nav-title">
+      <h3 class="section-title"></h3>
+    </div>
+    <nav>
+      <div class="navmenu-title active">
+        <h3>Contents</h3>
+        <ol>
+          <li *ngIf="position.position" (click)="onSelectNavItem('position-info')">Position Information</li>
+          <li *ngIf="position.position_desc" (click)="onSelectNavItem('position-desc')">Job Description</li>
+          <li *ngIf="(position.preferred_education_levels && position.preferred_education_levels.length > 0) || (position.preferred_majors && position.preferred_majors.length > 0) || (position.preferred_major_categories && position.preferred_major_categories.length > 0)" (click)="onSelectNavItem('position-edu')">Education Level</li>
+          <li *ngIf="position.preferred_experience && position.preferred_experience.length > 0" (click)="onSelectNavItem('position-exp')">Preferred Experience</li>
+          <li *ngIf="(position.minimum_skills && position.minimum_skills.length > 0) || (position.preferred_skills && position.preferred_skills.length > 0)" (click)="onSelectNavItem('position-skills')">Preferred & Required Skills</li>
+          <li *ngIf="position.preferred_interests && position.preferred_interests.length > 0" (click)="onSelectNavItem('position-interests')">Preferred Interests</li>
+          <li *ngIf="position.preferred_schools && position.preferred_schools.length > 0" (click)="onSelectNavItem('position-school')">School Restrictions</li>
+        </ol>
+      </div>
+      <div class="btn-section">
+        <action-button *ngIf="position && position.open === 0" class="nav-btn" color="primary" title="Save as template" (click)="openDialog('template')"></action-button>
+        <action-button *ngIf="position && position.open === 0" class="nav-btn" type="stroked" title="Edit" (click)="backToEdit()"></action-button>
+        <action-button *ngIf="position && position.open === 0" class="nav-btn" color="warn" title="Delete" (click)="onClickDelete()"></action-button>
+        <action-button *ngIf="position && position.open === 0" class="nav-btn" type="stroked"  title="Quit" (click)="onClickQuit()"></action-button>
+      </div>  
+    </nav>
+  </div>
+</div>
+<!-- Position Preview End -->

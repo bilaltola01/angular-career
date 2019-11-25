@@ -92,3 +92,24 @@ export interface CompanyInfoRequest {
   active:	number;
   company_industry_ids:	number[];
 }
+
+export interface PositionInfoRequest {
+  position:	string;
+  company_id:	number;
+  level: string;
+  type:	string;
+  position_desc: string;
+  start_date:	string;
+  end_date:	string;
+  position_filled: string;
+  pay: number;
+  negotiable:	number;
+  repeat_post: number;
+  repeat_date: string;
+  cover_letter_req:	number;
+  recruiter_id:	number;
+  department:	string;
+  open:	number;
+  openings:	number;
+  application_deadline:	string;
+}

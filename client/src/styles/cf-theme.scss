@@ -491,6 +491,8 @@ action-button {
   &.update-btn {
     margin-top: 20px;
     min-width: 150px;
+    margin-left: 10px;
+    margin-right: 10px;
   }
 
   &.contact-btn {
@@ -502,6 +504,30 @@ action-button {
     &>button {
       padding: 10px 25px !important;
       min-width: 130px;
+    }
+  }
+  &.back-btn {
+    &>button {
+      padding: 4px 19px !important;
+      font-size: 14px;
+      font-family: 'Poppins-Regular', sans-serif;
+      line-height: 1.5;
+    }
+  }
+  &.new-position {
+    &>button {
+      padding: 16px 21px !important;
+      font-size: 14px;
+      font-family: 'Poppins-Medium', sans-serif;
+      line-height: 1.5;
+    }
+  }
+  &.select-template {
+    &>button {
+      padding: 14px 20px !important;
+      font-size: 14px;
+      font-family: 'Poppins-Medium', sans-serif;
+      line-height: 1.15;
     }
   }
 }
@@ -521,7 +547,7 @@ action-button {
     position: relative;
     border-radius: 20px;
     margin: 0 40px;
-    template-dialog,profile-dialog, add-skill-popup, app-skill-description-popup,
+    template-dialog,profile-dialog, create-position-dialog, add-skill-popup, app-skill-description-popup,
     dialog-content {
       width: 100%;
       @include flex(column, center, flex-start);

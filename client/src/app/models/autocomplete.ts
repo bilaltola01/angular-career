@@ -56,3 +56,8 @@ export interface User {
   last_name: string;
   photo: string;
 }
+
+export interface MajorCategory {
+  cat_id: number;
+  cat_name: string;
+}

@@ -138,3 +138,99 @@ export interface CompanyInfoResponse {
   company_industries: any[];
 }
 
+export interface PositionInfoResponse {
+  position_popularity: number;
+  position_id: number;
+  position: string;
+  level: string;
+  type:	string;
+  position_desc: string;
+  start_date:	string;
+  end_date:	string;
+  position_filled: number;
+  pay: number;
+  negotiable:	number;
+  repeat_post: number;
+  repeat_date: string;
+  cover_letter_req:	number;
+  recruiter_id:	number;
+  company_id:	number;
+  company_name:	string;
+  post_date: string;
+  department:	string;
+  open:	number;
+  openings:	number;
+  recruiter_name:	string;
+  application_deadline: any;
+  application_type: string;
+  locations: any[];
+  preferred_skills:	any[];
+  minimum_skills:	any[];
+  preferred_schools: any[];
+  preferred_majors:	any[];
+  preferred_education_levels:	any[];
+  preferred_major_categories:	any[];
+  preferred_languages: any[];
+  preferred_interests: any[];
+  preferred_experience:	any[];
+}
+
+export interface PositionTemplateInfoResponse {
+  position_popularity: number;
+  position_id: number;
+  position:	string;
+  level: string;
+  type:	string;
+  position_desc: string;
+  start_date:	any;
+  end_date:	any;
+  position_filled: number;
+  pay: number;
+  negotiable:	number;
+  repeat_post: number;
+  repeat_date: any;
+  cover_letter_req:	number;
+  application_type:	string;
+  application_deadline: any;
+  recruiter_id: number;
+  company_id: number;
+  company_name: string;
+  post_date: any;
+  department: string;
+  open:	number;
+  openings:	number;
+  recruiter_name: string;
+  locations: any[];
+  preferred_skills:	any[];
+  minimum_skills:	any[];
+  preferred_schools: any[];
+  preferred_majors:	any[];
+  preferred_education_levels:	any[];
+  preferred_major_categories:	any[];
+  preferred_languages: any[];
+  preferred_interests: any[];
+  preferred_experience:	any[];
+}
+
+export interface PositionTemplateResponse {
+  template_id: number;
+  user_id: number;
+  position_template_name:	string;
+  position:	string;
+  level: string;
+  type:	string;
+  position_desc: string;
+  start_date:	any;
+  end_date:	any;
+  position_filled: number;
+  pay: number;
+  negotiable:	number;
+  repeat_post: number;
+  repeat_date: any;
+  cover_letter_req:	number;
+  cover_letter_pref: number;
+  department:	string;
+  application_type:	string;
+  application_deadline:	any;
+}
+

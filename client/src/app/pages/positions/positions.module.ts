@@ -7,6 +7,8 @@ import { positionRoutes } from './positions.routing';
 import { positionComponents } from './index';
 import { SharedModule } from '../../components/shared.module';
 import { AddSkillPopupComponent } from 'src/app/components/add-skill-popup/add-skill-popup.component';
+import { CreatePositionDialogComponent } from './create-position/create-position.component';
+import { SkillDescriptionPopupComponent } from 'src/app/components/skill-description-popup/skill-description-popup.component';
 
 @NgModule({
   imports: [
@@ -22,7 +24,9 @@ import { AddSkillPopupComponent } from 'src/app/components/add-skill-popup/add-s
     ...positionComponents
   ],
   entryComponents: [
-    AddSkillPopupComponent
+    AddSkillPopupComponent,
+    CreatePositionDialogComponent,
+    SkillDescriptionPopupComponent
   ]
 })
 

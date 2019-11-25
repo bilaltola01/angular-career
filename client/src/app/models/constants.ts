@@ -470,7 +470,6 @@ export const SortBy = [
   { 'title': 'Likely Fit', 'value': 'qualification' },
   { 'title': 'Date Posted', 'value': 'post-date' },
   { 'title': 'Popularity', 'value': 'popularity' }
-
 ];
 
 
@@ -485,8 +484,6 @@ export const QualificationLevel = [
 
 export const positionListLimit = 7;
 
-
-
 export const positionSearchMessages = {
   'APPLICATION_SAVE_SUCCESS': 'Application submission successful.',
   'POSITION_APPLY_SUCCESS': 'Position saves successful.'
@@ -495,4 +492,8 @@ export const positionSearchMessages = {
 export const peopleListLimit = 7;
 export const companyListLimit = 7;
 
+export const ApplicationType = [
+  'Rolling',
+  'Regular Decision'
+];
 

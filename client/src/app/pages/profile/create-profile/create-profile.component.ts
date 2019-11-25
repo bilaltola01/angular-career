@@ -53,7 +53,6 @@ import { SkillDescriptionPopupComponent } from 'src/app/components/skill-descrip
 export interface EditSkillItem {
   index: number;
   skillItem: UserSkillItem;
-
 }
 
 @Component({

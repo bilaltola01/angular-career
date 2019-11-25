@@ -1,0 +1,38 @@
+<mat-icon class="cancel" (click)="onClose()">cancel</mat-icon>
+
+<ng-container *ngIf="data.category === 'quit'" >
+  <h3 mat-dialog-title>Are you sure you want to quit?</h3>
+  <mat-dialog-actions>
+    <action-button class="update-btn" type="flat" color="primary" title="No" (click)="onClose()"></action-button>
+    <action-button class="update-btn" type="stroked" title="Yes" (click)="onClickQiut()"></action-button>
+  </mat-dialog-actions>
+</ng-container>
+
+<ng-container *ngIf="data.category === 'skip'" >
+  <h3 mat-dialog-title>Are you sure you want to skip this step?</h3>
+  <mat-dialog-content>
+    <p class="description">Failing to include skills, education, interests, or experience items greatly reduces the visibility of your position post. In addition, minimal information may reduce the quality of candidates that apply for your position.</p>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <action-button class="update-btn" type="flat" color="primary" title="No" (click)="onClose()"></action-button>
+    <action-button class="update-btn" type="stroked" title="Yes" (click)="onClickSkip()"></action-button>
+  </mat-dialog-actions>
+</ng-container>
+
+<ng-container *ngIf="data.category === 'template'" [formGroup]="templateNameForm">
+  <mat-dialog-content>
+    <div class="form-field">
+      <mat-form-field class="bg-transparent" appearance="fill">
+        <mat-label>Template Name *</mat-label>
+        <input matInput placeholder="Template Name *" formControlName="template_name" type="text">
+      </mat-form-field>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <action-button class="update-btn" type="stroked" title="No" (click)="onClose()"></action-button>
+    <action-button class="update-btn" type="flat" color="primary" title="Save As Template" [disabled]="!(templateNameForm.valid && template_name)" (click)="onClickSave()"></action-button>
+  </mat-dialog-actions>
+</ng-container>
+  
+
+
