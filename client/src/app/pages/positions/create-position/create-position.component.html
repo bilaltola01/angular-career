@@ -64,6 +64,7 @@
           <mat-icon matSuffix class="error-field" *ngIf="positionBasicInfoForm.get('position_company').value && helperService.checkSpacesString(positionBasicInfoForm.get('position_company').value) && !onCheckCompanyValidation() && positionBasicInfoForm.get('position_company').touched">close</mat-icon>
           <mat-autocomplete #autocompleteCompany="matAutocomplete" (closed)="onBlurCompany()">
             <mat-option *ngFor="let company of autocomplete_companies" [value]="company.company_name" (onSelectionChange)="onSelectCompany(company)">
+              <img class="autocomplete-company-logo" alt="Company Logo" src="{{company.company_logo ? company.company_logo : 'assets/icons/ic_default_company_logo.svg'}}">
               <span>{{company.company_name}}</span>
             </mat-option>
           </mat-autocomplete>

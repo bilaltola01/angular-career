@@ -130,6 +130,7 @@
         <mat-autocomplete #autocompleteCompany="matAutocomplete" (closed)="onBlurCompany()">
           <mat-option *ngFor="let autocomplete_company of autocomplete_companies"
             [value]="autocomplete_company.company_name" (onSelectionChange)="onSelectCompany(autocomplete_company)">
+            <img class="autocomplete-company-logo" alt="Company Logo" src="{{autocomplete_company.company_logo ? autocomplete_company.company_logo : 'assets/icons/ic_default_company_logo.svg'}}">
             <span>{{autocomplete_company.company_name}}</span>
           </mat-option>
         </mat-autocomplete>

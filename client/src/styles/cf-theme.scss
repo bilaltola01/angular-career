@@ -467,6 +467,10 @@ li {
   color: map-get($md-cfaccent, 400);
 }
 
+img.autocomplete-company-logo {
+  border-radius: 0 !important;
+}
+
 action-button {
   &>button {
     border-radius: 500px !important;
