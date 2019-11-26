@@ -256,7 +256,7 @@
               <ul>
                 <li>
                   <img class="img-style" src="assets/icons/ic_company.svg">
-                  <span class="image" routerLink="../company-page/{{job.company_id}}">
+                  <span class="image" [routerLink]="['/company-info/', job.company_id]">
                     {{job.company_name}}</span>
                 </li>
                 <li>
