@@ -108,8 +108,8 @@
                                 <div class="image"><img
                                         [src]="company.company_logo ? company.company_logo : 'assets/icons/ic_default_company_logo.svg'"></div>
                                 <div class="info">
-                                    <a routerLink="/company/{{ company.company_id }}/profile"
-                                        [queryParams]="{showBackButton: 'true'}">
+                                    <a [routerLink]="['/company-info/']"
+                                        [queryParams]="{id: company.company_id, showBackButton: 'true'}">
                                         <h2 class="name">{{company.company_name}}</h2>
                                     </a>
                                     <h3 *ngIf="company.hq_city || company.hq_state" class="title">
