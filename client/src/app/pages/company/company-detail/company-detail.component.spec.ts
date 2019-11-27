@@ -1,6 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { MaterialModule, TestingModule } from 'src/app/modules';
+
 import { CompanyDetailComponent } from './company-detail.component';
+
+import { SimpleTagComponent } from 'src/app/components/simple-tag/simple-tag.component';
 
 describe('CompanyDetailComponent', () => {
   let component: CompanyDetailComponent;
@@ -8,7 +12,8 @@ describe('CompanyDetailComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CompanyDetailComponent ]
+      imports : [ MaterialModule, TestingModule ],
+      declarations: [ CompanyDetailComponent, SimpleTagComponent ]
     })
     .compileComponents();
   }));

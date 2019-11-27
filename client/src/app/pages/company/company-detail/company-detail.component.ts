@@ -2,10 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import {
   AlertsService,
   AlertType,
-  CompanyService
+  CompanyService,
+  HelperService
 } from 'src/app/services';
 import { Router, Params, ActivatedRoute } from '@angular/router';
-import { CompanyInfoResponse } from 'src/app/models';
+import {
+  CompanyInfoResponse,
+  CompanySizeTypes
+} from 'src/app/models';
 
 @Component({
   selector: 'app-company-detail',
@@ -18,16 +22,38 @@ export class CompanyDetailComponent implements OnInit {
   showBackButton: boolean;
   loading: boolean;
   companyInfo: CompanyInfoResponse;
+  companySizeTypes = CompanySizeTypes;
+  tabIndex: number;
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private alertsService: AlertsService,
-    private companyService: CompanyService
+    private companyService: CompanyService,
+    private helperService: HelperService
   ) { }
 
   ngOnInit() {
     this.loading = true;
     this.loadBasicCompanyInfo();
+    this.tabIndex = 0;
+  }
+
+  backToCompaniesPage() {
+    this.router.navigate(['companies']);
+  }
+
+  companySize(size: string) {
+    return this.companySizeTypes.filter(val => val.toLowerCase().includes(size))[0];
+  }
+
+  selectTabMenu(tabIndex: number) {
+    this.tabIndex = tabIndex;
+  }
+
+  onSelectNavItem(id: string) {
+    const height = 70;
+    document.getElementById('sidenav-content').scrollTop = document.getElementById(id).offsetTop - height;
   }
 
   /**

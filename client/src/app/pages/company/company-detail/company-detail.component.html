@@ -1,1 +1,115 @@
-<p>company-detail works!</p>
+<ng-container *ngIf="loading">
+  <div class="loader">
+    <mat-spinner></mat-spinner>
+    <h4>Loading...</h4>
+  </div>
+</ng-container>
+
+<div *ngIf="!loading" class="career-main">
+  <div class="header-container">
+    <div class="back-row">
+      <action-button class="back-btn" type="stroked" title="Go Back" (click)="backToCompaniesPage()"></action-button>
+    </div>
+
+    <div class="company-row">
+      <div class="company-logo">
+        <img alt="Company Logo" src="{{companyInfo.company_logo ? companyInfo.company_logo : 'assets/icons/ic_default_company_logo.svg'}}">
+      </div>
+      <div class="company-detail">
+        <h2 class="company-name">
+          {{companyInfo.company_name}}
+        </h2>
+        <div class="company-locations">
+          <h4 class="company-location">
+            <img alt="" src="assets/icons/ic_location.svg">
+            {{companyInfo.hq_city_name}}, {{companyInfo.hq_state_name}}, {{companyInfo.hq_country_name}}
+          </h4>
+          <h4 class="company-location">
+            <img alt="" src="assets/icons/ic_goal.svg">
+            Since {{companyInfo.founding_year}}
+          </h4>
+        </div>
+        <div class="company-properties">
+          <div class="company-property">
+            <img alt="" src="assets/icons/ic_employees.svg">
+            <div class="info">
+              <h3 class="title">Company Size</h3>
+              <h4 class="secondary-title">{{companySize(companyInfo.company_size)}}</h4>
+            </div>
+          </div>
+
+          <div class="company-property">
+            <img alt="" src="assets/icons/ic_website.svg">
+            <div class="info">
+              <h3 class="title">Website</h3>
+              <h4 class="secondary-title">{{companyInfo.website}}</h4>
+            </div>
+          </div>
+
+          <div class="company-property">
+            <img alt="" src="assets/icons/ic_checked.svg">
+            <div class="info">
+              <h3 class="title">Validation Status</h3>
+              <h4 class="secondary-title">Validated</h4>
+            </div>
+          </div>
+
+          <div class="company-property">
+            <img alt="" src="assets/icons/ic_permissions_inactive.svg">
+            <div class="info">
+              <h3 class="title">Permissions Level</h3>
+              <h4 class="secondary-title">NA</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-row">
+      <h4 class="tab-menu" [class.active]="tabIndex===0" (click)="selectTabMenu(0)">About</h4>
+      <h4 class="tab-menu" [class.active]="tabIndex===1" (click)="selectTabMenu(1)">Positions</h4>
+      <h4 class="tab-menu" [class.active]="tabIndex===2" (click)="selectTabMenu(2)">People</h4>
+      <h4 class="tab-menu" [class.active]="tabIndex===3" (click)="selectTabMenu(3)">Career Fair</h4>
+    </div>
+  </div>
+
+  <div class="main-container">
+
+    <ng-container *ngIf="tabIndex===0">
+      <div class="nav-container">
+        <div class="nav-title">
+          <h3 class="section-title">About</h3>
+        </div>
+        <div class="nav-section">
+          <h3>Table of Content</h3>
+          <ol>
+            <li (click)="onSelectNavItem('about-company')">About Company</li>
+            <li (click)="onSelectNavItem('company-industry')">Company Industry</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="list-container">
+        <div *ngIf="companyInfo.company_desc" class="row" id="about-company">
+          <h3>About Company</h3>
+          <ng-container *ngIf="true; let short_desc">
+            <p class="description" [class.short-desc]="short_desc && companyInfo.company_desc > helperService.shortDescLength">{{short_desc ? helperService.shortDescription(companyInfo.company_desc) : companyInfo.company_desc}}</p>
+            <a *ngIf="companyInfo.company_desc && companyInfo.company_desc.length > helperService.shortDescLength" (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
+          </ng-container>
+        </div>
+
+        <div *ngIf="companyInfo.main_industry || (companyInfo.company_industry_ids && companyInfo.company_industry_ids.length > 0)" class="row" id="company-industry">
+          <h3>Company Industry</h3>
+          <ng-container *ngIf="companyInfo.main_industry">
+            <h4>Primary Industry</h4>
+            <simple-tag type="gray" title="{{companyInfo.main_industry_name}}"></simple-tag>
+          </ng-container>
+          <ng-container *ngIf="companyInfo.company_industry_ids && companyInfo.company_industry_ids.length > 0">
+            <h4>Secondary Industries {{companyInfo.company_industries.length}}</h4>
+            <simple-tag *ngFor="let industry of companyInfo.company_industries" type="gray" title="{{industry}}"></simple-tag>
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
