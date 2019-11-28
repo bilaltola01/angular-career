@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { TestingModule } from 'src/app/modules/testing.module';
+import { MaterialModule } from 'src/app/modules/material.module';
 import { CareerFairSearchComponent } from './career-fair-search.component';
+import { ActionButtonComponent } from 'src/app/components/action-button/action-button.component';
 
 describe('CareerFairSearchComponent', () => {
   let component: CareerFairSearchComponent;
@@ -8,7 +10,8 @@ describe('CareerFairSearchComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CareerFairSearchComponent ]
+      imports : [ MaterialModule, TestingModule ],
+      declarations: [ CareerFairSearchComponent, ActionButtonComponent ]
     })
     .compileComponents();
   }));
