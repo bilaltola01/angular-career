@@ -75,6 +75,7 @@
 
   <div class="main-container">
 
+    <!-- About company section start -->
     <ng-container *ngIf="tabIndex===0">
       <div class="nav-container">
         <div class="nav-title">
@@ -111,5 +112,193 @@
         </div>
       </div>
     </ng-container>
+    <!-- About company section end -->
+
+    <!-- company positions section start -->
+    <ng-container *ngIf="tabIndex===1">
+      <div class="nav-container" [formGroup]="positionForm">
+        <div class="nav-title">
+          <h3 class="section-title">POSITION SEARCH</h3>
+        </div>
+        <div class="filter-card">
+          <mat-form-field appearance="standard" class="search">
+            <mat-icon matSuffix (click)="onSearchPosition($event)">search</mat-icon>
+            <input matInput placeholder="Search Positions"  type="text" [matAutocomplete]="autocompleteSearch"
+              formControlName="searchPosition" (keyup.enter)="onSearchPosition($event)" >
+            <mat-autocomplete #autocompleteSearch="matAutocomplete">
+              <mat-option *ngFor="let search of autocomplete_searchposition" [value]="search.position  ">
+                <span>{{search.position}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+
+        <div class="nav-title">
+          <h3 class="section-title">POSITIONS FILTERS</h3>
+        </div>
+
+        <div class="filter-card">
+          <mat-form-field>
+            <mat-label>City</mat-label>
+            <input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity" formControlName="city" >
+            <mat-autocomplete #autocompleteCity="matAutocomplete">
+              <mat-option *ngFor="let city of autocomplete_cities" [value]="(city.city)?.split(',')[0]"
+                (onSelectionChange)="onChangeCity(city)">
+                <span>{{city.city}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+
+        <div class="filter-card">
+          <mat-form-field>
+            <mat-label>Skills</mat-label>
+            <input matInput placeholder="Skills" type="text" [matAutocomplete]="autocompleteSkills" formControlName="skill">
+            <mat-autocomplete #autocompleteSkills="matAutocomplete">
+              <mat-option *ngFor="let autocomplete_skill of autocomplete_skills" [value]="autocomplete_skill.skill" (onSelectionChange)="addSkills(autocomplete_skill)">
+                <span>{{autocomplete_skill.skill}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <div *ngIf="userSkillsList.length > 0 ? userSkillsList.length > 0 : skillUrlParams.length > 0" class="skills">
+            <simple-tag *ngFor="let skillData of userSkillsList; let i = index" type="gray" removeTag="true" title="{{skillData.skill}}" (click)="removeUserSkillsData(i)"></simple-tag>
+            <simple-tag *ngFor="let skillData of skillUrlParams; let i = index" type="gray" removeTag="true" title="{{skillData}}" (click)="removeSkillUrlParams(i)"></simple-tag>
+          </div>
+        </div>
+
+        <div class="filter-card">
+          <mat-form-field>
+            <mat-label>Minimum Salary</mat-label>
+            <input matInput placeholder="Minimum Salary" type="number" formControlName="minSal" >
+          </mat-form-field>
+        </div>
+
+        <div class="filter-card">
+          <mat-form-field>
+            <mat-label>Position Level</mat-label>
+            <mat-select class="arrow" formControlName="position" >
+              <mat-option value=''></mat-option>
+              <mat-option *ngFor="let position of positionLevel" value="{{position}}">{{position}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="filter-card">
+          <mat-form-field>
+            <mat-label>Education Level</mat-label>
+            <mat-select class="arrow" formControlName="education"  >
+              <mat-option value=''></mat-option>
+              <mat-option *ngFor="let education of educationLevel" value="{{educationLevel.indexOf(education)}}">
+                {{education}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="filter-card">
+          <mat-form-field>
+            <mat-label>Job Type</mat-label>
+            <mat-select class="arrow" formControlName="job" >
+              <mat-option value=''></mat-option>
+              <mat-option *ngFor="let jobtype of jobType" value="{{jobtype}}">{{jobtype}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="filter-card">
+          <mat-form-field>
+            <mat-label>Major </mat-label>
+            <input matInput placeholder="Major" type="text" [matAutocomplete]="autocompleteMajor"
+              formControlName="major">
+            <mat-autocomplete #autocompleteMajor="matAutocomplete">
+              <mat-option *ngFor="let major of autocomplete_education_major" [value]="major.major_name"
+                (onSelectionChange)="onChangeMajor(major)">
+                <span>{{major.major_name}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+
+        <div class="filter-card">
+          <mat-form-field>
+            <mat-label>Industry </mat-label>
+            <input matInput placeholder="Industry" type="text" [matAutocomplete]="autocompleteIndustry"
+              formControlName="industry" >
+            <mat-autocomplete #autocompleteIndustry="matAutocomplete">
+              <mat-option *ngFor="let industry of autocomplete_additional_industries" [value]="industry.industry_name"
+                (onSelectionChange)="onChangeIndustry(industry)">
+                <span>{{industry.industry_name}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+
+        <div class="filter-card">
+          <mat-form-field>
+            <mat-label>School</mat-label>
+            <input matInput placeholder="School" type="text" [matAutocomplete]="autocompleteSchool"
+              formControlName="school" >
+            <mat-autocomplete #autocompleteSchool="matAutocomplete">
+              <mat-option *ngFor="let school of autocomplete_school" [value]="school.school_name"
+                (onSelectionChange)="onChangeSchool(school)">
+                <span>{{school.school_name}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+
+        <div class="filter-card">
+          <mat-form-field>
+            <mat-label>Recruiter</mat-label>
+            <input matInput placeholder="Recruiter" type="text" [matAutocomplete]="autocompleterecruiter"
+              formControlName="recruiter" >
+            <mat-autocomplete #autocompleterecruiter="matAutocomplete">
+              <mat-option *ngFor="let recruiter of autocomplete_recruiter"
+                value="{{recruiter.first_name }} {{  recruiter.last_name}}  "
+                (onSelectionChange)="onChangeRecruiter(recruiter)" class="recruiter_option">
+                <img class="userimg" src="{{recruiter?.photo ? recruiter.photo : 'assets/icons/no_photo.png'}}">
+                <span>{{recruiter.first_name}} {{recruiter.last_name}} </span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+
+        <div class="filter-card">
+          <div class="side-filter-btn">
+            <action-button type="raised" color="primary" title="Apply Filters" (click)="applyFilter();">
+            </action-button>
+          </div>
+          <div class="clear-filter">
+            <action-button class="clear-btn" type="text" title="Clear Filters" (click)="clearFilter()" color="primary">
+            </action-button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <!-- company positions section end -->
+
+    <!-- company people section start -->
+    <ng-container *ngIf="tabIndex===2">
+      <div class="nav-container">
+        <div class="nav-title">
+          <h3 class="section-title">People</h3>
+        </div>
+        <div class="nav-section active">
+          <h3>Recruiters</h3>
+          <mat-icon>keyboard_arrow_right</mat-icon>
+        </div>
+        <div class="nav-section">
+          <h3>Administrators</h3>
+          <mat-icon>keyboard_arrow_right</mat-icon>
+        </div>
+        <div class="nav-section">
+          <h3>Employees</h3>
+          <mat-icon>keyboard_arrow_right</mat-icon>
+        </div>
+      </div>
+    </ng-container>
+    <!-- company people section end -->
   </div>
 </div>
