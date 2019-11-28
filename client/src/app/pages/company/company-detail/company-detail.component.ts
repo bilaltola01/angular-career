@@ -5,7 +5,10 @@ import {
   CompanyService,
   HelperService,
   PositionService,
-  AutoCompleteService
+  AutoCompleteService,
+  CartService,
+  ApplicationService,
+  ScoreService
 } from 'src/app/services';
 import { Router, Params, ActivatedRoute } from '@angular/router';
 import {
@@ -28,6 +31,11 @@ import {
   JobType
 } from 'src/app/models';
 import { FormGroup, FormControl } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { AddSkillPopupComponent } from 'src/app/components/add-skill-popup/add-skill-popup.component';
+export interface DialogData {
+  data: any;
+}
 
 @Component({
   selector: 'app-company-detail',
@@ -43,7 +51,6 @@ export class CompanyDetailComponent implements OnInit {
   companyPositions: PositionInfoResponse[];
   companySizeTypes = CompanySizeTypes;
   tabIndex: number;
-
 
   breakpoint: number;
   positionLevel: string[] = PositionLevel;
@@ -64,7 +71,8 @@ export class CompanyDetailComponent implements OnInit {
   autocomplete_searchposition: string[];
   userSkillsList = [];
   positionList = [];
-
+  savedJobs = [];
+  savedJobsMap = {};
   filterAttributes = {
     city_id: null,
     industry_id: null,
@@ -80,6 +88,10 @@ export class CompanyDetailComponent implements OnInit {
   filter_list: boolean;
   currentPageNumber: number;
   paginationArr = [];
+  appliedJobs = [];
+  appliedJobsMap = {};
+  preLoadDataObject = {};
+  updatedFitscoreList = [];
   searchQueryParam;
   urlParams = {};
   offsetFlag = false;
@@ -91,8 +103,6 @@ export class CompanyDetailComponent implements OnInit {
   skillUrlParams = [];
   skillUrlIdParam = [];
 
-  preLoadDataObject = {};
-
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -100,17 +110,23 @@ export class CompanyDetailComponent implements OnInit {
     private companyService: CompanyService,
     private helperService: HelperService,
     private positionService: PositionService,
-    private autoCompleteService: AutoCompleteService
-  ) { }
+    private autoCompleteService: AutoCompleteService,
+    private cartService: CartService,
+    private scoreService: ScoreService,
+    private applicationService: ApplicationService,
+    public dialog: MatDialog,
+  ) {
+    this.updateSkillCallback = this.updateSkillCallback.bind(this);
+  }
 
   ngOnInit() {
     this.loading = true;
-    this.loadBasicCompanyInfo();
     if (this.route.snapshot.queryParamMap.has('tabIndex')) {
       this.tabIndex = parseInt(this.route.snapshot.queryParamMap.get('tabIndex'), 10);
     } else {
       this.tabIndex = 0;
     }
+    this.loadBasicCompanyInfo();
   }
 
   backToCompaniesPage() {
@@ -125,7 +141,7 @@ export class CompanyDetailComponent implements OnInit {
     this.tabIndex = tabIndex;
     switch (this.tabIndex) {
       case 0:
-        this.loadBasicCompanyInfo();
+        this.loading = false;
         break;
       case 1:
         this.loadCompanyPositionsInfo();
@@ -161,8 +177,8 @@ export class CompanyDetailComponent implements OnInit {
   getCompanyById(company_id: number) {
     this.companyService.getCompanyById(company_id).subscribe(
       dataJson => {
-        this.loading = false;
         this.companyInfo = dataJson['data'];
+        this.selectTabMenu(this.tabIndex);
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -198,7 +214,7 @@ export class CompanyDetailComponent implements OnInit {
     }
 
     this.initPositionFilterForm();
-    // this.getJobData();
+    this.getJobData();
 
     this.breakpoint = (window.innerWidth <= 500) ? 2 : 4;
     // this.positionService.getCompanyPositions(this.company_id).subscribe(
@@ -442,19 +458,28 @@ export class CompanyDetailComponent implements OnInit {
       queryString = this.searchQueryParam;
       this.searchQueryParam = null;
     } else {
+
       queryString = this.positionForm.value.city ? `${queryString ? queryString + '&' : ''}city=${this.filterAttributes.city_id ? this.filterAttributes.city_id : this.urlParams['city']}&cityName=${this.positionForm.value.city}` : queryString;
+
       queryString = this.positionForm.value.position ? `${queryString ? queryString + '&' : ''}level=${this.positionForm.value.position}` : queryString;
+
       queryString = this.positionForm.value.education ? `${queryString ? queryString + '&' : ''}education=${parseInt(this.positionForm.value.education, 10) + 1}` : queryString;
+
       queryString = this.positionForm.value.job ? `${queryString ? queryString + '&' : ''}job_type=${this.positionForm.value.job}` : queryString;
+
       queryString = this.positionForm.value.school ? `${queryString ? queryString + '&' : ''}school=${this.filterAttributes.school_id ? this.filterAttributes.school_id : this.urlParams['school']}&schoolName=${this.positionForm.value.school}` : queryString;
+
       queryString = this.positionForm.value.major ? `${queryString ? queryString + '&' : ''}major=${this.filterAttributes.major_id ? this.filterAttributes.major_id : this.urlParams['major']}&majorName=${this.positionForm.value.major}` : queryString;
+
       queryString = this.positionForm.value.industry ? `${queryString ? queryString + '&' : ''}industry=${this.filterAttributes.industry_id ? this.filterAttributes.industry_id : this.urlParams['industry']}&industryName=${this.positionForm.value.industry}` : queryString;
-      queryString = this.positionForm.value.company ? `${queryString ? queryString + '&' : ''}company=${this.positionForm.value.company}` : queryString;
+
       queryString = this.positionForm.value.minSal ? `${queryString ? queryString + '&' : ''}pay=${this.positionForm.value.minSal}` : queryString;
+
       queryString = this.positionForm.value.recruiter ? `${queryString ? queryString + '&' : ''}recruiter=${this.filterAttributes.recruiter_id ? this.filterAttributes.recruiter_id : this.urlParams['recruiter']}&recruiterName=${this.positionForm.value.recruiter}` : queryString;
 
       if (this.offsetFlag) {
         queryString = queryString ? `${queryString}&offset=${parseInt(this.urlParams['offset'], 10) + parseInt(this.urlParams['limit'], 10)}` : `offset=${parseInt(this.urlParams['offset'], 10) + this.filterAttributes.limit}`;
+
         queryString = queryString ? `${queryString}&limit=${parseInt(this.urlParams['limit'], 10)}` : `offset=${parseInt(this.urlParams['limit'], 10)}`;
         this.offsetFlag = false;
       } else {
@@ -463,7 +488,8 @@ export class CompanyDetailComponent implements OnInit {
 
       }
       queryString = this.positionForm.value.searchPosition ? `${queryString ? queryString + '&' : ''}position=${this.positionForm.value.searchPosition}` : queryString;
-      queryString = this.positionForm.value.sortBy ? `${queryString ? queryString + '&' : ''}sort=${this.positionForm.value.sortBy}` : queryString;
+
+      // queryString = this.positionForm.value.sortBy ? `${queryString ? queryString + '&' : ''}sort=${this.positionForm.value.sortBy}` : queryString;
 
       urlQueryParam = this.positionForm.value.city ? `${urlQueryParam ? urlQueryParam + '&' : ''}city=${this.filterAttributes.city_id ? this.filterAttributes.city_id : this.urlParams['city']}&cityName=${this.positionForm.value.city}` : urlQueryParam;
       urlQueryParam = this.positionForm.value.position ? `${urlQueryParam ? urlQueryParam + '&' : ''}level=${this.positionForm.value.position}` : urlQueryParam;
@@ -472,7 +498,7 @@ export class CompanyDetailComponent implements OnInit {
       urlQueryParam = this.positionForm.value.school ? `${urlQueryParam ? urlQueryParam + '&' : ''}school=${this.filterAttributes.school_id ? this.filterAttributes.school_id : this.urlParams['school']}&schoolName=${this.positionForm.value.school}` : urlQueryParam;
       urlQueryParam = this.positionForm.value.major ? `${urlQueryParam ? urlQueryParam + '&' : ''}major=${this.filterAttributes.major_id ? this.filterAttributes.major_id : this.urlParams['major']}&majorName=${this.positionForm.value.major}` : urlQueryParam;
       urlQueryParam = this.positionForm.value.industry ? `${urlQueryParam ? urlQueryParam + '&' : ''}industry=${this.filterAttributes.industry_id ? this.filterAttributes.industry_id : this.urlParams['industry']}&industryName=${this.positionForm.value.industry}` : urlQueryParam;
-      urlQueryParam = this.positionForm.value.company ? `${urlQueryParam ? urlQueryParam + '&' : ''}company=${this.positionForm.value.company}` : urlQueryParam;
+
       urlQueryParam = this.positionForm.value.minSal ? `${urlQueryParam ? urlQueryParam + '&' : ''}pay=${this.positionForm.value.minSal}` : urlQueryParam;
       urlQueryParam = this.positionForm.value.recruiter ? `${urlQueryParam ? urlQueryParam + '&' : ''}recruiter=${this.filterAttributes.recruiter_id ? this.filterAttributes.recruiter_id : this.urlParams['recruiter']}&recruiterName=${this.positionForm.value.recruiter}` : urlQueryParam;
       urlQueryParam = this.positionForm.value.searchPosition ? `${urlQueryParam ? urlQueryParam + '&' : ''}position=${this.positionForm.value.searchPosition}` : urlQueryParam;
@@ -480,27 +506,21 @@ export class CompanyDetailComponent implements OnInit {
       if (this.offsetParam || this.filterAttributes.offset === 0 || this.filterAttributes.offset === this.filterAttributes.limit) {
         urlQueryParam = urlQueryParam ? `${urlQueryParam}&offset=${this.offsetParam ? this.offsetParam : 0}` : `offset=${this.offsetParam ? this.offsetParam : 0}`;
         urlQueryParam = urlQueryParam ? `${urlQueryParam}&limit=${this.filterAttributes.limit}` : `offset=${this.filterAttributes.limit}`;
-        urlQueryParam = this.positionForm.value.sortBy ? `${urlQueryParam ? urlQueryParam + '&' : ''}sort=${this.positionForm.value.sortBy}` : urlQueryParam;
-
+        // urlQueryParam = this.positionForm.value.sortBy ? `${urlQueryParam ? urlQueryParam + '&' : ''}sort=${this.positionForm.value.sortBy}` : urlQueryParam;
       }
-
 
       this.userSkillsList.forEach(skill => {
         queryString = queryString ? queryString + `&skills=${skill.skill_id}&skillName=${skill.skill}` : `skills=${skill.skill_id}&skillName=${skill.skill}`;
         urlQueryParam = urlQueryParam ? urlQueryParam + `&skills=${skill.skill_id}&skillName=${skill.skill}` : `skills=${skill.skill_id}&skillName=${skill.skill}`;
-
       });
-
-
-
 
       if (this.skillUrlIdParam.length > 0) {
         this.skillUrlIdParam.forEach(skill => {
           queryString = queryString ? queryString + `&skills=${skill}` : `skills=${skill}`;
           urlQueryParam = urlQueryParam ? urlQueryParam + `&skills=${skill}` : `skills=${skill}`;
-
         });
       }
+
       if (this.skillUrlParams.length > 0) {
         this.skillUrlParams.forEach(skill => {
           queryString = queryString ? queryString + `&skillName=${skill}` : `skillName=${skill}`;
@@ -510,7 +530,12 @@ export class CompanyDetailComponent implements OnInit {
       }
 
       if (this.queryFlag || this.prequeryFlag) {
-        this.router.navigate(['/positions'], { queryParams: { search: urlQueryParam ? urlQueryParam : '' } });
+        this.router.navigate(['/company-info'], { queryParams: {
+          id: this.company_id,
+          tabIndex: this.tabIndex,
+          showBackButton: this.showBackButton,
+          search: queryString ? queryString : ''
+        } });
       }
       this.urlQueryParameter = queryString;
 
@@ -529,14 +554,21 @@ export class CompanyDetailComponent implements OnInit {
       if (this.currentPageNumber < this.paginationArr[this.paginationArr.length - 1]) {
         this.preLoadNextPage(this.currentPageNumber + 1);
       } else {
-        this.router.navigate(['/positions'], { queryParams: { param: this.urlQueryParameter ? this.urlQueryParameter : '' } });
+        this.router.navigate(['/company-info'], { queryParams: {
+          id: this.company_id,
+          tabIndex: this.tabIndex,
+          showBackButton: this.showBackButton,
+          param: this.urlQueryParameter ? this.urlQueryParameter : ''
+        } });
       }
+      this.loading = false;
     } else {
       // this.isJobLoading = true;
       let queryParameters;
       queryParameters = this.generateQueryString();
-      this.positionService.getPositions(queryParameters).subscribe(
+      this.positionService.getCompanyPositions(this.company_id, queryParameters).subscribe(
         dataJson => {
+          this.loading = false;
           // this.isJobLoading = false;
           if (dataJson['success'] && dataJson.data.data) {
             this.positionList = dataJson.data.data;
@@ -609,6 +641,118 @@ export class CompanyDetailComponent implements OnInit {
     this.getJobData();
   }
 
+  calculateQualificationLevel(fitscoreInfo, minimum_skills) {
+    if (!fitscoreInfo || (minimum_skills === null && fitscoreInfo.education_weight === 0 && fitscoreInfo.experience_weight === 0 && fitscoreInfo.interests_weight === 0 && fitscoreInfo.skills_weight === 0)) {
+      return 'Unknown';
+    } else if (fitscoreInfo.fitscore <= 0.2) {
+      return 'Unqualified';
+    } else if (fitscoreInfo.fitscore > 0.2 && fitscoreInfo.fitscore <= 0.6) {
+      return 'Nascent';
+    } else if (fitscoreInfo.fitscore > 0.6 && fitscoreInfo.fitscore <= 0.8) {
+      return 'Qualified';
+    } else if (fitscoreInfo.fitscore > 0.8 && fitscoreInfo.fitscore <= 0.9) {
+      return 'Highly Qualified';
+    } else if (fitscoreInfo.fitscore > 0.9 && fitscoreInfo.fitscore <= 1.0) {
+      return 'Extremely Qualified';
+    } else {
+      return 'Unknown';
+    }
+  }
+
+  getSavedJobs() {
+    this.cartService.getSavedJobs().subscribe((data: any) => {
+      if (data.data && data.data.rows) {
+        this.savedJobs = data.data.rows;
+        for (const job of this.savedJobs) {
+          this.savedJobsMap[job.position_id] = job.position_id;
+        }
+      }
+    },
+    error => {
+      this.alertsService.show(error.message, AlertType.error);
+    });
+  }
+
+  getAppliedJobs() {
+    this.applicationService.getAppliedJobs().subscribe(data => {
+      if (data.data && data.data.data) {
+        this.appliedJobs = data.data.data;
+        for (const job of this.appliedJobs) {
+          this.appliedJobsMap[job.position_id] = job.application_id;
+
+        }
+      }
+    },
+    error => {
+      this.alertsService.show(error.message, AlertType.error);
+    });
+  }
+
+  saveJob(positionArr) {
+    this.cartService.saveJob(positionArr).subscribe(data => {
+      for (const position of positionArr) {
+        this.savedJobsMap[position.position_id] = position.position_id;
+      }
+      if (positionArr.length > 1) {
+        this.openSnackBarPosition();
+      }
+    },
+    error => {
+      this.alertsService.show(error.message, AlertType.error);
+    });
+  }
+
+  unSaveJob(position) {
+    this.cartService.unSaveJob(position.position_id).subscribe(data => {
+      delete this.savedJobsMap[position.position_id];
+    },
+    error => {
+      this.alertsService.show(error.message, AlertType.error);
+    });
+  }
+
+  withdrawApplication(position_id) {
+    const application_id = this.appliedJobsMap[position_id];
+    this.applicationService.withdrawJobs(application_id).subscribe(data => {
+      delete this.appliedJobsMap[position_id];
+    },
+    error => {
+      this.alertsService.show(error.message, AlertType.error);
+    });
+  }
+
+  applyJob(positionArr) {
+    this.applicationService.applyJob(positionArr)
+      .subscribe(data => {
+        for (const application of data) {
+          this.appliedJobsMap[application.position_id] = application.application_id;
+        }
+        if (data.length > 1) {
+          this.openSnackBarApplications();
+        }
+        this.removePositionFromLocalCart(data);
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      });
+  }
+
+  applySelected() {
+    const selectedPositionArr = this.positionList.filter(position => position.selected === true && !this.appliedJobsMap[position.position_id]);
+    this.applyJob(selectedPositionArr);
+  }
+
+  saveSelected() {
+    const selectedPositionArr = this.positionList.filter(position => position.selected === true && !this.savedJobsMap[position.position_id] && !this.appliedJobsMap[position.position_id]);
+    this.saveJob(selectedPositionArr);
+  }
+
+  removePositionFromLocalCart(appliedJobs) {
+    for (const jobs of appliedJobs) {
+      delete this.savedJobsMap[jobs.position_id];
+    }
+  }
+
   pageClicked(pageNo) {
     this.prequeryFlag = true;
     this.offsetFlag = false;
@@ -619,6 +763,13 @@ export class CompanyDetailComponent implements OnInit {
       this.offsetParam = this.filterAttributes.offset;
       this.getJobData(this.offsetParam);
     }
+  }
+
+  openSnackBarApplications() {
+    this.alertsService.show(positionSearchMessages.APPLICATION_SAVE_SUCCESS, AlertType.success);
+  }
+  openSnackBarPosition() {
+    this.alertsService.show(positionSearchMessages.POSITION_APPLY_SUCCESS, AlertType.success);
   }
 
   preLoadNextPage(nextPageNumber) {
@@ -640,6 +791,45 @@ export class CompanyDetailComponent implements OnInit {
         }
       );
     }
+  }
+
+  getPositionIds() {
+    let positionIds = this.positionList.map(position => `positionList=${position.position_id}`);
+    if (this.preLoadDataObject[this.currentPageNumber + 1] && this.preLoadDataObject[this.currentPageNumber + 1].data.data) {
+      const preLoadData = this.preLoadDataObject[this.currentPageNumber + 1].data.data.map(position => `positionList=${position.position_id}`);
+      positionIds = [...positionIds, ...preLoadData];
+    }
+    return positionIds.join('&');
+  }
+  updateSkillCallback() {
+    this.scoreService.putSkillVector().subscribe();
+    const positionIds = this.getPositionIds();
+    this.scoreService.getUpdatedfitscores(positionIds).subscribe(
+      dataJson => {
+        this.updatedFitscoreList = [...dataJson.data['fitscores']];
+        this.updatedFitscore();
+      });
+  }
+  updatedFitscore() {
+    for (let i = 0; i < this.updatedFitscoreList.length; i++) {
+      let index = this.positionList.findIndex(position => position.position_id === this.updatedFitscoreList[i].position_id);
+      if (index > -1) {
+        this.positionList[index]['true_fitscore_info'] = this.updatedFitscoreList[i];
+      } else {
+        index = this.preLoadDataObject[this.currentPageNumber + 1].data.data.findIndex(position => position.position_id === this.updatedFitscoreList[i].position_id);
+        this.preLoadDataObject[this.currentPageNumber + 1].data.data[index]['true_fitscore_info'] = this.updatedFitscoreList[i];
+      }
+    }
+  }
+
+  openSkilladdDialog(skillData) {
+    const dialogRef = this.dialog.open(AddSkillPopupComponent, {
+      data: { skillData, callback: this.updateSkillCallback },
+      width: '100vw',
+      maxWidth: '880px',
+      minWidth: '280px',
+      panelClass: ['edit-dialog-container']
+    });
   }
 
 }

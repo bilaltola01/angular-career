@@ -276,6 +276,215 @@
           </div>
         </div>
       </div>
+
+      <div class="list-container positions-list">
+
+        <div class="select-style">
+          <div class="selectall">
+            <round-checkbox id="test" title="Select All" [checked]="selectedAllFlag" (statusChange)="selectAll($event)">
+            </round-checkbox>
+            <action-button class="position-search-reload-result" color="primary" title="Reload Results" (click)="preLoadDataObject = {}; getJobData()"></action-button>
+
+            <div class="drop-buttons">
+              <span class="dot-icon">
+                <button mat-button [matMenuTriggerFor]="menu" disableRipple><img src="assets/icons/ic_more_vertical.svg">
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="getJobData()">Reload Results</button>
+                </mat-menu>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div *ngFor="let job of positionList ">
+
+          <div class="position-row" [ngClass]="{'selected': job.selected}">
+            <round-checkbox id="test" [checked]="job.selected" (statusChange)="job.selected = !job.selected;selectedAllFlag=false;"></round-checkbox>
+            <h1  [routerLink]="['/position-info/',job.position_id]" >{{job.position}} </h1>
+            <div class="position-right">
+              <div class="heart-icon">
+                <img *ngIf="!appliedJobsMap[job.position_id] && !savedJobsMap[job.position_id]" (click)="saveJob([job])" title="Save Job" src="assets/icons/ic_heart.svg" class="before-heart-icon">
+                <img *ngIf="!appliedJobsMap[job.position_id] && savedJobsMap[job.position_id]" (click)="unSaveJob(job);" title="Saved Job" src="assets/icons/ic_heart_circle.svg" class="after-heart-icon">
+              </div>
+              <span class="right-align">
+                <action-button *ngIf="!appliedJobsMap[job.position_id]" title="Apply" class="job-apply-btn"
+                  color="primary" (click)="applyJob([job])">
+                </action-button>
+                <action-button *ngIf="appliedJobsMap[job.position_id]" class="job-applied-btn" title="Applied"
+                  type="stroked" color="primary" disabled>
+                </action-button>
+              </span>
+              <span *ngIf="appliedJobsMap[job.position_id]" class="dot-icon">
+                <button mat-button [matMenuTriggerFor]="menu" disableRipple><img src="assets/icons/ic_more_vertical.svg">
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item routerLink="../application/{{this.appliedJobsMap[job.position_id]}}">See
+                    Application</button>
+                  <button mat-menu-item (click)="withdrawApplication(job.position_id)">Withdraw
+                    Application</button>
+                </mat-menu>
+              </span>
+            </div>
+            <div>
+              <div class="job-top-list">
+                <ul>
+                  <li>
+                    <img class="img-style" src="assets/icons/ic_company.svg">
+                    <span class="image" [routerLink]="['/company-info/', job.company_id]">
+                      {{job.company_name}}</span>
+                  </li>
+                  <li>
+                    <img src="assets/icons/ic_location.svg">
+                    <span class="image"
+                      *ngIf="job.locations; else noLocation">
+                      <span *ngFor="let location of job.locations | slice : 0 : 1;">
+                        <span *ngIf="location.city">{{location.city}},&nbsp;</span>
+                        <span *ngIf="location.state" >{{ location.state }},&nbsp;</span>
+                        <span>{{location.country }} <span *ngIf="job.locations?.length > 1"> +
+                        {{job.locations?.length-1}} locations </span>
+                        </span>
+                    </span>
+                  </span>
+                    <ng-template #noLocation>
+                      <span>N/A</span>
+                    </ng-template>
+                  </li>
+                  <li>
+                    <img src="assets/icons/ic_clock.svg">
+                    <span class="image"> {{job.post_date | date}}</span>
+                  </li>
+                </ul>
+              </div>
+              <mat-grid-list [cols]="breakpoint" rowHeight="60px" (window:resize)="onResize($event)" class="card">
+                <mat-grid-tile>
+                  <div class="card-item">
+                    <span>Qualification Level</span>
+                    <p>{{calculateQualificationLevel(job.true_fitscore_info, job.minimum_skills)}}</p>
+                  </div>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <div class="card-item">
+                    <span>Salary</span>
+                    <p>{{job.pay ? job.pay + ' USD' : 'N/A' }} </p>
+                  </div>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <div class="card-item">
+                    <span>Industry</span>
+                    <p>{{job.main_industry_name ? job.main_industry_name : 'N/A'}}</p>
+                  </div>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                  <div class="card-item">
+                    <span>Position Level</span>
+                    <p>{{job.level ? job.level : 'N/A'}}</p>
+                  </div>
+                </mat-grid-tile>
+              </mat-grid-list>
+              <div class="main-card">
+  
+                <ul type="none">
+                  <li>
+                    <h5 for="skill_required">Skills Required<span>{{ job.minimum_skills?.length}}</span>
+                    </h5>
+                    <div class="skil-height-fix" [ngClass]="{'skill-more-height': job.showMoreFlag}"
+                      *ngIf="job.minimum_skills; else noSkills">
+                      <div class="skills-preferred-m" *ngFor="let min_skill of job.minimum_skills ">
+                        <simple-tag type="gray" title="{{min_skill.skill}}" ellipseTag="true"
+                          value="{{min_skill.skill_level}}" [matTooltip]="SkillLevelDescription[min_skill.skill_level].title + SkillLevelDescription[min_skill.skill_level].description"
+                          [matTooltipShowDelay]=500 (click)="openSkilladdDialog(min_skill)">
+                        </simple-tag>
+  
+                      </div>
+                    </div>
+                  </li>
+                  <li class="skill-chips">
+                    <h5 class="skill-label" for="skill_preferred">Skills Preferred
+                      <span> {{job.preferred_skills?.length}}</span></h5>
+                    <div class="skil-height-fix" [ngClass]="{'skill-more-height': job.showMoreFlag}"
+                      *ngIf="job.preferred_skills; else noSkills">
+                      <div class="skills-preferred-m skill-prefer" *ngFor="let preskill of job.preferred_skills">
+                        <simple-tag type="gray" title="{{preskill.skill}}" ellipseTag="true"
+                          value="{{preskill.skill_level}}" [matTooltip]="SkillLevelDescription[preskill.skill_level].title + SkillLevelDescription[preskill.skill_level].description"
+                          [matTooltipShowDelay]=500 (click)="openSkilladdDialog(preskill)">
+                        </simple-tag>
+                      </div>
+                    </div>
+  
+                  </li>
+                </ul>
+                <ng-template #noSkills>
+                  <ul>
+                    <li>N/A</li>
+                  </ul>
+                </ng-template>
+              </div>
+    
+              <div *ngIf="job.showMoreFlag">
+                <div class="qualification-level-m">
+                  <h5>Qualification Level Estimate Breakdown</h5>
+  
+                  <simple-tag *ngIf="job.true_fitscore_info?.skills_weight" type="gray" title="Skills Match"
+                    ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.skills_fitscore)}}">
+                  </simple-tag>
+                  <simple-tag *ngIf="job.true_fitscore_info?.experience_weight" type="gray" title="Experience Match"
+                    ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.experience_fitscore)}}">
+                  </simple-tag>
+                  <simple-tag *ngIf="job.true_fitscore_info?.education_weight" type="gray" title="Education Match"
+                    ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.education_fitscore)}}">
+                  </simple-tag>
+                  <simple-tag *ngIf="job.true_fitscore_info?.interests_weight" type="gray" title="Interests Match"
+                    ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.interests_fitscore)}}">
+                  </simple-tag>
+                  <simple-tag *ngIf="job.minimum_skills" type="gray" title="Required Skills Match" ellipseTag="true"
+                    value="{{mathFloor(6*job.true_fitscore_info?.required_skills_fitscore)}}">
+                  </simple-tag>
+  
+                  <p
+                    *ngIf="!job.true_fitscore_info ||  (job.true_fitscore_info && !job.true_fitscore_info.skills_weight && !job.true_fitscore_info.experience_weight && !job.true_fitscore_info.education_weight && !job.true_fitscore_info.interests_weight && !job.minimum_skills)">
+                    N/A
+                  </p>
+                </div>
+  
+  
+                <div class="jobdesc-space">
+  
+                  <h5>Job Description</h5>
+                  <p>
+                    {{job.position_desc}}
+                  </p>
+                </div>
+  
+              </div>
+            </div>
+            <div class="show-button">
+              <action-button type="text" title="{{!job.showMoreFlag ? 'Show More' :
+                      'Show Less'}}" color="primary" (click)="job.showMoreFlag = !job.showMoreFlag"></action-button>
+              &nbsp;&nbsp;
+              <action-button type="text" title="Go to Details Page" color="primary"
+              [routerLink]="['/position-info/',job.position_id]" *ngIf="job.showMoreFlag"></action-button>
+  
+  
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!positionList || positionList.length == 0">
+          <div class="row no-job">
+            No search results found.
+          </div>
+        </div>
+
+        <div class="pagination" *ngIf="positionList.length > 0">
+          <ul type="none">
+            <li class="large_pagination_button" (click)="pageClicked(currentPageNumber-1)">Prev. Page</li>
+            <li *ngFor="let pageNo of paginationArr" [ngClass]="{'active': pageNo == currentPageNumber}"
+              (click)="pageClicked(pageNo)">{{ pageNo }}
+            </li>
+            <li class="large_pagination_button" (click)="pageClicked(currentPageNumber+1)">Next Page</li>
+          </ul>
+        </div>
+      </div>
     </ng-container>
     <!-- company positions section end -->
 
