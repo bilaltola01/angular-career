@@ -17,7 +17,9 @@ export class HelperService {
     return result;
 
   }
-
+  convertDateToFormattedString(date): string {
+    return moment(date).format('MM/DD/YYYY');
+  }
   convertToFormattedString(date: string, format: string): string {
     return moment.utc(new Date(date)).format(format);
   }
