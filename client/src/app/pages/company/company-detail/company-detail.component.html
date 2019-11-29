@@ -494,11 +494,11 @@
         <div class="nav-title">
           <h3 class="section-title">People</h3>
         </div>
-        <div class="nav-section active">
+        <div class="nav-section" [class.active]="peopleType === 'recruiter'" (click)="selectPeopleType('recruiter')">
           <h3>Recruiters</h3>
           <mat-icon>keyboard_arrow_right</mat-icon>
         </div>
-        <div class="nav-section">
+        <div class="nav-section" [class.active]="peopleType === 'administrator'" (click)="selectPeopleType('administrator')">
           <h3>Administrators</h3>
           <mat-icon>keyboard_arrow_right</mat-icon>
         </div>
@@ -510,13 +510,21 @@
 
       <div class="list-container people-list">
         <div class="row people-row">
-          <h2 class="title">Recruiters</h2>
-          <p class="description">This list of recruiters associated with this company.</p>
-          <div>
+          <h2 class="title">{{peopleType === 'recruiter' ? 'Recruiters' : 'Administrators'}}</h2>
+          <p class="description">This list of {{peopleType === 'recruiter' ? 'recruiters' : 'administrators'}} associated with this company.</p>
+          <div *ngIf="peopleType === 'recruiter'">
             <div *ngFor="let recruiter of companyRecruiters; let i = index;" class="img-tag">
               <img src="{{ recruiter.photo ? recruiter.photo : 'assets/icons/no_photo.png' }}">
               <label>{{ recruiter.first_name + ' ' + recruiter.last_name }}</label>
               <a>{{(recruiter.city ? recruiter.city : '') + (recruiter.city && (recruiter.state || recruiter.country) ? ', ' : '') + (recruiter.state ? recruiter.state : '') + (recruiter.state && recruiter.country ? ', ' : '') + (recruiter.country ? recruiter.country : '')}}</a>
+            </div>
+          </div>
+
+          <div *ngIf="peopleType === 'administrator'">
+            <div *ngFor="let administrator of companyAdministrators; let i = index;" class="img-tag">
+              <img src="{{ administrator.photo ? administrator.photo : 'assets/icons/no_photo.png' }}">
+              <label>{{ administrator.first_name + ' ' + administrator.last_name }}</label>
+              <a>{{(administrator.city ? administrator.city : '') + (administrator.city && (administrator.state || administrator.country) ? ', ' : '') + (administrator.state ? administrator.state : '') + (administrator.state && administrator.country ? ', ' : '') + (administrator.country ? administrator.country : '')}}</a>
             </div>
           </div> 
         </div>

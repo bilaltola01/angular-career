@@ -162,7 +162,6 @@ export class CompanyDetailComponent implements OnInit {
         this.loadCompanyPositionsInfo();
         break;
       case 2:
-        this.peopleType = 'recruiter';
         this.loadCompanyPeoplesInfo();
         break;
       case 3:
@@ -184,6 +183,7 @@ export class CompanyDetailComponent implements OnInit {
   loadBasicCompanyInfo() {
     this.company_id = parseInt(this.route.snapshot.queryParamMap.get('id'), 10) || null;
     this.showBackButton = this.route.snapshot.queryParamMap.get('showBackButton') === 'true' || false;
+    this.peopleType = this.route.snapshot.queryParamMap.get('people') || 'recruiter';
 
     if (this.company_id) {
       this.getCompanyById(this.company_id);
@@ -253,39 +253,44 @@ export class CompanyDetailComponent implements OnInit {
       this.companyRecruiterService.getRecruitersByCompanyId(this.company_id).subscribe(
         dataJson => {
           this.companyRecruiters = dataJson['data']['data'];
-          this.loading = false;
-          this.router.navigate(['/company-info'], {
-            queryParams: {
-              id: this.company_id,
-              tabIndex: this.tabIndex,
-              showBackButton: this.showBackButton,
-              people: this.peopleType
-            }
-          });
+          this.loadedCompanyPeoplesInfo();
         },
         error => {
+          this.companyRecruiters = null;
           this.alertsService.show(error.message, AlertType.error);
+          this.loadedCompanyPeoplesInfo();
         }
       );
-    } else {
+    } else if (this.peopleType === 'administrator') {
       this.companyAdminService.getAdminsByCompanyId(this.company_id).subscribe(
         dataJson => {
           this.companyAdministrators = dataJson['data']['data'];
-          this.loading = false;
-          this.router.navigate(['/company-info'], {
-            queryParams: {
-              id: this.company_id,
-              tabIndex: this.tabIndex,
-              showBackButton: this.showBackButton,
-              people: this.peopleType
-            }
-          });
+          this.loadedCompanyPeoplesInfo();
         },
         error => {
+          this.companyAdministrators = null;
           this.alertsService.show(error.message, AlertType.error);
+          this.loadedCompanyPeoplesInfo();
         }
       );
     }
+  }
+
+  loadedCompanyPeoplesInfo() {
+    this.loading = false;
+    this.router.navigate(['/company-info'], {
+      queryParams: {
+        id: this.company_id,
+        tabIndex: this.tabIndex,
+        showBackButton: this.showBackButton,
+        people: this.peopleType
+      }
+    });
+  }
+
+  selectPeopleType(type: string) {
+    this.peopleType = type;
+    this.loadCompanyPeoplesInfo();
   }
 
   /**
