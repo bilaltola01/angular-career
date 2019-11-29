@@ -8,7 +8,9 @@ import {
   AutoCompleteService,
   CartService,
   ApplicationService,
-  ScoreService
+  ScoreService,
+  CompanyRecruiterService,
+  CompanyAdminService
 } from 'src/app/services';
 import { Router, Params, ActivatedRoute } from '@angular/router';
 import {
@@ -103,6 +105,10 @@ export class CompanyDetailComponent implements OnInit {
   skillUrlParams = [];
   skillUrlIdParam = [];
 
+  companyRecruiters: any[];
+  companyAdministrators: any[];
+  peopleType: string;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -114,6 +120,8 @@ export class CompanyDetailComponent implements OnInit {
     private cartService: CartService,
     private scoreService: ScoreService,
     private applicationService: ApplicationService,
+    private companyRecruiterService: CompanyRecruiterService,
+    private companyAdminService: CompanyAdminService,
     public dialog: MatDialog,
   ) {
     this.updateSkillCallback = this.updateSkillCallback.bind(this);
@@ -142,11 +150,19 @@ export class CompanyDetailComponent implements OnInit {
     switch (this.tabIndex) {
       case 0:
         this.loading = false;
+        this.router.navigate(['/company-info'], {
+          queryParams: {
+            id: this.company_id,
+            tabIndex: this.tabIndex,
+            showBackButton: this.showBackButton
+          }
+        });
         break;
       case 1:
         this.loadCompanyPositionsInfo();
         break;
       case 2:
+        this.peopleType = 'recruiter';
         this.loadCompanyPeoplesInfo();
         break;
       case 3:
@@ -232,7 +248,44 @@ export class CompanyDetailComponent implements OnInit {
    * Retrieve peoples info
    */
   loadCompanyPeoplesInfo() {
-
+    this.loading = true;
+    if (this.peopleType === 'recruiter') {
+      this.companyRecruiterService.getRecruitersByCompanyId(this.company_id).subscribe(
+        dataJson => {
+          this.companyRecruiters = dataJson['data']['data'];
+          this.loading = false;
+          this.router.navigate(['/company-info'], {
+            queryParams: {
+              id: this.company_id,
+              tabIndex: this.tabIndex,
+              showBackButton: this.showBackButton,
+              people: this.peopleType
+            }
+          });
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    } else {
+      this.companyAdminService.getAdminsByCompanyId(this.company_id).subscribe(
+        dataJson => {
+          this.companyAdministrators = dataJson['data']['data'];
+          this.loading = false;
+          this.router.navigate(['/company-info'], {
+            queryParams: {
+              id: this.company_id,
+              tabIndex: this.tabIndex,
+              showBackButton: this.showBackButton,
+              people: this.peopleType
+            }
+          });
+        },
+        error => {
+          this.alertsService.show(error.message, AlertType.error);
+        }
+      );
+    }
   }
 
   /**

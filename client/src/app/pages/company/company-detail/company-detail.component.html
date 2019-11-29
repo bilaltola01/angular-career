@@ -507,6 +507,20 @@
           <mat-icon>keyboard_arrow_right</mat-icon>
         </div>
       </div>
+
+      <div class="list-container people-list">
+        <div class="row people-row">
+          <h2 class="title">Recruiters</h2>
+          <p class="description">This list of recruiters associated with this company.</p>
+          <div>
+            <div *ngFor="let recruiter of companyRecruiters; let i = index;" class="img-tag">
+              <img src="{{ recruiter.photo ? recruiter.photo : 'assets/icons/no_photo.png' }}">
+              <label>{{ recruiter.first_name + ' ' + recruiter.last_name }}</label>
+              <a>{{(recruiter.city ? recruiter.city : '') + (recruiter.city && (recruiter.state || recruiter.country) ? ', ' : '') + (recruiter.state ? recruiter.state : '') + (recruiter.state && recruiter.country ? ', ' : '') + (recruiter.country ? recruiter.country : '')}}</a>
+            </div>
+          </div> 
+        </div>
+      </div>
     </ng-container>
     <!-- company people section end -->
   </div>

@@ -599,6 +599,59 @@ a {
             }
           }
         }
+
+        .people-row {
+          h2.title {
+            font-family: "Poppins", sans-serif;
+            font-weight: 500;
+            font-size: 30px;
+            line-height: 1.5;
+            margin: 0;
+          }
+          p.description {
+            font-family: "Poppins", sans-serif;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 1.2;
+            margin: 10px 0 20px 0;
+          }
+          .img-tag {
+            background-color: $secondary-bg-color;
+            border: solid 3px $secondary-bg-color;
+            border-radius: 38px;
+            display: inline-grid;
+            grid-template: 
+              "image title" 35px
+              "image info" 35px
+              / 70px auto;
+            grid-gap: 0 10px;
+            width: 350px;
+            margin: 10px 20px 5px 0;
+            position: relative;
+            img {
+              grid-area: image;
+              width: 70px;
+              height: 70px;
+              border-radius: 50%;
+            }
+            label {
+              grid-area: title;
+              font-size: 16px;
+              display: flex;
+              align-items: flex-end;
+            }
+            a {
+              grid-area: info;
+              text-decoration: none;
+              cursor: pointer;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              padding-right: 20px;
+              color: rgba(map-get($md-cfaccent, 500), .84);
+            }
+          }
+        }
       }
 
       .pagination {

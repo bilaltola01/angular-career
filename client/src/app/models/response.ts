@@ -234,3 +234,17 @@ export interface PositionTemplateResponse {
   application_deadline:	any;
 }
 
+export interface UserInfo {
+  user_id: number;
+  first_name:	string;
+  last_name: string;
+  birthdate: any;
+  gender:	string;
+  recruiter: number;
+  applicant: number;
+  city:	string;
+  country: string;
+  state: string;
+  site_admin:	number;
+  verified: number;
+}
