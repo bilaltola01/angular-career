@@ -33,7 +33,7 @@ export class ChatViewerComponent implements OnInit {
   }
 
   async createRoom() {
-     this.chatId = await this.chatService.create(this.chatTitle, parseInt(this.chatOtherUserId, 10));
+     this.chatId = await this.chatService.create(this.chatTitle, parseInt(this.chatOtherUserId, 10), 101);
   }
 
   getMyRooms() {

@@ -45,7 +45,7 @@ export class ChatService implements OnInit {
       );
   }
 
-  async create(roomTitle: string = 'Room Title', otherUserId: number) {
+  async create(roomTitle: string = 'Room Title', otherUserId: number, applicationId: number) {
       const chatRoomData: ChatRoom = {
         title: roomTitle,
         createdAt: Date.now(),
@@ -58,6 +58,7 @@ export class ChatService implements OnInit {
       const chatRoomPairs = {
         userRecruiterId: otherUserId,
         userApplicantId: this.userService.user_id,
+        applicationId: applicationId,
         charRoomId: docRef.id,
         chatRoomTitle: roomTitle,
       };
