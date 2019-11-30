@@ -6,6 +6,15 @@
 </ng-container>
 
 <div *ngIf="!loading" class="career-main">
+  <legend id="legend">
+    <div class="nav-title" (click)="toggleMenu()">
+      <h3 *ngIf="tabIndex===0" class="section-title">About</h3>
+      <h3 *ngIf="tabIndex===1" class="section-title">Positions</h3>
+      <h3 *ngIf="tabIndex===2" class="section-title">People</h3>
+      <mat-icon>menu</mat-icon>
+    </div>
+  </legend>
+
   <div class="header-container">
     <div class="back-row">
       <action-button class="back-btn" type="stroked" title="Go Back" (click)="backToCompaniesPage()"></action-button>
@@ -67,8 +76,11 @@
 
     <div class="tab-row">
       <h4 class="tab-menu" [class.active]="tabIndex===0" (click)="selectTabMenu(0)">About</h4>
+      <div class="divider"></div>
       <h4 class="tab-menu" [class.active]="tabIndex===1" (click)="selectTabMenu(1)">Positions</h4>
+      <div class="divider"></div>
       <h4 class="tab-menu" [class.active]="tabIndex===2" (click)="selectTabMenu(2)">People</h4>
+      <div class="divider"></div>
       <h4 class="tab-menu" [class.active]="tabIndex===3" (click)="selectTabMenu(3)">Career Fair</h4>
     </div>
   </div>
@@ -77,7 +89,7 @@
 
     <!-- About company section start -->
     <ng-container *ngIf="tabIndex===0">
-      <div class="nav-container">
+      <div class="nav-container" [class.nav-hidden]="hiddenAboutMenu">
         <div class="nav-title">
           <h3 class="section-title">About</h3>
         </div>
@@ -115,7 +127,7 @@
     <!-- About company section end -->
 
     <!-- company positions section start -->
-    <ng-container *ngIf="tabIndex===1">
+    <!-- <ng-container *ngIf="tabIndex===1">
       <div class="nav-container" [formGroup]="positionForm">
         <div class="nav-title">
           <h3 class="section-title">POSITION SEARCH</h3>
@@ -485,11 +497,11 @@
           </ul>
         </div>
       </div>
-    </ng-container>
+    </ng-container> -->
     <!-- company positions section end -->
 
     <!-- company people section start -->
-    <ng-container *ngIf="tabIndex===2">
+    <!-- <ng-container *ngIf="tabIndex===2">
       <div class="nav-container">
         <div class="nav-title">
           <h3 class="section-title">People</h3>
@@ -529,7 +541,7 @@
           </div> 
         </div>
       </div>
-    </ng-container>
+    </ng-container> -->
     <!-- company people section end -->
   </div>
 </div>

@@ -109,6 +109,10 @@ export class CompanyDetailComponent implements OnInit {
   companyAdministrators: any[];
   peopleType: string;
 
+  hiddenAboutMenu: boolean;
+  hiddenPositionFilter: boolean;
+  hiddenPeopleMenu: boolean;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -129,6 +133,10 @@ export class CompanyDetailComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
+    this.hiddenAboutMenu = true;
+    this.hiddenPositionFilter = true;
+    this.hiddenPeopleMenu = true;
+
     if (this.route.snapshot.queryParamMap.has('tabIndex')) {
       this.tabIndex = parseInt(this.route.snapshot.queryParamMap.get('tabIndex'), 10);
     } else {
@@ -143,6 +151,22 @@ export class CompanyDetailComponent implements OnInit {
 
   companySize(size: string) {
     return this.companySizeTypes.filter(val => val.toLowerCase().includes(size))[0];
+  }
+
+  toggleMenu() {
+    switch (this.tabIndex) {
+      case 0:
+        this.hiddenAboutMenu = !this.hiddenAboutMenu;
+        break;
+      case 1:
+        this.hiddenPositionFilter = !this.hiddenPositionFilter;
+        break;
+      case 2:
+        this.hiddenPeopleMenu = !this.hiddenPeopleMenu;
+        break;
+      default:
+        break;
+    }
   }
 
   selectTabMenu(tabIndex: number) {
