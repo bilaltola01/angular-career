@@ -4,7 +4,7 @@
       <h2>The email verification link has been sent successfully.</h2>
       <p>Please verify your account.</p>
     </div>
-    <div *ngIf="!isSent" class="row__resend-form" [formGroup]="emailSendForm">
+    <div *ngIf="!isSent" class="row__resend-form" [formGroup]="emailSendForm" autocomplete="off">
       <mat-form-field appearance="fill">
         <mat-label>Email Address</mat-label>
         <mat-icon matPrefix>mail_outline</mat-icon>

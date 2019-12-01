@@ -3,13 +3,13 @@
   <mat-dialog-content>
     <div class="container">
       <div class="container__full">
-        <div class="profile-form" [formGroup]="skillsForm">
+        <div class="profile-form" [formGroup]="skillsForm" autocomplete="off">
 
           <div class="profile-form__field search">
             <h3>Skills</h3> <img src="assets/icons/ic_question.svg" class="question" (click)="openSkillDescriptionDialog()">
             <mat-form-field appearance="standard" class="search">
               <mat-icon matSuffix>search</mat-icon>
-              <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompleteSkills"
+              <input matInput placeholder="Search skills" type="text" autocomplete="off" [matAutocomplete]="autocompleteSkills" 
                 formControlName="skills">
               <mat-autocomplete #autocompleteSkills="matAutocomplete">
                 <mat-option *ngFor="let autocomplete_skill of autocomplete_skills" [value]="autocomplete_skill?.skill"
