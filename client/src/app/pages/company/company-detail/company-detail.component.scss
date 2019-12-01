@@ -779,6 +779,7 @@ a {
           height: calc(100vh - 130px);
           transition: top 0.5s;
           transition-timing-function: ease;
+          z-index: 1;
           .nav-title {
             display: none;
           }
@@ -792,6 +793,31 @@ a {
 
         .list-container {
           width: 100%;
+
+          .select-style {
+            margin: 9px 0;
+            & .selectall {
+              width: 74%;
+              padding-bottom: 6px;
+
+              & action-button {
+                margin-bottom: 5px;
+              }
+            }
+          }
+
+          .position-row {
+            h1 {
+              font-size: 26px;
+            }
+
+            & .card {
+              & .card-item {
+                width: 100%;
+              }
+            }
+
+          }
         }
       }
     }
@@ -804,6 +830,122 @@ a {
       .header-container {
         .tab-row {
           display: none;
+        }
+      }
+      .main-container {
+        .nav-container {
+          padding: 10px 20px 30px 20px;
+        }
+
+        .list-container {
+          .select-style {
+            & .selectall {
+              float: none;
+              width: 100%;
+              & round-checkbox{
+                margin-right: 13px;
+              }
+
+              & action-button {
+                margin-bottom: 5px;
+                display: none;
+              }
+              & .drop-buttons{
+                display: inline-block;
+              }
+            }
+
+            & .sort-item {
+              float: none;
+              margin-left: 30px;
+
+              & mat-form-field {
+                margin-top: 0px;
+                margin-bottom: 5px;
+                margin-left: 30px;
+              }
+            }
+          }
+
+          & .right-align {
+            @include inline-block-btn;
+            text-align: center;
+             & action-button{
+              @include inline-block-btn;
+             }
+          }
+
+          .position-row {
+            padding: 25px 10px;
+            h1 {
+              font-size: 18px;
+              margin-top: 3px;
+              line-height: 20px;
+              width: 86%;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
+
+            & .position-right {
+              margin-left: 10px;
+              float: none;
+              padding-top: 16px;
+
+              & .heart-icon{
+                margin: 8px auto 0;
+                width: 81px;
+                img{
+                  &.before-heart-icon {
+                    margin-top: 6px;
+                  }
+                  &.after-heart-icon{
+                    margin-top: -8px;
+                  }
+                }
+              }
+            }
+
+            & .job-top-list {
+              ul {
+                margin: 20px auto 0;
+                  li {
+                    margin-right: auto;
+                    font-size: 13px;
+                    margin-bottom: 6px;
+                    word-wrap: break-word;
+                    display: block;
+                }
+              }
+            }
+
+            & .card {
+              & .card-item {
+                padding: 18px 5px 12px 5px;
+                min-height: 60px;
+                & span{
+                  font-size: 13px;
+                }
+              }
+            }
+
+            .main-card {
+              ul {
+                li {
+                  width: 100%;
+                }
+              }
+            }
+          }
+
+          & .qualification-level-m {
+            & simple-tag {
+              @include inline-block-btn;
+              margin: 0px 5px 7px 0px;
+              font-family: "Poppins", sans-serif;
+              font-weight: 400;
+            }
+          }
         }
       }
     }
@@ -825,6 +967,11 @@ a {
               @include flex(column, center, flex-start);
             }
           }
+        }
+      }
+      .main-container {
+        .nav-container {
+          padding: 10px 20px 30px 20px;
         }
       }
     }

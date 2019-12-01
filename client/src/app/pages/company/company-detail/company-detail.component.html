@@ -127,8 +127,8 @@
     <!-- About company section end -->
 
     <!-- company positions section start -->
-    <!-- <ng-container *ngIf="tabIndex===1">
-      <div class="nav-container" [formGroup]="positionForm">
+    <ng-container *ngIf="tabIndex===1">
+      <div class="nav-container" [formGroup]="positionForm" [class.nav-hidden]="hiddenPositionFilter">
         <div class="nav-title">
           <h3 class="section-title">POSITION SEARCH</h3>
         </div>
@@ -497,7 +497,7 @@
           </ul>
         </div>
       </div>
-    </ng-container> -->
+    </ng-container>
     <!-- company positions section end -->
 
     <!-- company people section start -->
