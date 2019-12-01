@@ -12,6 +12,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 })
 
 export class UserService {
+
   max_limit = 100;
 
   helper = new JwtHelperService();
@@ -145,15 +146,6 @@ export class UserService {
       );
   }
 
-  public refreshToken(): Observable<any> {
-    return this.http.get(this.auth_service_url + 'token/refresh', this.authHttpOptions())
-      .pipe(
-        map(data => {
-          return {success: true, data: data['token']};
-        })
-      );
-  }
-
   // General Information Services
   public getGeneralInfo(userId: number = this.user_id): Observable<any> {
     return this.http.get(this.user_service_url + `user/${userId}`, this.authHttpOptions())
@@ -191,7 +183,8 @@ export class UserService {
       .pipe(
         map(data => {
           return {success: true, message: 'Success!', data: data};
-        })
+        }),
+        catchError(this.handleError)
       );
   }
 
@@ -301,12 +294,12 @@ export class UserService {
 
   public getAdditionalIndustries(experienceId: number): Observable<any> {
     return this.http.get(this.user_service_url + `experience/${experienceId}/additional-industries`, this.authHttpOptions())
-      .pipe(
-        map(data => {
-          return {success: true, message: 'Success!', data: data};
-        }),
-        catchError(this.handleError)
-      );
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
   }
 
   public postAdditionalIndustry(additionalIndustryInfo: any): Observable<any> {
@@ -341,12 +334,13 @@ export class UserService {
 
   public getSkillsTrained(experienceId: number): Observable<any> {
     return this.http.get(this.user_service_url + `experience/${experienceId}/skills-trained`, this.authHttpOptions())
-      .pipe(
-        map(data => {
-          return {success: true, message: 'Success!', data: data};
-        }),
-        catchError(this.handleError)
-      );
+    .pipe(
+      map(data => {
+        return {success: true, message: 'Success!', data: data};
+      }),
+      catchError(this.handleError)
+    );
+
   }
 
   public postSkillTrained(skillInfo: any): Observable<any> {
@@ -845,14 +839,12 @@ export class UserService {
 
   private authHttpOptions() {
     const token = localStorage.getItem('token');
-
     return {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'Authorization': token
       })
     };
-
   }
 
   private handleError(error) {
