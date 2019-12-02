@@ -288,7 +288,7 @@ export class CompanyDetailComponent implements OnInit {
     } else if (this.peopleType === 'administrator') {
       this.companyAdminService.getAdminsByCompanyId(this.company_id).subscribe(
         dataJson => {
-          this.companyAdministrators = dataJson['data']['data'];
+          this.companyAdministrators = dataJson['data'];
           this.loadedCompanyPeoplesInfo();
         },
         error => {

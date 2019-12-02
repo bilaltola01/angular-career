@@ -13,6 +13,17 @@
       <h3 *ngIf="tabIndex===2" class="section-title">People</h3>
       <mat-icon>menu</mat-icon>
     </div>
+    <div class="drop-buttons">
+      <span class="dot-icon">
+        <button mat-button [matMenuTriggerFor]="tabMenu" disableRipple><img src="assets/icons/ic_more_vertical.svg">
+        </button>
+        <mat-menu #tabMenu="matMenu">
+          <button mat-menu-item (click)="selectTabMenu(0)">About</button>
+          <button mat-menu-item (click)="selectTabMenu(1)">Positions</button>
+          <button mat-menu-item (click)="selectTabMenu(2)">People</button>
+        </mat-menu>
+      </span>
+    </div>
   </legend>
 
   <div class="header-container">
@@ -80,8 +91,8 @@
       <h4 class="tab-menu" [class.active]="tabIndex===1" (click)="selectTabMenu(1)">Positions</h4>
       <div class="divider"></div>
       <h4 class="tab-menu" [class.active]="tabIndex===2" (click)="selectTabMenu(2)">People</h4>
-      <div class="divider"></div>
-      <h4 class="tab-menu" [class.active]="tabIndex===3" (click)="selectTabMenu(3)">Career Fair</h4>
+      <!-- <div class="divider"></div>
+      <h4 class="tab-menu" [class.active]="tabIndex===3" (click)="selectTabMenu(3)">Career Fair</h4> -->
     </div>
   </div>
 
@@ -501,8 +512,8 @@
     <!-- company positions section end -->
 
     <!-- company people section start -->
-    <!-- <ng-container *ngIf="tabIndex===2">
-      <div class="nav-container">
+    <ng-container *ngIf="tabIndex===2">
+      <div class="nav-container" [class.nav-hidden]="hiddenPeopleMenu">
         <div class="nav-title">
           <h3 class="section-title">People</h3>
         </div>
@@ -514,10 +525,10 @@
           <h3>Administrators</h3>
           <mat-icon>keyboard_arrow_right</mat-icon>
         </div>
-        <div class="nav-section">
+        <!-- <div class="nav-section">
           <h3>Employees</h3>
           <mat-icon>keyboard_arrow_right</mat-icon>
-        </div>
+        </div> -->
       </div>
 
       <div class="list-container people-list">
@@ -541,7 +552,7 @@
           </div> 
         </div>
       </div>
-    </ng-container> -->
+    </ng-container>
     <!-- company people section end -->
   </div>
 </div>
