@@ -48,6 +48,7 @@ export class CompanyDetailComponent implements OnInit {
 
   company_id: number;
   showBackButton: boolean;
+  loading_companyInfo: boolean;
   loading: boolean;
   companyInfo: CompanyInfoResponse;
   companyPositions: PositionInfoResponse[];
@@ -132,6 +133,7 @@ export class CompanyDetailComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loading_companyInfo = true;
     this.loading = true;
     this.hiddenAboutMenu = true;
     this.hiddenPositionFilter = true;
@@ -218,6 +220,7 @@ export class CompanyDetailComponent implements OnInit {
     this.companyService.getCompanyById(company_id).subscribe(
       dataJson => {
         this.companyInfo = dataJson['data'];
+        this.loading_companyInfo = false;
         this.selectTabMenu(this.tabIndex);
       },
       error => {
@@ -257,15 +260,6 @@ export class CompanyDetailComponent implements OnInit {
     this.getJobData();
 
     this.breakpoint = (window.innerWidth <= 500) ? 2 : 4;
-    // this.positionService.getCompanyPositions(this.company_id).subscribe(
-    //   dataJson => {
-    //     this.loading = false;
-    //     this.companyPositions = dataJson['data'];
-    //   },
-    //   error => {
-    //     this.alertsService.show(error.message, AlertType.error);
-    //   }
-    // );
   }
 
   /**
@@ -643,15 +637,13 @@ export class CompanyDetailComponent implements OnInit {
           param: this.urlQueryParameter ? this.urlQueryParameter : ''
         } });
       }
-      this.loading = false;
     } else {
-      // this.isJobLoading = true;
+      this.loading = true;
       let queryParameters;
       queryParameters = this.generateQueryString();
       this.positionService.getCompanyPositions(this.company_id, queryParameters).subscribe(
         dataJson => {
           this.loading = false;
-          // this.isJobLoading = false;
           if (dataJson['success'] && dataJson.data.data) {
             this.positionList = dataJson.data.data;
             this.setPaginationValues(dataJson);
@@ -662,7 +654,6 @@ export class CompanyDetailComponent implements OnInit {
           }
         },
         error => {
-          // this.isJobLoading = false;
           this.alertsService.show(error.message, AlertType.error);
           this.positionList = [];
         }
