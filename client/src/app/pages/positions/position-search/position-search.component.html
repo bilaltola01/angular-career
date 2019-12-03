@@ -6,7 +6,7 @@
 </ng-container>
 <!-- Search Bar -->
 <div class="career-main">
-  <div class="comman_search_filter" [formGroup]="positionForm">
+  <div class="comman_search_filter" [formGroup]="positionForm" autocomplete="off">
     <div class="filter-data">
       <mat-icon (click)="toggleTabMenuOpen()" class="filter_icon">filter_list</mat-icon>
     </div>
@@ -24,7 +24,7 @@
     </div>
 
   </div>
-  <div [formGroup]="positionForm" class="position-main-container">
+  <div [formGroup]="positionForm" class="position-main-container" autocomplete="off">
     <!-- Position Filter Card -->
     <div class="filter-container container__header tablet" [class.open]="filter_list">
       <ng-container>

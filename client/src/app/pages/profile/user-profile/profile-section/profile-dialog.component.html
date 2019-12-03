@@ -173,7 +173,7 @@
       <h3>Skills Trained <span *ngIf="skills_trained.length > 0" class="count">{{skills_trained.length}}</span></h3>
       <mat-form-field appearance="standard" class="search">
         <mat-icon matSuffix>search</mat-icon>
-        <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompleteSkillsTrained"
+        <input matInput placeholder="Search skills" type="text" autocomplete="off" [matAutocomplete]="autocompleteSkillsTrained"
           formControlName="skills_trained">
         <mat-autocomplete #autocompleteSkillsTrained="matAutocomplete">
           <mat-option *ngFor="let autocomplete_skill_trained of autocomplete_skills_trained"
@@ -193,7 +193,7 @@
           class="count">{{additional_industries.length}}</span></h3>
       <mat-form-field appearance="standard" class="search">
         <mat-icon matSuffix>search</mat-icon>
-        <input matInput placeholder="Search Industries" type="text" [matAutocomplete]="autocompleteAdditionalIndustry"
+        <input matInput placeholder="Search Industries" type="text" autocomplete="off" [matAutocomplete]="autocompleteAdditionalIndustry"
           formControlName="additional_industries">
         <mat-autocomplete #autocompleteAdditionalIndustry="matAutocomplete">
           <mat-option *ngFor="let autocomplete_additional_industry of autocomplete_additional_industries"

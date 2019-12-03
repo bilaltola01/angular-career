@@ -183,8 +183,7 @@
       <img src="assets/icons/ic_question.svg" class="question" *ngIf="editMode" (click)="openSkillDescriptionDialog()">
     </div>
 
-
-    <div *ngIf="editMode" class="form-field search" [formGroup]="skillsSearchForm">
+    <div *ngIf="editMode" class="form-field search" [formGroup]="skillsSearchForm" autocomplete="off">
       <mat-form-field appearance="standard" class="search">
         <mat-icon matSuffix>search</mat-icon>
         <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompleteSkills"
@@ -224,7 +223,7 @@
   <div *ngIf="(userInterestsList && userInterestsList.length > 0) || editMode" class="row" [class.edit-mode]="editMode"
     id="interests">
     <h3> Interests </h3>
-    <div *ngIf="editMode" class="form-field search" [formGroup]="interestsSearchForm">
+    <div *ngIf="editMode" class="form-field search" [formGroup]="interestsSearchForm" autocomplete="off">
       <mat-form-field appearance="standard" class="search">
         <mat-icon matSuffix>search</mat-icon>
         <input matInput placeholder="Search Interests" type="text" [matAutocomplete]="autocompleteInterests"
