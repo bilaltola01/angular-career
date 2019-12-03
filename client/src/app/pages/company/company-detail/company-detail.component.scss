@@ -127,7 +127,13 @@ a {
               }
             }
           }
-
+        }
+        .company-status {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          align-items: flex-end;
+          margin-left: 20px;
         }
       }
 
@@ -854,6 +860,15 @@ a {
 
             .company-property {
               margin-right: 0;
+            }
+          }
+
+          .company-status {
+            flex-direction: column;
+            align-items: center;
+            margin-left: 0;
+            & > * {
+              margin: 5px;
             }
           }
         }

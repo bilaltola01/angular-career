@@ -905,4 +905,8 @@ export class CompanyDetailComponent implements OnInit {
     });
   }
 
+  onClickEdit() {
+    this.router.navigate(['/edit-company'], { queryParams: { edit: true, id: this.companyInfo.company_id } });
+  }
+
 }

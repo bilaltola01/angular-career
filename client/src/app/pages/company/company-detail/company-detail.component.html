@@ -84,6 +84,10 @@
             </div>
           </div>
         </div>
+
+        <div class="company-status">
+          <action-button type="flat" color="primary" title="Edit" (click)="onClickEdit()"></action-button>
+        </div>
       </div>
 
       <div class="tab-row">
@@ -116,25 +120,27 @@
       </div>
 
       <div class="list-container">
-        <div *ngIf="companyInfo.company_desc" class="row" id="about-company">
-          <h3>About Company</h3>
-          <ng-container *ngIf="true; let short_desc">
-            <p class="description" [class.short-desc]="short_desc && companyInfo.company_desc > helperService.shortDescLength">{{short_desc ? helperService.shortDescription(companyInfo.company_desc) : companyInfo.company_desc}}</p>
-            <a *ngIf="companyInfo.company_desc && companyInfo.company_desc.length > helperService.shortDescLength" (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
-          </ng-container>
-        </div>
+        <ng-container *ngIf="!loading">
+          <div *ngIf="companyInfo.company_desc" class="row" id="about-company">
+            <h3>About Company</h3>
+            <ng-container *ngIf="true; let short_desc">
+              <p class="description" [class.short-desc]="short_desc && companyInfo.company_desc > helperService.shortDescLength">{{short_desc ? helperService.shortDescription(companyInfo.company_desc) : companyInfo.company_desc}}</p>
+              <a *ngIf="companyInfo.company_desc && companyInfo.company_desc.length > helperService.shortDescLength" (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
+            </ng-container>
+          </div>
 
-        <div *ngIf="companyInfo.main_industry || (companyInfo.company_industry_ids && companyInfo.company_industry_ids.length > 0)" class="row" id="company-industry">
-          <h3>Company Industry</h3>
-          <ng-container *ngIf="companyInfo.main_industry">
-            <h4>Primary Industry</h4>
-            <simple-tag type="gray" title="{{companyInfo.main_industry_name}}"></simple-tag>
-          </ng-container>
-          <ng-container *ngIf="companyInfo.company_industry_ids && companyInfo.company_industry_ids.length > 0">
-            <h4>Secondary Industries {{companyInfo.company_industries.length}}</h4>
-            <simple-tag *ngFor="let industry of companyInfo.company_industries" type="gray" title="{{industry}}"></simple-tag>
-          </ng-container>
-        </div>
+          <div *ngIf="companyInfo.main_industry || (companyInfo.company_industry_ids && companyInfo.company_industry_ids.length > 0)" class="row" id="company-industry">
+            <h3>Company Industry</h3>
+            <ng-container *ngIf="companyInfo.main_industry">
+              <h4>Primary Industry</h4>
+              <simple-tag type="gray" title="{{companyInfo.main_industry_name}}"></simple-tag>
+            </ng-container>
+            <ng-container *ngIf="companyInfo.company_industry_ids && companyInfo.company_industry_ids.length > 0">
+              <h4>Secondary Industries {{companyInfo.company_industries.length}}</h4>
+              <simple-tag *ngFor="let industry of companyInfo.company_industries" type="gray" title="{{industry}}"></simple-tag>
+            </ng-container>
+          </div>
+        </ng-container>
       </div>
     </ng-container>
     <!-- About company section end -->
