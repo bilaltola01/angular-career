@@ -19,7 +19,7 @@ export class UserService {
 
   // store the URL so we can redirect after logging in
   public redirectUrl: string;
-  private user_id = -1;
+  public user_id = -1;
 
   private auth_service_url = `${environment.serverUrl}/${environment.auth_service}/api/${environment.api_version}/`;
   private user_service_url = `${environment.serverUrl}/${environment.user_service}/api/${environment.api_version}/`;

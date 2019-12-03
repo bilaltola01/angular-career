@@ -8,7 +8,12 @@ import { MaterialModule } from './modules/material.module';
 import { SharedModule } from './components/shared.module';
 import { ErrorInterceptor } from './services/error-interceptor';
 import { GuardsModule } from './guard/guards.module';
+import { environment } from 'src/environments/environment';
 
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,10 +27,14 @@ import { GuardsModule } from './guard/guards.module';
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    GuardsModule
+    GuardsModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
+    AngularFireStorageModule,
+    AngularFireAuthModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],
 })
