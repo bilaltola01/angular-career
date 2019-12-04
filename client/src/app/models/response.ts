@@ -124,6 +124,8 @@ export interface CompanyInfoResponse {
   company_desc:	string;
   company_logo:	string;
   company_size:	string;
+  founding_year: any;
+  website: string;
   hq_city: number;
   hq_city_name: string;
   hq_state:	number;

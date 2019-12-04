@@ -116,6 +116,12 @@ export class CreateCompanyComponent implements OnInit {
   isNavMenuOpened: boolean;
   isTabMenuOpen: boolean;
 
+  isEdit: boolean;
+  editCompanyId: number;
+  editCompanyAdmins: UserGeneralInfo[] = [];
+  editCompanyRecruiters: UserGeneralInfo[] = [];
+  is_loading: boolean;
+
   constructor(private route: ActivatedRoute,
     private router: Router,
     private autoCompleteService: AutoCompleteService,
@@ -138,7 +144,122 @@ export class CreateCompanyComponent implements OnInit {
     this.current_tab = this.tab_menus[0];
     this.is_administrators = false;
     this.selectedPageIndex = 0;
-    this.initializeFormsByPageIndex();
+    if (this.route.snapshot.queryParamMap.has('edit') && this.route.snapshot.queryParamMap.has('id')) {
+      this.isEdit = this.route.snapshot.queryParamMap.get('edit') === 'true';
+      this.editCompanyId = parseInt(this.route.snapshot.queryParamMap.get('id'), 10);
+    }
+    if (this.isEdit && this.editCompanyId) {
+      this.is_loading = true;
+      this.getCompanyById(this.editCompanyId);
+    } else {
+      this.initializeFormsByPageIndex();
+    }
+  }
+
+  getCompanyById(company_id: number) {
+    this.companyService.getCompanyById(company_id).subscribe(
+      dataJson => {
+        this.company = dataJson['data'];
+        this.is_loading = false;
+        this.initializeFormsByPageIndex();
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  updateCompany() {
+    this.is_loading = true;
+    const companyInfo = {};
+    switch (this.selectedPageIndex) {
+      case 1:
+        if (this.company.company_name !== this.company_name) {
+          companyInfo['company_name'] = this.company_name;
+        }
+
+        if (this.company.company_desc !== this.company_desc) {
+          companyInfo['company_desc'] = this.company_desc;
+        }
+        break;
+      case 2:
+        if (this.company.company_size !== this.parseCompanySize(this.company_size)) {
+          companyInfo['company_size'] = this.parseCompanySize(this.company_size);
+        }
+
+        if (this.company.founding_year !== this.founding_year) {
+          companyInfo['founding_year'] = this.founding_year;
+        }
+
+        if (this.company.hq_city !== this.hq_city.city_id) {
+          companyInfo['hq_city'] = this.hq_city.city_id;
+        }
+
+        if (this.company.hq_state !== this.hq_state.state_id) {
+          companyInfo['hq_state'] = this.hq_state.state_id;
+        }
+
+        if (this.company.hq_country !== this.hq_country) {
+          companyInfo['hq_country'] = this.hq_country;
+        }
+
+        if (this.company.website !== this.website) {
+          companyInfo['website'] = this.website;
+        }
+        break;
+      default:
+        break;
+    }
+    this.companyService.patchCompanyById(companyInfo, this.company.company_id).subscribe(
+      dataJson => {
+        this.company = dataJson['data'];
+        this.is_loading = false;
+        switch (this.selectedPageIndex) {
+          case 1:
+            this.initCompanyBasicInfoForm();
+            break;
+          case 2:
+            this.initCompanyIndustryForm();
+            break;
+          case 3:
+            this.initCompanyAdministratorsForm();
+            break;
+          case 4:
+            this.initCompanyRecruitersForm();
+            break;
+          default:
+            break;
+        }
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+        this.is_loading = false;
+      }
+    );
+  }
+
+  getCompanyAdminsById(company_id: number) {
+    this.companyAdminService.getAdminsByCompanyId(company_id).subscribe(
+      dataJson => {
+        this.editCompanyAdmins = dataJson['data'];
+      },
+      error => {
+        this.editCompanyAdmins = null;
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  getCompanyRecruitersById(company_id: number) {
+    this.companyRecruiterService.getRecruitersByCompanyId(company_id).subscribe(
+      dataJson => {
+        this.editCompanyRecruiters = dataJson['data']['data'];
+      },
+      error => {
+        this.editCompanyRecruiters = null;
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
   }
 
   onClickTogggle() {
@@ -165,10 +286,18 @@ export class CreateCompanyComponent implements OnInit {
     ++this.selectedPageIndex;
     switch (this.selectedPageIndex) {
       case 1:
-        this.initCompanyBasicInfoForm();
+        if (this.isEdit && (this.company.company_name !== this.company_name || this.company.company_desc !== this.company_desc)) {
+          this.updateCompany();
+        } else {
+          this.initCompanyBasicInfoForm();
+        }
         break;
       case 2:
-        this.initCompanyIndustryForm();
+        if (this.isEdit && (this.company.company_size !== this.parseCompanySize(this.company_size) || this.company.founding_year !== this.founding_year || this.company.hq_city !== this.hq_city.city_id || this.company.hq_state !== this.hq_state.state_id || this.company.hq_country !== this.hq_country || this.company.website !== this.website)) {
+          this.updateCompany();
+        } else {
+          this.initCompanyIndustryForm();
+        }
         break;
       case 3:
         this.initCompanyAdministratorsForm();
@@ -230,6 +359,12 @@ export class CreateCompanyComponent implements OnInit {
    * Company Name and Overview Form
    */
   initNameOverviewForm() {
+    if (this.isEdit) {
+      this.company_logo_url = this.company.company_logo;
+      this.company_name = this.company.company_name;
+      this.company_desc = this.company.company_desc;
+    }
+
     this.nameOverviewForm = new FormGroup({
       company_logo: new FormControl(this.company_logo ? this.company_logo : null),
       company_name: new FormControl(this.company_name ? this.company_name : null, [Validators.required]),
@@ -260,6 +395,9 @@ export class CreateCompanyComponent implements OnInit {
 
       reader.onload = (reader_event: any) => {
         this.company_logo_url = reader_event.target.result;
+        if (this.isEdit) {
+          this.addCompanyLogo();
+        }
       };
 
       reader.readAsDataURL(event.target.files[0]);
@@ -273,6 +411,21 @@ export class CreateCompanyComponent implements OnInit {
   initCompanyBasicInfoForm() {
     this.autocomplete_cities = [];
     this.autocomplete_states = [];
+
+    if (this.isEdit) {
+      this.company_size = this.companySizeTypes.filter(val => val.toLowerCase().includes(this.company.company_size))[0];
+      this.founding_year = this.company.founding_year;
+      this.hq_city = {
+        city_id: this.company.hq_city,
+        city: this.company.hq_city_name
+      };
+      this.hq_state = {
+        state_id: this.company.hq_state,
+        state: this.company.hq_state_name
+      };
+      this.hq_country = this.company.hq_country;
+      this.website = this.company.website;
+    }
 
     this.companyBasicInfoForm = new FormGroup({
       company_size: new FormControl(this.company_size ? this.company_size : null, [Validators.required]),
@@ -426,6 +579,19 @@ export class CreateCompanyComponent implements OnInit {
   initCompanyIndustryForm() {
     this.autocomplete_main_industries = [];
     this.autocomplete_company_industries = [];
+
+    if (this.isEdit) {
+      this.main_industry = {
+        industry_id: this.company.main_industry,
+        industry_name: this.company.main_industry_name
+      };
+      this.company_industries = this.company.company_industry_ids.map((val, index) => {
+        return {
+          industry_id: val,
+          industry_name: this.company.company_industries[index]
+        };
+      });
+    }
 
     this.companyIndustryForm = new FormGroup({
       main_industry: new FormControl(this.main_industry ? this.main_industry.industry_name : null),

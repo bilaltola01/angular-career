@@ -24,5 +24,10 @@ export const companyRoutes: Routes = [
     path: 'company-info',
     component: CompanyDetailComponent,
     canActivate: [AuthGuard]
-  }
+  },
+  {
+    path: 'edit-company',
+    component: CreateCompanyComponent,
+    canActivate: [AuthGuard]
+  },
 ];
