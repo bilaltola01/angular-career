@@ -183,7 +183,7 @@
       <img src="assets/icons/ic_question.svg" class="question" *ngIf="editMode" (click)="openSkillDescriptionDialog()">
     </div>
 
-    <div *ngIf="editMode" class="form-field search" [formGroup]="skillsSearchForm" autocomplete="off">
+    <div class="form-field search" [formGroup]="skillsSearchForm" autocomplete="off">
       <mat-form-field appearance="standard" class="search">
         <mat-icon matSuffix>search</mat-icon>
         <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompleteSkills"
@@ -196,10 +196,10 @@
         </mat-autocomplete>
       </mat-form-field>
     </div>
-    <div *ngIf="editMode && temp_skill" class="temp-skill">
-      <simple-tag type="gray" title="{{temp_skill.skillItem.skill}}" ellipseTag="true" isControl="true"
-        value="{{temp_skill.skillItem.skill_level}}" (levelChanged)="onLevelChanged($event, temp_skill.index)"
-        (removeClick)="removeUserSkillsData(temp_skill.index, temp_skill.skillItem)"></simple-tag>
+    <div *ngIf="temp_skill" class="temp-skill">
+      <simple-tag type="gray" title="{{temp_skill.skillItem.skill}}" ellipseTag="true" [isControl]="editMode" value="{{temp_skill.skillItem.skill_level}}" (levelChanged)="onLevelChanged($event, temp_skill.index)" (removeClick)="removeUserSkillsData(temp_skill.index, temp_skill.skillItem)" [matTooltip]="SkillLevelDescription[temp_skill.skillItem.skill_level].title + SkillLevelDescription[temp_skill.skillItem.skill_level].description"
+      [matTooltipShowDelay]=500>
+      </simple-tag>
       <mat-icon (click)="editSkillDone()">cancel</mat-icon>
     </div>
     <ng-container *ngIf="!editMode || !temp_skill">

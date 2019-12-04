@@ -2,11 +2,12 @@ import { Component, OnInit, } from '@angular/core';
 import { PositionService, CartService, AlertsService, AlertType, ApplicationService, UserService, ScoreService, CompanyService, HelperService } from 'src/app/services';
 import { ActivatedRoute } from '@angular/router';
 import { MatchingService } from 'src/app/services/matching.service';
-import { SkillLevelDescription } from 'src/app/models';
+import { SkillLevelDescription, Skill } from 'src/app/models';
 import { MatDialog } from '@angular/material/dialog';
 import { SkillDescriptionPopupComponent } from 'src/app/components/skill-description-popup/skill-description-popup.component';
 import { AddSkillPopupComponent } from 'src/app/components/add-skill-popup/add-skill-popup.component';
 import { element } from 'protractor';
+import { FormGroup, FormControl } from '@angular/forms';
 
 
 @Component({
@@ -45,6 +46,16 @@ export class PositionsDetailsComponent implements OnInit {
 
   calculatedQualificationLevel: string;
   Object = Object;
+
+  preferredSkillsSearchForm: FormGroup;
+  requiredSkillsSearchForm: FormGroup;
+
+  autocomplete_preferred_skills: Skill[] = [];
+  autocomplete_required_skills: Skill[] = [];
+
+  temp_preferred_skill: Skill;
+  temp_required_skill: Skill;
+
   constructor(private positionService: PositionService,
     private route: ActivatedRoute,
     private matchingService: MatchingService,
@@ -86,12 +97,67 @@ export class PositionsDetailsComponent implements OnInit {
           this.getLowestEducationLevel(this.positionName[0].preferred_education_levels);
         }
         this.calculatedQualificationLevel = this.calculateQualificationLevel(this.positionName[0].true_fitscore_info, this.positionName[0].minimum_skills);
+        this.initPreferredSkillsSearchForm();
+        this.initRequiredSkillsSearchForm();
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
       }
     );
   }
+
+  initPreferredSkillsSearchForm() {
+    this.autocomplete_preferred_skills = [];
+    this.temp_preferred_skill = null;
+
+    this.preferredSkillsSearchForm = new FormGroup({
+      preferred_skill: new FormControl('')
+    });
+
+    this.preferredSkillsSearchForm.get('preferred_skill').valueChanges.subscribe(
+      (skill) => {
+        if (skill && this.helperService.checkSpacesString(skill)) {
+          this.autocomplete_preferred_skills = this.positionName[0].preferred_skills.filter(value => value.skill.toLocaleLowerCase().includes(skill));
+        } else {
+          this.autocomplete_preferred_skills = [];
+        }
+      }
+    );
+  }
+
+  selectPreferredSkill(preferred_skill: Skill) {
+    this.temp_preferred_skill = preferred_skill;
+    this.preferredSkillsSearchForm.get('preferred_skill').setValue('');
+  }
+
+  initRequiredSkillsSearchForm() {
+    this.autocomplete_required_skills = [];
+    this.temp_required_skill = null;
+
+    this.requiredSkillsSearchForm = new FormGroup({
+      required_skill: new FormControl('')
+    });
+
+    this.requiredSkillsSearchForm.get('required_skill').valueChanges.subscribe(
+      (skill) => {
+        if (skill && this.helperService.checkSpacesString(skill)) {
+          this.autocomplete_required_skills = this.positionName[0].minimum_skills.filter(value => value.skill.toLocaleLowerCase().includes(skill));
+        } else {
+          this.autocomplete_required_skills = [];
+        }
+      }
+    );
+  }
+
+  selectRequiredSkill(required_skill: Skill) {
+    this.temp_required_skill = required_skill;
+    this.requiredSkillsSearchForm.get('required_skill').setValue('');
+  }
+
+  skillsSearchDone(isPreferredSkill: boolean) {
+    isPreferredSkill ? this.temp_preferred_skill = null : this.temp_required_skill = null;
+  }
+
   countWords(description) {
     if ( description) {
       this.jobDescription = description.split(' ').length;
