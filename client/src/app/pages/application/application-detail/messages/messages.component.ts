@@ -85,7 +85,7 @@ export class MessagesComponent implements OnInit {
     );
   }
   joinRoom(chatId) {
-    // console.log(chatId)
+    console.log(chatId)
     const source = this.chatService.get(chatId);
     this.chatRoom$ = this.chatService.joinUsers(source);
     this.scrollChatBoxToBottom();

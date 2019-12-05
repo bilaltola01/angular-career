@@ -7,6 +7,7 @@ import { ApplicationTemplateInformationComponent } from './application-detail/ap
 import { ApplicationReferencesComponent } from './application-detail/application-references/application-references.component';
 import { ApplicationPositionInformationComponent } from './application-detail/application-position-information/application-position-information.component';
 import { ProfileInformationComponent } from './application-detail/profile-information/profile-information.component';
+import { MessagesComponent } from './application-detail/messages/messages.component';
 
 
 export const applicationsRoutes: Routes = [
@@ -48,6 +49,11 @@ export const applicationsRoutes: Routes = [
       {
         path: 'profile-information',
         component: ProfileInformationComponent,
+        // canActivate: [AuthGuard]
+      },
+      {
+        path: 'message',
+        component: MessagesComponent,
         // canActivate: [AuthGuard]
       }
     ]

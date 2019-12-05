@@ -78,8 +78,6 @@ export class ChatService implements OnInit {
 
     return mergedRooms;
   }
-<<<<<<< HEAD
-=======
   getApplicantRoom() {
     // const observableArr = [];
     const user_id = this.userService.user_id;
@@ -94,7 +92,7 @@ export class ChatService implements OnInit {
     // recruiterRooms.subscribe(doc => doc.forEach(doc1 => console.log('recruiterRooms',doc1.data())) )
     return recruiterRooms ;
   }
->>>>>>> 0b430a6f... Message page completed.
+
 
   async sendMessage(chatId, content) {
     const user_id  = this.userService.user_id; // TODO: Make a Get User ID function

@@ -63,6 +63,8 @@ export class ApplicationNavSectionComponent implements OnInit {
       this.applicationNavIndex = 2;
     } else if (url.includes('application-references')) {
       this.applicationNavIndex = 3;
+    } else if (url.includes('message')) {
+      this.applicationNavIndex = 4;
     } else if (url.includes('position-information')) {
       this.applicationNavIndex = 5;
     }
@@ -82,6 +84,8 @@ export class ApplicationNavSectionComponent implements OnInit {
         this.router.navigate([`application-template-information`], { relativeTo: this.route });
       } else if (navIndex === 3) {
         this.router.navigate(['application-references'], { relativeTo: this.route });
+      } else if (navIndex === 4) {
+        this.router.navigate(['message'], { relativeTo: this.route });
       } else if (navIndex === 5) {
         this.router.navigate(['position-information'], { relativeTo: this.route });
       }

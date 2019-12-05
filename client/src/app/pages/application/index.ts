@@ -3,12 +3,14 @@ import { ApplicationCoverLetterComponent } from './application-detail/applicatio
 import { ApplicationTemplateInformationComponent } from './application-detail/application-template-information/application-template-information.component';
 import { ProfileInformationComponent } from './application-detail/profile-information/profile-information.component';
 import { ApplicationPositionInformationComponent } from './application-detail/application-position-information/application-position-information.component';
+import { MessagesComponent } from './application-detail/messages/messages.component';
 
 export const applicationComponents = [
   ApplicationsComponent,
   ApplicationCoverLetterComponent,
   ApplicationTemplateInformationComponent,
   ProfileInformationComponent,
-  ApplicationPositionInformationComponent
+  ApplicationPositionInformationComponent,
+  MessagesComponent
 
 ];

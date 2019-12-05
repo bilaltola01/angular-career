@@ -74,6 +74,9 @@ export class ApplicationHeaderSectionComponent implements OnInit {
     } else if (url.includes('application-references')) {
       this.router.navigate([`application-references`], { relativeTo: this.route });
 
+    } else if (url.includes('message')) {
+      this.router.navigate([`message`], { relativeTo: this.route });
+
     } else if (url.includes('position-information')) {
       this.router.navigate([`position-information`], { relativeTo: this.route });
 

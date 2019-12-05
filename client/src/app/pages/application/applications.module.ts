@@ -16,6 +16,7 @@ import { ApplicationReferencesComponent } from './application-detail/application
 import { ApplicationPositionInformationComponent } from './application-detail/application-position-information/application-position-information.component';
 import { ProfileInformationComponent } from './application-detail/profile-information/profile-information.component';
 import { RequestResponsePopupComponent } from 'src/app/components/request-response-popup/request-response-popup.component';
+import { MessagesComponent } from './application-detail/messages/messages.component';
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { RequestResponsePopupComponent } from 'src/app/components/request-respon
     ApplicationTemplateInformationComponent,
     ApplicationReferencesComponent,
     ApplicationPositionInformationComponent,
-    ProfileInformationComponent
+    ProfileInformationComponent,
+    MessagesComponent
   ],
   entryComponents: [
     AddSkillPopupComponent,
