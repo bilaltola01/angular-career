@@ -1,0 +1,35 @@
+<div class="application-messagebox">
+  <div class="row">
+    <ng-container *ngIf="isJobLoading">
+      <div class="loading">
+        <mat-spinner></mat-spinner>
+        <h4>Loading...</h4>
+      </div>
+    </ng-container>
+    <div>
+      <div class="send" #chatbox>
+        <div *ngIf="chatRoom$ | async as chat">
+          <div class="msg" *ngFor="let msg of chat.messages; trackBy: trackByCreated">
+            <p class="right-user" *ngIf="msg.user.user_id === currentUser"><span>{{ msg.content }}</span> <img
+                [src]="msg.user.photo ? msg.user.photo : 'assets/icons/no_photo.png' "></p>
+            <p class="left-user" *ngIf="msg.user.user_id === recruiterUserId"> <img
+                [src]="msg.user.photo ? msg.user.photo : 'assets/icons/no_photo.png' "> <span>{{ msg.content }}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="message-form">
+      <div class="textarea-content">
+        <mat-form-field floatLabel="never">
+          <input matInput placeholder="Type a message..." type="text" [(ngModel)]="newMessage" autocomplete="off">
+        </mat-form-field>
+        <!-- <a href="#">
+                   <img src="assets/icons/ic_paperclip.svg">
+                </a> -->
+      </div>
+      <action-button class="message-send-btn" type="raised" title="Send" (click)="sendMessage()
+                " (window:keyup.enter)="sendMessage()" color="primary"></action-button>
+    </div>
+  </div>
+</div>
