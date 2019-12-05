@@ -42,6 +42,16 @@ export class CompanyRecruiterService {
       );
   }
 
+  public deleteCompanyRecruiterById(companyId: number, recruiterId: number): Observable<any> {
+    return this.http.delete(this.recruiter_service_url + `company/${companyId}/recruiter/${recruiterId}`, this.authHttpOptions())
+      .pipe(
+        map(data => {
+          return {success: true, message: 'Success!', data: data};
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   private httpOptions() {
     return {
       headers: new HttpHeaders({

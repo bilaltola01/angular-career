@@ -534,6 +534,12 @@ action-button {
       line-height: 1.15;
     }
   }
+  &.company-edit-btn {
+    &>button {
+      min-width: 100px;
+      padding: 7px 25px !important;
+    }
+  }
 }
 
 .container {

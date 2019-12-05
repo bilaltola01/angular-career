@@ -236,7 +236,7 @@
 			</div>
 		</div>
 		<div class="container__full">
-			<action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
+			<action-button class="btn-next" type="flat" title="{{isEdit ? 'Update' : 'Next'}}" color="primary" (click)="goToNextPage()"></action-button>
 		</div>
 	</div>
 	<!-- Company Industry end -->
@@ -279,7 +279,7 @@
 			</div>
 		</div>
 		<div class="container__full">
-			<action-button class="btn-next" type="flat" title="Next" color="primary" (click)="goToNextPage()"></action-button>
+			<action-button class="btn-next" type="flat" title="{{isEdit ? 'Update' : 'Next'}}" color="primary" (click)="goToNextPage()"></action-button>
 		</div>
 	</div>
 	<!-- Company Recruiters end -->

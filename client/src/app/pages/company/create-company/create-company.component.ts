@@ -169,9 +169,10 @@ export class CreateCompanyComponent implements OnInit {
     );
   }
 
-  updateCompany() {
+  updateCompany(temp_arr?: Industry[]) {
     this.is_loading = true;
     const companyInfo = {};
+
     switch (this.selectedPageIndex) {
       case 1:
         if (this.company.company_name !== this.company_name) {
@@ -207,6 +208,15 @@ export class CreateCompanyComponent implements OnInit {
           companyInfo['website'] = this.website;
         }
         break;
+      case 3:
+        if (this.company.main_industry !== this.main_industry.industry_id) {
+          companyInfo['main_industry'] = this.main_industry.industry_id;
+        }
+
+        if (temp_arr && temp_arr.length > 0) {
+          companyInfo['company_industry_ids'] = temp_arr.map(val => val.industry_id);
+        }
+        break;
       default:
         break;
     }
@@ -222,10 +232,7 @@ export class CreateCompanyComponent implements OnInit {
             this.initCompanyIndustryForm();
             break;
           case 3:
-            this.initCompanyAdministratorsForm();
-            break;
-          case 4:
-            this.initCompanyRecruitersForm();
+            this.getCompanyAdminsById(this.company.company_id);
             break;
           default:
             break;
@@ -239,24 +246,34 @@ export class CreateCompanyComponent implements OnInit {
   }
 
   getCompanyAdminsById(company_id: number) {
+    this.is_loading = true;
     this.companyAdminService.getAdminsByCompanyId(company_id).subscribe(
       dataJson => {
         this.editCompanyAdmins = dataJson['data'];
+        this.is_loading = false;
+        this.initCompanyAdministratorsForm();
       },
       error => {
         this.editCompanyAdmins = null;
+        this.is_loading = false;
+        this.initCompanyAdministratorsForm();
         this.alertsService.show(error.message, AlertType.error);
       }
     );
   }
 
   getCompanyRecruitersById(company_id: number) {
+    this.is_loading = true;
     this.companyRecruiterService.getRecruitersByCompanyId(company_id).subscribe(
       dataJson => {
         this.editCompanyRecruiters = dataJson['data']['data'];
+        this.is_loading = false;
+        this.initCompanyRecruitersForm();
       },
       error => {
         this.editCompanyRecruiters = null;
+        this.is_loading = false;
+        this.initCompanyRecruitersForm();
         this.alertsService.show(error.message, AlertType.error);
       }
     );
@@ -300,14 +317,46 @@ export class CreateCompanyComponent implements OnInit {
         }
         break;
       case 3:
-        this.initCompanyAdministratorsForm();
+        if (this.isEdit) {
+          let temp_arr;
+          if (this.company_industries && this.company_industries.length > 0) {
+            if (this.company.company_industry_ids && this.company.company_industry_ids.length > 0) {
+              temp_arr = this.company_industries.filter((local_value) => {
+                return !(this.company.company_industry_ids.some(value => {
+                  return value === local_value.industry_id;
+                }));
+              });
+            } else {
+              temp_arr = this.company_industries;
+            }
+          }
+
+          if (this.company.main_industry !== this.main_industry.industry_id || (temp_arr && temp_arr.length > 0)) {
+            this.updateCompany(temp_arr);
+          } else {
+            this.getCompanyAdminsById(this.company.company_id);
+          }
+        } else {
+          this.initCompanyAdministratorsForm();
+        }
         break;
       case 4:
-        this.initCompanyRecruitersForm();
+        if (this.isEdit) {
+          this.getCompanyRecruitersById(this.company.company_id);
+        } else {
+          this.initCompanyRecruitersForm();
+        }
         break;
       case 5:
-        this.current_tab = this.tab_menus[0];
-        this.is_administrators = false;
+        if (this.isEdit) {
+          this.router.navigate(['/company-info/'], {queryParams: {
+            id: this.company.company_id,
+            showBackButton: true
+          }});
+        } else {
+          this.current_tab = this.tab_menus[0];
+          this.is_administrators = false;
+        }
         break;
       default:
         break;
@@ -680,6 +729,21 @@ export class CreateCompanyComponent implements OnInit {
     if (this.company_industries[arrIndex].industry_id === industry.industry_id) {
       this.company_industries.splice(arrIndex, 1);
     }
+
+    if (this.isEdit) {
+      const index = this.company.company_industry_ids.findIndex(val => val === industry.industry_id);
+      if (index !== -1)  {
+        this.companyService.deleteCompanyIndustryById(this.company.company_id, this.company.company_industry_ids[index]).subscribe(
+          dataJson => {
+            this.company.company_industry_ids.splice(index, 1);
+            this.company.company_industries.splice(index, 1);
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+          }
+        );
+      }
+    }
   }
 
   /**
@@ -687,6 +751,10 @@ export class CreateCompanyComponent implements OnInit {
    */
   initCompanyAdministratorsForm() {
     this.autocomplete_administrators = [];
+
+    if (this.isEdit) {
+      this.company_administrators = this.editCompanyAdmins.slice();
+    }
 
     this.companyAdministratorsForm = new FormGroup({
       company_administrator: new FormControl(''),
@@ -719,7 +787,18 @@ export class CreateCompanyComponent implements OnInit {
         this.userService.getGeneralInfo(administrator.user_id).subscribe(
           dataJson => {
             if (dataJson['success']) {
-              this.company_administrators.push(dataJson['data']);
+              if (this.isEdit) {
+                this.companyAdminService.postAdmin({admin_id: administrator.user_id, company_id: this.company.company_id}).subscribe(
+                  data => {
+                    this.company_administrators.push(dataJson['data']);
+                  },
+                  error => {
+                    this.alertsService.show(error.message, AlertType.error);
+                  }
+                );
+              } else {
+                this.company_administrators.push(dataJson['data']);
+              }
             }
           },
           error => {
@@ -733,7 +812,18 @@ export class CreateCompanyComponent implements OnInit {
 
   onRemoveCompanyAdministrator(administrator: UserGeneralInfo, arrIndex: number) {
     if (this.company_administrators[arrIndex].user_id === administrator.user_id) {
-      this.company_administrators.splice(arrIndex, 1);
+      if (this.isEdit) {
+        this.companyAdminService.deleteCompanyAdminById(this.company.company_id, administrator.user_id).subscribe(
+          dataJson => {
+            this.company_administrators.splice(arrIndex, 1);
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+          }
+        );
+      } else {
+        this.company_administrators.splice(arrIndex, 1);
+      }
     }
   }
 
@@ -742,6 +832,10 @@ export class CreateCompanyComponent implements OnInit {
    */
   initCompanyRecruitersForm() {
     this.autocomplete_recruiters = [];
+
+    if (this.isEdit) {
+      this.company_recruiters = this.editCompanyRecruiters.slice();
+    }
 
     this.companyRecruitersForm = new FormGroup({
       company_recruiter: new FormControl(''),
@@ -774,7 +868,18 @@ export class CreateCompanyComponent implements OnInit {
         this.userService.getGeneralInfo(recruiter.user_id).subscribe(
           dataJson => {
             if (dataJson['success']) {
-              this.company_recruiters.push(dataJson['data']);
+              if (this.isEdit) {
+                this.companyRecruiterService.postRecruiterByCompanyId({recruiterId: recruiter.user_id}, this.company.company_id).subscribe(
+                  data => {
+                    this.company_recruiters.push(dataJson['data']);
+                  },
+                  error => {
+                    this.alertsService.show(error.message, AlertType.error);
+                  }
+                );
+              } else {
+                this.company_recruiters.push(dataJson['data']);
+              }
             }
           },
           error => {
@@ -788,7 +893,18 @@ export class CreateCompanyComponent implements OnInit {
 
   onRemoveCompanyRecruiter(recruiter: UserGeneralInfo, arrIndex: number) {
     if (this.company_recruiters[arrIndex].user_id === recruiter.user_id) {
-      this.company_recruiters.splice(arrIndex, 1);
+      if (this.isEdit) {
+        this.companyRecruiterService.deleteCompanyRecruiterById(this.company.company_id, recruiter.user_id).subscribe(
+          dataJson => {
+            this.company_recruiters.splice(arrIndex, 1);
+          },
+          error => {
+            this.alertsService.show(error.message, AlertType.error);
+          }
+        );
+      } else {
+        this.company_recruiters.splice(arrIndex, 1);
+      }
     }
   }
 
