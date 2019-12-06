@@ -390,10 +390,18 @@ export class CreateCompanyComponent implements OnInit {
         this.initCompanyIndustryForm();
         break;
       case 3:
-        this.initCompanyAdministratorsForm();
+        if (this.isEdit) {
+          this.getCompanyAdminsById(this.company.company_id);
+        } else {
+          this.initCompanyAdministratorsForm();
+        }
         break;
       case 4:
-        this.initCompanyRecruitersForm();
+        if (this.isEdit) {
+          this.getCompanyRecruitersById(this.company.company_id);
+        } else {
+          this.initCompanyRecruitersForm();
+        }
         break;
       case 5:
         this.current_tab = this.tab_menus[0];
