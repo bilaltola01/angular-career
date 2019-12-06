@@ -401,7 +401,6 @@ export class ApplicationsComponent implements OnInit {
       this.urlQueryParameter = queryString;
     }
 
-
     return queryString;
   }
   getApplicationData() {

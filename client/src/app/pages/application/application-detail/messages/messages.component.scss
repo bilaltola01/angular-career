@@ -33,6 +33,12 @@
         &::-webkit-scrollbar {
           width: 0 !important;
         }
+        div{
+          overflow-x: auto;
+          &::-webkit-scrollbar {
+            width: 0 !important;
+          }
+        }
 
         img {
           width: 25px;

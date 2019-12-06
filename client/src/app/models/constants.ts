@@ -407,7 +407,7 @@ export const NavMenus = {
     },
     {
       id: 'references',
-      title: 'References',
+      title: 'Reference Requests',
       items: []
     }
   ]

@@ -2,7 +2,9 @@
   <div *ngIf="userReferenceList" class="row">
     <div>
       <div *ngFor="let reference of userReferenceList; let i = index;" class="img-tag">
-        <img src="{{ reference.photo ? reference.photo : 'assets/icons/no_photo.png' }}">
+        <div class="img-box">
+          <img src="{{ reference.photo ? reference.photo : 'assets/icons/no_photo.png' }}">
+        </div>
         <label>{{ reference.requesting_first_name + ' ' + reference.requesting_last_name }}</label>
         <div *ngIf="currentPage === 'references' && !userId" class="overlay">
           <mat-icon class="accept" (click)="acceptReferenceRequest(reference,i)">check_circle</mat-icon>
@@ -12,6 +14,6 @@
     </div>
   </div>
   <div *ngIf="!userReferenceList || userReferenceList.length === 0" class="row">
-    <p>{{ currentPage === 'references' ? 'No references' : 'No reference requests' }}</p>
+    <p>{{ currentPage === 'references' ? 'No reference requests' : 'No reference requests' }}</p>
   </div>
 </ng-container>

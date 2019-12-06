@@ -103,6 +103,7 @@ export class PositionSearchComponent implements OnInit {
   ngOnInit() {
     const urlParams = new URLSearchParams(window.location.search);
     this.searchQueryParam = urlParams.get('search');
+    console.log('search', this.searchQueryParam);
     if (this.searchQueryParam) {
       this.preLoadDataFlag = false;
       this.offsetFlag = true;
@@ -355,7 +356,7 @@ export class PositionSearchComponent implements OnInit {
   generateQueryString(): string {
     let queryString;
     let urlQueryParam;
-
+// console.log('search',this.searchQueryParam)
     if (this.searchQueryParam) {
       queryString = this.searchQueryParam;
       this.applicationUrlParams = this.searchQueryParam;
@@ -438,6 +439,7 @@ export class PositionSearchComponent implements OnInit {
       this.urlQueryParameter = queryString;
 
     }
+
     return queryString;
   }
   getJobData() {
@@ -461,6 +463,7 @@ export class PositionSearchComponent implements OnInit {
       this.isJobLoading = true;
       let queryParameters;
       queryParameters = this.generateQueryString();
+      console.log('query', queryParameters);
       this.positionService.getPositions(queryParameters).subscribe(
         dataJson => {
           this.isJobLoading = false;
