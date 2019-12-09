@@ -79,17 +79,13 @@ export class ChatService implements OnInit {
     return mergedRooms;
   }
   getApplicantRoom() {
-    // const observableArr = [];
     const user_id = this.userService.user_id;
     const applicantRooms  =  this.afs.collection('chatRoomPairs', ref => ref.where('userRecruiterId', '==', user_id)).get();
-    // applicantRooms.subscribe(doc => doc.forEach(doc1 => console.log('applicantRooms',doc1.data())) )
     return applicantRooms;
   }
   getRecuriterRoom() {
-    const observableArr = [];
     const user_id = this.userService.user_id;
     const recruiterRooms = this.afs.collection('chatRoomPairs', ref => ref.where('userApplicantId', '==', user_id)).get();
-    // recruiterRooms.subscribe(doc => doc.forEach(doc1 => console.log('recruiterRooms',doc1.data())) )
     return recruiterRooms ;
   }
 

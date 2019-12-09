@@ -200,7 +200,7 @@
         <div class="sort-item">
           <mat-label>Sort by</mat-label>&nbsp;
           <mat-form-field>
-            <mat-select value="dateposted" formControlName="sortBy" (selectionChange)="getApplicationData()">
+            <mat-select value="dateposted" formControlName="sortBy" (selectionChange)="sortByData()">
               <mat-option *ngFor="let sort of sortBy" [value]="sort.value">{{sort.title}}</mat-option>
             </mat-select>
           </mat-form-field>

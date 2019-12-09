@@ -325,6 +325,10 @@ export class ApplicationsComponent implements OnInit {
     this.skillUrlParams.splice(index, 1);
     this.skillUrlIdParam.splice(index, 1);
   }
+  sortByData() {
+    this.prequeryFlag = true;
+    this.getApplicationData();
+  }
   generateQueryString(): string {
     let queryString;
     let urlQueryParam;
@@ -394,8 +398,8 @@ export class ApplicationsComponent implements OnInit {
       queryString = this.applicationForm.value.searchPosition ? `${queryString ? queryString + '&' : ''}position=${this.applicationForm.value.searchPosition}` : queryString;
       queryString = this.applicationForm.value.sortBy ? `${queryString ? queryString + '&' : ''}sort=${this.applicationForm.value.sortBy}` : queryString;
 
-      if (this.queryFlag || this.prequeryFlag) {
-        this.router.navigate(['/applications'], { queryParams: { filter: urlQueryParam ? urlQueryParam : '' } });
+      if (this.prequeryFlag) {
+         this.router.navigate(['/applications'], { queryParams: { filter: urlQueryParam ? urlQueryParam : '' } });
         this.applicationParam = urlQueryParam;
       }
       this.urlQueryParameter = queryString;
@@ -403,7 +407,7 @@ export class ApplicationsComponent implements OnInit {
     return queryString;
   }
   getApplicationData() {
-    this.queryFlag = true;
+    this.prequeryFlag = true;
     this.selectedAllFlag = false;
     if (this.searchQueryParam) {
       this.currentPageNumber = (this.urlParams['offset'] / this.urlParams['limit']) + 1;
@@ -416,6 +420,7 @@ export class ApplicationsComponent implements OnInit {
       if (this.currentPageNumber < this.paginationArr[this.paginationArr.length - 1]) {
         this.preLoadNextPage(this.currentPageNumber + 1);
       } else {
+        this.applicationParam = this.urlQueryParameter;
         this.router.navigate(['/applications'], { queryParams: { filter: this.urlQueryParameter ? this.urlQueryParameter : '' } });
       }
     } else {
@@ -521,6 +526,8 @@ export class ApplicationsComponent implements OnInit {
 
   }
   preLoadNextPage(nextPageNumber) {
+    this.queryFlag = false;
+    this.prequeryFlag = false;
     if (!this.preLoadDataObject[nextPageNumber]) {
       const previousOffset = this.filterAttributes.offset;
       this.filterAttributes.offset = this.filterAttributes.offset + applicationListLimit;
@@ -721,7 +728,7 @@ export class ApplicationsComponent implements OnInit {
     );
   }
   routerNavigate(application_id, position_id) {
-    this.router.navigate([`/applications/${application_id}/application-detail/`, position_id], { queryParams: { filter: this.applicationParam ? this.applicationParam :  this.applicationSearchParam } });
+    this.router.navigate([`/applications/${application_id}/application-detail/`, position_id], { queryParams: { filters: this.applicationParam ? this.applicationParam :  this.applicationSearchParam } });
 
   }
 }

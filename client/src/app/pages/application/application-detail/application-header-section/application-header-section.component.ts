@@ -37,9 +37,9 @@ export class ApplicationHeaderSectionComponent implements OnInit {
 
     // store queryParams from Application , Position-info and Position search page
 
-    this.filterQueryParam = urlParams.get('filter');
+    this.filterQueryParam = urlParams.get('filters');
     this.positionInfoQueryParam = urlParams.get('positionId');
-    this.searchQueryParam = urlParams.get('search');
+    this.searchQueryParam = urlParams.get('searchData');
     this.applicationId = this.route.snapshot.paramMap.get('application_id');
     this.positionId = this.route.snapshot.paramMap.get('position_id');
     this.parseRouterUrl(router.url);
@@ -47,13 +47,15 @@ export class ApplicationHeaderSectionComponent implements OnInit {
     this.getApplicationData(this.applicationId);
     router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
-        if (val.url.includes('filter')) {
+        if (val.url.includes('filters')) {
           this.router.navigate(['/applications'], { queryParams: { filter: this.filterQueryParam ? this.filterQueryParam : '' } });
         } else if (val.url.includes('positionId')) {
           this.router.navigate([`/positions/position-info/${this.positionInfoQueryParam}`]);
-        } else if (val.url.includes('search')) {
-          this.router.navigate(['/positions'], {queryParams : { search: this.searchQueryParam ? this.searchQueryParam : ''}});
-        }
+        } else if (val.url.includes('searchData')) {
+          if (this.searchQueryParam) {
+            this.router.navigate(['/positions'], {queryParams : { search: this.searchQueryParam ? this.searchQueryParam : ''}});
+          }
+         }
       }
     });
   }
