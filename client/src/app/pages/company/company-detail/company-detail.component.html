@@ -28,7 +28,7 @@
     </legend>
 
     <div class="header-container">
-      <div class="back-row">
+      <div *ngIf="showBackButton" class="back-row">
         <action-button class="back-btn" type="stroked" title="Go Back" (click)="backToCompaniesPage()"></action-button>
       </div>
 
