@@ -124,6 +124,8 @@ export interface CompanyInfoResponse {
   company_desc:	string;
   company_logo:	string;
   company_size:	string;
+  founding_year: any;
+  website: string;
   hq_city: number;
   hq_city_name: string;
   hq_state:	number;
@@ -234,3 +236,17 @@ export interface PositionTemplateResponse {
   application_deadline:	any;
 }
 
+export interface UserInfo {
+  user_id: number;
+  first_name:	string;
+  last_name: string;
+  birthdate: any;
+  gender:	string;
+  recruiter: number;
+  applicant: number;
+  city:	string;
+  country: string;
+  state: string;
+  site_admin:	number;
+  verified: number;
+}

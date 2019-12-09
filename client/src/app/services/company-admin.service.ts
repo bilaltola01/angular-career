@@ -42,6 +42,16 @@ export class CompanyAdminService {
       );
   }
 
+  public deleteCompanyAdminById(companyId: number, adminId: number): Observable<any> {
+    return this.http.delete(this.company_admin_service_url + `company/${companyId}/admin/${adminId}`, this.authHttpOptions())
+      .pipe(
+        map(data => {
+          return {success: true, message: 'Success!', data: data};
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   private httpOptions() {
     return {
       headers: new HttpHeaders({

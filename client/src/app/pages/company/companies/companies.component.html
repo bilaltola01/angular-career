@@ -19,8 +19,8 @@
                     formControlName="searchCompanies" (keyup.enter)="onSearchCompany($event)">
                 <mat-autocomplete #autocompleteSearch="matAutocomplete">
                     <a *ngFor="let company of autocomplete_searchcompanies | slice:0:4"
-                        routerLink="/company/{{company.company_id}}" 
-                        [queryParams]="{showBackButton: 'true'}">
+                        [routerLink]="['/company-info/']"
+                        [queryParams]="{id: company.company_id}">
                         <mat-option [value]="company.company_name">
                             <img class="company-autocomplete-logo" [src]="company.company_logo ? company.company_logo : 'assets/icons/ic_default_company_logo.svg'">
                             <span>{{company.company_name}}</span>
@@ -108,8 +108,8 @@
                                 <div class="image"><img
                                         [src]="company.company_logo ? company.company_logo : 'assets/icons/ic_default_company_logo.svg'"></div>
                                 <div class="info">
-                                    <a routerLink="/company/{{ company.company_id }}/profile"
-                                        [queryParams]="{showBackButton: 'true'}">
+                                    <a [routerLink]="['/company-info/']"
+                                        [queryParams]="{id: company.company_id}">
                                         <h2 class="name">{{company.company_name}}</h2>
                                     </a>
                                     <h3 *ngIf="company.hq_city || company.hq_state" class="title">

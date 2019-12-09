@@ -83,6 +83,18 @@ export class CompanyService {
         catchError(this.handleError));
   }
 
+  public deleteCompanyIndustryById(companyId: number, industryId: number): Observable<any> {
+    return this.http.delete(this.company_service_url + `company/${companyId}/industry/${industryId}`, this.authHttpOptions())
+      .pipe(
+        map(
+          data => {
+            return {success: true, message: 'Success!', data: data};
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+
   private httpOptions() {
     return {
       headers: new HttpHeaders({

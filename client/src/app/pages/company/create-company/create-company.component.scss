@@ -20,6 +20,12 @@ $profile-form-max-width-mobile: 450px;
 
 $profile-form-field-mt: 30px;
 
+.loader {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+}
+
 :host {
   @include flex(column, center, flex-start);
   min-height: 100vh;
