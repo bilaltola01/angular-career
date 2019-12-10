@@ -47,7 +47,7 @@ export class UserService {
       );
   }
 
-  public login(user, isRemember: boolean): Observable<any> {
+  public login(user, isRemember: boolean, role: number = 0): Observable<any> {
     return this.http.post(this.auth_service_url + 'login', user, this.httpOptions())
       .pipe(
         map(data => {
@@ -58,6 +58,9 @@ export class UserService {
             } else {
               localStorage.setItem('storedUser', null);
             }
+
+            localStorage.setItem('role', JSON.stringify(role));
+
             this.user_id = this.helper.decodeToken(data['token']).user_id;
           }
           return {success: this.isLoggedIn(), message: data['message']};
@@ -125,6 +128,7 @@ export class UserService {
   public logOut() {
     localStorage.removeItem('token');
     localStorage.removeItem('storedUser');
+    localStorage.removeItem('role');
   }
 
   public isLoggedIn(): boolean {
@@ -134,6 +138,24 @@ export class UserService {
       isLoggedIn = true;
     }
     return isLoggedIn;
+  }
+
+  public checkCurrentRole(): number {
+    const role = localStorage.getItem('role');
+
+    if (role) {
+      return JSON.parse(role);
+    } else {
+      return 0;
+    }
+  }
+
+  public switchRole(role: number) {
+    const prevRole = localStorage.getItem('role');
+
+    if (prevRole) {
+      localStorage.setItem('role', JSON.stringify(role));
+    }
   }
 
   public resendEmail(email: object) {

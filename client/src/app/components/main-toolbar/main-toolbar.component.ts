@@ -79,4 +79,12 @@ export class MainToolbarComponent implements OnInit {
     this.userService.logOut();
   }
 
+  public switchRecruiterApp() {
+    this.userService.switchRole(1);
+  }
+
+  public switchApplicantApp() {
+    this.userService.switchRole(0);
+  }
+
 }

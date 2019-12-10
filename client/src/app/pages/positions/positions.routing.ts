@@ -1,6 +1,7 @@
 import { PositionSearchComponent } from './position-search/position-search.component';
 import { CreatePositionComponent } from './create-position/create-position.component';
-import { AuthGuard } from '../../guard/auth.guard';
+import { AuthGuard } from 'src/app/guard/auth.guard';
+import { RecruiterGuard } from 'src/app/guard/role.guard';
 import { Routes } from '@angular/router';
 import { PositionsDetailsComponent } from 'src/app/components/positions-details/positions-details.component';
 import { PositionTemplatesComponent } from './position-templates/position-templates.component';
@@ -12,11 +13,6 @@ export const positionRoutes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: '',
-    component: PositionSearchComponent
-    // canActivate: [AuthGuard]
-  },
-  {
     path: 'positions',
     component: PositionSearchComponent,
     canActivate: [AuthGuard]
@@ -24,7 +20,7 @@ export const positionRoutes: Routes = [
   {
     path: 'create-position',
     component: CreatePositionComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, RecruiterGuard]
   },
   {
     path: 'positions/position-info/:position_id',
@@ -34,13 +30,6 @@ export const positionRoutes: Routes = [
   {
     path: 'position-templates',
     component: PositionTemplatesComponent,
-    canActivate: [AuthGuard]
-  },
-  // {
-  //   path: '',
-  //   component: PositionSearchComponent,
-  //   pathMatch: 'full'
-  // },
-
-
+    canActivate: [AuthGuard, RecruiterGuard]
+  }
 ];
