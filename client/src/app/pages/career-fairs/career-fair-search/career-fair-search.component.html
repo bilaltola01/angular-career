@@ -4,9 +4,7 @@
     <h4>Loading...</h4>
   </div>
 </ng-container>
-
 <!-- Search Bar -->
-
 <div class="career-main">
   <div class="comman_search_filter" [formGroup]="careerFairsForm">
     <div class="filter-data">
@@ -19,14 +17,9 @@
           (keyup.enter)="onSearchPosition($event)">
       </mat-form-field>
     </div>
-
   </div>
-
-
   <!-- Career-fair Filter Card -->
-
   <div [formGroup]="careerFairsForm" class="position-main-container">
-
     <div class="filter-container container__header tablet" [class.open]="filter_list">
       <ng-container>
         <div class="nav-title">
@@ -76,9 +69,7 @@
         </div>
       </ng-container>
     </div>
-
     <!-- Career-fair Card -->
-
     <div class="position-list-container">
       <div *ngFor="let fair of careerFairsList ">
         <div class="row">
