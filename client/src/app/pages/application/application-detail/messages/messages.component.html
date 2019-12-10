@@ -8,16 +8,14 @@
     </ng-container>
     <div >
       <div class="send" >
-        <div *ngIf="chatRoom$ | async as chat" id="sidenav" >
-            <div class="chat"   >
+        <div *ngIf="chatRoom$ | async as chat" id="sidenav"  #chatbox>
           <div class="msg" *ngFor="let msg of chat.messages; trackBy: trackByCreated">
             <p class="right-user" *ngIf="msg.user.user_id === currentUser"><span>{{ msg.content }}</span> <img
                 [src]="msg.user.photo ? msg.user.photo : 'assets/icons/no_photo.png' " ></p>
-            <p class="left-user" *ngIf="msg.user.user_id === recruiterUserId"   > <img
+            <p class="left-user" *ngIf="!(msg.user.user_id === currentUser)"   > <img
                 [src]="msg.user.photo ? msg.user.photo : 'assets/icons/no_photo.png' " > <span>{{ msg.content }}</span>
             </p>
             </div>
-          </div>
         </div>
       </div>
     </div>

@@ -344,27 +344,27 @@
                 <h5>Qualification Level Estimate Breakdown</h5>
                 <simple-tag *ngIf="job.true_fitscore_info?.skills_weight" type="gray" title="Skills Match"
                   ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.skills_fitscore)}}"
-                  matTooltip="Skills Match: {{(job.true_fitscore_info?.skills_fitscore*100).toFixed(2)}}%"
+                  matTooltip="Skills Match: {{(job.true_fitscore_info?.skills_fitscore*100) | number : '2.0'}}%"
                   [matTooltipShowDelay]=500>
                 </simple-tag>
                 <simple-tag *ngIf="job.minimum_skills" type="gray" title="Required Skills Match" ellipseTag="true"
                   value="{{mathFloor(6*job.true_fitscore_info?.required_skills_fitscore)}}"
-                  matTooltip="Required Skills Match: {{(job.true_fitscore_info?.required_skills_fitscore*100).toFixed(2)}}%"
+                  matTooltip="Required Skills Match: {{(job.true_fitscore_info?.required_skills_fitscore*100) | number : '2.0'}}%"
                   [matTooltipShowDelay]=500>
                 </simple-tag>
                 <simple-tag *ngIf="job.true_fitscore_info?.experience_weight" type="gray" title="Experience Match"
                   ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.experience_fitscore)}}"
-                  matTooltip="Experience Match: {{(job.true_fitscore_info?.experience_fitscore*100).toFixed(2)}}%"
+                  matTooltip="Experience Match: {{(job.true_fitscore_info?.experience_fitscore*100) | number : '2.0'}}%"
                   [matTooltipShowDelay]=500>
                 </simple-tag>
                 <simple-tag *ngIf="job.true_fitscore_info?.education_weight" type="gray" title="Education Match"
                   ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.education_fitscore)}}"
-                  matTooltip="Education Match:{{(job.true_fitscore_info?.education_fitscore*100).toFixed(2)}}%"
+                  matTooltip="Education Match:{{(job.true_fitscore_info?.education_fitscore*100) | number : '2.0'}}%"
                   [matTooltipShowDelay]=500>
                 </simple-tag>
                 <simple-tag *ngIf="job.true_fitscore_info?.interests_weight" type="gray" title="Interests Match"
                   ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.interests_fitscore)}}"
-                  matTooltip="Interests Match: {{(job.true_fitscore_info?.interests_fitscore*100).toFixed(2)}}%"
+                  matTooltip="Interests Match: {{(job.true_fitscore_info?.interests_fitscore*100) | number : '2.0'}}%"
                   [matTooltipShowDelay]=500>
                 </simple-tag>
                 <p

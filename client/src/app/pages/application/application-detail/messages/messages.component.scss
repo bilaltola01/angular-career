@@ -33,7 +33,7 @@
         &::-webkit-scrollbar {
           width: 0 !important;
         }
-        div{
+        & #sidenav{
           overflow-x: auto;
           &::-webkit-scrollbar {
             width: 0 !important;

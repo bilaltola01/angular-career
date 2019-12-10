@@ -29,7 +29,6 @@ export class MessagesComponent implements OnInit {
   positionTitle;
   isJobLoading;
   constructor(private chatService: ChatService, private router: Router, private userService: UserService, private applicationService: ApplicationService) {
-
     const urlObject = this.router.url.split('/');
     for (let i = 0; i < urlObject.length; i++) {
       if (i === 2) {
@@ -39,13 +38,9 @@ export class MessagesComponent implements OnInit {
     }
     this.checkCuurentUser();
   }
-
   ngOnInit() {
-
   }
-
   async checkChatRoom() {
-
     this.chatService.getApplicantRoom().subscribe(querySnapshot => {
       if (querySnapshot) {
         querySnapshot.forEach(doc => {
@@ -84,7 +79,10 @@ export class MessagesComponent implements OnInit {
   joinRoom(chatId) {
     const source = this.chatService.get(chatId);
     this.chatRoom$ = this.chatService.joinUsers(source);
-    this.scrollChatBoxToBottom();
+    setTimeout(() => {
+      this.scrollChatBoxToBottom();
+    }, 1000);
+
   }
 
   async sendMessage() {
@@ -109,25 +107,17 @@ export class MessagesComponent implements OnInit {
       }
     }
   }
-
-  sendData() {
-
-  }
-
   trackByCreated(i, msg) {
     return msg.createdAt;
   }
 
   scrollChatBoxToBottom() {
     if (this.chatRef) {
-
       setTimeout(() => {
         this.chatRef.nativeElement.scrollTop = this.chatRef.nativeElement.scrollHeight + 50;
       }, 500);
     }
   }
-
-
   checkCuurentUser() {
     this.currentUser = this.userService.user_id;
   }
