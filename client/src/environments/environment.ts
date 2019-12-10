@@ -13,6 +13,7 @@ export const environment = {
   position_service: 'position-service',
   position_management_service: 'position-management-service',
   cart_service: 'cart-service',
+  careerfair_service: 'careerfair-service',
   matching_service: 'matching-service',
   company_service: 'companies-service',
   score_service: 'score-service',

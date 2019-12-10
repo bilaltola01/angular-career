@@ -43,6 +43,11 @@ export const routes: Routes = [
     path: 'chatDemo', loadChildren: () => import('./pages/chat/chat.module')
       .then(module => module.ChatModule)
   },
+  {
+    path: 'career-fairs', loadChildren: () => import('./pages/career-fairs/career-fair.module')
+      .then(module => module.CareerFairModule)
+
+  },
   // Use this route to redirect to /404 if we want to pop error page to the user
   // We cannot redirect to '**' so we shall use 404 instead
   { path: 'error/:status-code', component: ErrorPageComponent },

@@ -611,6 +611,17 @@ action-button {
       margin: 0 20px;
     }
   }
+  .mat-form-field-appearance-standard {
+    &.search {
+      .mat-form-field-wrapper {
+        .mat-form-field-flex {
+          .mat-form-field-infix {
+            font-size: 10px;
+          }
+        }
+      }
+    }
+  }
 }
 .cdk-overlay-pane{
   mat-option{

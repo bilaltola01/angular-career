@@ -1,0 +1,140 @@
+<ng-container *ngIf="isJobLoading">
+  <div class="loading">
+    <mat-spinner></mat-spinner>
+    <h4>Loading...</h4>
+  </div>
+</ng-container>
+<!-- Search Bar -->
+<div class="career-main">
+  <div class="comman_search_filter" [formGroup]="careerFairsForm">
+    <div class="filter-data">
+      <mat-icon (click)="toggleTabMenuOpen()" class="filter_icon">filter_list</mat-icon>
+    </div>
+    <div class="postion-search-header">
+      <mat-form-field appearance="standard" class="search">
+        <mat-icon matSuffix (click)="onSearchPosition($event)">search</mat-icon>
+        <input matInput placeholder="Search career fair by university name" type="text" formControlName="searchPosition"
+          (keyup.enter)="onSearchPosition($event)">
+      </mat-form-field>
+    </div>
+  </div>
+  <!-- Career-fair Filter Card -->
+  <div [formGroup]="careerFairsForm" class="position-main-container">
+    <div class="filter-container container__header tablet" [class.open]="filter_list">
+      <ng-container>
+        <div class="nav-title">
+          <h3 class="section-title">CAREER FAIR FILTERS</h3>
+        </div>
+        <div class="filter-card">
+          <mat-form-field>
+            <mat-label>Hosting Company </mat-label>
+            <input matInput placeholder="Company" type="text" [matAutocomplete]="autocompleteCompany"
+              formControlName="company">
+            <mat-autocomplete #autocompleteCompany="matAutocomplete">
+              <mat-option *ngFor="let company of autocomplete_companies" [value]="company.company_name">
+                <span>{{company.company_name}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="filter-card">
+          <mat-form-field>
+            <mat-label>City</mat-label>
+            <input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity"
+              formControlName="location">
+            <mat-autocomplete #autocompleteCity="matAutocomplete">
+              <mat-option *ngFor="let city of autocomplete_cities" [value]="(city.city)?.split(',')[0]">
+                <span>{{city.city}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="filter-card">
+          <mat-form-field>
+            <input matInput [matDatepicker]="picker" formControlName="date" [min]="minDate"
+              placeholder="Date of Career Fair">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="filter-card">
+          <div class="side-filter-btn">
+            <action-button type="raised" color="primary" title="Apply Filters" (click)="applyFilter();">
+            </action-button>
+          </div>
+          <div class="clear-filter">
+            <action-button class="clear-btn" type="text" title="Clear Filters" (click)="clearFilter()" color="primary">
+            </action-button>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <!-- Career-fair Card -->
+    <div class="position-list-container">
+      <div *ngFor="let fair of careerFairsList ">
+        <div class="row">
+          <img class="img-style" src="{{fair.company_logo ? fair.company_logo : 'assets/icons/ic_university.svg'}}">
+          <h1>{{fair.name_of_careerfair}} </h1>
+          <div>
+            <div class="job-top-list">
+              <ul>
+                <li>
+                  <div class="company-border">
+                    <img class="img-style company" src="{{'assets/icons/ic_company.svg'}}">
+                  </div>
+                  <div class="company-content">
+                    <small>Hosting Company</small>
+                    <span class="image" routerLink="../company-page/{{fair.hosting_company_id}}">
+                      {{fair.hosting_company}}</span>
+                  </div>
+                </li>
+                <li>
+                  <div class="company-border">
+                    <img src="assets/icons/ic_location.svg">
+                  </div>
+                  <div class="company-content">
+                    <small>Location</small>
+                    <span class="image">
+                      {{fair.location ? fair.location : 'N/A' }}
+                    </span>
+                  </div>
+                </li>
+                <li>
+                  <div class="company-border date-bg">
+                    <div class="date">
+                      <p>{{ fair.date_of_careerfair | date: 'd'}}</p>
+                      <small>{{ fair.date_of_careerfair | date: 'MMM'}}</small>
+                    </div>
+                  </div>
+                  <div class="company-content">
+                    <small>Event Date</small>
+                    <span class="image">
+                      {{ fair.date_of_careerfair | date: 'MMM d, yyyy'}}</span>
+                  </div>
+                </li>
+              </ul>
+              <div class="overview">
+                <small>Overview</small>
+                <p>{{fair.description}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!careerFairsList || careerFairsList?.length == 0">
+        <div class="row no-job">
+          No search results found.
+        </div>
+      </div>
+      <div class="pagination" *ngIf="careerFairsList?.length > 0">
+        <ul type="none">
+          <li class="large_pagination_button" (click)="pageClicked(currentPageNumber-1)">Prev. Page</li>
+          <li *ngFor="let pageNo of paginationArr" [ngClass]="{'active': pageNo == currentPageNumber}"
+            (click)="pageClicked(pageNo)">{{ pageNo }}
+          </li>
+          <li class="large_pagination_button" (click)="pageClicked(currentPageNumber+1)">Next Page</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
