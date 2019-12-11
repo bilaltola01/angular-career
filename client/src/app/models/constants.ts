@@ -634,11 +634,9 @@ export const interestLevel = [
 ];
 
 export const positionListLimit = 7;
-<<<<<<< HEAD
 export const careerFairsListLimit = 7;
-=======
 export const applicationListLimit = 7;
->>>>>>> Application page, few functionality added
+
 
 export const positionSearchMessages = {
   'APPLICATION_SAVE_SUCCESS': 'Application submission successful.',
