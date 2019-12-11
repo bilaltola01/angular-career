@@ -28,7 +28,7 @@ export class AddSkillPopupComponent {
   filteredSkill: UserSkillItem;
   allSkills = [];
   skillLevelDescription = SkillLevelDescription;
-  skillUpdateCalllback;
+  skillUpdateCallback;
   constructor(public dialogRef: MatDialogRef<AddSkillPopupComponent>, @Inject(MAT_DIALOG_DATA) public data,
     public dialog: MatDialog,
     private userService: UserService,
@@ -50,7 +50,7 @@ export class AddSkillPopupComponent {
     this.prevent_skills_autocomplete = true;
     this.userSkillsList = [];
     this.skillData = Object.assign({}, this.data.skillData);
-    this.skillUpdateCalllback = this.data.callback;
+    this.skillUpdateCallback = this.data.callback;
     this.skillsForm = new FormGroup({
       skills: new FormControl(''),
     });
@@ -158,7 +158,7 @@ export class AddSkillPopupComponent {
     this.userService.postSkillInfo(userSkillItem).subscribe(
       dataJson => {
         this.userSkillsList.push(dataJson['data']);
-        this.skillUpdateCalllback();
+        this.skillUpdateCallback();
 
       },
       error => {

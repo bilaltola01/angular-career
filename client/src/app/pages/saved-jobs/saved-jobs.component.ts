@@ -52,7 +52,7 @@ export class SavedJobsComponent implements OnInit {
   autocomplete_companies: Company[][] = [];
   autocomplete_recruiter: Recruiter[][] = [];
   userSkillsList = [];
-  positionList = [];
+  savedPositionList = [];
   savedJobs = [];
   savedJobsMap = {};
   autocomplete_searchposition = [];
@@ -419,12 +419,12 @@ export class SavedJobsComponent implements OnInit {
     }
 
     if (this.preLoadDataObject[this.currentPageNumber]) {
-      this.positionList = this.preLoadDataObject[this.currentPageNumber].data.data;
+      this.savedPositionList = this.preLoadDataObject[this.currentPageNumber].data.data;
       this.setPaginationValues(this.preLoadDataObject[this.currentPageNumber]);
       if (this.currentPageNumber < this.paginationArr[this.paginationArr.length - 1]) {
         this.preLoadNextPage(this.currentPageNumber + 1);
       } else {
-        this.router.navigate(['/saved-jobs'], { queryParams: { param: this.urlQueryParameter ? this.urlQueryParameter : '' } });
+        this.router.navigate(['/saved-jobs'], { queryParams: { search: this.urlQueryParameter ? this.urlQueryParameter : '' } });
       }
     } else {
       this.isJobLoading = true;
@@ -434,7 +434,7 @@ export class SavedJobsComponent implements OnInit {
         dataJson => {
           this.isJobLoading = false;
           if (dataJson['success'] && dataJson.data.data) {
-            this.positionList = dataJson.data.data;
+            this.savedPositionList = dataJson.data.data;
             this.setPaginationValues(dataJson);
             if (this.currentPageNumber < this.paginationArr[this.paginationArr.length - 1]) {
               this.preLoadNextPage(this.currentPageNumber + 1);
@@ -445,7 +445,7 @@ export class SavedJobsComponent implements OnInit {
         error => {
           this.isJobLoading = false;
           this.alertsService.show(error.message, AlertType.error);
-          this.positionList = [];
+          this.savedPositionList = [];
         }
       );
     }
@@ -482,7 +482,7 @@ export class SavedJobsComponent implements OnInit {
 
   selectAll(isChecked) {
     this.selectedAllFlag = isChecked;
-    this.positionList = this.positionList.map(job => {
+    this.savedPositionList = this.savedPositionList.map(job => {
       job['selected'] = isChecked;
       return job;
     });
@@ -538,7 +538,7 @@ export class SavedJobsComponent implements OnInit {
       });
   }
   unSaveSelected() {
-    const selectedPositionArr = this.positionList.filter(position => position.selected === true);
+    const selectedPositionArr = this.savedPositionList.filter(position => position.selected === true);
     this.unSaveJob(selectedPositionArr);
   }
   applyJob(positionArr) {
@@ -555,7 +555,7 @@ export class SavedJobsComponent implements OnInit {
   }
 
   applySelected() {
-    const selectedPositionArr = this.positionList.filter(position => position.selected === true);
+    const selectedPositionArr = this.savedPositionList.filter(position => position.selected === true);
     this.applyJob(selectedPositionArr);
   }
   pageClicked(pageNo) {
@@ -590,7 +590,7 @@ export class SavedJobsComponent implements OnInit {
           this.filterAttributes.offset = previousOffset;
         },
         error => {
-          this.positionList = [];
+          this.savedPositionList = [];
         }
       );
     }
@@ -598,9 +598,9 @@ export class SavedJobsComponent implements OnInit {
 
 
   getPositionIds() {
-    let positionIds = this.positionList.map(position => `positionList=${position.position_id}`);
+    let positionIds = this.savedPositionList.map(position => `savedPositionList=${position.position_id}`);
     if (this.preLoadDataObject[this.currentPageNumber + 1] && this.preLoadDataObject[this.currentPageNumber + 1].data.data) {
-      const preLoadData = this.preLoadDataObject[this.currentPageNumber + 1].data.data.map(position => `positionList=${position.position_id}`);
+      const preLoadData = this.preLoadDataObject[this.currentPageNumber + 1].data.data.map(position => `savedPositionList=${position.position_id}`);
       positionIds = [...positionIds, ...preLoadData];
     }
     return positionIds.join('&');
@@ -616,9 +616,9 @@ export class SavedJobsComponent implements OnInit {
   }
   updatedFitscore() {
     for (let i = 0; i < this.updatedFitscoreList.length; i++) {
-      let index = this.positionList.findIndex(position => position.position_id === this.updatedFitscoreList[i].position_id);
+      let index = this.savedPositionList.findIndex(position => position.position_id === this.updatedFitscoreList[i].position_id);
       if (index > -1) {
-        this.positionList[index]['true_fitscore_info'] = this.updatedFitscoreList[i];
+        this.savedPositionList[index]['true_fitscore_info'] = this.updatedFitscoreList[i];
       } else {
         index = this.preLoadDataObject[this.currentPageNumber + 1].data.data.findIndex(position => position.position_id === this.updatedFitscoreList[i].position_id);
         this.preLoadDataObject[this.currentPageNumber + 1].data.data[index]['true_fitscore_info'] = this.updatedFitscoreList[i];
