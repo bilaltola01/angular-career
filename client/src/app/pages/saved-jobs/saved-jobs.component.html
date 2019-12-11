@@ -22,7 +22,6 @@
         </mat-autocomplete>
       </mat-form-field>
     </div>
-
   </div>
   <div [formGroup]="SavedJobsForm" class="position-main-container">
     <!-- Position Filter Card -->
@@ -178,14 +177,10 @@
         </div>
       </ng-container>
     </div>
-
     <!-- Job Position Card -->
-
     <div class="position-list-container">
-
       <div class="select-style">
         <div class="selectall">
-
           <round-checkbox id="test" title="Select All" [checked]="selectedAllFlag" (statusChange)="selectAll($event)">
           </round-checkbox>
           <action-button class="position-search-reload-result" color="primary" title="Apply Selected"
@@ -207,8 +202,6 @@
               </mat-menu>
             </span>
           </div>
-
-
         </div>
         <div class="sort-item">
           <mat-label>Sort by</mat-label>&nbsp;
@@ -219,9 +212,7 @@
           </mat-form-field>
         </div>
       </div>
-
       <div *ngFor="let job of savedPositionList ">
-
         <div class="row" [ngClass]="{'selected': job.selected}">
           <round-checkbox id="test" [checked]="job.selected"
             (statusChange)="job.selected = !job.selected;selectedAllFlag=false;"></round-checkbox>
@@ -241,7 +232,7 @@
               <ul>
                 <li>
                   <img class="img-style" src="assets/icons/ic_company.svg">
-                  <span class="image" routerLink="../company-page/{{job.company_id}}">
+                  <span class="image" routerLink="../company/{{ job.company_id }}/profile">
                     {{job.company_name}}</span>
                 </li>
                 <li>
@@ -292,7 +283,6 @@
               </mat-grid-tile>
             </mat-grid-list>
             <div class="main-card">
-
               <ul type="none">
                 <li>
                   <h5 for="skill_required">Skills Required<span>{{ job.minimum_skills?.length}}</span>
@@ -305,12 +295,8 @@
                         [matTooltip]="SkillLevelDescription[min_skill.skill_level].title + SkillLevelDescription[min_skill.skill_level].description"
                         [matTooltipShowDelay]=500 (click)="openSkilladdDialog(min_skill)">
                       </simple-tag>
-
                     </div>
-
                   </div>
-
-
                 </li>
                 <li class="skill-chips">
                   <h5 class="skill-label" for="skill_preferred">Skills Preferred
@@ -325,7 +311,6 @@
                       </simple-tag>
                     </div>
                   </div>
-
                 </li>
               </ul>
               <ng-template #noSkills>
@@ -334,48 +319,40 @@
                 </ul>
               </ng-template>
             </div>
-
             <div *ngIf="job.showMoreFlag">
               <div class="qualification-level-m">
                 <h5>Qualification Level Estimate Breakdown</h5>
-
                 <simple-tag *ngIf="job.true_fitscore_info?.skills_weight" type="gray" title="Skills Match"
                   ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.skills_fitscore)}}"
-                  matTooltip="{{job.true_fitscore_info?.skills_fitscore*100}}% of skills match" [matTooltipShowDelay]=500>
+                  matTooltip="Skills Match: {{(job.true_fitscore_info?.skills_fitscore*100)  | number : '2.0'}}%" [matTooltipShowDelay]=500>
                 </simple-tag>
                 <simple-tag *ngIf="job.minimum_skills" type="gray" title="Required Skills Match" ellipseTag="true"
                   value="{{mathFloor(6*job.true_fitscore_info?.required_skills_fitscore)}}"
-                  matTooltip="{{job.true_fitscore_info?.required_skills_fitscore*100}}% of required skills match" [matTooltipShowDelay]=500>
+                  matTooltip="Required Skills Match: {{(job.true_fitscore_info?.required_skills_fitscore*100) | number : '2.0'}}%" [matTooltipShowDelay]=500>
                 </simple-tag>
                 <simple-tag *ngIf="job.true_fitscore_info?.experience_weight" type="gray" title="Experience Match"
                   ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.experience_fitscore)}}"
-                  matTooltip="{{job.true_fitscore_info?.experience_fitscore*100}}% of experience match" [matTooltipShowDelay]=500>
+                  matTooltip="Experience Match: {{(job.true_fitscore_info?.experience_fitscore*100)  | number : '2.0'}}%" [matTooltipShowDelay]=500>
                 </simple-tag>
                 <simple-tag *ngIf="job.true_fitscore_info?.education_weight" type="gray" title="Education Match"
                   ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.education_fitscore)}}"
-                  matTooltip="{{job.true_fitscore_info?.education_fitscore*100}}% of education match" [matTooltipShowDelay]=500>
+                  matTooltip="Education Match: {{(job.true_fitscore_info?.education_fitscore*100)  | number : '2.0'}}%" [matTooltipShowDelay]=500>
                 </simple-tag>
                 <simple-tag *ngIf="job.true_fitscore_info?.interests_weight" type="gray" title="Interests Match"
                   ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.interests_fitscore)}}"
-                  matTooltip="{{job.true_fitscore_info?.interests_fitscore*100}}% of interests match" [matTooltipShowDelay]=500>
+                  matTooltip="Interests Match: {{(job.true_fitscore_info?.interests_fitscore*100)  | number : '2.0'}}%" [matTooltipShowDelay]=500>
                 </simple-tag>
-
-
                 <p
                   *ngIf="!job.true_fitscore_info ||  (job.true_fitscore_info && !job.true_fitscore_info.skills_weight && !job.true_fitscore_info.experience_weight && !job.true_fitscore_info.education_weight && !job.true_fitscore_info.interests_weight && !job.minimum_skills)">
                   N/A
                 </p>
               </div>
-
-
               <div class="jobdesc-space">
-
                 <h5>Job Description</h5>
                 <p>
                   {{job.position_desc}}
                 </p>
               </div>
-
             </div>
           </div>
           <div class="show-button">
@@ -384,8 +361,6 @@
             &nbsp;&nbsp;
             <action-button type="text" title="Go to Details Page" color="primary"
               [routerLink]="['/positions/position-info/',job.position_id]" *ngIf="job.showMoreFlag"></action-button>
-
-
           </div>
         </div>
       </div>
