@@ -78,19 +78,29 @@
           <div class="position-qualification-skills" *ngFor="let score of positionName">
             <div>
               <simple-tag *ngIf="score.true_fitscore_info?.skills_weight" type="gray" title="Skills Match"
-                ellipseTag="true" value="{{mathFloor(6*score.true_fitscore_info?.skills_fitscore)}}">
+                ellipseTag="true" value="{{mathFloor(6*score.true_fitscore_info?.skills_fitscore)}}"
+                matTooltip="Skills Match: {{(score.true_fitscore_info?.skills_fitscore*100)| number : '2.0' }}%"
+                [matTooltipShowDelay]=500>
               </simple-tag>
               <simple-tag *ngIf="score.minimum_skills" type="gray" title="Required Skills Match" ellipseTag="true"
-                value="{{mathFloor(6*score.true_fitscore_info?.required_skills_fitscore)}}">
+                value="{{mathFloor(6*score.true_fitscore_info?.required_skills_fitscore)}}"
+                matTooltip="Required Skills Match: {{(score.true_fitscore_info?.required_skills_fitscore*100) | number : '2.0' }}%"
+              [matTooltipShowDelay]=500>
               </simple-tag>
               <simple-tag *ngIf="score.true_fitscore_info?.experience_weight" type="gray" title="Experience Match"
-                ellipseTag="true" value="{{mathFloor(6*score.true_fitscore_info?.experience_fitscore)}}">
+                ellipseTag="true" value="{{mathFloor(6*score.true_fitscore_info?.experience_fitscore)}}"
+                matTooltip="Experience Match: {{(score.true_fitscore_info?.experience_fitscore*100)| number : '2.0'}}%"
+              [matTooltipShowDelay]=500>
               </simple-tag>
               <simple-tag *ngIf="score.true_fitscore_info?.education_weight" type="gray" title="Education Match"
-                ellipseTag="true" value="{{mathFloor(6*score.true_fitscore_info?.education_fitscore)}}">
+                ellipseTag="true" value="{{mathFloor(6*score.true_fitscore_info?.education_fitscore)}}"
+                matTooltip="Education Match: {{(score.true_fitscore_info?.education_fitscore*100)| number : '2.0'}}%"
+                [matTooltipShowDelay]=500>
               </simple-tag>
               <simple-tag *ngIf="score.true_fitscore_info?.interests_weight" type="gray" title="Interests Match"
-                ellipseTag="true" value="{{mathFloor(6*score.true_fitscore_info?.interests_fitscore)}}">
+                ellipseTag="true" value="{{mathFloor(6*score.true_fitscore_info?.interests_fitscore)}}"
+                matTooltip="Interests Match: {{(score.true_fitscore_info?.interests_fitscore*100)| number : '2.0'}}%"
+              [matTooltipShowDelay]=500>
               </simple-tag>
               <p
                 *ngIf="!score.true_fitscore_info ||  (score.true_fitscore_info && !score.true_fitscore_info.skills_weight && !score.true_fitscore_info.experience_weight && !score.true_fitscore_info.education_weight && !score.true_fitscore_info.interests_weight && !score.minimum_skills)">
@@ -271,7 +281,8 @@
             <div class="skills" *ngIf="displayItemsLimit; let limit">
               <ng-container *ngFor="let skill of userSkillsList; let i = index">
                 <simple-tag type="gray" *ngIf="( i < limit)" title="{{skill.skill}}" ellipseTag="true"
-                  value="{{skill.skill_level}}"></simple-tag>
+                  value="{{skill.skill_level}}" [matTooltip]="SkillLevelDescription[skill.skill_level].title + SkillLevelDescription[skill.skill_level].description"
+                  [matTooltipShowDelay]=500></simple-tag>
               </ng-container>
               <img *ngIf="limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit"
                 src="assets/icons/ic_see_less.svg" alt="See Less">

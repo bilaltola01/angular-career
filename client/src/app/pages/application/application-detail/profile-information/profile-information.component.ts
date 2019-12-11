@@ -23,6 +23,7 @@ export class ProfileInformationComponent implements OnInit {
   missingSkills = [];
   matchedInterests = [];
   filter_list: boolean;
+  SkillLevelDescription = SkillLevelDescription;
   isJobLoading = true;
   Object = Object;
   generalInfo: UserGeneralInfo;

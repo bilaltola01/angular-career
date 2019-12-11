@@ -252,7 +252,8 @@
               <ul>
                 <li>
                   <img class="img-style" src="assets/icons/ic_company.svg">
-                  <span class="image" [routerLink]="['/company-info/', job.company_id]">
+                  <span class="image"[routerLink]="['/company-info/']"
+                  [queryParams]="{id: job.company_id}">
                     {{job.company_name}}</span>
                 </li>
                 <li>
@@ -359,7 +360,7 @@
                 </simple-tag>
                 <simple-tag *ngIf="job.true_fitscore_info?.education_weight" type="gray" title="Education Match"
                   ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.education_fitscore)}}"
-                  matTooltip="Education Match:{{(job.true_fitscore_info?.education_fitscore*100) | number : '2.0'}}%"
+                  matTooltip="Education Match: {{(job.true_fitscore_info?.education_fitscore*100) | number : '2.0'}}%"
                   [matTooltipShowDelay]=500>
                 </simple-tag>
                 <simple-tag *ngIf="job.true_fitscore_info?.interests_weight" type="gray" title="Interests Match"

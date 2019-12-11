@@ -261,6 +261,7 @@ $profile-form-field-mt: 30px;
                 @include inline-block-btn;
                 vertical-align: middle;
                 color: rgba(map-get($md-cfaccent, 500), 0.84);
+                cursor: pointer;
                 &.recruiter-text {
                   opacity: 0.34;
                 }
