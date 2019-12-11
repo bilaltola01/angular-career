@@ -74,7 +74,7 @@ export class PositionsDetailsComponent implements OnInit {
   ngOnInit() {
     this.getAppliedJobs();
     this.getSavedJobs();
-    this.positionId = this.route.snapshot.paramMap.get('position_id');
+    this.positionId = parseInt(this.route.snapshot.queryParamMap.get('id'), 10) || null;
     this.getposition(this.positionId);
     this.getMatchedSkill();
     this.getMissingSkill();

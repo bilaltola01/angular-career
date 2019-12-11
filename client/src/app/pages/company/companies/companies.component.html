@@ -19,7 +19,7 @@
                     formControlName="searchCompanies" (keyup.enter)="onSearchCompany($event)">
                 <mat-autocomplete #autocompleteSearch="matAutocomplete">
                     <a *ngFor="let company of autocomplete_searchcompanies | slice:0:4"
-                        [routerLink]="['/company-info/']"
+                        [routerLink]="['/company-info']"
                         [queryParams]="{id: company.company_id}">
                         <mat-option [value]="company.company_name">
                             <img class="company-autocomplete-logo" [src]="company.company_logo ? company.company_logo : 'assets/icons/ic_default_company_logo.svg'">

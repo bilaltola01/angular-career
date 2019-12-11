@@ -27,7 +27,7 @@ export const positionRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'positions/position-info/:position_id',
+    path: 'positions/position-info',
     component: PositionsDetailsComponent
     // canActivate: [AuthGuard]
   },
