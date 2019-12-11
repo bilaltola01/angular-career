@@ -377,8 +377,6 @@
           <div class="row position-required-skills-detail" id="preferred_skills" *ngIf="jobData.minimum_skills?.length > 0 || jobData.preferred_skills?.length > 0">
             <h3>Preferred & Required Skills</h3><img class="question-icon" src="assets/icons/ic_question.svg" (click)="openSkillDescriptionDialog()">
             <div class="education-level-m" >
-              <h5 for="skill_required">Skills Required <span *ngIf="jobData.minimum_skills?.length > 0">{{ jobData.minimum_skills?.length}}</span>
-              </h5>
 
               <div *ngIf="jobData.minimum_skills?.length > 0" class="form-field search" [formGroup]="requiredSkillsSearchForm">
                 <mat-form-field appearance="standard" class="search">
@@ -394,13 +392,16 @@
               </div>
 
               <div *ngIf="temp_required_skill" class="temp-skill">
-                <simple-tag type="normal" title="{{temp_required_skill.skill}}" ellipseTag="true"
+                <simple-tag type="gray" title="{{temp_required_skill.skill}}" ellipseTag="true"
                   value="{{temp_required_skill.skill_level}}"  (click)="openSkilladdDialog(temp_required_skill)"
                   [matTooltip]="SkillLevelDescription[temp_required_skill.skill_level].title + SkillLevelDescription[temp_required_skill.skill_level].description"
                   [matTooltipShowDelay]=500 >
                 </simple-tag>
                 <mat-icon (click)="skillsSearchDone(false)">cancel</mat-icon>
               </div>
+
+              <h5 for="skill_required">Skills Required <span *ngIf="jobData.minimum_skills?.length > 0">{{ jobData.minimum_skills?.length}}</span>
+              </h5>
               
               <div *ngIf="jobData.minimum_skills; else noSkill" >
                 <div class="skills" *ngIf="displayItemsLimit; let limit">
@@ -421,9 +422,7 @@
             </div>
 
             <div class="education-level-m">
-              <h5 for="skill_required">Skills Preferred <span *ngIf="jobData.preferred_skills?.length > 0">{{ jobData.preferred_skills?.length}}</span>
-              </h5>
-
+              
               <div *ngIf="jobData.preferred_skills?.length > 0" class="form-field search" [formGroup]="preferredSkillsSearchForm">
                 <mat-form-field appearance="standard" class="search">
                   <mat-icon matSuffix>search</mat-icon>
@@ -439,13 +438,16 @@
               </div>
 
               <div *ngIf="temp_preferred_skill" class="temp-skill">
-                <simple-tag type="gray" title="{{temp_preferred_skill.skill}}" ellipseTag="true"
+                <simple-tag type="normal" title="{{temp_preferred_skill.skill}}" ellipseTag="true"
                   value="{{temp_preferred_skill.skill_level}}"  (click)="openSkilladdDialog(temp_preferred_skill)"
                   [matTooltip]="SkillLevelDescription[temp_preferred_skill.skill_level].title + SkillLevelDescription[temp_preferred_skill.skill_level].description"
                   [matTooltipShowDelay]=500 >
                 </simple-tag>
                 <mat-icon (click)="skillsSearchDone(true)">cancel</mat-icon>
               </div>
+
+              <h5 for="skill_required">Skills Preferred <span *ngIf="jobData.preferred_skills?.length > 0">{{ jobData.preferred_skills?.length}}</span>
+              </h5>
 
               <div *ngIf="jobData.preferred_skills; else noSkill" >
                 <div class="skills" *ngIf="displayItemsLimit; let limit">
