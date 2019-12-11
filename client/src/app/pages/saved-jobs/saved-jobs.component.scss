@@ -257,6 +257,7 @@ $profile-form-field-mt: 30px;
                                 @include inline-block-btn;
                                 vertical-align: middle;
                                 color: rgba(map-get($md-cfaccent, 500), .84);
+                                cursor: pointer;
                             }
 
                             img {
