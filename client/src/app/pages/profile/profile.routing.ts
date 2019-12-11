@@ -6,6 +6,7 @@ import { ProfileSectionComponent } from './user-profile/profile-section/profile-
 import { ContactsSectionComponent } from './user-profile/contacts-section/contacts-section.component';
 import { TemplateSectionComponent } from './user-profile/template-section/template-section.component';
 import { UserProfileComponent } from './user-profile/user-profile/user-profile.component';
+import { ReferencesSectionComponent } from './user-profile/references-section/references-section.component';
 
 export const profileRoutes: Routes = [
   {
@@ -52,7 +53,17 @@ export const profileRoutes: Routes = [
         path: 'my-template/edit',
         component: TemplateSectionComponent,
         canActivate: [AuthGuard]
-      }
+      },
+      {
+        path: 'my-references',
+        component: ReferencesSectionComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'my-references/incoming-requests',
+        component: ReferencesSectionComponent,
+        canActivate: [AuthGuard]
+      },
     ]
   },
   {
@@ -78,6 +89,11 @@ export const profileRoutes: Routes = [
       {
         path: 'template',
         component: TemplateSectionComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'references',
+        component: ReferencesSectionComponent,
         canActivate: [AuthGuard]
       }
     ]

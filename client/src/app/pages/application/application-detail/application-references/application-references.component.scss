@@ -1,0 +1,209 @@
+@import "./../../../../../styles/variables.scss";
+:host {
+  grid-area: main;
+  margin: 0 40px 0 0;
+  padding-top: 0;
+  padding-bottom: 80px;
+  border-radius: 5px;
+  background-color: transparent;
+  .application-references {
+    float: right;
+    width: 70.3%;
+    padding-bottom: 80px;
+    .row {
+      background: white;
+      padding: 25px 20px;
+      border-bottom: 1px solid map-get($md-cfaccent, 50);
+      .edit-title {
+        margin-top: 10px;
+        @include flex(row, center, flex-end);
+        float: right;
+        a {
+          font-size: 12px;
+          cursor: pointer;
+          color: map-get($md-cfprimary, 500);
+          @include disable-select();
+          cursor: pointer;
+        }
+      }
+      h1.title {
+        margin-top: 0;
+        font-size: 30px;
+        opacity: 0.84;
+        line-height: 46px;
+        color: #001d40;
+        font-weight: 400;
+        margin-bottom: 10px;
+        display: inline-block;
+      }
+      p {
+        margin-top: 0;
+        margin-bottom: 10px;
+        font-size: 16px;
+        line-height: 24px;
+        color: #001d40;
+        opacity: 0.54;
+        font-weight: 400;
+        &.response {
+          color: map-get($md-cfaccent, 500);
+          opacity: 0.84;
+        }
+      }
+      h3 {
+        font-weight: 600;
+        font-size: 20px;
+        line-height: 30px;
+        margin-bottom: 20px;
+      }
+      .references-detail {
+        ul {
+          padding: 0;
+          margin: 30px auto;
+        }
+        li {
+          // list-style: none;
+          // display: inline-block;
+          // width: 47%;
+          // margin-right: 20px;
+          // background-color: #f5f8fa;
+          // border-radius: 70px;
+          // overflow: hidden;
+          // margin-bottom: 25px;
+
+          list-style: none;
+          width: 47%;
+          max-width: 420px;
+          margin-right: 20px;
+          background-color: #f5f8fa;
+          border-radius: 70px;
+          overflow: hidden;
+          margin-bottom: 25px;
+          display: flex;
+          justify-content: left;
+          .application-references-img {
+            float: left;
+            height: 70px;
+            width: 70px;
+            overflow: hidden;
+            border-radius: 100%;
+            margin-right: 10px;
+            background-color: #fff;
+            img {
+              width: 100%;
+              height: 100%;
+            }
+          }
+          .application-references-content {
+            // float: right;
+            // width: 80%;
+            padding: 10px 0 10px;
+            h6 {
+              margin: 0 auto;
+              font-size: 16px;
+              line-height: 24px;
+              color: #001d40;
+              opacity: 0.84;
+              font-weight: 600;
+            }
+            p {
+              opacity: 0.84;
+              margin-top: 5px;
+              margin-bottom: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: $min-mobile-breakpoint) and (max-width: $max-mobile-breakpoint) {
+  :host {
+    //application-references
+    .application-references {
+      width: 99%;
+      padding-top: 10px;
+      margin: 0 auto;
+      float: none;
+      .row {
+        .edit-title {
+          height: auto;
+          float: none;
+          justify-content: end;
+          margin-bottom: 12px;
+          margin-top: 0px;
+        }
+
+        .references-detail {
+          ul {
+            li {
+              width: 100%;
+              .application-references-content {
+                width: calc(100% - 80px);
+                padding: 10px 0 10px;
+                h6 {
+                  font-size: 14px;
+                  line-height: 16px;
+                }
+                p {
+                  font-size: 12px;
+                  line-height: 14px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: $min-mini-desktop-breakpoint) and (max-width: $max-mini-desktop-breakpoint) {
+  //application-references
+  .application-references {
+    width: 96%;
+    margin: 0 auto;
+    float: none;
+    .row {
+      .references-detail {
+        ul {
+          li {
+            margin-right: 15px;
+            .application-references-img {
+              img {
+                margin-right: 10px !important;
+              }
+            }
+
+            .application-references-content {
+              width: 73%;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: $min-tablet-breakpoint) and (max-width: $max-tablet-breakpoint) {
+  :host {
+    .application-references {
+      width: 96%;
+      margin: 0 auto;
+      float: none;
+      .row {
+        .references-detail {
+          ul {
+            li {
+              margin-right: 10px;
+              width: 48%;
+              .application-references-content {
+                width: 76%;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

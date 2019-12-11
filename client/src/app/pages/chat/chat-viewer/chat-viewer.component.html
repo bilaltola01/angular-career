@@ -2,20 +2,24 @@
     <div class="one-line">
         <mat-form-field appearance="fill">
             <mat-label>Chat Id</mat-label>
-            <input matInput placeholder="id" type="text" [(ngModel)]="chatId" required> 
+            <input matInput placeholder="id" type="text" [(ngModel)]="chatId" required>
         </mat-form-field>
         <action-button type="raised" title="Join" color="primary" (click)="joinRoom()"></action-button>
     </div>
-        
+
     <div class="one-line">
         <mat-form-field appearance="fill">
             <mat-label>Chat Title</mat-label>
-            <input matInput placeholder="id" type="text" [(ngModel)]="chatTitle" required> 
+            <input matInput placeholder="id" type="text" [(ngModel)]="chatTitle" required>
         </mat-form-field>
         <mat-form-field appearance="fill">
             <mat-label>Chat Other User</mat-label>
-            <input matInput placeholder="id" type="text" [(ngModel)]="chatOtherUserId" required> 
+            <input matInput placeholder="id" type="text" [(ngModel)]="chatOtherUserId" required>
         </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>applicationId</mat-label>
+          <input matInput placeholder="id" type="text" [(ngModel)]="applicationId" required>
+      </mat-form-field>
         <action-button type="raised" title="Create" color="primary" (click)="createRoom()"></action-button>
     </div>
     <br><br>
@@ -38,7 +42,7 @@
 
     <div class="messsage-form">
         <mat-form-field floatLabel="never">
-            <input matInput placeholder="Type a message..." type="text" [(ngModel)]="newMessage" autocomplete="off"> 
+            <input matInput placeholder="Type a message..." type="text" [(ngModel)]="newMessage" autocomplete="off">
         </mat-form-field>
         <action-button type="raised" title="Send" color="primary" (click)="sendMessage()" (window:keyup.enter)="sendMessage()"></action-button>
     </div>

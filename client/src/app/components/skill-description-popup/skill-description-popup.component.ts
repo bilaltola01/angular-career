@@ -8,15 +8,20 @@ import { StyleGuideComponent } from 'src/app/pages/style-guide/style-guide.compo
   templateUrl: './skill-description-popup.component.html',
   styleUrls: ['./skill-description-popup.component.scss']
 })
-export class SkillDescriptionPopupComponent  {
+export class SkillDescriptionPopupComponent {
 
   skillLevelDescription = SkillLevelDescription;
 
+  skillFlag = true;
   constructor(public dialogRef: MatDialogRef<SkillDescriptionPopupComponent>, @Inject(MAT_DIALOG_DATA) public data,
-  public dialog: MatDialog) {
+    public dialog: MatDialog) {
+    if (data.dialogFlag) {
+      this.skillFlag = false;
+    }
   }
 
   onClose(): void {
     this.dialogRef.close();
+
   }
 }

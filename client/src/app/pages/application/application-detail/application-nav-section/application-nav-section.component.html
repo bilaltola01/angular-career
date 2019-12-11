@@ -1,0 +1,24 @@
+<div class="comman_search_filter">
+  <div class="postion-search-detail">
+    <div class="filter-data">
+      <h3 class="section-title">APPLICATION </h3>
+      <mat-icon (click)="toggleTabOpen()" class="filter_icon">{{filter_list ? 'clear' : 'menu'}}</mat-icon>
+    </div>
+  </div>
+</div>
+<div class="filter-container container__header tablet cvr-letter" [class.open]="filter_list">
+  <nav>
+    <ng-container *ngFor="let menu of applicationNavMenu; let i = index;">
+      <div class="nav-section" [class.active]="i === applicationNavIndex">
+        <h3 (click)="onSelectNavMenu(i)">{{menu.title}}</h3>
+        <mat-icon>keyboard_arrow_right</mat-icon>
+        <ol *ngIf="menu.items.length > 0">
+          <ng-container *ngFor="let item of menu.items">
+            <li *ngIf="item.visible" (click)="onSelectNavItem(item.id)">{{item.title}}</li>
+          </ng-container>
+        </ol>
+      </div>
+    </ng-container>
+  </nav>
+</div>
+<router-outlet></router-outlet>

@@ -10,7 +10,7 @@
     </div>
   </legend>
   <router-outlet></router-outlet>
-  <nav-section 
+  <nav-section
     (selectedNavItem)="onSelectNavItem($event)" [isOpened]="isNavMenuOpened"
     [class.nav-hidden]="!((isHandset$ | async) && isNavMenuOpened)" id="nav-section"></nav-section>
 </ng-container>

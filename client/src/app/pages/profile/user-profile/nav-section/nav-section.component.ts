@@ -38,9 +38,9 @@ export class NavSectionComponent implements OnInit {
     if (router.url.includes('user')) {
       this.userId = parseInt(router.url.split('/')[2], 10);
       this.navMenu[0]['title'] = 'Profile';
-      this.navMenu.splice(2, 1);
+      this.navMenu.splice(2, 2);
     }
-    this.checkNavMenuItemsVisibility();
+     this.checkNavMenuItemsVisibility();
     this.parseRouterUrl(router.url);
     router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
@@ -63,6 +63,8 @@ export class NavSectionComponent implements OnInit {
       this.navIndex = 1;
     } else if (url.includes('template')) {
       this.navIndex = 2;
+    } else if (url.includes('references')) {
+      this.navIndex = 3;
     }
   }
 
@@ -78,6 +80,8 @@ export class NavSectionComponent implements OnInit {
         this.router.navigate([this.userId ? `/user/${this.userId}/contacts` : '/my-contacts'], { relativeTo: this.route });
       } else if (navIndex === 2) {
         this.router.navigate([this.userId ? `/user/${this.userId}/template` : '/my-template'], { relativeTo: this.route });
+      } else if (navIndex === 3) {
+        this.router.navigate([this.userId ? `/user/${this.userId}/references` : '/my-references'], { relativeTo: this.route });
       }
     }
   }

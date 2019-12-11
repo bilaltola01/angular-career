@@ -46,6 +46,7 @@ export class ChatService implements OnInit {
   }
 
   async create(roomTitle: string = 'Room Title', otherUserId: number, applicationId: number) {
+
       const chatRoomData: ChatRoom = {
         title: roomTitle,
         createdAt: Date.now(),
@@ -77,6 +78,17 @@ export class ChatService implements OnInit {
 
     return mergedRooms;
   }
+  getApplicantRoom() {
+    const user_id = this.userService.user_id;
+    const applicantRooms  =  this.afs.collection('chatRoomPairs', ref => ref.where('userRecruiterId', '==', user_id)).get();
+    return applicantRooms;
+  }
+  getRecuriterRoom() {
+    const user_id = this.userService.user_id;
+    const recruiterRooms = this.afs.collection('chatRoomPairs', ref => ref.where('userApplicantId', '==', user_id)).get();
+    return recruiterRooms ;
+  }
+
 
   async sendMessage(chatId, content) {
     const user_id  = this.userService.user_id; // TODO: Make a Get User ID function

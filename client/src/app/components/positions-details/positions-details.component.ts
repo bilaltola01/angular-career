@@ -1,6 +1,6 @@
 import { Component, OnInit, } from '@angular/core';
 import { PositionService, CartService, AlertsService, AlertType, ApplicationService, UserService, ScoreService, CompanyService, HelperService } from 'src/app/services';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatchingService } from 'src/app/services/matching.service';
 import { SkillLevelDescription, Skill } from 'src/app/models';
 import { MatDialog } from '@angular/material/dialog';
@@ -10,6 +10,7 @@ import { element } from 'protractor';
 import { FormGroup, FormControl } from '@angular/forms';
 
 
+
 @Component({
   selector: 'app-positions-details',
   templateUrl: './positions-details.component.html',
@@ -17,12 +18,13 @@ import { FormGroup, FormControl } from '@angular/forms';
 })
 export class PositionsDetailsComponent implements OnInit {
   positionId;
+
   mathFloor = Math.floor;
   breakpoint: number;
   positionName = [];
   savedJobsMap = {};
   savedJobs = [];
-  jobDescription ;
+  jobDescription;
   appliedJobsMap = {};
   appliedJobs = [];
   matchedSkills = [];
@@ -34,16 +36,14 @@ export class PositionsDetailsComponent implements OnInit {
   differenceInDays;
   newPositionCount = [];
   newCompanyPositions = {};
-  positionsAvailable = 0;
   queryCallback;
   displayItemsLimit = 7;
   displayIndustryLimit = 3;
   SkillLevelDescription = SkillLevelDescription;
   updatedFitscoreData;
   filter_list: boolean;
-  jobLowestEducationLevel;
   locationLength;
-
+  isJobLoading = true;
   calculatedQualificationLevel: string;
   Object = Object;
 
@@ -61,23 +61,30 @@ export class PositionsDetailsComponent implements OnInit {
     private matchingService: MatchingService,
     private cartService: CartService,
     private alertsService: AlertsService,
-    private applicationService: ApplicationService, private helperService: HelperService,
-    public dialog: MatDialog, private scoreService: ScoreService, private companyService: CompanyService,
-    private userService: UserService) {
+    private applicationService: ApplicationService,
+    private router: Router,
+    public dialog: MatDialog,
+     private scoreService: ScoreService,
+      private companyService: CompanyService,
+       private helperService: HelperService,
+       private userService: UserService) {
     this.updateSkillCallback = this.updateSkillCallback.bind(this);
   }
 
   ngOnInit() {
-    this.positionId = this.route.snapshot.paramMap.get('position_id');
-    this.getposition(this.positionId);
     this.getAppliedJobs();
     this.getSavedJobs();
+    this.positionId = this.route.snapshot.paramMap.get('position_id');
+    this.getposition(this.positionId);
     this.getMatchedSkill();
     this.getMissingSkill();
     this.getMatchedInterests();
     this.getRestrcitedSchoolData(this.positionId);
     this.breakpoint = (window.innerWidth <= 500) ? 2 : 4;
     this.filter_list = false;
+  }
+  getDate(post_date) {
+    this.helperService.convertToDays(post_date);
   }
   onResize(event) {
     this.breakpoint = (event.target.innerWidth <= 500) ? 2 : 4;
@@ -87,15 +94,14 @@ export class PositionsDetailsComponent implements OnInit {
   }
 
   getposition(positionId) {
+    this.isJobLoading = true;
     this.positionService.getPosition(positionId).subscribe(
       dataJson => {
+        this.isJobLoading = false;
         this.positionName.push(dataJson.data);
         this.getCompanyData(this.positionName[0].company_id);
         this.getRecruiterData(this.positionName[0].recruiter_id);
         this.countWords(this.positionName[0].position_desc);
-        if (this.positionName[0].preferred_education_levels) {
-          this.getLowestEducationLevel(this.positionName[0].preferred_education_levels);
-        }
         this.calculatedQualificationLevel = this.calculateQualificationLevel(this.positionName[0].true_fitscore_info, this.positionName[0].minimum_skills);
         this.initPreferredSkillsSearchForm();
         this.initRequiredSkillsSearchForm();
@@ -159,19 +165,15 @@ export class PositionsDetailsComponent implements OnInit {
   }
 
   countWords(description) {
-    if ( description) {
+    if (description) {
       this.jobDescription = description.split(' ').length;
     }
   }
-  getLowestEducationLevel(lowestEducation) {
-    let educationLowestLevel = lowestEducation.map(level => level.level);
-    educationLowestLevel = Math.min(...educationLowestLevel);
-    const index = lowestEducation.findIndex(lowestLevel => lowestLevel.level === educationLowestLevel);
-    this.jobLowestEducationLevel = lowestEducation[index].education_level;
-  }
   getCompanyData(comapnyId) {
+    this.isJobLoading = true;
     this.companyService.getCompanyData(comapnyId).subscribe(
       dataJson => {
+        this.isJobLoading = false;
         this.companyData.push(dataJson.data);
         this.getPositionCount(comapnyId);
       },
@@ -201,9 +203,9 @@ export class PositionsDetailsComponent implements OnInit {
     }
     for (let i = 0; i < this.newPositionCount.length; i++) {
       if (companyPositionValues[i] > 0) {
-        this.positionsAvailable++;
+        this.newCompanyPositions[this.newPositionCount[i]] = companyPositionValues[i];
       }
-      this.newCompanyPositions[this.newPositionCount[i]] = companyPositionValues[i];
+
     }
   }
   getRecruiterData(recruterId) {
@@ -248,8 +250,10 @@ export class PositionsDetailsComponent implements OnInit {
     );
   }
   getRestrcitedSchoolData(positionId) {
+    this.isJobLoading = true;
     this.positionService.getRestrictedSchool(positionId).subscribe(
       dataJson => {
+        this.isJobLoading = false;
         this.restrictedSchools = dataJson.data['data'];
       },
       error => {
@@ -259,8 +263,10 @@ export class PositionsDetailsComponent implements OnInit {
 
   }
   getSavedJobs() {
+    this.isJobLoading = true;
     this.cartService.getSavedJobs()
       .subscribe((data: any) => {
+        this.isJobLoading = false;
         if (data.data && data.data.rows) {
           this.savedJobs = data.data.rows;
           for (const job of this.savedJobs) {
@@ -275,8 +281,10 @@ export class PositionsDetailsComponent implements OnInit {
         });
   }
   getAppliedJobs() {
+    this.isJobLoading = true;
     this.applicationService.getAppliedJobs()
       .subscribe(data => {
+        this.isJobLoading = false;
         if (data.data && data.data.data) {
           this.appliedJobs = data.data.data;
           for (const job of this.appliedJobs) {
@@ -291,8 +299,10 @@ export class PositionsDetailsComponent implements OnInit {
         });
   }
   withdrawApplication(position_id) {
+    this.isJobLoading = true;
     const application_id = this.appliedJobsMap[position_id];
     this.applicationService.withdrawJobs(application_id).subscribe(data => {
+      this.isJobLoading = false;
       delete this.appliedJobsMap[position_id];
     },
       error => {
@@ -301,8 +311,10 @@ export class PositionsDetailsComponent implements OnInit {
   }
 
   applyJob(positionArr) {
+    this.isJobLoading = true;
     this.applicationService.applyJob(positionArr)
       .subscribe(data => {
+        this.isJobLoading = false;
         for (const application of data) {
           this.appliedJobsMap[application.position_id] = application.application_id;
         }
@@ -318,7 +330,9 @@ export class PositionsDetailsComponent implements OnInit {
     }
   }
   saveJob(positionArr) {
+    this.isJobLoading = true;
     this.cartService.saveJob(positionArr).subscribe(data => {
+      this.isJobLoading = false;
       for (const position of positionArr) {
         this.savedJobsMap[position.position_id] = position.position_id;
       }
@@ -328,9 +342,11 @@ export class PositionsDetailsComponent implements OnInit {
       });
   }
 
-  unSaveJob(position) {
-    this.cartService.unSaveJob(position.position_id).subscribe(data => {
-      delete this.savedJobsMap[position.position_id];
+  unSaveJob(positionData) {
+    this.isJobLoading = true;
+    this.cartService.unSaveJob(positionData).subscribe(data => {
+      this.isJobLoading = false;
+      delete this.savedJobsMap[positionData[0].position_id];
     },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -394,5 +410,8 @@ export class PositionsDetailsComponent implements OnInit {
     const height = 90;
     document.getElementById('sidenav-content').scrollTop = document.getElementById(id).offsetTop - height;
     this.filter_list = false;
+  }
+  routerNavigate(application_id, position_id) {
+    this.router.navigate([`/applications/${application_id}/application-detail/`, position_id], { queryParams: { positionId : position_id ? position_id :  '' } });
   }
 }

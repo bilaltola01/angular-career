@@ -1,0 +1,1010 @@
+@import "../../../../../styles/variables";
+$profile-form-field-mt: 30px;
+:host {
+  grid-area: main;
+  margin: 0 40px 0 0;
+  padding-top: 0;
+  padding-bottom: 80px;
+  border-radius: 5px;
+  background-color: transparent;
+  .career-main {
+    float: right;
+    padding-bottom: 80px;
+    width: 70.3%;
+    background-color: $bg-color-1;
+    .position-main-container {
+      background-color: $bg-color-1;
+      //width: 94%;
+      margin: 0 auto;
+
+      .position-list-container {
+        float: right;
+        width: 100%;
+        padding-bottom: 60px;
+        .row {
+          background: $white;
+          padding: 20px 20px 20px;
+          border-bottom: 1px solid map-get($md-cfaccent, 50);
+          &.position-detail {
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            padding: 30px 20px 20px;
+          }
+
+          & .job-top-list {
+            margin: 10px 0 20px;
+          }
+
+          & .qualification-level-m {
+            margin-top: 20px;
+            h5 {
+              font-family: "Helvetica Neue";
+            }
+            p {
+              margin-top: 0px;
+            }
+          }
+
+          &.selected {
+            background-color: $selected-bg-color;
+          }
+
+          &.no-job {
+            @include btn-align-center;
+          }
+          h1 {
+            @include inline-block-btn;
+            vertical-align: middle;
+            margin-bottom: 1px;
+            font-size: 30px;
+            line-height: 46px;
+            color: rgba(map-get($md-cfaccent, 500), 0.84);
+            margin-top: 0;
+            font-family: "Poppins", sans-serif;
+            cursor: pointer;
+            font-weight: 600;
+          }
+          img {
+            vertical-align: middle;
+            margin-right: 8px;
+            &.align-more-img {
+              margin-top: -7px;
+            }
+          }
+
+          h3 {
+            font-size: 20px;
+            margin-top: 0;
+            font-family: "Poppins", sans-serif;
+            font-weight: 600;
+            color: #001d40;
+            opacity: 0.84;
+            line-height: 30px;
+          }
+
+          & .skills-preferred-m {
+            display: inline-block;
+            vertical-align: middle;
+          }
+          & .education-level-m {
+            margin: 20px auto 0;
+            clear: both;
+          }
+
+          &.position-experience-detail {
+            h3 {
+              margin-bottom: 0;
+            }
+            & ul {
+              padding: 0;
+              margin: 0;
+              & li {
+                list-style: none;
+                display: inline-block;
+                border-bottom: 1px solid #ddd;
+                padding: 20px 0;
+                &:last-child {
+                  border-bottom: none;
+                }
+                h6 {
+                  font-size: 14px;
+                  opacity: 0.84;
+                  font-family: "Poppins", sans-serif;
+                  font-weight: 400;
+                  margin-top: 0;
+                  margin-bottom: 0;
+                }
+                p {
+                  font-size: 14px;
+                  opacity: 0.84;
+                  font-family: "Poppins", sans-serif;
+                  font-weight: 400;
+                  margin-top: 10px;
+                  margin-bottom: 10px;
+                  line-height: 21px;
+                }
+                & .education-level-m {
+                  margin-top: 5px;
+                }
+              }
+            }
+          }
+          &.position-required-skills-detail {
+            h3 {
+              float: left;
+            }
+            & .show-button {
+              float: right;
+              margin-top: -22px;
+            }
+            img {
+              margin-top: -3px;
+              &.align-more-img {
+                margin-top: -7px;
+                margin-left: 0;
+              }
+              &.question-icon {
+                margin-top: 4px;
+                cursor: pointer;
+                margin-left: 5px;
+              }
+            }
+            & .education-level-m {
+              & img {
+                margin-left: 0;
+                margin-top: 15px;
+                &.edu_img {
+                  margin-top: -4px;
+                }
+              }
+            }
+          }
+          & .position-prefer-interest {
+            clear: both;
+          }
+          &.position-schools-restriction {
+            p {
+              font-size: 14px;
+              opacity: 0.84;
+              font-family: "Poppins", sans-serif;
+              font-weight: 400;
+              margin-top: 0px;
+              margin-bottom: 10px;
+              line-height: 21px;
+            }
+          }
+
+          & simple-tag {
+            display: inline-block;
+            margin-bottom: 10px;
+            margin-right: 10px;
+          }
+          & .position-matched {
+            max-height: 150px;
+            overflow: hidden;
+            &.skill-more-height {
+              max-height: initial;
+            }
+            p {
+              opacity: 0.84;
+              margin-bottom: 0;
+              font-size: 16px;
+              line-height: 24px;
+              color: #001d40;
+            }
+          }
+          & .position-qualification-skills {
+            & simple-tag {
+              margin-right: 8px;
+            }
+          }
+        }
+
+        & .mat-icon {
+          vertical-align: middle;
+          margin-right: 20px;
+        }
+
+        h5 {
+          margin-bottom: 5px;
+          font-size: 14px;
+          line-height: 21px;
+          color: rgba(map-get($md-cfaccent, 500), 0.34);
+          font-weight: 400;
+          margin-top: 0;
+          font-weight: 400;
+
+          span {
+            display: inline-block;
+            margin-left: 4px;
+            color: rgba(map-get($md-cfaccent, 500), 0.84);
+          }
+        }
+
+        p {
+          margin-top: 10px;
+          margin-bottom: 10px;
+          font-size: 14px;
+          line-height: 22px;
+          font-weight: 400;
+          max-height: 310px;
+          width: 95%;
+          -webkit-box-orient: vertical;
+          display: block;
+          display: -webkit-box;
+          -webkit-line-clamp: 14;
+          overflow: hidden;
+          /* autoprefixer: ignore next */
+          -webkit-box-orient: vertical;
+          text-overflow: ellipsis;
+        }
+
+        & .right-align {
+          @include inline-block-btn;
+
+          vertical-align: middle;
+        }
+
+        & .job-top-list {
+          ul {
+            padding: 0;
+            margin-top: 0;
+            margin-bottom: 0px;
+
+            li {
+              list-style: none;
+              @include inline-block-btn;
+              margin-right: 85px;
+              font-size: 14px;
+              line-height: 16px;
+              vertical-align: middle;
+              font-family: "Poppins", sans-serif;
+              font-weight: 400;
+
+              a {
+                @include inline-block-btn;
+                vertical-align: middle;
+                color: rgba(map-get($md-cfaccent, 500), 0.84);
+                text-decoration: none;
+              }
+
+              span {
+                @include inline-block-btn;
+                vertical-align: middle;
+                color: rgba(map-get($md-cfaccent, 500), 0.84);
+                &.recruiter-text {
+                  opacity: 0.34;
+                }
+              }
+
+              img {
+                margin-right: 5px;
+                vertical-align: middle;
+              }
+            }
+          }
+        }
+
+        & .main-card {
+          ul {
+            padding: 0;
+            margin: 0;
+            clear: both;
+
+            li {
+              list-style: none;
+              @include inline-block-btn;
+              width: 49%;
+              vertical-align: top;
+              ul {
+                margin-top: 0;
+                li {
+                  font-size: 14px;
+                }
+              }
+
+              .skills-preferred-m {
+                @include inline-block-btn;
+                & simple-tag {
+                  font-family: "Poppins", sans-serif;
+                  color: rgba(map-get($md-cfaccent, 500), 0.05);
+                  cursor: pointer;
+                }
+              }
+
+              & .skil-height-fix {
+                overflow: hidden;
+                max-height: 30px;
+
+                &.skill-more-height {
+                  max-height: 100%;
+                }
+              }
+            }
+          }
+        }
+
+        & .show-button {
+          text-align: center;
+
+          action-button {
+            display: inline-block;
+            position: relative;
+            cursor: pointer;
+            &::after {
+              position: absolute;
+              right: -47px;
+              color: rgba(0, 29, 64, 0.1);
+              height: 100%;
+              width: 100%;
+              content: "|";
+              top: 20px;
+            }
+            &:last-child::after {
+              display: none;
+            }
+            &:focus {
+              outline: none;
+            }
+          }
+        }
+
+        & .qualification-level-m {
+          & simple-tag {
+            @include inline-block-btn;
+            margin: 12px 5px 22px 0px;
+            font-family: "Poppins", sans-serif;
+            font-weight: 400;
+          }
+        }
+
+        & .card {
+          margin: 0;
+          & mat-grid-tile {
+            border: 1px solid #f0f0f0;
+            border-right: none;
+            &:last-child {
+              border-right: 1px solid #f0f0f0;
+            }
+          }
+          & .card-item {
+            @include inline-block-btn;
+            width: 100%;
+            padding: 9px 15px 9px 15px;
+            vertical-align: middle;
+
+            span {
+              color: rgba(map-get($md-cfaccent, 500), 0.44);
+              font-size: 14px;
+              font-family: "Poppins", sans-serif;
+              font-weight: 400;
+            }
+
+            p {
+              margin: 3px 0 0;
+              font-size: 14px;
+              line-height: 16px;
+            }
+          }
+          &.second-card {
+            & mat-grid-tile {
+              border-top: none;
+            }
+          }
+        }
+      }
+      & .content {
+        & mat-card {
+          padding: 20px 20px;
+          box-shadow: none;
+          h4 {
+            font-size: 20px;
+            font-family: "Poppins", sans-serif;
+            font-weight: 400;
+            display: block;
+            line-height: 26px;
+            margin-bottom: 0;
+          }
+          ol {
+            margin-top: 5px;
+            padding-left: 14px;
+
+            li {
+              font-size: 14px;
+              font-family: "Poppins", sans-serif;
+              font-weight: 400;
+              line-height: 30px;
+              &:hover {
+                color: map-get($md-cfprimary, 500);
+                cursor: pointer;
+              }
+            }
+          }
+        }
+        &::after {
+          content: "";
+          display: table;
+          clear: both;
+        }
+
+        &::before {
+          content: "";
+          display: table;
+        }
+      }
+    }
+
+    .filter-container {
+      width: 26%;
+      float: left;
+      position: sticky;
+      position: -webkit-sticky;
+      top: 68px;
+      overflow-y: scroll;
+      height: calc(100vh - 70px);
+      padding-bottom: 120px;
+      box-sizing: border-box;
+      clear: both;
+      &::-webkit-scrollbar {
+        width: 0;
+        background-color: transparent;
+      }
+
+      & .position-company-map {
+        & .company-map {
+          ul {
+            padding: 0;
+            margin: 0 auto;
+            li {
+              list-style: none;
+              margin-top: 15px;
+              overflow: hidden;
+              clear: both;
+              & .company-industry {
+                display: inline-block;
+                margin-right: 5px;
+              }
+              & .company-position {
+                display: inline-block;
+              }
+            }
+          }
+          & mat-card {
+            margin-bottom: 10px;
+            padding: 30px 20px 10px;
+            box-shadow: none;
+            & .company-border {
+              height: 60px;
+              width: 60px;
+              text-align: center;
+              overflow: hidden;
+              padding: 10px 0 4px;
+              position: relative;
+              img {
+                width: 45px;
+                &.image-upload {
+                  position: absolute;
+                  top: 10px;
+                  left: 0;
+                  right: 0;
+                  text-align: center;
+                  margin: 0 auto;
+                }
+              }
+            }
+            h5 {
+              font-size: 20px;
+              font-family: "Poppins", sans-serif;
+              font-weight: 600;
+              margin: 10px 0;
+              line-height: 30px;
+              opacity: 0.84;
+              cursor: pointer;
+            }
+            p {
+              img {
+                width: 26px;
+                vertical-align: top;
+                margin-right: 3px;
+                margin-top: 2px;
+                &.edu_img {
+                  margin-top: 3px;
+                  width: 30px;
+                  margin-left: 0;
+                }
+              }
+              font-size: 14px;
+              opacity: 0.84;
+              font-family: "Poppins", sans-serif;
+              font-weight: 400;
+              margin-bottom: 0;
+              margin-top: 3px;
+            }
+            span {
+              span {
+                opacity: 0.84;
+              }
+              font-size: 14px;
+              opacity: 0.34;
+              font-family: "Poppins", sans-serif;
+              font-weight: 400;
+              margin-bottom: 2px;
+              display: block;
+              line-height: 20px;
+              &.company-address {
+                display: inline-block;
+                width: 78%;
+                margin-left: 8px;
+                margin-bottom: 18px;
+                font-size: 14px;
+                opacity: 0.84;
+                font-family: "Poppins", sans-serif;
+                font-weight: 400;
+                margin-bottom: 17px;
+                margin-top: 10px;
+              }
+            }
+            small {
+              font-size: 14px;
+              font-family: "Poppins", sans-serif;
+              font-weight: 400;
+              display: block;
+              line-height: 19px;
+              li {
+                display: inline-block;
+                position: relative;
+                margin-top: 5px;
+                margin-bottom: 0;
+
+                &::after {
+                  position: absolute;
+                  right: -4px;
+                  bottom: 0;
+                }
+                &:last-child::after {
+                  display: none;
+                }
+              }
+            }
+          }
+          & .show-button2 {
+            text-align: center;
+            & action-button {
+              &.company-go-detail {
+                position: relative;
+                &::after {
+                  position: absolute;
+                  content: "|";
+                  left: 0;
+                  top: 0;
+                  color: #001d40;
+                  opacity: 0.1;
+                }
+              }
+            }
+          }
+          img {
+            display: inline-block;
+          }
+        }
+      }
+    }
+  }
+
+  .loading {
+    position: absolute;
+    width: 100%;
+    height: calc(100% - 70px);
+    @include flex(column, center, center);
+  }
+}
+
+@media only screen and (min-width: $min-mini-desktop-breakpoint) and (max-width: $max-mini-desktop-breakpoint) {
+  :host {
+    .career-main {
+      .position-main-container {
+        width: 95%;
+
+        & .filter-container {
+          & .position-company-map {
+            & .company-map {
+              & mat-card {
+                p {
+                  font-size: 13px;
+                  display: inline;
+                }
+                span.company-address {
+                  font-size: 13px;
+                  width: 86%;
+                }
+              }
+            }
+          }
+          &::after {
+            content: "";
+            display: table;
+            clear: both;
+          }
+
+          &::before {
+            content: "";
+            display: table;
+          }
+        }
+
+        .position-list-container {
+          .job-top-list {
+            ul {
+              li {
+                margin-right: 20px;
+                font-size: 13px;
+                span {
+                  font-family: "Poppins", sans-serif;
+                  font-weight: 400;
+                  display: inline;
+                }
+              }
+            }
+          }
+
+          & .row {
+            h1 {
+              font-size: 26px;
+            }
+
+            & .job-top-list {
+              ul {
+                margin-top: 0% li {
+                  margin-right: 70px;
+                }
+              }
+            }
+
+            & .card {
+              & .card-item {
+                width: 100%;
+                span {
+                  font-size: 13px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: $min-tablet-breakpoint) and (max-width: $max-tablet-breakpoint) {
+  :host {
+    .career-main {
+      float: none;
+      width: 95%;
+      padding-bottom: 0px;
+      margin: 0 auto;
+      padding-bottom: 50px;
+      .comman_search_filter {
+        position: fixed;
+        margin: 0;
+        width: 100%;
+        box-sizing: border-box;
+        flex-wrap: wrap;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        z-index: 100;
+        .postion-search-detail {
+          padding: 12px 20px;
+          overflow: hidden;
+          .filter-data {
+            float: right;
+
+            .filter_icon {
+              display: block;
+            }
+          }
+        }
+      }
+      .filter-container {
+        width: 95%;
+        float: none;
+        position: relative;
+        position: -webkit-relative;
+        top: 30px;
+        overflow-y: auto;
+        height: auto;
+        padding-bottom: 60px;
+        box-sizing: border-box;
+        margin: 0 auto;
+      }
+      .position-main-container {
+        width: 100%;
+        height: 100%;
+        .content {
+          mat-card {
+            width: 86%;
+            padding: 20px 20px;
+            box-shadow: none;
+            position: absolute;
+            margin: 0 auto;
+            left: 0;
+            right: 0;
+          }
+          position: absolute;
+          width: 100%;
+          top: -1000%;
+          left: 0;
+          border-bottom: none;
+          @include flex(column, center, center);
+          background-color: $white;
+          padding-top: $profile-form-field-mt;
+          padding-bottom: $profile-form-field-mt;
+          box-sizing: border-box;
+          transition: top 0.5s;
+          transition-timing-function: ease;
+          z-index: 1;
+
+          &.open {
+            top: 160px;
+            transition: top 0.5s;
+            transition-timing-function: ease;
+            background-color: transparent;
+            padding-top: 0;
+            position: fixed;
+            display: block;
+            left: 0;
+
+            &::after {
+              position: fixed;
+              padding: 10px 43px 30px 40px;
+              left: 0;
+              width: 90%;
+              background-color: rgba(0, 0, 0, 0.32);
+              top: 135px;
+              height: calc(103vh - 130px);
+              z-index: -1;
+            }
+          }
+        }
+
+        .position-list-container {
+          float: none;
+          width: 95%;
+          margin: 0 auto;
+          padding: 0 10px;
+          .card {
+            .card-item {
+              span {
+                font-size: 11px;
+              }
+            }
+          }
+          .job-top-list {
+            ul {
+              li {
+                margin-right: 30px;
+                font-size: 13px;
+              }
+            }
+          }
+          .row {
+            padding: 30px 20px 30px;
+            h1 {
+              font-size: 26px;
+            }
+            .card {
+              .card-item {
+                width: 100%;
+                span {
+                  font-size: 13px;
+                }
+              }
+            }
+          }
+        }
+        .content {
+          position: absolute;
+          z-index: 1;
+          top: -210px;
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: $min-mobile-breakpoint) and (max-width: $max-mobile-breakpoint) {
+  :host {
+    .career-main {
+      padding-bottom: 50px;
+      float: none;
+      width: 90%;
+      padding-bottom: 0px;
+      margin: 0 auto;
+      .comman_search_filter {
+        position: fixed;
+        margin: 0;
+        width: 100%;
+        box-sizing: border-box;
+        flex-wrap: wrap;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        z-index: 100;
+        .postion-search-detail {
+          padding: 12px 20px;
+          overflow: hidden;
+          .filter-data {
+            float: right;
+            margin-top: 0;
+
+            & .filter_icon {
+              display: block;
+            }
+          }
+        }
+      }
+      .position-main-container {
+        width: 100%;
+        height: 100%;
+        padding-top: 10px;
+        // padding-top: 87px;
+        .content {
+          mat-card {
+            width: 80%;
+            padding: 20px 20px;
+            box-shadow: none;
+            position: absolute;
+          }
+          position: absolute;
+          width: 100%;
+          top: -1000%;
+          left: 0;
+          border-bottom: none;
+          @include flex(column, center, center);
+          background-color: $white;
+          padding-top: $profile-form-field-mt;
+          padding-bottom: $profile-form-field-mt;
+          box-sizing: border-box;
+          transition: top 0.5s;
+          transition-timing-function: ease;
+          z-index: 1;
+
+          &.open {
+            top: 140px;
+            transition: top 0.5s;
+            transition-timing-function: ease;
+            background-color: #f2f2f2;
+            padding-top: 0;
+            position: fixed;
+            display: block;
+            left: 5%;
+
+            &::after {
+              position: fixed;
+              padding: 10px 43px 30px 40px;
+              left: 0;
+              width: 80%;
+              background-color: rgba(0, 0, 0, 0.32);
+              top: 135px;
+              height: calc(103vh - 130px);
+              z-index: -1;
+              top: 0;
+              height: 100%;
+            }
+          }
+        }
+
+        & .container__header {
+          &.filter-container {
+            height: auto;
+            width: 92%;
+            float: none;
+            margin: 0 auto 20px;
+            padding: 0 10px;
+            clear: both;
+            position: relative;
+            top: 0px;
+            box-sizing: inherit;
+
+            & .position-company-map {
+              display: block;
+              width: 100%;
+              position: relative;
+            }
+          }
+
+          & .filter-card {
+            width: 90%;
+          }
+        }
+        .position-list-container {
+          float: none;
+          width: 92%;
+          margin: auto;
+          padding: 0 10px;
+          & .right-align {
+            @include inline-block-btn;
+            text-align: center;
+            & action-button {
+              @include inline-block-btn;
+            }
+          }
+          .main-card {
+            ul {
+              li {
+                width: 100%;
+                margin-bottom: 10px;
+                & .skills-preferred-m {
+                  margin-bottom: 4px;
+                }
+              }
+            }
+          }
+
+          & .row {
+            padding: 30px 10px;
+            &.position-detail {
+              padding: 30px 10px;
+            }
+            h1 {
+              font-size: 18px;
+              margin-top: 3px;
+              line-height: 20px;
+              width: 86%;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              // margin-bottom: 18px;
+            }
+            h3 {
+              font-size: 18px;
+            }
+
+            & .job-top-list {
+              ul {
+                margin: 20px auto 0;
+                li {
+                  margin-right: auto;
+                  font-size: 13px;
+                  margin-bottom: 6px;
+                  word-wrap: break-word;
+                  display: block;
+                  span {
+                    display: initial;
+                  }
+                }
+              }
+            }
+
+            & .card {
+              & .card-item {
+                padding: 18px 5px 12px 5px;
+                min-height: 70px;
+                & span {
+                  font-size: 12px;
+                  line-height: initial;
+                }
+                p {
+                  font-size: 13px;
+                }
+              }
+              & mat-grid-tile {
+                border-right: 1px solid #f0f0f0;
+              }
+            }
+          }
+
+          & .qualification-level-m {
+            & simple-tag {
+              @include inline-block-btn;
+              margin: 0px 5px 7px 0px;
+              font-family: "Poppins", sans-serif;
+              font-weight: 400;
+            }
+          }
+        }
+      }
+    }
+  }
+}

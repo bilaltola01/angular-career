@@ -1,0 +1,63 @@
+<ng-container *ngIf="isJobLoading">
+  <div class="loading">
+    <mat-spinner></mat-spinner>
+    <h4>Loading...</h4>
+  </div>
+</ng-container>
+<!-- Search Bar -->
+<div class="application-page">
+  <div class="application-detail-header">
+    <div class="application-detail-heading">
+      <h2>Application Information</h2>
+    </div>
+    <div class="application-header-btn-style">
+      <div class="application-header-choice">
+        <simple-tag class="top-choices-tag" ellipseTag="true" [value]="applicationData.interest_level"
+          removeActive="true" (levelChanged)="onLevelChanged($event, applicationData.application_id)">
+        </simple-tag>
+        <mat-icon class="cancel" (click)="onClose(applicationData.application_id,applicationData.interest_level)">cancel
+        </mat-icon>
+        <div class="top-choice-content">
+          <span>Interest In Position</span>
+          <p>{{interestHeading(applicationData.interest_level)}}</p>
+        </div>
+      </div>
+      <div class="application-header-review" [ngClass]="{
+        'acceptStatus':applicationData.accepted,
+        'rejectStatus':applicationData.rejected}">
+        <div class="top-choice-content">
+          <span>Application Status</span>
+          <p *ngIf="applicationData.accepted" class="accepted">Accepted</p>
+          <p *ngIf="applicationData.in_review">In Review</p>
+          <p *ngIf="applicationData.interviewing">Interviewing</p>
+          <p *ngIf="applicationData.offer_sent">Offer Sent</p>
+          <p *ngIf="applicationData.rejected" class="rejected">Rejected</p>
+          <p *ngIf="applicationData.wait_listed">Wait Listed</p>
+          <p *ngIf="applicationData.saved">Saved</p>
+          <p
+            *ngIf="!(applicationData.accepted || applicationData.in_review || applicationData.interviewing || applicationData.offer_sent || applicationData.rejected || applicationData.wait_listed || applicationData.saved )">
+            Submitted</p>
+        </div>
+        <div class="application-action">
+          <action-button title="Take Action" class="take-action-btn" mat-button [matMenuTriggerFor]="menu"
+            disableRipple>
+          </action-button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="withdrawApplication([applicationData])">Withdraw
+              Application</button>
+            <div *ngIf="applicationData.offer_sent">
+              <button mat-menu-item (click)="acceptOffer([applicationData])">Accept Offer</button>
+              <button mat-menu-item (click)="rejectOffer([applicationData])">Reject Offer</button>
+            </div>
+          </mat-menu>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="application-main-container">
+    <app-application-nav-section (selectedNavItem)="onSelectNavItem($event)" [class.nav-hidden]="!(isNavMenuOpened)"
+      id="app-application-nav-section">
+    </app-application-nav-section>
+  </div>
+
+</div>

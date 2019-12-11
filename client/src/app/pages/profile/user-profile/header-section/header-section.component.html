@@ -1,21 +1,14 @@
 <ng-container>
-  <div class="back-row" *ngIf="showBackButtonFlag">
-    <button class="back" (click)="goBack()">Back</button>
-  </div>
+
   <div *ngIf="generalInfo" class="user-row">
     <div>
-      <input [disabled]="(currentPage === 'profile' && !editMode) || currentPage !== 'profile'"
-        style="display: none"
-        type="file"
-        (change)="onPhotoFileSelected($event)"
-        #fileInput
-      >
+      <input [disabled]="(currentPage === 'profile' && !editMode) || currentPage !== 'profile'" style="display: none"
+        type="file" (change)="onPhotoFileSelected($event)" #fileInput>
 
       <div [ngClass]="{'hover-img': currentPage === 'profile' && editMode}" (click)="fileInput.click()">
         <img class="user-photo"
           src="{{(currentPage === 'profile' && editMode ? (photo_url || generalInfoForm.get('photo').value) : generalInfo.photo) || 'assets/icons/no_photo.png'}}"
-          alt="Profile Image"
-        >
+          alt="Profile Image">
       </div>
     </div>
 
@@ -53,8 +46,11 @@
         </div>
       </div>
       <div class="user-status">
-        <simple-tag  [title]="profileStatuses[generalInfo.is_looking]" onlineTag="true" [active]="generalInfo.is_looking === 1" (click)="onChangeProfileStatus(generalInfo.is_looking === 1)"></simple-tag>
-        <action-button *ngIf="userId && contact_status" type="stroked" [title]="contactBtnTitle()" (click)="onClickContactBtn()"></action-button>
+        <simple-tag [title]="profileStatuses[generalInfo.is_looking]" *ngIf="showBackButtonFlag === false"
+          onlineTag="true" [active]="generalInfo.is_looking === 1"
+          (click)="onChangeProfileStatus(generalInfo.is_looking === 1)"></simple-tag>
+        <action-button *ngIf="userId && contact_status" type="stroked" [title]="contactBtnTitle()"
+          (click)="onClickContactBtn()"></action-button>
       </div>
     </ng-container>
 
@@ -69,8 +65,12 @@
           <mat-form-field class="bg-transparent last-name" appearance="fill">
             <mat-label>Last Name</mat-label>
             <input matInput placeholder="Last Name" type="text" formControlName="last_name">
-            <mat-icon matSuffix *ngIf="generalInfoForm.get('first_name').valid && helperService.checkSpacesString(generalInfoForm.get('first_name').value) && generalInfoForm.get('last_name').valid && helperService.checkSpacesString(generalInfoForm.get('last_name').value)">done</mat-icon>
-            <mat-icon matSuffix class="error-field" *ngIf="(!generalInfoForm.get('first_name').valid || !generalInfoForm.get('last_name').valid) && (generalInfoForm.get('first_name').touched || generalInfoForm.get('last_name').touched) && helperService.checkSpacesString(generalInfoForm.get('first_name').value) && helperService.checkSpacesString(generalInfoForm.get('last_name').value)">close</mat-icon>
+            <mat-icon matSuffix
+              *ngIf="generalInfoForm.get('first_name').valid && helperService.checkSpacesString(generalInfoForm.get('first_name').value) && generalInfoForm.get('last_name').valid && helperService.checkSpacesString(generalInfoForm.get('last_name').value)">
+              done</mat-icon>
+            <mat-icon matSuffix class="error-field"
+              *ngIf="(!generalInfoForm.get('first_name').valid || !generalInfoForm.get('last_name').valid) && (generalInfoForm.get('first_name').touched || generalInfoForm.get('last_name').touched) && helperService.checkSpacesString(generalInfoForm.get('first_name').value) && helperService.checkSpacesString(generalInfoForm.get('last_name').value)">
+              close</mat-icon>
           </mat-form-field>
         </div>
 
@@ -78,12 +78,15 @@
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>City</mat-label>
             <input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity" formControlName="city">
-            <mat-icon matSuffix *ngIf="generalInfoForm.get('city').value && generalInfoForm.get('city').valid && helperService.checkSpacesString(generalInfoForm.get('city').value) && checkCityValidation()">done</mat-icon>
-            <mat-icon matSuffix class="error-field" *ngIf="generalInfoForm.get('city').value && helperService.checkSpacesString(generalInfoForm.get('city').value) && !checkCityValidation() && generalInfoForm.get('city').touched">close</mat-icon>
+            <mat-icon matSuffix
+              *ngIf="generalInfoForm.get('city').value && generalInfoForm.get('city').valid && helperService.checkSpacesString(generalInfoForm.get('city').value) && checkCityValidation()">
+              done</mat-icon>
+            <mat-icon matSuffix class="error-field"
+              *ngIf="generalInfoForm.get('city').value && helperService.checkSpacesString(generalInfoForm.get('city').value) && !checkCityValidation() && generalInfoForm.get('city').touched">
+              close</mat-icon>
             <mat-autocomplete #autocompleteCity="matAutocomplete" (closed)="onBlurCity()">
               <mat-option *ngFor="let city of autocomplete_cities"
-                          [value]="helperService.cityNameFromAutoComplete(city.city)"
-                          (onSelectionChange)="onSelectCity(city)">
+                [value]="helperService.cityNameFromAutoComplete(city.city)" (onSelectionChange)="onSelectCity(city)">
                 <span>{{city.city}}</span>
               </mat-option>
             </mat-autocomplete>
@@ -93,12 +96,17 @@
         <div class="form-field">
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>State</mat-label>
-            <input matInput placeholder="State" type="text" [matAutocomplete]="autocompleteState" formControlName="state">
-            <mat-icon matSuffix *ngIf="generalInfoForm.get('state').value && helperService.checkSpacesString(generalInfoForm.get('state').value) && generalInfoForm.get('state').valid && checkStateValidation()">done</mat-icon>
-            <mat-icon matSuffix class="error-field" *ngIf="generalInfoForm.get('state').value && helperService.checkSpacesString(generalInfoForm.get('state').value) && !checkStateValidation() && generalInfoForm.get('state').touched">close</mat-icon>
+            <input matInput placeholder="State" type="text" [matAutocomplete]="autocompleteState"
+              formControlName="state">
+            <mat-icon matSuffix
+              *ngIf="generalInfoForm.get('state').value && helperService.checkSpacesString(generalInfoForm.get('state').value) && generalInfoForm.get('state').valid && checkStateValidation()">
+              done</mat-icon>
+            <mat-icon matSuffix class="error-field"
+              *ngIf="generalInfoForm.get('state').value && helperService.checkSpacesString(generalInfoForm.get('state').value) && !checkStateValidation() && generalInfoForm.get('state').touched">
+              close</mat-icon>
             <mat-autocomplete #autocompleteState="matAutocomplete" (closed)="onBlurState()">
               <mat-option *ngFor="let state of autocomplete_states" [value]="state.state"
-                          (onSelectionChange)="onSelectState(state)">
+                (onSelectionChange)="onSelectState(state)">
                 <span>{{state.state}}</span>
               </mat-option>
             </mat-autocomplete>
@@ -121,10 +129,7 @@
             <input matInput placeholder="MM/DD/YYYY" formControlName="birthdate" pattern="\d{1,2}/\d{1,2}/\d{4}">
             <input class="hide" [matDatepicker]="birthdate" [max]="maxDate" (dateChange)="onChangeBirthDate($event)">
             <mat-datepicker-toggle matSuffix [for]="birthdate"></mat-datepicker-toggle>
-            <mat-datepicker
-              touchUi
-              #birthdate
-            >
+            <mat-datepicker touchUi #birthdate>
             </mat-datepicker>
           </mat-form-field>
         </div>
@@ -140,8 +145,8 @@
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>Ethnicity</mat-label>
             <mat-select formControlName="ethnicity">
-              <mat-option *ngFor="let ethnicityType of ethnicityTypes"
-                          value="{{ethnicityType}}">{{ethnicityType}}</mat-option>
+              <mat-option *ngFor="let ethnicityType of ethnicityTypes" value="{{ethnicityType}}">{{ethnicityType}}
+              </mat-option>
             </mat-select>
           </mat-form-field>
         </div>

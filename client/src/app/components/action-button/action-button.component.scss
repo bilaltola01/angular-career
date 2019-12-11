@@ -1,4 +1,4 @@
-@import './../../../styles/variables.scss';
+@import "./../../../styles/variables.scss";
 :host {
   button {
     width: 100%;
@@ -20,26 +20,132 @@
 }
 
 :host-context(.job-apply-btn) button {
-  line-height: 21px;
-    font-weight: 500;
-    padding: 12px 30px !important;
-    font-size: 14px;
-    font-family: "Poppins", sans-serif;
+  line-height: 16px;
+  font-weight: 500;
+  padding: 12px 30px !important;
+  font-size: 14px;
+  font-family: "Poppins", sans-serif;
 }
 :host-context(.job-applied-btn) button {
   line-height: 21px;
-    font-weight: 500;
-    padding: 12px 22px !important;
-    font-size: 14px;
-    font-family: "Poppins", sans-serif;
-    background-color: $secondary-bg-color;
-    color: #318BD6;
-    border:none;
-    &:hover{
-      color: #318BD6;
-    }
+  font-weight: 500;
+  padding: 12px 22px !important;
+  font-size: 14px;
+  font-family: "Poppins", sans-serif;
+  background-color: $secondary-bg-color;
+  color: #318bd6;
+  border: none;
+  &:hover {
+    color: #318bd6;
+  }
 }
-:host-context(.dot-icon) button{
+
+:host-context(.application-in_review) button {
+  line-height: 21px;
+  font-weight: 500;
+  padding: 12px 22px !important;
+  font-size: 14px;
+  font-family: "Poppins", sans-serif;
+  background-color: $secondary-bg-color;
+  color: #318bd6;
+  border: none;
+  &:hover {
+    color: #318bd6;
+  }
+}
+:host-context(.application-interviewing) button {
+  line-height: 21px;
+  font-weight: 500;
+  padding: 12px 22px !important;
+  font-size: 14px;
+  font-family: "Poppins", sans-serif;
+  background-color: $secondary-bg-color;
+  color: #318bd6;
+  border: none;
+  &:hover {
+    color: #318bd6;
+  }
+}
+:host-context(.application-offer_sent) button {
+  line-height: 21px;
+  font-weight: 500;
+  padding: 12px 22px !important;
+  font-size: 14px;
+  font-family: "Poppins", sans-serif;
+  background-color: $secondary-bg-color;
+  color: #318bd6;
+  border: none;
+  &:hover {
+    color: #318bd6;
+  }
+}
+:host-context(.application-rejected) button {
+  line-height: 21px;
+  font-weight: 500;
+  padding: 12px 22px !important;
+  font-size: 14px;
+  font-family: "Poppins", sans-serif;
+  background-color: $secondary-bg-color-reject-btn;
+  color: red;
+  border: none;
+  &:hover {
+    color: red;
+  }
+}
+:host-context(.application-wait_listed) button {
+  line-height: 21px;
+  font-weight: 500;
+  padding: 12px 22px !important;
+  font-size: 14px;
+  font-family: "Poppins", sans-serif;
+  background-color: $secondary-bg-color;
+  color: #318bd6;
+  border: none;
+  &:hover {
+    color: #318bd6;
+  }
+}
+:host-context(.application-saved) button {
+  line-height: 21px;
+  font-weight: 500;
+  padding: 12px 22px !important;
+  font-size: 14px;
+  font-family: "Poppins", sans-serif;
+  background-color: $secondary-bg-color;
+  color: #318bd6;
+  border: none;
+  &:hover {
+    color: #318bd6;
+  }
+}
+:host-context(.application-submitted) button {
+  line-height: 21px;
+  font-weight: 500;
+  padding: 12px 22px !important;
+  font-size: 14px;
+  font-family: "Poppins", sans-serif;
+  background-color: $secondary-bg-color;
+  color: #318bd6;
+  border: none;
+  &:hover {
+    color: #318bd6;
+  }
+}
+
+:host-context(.application-accept-btn) button {
+  line-height: 21px;
+  font-weight: 500;
+  padding: 12px 22px !important;
+  font-size: 14px;
+  font-family: "Poppins", sans-serif;
+  background-color: $secondary-bg-color-btn;
+  color: rgb(64, 211, 28);
+  border: none;
+  &:hover {
+    color: rgb(64, 211, 28);
+  }
+}
+:host-context(.dot-icon) button {
   padding: 0 !important;
 }
 :host-context(.side-filter-btn) button {
@@ -55,15 +161,15 @@
   padding: 10px 0 0 !important;
 }
 :host-context(.show-button) button {
-    line-height: initial;
-    padding: 20px 12px 5px!important;
-    font-weight: 500;
-    font-size: 12px;
-    font-family: "Poppins", sans-serif;
+  line-height: initial;
+  padding: 20px 12px 5px !important;
+  font-weight: 500;
+  font-size: 12px;
+  font-family: "Poppins", sans-serif;
 }
 :host-context(.show-button2) button {
   line-height: initial;
-  padding: 16px 12px 5px!important;
+  padding: 16px 12px 5px !important;
   font-weight: 500;
   font-size: 12px;
   font-family: "Poppins", sans-serif;
@@ -85,6 +191,66 @@
   font-family: "Poppins", sans-serif;
   text-align: left;
 }
+:host-context(.application-submit-btn) button {
+  display: inline-block;
+  width: auto;
+  line-height: 30px;
+}
+:host-context(.application-no-thanks-btn) button {
+  display: inline-block;
+  width: auto;
+  background-color: rgba(0, 0, 0, 0.27);
+  margin: 0 5px;
+  line-height: 30px;
+}
+:host-context(.take-action-btn) button {
+  line-height: initial;
+  padding: 12px 15px !important;
+  font-weight: 600;
+  font-size: 12px;
+  font-family: "Poppins", sans-serif;
+  display: inline-block;
+  width: auto;
+}
+:host-context(.contact-btn) button {
+  line-height: initial;
+  padding: 12px 20px !important;
+  font-weight: 500;
+  font-size: 12px;
+  font-family: "Poppins", sans-serif;
+  display: inline-block;
+}
+:host-context(.contact-btn1) button {
+  line-height: initial;
+  padding: 12px 15px !important;
+  font-weight: 500;
+  font-size: 12px;
+  font-family: "Poppins", sans-serif;
+  display: inline-block;
+}
+
+:host-context(.message-send-btn) button {
+  line-height: initial;
+  padding: 5px 30px !important;
+  font-weight: 500;
+  font-size: 14px;
+  font-family: "Poppins", sans-serif;
+  display: inline-block;
+  line-height: normal;
+  margin-top: 14px;
+  box-shadow: none;
+}
+
 @media only screen and (max-width: $tablet-breakpoint) {
-  :host-context(.position-search-reload-result)button {padding: 4px 13px !important;}
+  :host-context(.position-search-reload-result)button {
+    padding: 4px 13px !important;
   }
+}
+@media only screen and (min-width: $min-mobile-breakpoint) and (max-width: $max-mobile-breakpoint) {
+  :host-context(.application-no-thanks-btn) button {
+    padding: 4px 13px !important;
+  }
+  :host-context(.application-submit-btn) button {
+    padding: 4px 13px !important;
+  }
+}

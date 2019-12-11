@@ -146,9 +146,36 @@ export class UserService {
       );
   }
 
+  public getUserSkills(userSkillId: number): Observable<any> {
+    return this.http.get(this.user_service_url + `user/${userSkillId}/skills`, this.authHttpOptions())
+      .pipe(
+        map(data => {
+          return {success: true, message: 'Success!', data: data};
+        }),
+        catchError(this.handleError)
+      );
+  }
+  public getUserInterestsList(userSkillId: number): Observable<any> {
+    return this.http.get(this.user_service_url + `user/${userSkillId}/interests`, this.authHttpOptions())
+      .pipe(
+        map(data => {
+          return {success: true, message: 'Success!', data: data};
+        }),
+        catchError(this.handleError)
+      );
+  }
   // General Information Services
   public getGeneralInfo(userId: number = this.user_id): Observable<any> {
     return this.http.get(this.user_service_url + `user/${userId}`, this.authHttpOptions())
+      .pipe(
+        map(data => {
+          return {success: true, message: 'Success!', data: data};
+        }),
+        catchError(this.handleError)
+      );
+  }
+  public getUserContact(): Observable<any> {
+    return this.http.get(this.user_service_url + `user/${this.user_id}/contacts`, this.authHttpOptions())
       .pipe(
         map(data => {
           return {success: true, message: 'Success!', data: data};

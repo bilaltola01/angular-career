@@ -1,0 +1,628 @@
+@import "../../../../../styles/variables.scss";
+$profile-form-field-mt: 30px;
+
+:host {
+  .application-coverletter {
+    float: right;
+    width: 70.3%;
+    padding-bottom: 80px;
+
+    .row {
+      background: $white;
+      padding: 30px 18px 20px;
+      border-bottom: 1px solid map-get($md-cfaccent, 50);
+      margin-bottom: 5px;
+      border-radius: 5px;
+      overflow: hidden;
+      h3 {
+        color: #001d40;
+        font-size: 30px;
+        font-weight: 600;
+        line-height: 46px;
+        opacity: 0.84;
+        margin-top: 0;
+        float: left;
+        font-family: "Poppins", sans-serif;
+      }
+      & .application-edit {
+        display: flex;
+        //float: right;
+        justify-content: flex-end;
+        .job-apply-btn {
+          margin: 0 5px;
+        }
+      }
+      & .application-content-detail {
+        padding-top: 25px;
+        border-top: 1px solid #ddd;
+        clear: both;
+        p {
+          font-size: 16px;
+          font-weight: 400;
+          line-height: 24px;
+          color: #001d40;
+          margin-top: 0;
+          word-break: break-word;
+          white-space: pre-wrap;
+          max-height: initial;
+        }
+        .full-width {
+          display: block;
+          border: 1px solid #dae4f1;
+          padding: 10px;
+          padding-top: 0px;
+        }
+      }
+      & .qualification-level-m {
+        margin-top: 20px;
+        h5 {
+          font-family: "Helvetica Neue";
+        }
+        p {
+          margin-top: 0px;
+        }
+      }
+
+      &.selected {
+        background-color: $selected-bg-color;
+      }
+
+      &.no-job {
+        @include btn-align-center;
+      }
+
+      & round-checkbox {
+        @include inline-block-btn;
+        vertical-align: middle;
+      }
+
+      h1 {
+        @include inline-block-btn;
+        vertical-align: middle;
+        margin-bottom: 1px;
+        font-size: 30px;
+        line-height: 46px;
+        color: rgba(map-get($md-cfaccent, 500), 0.84);
+        margin-top: 0;
+        font-family: "Poppins", sans-serif;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      & .position-right {
+        float: right;
+
+        & .heart-icon {
+          text-align: center;
+          margin: 0 auto 0;
+          display: inline-block;
+          width: 50px;
+          vertical-align: top;
+          height: 46px;
+          img {
+            &.before-heart-icon {
+              margin-top: 14px;
+            }
+          }
+        }
+
+        vertical-align: middle;
+
+        & .dot-icon {
+          img {
+            margin: 0 0 0 15px;
+          }
+        }
+      }
+
+      img {
+        vertical-align: middle;
+        margin-right: 8px;
+      }
+    }
+
+    & .mat-icon {
+      vertical-align: middle;
+      margin-right: 20px;
+    }
+
+    h5 {
+      margin-bottom: 5px;
+      font-size: 14px;
+      line-height: 21px;
+      color: rgba(map-get($md-cfaccent, 500), 0.34);
+      font-weight: 400;
+      margin-top: 0;
+      font-weight: 400;
+
+      span {
+        display: inline-block;
+        margin-left: 4px;
+        color: rgba(map-get($md-cfaccent, 500), 0.84);
+      }
+    }
+
+    p {
+      margin-top: 10px;
+      margin-bottom: 10px;
+      font-size: 14px;
+      line-height: 22px;
+      font-weight: 400;
+      max-height: 310px;
+      width: 95%;
+      -webkit-box-orient: vertical;
+      display: block;
+      display: -webkit-box;
+      // -webkit-line-clamp: 14;
+      overflow: hidden;
+      /* autoprefixer: ignore next */
+      -webkit-box-orient: vertical;
+      text-overflow: ellipsis;
+    }
+
+    & .right-align {
+      @include inline-block-btn;
+
+      vertical-align: middle;
+    }
+
+    & .job-top-list {
+      ul {
+        padding: 0;
+        margin-top: 0;
+        margin-bottom: 0px;
+
+        li {
+          list-style: none;
+          @include inline-block-btn;
+          margin-right: 100px;
+          font-size: 14px;
+          line-height: 16px;
+          vertical-align: middle;
+          font-family: "Poppins", sans-serif;
+          font-weight: 400;
+
+          a {
+            @include inline-block-btn;
+            vertical-align: middle;
+            color: rgba(map-get($md-cfaccent, 500), 0.84);
+            text-decoration: none;
+          }
+
+          span {
+            @include inline-block-btn;
+            vertical-align: middle;
+            color: rgba(map-get($md-cfaccent, 500), 0.84);
+          }
+
+          img {
+            margin-right: 5px;
+            vertical-align: middle;
+          }
+        }
+      }
+    }
+
+    & .main-card {
+      ul {
+        padding: 0;
+        margin: 0;
+
+        li {
+          list-style: none;
+          @include inline-block-btn;
+          width: 49%;
+          vertical-align: top;
+          ul {
+            margin-top: 0;
+            li {
+              font-size: 14px;
+            }
+          }
+
+          .skills-preferred-m {
+            @include inline-block-btn;
+            margin: 0 5px 7px 0;
+            & simple-tag {
+              font-family: "Poppins", sans-serif;
+              color: rgba(map-get($md-cfaccent, 500), 0.05);
+            }
+          }
+
+          & .skil-height-fix {
+            overflow: hidden;
+            max-height: 45px;
+
+            &.skill-more-height {
+              max-height: 135px;
+            }
+          }
+        }
+      }
+    }
+
+    & .show-button {
+      text-align: center;
+
+      action-button {
+        display: inline-block;
+        position: relative;
+        cursor: pointer;
+        &::after {
+          position: absolute;
+          right: -47px;
+          color: rgba(0, 29, 64, 0.1);
+          height: 100%;
+          width: 100%;
+          content: "|";
+          top: 20px;
+        }
+        &:last-child::after {
+          display: none;
+        }
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+
+    & .qualification-level-m {
+      & simple-tag {
+        @include inline-block-btn;
+        margin: 12px 5px 22px 0px;
+        font-family: "Poppins", sans-serif;
+        font-weight: 400;
+      }
+    }
+
+    & .card {
+      margin: 20px 0 10px;
+      & mat-grid-tile {
+        border: 1px solid #f0f0f0;
+        border-right: none;
+        &:last-child {
+          border-right: 1px solid #f0f0f0;
+        }
+      }
+      & .card-item {
+        @include inline-block-btn;
+        width: 100%;
+        padding: 9px 15px 9px 15px;
+        vertical-align: middle;
+
+        span {
+          color: rgba(map-get($md-cfaccent, 500), 0.44);
+          font-size: 14px;
+          font-family: "Poppins", sans-serif;
+          font-weight: 400;
+        }
+
+        p {
+          margin: 3px 0 0;
+          font-size: 14px;
+          line-height: 16px;
+        }
+      }
+    }
+
+    & .application-top-choices {
+      border: 1px solid #f0f0f0;
+      overflow: hidden;
+      padding: 10px;
+      margin-bottom: 10px;
+      & .application-top-choices-m {
+        float: left;
+        width: 60%;
+        & .top-choice-content {
+          display: inline-block;
+          width: 30%;
+          vertical-align: middle;
+          span {
+            font-size: 14px;
+            line-height: 21px;
+            color: rgba(0, 29, 64, 0.34);
+            font-weight: 400;
+            vertical-align: middle;
+            font-family: "Poppins", sans-serif;
+          }
+          p {
+            font-size: 14px;
+            line-height: 21px;
+            color: rgba(0, 29, 64, 0.84);
+            font-weight: 400;
+            font-family: "Roboto", sans-serif;
+            margin: 0;
+          }
+        }
+      }
+      & .application-top-choices-right {
+        float: right;
+        margin-top: 11px;
+      }
+    }
+  }
+
+  .loading {
+    position: absolute;
+    width: 100%;
+    height: calc(100% - 70px);
+    @include flex(column, center, center);
+  }
+}
+
+@media only screen and (min-width: $min-mini-desktop-breakpoint) and (max-width: $max-mini-desktop-breakpoint) {
+  :host {
+    .application-page {
+      .comman_search_filter {
+        display: block;
+        width: 100%;
+        text-align: left;
+        margin: 0 auto 12px;
+        background-color: $white;
+
+        .postion-search-header {
+          display: block;
+          border: none;
+          width: 560px;
+          margin: 0 auto;
+          position: relative;
+
+          mat-form-field {
+            width: 100%;
+
+            mat-icon {
+              cursor: pointer;
+            }
+          }
+        }
+
+        .filter-data {
+          float: left;
+          background-color: $white;
+          margin-top: 20px;
+          margin-left: 28px;
+
+          & .filter_icon {
+            display: block;
+            cursor: pointer;
+          }
+        }
+      }
+      .application-main-container {
+        width: 100%;
+
+        & .container__header {
+          &.tablet {
+            position: absolute;
+            width: 100%;
+            top: -1000%;
+            left: 0;
+            border-bottom: none;
+            @include flex(column, center, center);
+            background-color: $white;
+            padding-top: $profile-form-field-mt;
+            padding-bottom: $profile-form-field-mt;
+            box-sizing: border-box;
+            transition: top 0.5s;
+            transition-timing-function: ease;
+            z-index: 1;
+
+            &.open {
+              top: 140px;
+              transition: top 0.5s;
+              transition-timing-function: ease;
+              background-color: #f2f2f2;
+              padding-top: 0;
+            }
+          }
+
+          &.filter-container {
+            height: auto;
+            width: 100%;
+            float: none;
+            margin: 0 auto;
+            padding: 0 10px;
+            clear: both;
+          }
+          & .nav-title {
+            width: 100%;
+          }
+          & .filter-card {
+            width: 97%;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: $min-tablet-breakpoint) and (max-width: $max-tablet-breakpoint) {
+  :host {
+    .application-page {
+      .comman_search_filter {
+        display: block;
+        width: 100%;
+        text-align: left;
+        margin: 0 auto 12px;
+        background-color: $white;
+
+        .postion-search-header {
+          display: block;
+          border: none;
+          width: 450px;
+          margin: 0 auto;
+          position: relative;
+
+          mat-form-field {
+            width: 100%;
+
+            mat-icon {
+              cursor: pointer;
+            }
+          }
+        }
+
+        .filter-data {
+          float: left;
+          background-color: $white;
+          margin-top: 20px;
+          margin-left: 28px;
+
+          & .filter_icon {
+            display: block;
+            cursor: pointer;
+          }
+        }
+      }
+      .application-main-container {
+        width: 100%;
+
+        & .container__header {
+          &.tablet {
+            position: absolute;
+            width: 100%;
+            top: -1000%;
+            left: 0;
+            border-bottom: none;
+            @include flex(column, center, center);
+            background-color: $white;
+            padding-top: $profile-form-field-mt;
+            padding-bottom: $profile-form-field-mt;
+            box-sizing: border-box;
+            transition: top 0.5s;
+            transition-timing-function: ease;
+            z-index: 1;
+
+            &.open {
+              top: 140px;
+              transition: top 0.5s;
+              transition-timing-function: ease;
+              background-color: #f2f2f2;
+              padding-top: 0;
+            }
+          }
+          &.filter-container {
+            height: auto;
+            width: 100%;
+            float: none;
+            margin: 0 auto;
+            padding: 0 10px;
+            clear: both;
+          }
+          & .nav-title {
+            width: 100%;
+          }
+          & .filter-card {
+            width: 95%;
+          }
+        }
+      }
+    }
+    .application-coverletter {
+      width: 96%;
+      margin: 0 auto;
+      float: none;
+    }
+  }
+}
+
+@media only screen and (min-width: $min-mobile-breakpoint) and (max-width: $max-mobile-breakpoint) {
+  :host {
+    .application-page {
+      .comman_search_filter {
+        display: block;
+        width: 100%;
+        text-align: left;
+        margin: 0 auto 12px;
+        background-color: $white;
+
+        .postion-search-header {
+          display: inline-block;
+          border: none;
+          width: 76%;
+          margin-bottom: 0;
+          position: relative;
+
+          mat-form-field {
+            width: 100%;
+
+            mat-icon {
+              cursor: pointer;
+            }
+          }
+        }
+
+        .filter-data {
+          float: left;
+          background-color: $white;
+          margin-top: 20px;
+          margin-left: 14px;
+
+          & .filter_icon {
+            display: block;
+          }
+        }
+      }
+      .application-main-container {
+        width: 100%;
+        padding-bottom: 100px;
+
+        & .container__header {
+          &.tablet {
+            position: absolute;
+            width: 100%;
+            top: -1000%;
+            left: 0;
+            border-bottom: none;
+            @include flex(column, center, center);
+            background-color: $white;
+            padding-top: $profile-form-field-mt;
+            padding-bottom: $profile-form-field-mt;
+            box-sizing: border-box;
+            transition: top 0.5s;
+            transition-timing-function: ease;
+            z-index: 1;
+
+            &.open {
+              top: 140px;
+              transition: top 0.5s;
+              transition-timing-function: ease;
+              background-color: #f2f2f2;
+              padding-top: 0;
+            }
+          }
+          &.filter-container {
+            height: auto;
+            width: 100%;
+            float: none;
+            margin: 0 auto;
+            padding: 0 10px;
+            clear: both;
+          }
+          & .nav-title {
+            width: 100%;
+          }
+          & .filter-card {
+            width: 90%;
+          }
+        }
+      }
+    }
+    .application-coverletter {
+      width: 96%;
+      margin: 0 auto;
+      float: none;
+      padding-top: 10px;
+      .row{
+        h3{
+          float: none;
+          margin-bottom: 0px;
+        }
+        .application-edit{
+          float: left;
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
+}

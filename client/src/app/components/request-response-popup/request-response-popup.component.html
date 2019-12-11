@@ -1,0 +1,60 @@
+<ng-container *ngIf="isJobLoading">
+  <div class="loading">
+    <mat-spinner></mat-spinner>
+    <h4>Loading...</h4>
+  </div>
+</ng-container>
+
+<div class="profile-form" [formGroup]="searchForm">
+    <div class="application-references refer-pop-app">
+    <h1 class="title">References</h1>
+  <div class="profile-form__field search">
+    <mat-form-field appearance="standard" class="search">
+      <mat-icon matSuffix>search</mat-icon>
+      <input matInput placeholder="Search People" type="text" [matAutocomplete]="autocompleteSearchUser"
+        formControlName="searchUser">
+      <mat-autocomplete #autocompleteSearchUser="matAutocomplete">
+        <mat-option *ngFor="let people of autocomplete_searchUser"
+          [value]="people.first_name + (people.last_name ? ' ' + people.last_name : '')"
+          (onSelectionChange)="addUser(people)">
+          <img [src]="people.photo ? people.photo : 'assets/icons/no_photo.png'">
+          <span>{{people.first_name + (people.last_name ? ' ' + people.last_name : '')}}</span>
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+
+
+  <mat-icon class="cancel" (click)="onClose()">cancel</mat-icon>
+  <div class="people-list-container">
+    <ng-container>
+      <div *ngFor="let user of userContactList; let i = index;">
+        <div class="row" *ngIf="true; let show_less">
+          <div class="header-container">
+            <div class="user-info">
+              <div class="image"><img [src]="user.photo ? user.photo : 'assets/icons/no_photo.png'"></div>
+              <div class="info">
+                <h2 class="name">{{user.first_name}} {{user.last_name}}</h2>
+              </div>
+            </div>
+            <div class="send-btn">
+              <action-button class="contact-btn" *ngIf="!(user.status === 'Sent' || user.status === 'Accepted')" type="flat" color="primary" title={{user.status}}
+                (click)="sendReferenceRequest(i,user)">
+              </action-button>
+              <action-button class="contact-btn" type="flat"  *ngIf="!(user.status === 'send') && (user.status === 'Sent' || user.status === 'Accepted')" color="primary" title={{user.status}}
+                disabled>
+              </action-button>
+              <action-button class="contact-btn1" type="flat" color="primary" *ngIf="!(user.status === 'Sent')" title="Cancel"
+                (click)="cancelContact(i)" color="warn">
+              </action-button>
+              <action-button class="contact-btn1" type="flat" color="primary" *ngIf="(user.status === 'Sent')" title="Delete Request"
+                (click)="deleteContactRequest(i,user)" color="warn">
+              </action-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+</div>

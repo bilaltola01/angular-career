@@ -1,0 +1,244 @@
+@import "../../../../../styles/variables.scss";
+:host {
+  .application-messagebox {
+    float: right;
+    width: 70.3%;
+    padding-bottom: 80px;
+    .row {
+      background: $white;
+      padding: 30px 20px 15px;
+      margin-bottom: 5px;
+      border-radius: 5px;
+      overflow: hidden;
+      position: relative;
+      .loading {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      //send
+      .send {
+        max-height: calc(100vh - 500px);
+        overflow-x: auto;
+        min-height: 435px;
+        display: flex;
+        flex-flow: column;
+        justify-content: flex-end;
+        &::-webkit-scrollbar {
+          width: 0 !important;
+        }
+        & #sidenav{
+          overflow-x: auto;
+          &::-webkit-scrollbar {
+            width: 0 !important;
+          }
+        }
+
+        img {
+          width: 25px;
+          height: 25px;
+          margin-right: 5px;
+          border-radius: 50%;
+          -o-object-fit: cover;
+          object-fit: cover;
+        }
+
+        //display: block;
+        //justify-content: left;
+        .sender-icon {
+          margin-right: 10px;
+          padding-bottom: 15px;
+          span {
+            font-family: "Roboto", sans-serif;
+            background-color: #525252;
+            opacity: 0.54;
+            color: #ffffff;
+            font-size: 12px;
+            line-height: 16px;
+            font-weight: 500;
+            border-radius: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 30px;
+            height: 30px;
+          }
+        }
+        .sender-message {
+          max-width: 450px;
+          p {
+            margin: 0px;
+            font-size: 14px;
+            line-height: 21px;
+            color: #001d40;
+            opacity: 0.84;
+            font-family: "Poppins", sans-serif;
+            font-weight: 400;
+            background-color: rgba(0, 29, 64, 0.05);
+            margin-bottom: 2px;
+            display: inline-block;
+            padding: 7px 15px;
+            border-radius: 0px 15px 15px 0px;
+            &:nth-child(1) {
+              border-radius: 22px 22px 22px 0px;
+            }
+            &:nth-last-child(1) {
+              border-radius: 0px 15px 15px 15px;
+            }
+          }
+        }
+      }
+      //message-form
+      .message-form {
+        border-top: 1px solid #f0f0f0;
+        display: flex;
+        margin-top: 30px;
+        justify-content: space-between;
+        padding-top: 10px;
+        align-items: center;
+        .textarea-content {
+          display: flex;
+          align-items: center;
+          width: 85%;
+          .mat-form-field {
+            display: block;
+            width: 100%;
+          }
+          textarea {
+            border: 0px;
+            font-size: 14px;
+            line-height: 21px;
+            color: #525252;
+            width: 100%;
+            margin-right: 10px;
+            font-family: "Poppins", sans-serif;
+            font-weight: 500;
+            resize: none;
+            font-style: italic;
+            &:focus {
+              outline: none;
+              box-shadow: none;
+            }
+
+            &::-webkit-input-placeholder {
+              color: #525252;
+              opacity: 0.34;
+            }
+
+            &::-moz-placeholder {
+              /* Firefox 18- */
+              color: #525252;
+              opacity: 0.34;
+            }
+          }
+        }
+      }
+
+      //new scs
+      .send {
+        .msg {
+          p {
+            display: flex;
+            align-items: center;
+            span {
+              max-width: 450px;
+            }
+
+            &.right-user {
+              justify-content: flex-end;
+
+              img {
+                margin-right: 0px;
+                margin-left: 5px;
+              }
+
+              span {
+                margin: 0px;
+                font-size: 14px;
+                line-height: 21px;
+                color: #001d40;
+                opacity: 0.84;
+                font-family: "Poppins", sans-serif;
+                font-weight: 400;
+                background-color: #e4ecf7;
+                margin-bottom: 2px;
+                display: inline-block;
+                padding: 7px 15px;
+                border-radius: 15px 0px 0px 15px;
+
+                &:nth-child(1) {
+                  border-radius: 22px 22px 0px 22px;
+                }
+                &:nth-last-child(1) {
+                  border-radius: 15px 0px 15px 15px;
+                }
+              }
+            }
+
+            &.left-user {
+              span {
+                margin: 0px;
+                font-size: 14px;
+                line-height: 21px;
+                color: #001d40;
+                opacity: 0.84;
+                font-family: "Poppins", sans-serif;
+                font-weight: 400;
+                background-color: rgba(0, 29, 64, 0.05);
+                margin-bottom: 2px;
+                display: inline-block;
+                padding: 7px 15px;
+                border-radius: 0px 15px 15px 0px;
+                &:nth-child(1) {
+                  border-radius: 22px 22px 22px 0px;
+                }
+                &:nth-last-child(1) {
+                  border-radius: 15px 15px 15px 0px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@media only screen and (min-width: $min-mobile-breakpoint) and (max-width: $max-mobile-breakpoint) {
+  :host {
+    .application-messagebox {
+      width: 96%;
+      margin: 0px auto;
+      float: none;
+      .row {
+        .send {
+          .msg {
+            p {
+              span {
+                max-width: 65%;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: $min-mini-desktop-breakpoint) and (max-width: $max-mini-desktop-breakpoint) {
+}
+
+@media only screen and (min-width: $min-tablet-breakpoint) and (max-width: $max-tablet-breakpoint) {
+  :host {
+    .application-messagebox {
+      width: 96%;
+      margin: 0px auto;
+      float: none;
+    }
+  }
+}

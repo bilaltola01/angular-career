@@ -17,6 +17,7 @@ export class ChatViewerComponent implements OnInit {
   chatId: string;
   chatTitle: string;
   chatOtherUserId: string;
+applicationId: number;
   newMessage: string;
 
   cachedUsers: UserObject[] = []; // TODO: Add Cached users
@@ -33,7 +34,8 @@ export class ChatViewerComponent implements OnInit {
   }
 
   async createRoom() {
-     this.chatId = await this.chatService.create(this.chatTitle, parseInt(this.chatOtherUserId, 10), 101);
+     this.chatId = await this.chatService.create(this.chatTitle, parseInt(this.chatOtherUserId, 10), this.applicationId);
+
   }
 
   getMyRooms() {

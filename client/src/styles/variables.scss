@@ -12,6 +12,9 @@ $max-tablet-breakpoint: 1023px;
 $min-mobile-breakpoint: 310px;
 $max-mobile-breakpoint: 767px;
 
+$min-desktop-breakpoint: 1301px;
+$max-desktop-breakpoint: 1430px;
+
 
 
 // Official Colors
@@ -225,6 +228,8 @@ $container-max-width: 1365px;
 
 $mat-form-bg-color: #ecf3fc;
 $secondary-bg-color: #f5f8fa;
+$secondary-bg-color-btn:#eefbf2;
+$secondary-bg-color-reject-btn:#fde2e2;
 $third-bg-color: #f4f5f8;
 $bg-color-1: #f2f2f4;
 $bg-color-2: #f2f3f7;
@@ -232,6 +237,7 @@ $mat-form-border-color: #dae4f1;
 $mat-form-prefix-color: #525252;
 $header-color:grey;
 $selected-bg-color: #d6e8f7;
+$filter-menu-bg-color: #fff;
 @mixin flex($direction, $align, $justify) {
   display: flex;
   flex-wrap: wrap;

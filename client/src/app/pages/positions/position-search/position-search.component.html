@@ -13,8 +13,8 @@
     <div class="postion-search-header">
       <mat-form-field appearance="standard" class="search">
         <mat-icon matSuffix (click)="onSearchPosition($event)">search</mat-icon>
-        <input matInput placeholder="Search Positions"  type="text" [matAutocomplete]="autocompleteSearch"
-          formControlName="searchPosition" (keyup.enter)="onSearchPosition($event)" >
+        <input matInput placeholder="Search Positions" type="text" [matAutocomplete]="autocompleteSearch"
+          formControlName="searchPosition" (keyup.enter)="onSearchPosition($event)">
         <mat-autocomplete #autocompleteSearch="matAutocomplete">
           <mat-option *ngFor="let search of autocomplete_searchposition" [value]="search.position  ">
             <span>{{search.position}}</span>
@@ -34,7 +34,7 @@
         <div class="filter-card">
           <mat-form-field>
             <mat-label>City</mat-label>
-            <input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity" formControlName="city" >
+            <input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity" formControlName="city">
             <mat-autocomplete #autocompleteCity="matAutocomplete">
               <mat-option *ngFor="let city of autocomplete_cities" [value]="(city.city)?.split(',')[0]"
                 (onSelectionChange)="onChangeCity(city)">
@@ -47,7 +47,7 @@
           <mat-form-field>
             <mat-label>Skills</mat-label>
             <input matInput placeholder="Skills" type="text" [matAutocomplete]="autocompleteSkills"
-              formControlName="skill" >
+              formControlName="skill">
             <mat-autocomplete #autocompleteSkills="matAutocomplete">
               <mat-option *ngFor="let autocomplete_skill of autocomplete_skills" [value]="autocomplete_skill.skill"
                 (onSelectionChange)="addSkills(autocomplete_skill)">
@@ -55,23 +55,24 @@
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
-          <div *ngIf="userSkillsList.length > 0 ? userSkillsList.length > 0 : skillUrlParams.length > 0 " class="skills">
-              <simple-tag *ngFor="let skillData of userSkillsList; let i = index" type="gray" removeTag="true"
-                title="{{skillData.skill}}" (click)="removeUserSkillsData(i)"></simple-tag>
-                 <simple-tag *ngFor="let skillData of skillUrlParams; let i = index" type="gray" removeTag="true"
-                title="{{skillData}}" (click)="removeSkillUrlParams(i)"></simple-tag>
-            </div>
+          <div *ngIf="userSkillsList.length > 0 ? userSkillsList.length > 0 : skillUrlParams.length > 0 "
+            class="skills">
+            <simple-tag *ngFor="let skillData of userSkillsList; let i = index" type="gray" removeTag="true"
+              title="{{skillData.skill}}" (click)="removeUserSkillsData(i)"></simple-tag>
+            <simple-tag *ngFor="let skillData of skillUrlParams; let i = index" type="gray" removeTag="true"
+              title="{{skillData}}" (click)="removeSkillUrlParams(i)"></simple-tag>
+          </div>
         </div>
         <div class="filter-card">
           <mat-form-field>
             <mat-label>Minimum Salary</mat-label>
-            <input matInput placeholder="Minimum Salary" type="number" formControlName="minSal" >
+            <input matInput placeholder="Minimum Salary" type="number" formControlName="minSal">
           </mat-form-field>
         </div>
         <div class="filter-card">
           <mat-form-field>
             <mat-label>Position Level</mat-label>
-            <mat-select class="arrow" formControlName="position" >
+            <mat-select class="arrow" formControlName="position">
               <mat-option value=''></mat-option>
               <mat-option *ngFor="let position of positionLevel" value="{{position}}">{{position}}
               </mat-option>
@@ -81,7 +82,7 @@
         <div class="filter-card">
           <mat-form-field>
             <mat-label>Education Level</mat-label>
-            <mat-select class="arrow" formControlName="education"  >
+            <mat-select class="arrow" formControlName="education">
               <mat-option value=''></mat-option>
               <mat-option *ngFor="let education of educationLevel" value="{{educationLevel.indexOf(education)}}">
                 {{education}}
@@ -92,7 +93,7 @@
         <div class="filter-card">
           <mat-form-field>
             <mat-label>Job Type</mat-label>
-            <mat-select class="arrow" formControlName="job" >
+            <mat-select class="arrow" formControlName="job">
               <mat-option value=''></mat-option>
               <mat-option *ngFor="let jobtype of jobType" value="{{jobtype}}">{{jobtype}}
               </mat-option>
@@ -116,7 +117,7 @@
           <mat-form-field>
             <mat-label>Industry </mat-label>
             <input matInput placeholder="Industry" type="text" [matAutocomplete]="autocompleteIndustry"
-              formControlName="industry" >
+              formControlName="industry">
             <mat-autocomplete #autocompleteIndustry="matAutocomplete">
               <mat-option *ngFor="let industry of autocomplete_additional_industries" [value]="industry.industry_name"
                 (onSelectionChange)="onChangeIndustry(industry)">
@@ -129,7 +130,7 @@
           <mat-form-field>
             <mat-label>Company </mat-label>
             <input matInput placeholder="Company" type="text" [matAutocomplete]="autocompleteCompany"
-              formControlName="company" >
+              formControlName="company">
             <mat-autocomplete #autocompleteCompany="matAutocomplete">
               <mat-option *ngFor="let company of autocomplete_companies" [value]="company.company_name">
                 <span>{{company.company_name}}</span>
@@ -141,7 +142,7 @@
           <mat-form-field>
             <mat-label>School</mat-label>
             <input matInput placeholder="School" type="text" [matAutocomplete]="autocompleteSchool"
-              formControlName="school" >
+              formControlName="school">
             <mat-autocomplete #autocompleteSchool="matAutocomplete">
               <mat-option *ngFor="let school of autocomplete_school" [value]="school.school_name"
                 (onSelectionChange)="onChangeSchool(school)">
@@ -154,7 +155,7 @@
           <mat-form-field>
             <mat-label>Recruiter</mat-label>
             <input matInput placeholder="Recruiter" type="text" [matAutocomplete]="autocompleterecruiter"
-              formControlName="recruiter" >
+              formControlName="recruiter">
             <mat-autocomplete #autocompleterecruiter="matAutocomplete">
               <mat-option *ngFor="let recruiter of autocomplete_recruiter"
                 value="{{recruiter.first_name }} {{  recruiter.last_name}}  "
@@ -181,10 +182,8 @@
     <!-- Job Position Card -->
 
     <div class="position-list-container">
-
       <div class="select-style">
         <div class="selectall">
-
           <round-checkbox id="test" title="Select All" [checked]="selectedAllFlag" (statusChange)="selectAll($event)">
           </round-checkbox>
           <action-button class="position-search-reload-result" color="primary" title="Apply Selected"
@@ -194,7 +193,7 @@
             (click)="saveSelected()">
           </action-button>
           <action-button class="position-search-reload-result" color="primary" title="Reload Results"
-            (click)="preLoadDataObject = {}; getJobData()"></action-button>
+            (click)="reloadResult()"></action-button>
           <div class="drop-buttons">
             <span class="dot-icon">
               <button mat-button [matMenuTriggerFor]="menu" disableRipple><img src="assets/icons/ic_more_vertical.svg">
@@ -202,12 +201,10 @@
               <mat-menu #menu="matMenu">
                 <button mat-menu-item (click)="applySelected()">Apply Selected</button>
                 <button mat-menu-item (click)="saveSelected();">Save Selected</button>
-                <button mat-menu-item (click)="getJobData()">Reload Results</button>
+                <button mat-menu-item (click)="reloadResult()">Reload Results</button>
               </mat-menu>
             </span>
           </div>
-
-
         </div>
         <div class="sort-item">
           <mat-label>Sort by</mat-label>&nbsp;
@@ -218,18 +215,16 @@
           </mat-form-field>
         </div>
       </div>
-
       <div *ngFor="let job of positionList ">
-
         <div class="row" [ngClass]="{'selected': job.selected}">
           <round-checkbox id="test" [checked]="job.selected"
             (statusChange)="job.selected = !job.selected;selectedAllFlag=false;"></round-checkbox>
-          <h1  [routerLink]="['/position-info/',job.position_id]" >{{job.position}} </h1>
+          <h1 [routerLink]="['position-info/',job.position_id]">{{job.position}} </h1>
           <div class="position-right">
             <div class="heart-icon">
               <img *ngIf="!appliedJobsMap[job.position_id] && !savedJobsMap[job.position_id]" (click)="saveJob([job])"
                 title="Save Job" src="assets/icons/ic_heart.svg" class="before-heart-icon">
-              <img *ngIf="!appliedJobsMap[job.position_id] && savedJobsMap[job.position_id]" (click)="unSaveJob(job);"
+              <img *ngIf="!appliedJobsMap[job.position_id] && savedJobsMap[job.position_id]" (click)="unSaveJob([job]);"
                 title="Saved Job" src="assets/icons/ic_heart_circle.svg" class="after-heart-icon">
             </div>
             <span class="right-align">
@@ -244,7 +239,8 @@
               <button mat-button [matMenuTriggerFor]="menu" disableRipple><img src="assets/icons/ic_more_vertical.svg">
               </button>
               <mat-menu #menu="matMenu">
-                <button mat-menu-item routerLink="../application/{{this.appliedJobsMap[job.position_id]}}">See
+                <button mat-menu-item
+                  (click)="routerNavigate(this.appliedJobsMap[job.position_id], job.position_id)">See
                   Application</button>
                 <button mat-menu-item (click)="withdrawApplication(job.position_id)">Withdraw
                   Application</button>
@@ -256,21 +252,21 @@
               <ul>
                 <li>
                   <img class="img-style" src="assets/icons/ic_company.svg">
-                  <span class="image" [routerLink]="['/company-info/', job.company_id]">
+                  <span class="image"[routerLink]="['/company-info/']"
+                  [queryParams]="{id: job.company_id}">
                     {{job.company_name}}</span>
                 </li>
                 <li>
                   <img src="assets/icons/ic_location.svg">
-                  <span class="image"
-                    *ngIf="job.locations; else noLocation">
+                  <span class="image" *ngIf="job.locations; else noLocation">
                     <span *ngFor="let location of job.locations | slice : 0 : 1;">
                       <span *ngIf="location.city">{{location.city}},&nbsp;</span>
-                      <span *ngIf="location.state" >{{ location.state }},&nbsp;</span>
+                      <span *ngIf="location.state">{{ location.state }},&nbsp;</span>
                       <span>{{location.country }} <span *ngIf="job.locations?.length > 1"> +
-                      {{job.locations?.length-1}} locations </span>
+                          {{job.locations?.length-1}} locations </span>
                       </span>
+                    </span>
                   </span>
-                </span>
                   <ng-template #noLocation>
                     <span>N/A</span>
                   </ng-template>
@@ -308,7 +304,6 @@
               </mat-grid-tile>
             </mat-grid-list>
             <div class="main-card">
-
               <ul type="none">
                 <li>
                   <h5 for="skill_required">Skills Required<span>{{ job.minimum_skills?.length}}</span>
@@ -317,15 +312,12 @@
                     *ngIf="job.minimum_skills; else noSkills">
                     <div class="skills-preferred-m" *ngFor="let min_skill of job.minimum_skills ">
                       <simple-tag type="gray" title="{{min_skill.skill}}" ellipseTag="true"
-                        value="{{min_skill.skill_level}}" [matTooltip]="SkillLevelDescription[min_skill.skill_level].title + SkillLevelDescription[min_skill.skill_level].description"
-                        [matTooltipShowDelay]=500 (click)="openSkilladdDialog(min_skill)">
+                        value="{{min_skill.skill_level}}" (click)="openSkilladdDialog(min_skill)"
+                        [matTooltip]="SkillLevelDescription[min_skill.skill_level].title + SkillLevelDescription[min_skill.skill_level].description"
+                        [matTooltipShowDelay]=500>
                       </simple-tag>
-
                     </div>
-
                   </div>
-
-
                 </li>
                 <li class="skill-chips">
                   <h5 class="skill-label" for="skill_preferred">Skills Preferred
@@ -334,12 +326,12 @@
                     *ngIf="job.preferred_skills; else noSkills">
                     <div class="skills-preferred-m skill-prefer" *ngFor="let preskill of job.preferred_skills">
                       <simple-tag type="gray" title="{{preskill.skill}}" ellipseTag="true"
-                        value="{{preskill.skill_level}}" [matTooltip]="SkillLevelDescription[preskill.skill_level].title + SkillLevelDescription[preskill.skill_level].description"
-                        [matTooltipShowDelay]=500 (click)="openSkilladdDialog(preskill)">
+                        value="{{preskill.skill_level}}" (click)="openSkilladdDialog(preskill)"
+                        [matTooltip]="SkillLevelDescription[preskill.skill_level].title + SkillLevelDescription[preskill.skill_level].description"
+                        [matTooltipShowDelay]=500>
                       </simple-tag>
                     </div>
                   </div>
-
                 </li>
               </ul>
               <ng-template #noSkills>
@@ -348,42 +340,45 @@
                 </ul>
               </ng-template>
             </div>
-
             <div *ngIf="job.showMoreFlag">
               <div class="qualification-level-m">
                 <h5>Qualification Level Estimate Breakdown</h5>
-
                 <simple-tag *ngIf="job.true_fitscore_info?.skills_weight" type="gray" title="Skills Match"
-                  ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.skills_fitscore)}}">
-                </simple-tag>
-                <simple-tag *ngIf="job.true_fitscore_info?.experience_weight" type="gray" title="Experience Match"
-                  ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.experience_fitscore)}}">
-                </simple-tag>
-                <simple-tag *ngIf="job.true_fitscore_info?.education_weight" type="gray" title="Education Match"
-                  ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.education_fitscore)}}">
-                </simple-tag>
-                <simple-tag *ngIf="job.true_fitscore_info?.interests_weight" type="gray" title="Interests Match"
-                  ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.interests_fitscore)}}">
+                  ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.skills_fitscore)}}"
+                  matTooltip="Skills Match: {{(job.true_fitscore_info?.skills_fitscore*100) | number : '2.0'}}%"
+                  [matTooltipShowDelay]=500>
                 </simple-tag>
                 <simple-tag *ngIf="job.minimum_skills" type="gray" title="Required Skills Match" ellipseTag="true"
-                  value="{{mathFloor(6*job.true_fitscore_info?.required_skills_fitscore)}}">
+                  value="{{mathFloor(6*job.true_fitscore_info?.required_skills_fitscore)}}"
+                  matTooltip="Required Skills Match: {{(job.true_fitscore_info?.required_skills_fitscore*100) | number : '2.0'}}%"
+                  [matTooltipShowDelay]=500>
                 </simple-tag>
-
+                <simple-tag *ngIf="job.true_fitscore_info?.experience_weight" type="gray" title="Experience Match"
+                  ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.experience_fitscore)}}"
+                  matTooltip="Experience Match: {{(job.true_fitscore_info?.experience_fitscore*100) | number : '2.0'}}%"
+                  [matTooltipShowDelay]=500>
+                </simple-tag>
+                <simple-tag *ngIf="job.true_fitscore_info?.education_weight" type="gray" title="Education Match"
+                  ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.education_fitscore)}}"
+                  matTooltip="Education Match: {{(job.true_fitscore_info?.education_fitscore*100) | number : '2.0'}}%"
+                  [matTooltipShowDelay]=500>
+                </simple-tag>
+                <simple-tag *ngIf="job.true_fitscore_info?.interests_weight" type="gray" title="Interests Match"
+                  ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.interests_fitscore)}}"
+                  matTooltip="Interests Match: {{(job.true_fitscore_info?.interests_fitscore*100) | number : '2.0'}}%"
+                  [matTooltipShowDelay]=500>
+                </simple-tag>
                 <p
                   *ngIf="!job.true_fitscore_info ||  (job.true_fitscore_info && !job.true_fitscore_info.skills_weight && !job.true_fitscore_info.experience_weight && !job.true_fitscore_info.education_weight && !job.true_fitscore_info.interests_weight && !job.minimum_skills)">
                   N/A
                 </p>
               </div>
-
-
               <div class="jobdesc-space">
-
                 <h5>Job Description</h5>
                 <p>
                   {{job.position_desc}}
                 </p>
               </div>
-
             </div>
           </div>
           <div class="show-button">
@@ -391,9 +386,7 @@
                     'Show Less'}}" color="primary" (click)="job.showMoreFlag = !job.showMoreFlag"></action-button>
             &nbsp;&nbsp;
             <action-button type="text" title="Go to Details Page" color="primary"
-            [routerLink]="['/position-info/',job.position_id]" *ngIf="job.showMoreFlag"></action-button>
-
-
+              [routerLink]="['position-info/',job.position_id]" *ngIf="job.showMoreFlag"></action-button>
           </div>
         </div>
       </div>
@@ -412,9 +405,5 @@
         </ul>
       </div>
     </div>
-
-
-
-    </div>
-
+  </div>
 </div>

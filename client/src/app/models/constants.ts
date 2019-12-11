@@ -404,6 +404,131 @@ export const NavMenus = {
       id: 'application-template',
       title: 'Application Template',
       items: []
+    },
+    {
+      id: 'references',
+      title: 'Reference Requests',
+      items: []
+    }
+  ]
+};
+export const ApplicationNavMenus = {
+  application: [
+    {
+      id: 'letter',
+      title: 'Cover Letter',
+      items: []
+    },
+    {
+      id: 'profile',
+      title: 'Profile Information',
+      items: [
+        {
+          id: 'gen-info',
+          title: 'General Information',
+        },
+        {
+          id: 'qualification-level',
+          title: 'Qualification Level Estimate',
+        },
+        {
+          id: 'matched-skills',
+          title: 'Matched Skills',
+        },
+        {
+          id: 'matched-interest',
+          title: 'Matched Interests',
+        },
+        {
+          id: 'intro',
+          title: 'Introduction',
+        },
+        {
+          id: 'education',
+          title: 'Education',
+        },
+        {
+          id: 'work',
+          title: 'Work Experience',
+        },
+        {
+          id: 'skills',
+          title: 'Skills',
+        },
+        {
+          id: 'interest',
+          title: 'Interests',
+        },
+        {
+          id: 'publications',
+          title: 'Publications',
+        },
+        {
+          id: 'project',
+          title: 'Projects',
+        }
+      ]
+    },
+    {
+      id: 'template-information',
+      title: 'Template Information',
+      items: []
+    },
+    {
+      id: 'references',
+      title: 'References',
+      items: []
+    },
+    {
+      id: 'message',
+      title: 'Messages',
+      items: []
+    },
+    {
+      id: 'position-info',
+      title: 'Position Information',
+      items: [
+        {
+          id: 'information',
+          title: 'Position Information',
+        },
+        {
+          id: 'qualification_level_breakdown',
+          title: 'Qualification Level Estimate',
+        },
+        {
+          id: 'skills',
+          title: 'Missing/Matching Skills',
+        },
+        {
+          id: 'matched_interest',
+          title: 'Matched Interest',
+        },
+        {
+          id: 'description',
+          title: 'Job Description',
+        },
+        {
+          id: 'qualification',
+          title: 'Preferred Education',
+        },
+        {
+          id: 'experience',
+          title: 'Preferred Experience',
+        },
+        {
+          id: 'preferred_skills',
+          title: 'Skills',
+        },
+        {
+          id: 'interest',
+          title: 'Preferred Interests',
+        },
+        {
+          id: 'school',
+          title: 'School Restrictions',
+        }
+      ]
     }
   ]
 };
@@ -427,13 +552,13 @@ export const MILITARY_STATUS_OPTIONS = [
 
 
 export const SkillLevelDescription = {
- 0 : {'title': 'No proficiency : ', 'description' : 'no training and no experience'},
- 1 : {'title': 'Limited proficiency : ' , 'description' : 'some training or some experience'},
- 2 : {'title': 'Moderately proficient : ', 'description' : 'moderate training and moderate experience, though not enough to be considered competent (if someone were to hire you based on this skill you might need substantial training/assistance)'},
- 3 : {'title': 'Proficient : ', 'description' : 'sufficient training or experience to be considered competent (if someone were to hire you based on this skill you might need moderate training/assistance)'},
- 4 : {'title': 'Highly proficient : ', 'description' : 'substantial training or experience (if someone were to hire you based on this skill, you would need minimal training/assistance)'},
- 5 : {'title': 'Extremely proficient : ', 'description' : 'substantial training and experience in the subject, familiarity with industry standards, and some understanding of abstract or esoteric subject matter'},
- 6 : {'title': 'Specialized : ', 'description' :  'extensive training, possible research experience, and substantial work experience. This level is usually reserved for people with at least 5 years of academic or industry experience or with MS or Ph.D levels of understanding'}
+  0: { 'title': 'No proficiency: ', 'description': 'no training and no experience' },
+  1: { 'title': 'Limited proficiency: ', 'description': 'some training or some experience' },
+  2: { 'title': 'Moderately proficient: ', 'description': 'moderate training and moderate experience, though not enough to be considered competent (if someone were to hire you based on this skill you might need substantial training/assistance)' },
+  3: { 'title': 'Proficient: ', 'description': 'sufficient training or experience to be considered competent (if someone were to hire you based on this skill you might need moderate training/assistance)' },
+  4: { 'title': 'Highly proficient: ', 'description': 'substantial training or experience (if someone were to hire you based on this skill, you would need minimal training/assistance)' },
+  5: { 'title': 'Extremely proficient: ', 'description': 'substantial training and experience in the subject, familiarity with industry standards, and some understanding of abstract or esoteric subject matter' },
+  6: { 'title': 'Specialized: ', 'description': 'extensive training, possible research experience, and substantial work experience. This level is usually reserved for people with at least 5 years of academic or industry experience or with MS or Ph.D levels of understanding' }
 };
 
 export const PositionLevel = [
@@ -464,6 +589,15 @@ export const EducationLevel = [
   'J.D.',
   'Ph.D.'
 ];
+export const ApplicationStatus = [
+  { 'title': 'Accepted', 'value': 'accepted' },
+  { 'title': 'In Review', 'value': 'in_review' },
+  { 'title': 'Interviewing', 'value': 'interviewing' },
+  { 'title': 'Wait Listed', 'value': 'wait_listed' },
+  { 'title': 'Rejected', 'value': 'rejected' },
+  { 'title': 'Offer Sent', 'value': 'offer_sent' },
+  { 'title': 'Saved', 'value': 'saved' }
+];
 
 
 export const SortBy = [
@@ -472,6 +606,14 @@ export const SortBy = [
   { 'title': 'Popularity', 'value': 'popularity' }
 ];
 
+export const ApplicationSortBy = [
+  { 'title': 'Application Date', 'value': 'application_date' },
+  { 'title': 'Salary', 'value': 'salary' },
+  { 'title': 'Qualification Level', 'value': 'qualification_level' },
+  { 'title': 'Application Deadline', 'value': 'application_deadline' },
+  { 'title': 'Popularity', 'value': 'popularity' }
+
+];
 
 export const QualificationLevel = [
   { 'title': 'Unqualified', 'value': 'unqualified' },
@@ -481,9 +623,20 @@ export const QualificationLevel = [
   { 'title': 'Extermely Qualified', 'value': 'extremely_qualified' }
 
 ];
+export const interestLevel = [
+  { 'title': '0 - Interested but still looking', 'value': '0' },
+  { 'title': '1 - Interested', 'value': '1' },
+  { 'title': '2 - Extremely interested', 'value': '2' },
+  { 'title': '3 - Excited to apply', 'value': '3' },
+  { 'title': '4 - Among top choices', 'value': '4' },
+  { 'title': '5 - Second choice', 'value': '5' },
+  { 'title': '6 - First choice', 'value': '6' }
+];
 
 export const positionListLimit = 7;
 export const careerFairsListLimit = 7;
+export const applicationListLimit = 7;
+
 
 export const positionSearchMessages = {
   'APPLICATION_SAVE_SUCCESS': 'Application submission successful.',
@@ -497,4 +650,7 @@ export const ApplicationType = [
   'Rolling',
   'Regular Decision'
 ];
+
+export const DisplayItemsLimit = 7;
+
 

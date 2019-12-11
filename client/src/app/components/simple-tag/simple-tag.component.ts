@@ -14,6 +14,7 @@ export class SimpleTagComponent implements OnInit {
   @Input() active = false;
   @Input() removeTag = false;
   @Input() isControl = false;
+  @Input() removeActive;
   @Output() levelChanged = new EventEmitter();
   @Output() removeClick = new EventEmitter();
 
@@ -37,7 +38,7 @@ export class SimpleTagComponent implements OnInit {
   }
 
   onSelectLevel(level: number) {
-    if (this.isControl) {
+    if (this.isControl || this.removeActive) {
       this.levelChanged.emit(level + 1);
     }
   }

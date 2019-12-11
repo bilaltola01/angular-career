@@ -1,0 +1,32 @@
+<ng-container *ngIf="isJobLoading">
+  <div class="loading">
+    <mat-spinner></mat-spinner>
+    <h4>Loading...</h4>
+  </div>
+</ng-container>
+<div class="application-references">
+  <div class="row">
+
+
+    <h1 class="title">References</h1>
+    <div class="edit-title">
+        <a (click)="openReferenceRequestDialog()">Request Reference</a>
+      </div>
+    <p>This list of employees/recruiters have vouched for this candidate.</p>
+    <div class="references-detail">
+      <ul>
+        <li *ngFor="let reference of referenceData">
+          <div class="application-references-img">
+            <img alt="user photo" src="{{reference?.photo ? reference?.photo : 'assets/icons/no_photo.png'}}">
+          </div>
+          <div>
+            <div class="application-references-content">
+              <h6>{{reference.first_name }} {{ reference.last_name}}</h6>
+              <p>Los Angeles, California, USA</p>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
