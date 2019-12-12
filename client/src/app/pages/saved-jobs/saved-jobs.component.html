@@ -232,8 +232,9 @@
               <ul>
                 <li>
                   <img class="img-style" src="assets/icons/ic_company.svg">
-                  <span class="image" [routerLink]="['/company-info/']"
-                  [queryParams]="{id: job.company_id}">
+                  <span class="image" [routerLink]="['/company-info']"
+                  [queryParams]="{id: job.company_id, tabIndex: 0,
+                    showBackButton: false}">
                     {{job.company_name}}</span>
                 </li>
                 <li>
