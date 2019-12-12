@@ -2,9 +2,13 @@ import { Component, OnInit, } from '@angular/core';
 import { PositionService, CartService, AlertsService, AlertType, ApplicationService, UserService, ScoreService, CompanyService, HelperService } from 'src/app/services';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatchingService } from 'src/app/services/matching.service';
-import { SkillLevelDescription } from 'src/app/models';
+import { SkillLevelDescription, Skill } from 'src/app/models';
 import { MatDialog } from '@angular/material/dialog';
 import { SkillDescriptionPopupComponent } from 'src/app/components/skill-description-popup/skill-description-popup.component';
+import { FormGroup, FormControl } from '@angular/forms';
+import { ThrowStmt } from '@angular/compiler';
+import { filter } from 'rxjs/operators';
+// import value from '*.json';
 
 @Component({
   selector: 'app-application-position-information',
@@ -32,12 +36,16 @@ export class ApplicationPositionInformationComponent implements OnInit {
   calculatedQualificationLevel: string;
   Object = Object;
   applicationId;
+  autocomplete_skills = [] ;
+  skillsSearchForm: FormGroup;
+  temp_skill;
   constructor(private positionService: PositionService,
     private matchingService: MatchingService, private helperService: HelperService,
     private alertsService: AlertsService,
     public dialog: MatDialog,
     private router: Router,
     private userService: UserService) {
+      this.initSkillsSearchForm();
   }
 
   ngOnInit() {
@@ -57,6 +65,31 @@ export class ApplicationPositionInformationComponent implements OnInit {
     this.breakpoint = (window.innerWidth <= 500) ? 2 : 4;
   }
 
+  initSkillsSearchForm() {
+    this.autocomplete_skills = [];
+    this.temp_skill = null;
+    this.skillsSearchForm = new FormGroup({
+      skills: new FormControl('')
+    });
+    this.skillsSearchForm.get('skills').valueChanges.subscribe(
+      (skill) => {
+        if (skill && this.helperService.checkSpacesString(skill)) {
+          this.autocomplete_skills = [...this.positionName[0].preferred_skills, ...this.positionName[0].minimum_skills];
+            this.autocomplete_skills = this.autocomplete_skills.filter(value => value.skill.toLocaleLowerCase().includes(skill));
+        } else {
+          this.autocomplete_skills = [];
+        }
+      }
+    );
+  }
+  addSkills(skill) {
+this.temp_skill = skill;
+    this.autocomplete_skills = [];
+  }
+  editSkillDone() {
+    this.temp_skill = null;
+    this.autocomplete_skills = [];
+  }
   getDate(post_date) {
     this.helperService.convertToDays(post_date);
   }

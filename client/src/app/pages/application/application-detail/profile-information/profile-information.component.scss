@@ -201,6 +201,39 @@ $profile-form-field-mt: 30px;
             display: block;
             margin: 20px auto 10px;
           }
+          .form-field {
+            width: 80%;
+            max-width: 615px;
+            min-width: 240px;
+            border: solid 1px $mat-form-border-color;
+            border-radius: 5px;
+            padding: 0;
+            &.search {
+              border: none;
+              padding: 0;
+              margin-bottom: 15px;
+              mat-form-field {
+                width: 100%;
+                background-color: $third-bg-color;
+                border-radius: 25px;
+              }
+            }
+            &.textarea {
+              padding: 10px 20px 5px 20px;
+            }
+          }
+          .temp-skill {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            simple-tag {
+              margin-bottom: 0px;
+            }
+            mat-icon {
+              color: map-get($md-cfaccent, 100);
+            }
+          }
         }
 
         &.position-experience-detail {
@@ -242,29 +275,15 @@ $profile-form-field-mt: 30px;
           }
         }
         &.position-required-skills-detail {
-          h3 {
-            float: left;
-          }
-          & .show-button {
-            float: right;
-            margin-top: -22px;
-          }
-          img {
-            margin-top: -3px;
-            &.question {
-              margin-top: 6px;
-              margin-left: 5px;
-            }
-            &.align-more-img {
-              margin-top: -7px;
-              margin-left: 0;
-            }
-            &.question-icon {
-              margin-top: 4px;
-              cursor: pointer;
-              margin-left: 5px;
+          .qualification-heading {
+            display: flex;
+            align-items: center;
+            h3 {
+              margin-right: 7px;
+              margin-bottom: 0px;
             }
           }
+
           & .education-level-m {
             & img {
               width: 30px;
@@ -320,7 +339,6 @@ $profile-form-field-mt: 30px;
 
       & .mat-icon {
         vertical-align: middle;
-        margin-right: 20px;
       }
 
       h5 {
@@ -596,8 +614,9 @@ $profile-form-field-mt: 30px;
   :host {
     .application-profile-detail-container {
       float: none;
-      width: 100%;
+      width: 95%;
       padding-bottom: 50px;
+      margin: 0px auto;
       .comman_search_filter {
         position: fixed;
         margin: 0;
@@ -739,8 +758,9 @@ $profile-form-field-mt: 30px;
   :host {
     .application-profile-detail-container {
       float: none;
-      width: 100%;
+      width: 90%;
       padding-bottom: 50px;
+      margin: 0px auto;
       .comman_search_filter {
         position: fixed;
         margin: 0;

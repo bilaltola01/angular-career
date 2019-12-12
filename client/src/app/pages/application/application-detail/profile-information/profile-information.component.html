@@ -274,9 +274,32 @@
         </div>
         <div class="row position-eductaion-detail position-required-skills-detail" id="skills"
           *ngIf="userSkillsList?.length > 0">
-          <h3> Skills </h3>
-          <img src="assets/icons/ic_question.svg" class="question" (click)="openSkillDescriptionDialog()">
+
+          <div class="qualification-heading">
+              <h3> Skills </h3>
+              <img src="assets/icons/ic_question.svg" class="question" (click)="openSkillDescriptionDialog()">
+
+            </div>
+
+
           <div class="education-level-m">
+              <div class="form-field search" [formGroup]="skillsSearchForm" autocomplete="off">
+                  <mat-form-field appearance="standard" class="search">
+                    <mat-icon matSuffix>search</mat-icon>
+                    <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompleteSkills"
+                      formControlName="skills" [value]="autocompleteSkills">
+                    <mat-autocomplete #autocompleteSkills="matAutocomplete">
+                      <mat-option *ngFor="let autocomplete_skill of autocomplete_skills" [value]="autocomplete_skill?.skill" (onSelectionChange)="addSkills(autocomplete_skill)">
+                        <span>{{autocomplete_skill.skill}}</span>
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </div>
+                <div *ngIf="temp_skill" class="temp-skill">
+                    <simple-tag type="gray" title="{{temp_skill.skill}}" ellipseTag="true"  value="{{temp_skill.skill_level}}" >
+                    </simple-tag>
+                    <mat-icon (click)="editSkillDone()">cancel</mat-icon>
+                  </div>
             <h5>Skills <span>{{ userSkillsList ? userSkillsList.length : '0' }}</span></h5>
             <div class="skills" *ngIf="displayItemsLimit; let limit">
               <ng-container *ngFor="let skill of userSkillsList; let i = index">
