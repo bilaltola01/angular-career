@@ -29,7 +29,7 @@
             </div>
 
             <h5 [routerLink]="['/company-info/']"
-            [queryParams]="{id: info.company_id}">{{info.company_name}}</h5>
+            [queryParams]="{id: info.company_id, tabIndex: 0, showBackButton: false}">{{info.company_name}}</h5>
 
             <img src="assets/icons/ic_location.svg">
             <span class="company-address"
@@ -95,8 +95,8 @@
             <div class="show-button2">
               <action-button routerLink="." type="text" title="{{!info.showMoreFlag ? 'Show More' :
               'Show Less'}}" color="primary" (click)="info.showMoreFlag = !info.showMoreFlag"></action-button>
-              <action-button class="company-go-detail" type="text" [routerLink]="['/company-info/']"
-              [queryParams]="{id: info.company_id}"
+              <action-button class="company-go-detail" type="text" [routerLink]="['/company-info']"
+              [queryParams]="{id: info.company_id, tabIndex: 0, showBackButton: false}"
                 title="Details Page" color="primary" *ngIf="info.showMoreFlag">
               </action-button>
             </div>
@@ -177,8 +177,8 @@
               <ul>
                 <li>
                   <img class="img-style" src="assets/icons/ic_company.svg">
-                  <span class="image"[routerLink]="['/company-info/']"
-                  [queryParams]="{id: info.company_id}">
+                  <span class="image"[routerLink]="['/company-info']"
+                  [queryParams]="{id: info.company_id, tabIndex: 0, showBackButton: false}">
                     {{info.company_name}}</span>
                 </li>
                 <li>

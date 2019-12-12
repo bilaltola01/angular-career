@@ -9,7 +9,7 @@ export const savedJobsRouting: Routes = [
     component: SavedJobsComponent
   },
   {
-    path: 'position-info/:position_id',
+    path: 'position-info',
     component: PositionsDetailsComponent
     // canActivate: [AuthGuard]
   },

@@ -350,7 +350,9 @@ export class CreateCompanyComponent implements OnInit {
       case 5:
         if (this.isEdit) {
           this.router.navigate(['/company-info/'], {queryParams: {
-            id: this.company.company_id
+            id: this.company.company_id,
+            tabIndex: 0,
+            showBackButton: false
           }});
         } else {
           this.current_tab = this.tab_menus[0];

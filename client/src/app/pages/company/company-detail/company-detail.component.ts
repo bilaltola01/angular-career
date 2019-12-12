@@ -176,13 +176,15 @@ export class CompanyDetailComponent implements OnInit {
     switch (this.tabIndex) {
       case 0:
         this.loading = false;
-        this.router.navigate(['/company-info'], {
-          queryParams: {
-            id: this.company_id,
-            tabIndex: this.tabIndex,
-            showBackButton: this.showBackButton
-          }
-        });
+        if (parseInt(this.route.snapshot.queryParamMap.get('tabIndex'), 10) !== 0) {
+          this.router.navigate(['/company-info'], {
+            queryParams: {
+              id: this.company_id,
+              tabIndex: this.tabIndex,
+              showBackButton: this.showBackButton
+            }
+          });
+        }
         break;
       case 1:
         this.loadCompanyPositionsInfo();
