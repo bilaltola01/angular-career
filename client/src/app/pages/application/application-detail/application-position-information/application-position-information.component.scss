@@ -86,38 +86,74 @@ $profile-form-field-mt: 30px;
             margin: 20px auto 0;
             clear: both;
             .form-field {
-              width: 80%;
+              width: 100%;
               max-width: 615px;
-              min-width: 240px;
               border: solid 1px $mat-form-border-color;
               border-radius: 5px;
               padding: 0;
-              margin-bottom: 15px;
+              box-sizing: border-box;
               &.search {
                 border: none;
                 padding: 0;
+                margin-top: 10px;
+                margin-bottom: 10px;
                 mat-form-field {
                   width: 100%;
                   background-color: $third-bg-color;
                   border-radius: 25px;
+                  mat-icon {
+                    margin-right: 0 !important;
+                  }
                 }
               }
-              &.textarea {
-                padding: 10px 20px 5px 20px;
-              }
             }
+
             .temp-skill {
               margin-top: 10px;
-              display: flex;
-              align-items: center;
-              margin-bottom: 15px;
-              simple-tag {
-                margin-bottom: 0px;
+              margin-bottom: 20px;
+              @include flex(row, center, flex-start);
+              & > simple-tag {
+                margin-top: 10px !important;
+                margin-right: 10px !important;
               }
               mat-icon {
                 color: map-get($md-cfaccent, 100);
               }
             }
+
+            // .form-field {
+            //   width: 80%;
+            //   max-width: 615px;
+            //   min-width: 240px;
+            //   border: solid 1px $mat-form-border-color;
+            //   border-radius: 5px;
+            //   padding: 0;
+            //   margin-bottom: 15px;
+            //   &.search {
+            //     border: none;
+            //     padding: 0;
+            //     mat-form-field {
+            //       width: 100%;
+            //       background-color: $third-bg-color;
+            //       border-radius: 25px;
+            //     }
+            //   }
+            //   &.textarea {
+            //     padding: 10px 20px 5px 20px;
+            //   }
+            // }
+            // .temp-skill {
+            //   margin-top: 10px;
+            //   display: flex;
+            //   align-items: center;
+            //   margin-bottom: 15px;
+            //   simple-tag {
+            //     margin-bottom: 0px;
+            //   }
+            //   mat-icon {
+            //     color: map-get($md-cfaccent, 100);
+            //   }
+            // }
           }
 
           &.position-experience-detail {

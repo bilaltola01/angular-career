@@ -70,14 +70,10 @@ export class ProfileInformationComponent implements OnInit {
   }
   initSkillsSearchForm() {
     this.autocomplete_skills = [];
-
     this.temp_skill = null;
-
     this.skillsSearchForm = new FormGroup({
       skills: new FormControl('')
     });
-
-
     this.skillsSearchForm.get('skills').valueChanges.subscribe(
 
       (skill) => {
@@ -92,6 +88,7 @@ export class ProfileInformationComponent implements OnInit {
   addSkills(skill) {
 this.temp_skill = skill;
     this.autocomplete_skills = [];
+    this.skillsSearchForm.get('skills').setValue('');
   }
   editSkillDone() {
     this.temp_skill = null;
