@@ -118,9 +118,9 @@
     border-color: rgba(#707070, 0.1);
   }
   p {
-    color: rgba(map-get($md-cfaccent, 500), 0.74);
+    color: rgba(map-get($md-cfaccent, 500), 0.84);
     &.short-desc {
-      color: rgba(map-get($md-cfaccent, 500), 0.74);
+      color: rgba(map-get($md-cfaccent, 500), 0.84);
     }
   }
   .detail-info {
