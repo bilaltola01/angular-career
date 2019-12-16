@@ -33,7 +33,7 @@ export class RecruiterGuard implements CanActivate, CanActivateChild {
       this.userService.redirectUrl = url;
 
       //  When we hit the RoleGuard this means that the user tries to access authenticated route so we display /401
-      this.router.navigate(['/error'], {queryParams: {'status-code': 401}});
+      this.router.navigate(['/error'], {queryParams: {'status-code': 403}});
       return false;
     }
   }
