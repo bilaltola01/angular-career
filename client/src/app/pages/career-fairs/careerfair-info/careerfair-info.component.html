@@ -1,0 +1,223 @@
+<ng-container *ngIf="isJobLoading">
+    <div class="loading">
+      <mat-spinner></mat-spinner>
+      <h4>Loading...</h4>
+    </div>
+  </ng-container>
+
+  <!-- Search Bar -->
+
+  <div class="career-main">
+    <!-- careerfair-detail -->
+      <div class="careerfair-detail" *ngFor="let item of careerFairData">
+        <div class="careerfair-top-detail" >
+            <div class="careerfair-detail-left"  >
+                <img class="img-style" src="{{item.company_logo ? item.company_logo : 'assets/icons/ic_university.svg'}}">
+              </div>
+            <div class="careerfair-detail-right">
+                <div class="careerfair-detail-heading">
+                  <h1 >{{item.name_of_careerfair}}</h1>
+
+                </div>
+
+                <div class="job-top-list">
+                    <ul>
+
+                      <li>
+                        <div class="Positions-info">
+                            <p><span>{{compaiesCount}}</span> Companies</p>
+                            <p><span>{{positionsCount}}</span> Positions</p>
+                        </div>
+                      </li>
+
+                      <li>
+                        <div class="company-border">
+                          <img class="img-style company" src="assets/icons/ic_company.svg">
+                        </div>
+                        <div class="company-content">
+                          <small>Hosting Company</small>
+                          <span class="image" routerLink="">
+                            {{item.hosting_company}}</span>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="company-border">
+                          <img src="assets/icons/ic_location.svg">
+                        </div>
+                        <div class="company-content">
+                          <small>Location</small>
+                          <span class="image">
+                              {{item.location}}
+                          </span>
+                        </div>
+                      </li>
+                      <li>
+                          <div class="company-border date-bg">
+                            <div class="date">
+                              <p>{{ item.date_of_careerfair | date: 'd'}}</p>
+                              <small>{{ item.date_of_careerfair | date: 'MMM'}}</small>
+                            </div>
+                          </div>
+                          <div class="company-content">
+                            <small>Event Date</small>
+                            <span class="image">
+                              {{ item.date_of_careerfair | date: 'MMM d, yyyy'}}</span>
+                          </div>
+                        </li>
+                    </ul>
+                    <div class="overview">
+                        <small>Overview</small>
+                        <p>{{item.description}}</p>
+                    </div>
+                  </div>
+            </div>
+        </div>
+
+
+            <div class="careerfair-bottam-detail">
+              <ul>
+                <li class="active"><a *ngIf="currentPage === 'companies'" (click)="navigateToCompanies()">Companies</a></li>
+                <li>|</li>
+                <li><a *ngIf="currentPage === 'positions'" (click)="navigateToPositions()">Positions</a></li>
+              </ul>
+            </div>
+      </div>
+
+
+    <!-- Career-fair Filter Card -->
+
+    <div [formGroup]="careerFairForm" class="position-main-container" *ngIf="">
+
+      <div class="filter-container container__header tablet" [class.open]="filter_list">
+        <ng-container>
+
+          <div class="nav-title">
+            <h3 class="section-title">COMPANY SEARCH</h3>
+          </div>
+          <div class="comman_search_filter" [formGroup]="careerFairForm">
+              <div class="filter-data">
+                <mat-icon (click)="toggleTabMenuOpen()" class="filter_icon">filter_list</mat-icon>
+              </div>
+              <div class="postion-search-header">
+                <mat-form-field appearance="standard" class="search">
+                  <mat-icon matSuffix (click)="onSearchCareerfair($event)">search</mat-icon>
+                  <input matInput placeholder="Search company…." type="text" formControlName="searchCompany"
+                    (keyup.enter)="onSearchCareerfair($event)">
+                </mat-form-field>
+              </div>
+            </div>
+
+
+          <div class="nav-title">
+            <h3 class="section-title">COMPANY FILTERS</h3>
+          </div>
+
+          <div class="filter-card">
+              <mat-form-field>
+                <mat-label>Hosting Company </mat-label>
+            <input matInput placeholder="Company" type="text" [matAutocomplete]="autocompleteCompany"
+              formControlName="company">
+            <mat-autocomplete #autocompleteCompany="matAutocomplete">
+              <mat-option *ngFor="let company of autocomplete_companies" [value]="company.company_name">
+                <span>{{company.company_name}}</span>
+              </mat-option>
+            </mat-autocomplete>
+              </mat-form-field>
+          </div>
+          <div class="filter-card">
+              <mat-form-field>
+                <mat-label>Location</mat-label>
+                <input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity"
+                formControlName="location">
+              <mat-autocomplete #autocompleteCity="matAutocomplete">
+                <mat-option *ngFor="let city of autocomplete_cities" [value]="(city.city)?.split(',')[0]">
+                  <span>{{city.city}}</span>
+                </mat-option>
+              </mat-autocomplete>
+              </mat-form-field>
+          </div>
+
+          <div class="filter-card">
+            <mat-form-field>
+              <input matInput [matDatepicker]="picker" formControlName="date" [min]="minDate"
+                placeholder="Date of Career Fair">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+          <div class="filter-card">
+            <div class="side-filter-btn">
+              <action-button type="raised" color="primary" title="Apply Filters" (click)="applyFilter();">
+              </action-button>
+            </div>
+            <div class="clear-filter">
+              <action-button class="clear-btn" type="text" title="Clear Filters" (click)="clearFilter()" color="primary">
+              </action-button>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+
+      <!-- Career-fair Card -->
+
+      <div class="position-list-container" >
+        <div *ngFor="let fair of careerFairsList ">
+          <div class="row">
+            <div class="careerfair-detail-card-top">
+                <div class="careerfair-uni-img">
+                    <img class="img-style" src="{{fair.company_logo ? fair.company_logo : 'assets/icons/ic_university.svg'}}">
+                </div>
+                <div class="careerfair-uni-address">
+                  <h1>{{fair.company_name}} </h1>
+                  <p><img _ngcontent-uuq-c10="" src="assets/icons/ic_location.svg">  <span class="company-address"
+                    *ngIf="fair.hq_city_name && fair.hq_state_name && fair.hq_country_name; else noLocation">
+                    {{fair.hq_city_name}},
+                    {{fair.hq_state_name}},
+                    {{fair.hq_country_name}} </span>
+                  <ng-template #noLocation>
+                    <span class="company-address">N/A</span>
+                  </ng-template></p>
+                </div>
+            </div>
+            <div>
+              <div class="careerfair-uni-description">
+                <div class="careerfair-description-detail">
+                    <h4>Industry</h4>
+                    <p>{{fair.company_industrie ? fair.company_industrie : 'N/A'}}</p>
+                </div>
+                <div class="careerfair-description-detail">
+                    <h4>Size</h4>
+                    <p>{{parseReverseCompanySize(fair.company_size)}}</p>
+                </div>
+                <div class="careerfair-description-detail">
+                    <h4>Total Openings</h4>
+                    <p>125 Positions</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="overview">
+                <span>About Company</span>
+                <p>{{fair.company_desc}}</p>
+            </div>
+
+          </div>
+        </div>
+        <div *ngIf="!careerFairsList || careerFairsList?.length == 0">
+          <div class="row no-job">
+            No search results found.
+          </div>
+        </div>
+        <div class="pagination" *ngIf="careerFairsList?.length > 0">
+          <ul type="none">
+            <li class="large_pagination_button" (click)="pageClicked(currentPageNumber-1)">Prev. Page</li>
+            <li *ngFor="let pageNo of paginationArr" [ngClass]="{'active': pageNo == currentPageNumber}"
+              (click)="pageClicked(pageNo)">{{ pageNo }}
+            </li>
+            <li class="large_pagination_button" (click)="pageClicked(currentPageNumber+1)">Next Page</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>

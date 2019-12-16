@@ -154,6 +154,7 @@ export class CareerFairSearchComponent implements OnInit {
           this.isJobLoading = false;
           if (dataJson['success'] && dataJson.data.data) {
             this.careerFairsList = dataJson.data.data;
+            // console.log('careere',this.careerFairsList)
             this.setPaginationValues(dataJson);
             if (this.currentPageNumber < this.paginationArr[this.paginationArr.length - 1]) {
               this.preLoadNextPage(this.currentPageNumber + 1);

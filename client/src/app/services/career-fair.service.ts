@@ -37,6 +37,62 @@ export class CareerFairService {
   }
   public getCareerFairs(queryString?: string): Observable<any> {
   const queryUrl = `${this.career_fair_service_url}careerfairs?${queryString}`;
+  // console.log('query',queryUrl)
+    return this.http.get(queryUrl, this.authHttpOptions())
+    .pipe(
+        map(
+          data => {
+            return { success: true, message: 'Success!', data: data };
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+  public getCareerFairById(careerFairId: number): Observable<any> {
+    const queryUrl = `${this.career_fair_service_url}careerfair/${careerFairId}`;
+    // console.log('query',queryUrl)
+    // console.log('id query',queryUrl)
+      return this.http.get(queryUrl, this.authHttpOptions())
+      .pipe(
+          map(
+            data => {
+              return { success: true, message: 'Success!', data: data };
+            }
+          ),
+          catchError(this.handleError)
+        );
+    }
+    getCompaniesCount(careerFairId) {
+      const queryUrl = `${this.career_fair_service_url}careerfair/${careerFairId}/companies-count`;
+    // console.log('query',queryUrl)
+    // console.log('id query',queryUrl)
+      return this.http.get(queryUrl, this.authHttpOptions())
+      .pipe(
+          map(
+            data => {
+              return { success: true, message: 'Success!', data: data };
+            }
+          ),
+          catchError(this.handleError)
+        );
+    }
+    getPositionsCount(careerFairId) {
+      const queryUrl = `${this.career_fair_service_url}careerfair/${careerFairId}/positions-count`;
+    // console.log('query',queryUrl)
+    // console.log('id query',queryUrl)
+      return this.http.get(queryUrl, this.authHttpOptions())
+      .pipe(
+          map(
+            data => {
+              return { success: true, message: 'Success!', data: data };
+            }
+          ),
+          catchError(this.handleError)
+        );
+    }
+  getPresentcompanies(careerfairId, queryString?: string): Observable<any>  {
+    const queryUrl = `${this.career_fair_service_url}careerfair/${careerfairId}/companies?${queryString}`;
+    // console.log('query',queryUrl)
     return this.http.get(queryUrl, this.authHttpOptions())
     .pipe(
         map(
