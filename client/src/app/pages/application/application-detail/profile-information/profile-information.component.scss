@@ -180,8 +180,7 @@ $profile-form-field-mt: 30px;
         p {
           font-size: 14px;
           font-weight: 400;
-          color: #001d40;
-          opacity: 0.54;
+          color: rgba(map-get($md-cfaccent, 500), 0.84);
           margin: 10px 0 13px;
         }
 
