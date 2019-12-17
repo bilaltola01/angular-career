@@ -177,7 +177,7 @@
     <action-button class="btn-next btn-quit" type="stroked" title="Quit" (click)="onClickQuit()"></action-button>
   </div>
 </div>
-  
+
 <!-- Position Information end -->
 
 <!-- Preferred Education Start -->
@@ -187,6 +187,7 @@
       <h3 class="profile-form__title">
         Preferred Education
       </h3>
+      <p class="headup">Note that these education preferences are addative, meaning that the most qualified candidate possible will have all educational qualities indicated on this page. yourCareerFair will determine abstract requirements automatically, which means that the application will identify applicants with similar academic backgrounds, intelligently compare the educational features to what is required, and provide the applicant with a suitable education score. Therefore, specifying all majors and categories you wish to include is not necessary and may even be detrimental to your position's visibility.</p>
       <div class="profile-form__field search">
         <h3>Preferred Education Level <span *ngIf="preferred_education_levels && preferred_education_levels.length > 0" class="count">{{preferred_education_levels.length}}</span></h3>
       </div>
@@ -200,10 +201,10 @@
       </div>
       <div class="profile-form__field search margin-0">
         <div class="skills" *ngIf="preferred_education_levels && preferred_education_levels.length > 0">
-          <simple-tag *ngFor="let level of preferred_education_levels; let j = index" 
+          <simple-tag *ngFor="let level of preferred_education_levels; let j = index"
             type="gray"
-            title="{{level.education_level}}" 
-            removeTag="true" 
+            title="{{level.education_level}}"
+            removeTag="true"
             (click)="onRemoveEducationLevel(level, j)">
           </simple-tag>
         </div>
@@ -215,23 +216,23 @@
           <mat-icon matSuffix>search</mat-icon>
           <input matInput
             [attr.disabled]="preferred_education_majors && preferred_education_majors.length === 3 ? '' : null"
-            placeholder="Search Eudaction Major" 
-            type="text" 
-            [matAutocomplete]="autocompleteEducationMajor" 
+            placeholder="Search Eudaction Major"
+            type="text"
+            [matAutocomplete]="autocompleteEducationMajor"
             formControlName="search_education_major">
           <mat-autocomplete #autocompleteEducationMajor="matAutocomplete">
             <mat-option *ngFor="let major of autocomplete_majors"
-              [value]="major.major_name" 
+              [value]="major.major_name"
               (onSelectionChange)="onSelectEducationMajor(major)">
               <span>{{major.major_name}}</span>
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
         <div class="skills" *ngIf="preferred_education_majors && preferred_education_majors.length > 0">
-          <simple-tag *ngFor="let major of preferred_education_majors; let j = index" 
+          <simple-tag *ngFor="let major of preferred_education_majors; let j = index"
             type="gray"
-            title="{{major.major_name}}" 
-            removeTag="true" 
+            title="{{major.major_name}}"
+            removeTag="true"
             (click)="onRemoveEducationMajor(major, j)">
           </simple-tag>
         </div>
@@ -241,24 +242,24 @@
         <h3>Preferred Major Categories <span *ngIf="preferred_education_major_categories && preferred_education_major_categories.length > 0" class="count">{{preferred_education_major_categories.length}}</span></h3>
         <mat-form-field appearance="standard" class="search">
           <mat-icon matSuffix>search</mat-icon>
-          <input matInput 
-            placeholder="Search Major Category" 
-            type="text" 
-            [matAutocomplete]="autocompleteMajorCategory" 
+          <input matInput
+            placeholder="Search Major Category"
+            type="text"
+            [matAutocomplete]="autocompleteMajorCategory"
             formControlName="search_major_category">
           <mat-autocomplete #autocompleteMajorCategory="matAutocomplete">
             <mat-option *ngFor="let major_category of autocomplete_major_categories"
-              [value]="major_category.cat_name" 
+              [value]="major_category.cat_name"
               (onSelectionChange)="onSelectEducationMajorCategory(major_category)">
               <span>{{major_category.cat_name}}</span>
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
         <div class="skills" *ngIf="preferred_education_major_categories && preferred_education_major_categories.length > 0">
-          <simple-tag *ngFor="let major_category of preferred_education_major_categories; let j = index" 
+          <simple-tag *ngFor="let major_category of preferred_education_major_categories; let j = index"
             type="gray"
-            title="{{major_category.cat_name}}" 
-            removeTag="true" 
+            title="{{major_category.cat_name}}"
+            removeTag="true"
             (click)="onRemoveEducationMajorCategory(major_category, j)">
           </simple-tag>
         </div>
@@ -323,7 +324,7 @@
           </div>
         </div>
 
-        
+
         <div class="profile-form__field btn">
           <action-button title="Remove" color="warn" (click)="onRemovePreferredWorkExperienceFormGroup(i)"></action-button>
         </div>
@@ -349,7 +350,7 @@
       <h3 class="profile-form__title">
         SKILLS
       </h3>
-      <p class="headup">Increase search visibility and the quality of applicants by indicating your required and preferred skills. Note that if an applicant doesn't match all required skills they are considered unqualified regardless of if they have all preferred skills.</p>
+      <p class="headup">Increase search visibility and the quality of applicants by indicating your required and preferred skills. Note that if an applicant doesn't match all required skills they are considered unqualified regardless of if they have all preferred skills. Also, these preferences are addative, meaning that the most qualified candidate possible will have all qualities indicated on this page.</p>
       <div class="profile-form__field search">
         <div class="question-container">
           <h3>Minimum Skills <span *ngIf="minimum_skills &&  minimum_skills.length > 0" class="count">{{minimum_skills.length}}</span></h3>
@@ -467,13 +468,13 @@
 <!-- Preferred Schools End -->
 
 <!-- Postion Preview Start -->
-<div *ngIf="selectedPageIndex===7 && !is_loading" class="container position-preview">  
+<div *ngIf="selectedPageIndex===7 && !is_loading" class="container position-preview">
   <legend id="legend">
     <div class="nav-title" (click)="onClickTogggle()">
       <h3 class="section-title">{{current_tab}}</h3>
       <mat-icon>menu</mat-icon>
     </div>
-    <a (click)="backToEdit()">Edit</a> 
+    <a (click)="backToEdit()">Edit</a>
   </legend>
   <div class="main-section">
     <div class="edit-title">
@@ -580,7 +581,7 @@
       <h3>Preferred Experience</h3>
       <ng-container *ngFor="let experience of position.preferred_experience; let i = index;">
         <h4>{{experience.industry_name}} {{'(' + experience.preferred_years + ' years)'}}</h4>
-        
+
         <ng-container *ngIf="experience.preferred_skills_trained && experience.preferred_skills_trained.length > 0">
           <h5>Preferred Skills Trained {{experience.preferred_skills_trained.length}}</h5>
           <div class="skills" *ngIf="displayItemsLimit; let limit">
@@ -674,7 +675,7 @@
         <action-button *ngIf="position && position.open === 0" class="nav-btn" type="stroked" title="Edit" (click)="backToEdit()"></action-button>
         <action-button *ngIf="position && position.open === 0" class="nav-btn" color="warn" title="Delete" (click)="onClickDelete()"></action-button>
         <action-button *ngIf="position && position.open === 0" class="nav-btn" type="stroked"  title="Quit" (click)="onClickQuit()"></action-button>
-      </div>  
+      </div>
     </nav>
   </div>
 </div>
