@@ -103,6 +103,19 @@ export class CareerFairService {
         catchError(this.handleError)
       );
   }
+  getPresentPositions(careerfairId, queryString?: string): Observable<any>  {
+    const queryUrl = `${this.career_fair_service_url}careerfair/${careerfairId}/positions?${queryString}`;
+    // console.log('query',queryUrl)
+    return this.http.get(queryUrl, this.authHttpOptions())
+    .pipe(
+        map(
+          data => {
+            return { success: true, message: 'Success!', data: data };
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
 
   private handleError(error) {
     if (!environment.production) {
