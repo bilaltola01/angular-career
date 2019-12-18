@@ -180,13 +180,9 @@ $profile-form-field-mt: 30px;
                   margin-bottom: 0;
                 }
                 p {
-                  font-size: 14px;
-                  opacity: 0.84;
-                  font-family: "Poppins", sans-serif;
                   font-weight: 400;
-                  margin-top: 10px;
-                  margin-bottom: 10px;
-                  line-height: 21px;
+                  word-break: break-word;
+                  white-space: pre-wrap;
                 }
                 & .education-level-m {
                   margin-top: 5px;
@@ -261,6 +257,8 @@ $profile-form-field-mt: 30px;
               font-size: 16px;
               line-height: 24px;
               color: #001d40;
+              word-break: break-word;
+              white-space: pre-wrap;
             }
           }
           & .position-qualification-skills {
@@ -268,7 +266,28 @@ $profile-form-field-mt: 30px;
               margin-right: 8px;
             }
           }
+          p{
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-size: 16px;
+            line-height: 24px;
+          }
+
         }
+
+        p {
+          color: rgba(map-get($md-cfaccent, 500), 0.74);
+          &.short-desc {
+            color: rgba(map-get($md-cfaccent, 500), 0.74);
+          }
+        }
+        a {
+          font-size: 14px;
+          line-height: 21px;
+          color: #318bd6;
+          text-decoration: none;
+          cursor: pointer;
+      }
 
         & .mat-icon {
           vertical-align: middle;

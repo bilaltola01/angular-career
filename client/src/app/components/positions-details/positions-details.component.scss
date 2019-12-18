@@ -196,13 +196,13 @@ $profile-form-field-mt: 30px;
                   margin-bottom: 0;
                 }
                 p {
-                  font-size: 14px;
-                  opacity: 0.84;
-                  font-family: "Poppins", sans-serif;
+                  font-size: 16px;
+                  word-break: break-word;
+                  white-space: pre-wrap;
                   font-weight: 400;
                   margin-top: 10px;
                   margin-bottom: 10px;
-                  line-height: 21px;
+                  line-height: 24px;
                 }
                 & .education-level-m {
                   margin-top: 5px;
@@ -260,24 +260,43 @@ $profile-form-field-mt: 30px;
             margin-bottom: 10px;
             margin-right: 10px;
           }
-          & .position-matched {
-            max-height: 150px;
-            overflow: hidden;
-            &.skill-more-height {
-              max-height: initial;
-            }
-            p {
-              opacity: 0.84;
-              margin-bottom: 0;
-              font-size: 16px;
-              line-height: 24px;
-              color: #001d40;
-            }
-          }
+          // & .position-matched {
+          //   max-height: 150px;
+          //   overflow: hidden;
+          //   &.skill-more-height {
+          //     max-height: initial;
+          //   }
+          // }
           & .position-qualification-skills {
             & simple-tag {
               margin-right: 8px;
             }
+          }
+          p {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-size: 16px;
+            line-height: 24px;
+          }
+
+          p {
+            color: rgba(map-get($md-cfaccent, 500), 0.74);
+            &.short-desc {
+              color: rgba(map-get($md-cfaccent, 500), 0.74);
+            }
+          }
+        }
+
+        a {
+          font-size: 14px;
+          line-height: 21px;
+          color: map-get($md-cfprimary, 500);
+          text-decoration: none;
+          cursor: pointer;
+          &.title {
+            color: map-get($md-cfaccent, 500);
+            font-size: inherit;
+            line-height: inherit;
           }
         }
 
