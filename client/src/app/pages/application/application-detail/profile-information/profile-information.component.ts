@@ -3,9 +3,10 @@ import { UserGeneralInfo, ProfileStatuses, DisplayItemsLimit} from 'src/app/mode
 import { Router, ActivatedRoute } from '@angular/router';
 import { PositionService, CartService, HelperService, UserStateService, AlertsService, AlertType, ApplicationService, UserService, ScoreService, CompanyService } from 'src/app/services';
 import { MatchingService } from 'src/app/services/matching.service';
-import { SkillLevelDescription } from 'src/app/models';
+import { SkillLevelDescription, Skill } from 'src/app/models';
 import { MatDialog } from '@angular/material/dialog';
 import { SkillDescriptionPopupComponent } from 'src/app/components/skill-description-popup/skill-description-popup.component';
+import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-profile-information',
@@ -18,6 +19,7 @@ export class ProfileInformationComponent implements OnInit {
   mathFloor = Math.floor;
   breakpoint: number;
   positionName = [];
+  skillsSearchForm: FormGroup;
 
   matchedSkills = [];
   missingSkills = [];
@@ -36,6 +38,9 @@ export class ProfileInformationComponent implements OnInit {
   userProjectsList;
   userSkillsList = [];
   interestsList = [];
+  autocomplete_skills: Skill[] = [];
+  prevent_skills_autocomplete: boolean;
+  temp_skill;
   //
   constructor(private positionService: PositionService,
     private matchingService: MatchingService,
@@ -45,6 +50,7 @@ export class ProfileInformationComponent implements OnInit {
     private router: Router,
     public dialog: MatDialog,
     private userService: UserService) {
+      this.initSkillsSearchForm();
   }
 
   ngOnInit() {
@@ -61,6 +67,31 @@ export class ProfileInformationComponent implements OnInit {
     this.breakpoint = (window.innerWidth <= 500) ? 2 : 4;
     this.filter_list = false;
     this.getPositionData(this.positionId);
+  }
+  initSkillsSearchForm() {
+    this.autocomplete_skills = [];
+    this.temp_skill = null;
+    this.skillsSearchForm = new FormGroup({
+      skills: new FormControl('')
+    });
+    this.skillsSearchForm.get('skills').valueChanges.subscribe(
+
+      (skill) => {
+        if (skill && this.helperService.checkSpacesString(skill)) {
+            this.autocomplete_skills = this.userSkillsList.filter(value => value.skill.toLocaleLowerCase().includes(skill));
+        } else {
+          this.autocomplete_skills = [];
+        }
+      }
+    );
+  }
+  addSkills(skill) {
+this.temp_skill = skill;
+    this.autocomplete_skills = [];
+    this.skillsSearchForm.get('skills').setValue('');
+  }
+  editSkillDone() {
+    this.temp_skill = null;
   }
   getGeneralInfo() {
     this.userStateService.getUser

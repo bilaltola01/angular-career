@@ -396,7 +396,7 @@ $profile-form-field-mt: 30px;
 
               & .skil-height-fix {
                 overflow: hidden;
-                max-height: 30px;
+                max-height: 70px;
 
                 &.skill-more-height {
                   max-height: 100%;
@@ -922,16 +922,8 @@ $profile-form-field-mt: 30px;
         .postion-search-detail {
           padding: 14px 20px;
           overflow: hidden;
-          // background-color: #f2f2f4;
+          background-color: #f2f2f4;
           border-bottom: 1px solid #e0e4e8;
-          // .filter-data {
-          //   float: right;
-          //   margin-top: 0;
-
-          //   & .filter_icon {
-          //     display: block;
-          //   }
-          // }
           .filter-data {
             display: flex;
             padding: 0px 0px;

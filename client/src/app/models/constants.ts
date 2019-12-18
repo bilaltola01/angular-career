@@ -591,11 +591,11 @@ export const EducationLevel = [
 ];
 export const ApplicationStatus = [
   { 'title': 'Accepted', 'value': 'accepted' },
-  { 'title': 'In Review', 'value': 'in_review' },
-  { 'title': 'Interviewing', 'value': 'interviewing' },
-  { 'title': 'Wait Listed', 'value': 'wait_listed' },
   { 'title': 'Rejected', 'value': 'rejected' },
   { 'title': 'Offer Sent', 'value': 'offer_sent' },
+  { 'title': 'Wait Listed', 'value': 'wait_listed' },
+  { 'title': 'Interviewing', 'value': 'interviewing' },
+  { 'title': 'In Review', 'value': 'in_review' },
   { 'title': 'Saved', 'value': 'saved' }
 ];
 

@@ -212,7 +212,7 @@
 @media only screen and (min-width: $min-mobile-breakpoint) and (max-width: $max-mobile-breakpoint) {
   :host {
     .application-messagebox {
-      width: 96%;
+      width: 90%;
       margin: 0px auto;
       float: none;
       .row {
@@ -236,7 +236,7 @@
 @media only screen and (min-width: $min-tablet-breakpoint) and (max-width: $max-tablet-breakpoint) {
   :host {
     .application-messagebox {
-      width: 96%;
+      width: 95%;
       margin: 0px auto;
       float: none;
     }
