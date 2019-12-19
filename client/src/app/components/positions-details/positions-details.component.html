@@ -369,8 +369,7 @@
             </div> -->
             <ng-container *ngIf="true; let short_desc">
               <p *ngIf="jobData?.position_desc" class="description"
-                [class.short-desc]="short_desc && jobData?.position_desc?.length > helperService.shortDescLength">
-                {{short_desc ? helperService.shortDescription(jobData.position_desc) : jobData.position_desc }}
+                [class.short-desc]="short_desc && jobData?.position_desc?.length > helperService.shortDescLength">{{short_desc ? helperService.shortDescription(jobData.position_desc) : jobData.position_desc }}
               </p>
               <a *ngIf="jobData?.position_desc && jobData?.position_desc?.length > helperService.shortDescLength"
                 (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
@@ -442,8 +441,7 @@
                   <!-- <p *ngIf="experience.exp_desc">{{experience.exp_desc}}</p> -->
                   <ng-container *ngIf="true; let short_desc">
                     <p *ngIf="experience?.exp_desc" class="description"
-                      [class.short-desc]="short_desc && experience?.exp_desc?.length > helperService.shortDescLength">
-                      {{short_desc ? helperService.shortDescription(experience.exp_desc) : experience.exp_desc }}
+                      [class.short-desc]="short_desc && experience?.exp_desc?.length > helperService.shortDescLength">{{short_desc ? helperService.shortDescription(experience.exp_desc) : experience.exp_desc }}
                     </p>
                     <a *ngIf="experience?.exp_desc && experience?.exp_desc?.length > helperService.shortDescLength"
                       (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
