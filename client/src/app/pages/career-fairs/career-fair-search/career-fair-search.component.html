@@ -13,7 +13,7 @@
     <div class="postion-search-header">
       <mat-form-field appearance="standard" class="search">
         <mat-icon matSuffix (click)="onSearchPosition($event)">search</mat-icon>
-        <input matInput placeholder="Search career fair by university name" type="text" formControlName="searchPosition"
+        <input matInput placeholder="Search career fair by university name" type="text" formControlName="searchCareerfair"
           (keyup.enter)="onSearchPosition($event)">
       </mat-form-field>
     </div>
@@ -51,15 +51,15 @@
         </div>
         <div class="filter-card">
           <mat-form-field>
-            <input matInput [matDatepicker]="picker" formControlName="date" [min]="minDate"
-              placeholder="Date of Career Fair">
+            <input matInput [matDatepicker]="picker"  formControlName="date" [min]="minDate"
+              placeholder= "Date of Career Fair">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
         </div>
         <div class="filter-card">
           <div class="side-filter-btn">
-            <action-button type="raised" color="primary" title="Apply Filters" (click)="applyFilter();">
+            <action-button type="raised" color="primary" title="Apply Filters" (click)="applyFilter()">
             </action-button>
           </div>
           <div class="clear-filter">
@@ -74,7 +74,8 @@
       <div *ngFor="let fair of careerFairsList ">
         <div class="row">
           <img class="img-style" src="{{fair.company_logo ? fair.company_logo : 'assets/icons/ic_university.svg'}}">
-          <h1 [routerLink]="['careerfair-info/',fair.careerfair_id]">{{fair.name_of_careerfair}} </h1>
+          <!-- <h1 [routerLink]="['careerfair-info/',fair.careerfair_id]">{{fair.name_of_careerfair}} </h1> -->
+          <h1 (click) ="routerNavigate(fair.careerfair_id)">{{fair.name_of_careerfair}} </h1>
           <div>
             <div class="job-top-list">
               <ul>

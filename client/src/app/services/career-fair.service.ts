@@ -37,7 +37,6 @@ export class CareerFairService {
   }
   public getCareerFairs(queryString?: string): Observable<any> {
   const queryUrl = `${this.career_fair_service_url}careerfairs?${queryString}`;
-  // console.log('query',queryUrl)
     return this.http.get(queryUrl, this.authHttpOptions())
     .pipe(
         map(
@@ -50,8 +49,6 @@ export class CareerFairService {
   }
   public getCareerFairById(careerFairId: number): Observable<any> {
     const queryUrl = `${this.career_fair_service_url}careerfair/${careerFairId}`;
-    // console.log('query',queryUrl)
-    // console.log('id query',queryUrl)
       return this.http.get(queryUrl, this.authHttpOptions())
       .pipe(
           map(
@@ -64,8 +61,6 @@ export class CareerFairService {
     }
     getCompaniesCount(careerFairId) {
       const queryUrl = `${this.career_fair_service_url}careerfair/${careerFairId}/companies-count`;
-    // console.log('query',queryUrl)
-    // console.log('id query',queryUrl)
       return this.http.get(queryUrl, this.authHttpOptions())
       .pipe(
           map(
@@ -78,8 +73,6 @@ export class CareerFairService {
     }
     getPositionsCount(careerFairId) {
       const queryUrl = `${this.career_fair_service_url}careerfair/${careerFairId}/positions-count`;
-    // console.log('query',queryUrl)
-    // console.log('id query',queryUrl)
       return this.http.get(queryUrl, this.authHttpOptions())
       .pipe(
           map(
@@ -92,7 +85,6 @@ export class CareerFairService {
     }
   getPresentcompanies(careerfairId, queryString?: string): Observable<any>  {
     const queryUrl = `${this.career_fair_service_url}careerfair/${careerfairId}/companies?${queryString}`;
-    // console.log('query',queryUrl)
     return this.http.get(queryUrl, this.authHttpOptions())
     .pipe(
         map(
@@ -105,7 +97,7 @@ export class CareerFairService {
   }
   getPresentPositions(careerfairId, queryString?: string): Observable<any>  {
     const queryUrl = `${this.career_fair_service_url}careerfair/${careerfairId}/positions?${queryString}`;
-    // console.log('query',queryUrl)
+
     return this.http.get(queryUrl, this.authHttpOptions())
     .pipe(
         map(
