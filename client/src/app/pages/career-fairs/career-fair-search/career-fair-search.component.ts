@@ -4,7 +4,6 @@ import { AlertsService, AlertType, AutoCompleteService, CareerFairService } from
 
 import { City, Company, careerFairsListLimit } from 'src/app/models';
 import { Router, ActivatedRoute } from '@angular/router';
-import { DatePipe } from '@angular/common';
 
 
 
@@ -56,7 +55,7 @@ export class CareerFairSearchComponent implements OnInit {
   urlParamsDate;
 
   constructor(private autoCompleteService: AutoCompleteService, private router: Router, private route: ActivatedRoute,
-    private alertsService: AlertsService, private careerfairService: CareerFairService, private datePipe: DatePipe) {
+    private alertsService: AlertsService, private careerfairService: CareerFairService) {
   }
   ngOnInit() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -73,7 +72,6 @@ export class CareerFairSearchComponent implements OnInit {
       }
 
     }
-    this.urlParamsDate = this.datePipe.transform(this.urlParams['date'], 'dd/MM/yyyy');
     this.initPositionFilterForm();
     this.getJobData();
 
@@ -293,7 +291,7 @@ export class CareerFairSearchComponent implements OnInit {
     }
   }
   routerNavigate(careerfair_id) {
-    this.router.navigate([`career-fairs/careerfair-info/${careerfair_id}`, ], { queryParams: { finds: this.urlQueryParameters ? this.urlQueryParameters :  '' } });
+    this.router.navigate([`career-fairs/careerfair-info/${careerfair_id}/careerfair-companies`], { queryParams: { finds: this.urlQueryParameters ? this.urlQueryParameters :  '' } });
 
   }
 }

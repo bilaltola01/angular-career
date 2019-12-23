@@ -14,14 +14,14 @@ export const careerFairSearchRouting: Routes = [
     component: CareerfairInfoComponent,
     children: [
       {
-        path: 'positions',
+        path: 'careerfair-positions',
         component: CareerfairInfoComponent,
         canActivate: [AuthGuard]
       },
       {
-        path: 'companies',
+        path: 'careerfair-companies',
         component: CareerfairInfoComponent,
-        canActivate: [AuthGuard]
+        // canActivate: [AuthGuard]
       },
     ]
   },

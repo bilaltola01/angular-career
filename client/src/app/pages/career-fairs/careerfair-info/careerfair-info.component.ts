@@ -104,14 +104,10 @@ export class CareerfairInfoComponent implements OnInit {
     router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
         if (val.url.includes('finds')) {
-          this.currentPage = 'companies';
-          this.router.navigate([`companies`], { relativeTo: this.route });
           this.router.navigate(['/career-fairs'], { queryParams: { find: this.searchQueryParam ? this.searchQueryParam : '' } });
-        } else if (val.url.includes('positions')) {
+        } else if (val.url.includes('careerfair-positions')) {
           this.currentPage = 'positions';
-          this.router.navigate([`positions`], { relativeTo: this.route });
-        } else if (val.url.includes('finds')) {
-          this.router.navigate(['/career-fairs'], { queryParams: { find: this.searchQueryParam ? this.searchQueryParam : '' } });
+          this.router.navigate([`careerfair-positions`], { relativeTo: this.route });
         }
       }
     });
@@ -129,15 +125,12 @@ export class CareerfairInfoComponent implements OnInit {
     this.filter_list = !this.filter_list;
   }
   parseRouterUrl(url: string) {
-    if (url.includes('companies')) {
-      this.currentPage = 'companies';
-      this.router.navigate([`companies`], { relativeTo: this.route });
-    } else if (url.includes('positions')) {
+    if (url.includes('careerfair-companies') && !(url.includes('careerfair-positions'))) {
+      this.currentPage = 'company';
+     this.router.navigate(['careerfair-companies'], { relativeTo: this.route });
+    } else if (url.includes('careerfair-positions')) {
       this.currentPage = 'positions';
-      this.router.navigate([`positions`], { relativeTo: this.route });
-    } else {
-      this.currentPage = 'companies';
-      this.router.navigate([`companies`], { relativeTo: this.route });
+      this.router.navigate([`careerfair-positions`], { relativeTo: this.route });
     }
   }
 
@@ -247,7 +240,7 @@ export class CareerfairInfoComponent implements OnInit {
 
       if (this.companyQueryFlag || this.companyPreQueryFlag) {
         this.urlQueryParameters = urlQueryParam;
-        this.router.navigate([`career-fairs/careerfair-info/${this.careerfairId}/companies`], { queryParams: { search: urlQueryParam ? urlQueryParam : '' } });
+        // this.router.navigate([`career-fairs/careerfair-info/${this.careerfairId}/company`], { queryParams: { search: urlQueryParam ? urlQueryParam : '' } });
       }
       this.urlQueryParameter = queryString;
     }
@@ -262,7 +255,7 @@ export class CareerfairInfoComponent implements OnInit {
       if (this.companyCurrentPageNumber < this.companyPaginationArr[this.companyPaginationArr.length - 1]) {
         this.preLoadCompanyNextPage(this.companyCurrentPageNumber + 1);
       } else {
-        this.router.navigate([`career-fairs/careerfair-info/${this.careerfairId}/companies`], { queryParams: { search: this.urlQueryParameter ? this.urlQueryParameter : '' } });
+        // this.router.navigate([`career-fairs/careerfair-info/${this.careerfairId}/company`], { queryParams: { search: this.urlQueryParameter ? this.urlQueryParameter : '' } });
       }
     } else {
       this.isJobLoading = true;
@@ -364,13 +357,14 @@ export class CareerfairInfoComponent implements OnInit {
   }
 
   navigateToCompanies() {
-    this.currentPage = 'companies';
-    this.router.navigate([`career-fairs/careerfair-info/${this.careerfairId}/companies`], { queryParams: { search: this.urlQueryParameter ? this.urlQueryParameter : '' } });
+    this.currentPage = 'company';
+    this.router.navigate(['careerfair-companies'], { relativeTo: this.route });
+    // this.router.navigate([`career-fairs/careerfair-info/${this.careerfairId}/company`], { queryParams: { search: this.urlQueryParameter ? this.urlQueryParameter : '' } });
   }
 
   navigateToPositions() {
     this.currentPage = 'positions';
-    this.router.navigate([`positions`], { relativeTo: this.route });
+    this.router.navigate([`careerfair-positions`], { relativeTo: this.route });
   }
   routerNavigate(application_id, position_id) {
     this.router.navigate([`/applications/${application_id}/application-detail/`, position_id]);
