@@ -55,6 +55,7 @@ export class PositionsDetailsComponent implements OnInit {
 
   temp_preferred_skill: Skill;
   temp_required_skill: Skill;
+  shortDescLength = 300;
 
   constructor(private positionService: PositionService,
     private route: ActivatedRoute,
@@ -190,6 +191,11 @@ export class PositionsDetailsComponent implements OnInit {
         this.alertsService.show(error.message, AlertType.error);
       }
     );
+  }
+  shortDescription(description: string): string {
+    if (description && description.length > this.shortDescLength) {
+      return description.slice(0, this.shortDescLength) + '...';
+    }
   }
   positionDataTransform(companyPositon) {
     const companyPositionKeys = this.Object.keys(companyPositon);
