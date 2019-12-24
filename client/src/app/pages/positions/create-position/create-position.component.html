@@ -21,7 +21,7 @@
 
 <div *ngIf="selectedPageIndex===0 && !is_loading" class="container profile-basic">
 	<div class="container__full">
-		<div class="profile-form" [formGroup]="nameOverviewForm">
+		<form class="profile-form" [formGroup]="nameOverviewForm" autocomplete="off">
 			<h3 class="profile-form__title">
 				Position Name & Overview
 			</h3>
@@ -37,7 +37,7 @@
 					<textarea matInput placeholder="Position Description" rows="15" formControlName="position_desc"></textarea>
 				</mat-form-field>
 			</div>
-		</div>
+		</form>
 	</div>
 
 	<div class="container__full">
@@ -52,14 +52,14 @@
 <!-- Position Information start -->
 <div *ngIf="selectedPageIndex===1 && !is_loading" class="container profile-basic">
   <div class="container__full">
-    <div class="profile-form" [formGroup]="positionBasicInfoForm">
+    <form class="profile-form" [formGroup]="positionBasicInfoForm" autocomplete="off">
       <h3 class="profile-form__title">
         Position Information
       </h3>
       <div class="profile-form__field">
-        <mat-form-field class="bg-transparent" appearance="fill">
+        <mat-form-field class="bg-transparent" appearance="fill" autocomplete="off">
           <mat-label>Company *</mat-label>
-          <input matInput placeholder="Company *" type="text" [matAutocomplete]="autocompleteCompany" formControlName="position_company">
+          <input matInput placeholder="Company *" type="text" [matAutocomplete]="autocompleteCompany" formControlName="position_company" autocomplete="off">
           <mat-icon matSuffix *ngIf="positionBasicInfoForm.get('position_company').value && helperService.checkSpacesString(positionBasicInfoForm.get('position_company').value) && positionBasicInfoForm.get('position_company').valid && onCheckCompanyValidation()">done</mat-icon>
           <mat-icon matSuffix class="error-field" *ngIf="positionBasicInfoForm.get('position_company').value && helperService.checkSpacesString(positionBasicInfoForm.get('position_company').value) && !onCheckCompanyValidation() && positionBasicInfoForm.get('position_company').touched">close</mat-icon>
           <mat-autocomplete #autocompleteCompany="matAutocomplete" (closed)="onBlurCompany()">
@@ -82,7 +82,7 @@
       <div *ngIf="position_country && position_country === 43" class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
           <mat-label>State *</mat-label>
-          <input matInput placeholder="State *" type="text" [matAutocomplete]="autocompleteState" formControlName="position_state">
+          <input matInput placeholder="State *" type="text" [matAutocomplete]="autocompleteState" formControlName="position_state" autocomplete="new-company-state">
           <mat-icon matSuffix *ngIf="positionBasicInfoForm.value.position_state && helperService.checkSpacesString(positionBasicInfoForm.value.position_state) && positionBasicInfoForm.get('position_state').valid && onCheckStateValidation()">done</mat-icon>
           <mat-icon matSuffix class="error-field" *ngIf="positionBasicInfoForm.get('position_state').value && helperService.checkSpacesString(positionBasicInfoForm.get('position_state').value) && !onCheckStateValidation() && positionBasicInfoForm.get('position_state').touched">close</mat-icon>
           <mat-autocomplete #autocompleteState="matAutocomplete" (closed)="onBlurState()">
@@ -95,7 +95,7 @@
       <div class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
           <mat-label>City *</mat-label>
-          <input matInput placeholder="City *" type="text" [matAutocomplete]="autocompleteCity" formControlName="position_city">
+          <input matInput placeholder="City *" type="text" [matAutocomplete]="autocompleteCity" formControlName="position_city" autocomplete="new-company-city">
           <mat-icon matSuffix *ngIf="positionBasicInfoForm.get('position_city').value && helperService.checkSpacesString(positionBasicInfoForm.get('position_city').value) && positionBasicInfoForm.get('position_city').valid && onCheckCityValidation()">done</mat-icon>
           <mat-icon matSuffix class="error-field" *ngIf="positionBasicInfoForm.get('position_city').value && helperService.checkSpacesString(positionBasicInfoForm.get('position_city').value) && !onCheckCityValidation() && positionBasicInfoForm.get('position_city').touched">close</mat-icon>
           <mat-autocomplete #autocompleteCity="matAutocomplete" (closed)="onBlurCity()">
@@ -170,7 +170,7 @@
         </mat-form-field>
       </div>
       <p class="headup">In order to change the recruiter, you must provide a valid company first.</p>
-    </div>
+    </form>
   </div>
   <div class="container__full">
     <action-button class="btn-next" type="flat" title="Next" color="primary" [disabled]="!(positionBasicInfoForm.valid && position_company && position_level && position_type &&  onCheckCompanyValidation() && onCheckCityValidation() && onCheckStateValidation() && onCheckRecruiterValidation())" (click)="createPosition()"></action-button>
@@ -183,7 +183,7 @@
 <!-- Preferred Education Start -->
 <div *ngIf="selectedPageIndex===2 && !is_loading" class="container profile-skills">
   <div class="container__full">
-    <div class="profile-form" [formGroup]="preferredEducationForm">
+    <form class="profile-form" [formGroup]="preferredEducationForm" autocomplete="off">
       <h3 class="profile-form__title">
         Preferred Education
       </h3>
@@ -264,7 +264,7 @@
           </simple-tag>
         </div>
       </div>
-    </div>
+    </form>
   </div>
   <div class="container__full">
     <action-button class="btn-next" type="flat" title="Next" color="primary" [disabled]="!preferredEducationForm.valid" (click)="addPositionInfo('education')"></action-button>
@@ -284,7 +284,7 @@
         <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>Industry *</mat-label>
-            <input matInput placeholder="Industry *" type="text" [matAutocomplete]="autocompleteWorkIndustry" formControlName="industry">
+            <input matInput placeholder="Industry *" type="text" [matAutocomplete]="autocompleteWorkIndustry" formControlName="industry" utocomplete="new-position-experience-industry">
             <mat-icon matSuffix *ngIf="preferredWorkExperienceFormArray.at(i).get('industry').value && helperService.checkSpacesString(preferredWorkExperienceFormArray.at(i).get('industry').value) && preferredWorkExperienceFormArray.at(i).get('industry').valid && onCheckIndustryValidation(i)">done</mat-icon>
             <mat-icon matSuffix class="error-field" *ngIf="preferredWorkExperienceFormArray.at(i).get('industry').value && helperService.checkSpacesString(preferredWorkExperienceFormArray.at(i).get('industry').value) && !onCheckIndustryValidation(i) && preferredWorkExperienceFormArray.at(i).get('industry').touched">close</mat-icon>
             <mat-autocomplete #autocompleteWorkIndustry="matAutocomplete" (closed)="onBlurIndustry(i)">
@@ -297,7 +297,7 @@
         <div class="profile-form__field">
           <mat-form-field class="bg-transparent" appearance="fill">
             <mat-label>Years *</mat-label>
-            <input matInput placeholder="Years *" type="text" formControlName="years" pattern="^\d+$">
+            <input matInput placeholder="Years *" type="text" formControlName="years" pattern="^\d+$" autocomplete="new-position-experience-years">
             <mat-icon matSuffix *ngIf="preferredWorkExperienceFormArray.at(i).get('years').valid">done</mat-icon>
             <mat-icon matSuffix class="error-field" *ngIf="preferredWorkExperienceFormArray.at(i).get('years').value && !preferredWorkExperienceFormArray.at(i).get('years').valid && preferredWorkExperienceFormArray.at(i).get('years').touched">close</mat-icon>
           </mat-form-field>
@@ -346,7 +346,7 @@
 <!-- Skills Start -->
 <div *ngIf="selectedPageIndex===4 && !is_loading" class="container profile-skills">
   <div class="container__full">
-    <div class="profile-form" [formGroup]="skillsForm">
+    <form class="profile-form" [formGroup]="skillsForm" autocomplete="off">
       <h3 class="profile-form__title">
         SKILLS
       </h3>
@@ -396,7 +396,7 @@
           <simple-tag *ngFor="let preferred_skill of preferred_skills; let i = index" type="gray" title="{{preferred_skill.skill}}" ellipseTag="true" value="{{preferred_skill.skill_level}}" isControl="true" (levelChanged)="onLevelChanged($event, i, false)" (removeClick)="onRemovePreferredSkill(preferred_skill, i)"></simple-tag>
         </div>
       </div>
-    </div>
+    </form>
   </div>
   <div class="container__full">
     <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="addPositionInfo('skills')"></action-button>
@@ -408,7 +408,7 @@
 <!-- Interests Start -->
 <div *ngIf="selectedPageIndex===5 && !is_loading" class="container profile-skills">
   <div class="container__full">
-    <div class="profile-form" [formGroup]="interestsForm">
+    <form class="profile-form" [formGroup]="interestsForm" autocomplete="off">
       <h3 class="profile-form__title">
         INTERESTS
       </h3>
@@ -427,7 +427,7 @@
           <simple-tag *ngFor="let interestData of preferred_interests; let i = index" type="gray" removeTag="true" title="{{interestData.interest}}" (click)="onRemovePreferredInterest(interestData, i)"></simple-tag>
         </div>
       </div>
-    </div>
+    </form>
   </div>
   <div class="container__full">
     <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="addPositionInfo('interests')"></action-button>
@@ -439,7 +439,7 @@
 <!-- Preferred Schools Start -->
 <div *ngIf="selectedPageIndex===6 && !is_loading" class="container profile-skills">
   <div class="container__full">
-    <div class="profile-form" [formGroup]="schoolRestrictionsForm">
+    <form class="profile-form" [formGroup]="schoolRestrictionsForm" autocomplete="off">
       <h3 class="profile-form__title">
         School Restrictions
       </h3>
@@ -458,7 +458,7 @@
           <simple-tag *ngFor="let preferred_school of preferred_schools; let i = index" type="gray" removeTag="true" title="{{preferred_school.school_name}}" (click)="onRemovePreferredSchool(preferred_school, i)"></simple-tag>
         </div>
       </div>
-    </div>
+    </form>
   </div>
   <div class="container__full">
     <action-button class="btn-next" type="flat" title="Next" color="primary" (click)="addPositionInfo('schools')"></action-button>

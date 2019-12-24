@@ -298,7 +298,7 @@
                     </mat-autocomplete>
                   </mat-form-field>
                 </div> -->
-              <div class="form-field search" [formGroup]="skillsSearchForm" >
+              <form class="form-field search" [formGroup]="skillsSearchForm" autocomplete="off">
                   <mat-form-field appearance="standard" class="search">
                     <mat-icon matSuffix>search</mat-icon>
                     <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompleteSkills"
@@ -309,7 +309,7 @@
                       </mat-option>
                     </mat-autocomplete>
                   </mat-form-field>
-                </div>
+                </form>
                 <div *ngIf="temp_skill" class="temp-skill">
                     <simple-tag type="gray" title="{{temp_skill.skill}}" ellipseTag="true"  value="{{temp_skill.skill_level}}" >
                     </simple-tag>

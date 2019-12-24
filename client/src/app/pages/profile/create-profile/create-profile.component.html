@@ -120,7 +120,7 @@
       <div class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
           <mat-label>Date Of Birth</mat-label>
-          <input matInput placeholder="MM/DD/YYYY" formControlName="basicInfoBirth" pattern="\d{1,2}/\d{1,2}/\d{4}">
+          <input matInput placeholder="MM/DD/YYYY" formControlName="basicInfoBirth" pattern="\d{1,2}/\d{1,2}/\d{4}" autocomplete="off">
           <input class="hide" [matDatepicker]="birthdate" [max]="maxDate" (dateChange)="onChangeBirthDate($event)">
           <mat-datepicker-toggle matSuffix [for]="birthdate"></mat-datepicker-toggle>
           <mat-datepicker
@@ -133,7 +133,7 @@
       <div class="profile-form__field">
         <mat-form-field class="bg-transparent" appearance="fill">
           <mat-label>Job Title</mat-label>
-          <input matInput placeholder="Job Title" type="text" formControlName="basicInfoTitle">
+          <input matInput placeholder="Job Title" type="text" formControlName="basicInfoTitle" autocomplete="off">
         </mat-form-field>
       </div>
       <div class="profile-form__field">
@@ -270,7 +270,7 @@
           <div class="profile-form__field">
             <mat-form-field class="bg-transparent" appearance="fill">
               <mat-label>GPA</mat-label>
-              <input matInput placeholder="GPA" formControlName="gpa" type="text">
+              <input matInput placeholder="GPA" formControlName="gpa" type="text" autocomplete="off-gpa">
             </mat-form-field>
           </div>
           <div class="profile-form__field textarea">
@@ -308,7 +308,7 @@
           <div class="profile-form__field">
             <mat-form-field class="bg-transparent" appearance="fill">
               <mat-label>Company Name</mat-label>
-              <input matInput placeholder="Company Name" type="text" [matAutocomplete]="autocompleteCompany" formControlName="company_name">
+              <input matInput placeholder="Company Name" type="text" [matAutocomplete]="autocompleteCompany" formControlName="company_name" autocomplete="new-companyName">
               <mat-autocomplete #autocompleteCompany="matAutocomplete" (closed)="onBlurCompany(i)">
                 <mat-option *ngFor="let autocomplete_company of autocomplete_companies[i]" [value]="autocomplete_company.company_name" (onSelectionChange)="onSelectCompany(i, autocomplete_company)">
                   <img class="autocomplete-company-logo" alt="Company Logo" src="{{autocomplete_company.company_logo ? autocomplete_company.company_logo : 'assets/icons/ic_default_company_logo.svg'}}">
@@ -320,7 +320,7 @@
           <div class="profile-form__field">
             <mat-form-field class="bg-transparent" appearance="fill">
               <mat-label>Start Date</mat-label>
-              <input matInput placeholder="MM/YYYY" type="text" formControlName="start_date" pattern="\d{1,2}/\d{4}">
+              <input matInput placeholder="MM/YYYY" type="text" formControlName="start_date" pattern="\d{1,2}/\d{4}" autocomplete="off-start-date">
               <input class="hide" [matDatepicker]="experience_start_date" [max]="maxDate">
               <mat-datepicker-toggle matSuffix [for]="experience_start_date"></mat-datepicker-toggle>
               <mat-datepicker
@@ -335,7 +335,7 @@
           <div class="profile-form__field" *ngIf="isExperienceStartDate(i)">
             <mat-form-field class="bg-transparent" appearance="fill">
               <mat-label>End Date</mat-label>
-              <input matInput placeholder="MM/YYYY" type="text" formControlName="end_date" pattern="\d{1,2}/\d{4}">
+              <input matInput placeholder="MM/YYYY" type="text" formControlName="end_date" pattern="\d{1,2}/\d{4}" autocomplete="off-end-date">
               <input class="hide" [matDatepicker]="experience_end_date" [min]="minExperienceEndDate(i)" [max]="maxDate">
               <mat-datepicker-toggle matSuffix [for]="experience_end_date"></mat-datepicker-toggle>
               <mat-datepicker
@@ -477,7 +477,7 @@
           <div class="profile-form__field">
             <mat-form-field class="bg-transparent" appearance="fill">
               <mat-label>Date of Completion</mat-label>
-              <input matInput placeholder="MM/DD/YYYY" type="text" formControlName="date_finished" pattern="\d{1,2}/\d{1,2}/\d{4}">
+              <input matInput placeholder="MM/DD/YYYY" type="text" formControlName="date_finished" pattern="\d{1,2}/\d{1,2}/\d{4}" autocomplete="off">
               <input class="hide" [matDatepicker]="project_finished_date" [max]="maxDate" (dateChange)="onChangeProjectFinishedDate($event, i)">
               <mat-datepicker-toggle matSuffix [for]="project_finished_date"></mat-datepicker-toggle>
               <mat-datepicker
@@ -534,7 +534,7 @@
           <div class="profile-form__field">
             <mat-form-field class="bg-transparent" appearance="fill">
               <mat-label>Date Published</mat-label>
-              <input matInput placeholder="MM/DD/YYYY" type="text" formControlName="date_published" pattern="\d{1,2}/\d{1,2}/\d{4}">
+              <input matInput placeholder="MM/DD/YYYY" type="text" formControlName="date_published" pattern="\d{1,2}/\d{1,2}/\d{4}" autocomplete="off">
               <input class="hide" [matDatepicker]="publication_date_published" [max]="maxDate" (dateChange)="onChangeDatePublished($event, i)">
               <mat-datepicker-toggle matSuffix [for]="publication_date_published"></mat-datepicker-toggle>
               <mat-datepicker
@@ -682,7 +682,7 @@
               <div class="profile-form__field">
                 <mat-form-field class="bg-transparent" appearance="fill">
                   <mat-label>Arrest Date</mat-label>
-                  <input matInput placeholder="MM/DD/YYYY" type="text" formControlName="arrest_date" pattern="\d{1,2}/\d{1,2}/\d{4}">
+                  <input matInput placeholder="MM/DD/YYYY" type="text" formControlName="arrest_date" pattern="\d{1,2}/\d{1,2}/\d{4}" autocomplete="off">
                   <input class="hide" [matDatepicker]="arrest_date" [max]="maxDate" (dateChange)="onChangeArrestDate($event, i)">
                   <mat-datepicker-toggle matSuffix [for]="arrest_date"></mat-datepicker-toggle>
                   <mat-datepicker

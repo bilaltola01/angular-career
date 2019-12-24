@@ -26,7 +26,7 @@
   </div>
   <!-- Position Filter Card -->
 
-  <div [formGroup]="applicationForm" class="application-main-container">
+  <form [formGroup]="applicationForm" class="application-main-container" autocomplete="off">
     <div class="filter-container container__header tablet" [class.open]="filter_list">
       <ng-container>
         <div class="nav-title">
@@ -184,7 +184,7 @@
     <div class="application-list-container">
       <div class="select-style">
         <div class="selectall">
-          <round-checkbox id="test" title="Select All" [checked]="selectedAllFlag" (statusChange)="selectAll($event)">
+          <round-checkbox  title="Select All" [checked]="selectedAllFlag" (statusChange)="selectAll($event)">
           </round-checkbox>
           <div class="application_modify">
             <mat-label>Modify Status</mat-label>&nbsp;
@@ -208,7 +208,7 @@
       </div>
       <div *ngFor="let application of applicationList ">
         <div class="row" [ngClass]="{'selected': application.selected}">
-          <round-checkbox id="test" [checked]="application.selected"
+          <round-checkbox  [checked]="application.selected"
             (statusChange)="application.selected = !application.selected;selectedAllFlag=false;"></round-checkbox>
           <h1 (click)="routerNavigate(application.application_id,application.position_id)">{{application.position}}
           </h1>
@@ -430,5 +430,5 @@
         </ul>
       </div>
     </div>
-  </div>
+  </form>
 </div>

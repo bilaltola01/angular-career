@@ -6,7 +6,7 @@
 </ng-container>
 <!-- Search Bar -->
 <div class="career-main">
-  <div class="comman_search_filter" [formGroup]="SavedJobsForm">
+  <form class="comman_search_filter" [formGroup]="SavedJobsForm" autocomplete="off">
     <div class="filter-data">
       <mat-icon (click)="toggleTabMenuOpen()" class="filter_icon">filter_list</mat-icon>
     </div>
@@ -22,8 +22,8 @@
         </mat-autocomplete>
       </mat-form-field>
     </div>
-  </div>
-  <div [formGroup]="SavedJobsForm" class="position-main-container">
+  </form>
+  <form [formGroup]="SavedJobsForm" class="position-main-container" autocomplete="off">
     <!-- Position Filter Card -->
     <div class="filter-container container__header tablet" [class.open]="filter_list">
       <ng-container>
@@ -181,7 +181,7 @@
     <div class="position-list-container">
       <div class="select-style">
         <div class="selectall">
-          <round-checkbox id="test" title="Select All" [checked]="selectedAllFlag" (statusChange)="selectAll($event)">
+          <round-checkbox  title="Select All" [checked]="selectedAllFlag" (statusChange)="selectAll($event)">
           </round-checkbox>
           <action-button class="position-search-reload-result" color="primary" title="Apply Selected"
             (click)="applySelected()">
@@ -214,7 +214,7 @@
       </div>
       <div *ngFor="let job of savedPositionList ">
         <div class="row" [ngClass]="{'selected': job.selected}">
-          <round-checkbox id="test" [checked]="job.selected"
+          <round-checkbox  [checked]="job.selected"
             (statusChange)="job.selected = !job.selected;selectedAllFlag=false;"></round-checkbox>
           <h1 [routerLink]="['position-info']" [queryParams]="{id: job.position_id}">{{job.position}} </h1>
           <div class="position-right">
@@ -381,5 +381,5 @@
         </ul>
       </div>
     </div>
-  </div>
+  </form>
 </div>

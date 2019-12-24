@@ -8,7 +8,7 @@
 
 <!-- Search Bar -->
 <div class="career-main">
-    <div class="common-search-filter" [formGroup]="companiesForm" autocomplete="off">
+    <form class="common-search-filter" [formGroup]="companiesForm" autocomplete="off">
         <div class="filter-data">
             <mat-icon (click)="toggleTabMenuOpen()" class="filter_icon">filter_list</mat-icon>
         </div>
@@ -34,7 +34,7 @@
                 </mat-autocomplete>
             </mat-form-field>
         </div>
-    </div>
+    </form>
 
     <div class="companies-main-container">
 
