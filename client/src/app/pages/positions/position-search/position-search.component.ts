@@ -743,6 +743,10 @@ export class PositionSearchComponent implements OnInit {
   routerNavigate(application_id, position_id) {
     this.router.navigate([`/applications/${application_id}/application-detail/`, position_id], { queryParams: { searchData: this.applicationUrlParams ? this.applicationUrlParams : this.urlQueryParameter } });
   }
+  routerNavigatePosition(position_id) {
+    this.router.navigate([`positions/position-info/${position_id}`] );
+
+  }
 }
 
 

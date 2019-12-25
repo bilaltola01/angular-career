@@ -634,5 +634,8 @@ export class SavedJobsComponent implements OnInit {
       panelClass: ['edit-dialog-container']
     });
   }
+  routerNavigatePosition(position_id) {
+    this.router.navigate([`saved-jobs/position-info/${position_id}`] );
 
+  }
 }
