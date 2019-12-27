@@ -10,23 +10,18 @@ export const careerFairSearchRouting: Routes = [
     component: CareerFairSearchComponent
   },
   {
-    path: 'careerfair-info/:careerfair_id',
+    path: 'careerfair-info',
     component: CareerfairInfoComponent,
-    children: [
-      {
-        path: 'careerfair-positions',
-        component: CareerfairInfoComponent,
-        canActivate: [AuthGuard]
-      },
-      {
-        path: 'careerfair-companies',
-        component: CareerfairInfoComponent,
-        // canActivate: [AuthGuard]
-      },
-    ]
+    canActivate: [AuthGuard],
   },
   {
-    path: 'careerfair-info/:careerfair_id/position-info',
+    path: 'position-info/:position_id',
+    component: PositionsDetailsComponent,
+    pathMatch: 'full'
+    // canActivate: [AuthGuard]
+  },
+  {
+    path: 'career-fairs/careerfair-info/position-info',
     component: PositionsDetailsComponent
     // canActivate: [AuthGuard]
   },

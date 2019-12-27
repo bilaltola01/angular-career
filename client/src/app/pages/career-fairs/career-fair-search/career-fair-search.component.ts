@@ -42,6 +42,7 @@ export class CareerFairSearchComponent implements OnInit {
   searchQueryParam;
   urlParams = {};
   offsetFlag = false;
+  params = {};
   queryFlag = true;
   prequeryFlag = false;
   preLoadDataFlag = true;
@@ -53,25 +54,13 @@ export class CareerFairSearchComponent implements OnInit {
   querySearchOffset;
   querySearchlimit;
   urlParamsDate;
+  queryParamOffset;
+  queryParamLimit;
 
   constructor(private autoCompleteService: AutoCompleteService, private router: Router, private route: ActivatedRoute,
     private alertsService: AlertsService, private careerfairService: CareerFairService) {
   }
   ngOnInit() {
-    const urlParams = new URLSearchParams(window.location.search);
-    this.searchQueryParam = urlParams.get('find');
-    if (this.searchQueryParam) {
-
-      this.preLoadDataFlag = false;
-      this.offsetFlag = true;
-      const urlObject = this.searchQueryParam.split('&');
-
-      for (let i = 0; i < urlObject.length; i++) {
-        const result = urlObject[i].split('=');
-        this.urlParams[result[0]] = result[1];
-      }
-
-    }
     this.initPositionFilterForm();
     this.getJobData();
 
@@ -81,11 +70,21 @@ export class CareerFairSearchComponent implements OnInit {
     this.filter_list = !this.filter_list;
   }
   initPositionFilterForm() {
+    const querySearchedName = this.route.snapshot.queryParamMap.get('searchCareerfair') || null;
+    const querySearchedDate = this.route.snapshot.queryParamMap.get('date') || null;
+    const querySearchedLocation = this.route.snapshot.queryParamMap.get('location') || null;
+    const querySearchedCompany = this.route.snapshot.queryParamMap.get('company') || null;
+     this.queryParamOffset = this.route.snapshot.queryParamMap.get('offset') || null;
+    this.queryParamLimit = this.route.snapshot.queryParamMap.get('limit') || null;
+    if (this.queryParamOffset) {
+this.offsetFlag = true;
+    }
+
     this.careerFairsForm = new FormGroup({
-      'searchCareerfair': new FormControl(null),
-      'location': new FormControl(null),
-      'company': new FormControl(null),
-      'date': new FormControl(null),
+      'searchCareerfair': new FormControl(querySearchedName),
+      'location': new FormControl(querySearchedLocation),
+      'company': new FormControl(querySearchedCompany),
+      'date': new FormControl(querySearchedDate),
     });
     this.careerFairsForm.get('location').valueChanges.subscribe((location) => {
       location ? this.onCityValueChanges(location) : this.autocomplete_cities = [];
@@ -93,14 +92,6 @@ export class CareerFairSearchComponent implements OnInit {
     this.careerFairsForm.get('company').valueChanges.subscribe((company) => {
       company ? this.onCompanyValueChanges(company) : this.autocomplete_companies = [];
     });
-    if (this.searchQueryParam) {
-      this.careerFairsForm.patchValue({
-        'searchCareerfair': this.urlParams['name'],
-        'location': this.urlParams['location'],
-        'company': this.urlParams['company'],
-        'date': this.urlParams['date'],
-      });
-    }
   }
 
 
@@ -132,51 +123,51 @@ export class CareerFairSearchComponent implements OnInit {
   }
   generateQueryString(): string {
     let queryString;
-    let urlQueryParam;
-    if (this.searchQueryParam) {
-      this.urlQueryParameters = this.searchQueryParam;
-      queryString = this.searchQueryParam;
-      this.searchQueryParam = null;
-    } else {
     queryString = this.careerFairsForm.value.location ? `${queryString ? queryString + '&' : ''}location=${this.careerFairsForm.value.location ? this.careerFairsForm.value.location : ''}` : queryString;
     queryString = this.careerFairsForm.value.company ? `${queryString ? queryString + '&' : ''}company=${this.careerFairsForm.value.company ? this.careerFairsForm.value.company : ''}` : queryString;
     queryString = this.careerFairsForm.value.date ? `${queryString ? queryString + '&' : ''}date=${this.careerFairsForm.value.date}` : queryString;
-    // queryString = queryString ? `${queryString}&offset=${this.filterAttributes.offset}` : `offset=${this.filterAttributes.offset}`;
-    // queryString = queryString ? `${queryString}&limit=${this.filterAttributes.limit}` : `offset=${this.filterAttributes.limit}`;
     queryString = this.careerFairsForm.value.searchCareerfair ? `${queryString ? queryString + '&' : ''}name=${this.careerFairsForm.value.searchCareerfair}` : queryString;
     if (this.offsetFlag) {
-      queryString = queryString ? `${queryString}&offset=${parseInt(this.urlParams['offset'], 10) + parseInt(this.urlParams['limit'], 10)}` : `offset=${parseInt(this.urlParams['offset'], 10) + this.filterAttributes.limit}`;
-      queryString = queryString ? `${queryString}&limit=${parseInt(this.urlParams['limit'], 10)}` : `offset=${parseInt(this.urlParams['limit'], 10)}`;
+      queryString = queryString ? `${queryString}&offset=${this.queryParamOffset}` : `offset=${this.queryParamOffset}`;
+      queryString = queryString ? `${queryString}&limit=${this.filterAttributes.limit}` : `offset=${this.filterAttributes.limit}`;
       this.offsetFlag = false;
     } else {
       queryString = queryString ? `${queryString}&offset=${this.filterAttributes.offset}` : `offset=${this.filterAttributes.offset}`;
       queryString = queryString ? `${queryString}&limit=${this.filterAttributes.limit}` : `offset=${this.filterAttributes.limit}`;
 
     }
-    urlQueryParam = this.careerFairsForm.value.location ? `${urlQueryParam ? urlQueryParam + '&' : ''}location=${this.careerFairsForm.value.location ? this.careerFairsForm.value.location : ''}` : urlQueryParam;
-      urlQueryParam = this.careerFairsForm.value.company ? `${urlQueryParam ? urlQueryParam + '&' : ''}company=${this.careerFairsForm.value.company ? this.careerFairsForm.value.company : ''}` : urlQueryParam;
-      urlQueryParam = this.careerFairsForm.value.date ? `${urlQueryParam ? urlQueryParam + '&' : ''}date=${this.careerFairsForm.value.date}` : urlQueryParam;
-      urlQueryParam = this.careerFairsForm.value.searchCareerfair ? `${urlQueryParam ? urlQueryParam + '&' : ''}name=${this.careerFairsForm.value.searchCareerfair}` : urlQueryParam;
+     this.params = {
+      'name': this.careerFairsForm.value.searchCareerfair,
+      'location': this.careerFairsForm.value.location,
+      'company': this.careerFairsForm.value.company,
+      'date': this.careerFairsForm.value.date,
+      'offset': this.filterAttributes.offset,
+      'limit': this.filterAttributes.limit
+    };
 
-      if (this.offsetParam || this.filterAttributes.offset === 0 || this.filterAttributes.offset === this.filterAttributes.limit) {
-        urlQueryParam = urlQueryParam ? `${urlQueryParam}&offset=${this.filterAttributes.offset === 0 || this.filterAttributes.offset === this.filterAttributes.limit ? 0 : this.offsetParam}` : `offset=${this.filterAttributes.offset === 0 || this.filterAttributes.offset === this.filterAttributes.limit ? 0 : this.offsetParam}`;
-        urlQueryParam = urlQueryParam ? `${urlQueryParam}&limit=${this.filterAttributes.limit}` : `offset=${this.filterAttributes.limit}`;
-      }
 
 
-    if (this.queryFlag || this.prequeryFlag) {
-      this.urlQueryParameters = urlQueryParam;
-      this.router.navigate([], { queryParams: { find: urlQueryParam ? urlQueryParam : ''} });
+
+    if (this.queryFlag) {
+      const paramsInQuery = {
+        'name': this.careerFairsForm.value.searchCareerfair,
+        'location': this.careerFairsForm.value.location,
+        'company': this.careerFairsForm.value.company,
+        'date': this.careerFairsForm.value.date,
+        'offset': this.queryParamOffset ? this.queryParamOffset : this.filterAttributes.offset,
+        'limit': this.filterAttributes.limit
+      };
+
+     this.router.navigate([], { queryParams : paramsInQuery  });
     }
-    this.urlQueryParameter = queryString;
-    }
+    this.urlQueryParameters = queryString;
     return queryString;
   }
   getJobData() {
     this.queryFlag = true;
     this.selectedAllFlag = false;
-    if (this.searchQueryParam) {
-      this.currentPageNumber = (this.urlParams['offset'] / this.urlParams['limit']) + 1;
+    if (this.queryParamOffset) {
+      this.currentPageNumber = (this.queryParamOffset / this.filterAttributes.limit) + 1;
     } else {
       this.currentPageNumber = (this.filterAttributes.offset / this.filterAttributes.limit) + 1;
     }
@@ -188,8 +179,11 @@ export class CareerFairSearchComponent implements OnInit {
       if (this.currentPageNumber < this.paginationArr[this.paginationArr.length - 1]) {
         this.preLoadNextPage(this.currentPageNumber + 1);
       } else {
-        this.urlQueryParameters = this.urlQueryParameter;
-        this.router.navigate([], { queryParams: { find : this.urlQueryParameter ? this.urlQueryParameter : ''} });
+
+      this.router.navigate([], { relativeTo: this.route,
+       queryParams: this.params,
+        queryParamsHandling: 'merge',
+      });
       }
     } else {
       this.isJobLoading = true;
@@ -216,21 +210,26 @@ export class CareerFairSearchComponent implements OnInit {
   }
 
   setPaginationValues(dataJson) {
+
     let max;
     let min;
     if (this.currentPageNumber >= 5) {
       max = Math.ceil(dataJson.data.count / careerFairsListLimit) <= 6 ? Math.ceil(dataJson.data.count / careerFairsListLimit) + this.currentPageNumber - 1 : this.currentPageNumber + 6;
       min = max > 10 ? max - 9 : 1;
     } else {
-      if (this.offsetFlag) {
-        this.filterAttributes.offset = parseInt(this.urlParams['offset'], 10);
+      if (this.queryParamOffset) {
+
+        this.filterAttributes.offset = parseInt(this.queryParamOffset, 10);
+        this.queryParamOffset = '';
       }
+
       max = Math.ceil((dataJson.data.count + this.filterAttributes.offset) / careerFairsListLimit) < 10 ? Math.ceil((dataJson.data.count + this.filterAttributes.offset) / careerFairsListLimit) : 10;
       min = 1;
     }
     this.paginationArr = Array(max - min + 1).fill(0).map((x, i) => i + min);
   }
   clearFilter() {
+    this.urlParamsDate = '';
     const sortValue = this.careerFairsForm.value.sortBy;
     const setPositionValue = this.careerFairsForm.value.searchCareerfair;
     this.careerFairsForm.reset();
@@ -272,7 +271,7 @@ export class CareerFairSearchComponent implements OnInit {
   }
   preLoadNextPage(nextPageNumber) {
     this.queryFlag = false;
-    if (!this.preLoadDataObject[nextPageNumber]) {
+    // if (!this.preLoadDataObject[nextPageNumber]) {
       const previousOffset = this.filterAttributes.offset;
       this.filterAttributes.offset = this.filterAttributes.offset + careerFairsListLimit;
       const queryString = this.generateQueryString();
@@ -288,10 +287,11 @@ export class CareerFairSearchComponent implements OnInit {
           this.careerFairsList = [];
         }
       );
-    }
+    // }
   }
-  routerNavigate(careerfair_id) {
-    this.router.navigate([`career-fairs/careerfair-info/${careerfair_id}/careerfair-companies`], { queryParams: { finds: this.urlQueryParameters ? this.urlQueryParameters :  '' } });
+//   routerNavigate(careerfair_id) {
+// this.router.navigate(['career-fairs/careerfair-info/', careerfair_id]);
+//     // this.router.navigate(['career-fairs/careerfair-info/', careerfair_id], { queryParams: { finds: this.urlQueryParameters ? this.urlQueryParameters :  '' } });
 
-  }
+//   }
 }

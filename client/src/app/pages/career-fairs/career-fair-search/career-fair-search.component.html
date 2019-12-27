@@ -74,8 +74,9 @@
       <div *ngFor="let fair of careerFairsList ">
         <div class="row">
           <img class="img-style" src="{{fair.company_logo ? fair.company_logo : 'assets/icons/ic_university.svg'}}">
-          <!-- <h1 [routerLink]="['careerfair-info/',fair.careerfair_id]">{{fair.name_of_careerfair}} </h1> -->
-          <h1 (click) ="routerNavigate(fair.careerfair_id)">{{fair.name_of_careerfair}} </h1>
+          <h1 [routerLink]="['careerfair-info/']"
+          [queryParams]="{id: fair.careerfair_id, tabIndex: 0 }" >{{fair.name_of_careerfair}} </h1>
+          <!-- <h1 (click) ="routerNavigate(fair.careerfair_id)">{{fair.name_of_careerfair}} </h1> -->
           <div>
             <div class="job-top-list">
               <ul>

@@ -9,13 +9,14 @@ $profile-form-field-mt: 30px;
     .comman_search_filter {
       .postion-search-header {
         background-color: $white;
-        border: 1px solid #ddd;
+        //border: 1px solid #ddd;
         padding: 12px 15px;
         text-align: center;
         margin-bottom: 20px;
         position: relative;
         z-index: 1;
         left: 0;
+        border-radius: 5px;
         & mat-form-field {
           width: 100%;
           border-radius: 50px;
@@ -119,7 +120,7 @@ $profile-form-field-mt: 30px;
               align-items: center;
             .careerfair-uni-img{
                 border: 1px solid #EFEFEF;
-                border-radius: 100%;
+                // border-radius: 100%;
                 width: 60px;
                 height: 60px;
                 overflow: hidden;
@@ -204,8 +205,9 @@ $profile-form-field-mt: 30px;
                opacity: 0.34;
             }
             p{
-                color: #001D40;
-                opacity: 0.54;
+                //color: #001D40;
+                //opacity: 0.54;
+                color: #263f5d;
                 font-family: "Poppins", sans-serif;
                 margin-top: 0px;
                 font-size: 14px;
@@ -461,6 +463,10 @@ $profile-form-field-mt: 30px;
           font-size: 14px;
           display: block;
         }
+        simple-tag{
+          display: inline-block;
+          margin: 15px 5px 0px 5px;
+        }
       }
       .side-filter-btn {
         @include btn-align-center;
@@ -632,8 +638,9 @@ $profile-form-field-mt: 30px;
                        line-height: 19px;
                     }
                     p{
-                        color: #001D40;
-                        opacity: 0.54;
+                        //color: #001D40;
+                        //opacity: 0.54;
+                        color: #263f5d;
                         font-family: "Poppins", sans-serif;
                         margin-top: 0px;
 
@@ -656,6 +663,7 @@ $profile-form-field-mt: 30px;
                 line-height: 34px;
                 font-weight: 500;
                 padding: 0px 15px;
+                font-family: "Poppins", sans-serif;
                 a{
                     text-decoration: none;
                     color: rgba(0, 29, 64, 0.3);

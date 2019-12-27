@@ -1,13 +1,14 @@
-<ng-container *ngIf="isJobLoading">
-  <div class="loading">
-    <mat-spinner></mat-spinner>
-    <h4>Loading...</h4>
-  </div>
-</ng-container>
+
 
 <!-- Search Bar -->
 
 <div class="career-main">
+  <ng-container *ngIf="isJobLoading">
+    <div class="loading">
+      <mat-spinner></mat-spinner>
+      <h4>Loading...</h4>
+    </div>
+  </ng-container>
   <!-- careerfair-detail -->
   <div class="filter-data">
     <mat-icon (click)="toggleTabMenuOpen()" class="filter_icon">filter_list</mat-icon>
@@ -77,9 +78,9 @@
     </div>
     <div class="careerfair-bottam-detail">
       <ul>
-        <li><a (click)="navigateToCompanies()" [ngClass]="{'active': currentPage == 'company'}">Companies</a></li>
+        <li><a (click)="selectTabMenu(0)" [ngClass]="{'active': tabIndex == 0}">COMPANIES</a></li>
         <li>|</li>
-        <li><a (click)="navigateToPositions()" [ngClass]="{'active': currentPage == 'positions'}">Positions</a></li>
+        <li><a (click)="selectTabMenu(1)" [ngClass]="{'active': tabIndex == 1}">POSITIONS</a></li>
       </ul>
     </div>
   </div>
@@ -87,8 +88,7 @@
   <!-- Career-fair company started -->
 
   <!-- Career-fair Filter Card -->
-  <div [formGroup]="careerFairForm" class="position-main-container"
-    *ngIf="currentPage === 'company' && currentPage !== 'positions'">
+  <div [formGroup]="careerFairForm" class="position-main-container" *ngIf="tabIndex === 0">
     <div class="filter-container container__header tablet" [class.open]="filter_list">
       <ng-container>
         <div class="nav-title">
@@ -111,34 +111,37 @@
         </div>
         <div class="filter-card">
           <mat-form-field>
-            <mat-label>Hosting Company </mat-label>
-            <input matInput placeholder="Company" type="text" [matAutocomplete]="autocompleteCompany"
-              formControlName="company">
-            <mat-autocomplete #autocompleteCompany="matAutocomplete">
-              <mat-option *ngFor="let company of autocomplete_companies" [value]="company.company_name">
-                <span>{{company.company_name}}</span>
+            <mat-label>Industry </mat-label>
+            <input matInput placeholder="Industry" type="text" [matAutocomplete]="autocompleteIndustry"
+              formControlName="industry">
+            <mat-autocomplete #autocompleteIndustry="matAutocomplete">
+              <mat-option *ngFor="let industry of autocomplete_industries" [value]="industry.industry_name"
+                (onSelectionChange)="onChangeCompanyIndustry(industry)">
+                <span>{{industry.industry_name}}</span>
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
         </div>
         <div class="filter-card">
           <mat-form-field>
-            <mat-label>Location</mat-label>
-            <input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity"
-              formControlName="location">
+            <mat-label>Size</mat-label>
+            <mat-select class="arrow" formControlName="size">
+              <mat-option value=''></mat-option>
+              <mat-option *ngFor="let size of companySizeTypes" value="{{size}}">{{size}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="filter-card">
+          <mat-form-field>
+            <mat-label>City</mat-label>
+            <input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity" formControlName="city">
             <mat-autocomplete #autocompleteCity="matAutocomplete">
-              <mat-option *ngFor="let city of autocomplete_cities" [value]="(city.city)?.split(',')[0]">
+              <mat-option *ngFor="let city of autocomplete_cities" [value]="(city.city)?.split(',')[0]"
+                (onSelectionChange)="onChangeCity(city)">
                 <span>{{city.city}}</span>
               </mat-option>
             </mat-autocomplete>
-          </mat-form-field>
-        </div>
-        <div class="filter-card">
-          <mat-form-field>
-            <input matInput [matDatepicker]="picker" formControlName="date" [min]="minDate"
-              placeholder="Date of Career Fair">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
         </div>
         <div class="filter-card">
@@ -147,7 +150,8 @@
             </action-button>
           </div>
           <div class="clear-filter">
-            <action-button class="clear-btn" type="text" title="Clear Filters" (click)="clearCompanyFilter()" color="primary">
+            <action-button class="clear-btn" type="text" title="Clear Filters" (click)="clearCompanyFilter()"
+              color="primary">
             </action-button>
           </div>
         </div>
@@ -156,6 +160,7 @@
     <!-- Career-fair company info Card -->
 
     <div class="company-list-container">
+
       <div *ngFor="let fair of companiesList">
         <div class="row">
           <div class="careerfair-detail-card-top">
@@ -164,7 +169,7 @@
             </div>
             <div class="careerfair-uni-address">
               <h1 [routerLink]="['/company-info']"
-              [queryParams]="{id: fair.company_id, tabIndex: 0, showBackButton: false}">{{fair.company_name}} </h1>
+                [queryParams]="{id: fair.company_id, tabIndex: 0, showBackButton: false}">{{fair.company_name}} </h1>
               <p><img _ngcontent-uuq-c10="" src="assets/icons/ic_location.svg"> <span class="company-address"
                   *ngIf="fair.hq_city_name && fair.hq_state_name && fair.hq_country_name; else noLocation">
                   {{fair.hq_city_name}},
@@ -227,8 +232,7 @@
   <!-- Carrer-fair company Ends -->
 
   <!-- Carrer-fair positions Start -->
-  <div [formGroup]="positionForm" class="position-main-container"
-    *ngIf="currentPage === 'positions' && currentPage !== 'company'">
+  <div [formGroup]="positionForm" class="position-main-container" *ngIf="tabIndex===1">
     <div class="filter-container container__header tablet" [class.open]="filter_list">
       <ng-container>
         <div class="nav-title">
@@ -239,17 +243,17 @@
             <mat-icon (click)="toggleTabMenuOpen()" class="filter_icon">filter_list</mat-icon>
           </div> -->
           <div class="postion-search-header">
-                <mat-form-field appearance="standard" class="search">
-                  <mat-icon matSuffix (click)="onSearchPosition($event)">search</mat-icon>
-                  <input matInput placeholder="Search Positions" type="text" [matAutocomplete]="autocompleteSearch"
-                    formControlName="searchPosition" (keyup.enter)="onSearchPosition($event)">
-                  <mat-autocomplete #autocompleteSearch="matAutocomplete">
-                    <mat-option *ngFor="let search of autocomplete_searchposition" [value]="search.position  ">
-                      <span>{{search.position}}</span>
-                    </mat-option>
-                  </mat-autocomplete>
-                </mat-form-field>
-              </div>
+            <mat-form-field appearance="standard" class="search">
+              <mat-icon matSuffix (click)="onSearchPosition($event)">search</mat-icon>
+              <input matInput placeholder="Search Positions" type="text" [matAutocomplete]="autocompleteSearch"
+                formControlName="searchPosition" (keyup.enter)="onSearchPosition($event)">
+              <mat-autocomplete #autocompleteSearch="matAutocomplete">
+                <mat-option *ngFor="let search of autocomplete_searchposition" [value]="search.position  ">
+                  <span>{{search.position}}</span>
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
         </div>
         <div class="nav-title">
           <h3 class="section-title">POSITION FILTERS</h3>
@@ -278,9 +282,11 @@
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
-          <div *ngIf="userSkillsList.length > 0" class="skills">
+          <div *ngIf="userSkillsList.length > 0 ? userSkillsList.length > 0 : skillUrlParams.length > 0" class="skills">
             <simple-tag *ngFor="let skillData of userSkillsList; let i = index" type="gray" removeTag="true"
               title="{{skillData.skill}}" (click)="removeUserSkillsData(i)"></simple-tag>
+            <simple-tag *ngFor="let skillData of skillUrlParams; let i = index" type="gray" removeTag="true"
+              title="{{skillData}}" (click)="removeSkillUrlParams(i)"></simple-tag>
           </div>
         </div>
         <div class="filter-card">
@@ -393,7 +399,8 @@
             </action-button>
           </div>
           <div class="clear-filter">
-            <action-button class="clear-btn" type="text" title="Clear Filters" (click)="clearPositionFilter()" color="primary">
+            <action-button class="clear-btn" type="text" title="Clear Filters" (click)="clearPositionFilter()"
+              color="primary">
             </action-button>
           </div>
         </div>
@@ -425,20 +432,21 @@
             </span>
           </div>
         </div>
-        <div class="sort-item">
+        <!-- <div class="sort-item">
           <mat-label>Sort by</mat-label>&nbsp;
           <mat-form-field>
             <mat-select value="dateposted" formControlName="sortBy" (selectionChange)="getPositionsData()">
               <mat-option *ngFor="let sort of sortBy" [value]="sort.value">{{sort.title}}</mat-option>
             </mat-select>
           </mat-form-field>
-        </div>
+        </div> -->
       </div>
       <div *ngFor="let job of positionList ">
         <div class="row" [ngClass]="{'selected': job.selected}">
           <round-checkbox id="test" [checked]="job.selected"
             (statusChange)="job.selected = !job.selected;selectedAllFlag=false;"></round-checkbox>
           <h1 [routerLink]="['position-info']" [queryParams]="{id: job.position_id}">{{job.position}} </h1>
+          <!-- <h1 (click)="routerNavigatePosition(job.position_id)" >{{job.position}} </h1> -->
           <div class="position-right">
             <div class="heart-icon">
               <img *ngIf="!appliedJobsMap[job.position_id] && !savedJobsMap[job.position_id]" (click)="saveJob([job])"
@@ -530,10 +538,10 @@
                   <div class="skil-height-fix" [ngClass]="{'skill-more-height': job.showMoreFlag}"
                     *ngIf="job.minimum_skills; else noSkills">
                     <div class="skills-preferred-m" *ngFor="let min_skill of job.minimum_skills ">
-                      <simple-tag type="gray" title="{{min_skill.skill}}" ellipseTag="true" (click)="openSkilladdDialog(min_skill)"
+                      <simple-tag type="gray" title="{{min_skill.skill}}" ellipseTag="true"
+                        value="{{min_skill.skill_level}}" (click)="openSkilladdDialog(min_skill)"
                         [matTooltip]="SkillLevelDescription[min_skill.skill_level].title + SkillLevelDescription[min_skill.skill_level].description"
-                        [matTooltipShowDelay]=500
-                        value="{{min_skill.skill_level}}">
+                        [matTooltipShowDelay]=500>
                       </simple-tag>
                     </div>
                   </div>
@@ -544,10 +552,10 @@
                   <div class="skil-height-fix" [ngClass]="{'skill-more-height': job.showMoreFlag}"
                     *ngIf="job.preferred_skills; else noSkills">
                     <div class="skills-preferred-m skill-prefer" *ngFor="let preskill of job.preferred_skills">
-                      <simple-tag type="gray" title="{{preskill.skill}}" ellipseTag="true" (click)="openSkilladdDialog(preskill)"
-                      [matTooltip]="SkillLevelDescription[preskill.skill_level].title + SkillLevelDescription[preskill.skill_level].description"
-                      [matTooltipShowDelay]=500
-                        value="{{preskill.skill_level}}">
+                      <simple-tag type="gray" title="{{preskill.skill}}" ellipseTag="true"
+                        value="{{preskill.skill_level}}"  (click)="openSkilladdDialog(preskill)"
+                        [matTooltip]="SkillLevelDescription[preskill.skill_level].title + SkillLevelDescription[preskill.skill_level].description"
+                        [matTooltipShowDelay]=500>
                       </simple-tag>
                     </div>
                   </div>

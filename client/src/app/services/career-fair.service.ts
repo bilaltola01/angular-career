@@ -97,7 +97,6 @@ export class CareerFairService {
   }
   getPresentPositions(careerfairId, queryString?: string): Observable<any>  {
     const queryUrl = `${this.career_fair_service_url}careerfair/${careerfairId}/positions?${queryString}`;
-
     return this.http.get(queryUrl, this.authHttpOptions())
     .pipe(
         map(
