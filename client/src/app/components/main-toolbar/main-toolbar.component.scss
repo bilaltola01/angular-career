@@ -85,7 +85,20 @@ mat-toolbar{
 }
 
 .logo-href {
-  height: 35px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+
+  img {
+    height: 50px;
+  }
+  span {
+    color: white;
+    margin-left: 5px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+  }
 }
 
 .userinfo-container {
@@ -138,7 +151,11 @@ button.mat-icon-button {
   .logo-href {
     height: 26px;
     img {
-      max-width: 100px
+      height: 35px;
+    }
+    span {
+      font-size: 12px;
+      margin-left: 4px;
     }
   }
   .user-dropdown {
