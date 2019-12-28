@@ -337,6 +337,17 @@ p {
           }
         }
       }
+      p.headup {
+        width: 80%;
+        text-align: left;
+        font-family: 'Poppins-Regular', sans-serif;
+        font-weight: 400;
+        font-style: normal;
+        font-size: 14px;
+        line-height: 21px;
+        color: rgba(map-get($md-cfaccent, 500), .44);
+        margin-top: 15px;
+      }
     }
   }
   &.profile-basic {
@@ -522,7 +533,7 @@ p {
         }
       }
     }
-  }  
+  }
 }
 
 @media only screen and (max-width: $mobile-breakpoint) {
