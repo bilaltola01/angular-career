@@ -4,7 +4,7 @@
       <h2>The email verification link has been sent successfully.</h2>
       <p>Please verify your account.</p>
     </div>
-    <div *ngIf="!isSent" class="row__resend-form" [formGroup]="emailSendForm" autocomplete="off">
+    <form *ngIf="!isSent" class="row__resend-form" [formGroup]="emailSendForm" autocomplete="off">
       <mat-form-field appearance="fill">
         <mat-label>Email Address</mat-label>
         <mat-icon matPrefix>mail_outline</mat-icon>
@@ -12,7 +12,7 @@
         <mat-icon matSuffix *ngIf="emailSendForm.controls.email.valid">done</mat-icon>
         <mat-icon matSuffix class="error-field" *ngIf="!emailSendForm.controls.email.valid && emailSendForm.controls.email.touched">close</mat-icon>
       </mat-form-field>
-    </div>
+    </form>
     <div class="row__btn-send">
       <action-button *ngIf="isSent" type="stroked" title="Resend" (click)="initEmailSendForm()"></action-button>
       <action-button *ngIf="!isSent" type="flat" title="Send" color="primary" (click)="resendEmail()" [disabled]="!emailSendForm.valid"></action-button>

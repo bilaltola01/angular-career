@@ -30,7 +30,7 @@
 	<!-- Company Name & Overview start -->
 	<div *ngIf="selectedPageIndex===0" class="container profile-basic">
 		<div class="container__full">
-			<div class="profile-form" [formGroup]="nameOverviewForm">
+			<form class="profile-form" [formGroup]="nameOverviewForm" autocomplete="off">
 				<h3 class="profile-form__title">
 					Company Name & Overview
 				</h3>
@@ -53,7 +53,7 @@
 						<textarea matInput placeholder="Briefly introduce the company *" rows="15" formControlName="company_desc"></textarea>
 					</mat-form-field>
 				</div>
-			</div>
+			</form>
 		</div>
 
 		<div class="container__full">
@@ -66,7 +66,7 @@
 	<!-- Company Information start -->
 	<div *ngIf="selectedPageIndex===1" class="container profile-basic">
 		<div class="container__full">
-			<div class="profile-form" [formGroup]="companyBasicInfoForm">
+			<form class="profile-form" [formGroup]="companyBasicInfoForm" autocomplete="off">
 				<h3 class="profile-form__title">
 					Company Information
 				</h3>
@@ -96,7 +96,7 @@
 				<div class="profile-form__field">
 					<mat-form-field class="bg-transparent" appearance="fill">
 						<mat-label>City</mat-label>
-						<input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity" formControlName="hq_city">
+						<input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity" formControlName="hq_city" autocomplete="new-company-city">
 						<mat-icon matSuffix *ngIf="companyBasicInfoForm.get('hq_city').value && helperService.checkSpacesString(companyBasicInfoForm.get('hq_city').value) && companyBasicInfoForm.get('hq_city').valid && onCheckCityValidation()">done</mat-icon>
 						<mat-icon matSuffix class="error-field" *ngIf="companyBasicInfoForm.get('hq_city').value && helperService.checkSpacesString(companyBasicInfoForm.get('hq_city').value) && !onCheckCityValidation() && companyBasicInfoForm.get('hq_city').touched">close</mat-icon>
 						<mat-autocomplete #autocompleteCity="matAutocomplete" (closed)="onBlurCity()">
@@ -109,7 +109,7 @@
 				<div class="profile-form__field">
 					<mat-form-field class="bg-transparent" appearance="fill">
 						<mat-label>State</mat-label>
-						<input matInput placeholder="State" type="text" [matAutocomplete]="autocompleteState" formControlName="hq_state">
+						<input matInput placeholder="State" type="text" [matAutocomplete]="autocompleteState" formControlName="hq_state" autocomplete="new-company-state">
 						<mat-icon matSuffix *ngIf="companyBasicInfoForm.value.hq_state && helperService.checkSpacesString(companyBasicInfoForm.value.hq_state) && companyBasicInfoForm.get('hq_state').valid && onCheckStateValidation()">done</mat-icon>
 						<mat-icon matSuffix class="error-field" *ngIf="companyBasicInfoForm.get('hq_state').value && helperService.checkSpacesString(companyBasicInfoForm.get('hq_state').value) && !onCheckStateValidation() && companyBasicInfoForm.get('hq_state').touched">close</mat-icon>
 						<mat-autocomplete #autocompleteState="matAutocomplete" (closed)="onBlurState()">
@@ -135,7 +135,7 @@
 						<input matInput placeholder="Title" type="text" formControlName="website">
 					</mat-form-field>
 				</div>
-			</div>
+			</form>
 		</div>
 		<div class="container__full">
 			<action-button class="btn-next" type="flat" title="{{isEdit ? 'Update' : 'Next'}}" color="primary" [disabled]="!(companyBasicInfoForm.valid && onCheckCityValidation() && onCheckStateValidation())" (click)="goToNextPage()"></action-button>
@@ -146,7 +146,7 @@
 	<!-- Company Industry start -->
 	<div *ngIf="selectedPageIndex===2" class="container profile-skills">
 		<div class="container__full">
-			<div class="profile-form" [formGroup]="companyIndustryForm">
+			<form class="profile-form" [formGroup]="companyIndustryForm" autocomplete="off">
 				<h3 class="profile-form__title">
 					Industry
 				</h3>
@@ -190,7 +190,7 @@
 						</simple-tag>
 					</div>
 				</div>
-			</div>
+			</form>
 		</div>
 		<div class="container__full">
 			<action-button class="btn-next" type="flat" title="{{isEdit ? 'Update' : 'Next'}}" color="primary" [disabled]="!(companyIndustryForm.valid && onCheckMainIndustryValidation())" (click)="goToNextPage()"></action-button>
@@ -201,7 +201,7 @@
 	<!-- Company Administrators start -->
 	<div *ngIf="selectedPageIndex===3" class="container profile-skills">
 		<div class="container__full">
-			<div class="profile-form" [formGroup]="companyAdministratorsForm">
+			<form class="profile-form" [formGroup]="companyAdministratorsForm" autocomplete="off">
 				<h3 class="profile-form__title">
 					Admin List
 				</h3>
@@ -233,7 +233,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</form>
 		</div>
 		<div class="container__full">
 			<action-button class="btn-next" type="flat" title="{{isEdit ? 'Update' : 'Next'}}" color="primary" (click)="goToNextPage()"></action-button>
@@ -244,7 +244,7 @@
 	<!-- Company Recruiters start -->
 	<div *ngIf="selectedPageIndex===4" class="container profile-skills">
 		<div class="container__full">
-			<div class="profile-form" [formGroup]="companyRecruitersForm">
+			<form class="profile-form" [formGroup]="companyRecruitersForm" autocomplete="off">
 				<h3 class="profile-form__title">
 					Recruiter List
 				</h3>
@@ -276,7 +276,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</form>
 		</div>
 		<div class="container__full">
 			<action-button class="btn-next" type="flat" title="{{isEdit ? 'Update' : 'Next'}}" color="primary" (click)="goToNextPage()"></action-button>

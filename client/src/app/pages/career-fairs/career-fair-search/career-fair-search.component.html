@@ -19,7 +19,7 @@
     </div>
   </div>
   <!-- Career-fair Filter Card -->
-  <div [formGroup]="careerFairsForm" class="position-main-container">
+  <form [formGroup]="careerFairsForm" class="position-main-container" autocomplete="off">
     <div class="filter-container container__header tablet" [class.open]="filter_list">
       <ng-container>
         <div class="nav-title">
@@ -136,5 +136,5 @@
         </ul>
       </div>
     </div>
-  </div>
+  </form>
 </div>

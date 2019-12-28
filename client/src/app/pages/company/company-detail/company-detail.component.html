@@ -312,7 +312,7 @@
 
         <div class="select-style">
           <div class="selectall">
-            <round-checkbox id="test" title="Select All" [checked]="selectedAllFlag" (statusChange)="selectAll($event)">
+            <round-checkbox  title="Select All" [checked]="selectedAllFlag" (statusChange)="selectAll($event)">
             </round-checkbox>
             <action-button class="position-search-reload-result" color="primary" title="Reload Results" (click)="preLoadDataObject = {}; getJobData()"></action-button>
 
@@ -332,7 +332,7 @@
           <div *ngFor="let job of positionList ">
 
             <div class="position-row" [ngClass]="{'selected': job.selected}">
-              <round-checkbox id="test" [checked]="job.selected" (statusChange)="job.selected = !job.selected;selectedAllFlag=false;"></round-checkbox>
+              <round-checkbox  [checked]="job.selected" (statusChange)="job.selected = !job.selected;selectedAllFlag=false;"></round-checkbox>
               <h1  [routerLink]="['/position-info/',job.position_id]" >{{job.position}} </h1>
               <div class="position-right">
                 <div class="heart-icon">

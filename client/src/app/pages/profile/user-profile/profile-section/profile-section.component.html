@@ -183,7 +183,7 @@
       <img src="assets/icons/ic_question.svg" class="question" *ngIf="editMode" (click)="openSkillDescriptionDialog()">
     </div>
 
-    <div class="form-field search" [formGroup]="skillsSearchForm" autocomplete="off">
+    <form class="form-field search" [formGroup]="skillsSearchForm" autocomplete="off">
       <mat-form-field appearance="standard" class="search">
         <mat-icon matSuffix>search</mat-icon>
         <input matInput placeholder="Search skills" type="text" [matAutocomplete]="autocompleteSkills"
@@ -195,7 +195,7 @@
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
-    </div>
+    </form>
     <div *ngIf="temp_skill" class="temp-skill">
       <simple-tag type="gray" title="{{temp_skill.skillItem.skill}}" ellipseTag="true" [isControl]="editMode" value="{{temp_skill.skillItem.skill_level}}" (levelChanged)="onLevelChanged($event, temp_skill.index)" (removeClick)="removeUserSkillsData(temp_skill.index, temp_skill.skillItem)" [matTooltip]="SkillLevelDescription[temp_skill.skillItem.skill_level].title + SkillLevelDescription[temp_skill.skillItem.skill_level].description"
       [matTooltipShowDelay]=500>
@@ -223,7 +223,7 @@
   <div *ngIf="(userInterestsList && userInterestsList.length > 0) || editMode" class="row" [class.edit-mode]="editMode"
     id="interests">
     <h3> Interests </h3>
-    <div *ngIf="editMode" class="form-field search" [formGroup]="interestsSearchForm" autocomplete="off">
+    <form *ngIf="editMode" class="form-field search" [formGroup]="interestsSearchForm" autocomplete="off">
       <mat-form-field appearance="standard" class="search">
         <mat-icon matSuffix>search</mat-icon>
         <input matInput placeholder="Search Interests" type="text" [matAutocomplete]="autocompleteInterests"
@@ -235,7 +235,7 @@
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
-    </div>
+    </form>
     <h5>Interests {{ userInterestsList ? userInterestsList.length : '0' }}</h5>
     <div class="skills" *ngIf="displayItemsLimit; let limit">
       <ng-container *ngFor="let interest of userInterestsList; let i = index">

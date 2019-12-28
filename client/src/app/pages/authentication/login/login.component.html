@@ -14,7 +14,7 @@
       <span>©2019 <a href="#">yourcareerfair.com</a> | <a routerLink="/legal">Cookies, Privacy and Terms</a></span>
     </div>
   </div>
-  <div class="container__right" [formGroup]="loginForm" autocomplete="off">
+  <form class="container__right" [formGroup]="loginForm" autocomplete="off">
     <div class="row__user_roles">
       <span class="user_role" [class.active]="currentRole === 0" (click)="switchRole(0)">I’M AN APPLICANT<div class="active-border"></div></span>
       <span class="user_role" [class.active]="currentRole === 1" (click)="switchRole(1)">I’M A RECRUITER<div class="active-border"></div></span>
@@ -50,5 +50,5 @@
     <div class="row__copyright">
       <span>©2019 <a href="#">yourcareerfair.com</a> | <a routerLink="/legal">Cookies, Privacy and Terms</a></span>
     </div>
-  </div>
+  </form>
 </div>

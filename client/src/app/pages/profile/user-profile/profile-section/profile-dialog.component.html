@@ -21,7 +21,7 @@
       <mat-form-field class="bg-transparent" appearance="fill">
         <mat-label>School</mat-label>
         <input matInput placeholder="School" type="text" [matAutocomplete]="autocompleteUniversity"
-          formControlName="university">
+          formControlName="university" autocomplete="new-university">
         <mat-autocomplete #autocompleteUniversity="matAutocomplete" (closed)="onBlurUniversity()">
           <mat-option *ngFor="let autocomplete_university of autocomplete_universities"
             [value]="autocomplete_university.school_name"
@@ -81,7 +81,7 @@
     <div class="form-field">
       <mat-form-field class="bg-transparent" appearance="fill">
         <mat-label>Start Date</mat-label>
-        <input matInput placeholder="YYYY" type="text" formControlName="start_date" pattern="\d{4}">
+        <input matInput placeholder="YYYY" type="text" formControlName="start_date" pattern="\d{4}" autocomplete="new-start-date">
         <input class="hide" [matDatepicker]="start_date" [max]="maxDate">
         <mat-datepicker-toggle matSuffix [for]="start_date"></mat-datepicker-toggle>
         <mat-datepicker touchUi #start_date startView="multi-year"
@@ -92,7 +92,7 @@
     <div class="form-field" *ngIf="educationForm.get('start_date').value">
       <mat-form-field class="bg-transparent" appearance="fill">
         <mat-label>Graduation Date</mat-label>
-        <input matInput placeholder="YYYY" type="text" formControlName="graduation_date" pattern="\d{4}">
+        <input matInput placeholder="YYYY" type="text" formControlName="graduation_date" pattern="\d{4}" autocomplete="new-grad-date">
         <input class="hide" [matDatepicker]="graduation_date" [min]="minDate">
         <mat-datepicker-toggle matSuffix [for]="graduation_date"></mat-datepicker-toggle>
         <mat-datepicker touchUi #graduation_date startView="multi-year"
@@ -103,7 +103,7 @@
     <div class="form-field">
       <mat-form-field class="bg-transparent" appearance="fill">
         <mat-label>GPA</mat-label>
-        <input matInput placeholder="GPA" formControlName="gpa" type="text">
+        <input matInput placeholder="GPA" formControlName="gpa" type="text" autocomplete="new-gpa">
       </mat-form-field>
     </div>
     <div class="form-field textarea">
@@ -126,7 +126,7 @@
       <mat-form-field class="bg-transparent" appearance="fill">
         <mat-label>Company Name</mat-label>
         <input matInput placeholder="Company Name" type="text" [matAutocomplete]="autocompleteCompany"
-          formControlName="company_name">
+          formControlName="company_name" autocomplete="new-company">
         <mat-autocomplete #autocompleteCompany="matAutocomplete" (closed)="onBlurCompany()">
           <mat-option *ngFor="let autocomplete_company of autocomplete_companies"
             [value]="autocomplete_company.company_name" (onSelectionChange)="onSelectCompany(autocomplete_company)">
@@ -161,7 +161,7 @@
     <div class="form-field">
       <mat-form-field class="bg-transparent" appearance="fill">
         <mat-label>Designation</mat-label>
-        <input matInput placeholder="Designation" type="text" formControlName="job">
+        <input matInput placeholder="Designation" type="text" formControlName="job" autocomplete="new-designation">
       </mat-form-field>
     </div>
     <div class="form-field textarea">
@@ -223,14 +223,14 @@
     <div class="form-field">
       <mat-form-field class="bg-transparent" appearance="fill">
         <mat-label>Project Name</mat-label>
-        <input matInput placeholder="Project Name" type="text" formControlName="project_name">
+        <input matInput placeholder="Project Name" type="text" formControlName="project_name" autocomplete="new-project">
       </mat-form-field>
     </div>
     <div class="form-field">
       <mat-form-field class="bg-transparent" appearance="fill">
         <mat-label>Date of Completion</mat-label>
         <input matInput placeholder="MM/DD/YYYY" type="text" formControlName="date_finished"
-          pattern="\d{1,2}/\d{1,2}/\d{4}">
+          pattern="\d{1,2}/\d{1,2}/\d{4}" autocomplete="new-project-date">
         <input class="hide" [matDatepicker]="project_finished_date" [max]="maxDate"
           (dateChange)="onChangeProjectFinishedDate($event)">
         <mat-datepicker-toggle matSuffix [for]="project_finished_date"></mat-datepicker-toggle>
@@ -263,7 +263,7 @@
     <div class="form-field">
       <mat-form-field class="bg-transparent" appearance="fill">
         <mat-label>Publication Name</mat-label>
-        <input matInput placeholder="Publication Name" type="text" formControlName="publication_name">
+        <input matInput placeholder="Publication Name" type="text" formControlName="publication_name" autocomplete="new-publication">
       </mat-form-field>
     </div>
     <div class="form-field">

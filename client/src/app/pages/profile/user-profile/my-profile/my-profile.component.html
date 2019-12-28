@@ -1,7 +1,7 @@
-<ng-container *ngIf="!isProfileLoading" class="profile-header">
+<ng-container *ngIf="!isProfileLoading" class="profile-header" autocomplete="off">
   <header-section
     (updatedGeneralInfoData)="onChangedGeneralInfoData($event)"
-    id="header-section"></header-section>
+    id="header-section" autocomplete="off"></header-section>
 </ng-container>
 
 <ng-container *ngIf="!isProfileLoading">

@@ -306,8 +306,8 @@
           </div>
           <div class="education-level-m">
 
-            <div *ngIf="jobData.minimum_skills?.length > 0" class="form-field search"
-              [formGroup]="requiredSkillsSearchForm">
+            <form *ngIf="jobData.minimum_skills?.length > 0" class="form-field search"
+              [formGroup]="requiredSkillsSearchForm" autocomplete="off">
               <mat-form-field appearance="standard" class="search">
                 <mat-icon matSuffix>search</mat-icon>
                 <input matInput placeholder="Search required skills" type="text"
@@ -320,7 +320,7 @@
                   </mat-option>
                 </mat-autocomplete>
               </mat-form-field>
-            </div>
+            </form>
 
             <div *ngIf="temp_required_skill" class="temp-skill">
               <simple-tag type="gray" title="{{temp_required_skill.skill}}" ellipseTag="true"
@@ -350,8 +350,8 @@
           </div>
 
           <div class="education-level-m">
-            <div *ngIf="jobData.preferred_skills?.length > 0" class="form-field search"
-              [formGroup]="preferredSkillsSearchForm">
+            <form *ngIf="jobData.preferred_skills?.length > 0" class="form-field search"
+              [formGroup]="preferredSkillsSearchForm" autocomplete="off">
               <mat-form-field appearance="standard" class="search">
                 <mat-icon matSuffix>search</mat-icon>
                 <input matInput placeholder="Search preferred skills" type="text"
@@ -364,7 +364,7 @@
                   </mat-option>
                 </mat-autocomplete>
               </mat-form-field>
-            </div>
+            </form>
 
             <div *ngIf="temp_preferred_skill" class="temp-skill">
               <simple-tag type="normal" title="{{temp_preferred_skill.skill}}" ellipseTag="true"
