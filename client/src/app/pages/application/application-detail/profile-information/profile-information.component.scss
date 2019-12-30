@@ -459,6 +459,8 @@ $profile-form-field-mt: 30px;
       }
       & .show-button {
         text-align: center;
+        float: right;
+        margin-top: -22px;
 
         action-button {
           display: inline-block;
