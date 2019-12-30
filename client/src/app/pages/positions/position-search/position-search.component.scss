@@ -211,6 +211,8 @@ $profile-form-field-mt: 30px;
                     font-size: 14px;
                     line-height: 22px;
                     font-weight: 400;
+                    word-break: break-word;
+                    white-space: pre-wrap;
                     max-height: 310px;
                     width: 95%;
                     -webkit-box-orient: vertical;

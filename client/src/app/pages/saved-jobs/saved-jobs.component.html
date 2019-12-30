@@ -216,7 +216,7 @@
         <div class="row" [ngClass]="{'selected': job.selected}">
           <round-checkbox  [checked]="job.selected"
             (statusChange)="job.selected = !job.selected;selectedAllFlag=false;"></round-checkbox>
-          <h1 [routerLink]="['position-info']" [queryParams]="{id: job.position_id}">{{job.position}} </h1>
+          <h1 (click)="routerNavigatePosition(job.position_id)">{{job.position}} </h1>
           <div class="position-right">
             <div class="heart-icon">
               <img title="Saved Job" src="assets/icons/ic_heart_circle.svg" class="after-heart-icon"
@@ -351,8 +351,7 @@
               </div>
               <div class="jobdesc-space">
                 <h5>Job Description</h5>
-                <p>
-                  {{job.position_desc}}
+                <p>{{job.position_desc}}
                 </p>
               </div>
             </div>
@@ -362,7 +361,7 @@
                     'Show Less'}}" color="primary" (click)="job.showMoreFlag = !job.showMoreFlag"></action-button>
             &nbsp;&nbsp;
             <action-button type="text" title="Go to Details Page" color="primary"
-              [routerLink]="['/positions/position-info/',job.position_id]" *ngIf="job.showMoreFlag"></action-button>
+            (click)="routerNavigatePosition(job.position_id)" *ngIf="job.showMoreFlag"></action-button>
           </div>
         </div>
       </div>

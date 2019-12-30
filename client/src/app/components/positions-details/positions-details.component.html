@@ -88,7 +88,7 @@
                 </li>
                 <li>
                   <span>About Company</span>
-                  <small>{{info.company_desc ? info.company_desc : 'N/A' }}</small>
+                  <small class="company-info-m">{{shortDescription(info.company_desc) ? shortDescription(info.company_desc)  :'N/A' }}</small>
                 </li>
               </ul>
             </div>
@@ -360,13 +360,14 @@
         <div class="comman" *ngFor="let jobData of positionName" id="description">
           <div class="row position-interest-detail" *ngIf="jobData.position_desc">
             <h3>Job Description</h3>
-            <div class="position-matched" [ngClass]="{'skill-more-height': info.readMoreFlag}">
-              <p>{{jobData.position_desc }}</p>
-            </div>
-            <div class="position-job-desc-btn">
-              <action-button routerLink="." *ngIf="jobDescription > 300" type="text" title="{{!info.readMoreFlag ? 'Read More' :
-                  'Read Less'}}" color="primary" (click)="info.readMoreFlag = !info.readMoreFlag"></action-button>
-            </div>
+            <ng-container *ngIf="true; let short_desc">
+              <p *ngIf="jobData?.position_desc" class="description"
+                [class.short-desc]="short_desc && jobData?.position_desc?.length > helperService.shortDescLength">
+                {{short_desc ? helperService.shortDescription(jobData.position_desc) : jobData.position_desc }}
+              </p>
+              <a *ngIf="jobData?.position_desc && jobData?.position_desc?.length > helperService.shortDescLength"
+                (click)="short_desc = !short_desc"> {{short_desc ? 'Read More' : 'Read Less'}}</a>
+            </ng-container>
           </div>
           <div class="row position-eductaion-detail position-required-skills-detail" id="qualification"
             *ngIf="jobData.preferred_education_levels?.length > 0 || jobData.preferred_majors?.length > 0 || jobData.preferred_major_categories?.length > 0">
@@ -431,7 +432,14 @@
                 <h6 *ngIf="experience.industry_name">{{experience.industry_name}} ({{experience.preferred_years}}
                   years)</h6>
                 <div class="education-level-m">
-                  <p *ngIf="experience.exp_desc">{{experience.exp_desc}}</p>
+                  <ng-container *ngIf="true; let short_desc">
+                    <p *ngIf="experience?.exp_desc" class="description"
+                      [class.short-desc]="short_desc && experience?.exp_desc?.length > helperService.shortDescLength">
+                      {{short_desc ? helperService.shortDescription(experience.exp_desc) : experience.exp_desc }}
+                    </p>
+                    <a *ngIf="experience?.exp_desc && experience?.exp_desc?.length > helperService.shortDescLength"
+                      (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
+                  </ng-container>
                   <h5 for="skill_required" *ngIf="experience.preferred_skills_trained?.length > 0"> Preferred Skills
                     Trained
                     <span>{{ experience.preferred_skills_trained?.length}}</span>

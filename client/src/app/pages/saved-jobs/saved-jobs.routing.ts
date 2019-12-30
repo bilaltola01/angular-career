@@ -8,8 +8,13 @@ export const savedJobsRouting: Routes = [
     path: '',
     component: SavedJobsComponent
   },
+    {
+      path: 'saved-jobs',
+      component: SavedJobsComponent,
+      canActivate: [AuthGuard],
+  },
   {
-    path: 'position-info',
+    path: 'position-info/:position_id',
     component: PositionsDetailsComponent
     // canActivate: [AuthGuard]
   },

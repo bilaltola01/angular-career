@@ -218,7 +218,7 @@
         <div class="row" [ngClass]="{'selected': job.selected}">
           <round-checkbox  [checked]="job.selected"
             (statusChange)="job.selected = !job.selected;selectedAllFlag=false;"></round-checkbox>
-          <h1 [routerLink]="['position-info']" [queryParams]="{id: job.position_id}">{{job.position}} </h1>
+          <h1 (click)="routerNavigatePosition(job.position_id)">{{job.position}} </h1>
           <div class="position-right">
             <div class="heart-icon">
               <img *ngIf="!appliedJobsMap[job.position_id] && !savedJobsMap[job.position_id]" (click)="saveJob([job])"
@@ -251,8 +251,8 @@
               <ul>
                 <li>
                   <img class="img-style" src="assets/icons/ic_company.svg">
-                  <span class="image"[routerLink]="['/company-info']"
-                  [queryParams]="{id: job.company_id, tabIndex: 0, showBackButton: false}">
+                  <span class="image" [routerLink]="['/company-info']"
+                    [queryParams]="{id: job.company_id, tabIndex: 0, showBackButton: false}">
                     {{job.company_name}}</span>
                 </li>
                 <li>
@@ -374,8 +374,7 @@
               </div>
               <div class="jobdesc-space">
                 <h5>Job Description</h5>
-                <p>
-                  {{job.position_desc}}
+                <p>{{job.position_desc}}
                 </p>
               </div>
             </div>
@@ -384,8 +383,7 @@
             <action-button type="text" title="{{!job.showMoreFlag ? 'Show More' :
                     'Show Less'}}" color="primary" (click)="job.showMoreFlag = !job.showMoreFlag"></action-button>
             &nbsp;&nbsp;
-            <action-button type="text" title="Go to Details Page" color="primary"
-            [routerLink]="['position-info']" [queryParams]="{id: job.position_id}" *ngIf="job.showMoreFlag"></action-button>
+            <action-button type="text" title="Go to Details Page" color="primary" (click)="routerNavigatePosition(job.position_id)" *ngIf="job.showMoreFlag"></action-button>
           </div>
         </div>
       </div>
