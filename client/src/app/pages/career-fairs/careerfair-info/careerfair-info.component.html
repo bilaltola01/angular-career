@@ -111,19 +111,6 @@
         </div>
         <div class="filter-card">
           <mat-form-field>
-            <mat-label>Industry </mat-label>
-            <input matInput placeholder="Industry" type="text" [matAutocomplete]="autocompleteIndustry"
-              formControlName="industry">
-            <mat-autocomplete #autocompleteIndustry="matAutocomplete">
-              <mat-option *ngFor="let industry of autocomplete_industries" [value]="industry.industry_name"
-                (onSelectionChange)="onChangeCompanyIndustry(industry)">
-                <span>{{industry.industry_name}}</span>
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-        </div>
-        <div class="filter-card">
-          <mat-form-field>
             <mat-label>Size</mat-label>
             <mat-select class="arrow" formControlName="size">
               <mat-option value=''></mat-option>
@@ -187,8 +174,18 @@
 
               <mat-grid-tile>
                 <div class="card-item">
-                  <span>Industry</span>{{fair.company_industrie}}
-                  <p>{{fair.company_industrie ? fair.company_industrie : 'N/A'}} </p>
+                  <span>Industry</span>
+                    <!-- {{fair.company_industrie ? fair.company_industrie : 'N/A'}}  -->
+                    <p class="image" *ngIf="fair.company_industries; else noIndustry">
+                      <span *ngFor="let location of fair.company_industries | slice : 0 : 1">
+                        <p>{{fair.company_industries[0] }} <span  class="more"   *ngIf="fair.company_industries?.length > 1"> +
+                            {{fair.company_industries?.length-1}} Industries </span>
+                        </p>
+                      </span>
+                    </p>
+                    <ng-template #noIndustry>
+                      <p>N/A</p>
+                    </ng-template>
                 </div>
               </mat-grid-tile>
               <mat-grid-tile>
@@ -239,9 +236,6 @@
           <h3 class="section-title">POSITION SEARCH</h3>
         </div>
         <div class="comman_search_filter" [formGroup]="positionForm">
-          <!-- <div class="filter-data">
-            <mat-icon (click)="toggleTabMenuOpen()" class="filter_icon">filter_list</mat-icon>
-          </div> -->
           <div class="postion-search-header">
             <mat-form-field appearance="standard" class="search">
               <mat-icon matSuffix (click)="onSearchPosition($event)">search</mat-icon>

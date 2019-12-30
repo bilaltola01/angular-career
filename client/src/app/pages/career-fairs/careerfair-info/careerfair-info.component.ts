@@ -283,9 +283,6 @@ export class CareerfairInfoComponent implements OnInit {
     }
   }
 
-  onChangeCompanyIndustry(industry) {
-    this.companyFilterAttributes['industry_id'] = industry.industry_id;
-  }
   onCityValueChanges(location: string) {
     this.autoCompleteService.autoComplete(location, 'cities').subscribe(
       dataJson => {
@@ -375,6 +372,7 @@ export class CareerfairInfoComponent implements OnInit {
     }
     if (this.preLoadCompanyDataObject[this.companyCurrentPageNumber]) {
       this.companiesList = this.preLoadCompanyDataObject[this.companyCurrentPageNumber].data.data;
+
       this.setCompanyPaginationValues(this.preLoadCompanyDataObject[this.companyCurrentPageNumber]);
       if (this.companyCurrentPageNumber < this.companyPaginationArr[this.companyPaginationArr.length - 1]) {
         this.preLoadCompanyNextPage(this.companyCurrentPageNumber + 1);

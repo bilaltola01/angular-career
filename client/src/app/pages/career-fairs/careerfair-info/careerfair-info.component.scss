@@ -108,6 +108,12 @@ $profile-form-field-mt: 30px;
                     margin: 3px 0 0;
                     font-size: 14px;
                     line-height: 16px;
+                    .more {
+                      margin: 3px 0 0;
+                    font-size: 14px;
+                    line-height: 16px;
+                    color: #263f5d;
+                    }
                 }
             }
         }
@@ -119,7 +125,7 @@ $profile-form-field-mt: 30px;
               display: flex;
               align-items: center;
             .careerfair-uni-img{
-                border: 1px solid #EFEFEF;
+                // border: 1px solid #EFEFEF;
                 // border-radius: 100%;
                 width: 60px;
                 height: 60px;
