@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, tap, map, finalize } from 'rxjs/operators';
 import { Observable, of, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { filter, get } from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,17 @@ export class AutoCompleteService {
     .pipe(
       map(
         data => {
-          return {success: true, message: 'Success!', data: data};
+        console.log("TCL: AutoCompleteService -> constructor -> data", data)
+          // Filter out "non-english" (comma, space, bracket, and dash are accepted; ÃƒÂ© - not accepted ) characters for city and state,
+          if (data[0].city) {
+            const filteredData = filter(data, obj => /^[a-zA-Z,\s-\(\)]+(-[a-zA-Z]+)*$/.test(get(obj, 'city')));
+            return {success: true, message: 'Success!', data: filteredData};
+          } else if (data[0].state) {
+            const filteredData = filter(data, obj => /^[a-zA-Z,\s-\(\)]+(-[a-zA-Z]+)*$/.test(get(obj, 'state')));
+            return {success: true, message: 'Success!', data: filteredData};
+          } else {
+            return {success: true, message: 'Success!', data: data};
+          }
         }
       ),
       catchError(this.handleError)
