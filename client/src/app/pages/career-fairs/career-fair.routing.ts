@@ -16,12 +16,6 @@ export const careerFairSearchRouting: Routes = [
   },
   {
     path: 'position-info/:position_id',
-    component: PositionsDetailsComponent,
-    pathMatch: 'full'
-    // canActivate: [AuthGuard]
-  },
-  {
-    path: 'career-fairs/careerfair-info/position-info',
     component: PositionsDetailsComponent
     // canActivate: [AuthGuard]
   },

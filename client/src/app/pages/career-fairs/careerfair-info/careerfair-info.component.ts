@@ -1049,6 +1049,10 @@ export class CareerfairInfoComponent implements OnInit {
       delete this.savedJobsMap[jobs.position_id];
     }
   }
+  routerNavigatePosition(position_id) {
+    this.router.navigate([`/position-info/${position_id}`] );
+
+  }
   routerNavigate(application_id, position_id) {
     this.router.navigate([`/applications/${application_id}/application-detail/`, position_id]);
   }
