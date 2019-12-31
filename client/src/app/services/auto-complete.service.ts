@@ -25,7 +25,6 @@ export class AutoCompleteService {
     .pipe(
       map(
         data => {
-        console.log("TCL: AutoCompleteService -> constructor -> data", data)
           // Filter out "non-english" (comma, space, bracket, and dash are accepted; ÃƒÂ© - not accepted ) characters for city and state,
           if (data[0].city) {
             const filteredData = filter(data, obj => /^[a-zA-Z,\s-\(\)]+(-[a-zA-Z]+)*$/.test(get(obj, 'city')));
