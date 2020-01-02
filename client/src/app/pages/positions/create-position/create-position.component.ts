@@ -1654,7 +1654,7 @@ export class CreatePositionComponent implements OnInit {
           this.position = dataJson['data'];
 
           if (this.position && this.position.position_id && this.position.open === 1) {
-            this.router.navigate([`positions/position-info`], { queryParams: { id: this.position.position_id } });
+            this.router.navigate([`positions/position-info/${this.position.position_id}`]);
           }
         },
         error => {
@@ -1662,7 +1662,7 @@ export class CreatePositionComponent implements OnInit {
         }
       );
     } else {
-      this.router.navigate([`positions/position-info`], { queryParams: { id: this.position.position_id } });
+      this.router.navigate([`positions/position-info/${this.position.position_id}`]);
     }
   }
 
