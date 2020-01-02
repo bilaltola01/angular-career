@@ -74,10 +74,10 @@ export class CareerFairSearchComponent implements OnInit {
     const querySearchedDate = this.route.snapshot.queryParamMap.get('date') || null;
     const querySearchedLocation = this.route.snapshot.queryParamMap.get('location') || null;
     const querySearchedCompany = this.route.snapshot.queryParamMap.get('company') || null;
-     this.queryParamOffset = this.route.snapshot.queryParamMap.get('offset') || null;
+    this.queryParamOffset = this.route.snapshot.queryParamMap.get('offset') || null;
     this.queryParamLimit = this.route.snapshot.queryParamMap.get('limit') || null;
     if (this.queryParamOffset) {
-this.offsetFlag = true;
+      this.offsetFlag = true;
     }
 
     this.careerFairsForm = new FormGroup({
@@ -136,7 +136,7 @@ this.offsetFlag = true;
       queryString = queryString ? `${queryString}&limit=${this.filterAttributes.limit}` : `offset=${this.filterAttributes.limit}`;
 
     }
-     this.params = {
+    this.params = {
       'name': this.careerFairsForm.value.searchCareerfair,
       'location': this.careerFairsForm.value.location,
       'company': this.careerFairsForm.value.company,
@@ -158,7 +158,7 @@ this.offsetFlag = true;
         'limit': this.filterAttributes.limit
       };
 
-     this.router.navigate([], { queryParams : paramsInQuery  });
+      this.router.navigate([], { queryParams: paramsInQuery });
     }
     this.urlQueryParameters = queryString;
     return queryString;
@@ -180,10 +180,11 @@ this.offsetFlag = true;
         this.preLoadNextPage(this.currentPageNumber + 1);
       } else {
 
-      this.router.navigate([], { relativeTo: this.route,
-       queryParams: this.params,
-        queryParamsHandling: 'merge',
-      });
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: this.params,
+          queryParamsHandling: 'merge',
+        });
       }
     } else {
       this.isJobLoading = true;
@@ -271,27 +272,20 @@ this.offsetFlag = true;
   }
   preLoadNextPage(nextPageNumber) {
     this.queryFlag = false;
-    // if (!this.preLoadDataObject[nextPageNumber]) {
-      const previousOffset = this.filterAttributes.offset;
-      this.filterAttributes.offset = this.filterAttributes.offset + careerFairsListLimit;
-      const queryString = this.generateQueryString();
-      this.careerfairService.getCareerFairs(queryString).subscribe(
-        dataJson => {
-          if (dataJson['success'] && dataJson) {
-            this.preLoadDataObject = {};
-            this.preLoadDataObject[nextPageNumber] = dataJson;
-          }
-          this.filterAttributes.offset = previousOffset;
-        },
-        error => {
-          this.careerFairsList = [];
+    const previousOffset = this.filterAttributes.offset;
+    this.filterAttributes.offset = this.filterAttributes.offset + careerFairsListLimit;
+    const queryString = this.generateQueryString();
+    this.careerfairService.getCareerFairs(queryString).subscribe(
+      dataJson => {
+        if (dataJson['success'] && dataJson) {
+          this.preLoadDataObject = {};
+          this.preLoadDataObject[nextPageNumber] = dataJson;
         }
-      );
-    // }
+        this.filterAttributes.offset = previousOffset;
+      },
+      error => {
+        this.careerFairsList = [];
+      }
+    );
   }
-//   routerNavigate(careerfair_id) {
-// this.router.navigate(['career-fairs/careerfair-info/', careerfair_id]);
-//     // this.router.navigate(['career-fairs/careerfair-info/', careerfair_id], { queryParams: { finds: this.urlQueryParameters ? this.urlQueryParameters :  '' } });
-
-//   }
 }
