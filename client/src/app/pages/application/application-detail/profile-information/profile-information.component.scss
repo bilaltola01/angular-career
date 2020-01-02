@@ -362,16 +362,15 @@ $profile-form-field-mt: 30px;
         font-size: 14px;
         line-height: 22px;
         font-weight: 400;
-        max-height: 310px;
         width: 95%;
-        -webkit-box-orient: vertical;
-        display: block;
-        display: -webkit-box;
-        -webkit-line-clamp: 14;
-        overflow: hidden;
         /* autoprefixer: ignore next */
         -webkit-box-orient: vertical;
         text-overflow: ellipsis;
+        &.short-desc{
+          display: -webkit-box;
+          max-height: 310px;
+          overflow: hidden;
+        }
       }
 
       & .right-align {

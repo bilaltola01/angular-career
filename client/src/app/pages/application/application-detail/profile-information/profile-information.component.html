@@ -226,7 +226,7 @@
             <ng-container *ngIf="true; let short_desc">
               <p *ngIf="experience.job_desc" class="description"
                 [class.short-desc]="short_desc && experience.job_desc?.length > helperService.shortDescLength">
-                {{short_desc ? helperService.shortDescription(experience.job_desc) : experience.job_desc }}</p>
+              {{short_desc ? helperService.shortDescription(experience.job_desc) : experience.job_desc }}</p>
               <a *ngIf="experience.job_desc && experience.job_desc?.length > helperService.shortDescLength"
                 (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
             </ng-container>

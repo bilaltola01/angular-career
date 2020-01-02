@@ -348,9 +348,12 @@
                     value="{{min_skill.skill_level}}" >
                   </simple-tag>
                 </div>
-                <img *ngIf="limit < jobData.minimum_skills?.length" (click)="limit = limit + displayItemsLimit"
-                  src="assets/icons/ic_more.svg" alt="See More">
-              </div>
+                  <img *ngIf="lessFlag && limit > displayItemsLimit" class="edu_img"
+                  (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
+                <img *ngIf="limit < jobData.minimum_skills?.length" class="edu_img"
+                  (click)="limit = limit + displayItemsLimit" (click)="lessFlag = true"
+                  src="assets/icons/ic_see_more.svg" alt="See More">
+                </div>
             </div>
             <ng-template #noSkill>
               <span>N/A</span>
@@ -392,9 +395,11 @@
                     value="{{preskill.skill_level}}" >
                   </simple-tag>
                 </div>
-
-                <img *ngIf="limit < jobData.preferred_skills?.length" (click)="limit = limit + displayItemsLimit"
-                  src="assets/icons/ic_more.svg" alt="See More">
+                <img *ngIf="lessFlag && limit > displayItemsLimit" class="edu_img"
+                (click)="limit = limit - displayItemsLimit" src="assets/icons/ic_see_less.svg" alt="See Less">
+              <img *ngIf="limit < jobData.preferred_skills?.length" class="edu_img"
+                (click)="limit = limit + displayItemsLimit" (click)="lessFlag = true"
+                src="assets/icons/ic_see_more.svg" alt="See More">
               </div>
             </div>
           </div>

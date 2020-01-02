@@ -346,13 +346,13 @@ export const UserRoles = [
   'recruiter'
 ];
 export const saveJobSortBy = [
-  { 'title': 'post-date', 'value': 'post-date' },
-  { 'title': 'employee-count', 'value': 'employee-count' },
-  { 'title': 'location', 'value': 'location' },
-  { 'title': 'available-positions', 'value': 'available-positions' },
-  { 'title': 'qualification', 'value': 'qualification' },
-  { 'title': 'popularity', 'value': 'popularity' },
-  { 'title': 'application-deadline', 'value': 'application-deadline' }
+  { 'title': 'Post Date', 'value': 'post-date' },
+  { 'title': 'Employee Count', 'value': 'employee-count' },
+  { 'title': 'Location', 'value': 'location' },
+  { 'title': 'Available Positions', 'value': 'available-positions' },
+  { 'title': 'Likely Fit', 'value': 'qualification' },
+  { 'title': 'Popularity', 'value': 'popularity' },
+  { 'title': 'Application Deadline', 'value': 'application-deadline' }
 ];
 
 export const NavMenus = {
