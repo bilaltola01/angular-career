@@ -5,6 +5,7 @@ import {
   PositionService, AlertsService, AlertType,
   AutoCompleteService, CartService, ApplicationService, ScoreService, HelperService
 } from '../../services/index';
+import { HostListener } from '@angular/core';
 
 import {
   City,
@@ -92,10 +93,21 @@ export class SavedJobsComponent implements OnInit {
     this.updateSkillCallback = this.updateSkillCallback.bind(this);
   }
   ngOnInit() {
+    this.getSearchFromQueryParams();
+    this.initSavedJobsFilterForm();
+    this.getSavedJobsData();
+    this.breakpoint = (window.innerWidth <= 500) ? 2 : 4;
+
+  }
+
+  getSearchFromQueryParams() {
     const urlParams = new URLSearchParams(window.location.search);
     const mydate = new Date();
     this.searchQueryParam = urlParams.get('search');
     if (this.searchQueryParam) {
+      this.urlParams = {};
+      this.skillUrlParams = [];
+      this.skillUrlIdParam = [];
       this.preLoadDataFlag = false;
       this.offsetFlag = true;
       const urlObject = this.searchQueryParam.split('&');
@@ -110,10 +122,6 @@ export class SavedJobsComponent implements OnInit {
         }
       }
     }
-    this.initSavedJobsFilterForm();
-    this.getSavedJobsData();
-    this.breakpoint = (window.innerWidth <= 500) ? 2 : 4;
-
   }
 
   onResize(event) {
@@ -344,7 +352,7 @@ export class SavedJobsComponent implements OnInit {
     } else {
       queryString = this.SavedJobsForm.value.city ? `${queryString ? queryString + '&' : ''}city=${this.filterAttributes.city_id ? this.filterAttributes.city_id : this.urlParams['city']}` : queryString;
       queryString = this.SavedJobsForm.value.position ? `${queryString ? queryString + '&' : ''}level=${this.SavedJobsForm.value.position}` : queryString;
-      queryString = this.SavedJobsForm.value.education ? `${queryString ? queryString + '&' : ''}education=${parseInt(this.SavedJobsForm.value.education, 10) + 1}` : queryString;
+      queryString = this.SavedJobsForm.value.education ? `${queryString ? queryString + '&' : ''}education=${parseInt(this.SavedJobsForm.value.education, 10) }` : queryString;
       queryString = this.SavedJobsForm.value.job ? `${queryString ? queryString + '&' : ''}job_type=${this.SavedJobsForm.value.job}` : queryString;
       queryString = this.SavedJobsForm.value.school ? `${queryString ? queryString + '&' : ''}school=${this.filterAttributes.school_id ? this.filterAttributes.school_id : this.urlParams['school']}` : queryString;
       queryString = this.SavedJobsForm.value.major ? `${queryString ? queryString + '&' : ''}major=${this.filterAttributes.major_id ? this.filterAttributes.major_id : this.urlParams['major']}` : queryString;
@@ -365,7 +373,7 @@ export class SavedJobsComponent implements OnInit {
       }
       urlQueryParam = this.SavedJobsForm.value.city ? `${urlQueryParam ? urlQueryParam + '&' : ''}city=${this.filterAttributes.city_id ? this.filterAttributes.city_id : this.urlParams['city']}&cityName=${this.SavedJobsForm.value.city}` : urlQueryParam;
       urlQueryParam = this.SavedJobsForm.value.position ? `${urlQueryParam ? urlQueryParam + '&' : ''}level=${this.SavedJobsForm.value.position}` : urlQueryParam;
-      urlQueryParam = this.SavedJobsForm.value.education ? `${urlQueryParam ? urlQueryParam + '&' : ''}education=${parseInt(this.SavedJobsForm.value.education, 10) + 1}` : urlQueryParam;
+      urlQueryParam = this.SavedJobsForm.value.education ? `${urlQueryParam ? urlQueryParam + '&' : ''}education=${parseInt(this.SavedJobsForm.value.education, 10) }` : urlQueryParam;
       urlQueryParam = this.SavedJobsForm.value.job ? `${urlQueryParam ? urlQueryParam + '&' : ''}job_type=${this.SavedJobsForm.value.job}` : urlQueryParam;
       urlQueryParam = this.SavedJobsForm.value.school ? `${urlQueryParam ? urlQueryParam + '&' : ''}school=${this.filterAttributes.school_id ? this.filterAttributes.school_id : this.urlParams['school']}&schoolName=${this.SavedJobsForm.value.school}` : urlQueryParam;
       urlQueryParam = this.SavedJobsForm.value.major ? `${urlQueryParam ? urlQueryParam + '&' : ''}major=${this.filterAttributes.major_id ? this.filterAttributes.major_id : this.urlParams['major']}&majorName=${this.SavedJobsForm.value.major}` : urlQueryParam;
@@ -637,5 +645,19 @@ export class SavedJobsComponent implements OnInit {
   routerNavigatePosition(position_id) {
     this.router.navigate([`saved-jobs/position-info/${position_id}`] );
 
+  }
+  @HostListener('window:popstate', ['$event'])
+  onPopState(event) {
+    // URL Params are updated on the next process tick, so we need to wait
+    setTimeout(() => {
+      this.SavedJobsForm.patchValue({ 'searchPosition': '' });
+      this.userSkillsList = [];
+      this.preLoadDataObject = {};
+      this.skillUrlIdParam = [];
+      this.skillUrlParams = [];
+      this.getSearchFromQueryParams();
+      this.initSavedJobsFilterForm();
+      this.applyFilter();
+    }, 100);
   }
 }

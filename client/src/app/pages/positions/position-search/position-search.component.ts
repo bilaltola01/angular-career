@@ -8,6 +8,7 @@ import {
 } from '../../../services/index';
 import { HostListener } from '@angular/core';
 
+
 import {
   City,
   PositionLevel,
@@ -101,7 +102,7 @@ export class PositionSearchComponent implements OnInit {
     this.updateSkillCallback = this.updateSkillCallback.bind(this);
   }
   ngOnInit() {
-    this.getSearchFromQueryParams();
+    this. getSearchFromQueryParams();
     this.initPositionFilterForm();
     this.getSavedJobs();
     this.getAppliedJobs();
@@ -109,18 +110,19 @@ export class PositionSearchComponent implements OnInit {
     this.breakpoint = (window.innerWidth <= 500) ? 2 : 4;
 
   }
-
   getSearchFromQueryParams() {
     const urlParams = new URLSearchParams(window.location.search);
+    const mydate = new Date();
     this.searchQueryParam = urlParams.get('search');
     if (this.searchQueryParam) {
+      this.urlParams = {};
+      this.skillUrlParams = [];
+      this.skillUrlIdParam = [];
       this.preLoadDataFlag = false;
       this.offsetFlag = true;
       const urlObject = this.searchQueryParam.split('&');
-
       for (let i = 0; i < urlObject.length; i++) {
         const result = urlObject[i].split('=');
-
         if (result[0] === 'skillName') {
           this.skillUrlParams.push(result[1]);
         } else if (result[0] === 'skills') {
@@ -365,7 +367,7 @@ export class PositionSearchComponent implements OnInit {
     } else {
       queryString = this.positionForm.value.city ? `${queryString ? queryString + '&' : ''}city=${this.filterAttributes.city_id ? this.filterAttributes.city_id : this.urlParams['city']}` : queryString;
       queryString = this.positionForm.value.position ? `${queryString ? queryString + '&' : ''}level=${this.positionForm.value.position}` : queryString;
-      queryString = this.positionForm.value.education ? `${queryString ? queryString + '&' : ''}education=${parseInt(this.positionForm.value.education, 10) + 1}` : queryString;
+      queryString = this.positionForm.value.education ? `${queryString ? queryString + '&' : ''}education=${parseInt(this.positionForm.value.education, 10)}` : queryString;
       queryString = this.positionForm.value.job ? `${queryString ? queryString + '&' : ''}job_type=${this.positionForm.value.job}` : queryString;
       queryString = this.positionForm.value.school ? `${queryString ? queryString + '&' : ''}school=${this.filterAttributes.school_id ? this.filterAttributes.school_id : this.urlParams['school']}` : queryString;
       queryString = this.positionForm.value.major ? `${queryString ? queryString + '&' : ''}major=${this.filterAttributes.major_id ? this.filterAttributes.major_id : this.urlParams['major']}` : queryString;
@@ -388,7 +390,7 @@ export class PositionSearchComponent implements OnInit {
 
       urlQueryParam = this.positionForm.value.city ? `${urlQueryParam ? urlQueryParam + '&' : ''}city=${this.filterAttributes.city_id ? this.filterAttributes.city_id : this.urlParams['city']}&cityName=${this.positionForm.value.city}` : urlQueryParam;
       urlQueryParam = this.positionForm.value.position ? `${urlQueryParam ? urlQueryParam + '&' : ''}level=${this.positionForm.value.position}` : urlQueryParam;
-      urlQueryParam = this.positionForm.value.education ? `${urlQueryParam ? urlQueryParam + '&' : ''}education=${parseInt(this.positionForm.value.education, 10) + 1}` : urlQueryParam;
+      urlQueryParam = this.positionForm.value.education ? `${urlQueryParam ? urlQueryParam + '&' : ''}education=${parseInt(this.positionForm.value.education, 10)}` : urlQueryParam;
       urlQueryParam = this.positionForm.value.job ? `${urlQueryParam ? urlQueryParam + '&' : ''}job_type=${this.positionForm.value.job}` : urlQueryParam;
       urlQueryParam = this.positionForm.value.school ? `${urlQueryParam ? urlQueryParam + '&' : ''}school=${this.filterAttributes.school_id ? this.filterAttributes.school_id : this.urlParams['school']}&schoolName=${this.positionForm.value.school}` : urlQueryParam;
       urlQueryParam = this.positionForm.value.major ? `${urlQueryParam ? urlQueryParam + '&' : ''}major=${this.filterAttributes.major_id ? this.filterAttributes.major_id : this.urlParams['major']}&majorName=${this.positionForm.value.major}` : urlQueryParam;
@@ -440,7 +442,6 @@ export class PositionSearchComponent implements OnInit {
       this.urlQueryParameter = queryString;
 
     }
-
     return queryString;
   }
   getJobData() {
@@ -748,14 +749,17 @@ export class PositionSearchComponent implements OnInit {
   }
   routerNavigatePosition(position_id) {
     this.router.navigate([`positions/position-info/${position_id}`] );
-  }
 
+  }
   @HostListener('window:popstate', ['$event'])
   onPopState(event) {
     // URL Params are updated on the next process tick, so we need to wait
     setTimeout(() => {
-      this.positionForm.reset();
-      this.clearFilter();
+      this.positionForm.patchValue({ 'searchPosition': '' });
+      this.userSkillsList = [];
+      this.preLoadDataObject = {};
+      this.skillUrlIdParam = [];
+      this.skillUrlParams = [];
       this.getSearchFromQueryParams();
       this.initPositionFilterForm();
       this.applyFilter();

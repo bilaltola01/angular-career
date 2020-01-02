@@ -339,7 +339,7 @@ export class ApplicationsComponent implements OnInit {
     } else {
       queryString = this.applicationForm.value.city ? `${queryString ? queryString + '&' : ''}city=${this.filterAttributes.city_id ? this.filterAttributes.city_id : this.urlParams['city']}` : queryString;
       queryString = this.applicationForm.value.position ? `${queryString ? queryString + '&' : ''}level=${this.applicationForm.value.position}` : queryString;
-      queryString = this.applicationForm.value.education ? `${queryString ? queryString + '&' : ''}education=${parseInt(this.applicationForm.value.education, 10) + 1}` : queryString;
+      queryString = this.applicationForm.value.education ? `${queryString ? queryString + '&' : ''}education=${parseInt(this.applicationForm.value.education, 10)}` : queryString;
       queryString = this.applicationForm.value.job ? `${queryString ? queryString + '&' : ''}job_type=${this.applicationForm.value.job}` : queryString;
       queryString = this.applicationForm.value.interest ? `${queryString ? queryString + '&' : ''}interest=${this.applicationForm.value.interest}` : queryString;
       queryString = this.applicationForm.value.applicationStatus ? `${queryString ? queryString + '&' : ''}filter=${this.applicationForm.value.applicationStatus}` : queryString;
@@ -358,7 +358,7 @@ export class ApplicationsComponent implements OnInit {
       }
       urlQueryParam = this.applicationForm.value.city ? `${urlQueryParam ? urlQueryParam + '&' : ''}city=${this.filterAttributes.city_id ? this.filterAttributes.city_id : this.urlParams['city']}&cityName=${this.applicationForm.value.city}` : urlQueryParam;
       urlQueryParam = this.applicationForm.value.position ? `${urlQueryParam ? urlQueryParam + '&' : ''}level=${this.applicationForm.value.position}` : urlQueryParam;
-      urlQueryParam = this.applicationForm.value.education ? `${urlQueryParam ? urlQueryParam + '&' : ''}education=${parseInt(this.applicationForm.value.education, 10) + 1}` : urlQueryParam;
+      urlQueryParam = this.applicationForm.value.education ? `${urlQueryParam ? urlQueryParam + '&' : ''}education=${parseInt(this.applicationForm.value.education, 10) }` : urlQueryParam;
       urlQueryParam = this.applicationForm.value.job ? `${urlQueryParam ? urlQueryParam + '&' : ''}job_type=${this.applicationForm.value.job}` : urlQueryParam;
       urlQueryParam = this.applicationForm.value.interest ? `${urlQueryParam ? urlQueryParam + '&' : ''}interest=${this.applicationForm.value.interest}` : urlQueryParam;
       urlQueryParam = this.applicationForm.value.applicationStatus ? `${urlQueryParam ? urlQueryParam + '&' : ''}filter=${this.applicationForm.value.applicationStatus}` : urlQueryParam;
