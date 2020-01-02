@@ -6,7 +6,7 @@ import {
   PositionService, AlertsService, AlertType,
   AutoCompleteService, CartService, ApplicationService, ScoreService
 } from '../../../services/index';
-
+import { HostListener } from '@angular/core';
 
 import {
   City,
@@ -101,6 +101,16 @@ export class PositionSearchComponent implements OnInit {
     this.updateSkillCallback = this.updateSkillCallback.bind(this);
   }
   ngOnInit() {
+    this.getSearchFromQueryParams();
+    this.initPositionFilterForm();
+    this.getSavedJobs();
+    this.getAppliedJobs();
+    this.getJobData();
+    this.breakpoint = (window.innerWidth <= 500) ? 2 : 4;
+
+  }
+
+  getSearchFromQueryParams() {
     const urlParams = new URLSearchParams(window.location.search);
     this.searchQueryParam = urlParams.get('search');
     if (this.searchQueryParam) {
@@ -120,13 +130,6 @@ export class PositionSearchComponent implements OnInit {
         }
       }
     }
-
-    this.initPositionFilterForm();
-    this.getSavedJobs();
-    this.getAppliedJobs();
-    this.getJobData();
-    this.breakpoint = (window.innerWidth <= 500) ? 2 : 4;
-
   }
 
   onResize(event) {
@@ -745,7 +748,18 @@ export class PositionSearchComponent implements OnInit {
   }
   routerNavigatePosition(position_id) {
     this.router.navigate([`positions/position-info/${position_id}`] );
+  }
 
+  @HostListener('window:popstate', ['$event'])
+  onPopState(event) {
+    // URL Params are updated on the next process tick, so we need to wait
+    setTimeout(() => {
+      this.positionForm.reset();
+      this.clearFilter();
+      this.getSearchFromQueryParams();
+      this.initPositionFilterForm();
+      this.applyFilter();
+    }, 100);
   }
 }
 
