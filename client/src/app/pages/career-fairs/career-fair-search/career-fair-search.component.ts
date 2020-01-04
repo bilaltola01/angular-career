@@ -4,7 +4,7 @@ import { AlertsService, AlertType, AutoCompleteService, CareerFairService } from
 
 import { City, Company, careerFairsListLimit } from 'src/app/models';
 import { Router, ActivatedRoute } from '@angular/router';
-
+import { HostListener } from '@angular/core';
 
 
 @Component({
@@ -230,12 +230,9 @@ export class CareerFairSearchComponent implements OnInit {
     this.paginationArr = Array(max - min + 1).fill(0).map((x, i) => i + min);
   }
   clearFilter() {
-    this.urlParamsDate = '';
-    const sortValue = this.careerFairsForm.value.sortBy;
     const setPositionValue = this.careerFairsForm.value.searchCareerfair;
     this.careerFairsForm.reset();
     this.preLoadDataObject = {};
-    this.careerFairsForm.patchValue({ 'sortBy': sortValue });
     this.careerFairsForm.patchValue({ 'searchCareerfair': setPositionValue });
     this.toggleTabMenuOpen();
   }
@@ -287,5 +284,16 @@ export class CareerFairSearchComponent implements OnInit {
         this.careerFairsList = [];
       }
     );
+  }
+  @HostListener('window:popstate', ['$event'])
+  onPopState(event) {
+    // URL Params are updated on the next process tick, so we need to wait
+    setTimeout(() => {
+      this.careerFairsForm.reset();
+      this.clearFilter();
+      // this.getSearchFromQueryParams();
+      this.initPositionFilterForm();
+      this.applyFilter();
+    }, 100);
   }
 }

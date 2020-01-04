@@ -24,6 +24,9 @@ export class ApplicationHeaderSectionComponent implements OnInit {
   filterQueryParam;
   positionInfoQueryParam;
   isJobLoading: boolean;
+  careerfairPositionsParams;
+  careerfairPositionsId;
+  careerfairPositionsTabIndex;
 
   @Output() selectedNavItem = new EventEmitter();
   isNavMenuOpened: boolean;
@@ -34,10 +37,18 @@ export class ApplicationHeaderSectionComponent implements OnInit {
     private applicationService: ApplicationService, public dialog: MatDialog) {
     this.updateInterestLevel = this.updateInterestLevel.bind(this);
     const urlParams = new URLSearchParams(window.location.search);
-
     // store queryParams from Application , Position-info and Position search page
 
     this.filterQueryParam = urlParams.get('filters');
+    /* queryParams
+     of
+     careerfair-info>positions starts*/
+    this.careerfairPositionsParams = urlParams.get('param');
+    this.careerfairPositionsId = urlParams.get('id');
+    this.careerfairPositionsTabIndex = urlParams.get('tabIndex');
+    /* queryParams
+     of
+     careerfair-info>positions ends*/
     this.positionInfoQueryParam = urlParams.get('positionId');
     this.searchQueryParam = urlParams.get('searchData');
     this.applicationId = this.route.snapshot.paramMap.get('application_id');
@@ -55,6 +66,12 @@ export class ApplicationHeaderSectionComponent implements OnInit {
           if (this.searchQueryParam) {
             this.router.navigate(['/positions'], {queryParams : { search: this.searchQueryParam ? this.searchQueryParam : ''}});
           }
+         } else if (val.url.includes('param')) {
+          this.router.navigate(['/career-fairs/careerfair-info'], {queryParams: {
+            id: this.careerfairPositionsId,
+            tabIndex: this.careerfairPositionsTabIndex,
+            PositionSearch: this.careerfairPositionsParams ? this.careerfairPositionsParams : ''
+          }});
          }
       }
     });

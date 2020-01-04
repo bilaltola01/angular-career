@@ -121,15 +121,17 @@
         </div>
         <div class="filter-card">
           <mat-form-field>
-            <mat-label>City</mat-label>
-            <input matInput placeholder="City" type="text" [matAutocomplete]="autocompleteCity" formControlName="city">
-            <mat-autocomplete #autocompleteCity="matAutocomplete">
-              <mat-option *ngFor="let city of autocomplete_cities" [value]="(city.city)?.split(',')[0]"
-                (onSelectionChange)="onChangeCity(city)">
-                <span>{{city.city}}</span>
-              </mat-option>
+            <mat-label>Industry </mat-label>
+            <input matInput placeholder="Industry" type="text" [matAutocomplete]="autocompleteIndustry"
+            formControlName="industry">
+            <mat-autocomplete #autocompleteIndustry="matAutocomplete">
+            <mat-option *ngFor="let industry of autocomplete_industries"
+                [value]="industry.industry_name"
+                (onSelectionChange)="onCompanyChangeIndustry(industry)">
+                <span>{{industry.industry_name}}</span>
+            </mat-option>
             </mat-autocomplete>
-          </mat-form-field>
+        </mat-form-field>
         </div>
         <div class="filter-card">
           <div class="side-filter-btn">
@@ -175,17 +177,8 @@
               <mat-grid-tile>
                 <div class="card-item">
                   <span>Industry</span>
-                    <!-- {{fair.company_industrie ? fair.company_industrie : 'N/A'}}  -->
-                    <p class="image" *ngIf="fair.company_industries; else noIndustry">
-                      <span *ngFor="let location of fair.company_industries | slice : 0 : 1">
-                        <p>{{fair.company_industries[0] }} <span  class="more"   *ngIf="fair.company_industries?.length > 1"> +
-                            {{fair.company_industries?.length-1}} Industries </span>
-                        </p>
-                      </span>
+                    <p>{{fair.main_industry_name ? fair.main_industry_name : 'N/A'}}
                     </p>
-                    <ng-template #noIndustry>
-                      <p>N/A</p>
-                    </ng-template>
                 </div>
               </mat-grid-tile>
               <mat-grid-tile>

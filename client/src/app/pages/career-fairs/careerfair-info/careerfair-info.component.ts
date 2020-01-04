@@ -5,6 +5,7 @@ import { City, SortBy, Company, companyListLimit, positionListLimit, Skill, Scho
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { AddSkillPopupComponent } from 'src/app/components/add-skill-popup/add-skill-popup.component';
 import { MatDialog } from '@angular/material/dialog';
+import { HostListener } from '@angular/core';
 @Component({
   selector: 'app-careerfair-info',
   templateUrl: './careerfair-info.component.html',
@@ -72,6 +73,7 @@ export class CareerfairInfoComponent implements OnInit {
   preLoadDataFlag = true;
   offsetParam;
   urlQueryParameter;
+  companySize;
   minDate = new Date;
   currentPage: string;
   public Object = Object;
@@ -91,8 +93,7 @@ export class CareerfairInfoComponent implements OnInit {
   savedJobs = [];
   savedJobsMap = {};
   autocomplete_searchposition = [];
-  // urlQueryParameters;
-  // companyUrlQueryParameters;
+  applicationUrlParams;
 
   mathFloor = Math.floor;
   appliedJobs = [];
@@ -116,16 +117,18 @@ export class CareerfairInfoComponent implements OnInit {
     private cartService: CartService,
     private applicationService: ApplicationService,
     private careerfairService: CareerFairService) {
-      this.updateSkillCallback = this.updateSkillCallback.bind(this);
+    this.updateSkillCallback = this.updateSkillCallback.bind(this);
     this.careerfairId = parseInt(this.route.snapshot.queryParamMap.get('id'), 10) || null;
     if (this.route.snapshot.queryParamMap.has('tabIndex')) {
       this.tabIndex = parseInt(this.route.snapshot.queryParamMap.get('tabIndex'), 10);
     } else {
       this.tabIndex = 0;
     }
-    this.getCareerFairInfo(this.careerfairId);
-    this.getCareerFairCompaniesCount(this.careerfairId);
-    this.getCareerFairPositionsCount(this.careerfairId);
+    if (this.careerfairId) {
+      this.getCareerFairInfo(this.careerfairId);
+      this.getCareerFairCompaniesCount(this.careerfairId);
+      this.getCareerFairPositionsCount(this.careerfairId);
+    }
   }
   ngOnInit() {
     this.initCompanyFilterForm();
@@ -189,6 +192,7 @@ export class CareerfairInfoComponent implements OnInit {
     const urlParams = new URLSearchParams(window.location.search);
     this.companyQueryParam = urlParams.get('CompanySearch');
     if (this.companyQueryParam) {
+
       this.preLoadDataFlag = false;
       this.companyOffsetFlag = true;
       const urlObject = this.companyQueryParam.split('&');
@@ -204,9 +208,8 @@ export class CareerfairInfoComponent implements OnInit {
     this.breakpoint = (window.innerWidth <= 500) ? 2 : 4;
   }
   loadPositionsInfo() {
-    // this.positionCurrentPageNumber = 1;
     const urlParams = new URLSearchParams(window.location.search);
-    this.searchQueryParam = urlParams.get('search');
+    this.searchQueryParam = urlParams.get('PositionSearch');
     if (this.searchQueryParam) {
       this.preLoadDataFlag = false;
       this.offsetFlag = true;
@@ -223,7 +226,6 @@ export class CareerfairInfoComponent implements OnInit {
           this.urlParams[result[0]] = result[1];
         }
       }
-      // this.positionCurrentPageNumber = (this.urlParams['offset'] / this.urlParams['limit']) + 1;
     }
 
     this.initPositionFilterForm();
@@ -263,36 +265,35 @@ export class CareerfairInfoComponent implements OnInit {
     this.careerFairForm = new FormGroup({
       'searchCompany': new FormControl(null),
       'industry': new FormControl(null),
-      'size': new FormControl(null),
-      'city': new FormControl(null)
-    });
-    this.careerFairForm.get('industry').valueChanges.subscribe((industry) => {
-      industry ? this.onIndustryValueChanges(industry) : this.autocomplete_industries = [];
+      'size': new FormControl(null)
     });
 
-    this.careerFairForm.get('city').valueChanges.subscribe((city) => {
-      city && this.helperService.checkSpacesString(city) ? this.onCityValueChanges(city) : this.autocomplete_cities = [];
+    this.careerFairForm.get('industry').valueChanges.subscribe((industry) => {
+      industry ? this.onCompanyIndustryValueChanges(industry) : this.autocomplete_industries = [];
     });
     if (this.companyQueryParam) {
       this.careerFairForm.patchValue({
         'searchCompany': this.companyUrlParams['name'],
-        'industry': this.companyUrlParams['industry'],
-        'size': this.companyUrlParams['size'],
-        'city': this.companyUrlParams['city']
+        'industry': this.companyUrlParams['industryName'],
+        'size': this.companyUrlParams['size'] ? this.parseReverseCompanySize(this.companyUrlParams['size']) : ''
       });
     }
   }
 
-  onCityValueChanges(location: string) {
-    this.autoCompleteService.autoComplete(location, 'cities').subscribe(
+
+  onCompanyChangeIndustry(industry) {
+    this.companyFilterAttributes['industry_id'] = industry.industry_id;
+  }
+  onCompanyIndustryValueChanges(industry: string) {
+    this.autoCompleteService.autoComplete(industry, 'industries').subscribe(
       dataJson => {
         if (dataJson['success']) {
-          this.autocomplete_cities = dataJson['data'];
+          this.autocomplete_industries = dataJson['data'];
         }
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
-        this.autocomplete_cities = [];
+        this.autocomplete_industries = [];
       }
     );
   }
@@ -319,15 +320,11 @@ export class CareerfairInfoComponent implements OnInit {
     } else {
       queryString = this.careerFairForm.value.size ? `${queryString ? queryString + '&' : ''}size=${this.parseCompanySize(this.careerFairForm.value.size)}` : queryString;
 
-      queryString = this.careerFairForm.value.industry ? `${queryString ? queryString + '&' : ''}industry=${this.filterAttributes.industry_id}` : queryString;
-
-      queryString = this.careerFairForm.value.city ? `${queryString ? queryString + '&' : ''}city=${this.filterAttributes.city_id}` : queryString;
-
+      queryString = this.careerFairForm.value.industry ? `${queryString ? queryString + '&' : ''}industry=${this.companyFilterAttributes.industry_id ? this.companyFilterAttributes.industry_id : this.companyUrlParams['industry']}&industryName=${this.careerFairForm.value.industry}` : queryString;
       queryString = this.careerFairForm.value.searchCompany ? `${queryString ? queryString + '&' : ''}name=${this.careerFairForm.value.searchCompany}` : queryString;
 
       if (this.companyOffsetFlag) {
-
-        queryString = queryString ? `${queryString}&offset=${parseInt(this.companyUrlParams['offset'], 10) + parseInt(this.companyUrlParams['limit'], 10)}` : `offset=${parseInt(this.companyUrlParams['offset'], 10) + this.filterAttributes.limit}`;
+        queryString = queryString ? `${queryString}&offset=${parseInt(this.companyUrlParams['offset'], 10) + parseInt(this.companyUrlParams['limit'], 10)}` : `offset=${parseInt(this.companyUrlParams['offset'], 10) + this.companyFilterAttributes.limit}`;
 
         queryString = queryString ? `${queryString}&limit=${parseInt(this.companyUrlParams['limit'], 10)}` : `offset=${parseInt(this.companyUrlParams['limit'], 10)}`;
 
@@ -338,9 +335,9 @@ export class CareerfairInfoComponent implements OnInit {
 
         queryString = queryString ? `${queryString}&limit=${this.companyFilterAttributes.limit}` : `offset=${this.companyFilterAttributes.limit}`;
       }
-
-      urlQueryParam = this.careerFairForm.value.searchCompany ? `${urlQueryParam ? urlQueryParam + '&' : ''}location=${this.careerFairForm.value.searchCompany ? this.careerFairForm.value.searchCompany : ''}` : urlQueryParam;
-
+      urlQueryParam = this.careerFairForm.value.industry ? `${urlQueryParam ? urlQueryParam + '&' : ''}industry=${this.companyFilterAttributes.industry_id ? this.companyFilterAttributes.industry_id : this.companyUrlParams['industry']}&industryName=${this.careerFairForm.value.industry}` : urlQueryParam;
+      urlQueryParam = this.careerFairForm.value.searchCompany ? `${urlQueryParam ? urlQueryParam + '&' : ''}name=${this.careerFairForm.value.searchCompany ? this.careerFairForm.value.searchCompany : ''}` : urlQueryParam;
+      urlQueryParam = this.careerFairForm.value.size ? `${urlQueryParam ? urlQueryParam + '&' : ''}size=${this.careerFairForm.value.size ? this.parseCompanySize(this.careerFairForm.value.size) : ''}` : urlQueryParam;
       if (this.offsetParam || this.companyFilterAttributes.offset === 0 || this.companyFilterAttributes.offset === this.companyFilterAttributes.limit) {
 
         urlQueryParam = urlQueryParam ? `${urlQueryParam}&offset=${this.companyFilterAttributes.offset === 0 || this.companyFilterAttributes.offset === this.companyFilterAttributes.limit ? 0 : this.offsetParam}` : `offset=${this.companyFilterAttributes.offset === 0 || this.companyFilterAttributes.offset === this.companyFilterAttributes.limit ? 0 : this.offsetParam}`;
@@ -354,7 +351,7 @@ export class CareerfairInfoComponent implements OnInit {
           queryParams: {
             id: this.careerfairId,
             tabIndex: this.tabIndex,
-            CompanySearch: queryString ? queryString : ''
+            CompanySearch: urlQueryParam ? urlQueryParam : ''
           }
         });
       }
@@ -366,7 +363,7 @@ export class CareerfairInfoComponent implements OnInit {
   getCompanyData() {
     this.companyQueryFlag = true;
     if (this.companyQueryParam) {
-      this.companyCurrentPageNumber = (this.companyUrlParams['offset'] / this.companyFilterAttributes.limit) + 1;
+      this.companyCurrentPageNumber = (this.companyUrlParams['offset'] / this.companyUrlParams['limit']) + 1;
     } else {
       this.companyCurrentPageNumber = (this.companyFilterAttributes.offset / this.companyFilterAttributes.limit) + 1;
     }
@@ -432,6 +429,8 @@ export class CareerfairInfoComponent implements OnInit {
   }
 
   onSearchCompany(event) {
+    this.companyOffsetFlag = false;
+    this.companyPreQueryFlag = true;
     this.companyFilterAttributes.offset = 0;
     this.preLoadCompanyDataObject = {};
     this.getCompanyData();
@@ -439,7 +438,7 @@ export class CareerfairInfoComponent implements OnInit {
   }
 
   applyCompanyFilter() {
-    this.prequeryFlag = true;
+    this.companyPreQueryFlag = true;
     this.companyOffsetFlag = false;
     this.companyFilterAttributes.offset = 0;
     this.toggleTabMenuOpen();
@@ -540,7 +539,7 @@ export class CareerfairInfoComponent implements OnInit {
       this.positionForm.patchValue({
         'searchPosition': this.urlParams['position'],
         'minSal': this.urlParams['pay'],
-        'level': this.urlParams['level'],
+        'position': this.urlParams['level'],
         'education': this.urlParams['education'],
         'job': this.urlParams['job_type'],
         'company': this.urlParams['company'],
@@ -697,17 +696,21 @@ export class CareerfairInfoComponent implements OnInit {
   removeUserSkillsData(index: number) {
     this.userSkillsList.splice(index, 1);
   }
+  removeSkillUrlParams(index: number) {
+    this.skillUrlParams.splice(index, 1);
+    this.skillUrlIdParam.splice(index, 1);
+  }
   generateQueryString(): string {
     let queryString;
     let urlQueryParam;
     if (this.searchQueryParam) {
       queryString = this.searchQueryParam;
-      // this.applicationUrlParams = this.searchQueryParam;
+      this.applicationUrlParams = this.searchQueryParam;
       this.searchQueryParam = null;
     } else {
       queryString = this.positionForm.value.city ? `${queryString ? queryString + '&' : ''}city=${this.filterAttributes.city_id ? this.filterAttributes.city_id : this.urlParams['city']}` : queryString;
       queryString = this.positionForm.value.position ? `${queryString ? queryString + '&' : ''}level=${this.positionForm.value.position}` : queryString;
-      queryString = this.positionForm.value.education ? `${queryString ? queryString + '&' : ''}education=${parseInt(this.positionForm.value.education, 10) + 1}` : queryString;
+      queryString = this.positionForm.value.education ? `${queryString ? queryString + '&' : ''}education=${parseInt(this.positionForm.value.education, 10)}` : queryString;
       queryString = this.positionForm.value.job ? `${queryString ? queryString + '&' : ''}job_type=${this.positionForm.value.job}` : queryString;
       queryString = this.positionForm.value.school ? `${queryString ? queryString + '&' : ''}school=${this.filterAttributes.school_id ? this.filterAttributes.school_id : this.urlParams['school']}` : queryString;
       queryString = this.positionForm.value.major ? `${queryString ? queryString + '&' : ''}major=${this.filterAttributes.major_id ? this.filterAttributes.major_id : this.urlParams['major']}` : queryString;
@@ -726,11 +729,9 @@ export class CareerfairInfoComponent implements OnInit {
 
       }
       queryString = this.positionForm.value.searchPosition ? `${queryString ? queryString + '&' : ''}position=${this.positionForm.value.searchPosition}` : queryString;
-      queryString = this.positionForm.value.sortBy ? `${queryString ? queryString + '&' : ''}sort=${this.positionForm.value.sortBy}` : queryString;
-
       urlQueryParam = this.positionForm.value.city ? `${urlQueryParam ? urlQueryParam + '&' : ''}city=${this.filterAttributes.city_id ? this.filterAttributes.city_id : this.urlParams['city']}&cityName=${this.positionForm.value.city}` : urlQueryParam;
       urlQueryParam = this.positionForm.value.position ? `${urlQueryParam ? urlQueryParam + '&' : ''}level=${this.positionForm.value.position}` : urlQueryParam;
-      urlQueryParam = this.positionForm.value.education ? `${urlQueryParam ? urlQueryParam + '&' : ''}education=${parseInt(this.positionForm.value.education, 10) + 1}` : urlQueryParam;
+      urlQueryParam = this.positionForm.value.education ? `${urlQueryParam ? urlQueryParam + '&' : ''}education=${parseInt(this.positionForm.value.education, 10)}` : urlQueryParam;
       urlQueryParam = this.positionForm.value.job ? `${urlQueryParam ? urlQueryParam + '&' : ''}job_type=${this.positionForm.value.job}` : urlQueryParam;
       urlQueryParam = this.positionForm.value.school ? `${urlQueryParam ? urlQueryParam + '&' : ''}school=${this.filterAttributes.school_id ? this.filterAttributes.school_id : this.urlParams['school']}&schoolName=${this.positionForm.value.school}` : urlQueryParam;
       urlQueryParam = this.positionForm.value.major ? `${urlQueryParam ? urlQueryParam + '&' : ''}major=${this.filterAttributes.major_id ? this.filterAttributes.major_id : this.urlParams['major']}&majorName=${this.positionForm.value.major}` : urlQueryParam;
@@ -743,7 +744,6 @@ export class CareerfairInfoComponent implements OnInit {
       if (this.offsetParam || this.filterAttributes.offset === 0 || this.filterAttributes.offset === this.filterAttributes.limit) {
         urlQueryParam = urlQueryParam ? `${urlQueryParam}&offset=${this.filterAttributes.offset === 0 || this.filterAttributes.offset === this.filterAttributes.limit ? 0 : this.offsetParam}` : `offset=${this.filterAttributes.offset === 0 || this.filterAttributes.offset === this.filterAttributes.limit ? 0 : this.offsetParam}`;
         urlQueryParam = urlQueryParam ? `${urlQueryParam}&limit=${this.filterAttributes.limit}` : `offset=${this.filterAttributes.limit}`;
-        urlQueryParam = this.positionForm.value.sortBy ? `${urlQueryParam ? urlQueryParam + '&' : ''}sort=${this.positionForm.value.sortBy}` : urlQueryParam;
 
       }
 
@@ -771,16 +771,13 @@ export class CareerfairInfoComponent implements OnInit {
 
         });
       }
-
-
-
-
       if (this.queryFlag || this.prequeryFlag) {
+        this.applicationUrlParams = urlQueryParam;
         this.router.navigate(['/career-fairs/careerfair-info'], {
           queryParams: {
             id: this.careerfairId,
             tabIndex: this.tabIndex,
-            search: queryString ? queryString : ''
+            PositionSearch: urlQueryParam ? urlQueryParam : ''
           }
         });
       }
@@ -805,27 +802,31 @@ export class CareerfairInfoComponent implements OnInit {
     event.stopPropagation();
   }
   applyPositionFilter() {
+    this.prequeryFlag = true;
+    this.offsetFlag = false;
     this.filterAttributes.offset = 0;
     this.toggleTabMenuOpen();
     this.preloadPositionData = {};
     this.getPositionsData();
   }
   clearPositionFilter() {
-    // const sortValue = this.careerFairForm.value.sortBy;
-    // const setPositionValue = this.careerFairForm.value;
+    const setPositionValue = this.careerFairForm.value.searchPosition;
     this.positionForm.reset();
+    this.userSkillsList = [];
     this.preloadPositionData = {};
-    // this.careerFairForm.patchValue({ 'searchCompany': setPositionValue });
+    this.skillUrlIdParam = [];
+    this.skillUrlParams = [];
+    this.careerFairForm.patchValue({ 'searchCompany': setPositionValue });
     this.toggleTabMenuOpen();
-  }
-  removeSkillUrlParams(index: number) {
-    this.skillUrlParams.splice(index, 1);
-    this.skillUrlIdParam.splice(index, 1);
   }
   getPositionsData() {
     this.queryFlag = true;
     this.selectedAllFlag = false;
-    this.positionCurrentPageNumber = (this.filterAttributes.offset / this.filterAttributes.limit) + 1;
+    if (this.searchQueryParam) {
+      this.positionCurrentPageNumber = (this.urlParams['offset'] / this.urlParams['limit']) + 1;
+    } else {
+      this.positionCurrentPageNumber = (this.filterAttributes.offset / this.filterAttributes.limit) + 1;
+    }
     if (this.preloadPositionData[this.positionCurrentPageNumber]) {
       this.positionList = this.preloadPositionData[this.positionCurrentPageNumber].data.data;
       this.setPositionPaginationValues(this.preloadPositionData[this.positionCurrentPageNumber]);
@@ -885,10 +886,12 @@ export class CareerfairInfoComponent implements OnInit {
     }
   }
   positionPageClicked(pageNo) {
+    this.prequeryFlag = true;
+    this.offsetFlag = false;
     document.getElementById('sidenav-content').scrollTo(0, 0);
     if (pageNo > 0 && pageNo <= this.positionPaginationArr[this.positionPaginationArr.length - 1]) {
       this.positionCurrentPageNumber = pageNo;
-      this.filterAttributes.offset = ((this.positionCurrentPageNumber - 1) * companyListLimit);
+      this.filterAttributes.offset = ((this.positionCurrentPageNumber - 1) * positionListLimit);
       this.offsetParam = this.filterAttributes.offset;
       this.getPositionsData();
     }
@@ -1050,11 +1053,17 @@ export class CareerfairInfoComponent implements OnInit {
     }
   }
   routerNavigatePosition(position_id) {
-    this.router.navigate([`/position-info/${position_id}`] );
+    this.router.navigate([`/position-info/${position_id}`]);
 
   }
   routerNavigate(application_id, position_id) {
-    this.router.navigate([`/applications/${application_id}/application-detail/`, position_id]);
+    this.router.navigate([`/applications/${application_id}/application-detail/`, position_id], {
+      queryParams: {
+        id: this.careerfairId,
+        tabIndex: this.tabIndex,
+        param: this.applicationUrlParams ? this.applicationUrlParams : this.urlQueryParameter
+      }
+    });
   }
   openSkilladdDialog(skillData) {
     const dialogRef = this.dialog.open(AddSkillPopupComponent, {
@@ -1064,5 +1073,21 @@ export class CareerfairInfoComponent implements OnInit {
       minWidth: '280px',
       panelClass: ['edit-dialog-container']
     });
+  }
+  @HostListener('window:popstate', ['$event'])
+  onPopState(event) {
+    // URL Params are updated on the next process tick, so we need to wait
+    setTimeout(() => {
+      this.positionForm.reset();
+      this.clearPositionFilter();
+      this.loadPositionsInfo();
+      this.initPositionFilterForm();
+      this.applyPositionFilter();
+      this.careerFairForm.reset();
+      this.clearCompanyFilter();
+      this.loadCompanyInfo();
+      this.initCompanyFilterForm();
+      this.applyCompanyFilter();
+    }, 100);
   }
 }
