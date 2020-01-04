@@ -611,7 +611,8 @@ export const ApplicationSortBy = [
   { 'title': 'Salary', 'value': 'salary' },
   { 'title': 'Qualification Level', 'value': 'qualification_level' },
   { 'title': 'Application Deadline', 'value': 'application_deadline' },
-  { 'title': 'Popularity', 'value': 'popularity' }
+  { 'title': 'Popularity', 'value': 'popularity' },
+  { 'title': 'Interest Level', 'value': 'interest' }
 
 ];
 

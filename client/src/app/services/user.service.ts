@@ -146,8 +146,8 @@ export class UserService {
       );
   }
 
-  public getUserSkills(userSkillId: number): Observable<any> {
-    return this.http.get(this.user_service_url + `user/${userSkillId}/skills`, this.authHttpOptions())
+  public getUserSkills(userSkillId: number ): Observable<any> {
+    return this.http.get(this.user_service_url + `user/${userSkillId}/skills?offset=0&limit=100`, this.authHttpOptions())
       .pipe(
         map(data => {
           return {success: true, message: 'Success!', data: data};

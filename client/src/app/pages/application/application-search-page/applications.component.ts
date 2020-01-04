@@ -5,7 +5,7 @@ import {
   PositionService, AlertsService, AlertType,
   AutoCompleteService, CartService, ApplicationService, ScoreService
 } from '../../../services/index';
-
+import { HostListener } from '@angular/core';
 
 import {
   PositionLevel,
@@ -105,6 +105,13 @@ export class ApplicationsComponent implements OnInit {
     this.updateInterestLevel = this.updateInterestLevel.bind(this);
   }
   ngOnInit() {
+    this.getSearchFromQueryParams();
+    this.initApplicationFilterForm();
+    this.getApplicationData();
+    this.breakpoint = (window.innerWidth <= 500) ? 2 : 4;
+
+  }
+  getSearchFromQueryParams() {
     const urlParams = new URLSearchParams(window.location.search);
     this.searchQueryParam = urlParams.get('filter');
     if (this.searchQueryParam) {
@@ -122,10 +129,6 @@ export class ApplicationsComponent implements OnInit {
         }
       }
     }
-    this.initPositionFilterForm();
-    this.getApplicationData();
-    this.breakpoint = (window.innerWidth <= 500) ? 2 : 4;
-
   }
   onResize(event) {
     this.breakpoint = (event.target.innerWidth <= 500) ? 2 : 4;
@@ -134,7 +137,7 @@ export class ApplicationsComponent implements OnInit {
   toggleTabMenuOpen() {
     this.filter_list = !this.filter_list;
   }
-  initPositionFilterForm() {
+  initApplicationFilterForm() {
     this.applicationForm = new FormGroup({
       'searchPosition': new FormControl(null),
       'city': new FormControl(null),
@@ -453,7 +456,6 @@ export class ApplicationsComponent implements OnInit {
     const sortValue = this.applicationForm.value.sortBy;
     const setPositionValue = this.applicationForm.value.searchPosition;
     this.applicationForm.reset();
-    this.preLoadDataObject = {};
     this.skillUrlIdParam = [];
     this.skillUrlParams = [];
     this.userSkillsList = [];
@@ -730,6 +732,17 @@ export class ApplicationsComponent implements OnInit {
   routerNavigate(application_id, position_id) {
     this.router.navigate([`/applications/${application_id}/application-detail/`, position_id], { queryParams: { filters: this.applicationParam ? this.applicationParam :  this.applicationSearchParam } });
 
+  }
+  @HostListener('window:popstate', ['$event'])
+  onPopState(event) {
+    // URL Params are updated on the next process tick, so we need to wait
+    setTimeout(() => {
+      this.applicationForm.reset();
+      this.clearFilter();
+      this.getSearchFromQueryParams();
+      this.initApplicationFilterForm();
+      this.applyFilter();
+    }, 100);
   }
 }
 

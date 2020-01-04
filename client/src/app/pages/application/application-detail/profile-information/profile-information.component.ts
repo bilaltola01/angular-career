@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserGeneralInfo, ProfileStatuses, DisplayItemsLimit} from 'src/app/models';
+import { UserGeneralInfo, ProfileStatuses, DisplayItemsLimit } from 'src/app/models';
 import { Router, ActivatedRoute } from '@angular/router';
 import { PositionService, CartService, HelperService, UserStateService, AlertsService, AlertType, ApplicationService, UserService, ScoreService, CompanyService } from 'src/app/services';
 import { MatchingService } from 'src/app/services/matching.service';
@@ -50,7 +50,7 @@ export class ProfileInformationComponent implements OnInit {
     private router: Router,
     public dialog: MatDialog,
     private userService: UserService) {
-      this.initSkillsSearchForm();
+    this.initSkillsSearchForm();
   }
 
   ngOnInit() {
@@ -78,7 +78,7 @@ export class ProfileInformationComponent implements OnInit {
 
       (skill) => {
         if (skill && this.helperService.checkSpacesString(skill)) {
-            this.autocomplete_skills = this.userSkillsList.filter(value => value.skill.toLocaleLowerCase().includes(skill));
+          this.autocomplete_skills = this.userSkillsList.filter(value => value.skill.toLocaleLowerCase().includes(skill));
         } else {
           this.autocomplete_skills = [];
         }
@@ -86,7 +86,7 @@ export class ProfileInformationComponent implements OnInit {
     );
   }
   addSkills(skill) {
-this.temp_skill = skill;
+    this.temp_skill = skill;
     this.autocomplete_skills = [];
     this.skillsSearchForm.get('skills').setValue('');
   }
@@ -180,14 +180,10 @@ this.temp_skill = skill;
   getYears(date1, date2) {
     const data = this.helperService.convertToyears(date1, date2);
     const result = data['_data'];
-    if (result.years < 1) {
-      return `${result.months} Months`;
+    if (result.years === 1) {
+      return ` ${result.years} Year`;
     } else {
-      if (result.months === 0) {
-        return ` ${result.years} Years`;
-      } else {
-        return ` ${result.years} Years ${result.months} Months`;
-      }
+      return ` ${result.years} Years`;
     }
   }
   getEducationList(userId) {
