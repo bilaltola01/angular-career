@@ -115,6 +115,9 @@ export class ApplicationsComponent implements OnInit {
     const urlParams = new URLSearchParams(window.location.search);
     this.searchQueryParam = urlParams.get('filter');
     if (this.searchQueryParam) {
+      this.urlParams = {};
+      this.skillUrlParams = [];
+      this.skillUrlIdParam = [];
       this.preLoadDataFlag = false;
       this.offsetFlag = true;
       const urlObject = this.searchQueryParam.split('&');
@@ -738,7 +741,12 @@ export class ApplicationsComponent implements OnInit {
     // URL Params are updated on the next process tick, so we need to wait
     setTimeout(() => {
       this.applicationForm.reset();
+      this.applicationForm.patchValue({ 'searchPosition': '' });
       this.clearFilter();
+      this.userSkillsList = [];
+      this.preLoadDataObject = {};
+      this.skillUrlIdParam = [];
+      this.skillUrlParams = [];
       this.getSearchFromQueryParams();
       this.initApplicationFilterForm();
       this.applyFilter();
