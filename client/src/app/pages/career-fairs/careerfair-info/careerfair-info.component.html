@@ -11,7 +11,33 @@
   </ng-container>
   <!-- careerfair-detail -->
   <div class="filter-data">
+    <div class="filter-data-flex">
     <mat-icon (click)="toggleTabMenuOpen()" class="filter_icon">filter_list</mat-icon>
+
+    <div class="postion-search-header" [formGroup]="careerFairForm" *ngIf="tabIndex === 0">
+      <mat-form-field appearance="standard" class="search" >
+        <mat-icon matSuffix (click)="onSearchCompany($event)">search</mat-icon>
+        <input matInput placeholder="Search company…." type="text" formControlName="searchCompany"
+          (keyup.enter)="onSearchCompany($event)">
+      </mat-form-field>
+    </div>
+
+
+      <div class="postion-search-header" [formGroup]="positionForm" *ngIf="tabIndex === 1">
+        <mat-form-field appearance="standard" class="search">
+          <mat-icon matSuffix (click)="onSearchPosition($event)">search</mat-icon>
+          <input matInput placeholder="Search positions…" type="text" [matAutocomplete]="autocompleteSearch"
+            formControlName="searchPosition" (keyup.enter)="onSearchPosition($event)">
+          <mat-autocomplete #autocompleteSearch="matAutocomplete">
+            <mat-option *ngFor="let search of autocomplete_searchposition" [value]="search.position  ">
+              <span>{{search.position}}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+    </div>
+
+
   </div>
   <div class="careerfair-detail" *ngFor="let item of careerFairData">
     <div class="careerfair-top-detail">
@@ -91,13 +117,11 @@
   <div [formGroup]="careerFairForm" class="position-main-container" *ngIf="tabIndex === 0">
     <div class="filter-container container__header tablet" [class.open]="filter_list">
       <ng-container>
+        <div class="position-search-hide">
         <div class="nav-title">
           <h3 class="section-title">COMPANY SEARCH</h3>
         </div>
         <div class="comman_search_filter" [formGroup]="careerFairForm">
-          <!-- <div class="filter-data">
-            <mat-icon (click)="toggleTabMenuOpen()" class="filter_icon">filter_list</mat-icon>
-          </div> -->
           <div class="postion-search-header">
             <mat-form-field appearance="standard" class="search">
               <mat-icon matSuffix (click)="onSearchCompany($event)">search</mat-icon>
@@ -106,6 +130,9 @@
             </mat-form-field>
           </div>
         </div>
+      </div>
+
+
         <div class="nav-title">
           <h3 class="section-title">COMPANY FILTERS</h3>
         </div>
@@ -225,23 +252,26 @@
   <div [formGroup]="positionForm" class="position-main-container" *ngIf="tabIndex===1">
     <div class="filter-container container__header tablet" [class.open]="filter_list">
       <ng-container>
-        <div class="nav-title">
-          <h3 class="section-title">POSITION SEARCH</h3>
-        </div>
-        <div class="comman_search_filter" [formGroup]="positionForm">
-          <div class="postion-search-header">
-            <mat-form-field appearance="standard" class="search">
-              <mat-icon matSuffix (click)="onSearchPosition($event)">search</mat-icon>
-              <input matInput placeholder="Search Positions" type="text" [matAutocomplete]="autocompleteSearch"
-                formControlName="searchPosition" (keyup.enter)="onSearchPosition($event)">
-              <mat-autocomplete #autocompleteSearch="matAutocomplete">
-                <mat-option *ngFor="let search of autocomplete_searchposition" [value]="search.position  ">
-                  <span>{{search.position}}</span>
-                </mat-option>
-              </mat-autocomplete>
-            </mat-form-field>
+        <div class="position-search-hide">
+          <div class="nav-title">
+            <h3 class="section-title">POSITION SEARCH</h3>
           </div>
-        </div>
+          <div class="comman_search_filter" [formGroup]="positionForm">
+            <div class="postion-search-header">
+              <mat-form-field appearance="standard" class="search">
+                <mat-icon matSuffix (click)="onSearchPosition($event)">search</mat-icon>
+                <input matInput placeholder="Search positions…" type="text" [matAutocomplete]="autocompleteSearch"
+                  formControlName="searchPosition" (keyup.enter)="onSearchPosition($event)">
+                <mat-autocomplete #autocompleteSearch="matAutocomplete">
+                  <mat-option *ngFor="let search of autocomplete_searchposition" [value]="search.position  ">
+                    <span>{{search.position}}</span>
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+          </div>
+      </div>
+
         <div class="nav-title">
           <h3 class="section-title">POSITION FILTERS</h3>
         </div>

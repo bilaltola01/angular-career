@@ -711,8 +711,7 @@ $profile-form-field-mt: 30px;
 
       & .select-style {
           overflow: hidden;
-          margin-bottom: 9px;
-
+          margin-bottom: 15px;
           & .sort-item {
               color: rgba(map-get($md-cfaccent, 500), .44);
               font-size: 14px;
@@ -731,7 +730,7 @@ $profile-form-field-mt: 30px;
 
           & .selectall {
               float: left;
-              width: 70%;
+              width: 100%;
 
               & round-checkbox {
                   display: inline;
@@ -1193,6 +1192,23 @@ $profile-form-field-mt: 30px;
       //filter data
       .filter-data{
         display: block;
+        .filter-data-flex{
+          display: flex;
+          align-items: center;
+          .postion-search-header {
+            margin: 0px auto;
+            mat-form-field{
+              border-radius: 50px;
+              background-color: #f2f2f4;
+              font-style: italic;
+              font-size: 14px;
+              line-height: 21px;
+              font-family: "Poppins", sans-serif;
+              font-weight: 500;
+              width: 550px;
+            }
+          }
+        }
       }
     }
     }
@@ -1308,6 +1324,24 @@ $profile-form-field-mt: 30px;
       //filter data
       .filter-data{
         display: block;
+        .filter-data-flex{
+          display: flex;
+          align-items: center;
+          .postion-search-header {
+            margin: 0px auto;
+            mat-form-field{
+              border-radius: 50px;
+              background-color: #f2f2f4;
+              font-style: italic;
+              font-size: 14px;
+              line-height: 21px;
+              font-family: "Poppins", sans-serif;
+              font-weight: 500;
+              width: 560px;
+            }
+          }
+        }
+
       }
     }
 
@@ -1615,10 +1649,39 @@ $profile-form-field-mt: 30px;
                 }
             }
 
-            //filter data
-            .filter-data{
-              display: block;
+
+           //filter data
+          .filter-data{
+            display: block;
+            .filter-data-flex{
+              display: flex;
+              align-items: center;
+              .postion-search-header {
+                margin: 0px auto;
+                width: 76%;
+                mat-form-field{
+                  border-radius: 50px;
+                  background-color: #f2f2f4;
+                  font-style: italic;
+                  font-size: 14px;
+                  line-height: 21px;
+                  font-family: "Poppins", sans-serif;
+                  font-weight: 500;
+                  width: 100%;
+                  margin-left: 3px;
+                }
+              }
             }
+
+          }
+    }
+  }
+}
+
+@media screen and (max-width: 1300px){
+  :host {
+    .position-search-hide{
+      display: none;
     }
   }
 }
