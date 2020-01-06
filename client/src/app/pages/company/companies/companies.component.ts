@@ -75,6 +75,7 @@ export class CompaniesComponent implements OnInit {
   autocomplete_industries: Industry[] = [];
 
   currentPageNumber = 1;
+  breakpoint: number;
   paginationArr = [];
   preLoadDataObject = {};
   filterAttributes = {
@@ -116,8 +117,12 @@ export class CompaniesComponent implements OnInit {
     this.initCompanyFilterForm();
     // Initial search
     this.applyFilter();
+    this.breakpoint = (window.innerWidth <= 600) ? 2 : 3.5;
   }
 
+  onResize(event) {
+    this.breakpoint = (event.target.innerWidth <= 600) ? 2 : 3.5;
+  }
   initCompanyFilterForm() {
     const querySearchedName = this.route.snapshot.queryParamMap.get('name') || null;
     const querySearchedIndustry = this.route.snapshot.queryParamMap.get('industry') || null;

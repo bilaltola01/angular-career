@@ -32,7 +32,7 @@ a {
         position: relative;
         z-index: 1;
         left: 0;
-    
+
         & mat-form-field {
           width: 560px;
           border-radius: 50px;
@@ -43,7 +43,7 @@ a {
           font-family: "Poppins", sans-serif;
           font-weight: 500;
         }
-    
+
         & .mat-icon {
           top: -13px;
           right: 0;
@@ -71,7 +71,7 @@ a {
         float: right;
         width: 70.3%;
         padding-bottom: 80px;
-      
+
         .row {
           background: $white;
           padding: 10px 18px;
@@ -99,25 +99,25 @@ a {
             margin-bottom: 0;
             color: rgba(map-get($md-cfaccent, 500), .84);
           }
-      
+
           a {
             text-decoration: none;
           }
-      
+
           &.no-companies {
             @include btn-align-center;
           }
-      
+
           .header-container {
             width: 100%;
             margin-bottom: 20px;
             @include flex(row, flex-start, space-between);
-      
+
             action-button {
               margin-top: 10px;
             }
           }
-      
+
           .sub-container {
             width: fit-content;
             margin-bottom: 20px;
@@ -125,17 +125,17 @@ a {
             flex-wrap: wrap;
             border: 1px solid rgba(0, 29, 64, 0.15);
             border-radius: 5px;
-      
+
             .company-info {
               margin-bottom: 10px;
               margin-right: 20px;
             }
           }
-      
+
           .skills-container {
             width: 100%;
             margin-bottom: 20px;
-      
+
             h5 {
               margin-top: 0;
               margin-bottom: 0;
@@ -145,29 +145,59 @@ a {
               font-size: 14px;
               line-height: 21px;
               color: rgba(map-get($md-cfaccent, 500), .34);
-      
+
               span.count {
                 color: rgba(map-get($md-cfaccent, 500), .84);
               }
             }
-      
+
             .skills {
               @include flex(row, center, flex-start);
-      
+
               img {
                 width: 30px;
                 height: 30px;
                 margin: 10px 0 5px 10px;
                 cursor: pointer;
               }
-      
+
               simple-tag {
                 margin: 10px 10px 5px 0;
               }
             }
           }
+          & .card {
+            margin: 20px 0;
+            & mat-grid-tile{
+                border: 1px solid #f0f0f0;
+                border-right: none;
+                &:last-child{
+                    border-right:1px solid #f0f0f0;
+                }
+            }
+            & .card-item {
+                @include inline-block-btn;
+                width: 100%;
+                padding: 9px 15px 9px 15px;
+                vertical-align: middle;
+
+
+                span {
+                    color: rgba(map-get($md-cfaccent, 500), .44);
+                    font-size: 14px;
+                    font-family: "Poppins", sans-serif;
+                    font-weight: 400;
+                }
+
+                p {
+                    margin: 3px 0 0;
+                    font-size: 14px;
+                    line-height: 16px;
+                }
+            }
         }
-      
+        }
+
         .company-info {
           display: grid;
           grid-template:
@@ -175,17 +205,17 @@ a {
           ;
           grid-column-gap: 15px;
           background-color: transparent;
-      
+
           .image {
             grid-area: image;
             @include flex(row, center, flex-start);
-      
+
             &>img {
               width: 60px;
               height: 60px;
               object-fit: cover;
             }
-      
+
             &.secondary {
               &>img {
                 width: 56px;
@@ -194,12 +224,12 @@ a {
               }
             }
           }
-      
+
           .info {
             grid-area: info;
             width: 100%;
             @include flex(column, flex-start, center);
-      
+
             h2.name {
               font-family: 'Poppins', sans-serif;
               font-weight: 600;
@@ -208,7 +238,7 @@ a {
               color: rgba(map-get($md-cfaccent, 500), .84);
               margin: 0;
             }
-      
+
             h3.title {
               font-family: 'Poppins', sans-serif;
               font-weight: 500;
@@ -217,7 +247,7 @@ a {
               color: rgba(map-get($md-cfaccent, 500), .84);
               margin: 0;
             }
-      
+
             h4.secondary-title {
               font-family: 'Roboto', sans-serif;
               font-weight: 400;
@@ -227,7 +257,7 @@ a {
               color: rgba(map-get($md-cfaccent, 500), .84);
               margin: 0;
             }
-      
+
             h5.secondary-title {
               font-family: 'Poppins-Medium', sans-serif;
               font-weight: 400;
@@ -238,7 +268,7 @@ a {
             }
           }
         }
-      
+
         .company-info-box {
           display: grid;
           grid-template:
@@ -246,16 +276,16 @@ a {
           ;
           grid-column-gap: 10px;
           background-color: transparent;
-      
+
           padding: 10px 20px 10px 15px;
           border-right: 1px solid rgba(0, 29, 64, 0.15);
           min-width: 230px;
-      
+
           .info {
             grid-area: info;
             width: 100%;
             @include flex(column, flex-start, center);
-      
+
             h4{
               font-family: 'Roboto', sans-serif;
               font-weight: 400;
@@ -265,7 +295,7 @@ a {
               color: rgba(map-get($md-cfaccent, 500), .84);
               margin: 0;
             }
-      
+
             h5 {
               font-family: 'Poppins-Medium', sans-serif;
               font-weight: 400;
@@ -280,13 +310,13 @@ a {
 
       .pagination {
         float: right;
-      
+
         ul {
           padding: 3px 10px;
           border-radius: 50px;
           background-color: map-get($md-cfgray, 500);
           @include inline-block-btn;
-      
+
           li {
             @include inline-block-btn;
             height: 15px;
@@ -302,22 +332,22 @@ a {
             font-family: "Poppins", sans-serif;
             font-weight: 500;
             line-height: 21px;
-      
+
             &.active {
               background-color: $white;
             }
-      
+
             &.large_pagination_button {
               height: auto;
               width: auto;
               margin-top: 4px;
             }
-      
+
             & span {
               vertical-align: middle;
               @include inline-block-btn;
             }
-      
+
           }
         }
       }
@@ -334,8 +364,8 @@ a {
       -ms-overflow-style: none;  // IE 10+
       scrollbar-width: none;  // Firefox
       box-sizing: border-box;
-      
-      &::-webkit-scrollbar { 
+
+      &::-webkit-scrollbar {
         display: none;  // Safari and Chrome
       }
 
@@ -349,11 +379,11 @@ a {
         content: "";
         display: table;
       }
-    
+
       .nav-title {
         height: 44px;
         @include flex(row, center, flex-start);
-    
+
         h3 {
           margin: 0;
             line-height: 30px;
@@ -364,7 +394,7 @@ a {
             font-weight: 700;
         }
       }
-    
+
       .filter-card {
         position: relative;
         padding: 10px 15px 20px;
@@ -373,14 +403,14 @@ a {
         border-radius: 5px;
         margin-bottom: 2px;
         box-sizing: border-box;
-    
+
         & mat-select {
           font-size: 14px;
           font-family: "Poppins", sans-serif;
           line-height: 21px;
           color: rgba(map-get($md-cfaccent, 500), .34);
           font-weight: 400;
-    
+
           & .mat-form-field-wrapper {
             & .mat-form-field-flex {
               & .mat-form-field-infix {
@@ -389,21 +419,21 @@ a {
             }
           }
         }
-    
+
         & simple-tag {
           @include inline-block-btn;
           margin: 15px 5px 0px 5px;
         }
-    
+
         & mat-form-field {
           font-size: 14px;
           display: block;
         }
       }
-    
+
       .side-filter-btn {
         @include btn-align-center;
-    
+
         & action-button {
           @include inline-block-btn;
           margin-top: 10px;
@@ -559,7 +589,7 @@ a {
               }
             }
           }
-      
+
           .company-info-box {
             border: 1px solid rgba(0, 29, 64, 0.15);
             border-radius: 5px;
