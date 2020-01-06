@@ -116,7 +116,7 @@ a {
                 color: rgba(map-get($md-cfaccent, 500), .34);
                 margin: 0;
               }
-        
+
               h4.secondary-title {
                 font-family: 'Roboto', sans-serif;
                 font-weight: 500;
@@ -153,6 +153,7 @@ a {
           color: rgba(map-get($md-cfaccent, 500), .30);
           margin: 10px 30px;
           text-transform: uppercase;
+          cursor: pointer;
           &.active {
             color: map-get($md-cfprimary, 500);
           }
@@ -304,6 +305,19 @@ a {
             margin-top: 10px;
           }
         }
+        .position-filters{
+          h3{
+          font-family: "Poppins", sans-serif;
+          font-weight: 700;
+          text-transform: uppercase;
+          font-size: 20px;
+          line-height: 1.5;
+          margin: 0;
+          color: rgba(0, 29, 64, 0.24);
+          margin-top: 10px;
+          margin-bottom: 10px;
+        }
+      }
 
       }
 
@@ -645,7 +659,7 @@ a {
             border: solid 3px $secondary-bg-color;
             border-radius: 38px;
             display: inline-grid;
-            grid-template: 
+            grid-template:
               "image title" 35px
               "image info" 35px
               / 70px auto;
@@ -723,6 +737,28 @@ a {
         }
       }
     }
+    .postion-search-header {
+      display: block;
+      border: none;
+      width: 450px;
+      margin: 0 auto;
+      position: relative;
+      border-radius: 50px;
+      background-color: #f2f2f4;
+      font-style: italic;
+      font-size: 14px;
+      line-height: 21px;
+      font-family: "Poppins", sans-serif;
+      font-weight: 500;
+
+      mat-form-field {
+          width: 100%;
+
+          mat-icon {
+              cursor: pointer;
+          }
+      }
+  }
   }
 }
 
@@ -737,6 +773,7 @@ a {
       width: 100%;
       background-color: $bg-color-1;
       border-bottom: 1px solid map-get($md-cfaccent, 50);
+      background-color: #ffffff;
       padding:0 40px;
       box-sizing: border-box;
       @include flex(row, center, space-between);
@@ -753,7 +790,7 @@ a {
           color: map-get($md-cfprimary, 500);
         }
         mat-icon {
-          color: map-get($md-cfprimary, 500);
+          // color: map-get($md-cfprimary, 500);
           margin-left: 10px;
           font-size: 20px;
           width: 20px;
@@ -765,12 +802,23 @@ a {
       }
     }
     .career-main {
+      #legend{
+        padding: 0 10px;
+        .postion-search-header{
+          max-width: 80%;
+        }
+      }
       .header-container {
-        margin-top: 60px;
+        margin-top: 75px;
         margin-bottom: 0;
 
         .tab-row {
-          display: none;
+          // display: none;
+          padding: 0 6px;
+          h4.tab-menu{
+            font-size: 20px;
+            margin: 10px 10px;
+          }
         }
       }
 
@@ -780,7 +828,7 @@ a {
           padding: 10px 40px 30px 40px;
           left: 0;
           width: 100%;
-          background-color: rgba(0, 0, 0, .32);
+          background-color: #f2f2f2;
           top: 130px;
           height: calc(100vh - 130px);
           transition: top 0.5s;
@@ -789,11 +837,24 @@ a {
           .nav-title {
             display: none;
           }
-        
+
           &.nav-hidden {
             top: -1000%;
             transition: top 0.5s;
             transition-timing-function: ease;
+          }
+          .searchbar-hide{
+            display: none;
+          }
+          .section-title{
+            font-size: 20px;
+            margin: 0;
+            line-height: 30px;
+            color: rgba(0, 29, 64, 0.24);
+            text-transform: uppercase;
+            padding-bottom: 12px;
+            font-family: "Poppins", sans-serif;
+            font-weight: 700;
           }
         }
 
@@ -882,7 +943,13 @@ a {
         }
 
         .tab-row {
-          display: none;
+          // display: none;
+          padding: 0 6px;
+          h4.tab-menu{
+            font-size: 12px;
+            margin: 10px 10px;
+          }
+
         }
       }
       .main-container {
