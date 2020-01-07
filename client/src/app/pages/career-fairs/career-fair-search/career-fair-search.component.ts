@@ -70,7 +70,7 @@ export class CareerFairSearchComponent implements OnInit {
     this.filter_list = !this.filter_list;
   }
   initPositionFilterForm() {
-    const querySearchedName = this.route.snapshot.queryParamMap.get('searchCareerfair') || null;
+    const querySearchedName = this.route.snapshot.queryParamMap.get('name') || null;
     const querySearchedDate = this.route.snapshot.queryParamMap.get('date') || null;
     const querySearchedLocation = this.route.snapshot.queryParamMap.get('location') || null;
     const querySearchedCompany = this.route.snapshot.queryParamMap.get('company') || null;
@@ -289,9 +289,11 @@ export class CareerFairSearchComponent implements OnInit {
   onPopState(event) {
     // URL Params are updated on the next process tick, so we need to wait
     setTimeout(() => {
+      // this.careerFairsForm.reset();
+      // debugger
+      // this.clearFilter();
       this.careerFairsForm.reset();
-      this.clearFilter();
-      // this.getSearchFromQueryParams();
+      this.preLoadDataObject = {};
       this.initPositionFilterForm();
       this.applyFilter();
     }, 100);

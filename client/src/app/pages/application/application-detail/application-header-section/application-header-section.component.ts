@@ -43,7 +43,7 @@ export class ApplicationHeaderSectionComponent implements OnInit {
     /* queryParams
      of
      careerfair-info>positions starts*/
-    this.careerfairPositionsParams = urlParams.get('param');
+    this.careerfairPositionsParams = urlParams.get('PositionSearchData');
     this.careerfairPositionsId = urlParams.get('id');
     this.careerfairPositionsTabIndex = urlParams.get('tabIndex');
     /* queryParams
@@ -64,15 +64,19 @@ export class ApplicationHeaderSectionComponent implements OnInit {
           this.router.navigate([`/positions/position-info/${this.positionInfoQueryParam}`]);
         } else if (val.url.includes('searchData')) {
           if (this.searchQueryParam) {
-            this.router.navigate(['/positions'], {queryParams : { search: this.searchQueryParam ? this.searchQueryParam : ''}});
+            this.router.navigate(['/positions'], { queryParams: { search: this.searchQueryParam ? this.searchQueryParam : '' } });
           }
-         } else if (val.url.includes('param')) {
-          this.router.navigate(['/career-fairs/careerfair-info'], {queryParams: {
-            id: this.careerfairPositionsId,
-            tabIndex: this.careerfairPositionsTabIndex,
-            PositionSearch: this.careerfairPositionsParams ? this.careerfairPositionsParams : ''
-          }});
-         }
+        } else if (val.url.includes('PositionSearchData')) {
+          if (this.careerfairPositionsParams) {
+            this.router.navigate(['/career-fairs/careerfair-info'], {
+              queryParams: {
+                id: this.careerfairPositionsId,
+                tabIndex: this.careerfairPositionsTabIndex,
+                PositionSearch: this.careerfairPositionsParams ? this.careerfairPositionsParams : ''
+              }
+            });
+          }
+        }
       }
     });
   }
