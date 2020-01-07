@@ -178,12 +178,23 @@ export class ProfileInformationComponent implements OnInit {
     );
   }
   getYears(date1, date2) {
-    const data = this.helperService.convertToyears(date1, date2);
-    const result = data['_data'];
-    if (result.years === 1) {
-      return ` ${result.years} Year`;
-    } else {
-      return ` ${result.years} Years`;
+    if (date1 === null) {
+      date1 = new Date();
+    }
+    if (date1 !== date2) {
+      const data = this.helperService.convertToyears(date1, date2);
+      const result = data['_data'];
+      if (result.years < 1 && result.months !== 0) {
+        return ` ${result.months} Months`;
+      } else if (result.years === 1) {
+        return ` ${result.years} Year`;
+      } else {
+        if (result.years > 1 && result.months !== 0) {
+          return ` ${result.years} Years`;
+        } else {
+          return ` ${result.years} Years ${result.months} Months`;
+        }
+      }
     }
   }
   getEducationList(userId) {
