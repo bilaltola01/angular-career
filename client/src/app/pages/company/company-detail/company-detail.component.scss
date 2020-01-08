@@ -335,7 +335,7 @@ a {
           margin-bottom: 15px;
           & .selectall {
             float: left;
-            width: 70%;
+            width: 82%;
 
             & round-checkbox {
               display: inline;
@@ -349,6 +349,21 @@ a {
             @include inline-block-btn;
             margin-right: 2%;
           }
+          & .sort-item {
+            color: rgba(map-get($md-cfaccent, 500), .44);
+            font-size: 14px;
+            font-family: "Poppins", sans-serif;
+            font-weight: 400;
+
+            & mat-form-field {
+                margin-top: -10px;
+                margin-bottom: 5px;
+                width: 123px;
+                font-family: "Poppins", sans-serif;
+                font-weight: 400;
+
+            }
+        }
         }
 
         .row {
@@ -867,7 +882,7 @@ a {
           .select-style {
             margin: 9px 0;
             & .selectall {
-              width: 74%;
+              width: 75%;
               padding-bottom: 6px;
 
               & action-button {
@@ -1080,7 +1095,8 @@ a {
   }
 }
 
-@media only screen and (max-width: 479px) {
+@media only screen and (min-width:$min-mini-desktop-breakpoint) and (max-width:$max-mini-desktop-breakpoint) {
+// @media only screen and (max-width: 479px) {
   :host {
     .career-main {
       .header-container {
@@ -1100,6 +1116,17 @@ a {
       .main-container {
         .nav-container {
           padding: 10px 20px 30px 20px;
+        }
+        .list-container {
+          .select-style {
+            .selectall {
+              float: none;
+              width: 100%;
+            }
+            .sort-item {
+              margin-left: 30px;
+            }
+          }
         }
       }
     }

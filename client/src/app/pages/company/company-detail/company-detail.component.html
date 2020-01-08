@@ -313,23 +313,38 @@
         </div>
       </div>
 
-      <div class="list-container positions-list">
+      <div class="list-container positions-list" [formGroup]="positionForm">
 
         <div class="select-style">
           <div class="selectall">
             <round-checkbox  title="Select All" [checked]="selectedAllFlag" (statusChange)="selectAll($event)">
             </round-checkbox>
-            <action-button class="position-search-reload-result" color="primary" title="Reload Results" (click)="preLoadDataObject = {}; getJobData()"></action-button>
-
+            <action-button class="position-search-reload-result" color="primary" title="Reload Results" (click)="reloadResult()"></action-button>
+            <action-button class="position-search-reload-result" color="primary" title="Apply Selected"
+            (click)="applySelected()">
+          </action-button>
+          <action-button class="position-search-reload-result" color="primary" title="Save Selected"
+            (click)="saveSelected()">
+          </action-button>
             <div class="drop-buttons">
               <span class="dot-icon">
                 <button mat-button [matMenuTriggerFor]="menu" disableRipple><img src="assets/icons/ic_more_vertical.svg">
                 </button>
                 <mat-menu #menu="matMenu">
-                  <button mat-menu-item (click)="getJobData()">Reload Results</button>
+                  <button mat-menu-item (click)="applySelected()">Apply Selected</button>
+                  <button mat-menu-item (click)="saveSelected();">Save Selected</button>
+                  <button mat-menu-item (click)="reloadResult()">Reload Results</button>
                 </mat-menu>
               </span>
             </div>
+          </div>
+          <div class="sort-item">
+            <mat-label>Sort by</mat-label>&nbsp;
+            <mat-form-field>
+              <mat-select value="dateposted" formControlName="sortBy" (selectionChange)="getJobData()">
+                <mat-option *ngFor="let sort of sortBy" [value]="sort.value">{{sort.title}}</mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
         </div>
 
@@ -341,8 +356,10 @@
               <h1  [routerLink]="['/position-info/',job.position_id]" >{{job.position}} </h1>
               <div class="position-right">
                 <div class="heart-icon">
-                  <img *ngIf="!appliedJobsMap[job.position_id] && !savedJobsMap[job.position_id]" (click)="saveJob([job])" title="Save Job" src="assets/icons/ic_heart.svg" class="before-heart-icon">
-                  <img *ngIf="!appliedJobsMap[job.position_id] && savedJobsMap[job.position_id]" (click)="unSaveJob(job);" title="Saved Job" src="assets/icons/ic_heart_circle.svg" class="after-heart-icon">
+                  <img *ngIf="!appliedJobsMap[job.position_id] && !savedJobsMap[job.position_id]" (click)="saveJob([job])"
+                    title="Save Job" src="assets/icons/ic_heart.svg" class="before-heart-icon">
+                  <img *ngIf="!appliedJobsMap[job.position_id] && savedJobsMap[job.position_id]" (click)="unSaveJob([job]);"
+                    title="Saved Job" src="assets/icons/ic_heart_circle.svg" class="after-heart-icon">
                 </div>
                 <span class="right-align">
                   <action-button *ngIf="!appliedJobsMap[job.position_id]" title="Apply" class="job-apply-btn"
