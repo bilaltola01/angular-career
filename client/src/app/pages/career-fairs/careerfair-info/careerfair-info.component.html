@@ -449,14 +449,14 @@
             </span>
           </div>
         </div>
-        <!-- <div class="sort-item">
+        <div class="sort-item">
           <mat-label>Sort by</mat-label>&nbsp;
           <mat-form-field>
             <mat-select value="dateposted" formControlName="sortBy" (selectionChange)="getPositionsData()">
               <mat-option *ngFor="let sort of sortBy" [value]="sort.value">{{sort.title}}</mat-option>
             </mat-select>
           </mat-form-field>
-        </div> -->
+        </div>
       </div>
       <div *ngFor="let job of positionList ">
         <div class="row" [ngClass]="{'selected': job.selected}">

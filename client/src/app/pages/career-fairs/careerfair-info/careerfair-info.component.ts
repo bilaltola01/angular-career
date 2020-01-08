@@ -754,7 +754,7 @@ export class CareerfairInfoComponent implements OnInit {
       if (this.offsetParam || this.filterAttributes.offset === 0 || this.filterAttributes.offset === this.filterAttributes.limit) {
         urlQueryParam = urlQueryParam ? `${urlQueryParam}&offset=${this.filterAttributes.offset === 0 || this.filterAttributes.offset === this.filterAttributes.limit ? 0 : this.offsetParam}` : `offset=${this.filterAttributes.offset === 0 || this.filterAttributes.offset === this.filterAttributes.limit ? 0 : this.offsetParam}`;
         urlQueryParam = urlQueryParam ? `${urlQueryParam}&limit=${this.filterAttributes.limit}` : `offset=${this.filterAttributes.limit}`;
-
+        urlQueryParam = this.positionForm.value.sortBy ? `${urlQueryParam ? urlQueryParam + '&' : ''}sort=${this.positionForm.value.sortBy}` : urlQueryParam;
       }
 
 
@@ -820,12 +820,14 @@ export class CareerfairInfoComponent implements OnInit {
     this.getPositionsData();
   }
   clearPositionFilter() {
+    const sortValue = this.positionForm.value.sortBy;
     const setPositionValue = this.careerFairForm.value.searchPosition;
     this.positionForm.reset();
     this.userSkillsList = [];
     this.preloadPositionData = {};
     this.skillUrlIdParam = [];
     this.skillUrlParams = [];
+    this.positionForm.patchValue({ 'sortBy': sortValue });
     this.careerFairForm.patchValue({ 'searchPosition': setPositionValue });
     this.toggleTabMenuOpen();
   }
