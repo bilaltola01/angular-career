@@ -284,10 +284,15 @@ $profile-form-field-mt: 30px;
           }
 
           & .education-level-m {
+            .skills{
+              .interest-img {
+                margin: 0px 0 0px 10px;
+              }
+            }
             & img {
               width: 30px;
-              height: 29px;
-              margin: 7px 0 5px 10px;
+              height: 30px;
+              margin: 10px 0 0px 10px;
               cursor: pointer;
               &.edu_img {
                 margin-top: -4px;
