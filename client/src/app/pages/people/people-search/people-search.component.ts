@@ -483,7 +483,9 @@ export class PeopleSearchComponent implements OnInit {
               let displayMajors = [];
               data.education.forEach(educationalElement => {
                 displayMajors.push(educationalElement.major_name);
+                if (educationalElement.focus_major_name !== null) {
                 displayMajors.push(educationalElement.focus_major_name);
+                }
               });
               displayMajors = [...new Set(displayMajors)];
 
