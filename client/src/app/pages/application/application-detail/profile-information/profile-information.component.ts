@@ -183,16 +183,22 @@ export class ProfileInformationComponent implements OnInit {
     }
     if (date1 !== date2) {
       const data = this.helperService.convertToyears(date1, date2);
-      const result = data['_data'];
-      if (result.years < 1 && result.months !== 0) {
-        return ` ${result.months} Months`;
-      } else if (result.years === 1) {
-        return ` ${result.years} Year`;
-      } else {
-        if (result.years > 1 && result.months !== 0) {
-          return ` ${result.years} Years`;
+      if (data < 12) {
+        if (data === 1) {
+          return `${data} Month`;
         } else {
-          return ` ${result.years} Years ${result.months} Months`;
+          return `${data} Months`;
+        }
+      } else if (data >= 12) {
+        if (data % 12 === 0) {
+          const result = data / 12;
+          if (result === 1) {
+            return `${result} Year`;
+          } else {
+            return `${result} Years`;
+          }
+        } else if (data % 12 !== 0) {
+          return `${Math.floor(data / 12)} Years  ${data % 12} Months`;
         }
       }
     }

@@ -27,7 +27,7 @@ export class HelperService {
   convertToyears(date1: string, date2: string) {
     const startDate = moment(date1);
     const  endDate = moment(date2);
-    return moment.duration(moment(startDate).diff(moment(endDate)));
+    return startDate.diff(endDate, 'month');
 
 
   }
