@@ -335,7 +335,7 @@ a {
           margin-bottom: 15px;
           & .selectall {
             float: left;
-            width: 82%;
+            width: 78%;
 
             & round-checkbox {
               display: inline;
@@ -706,6 +706,26 @@ a {
             }
           }
         }
+        .jobdesc-space-pera {
+          margin-top: 10px;
+          margin-bottom: 10px;
+          font-size: 14px;
+          line-height: 22px;
+          font-weight: 400;
+          word-break: break-word;
+          white-space: pre-wrap;
+          max-height: 310px;
+          width: 95%;
+          display: block;
+          display: -webkit-box;
+          -webkit-line-clamp: 14;
+          overflow: hidden;
+          -webkit-box-orient: vertical;
+          text-overflow: ellipsis;
+      }
+
+
+
       }
 
       .pagination {
@@ -1100,6 +1120,8 @@ a {
   :host {
     .career-main {
       .header-container {
+          margin-top: 75px;
+          margin-bottom: 0;
         .company-row {
 
           .company-detail {
@@ -1128,7 +1150,103 @@ a {
             }
           }
         }
+
+        //extra css
+        .nav-container {
+          position: fixed;
+          padding: 10px 40px 30px 40px;
+          left: 0;
+          width: 100%;
+          background-color: #f2f2f2;
+          top: 130px;
+          height: calc(100vh - 130px);
+          transition: top 0.5s;
+          transition-timing-function: ease;
+          z-index: 1;
+          .nav-title {
+            display: none;
+          }
+
+          &.nav-hidden {
+            top: -1000%;
+            transition: top 0.5s;
+            transition-timing-function: ease;
+          }
+          .searchbar-hide{
+            display: none;
+          }
+          .section-title{
+            font-size: 20px;
+            margin: 0;
+            line-height: 30px;
+            color: rgba(0, 29, 64, 0.24);
+            text-transform: uppercase;
+            padding-bottom: 12px;
+            font-family: "Poppins", sans-serif;
+            font-weight: 700;
+          }
+        }
+
+        .list-container {
+          width: 100%;
+          &.positions-list {
+            padding-top: 10px;
+          }
+          .select-style {
+            margin: 9px 0;
+            & .selectall {
+              width: 80%;
+              padding-bottom: 6px;
+              float: left;
+              & action-button {
+                margin-bottom: 5px;
+              }
+            }
+          }
+
+        }
+
+
       }
     }
+
+    legend {
+      position: fixed;
+      margin: 0;
+      height: 60px;
+      top: 70px;
+      left: 0;
+      width: 100%;
+      background-color: $bg-color-1;
+      border-bottom: 1px solid map-get($md-cfaccent, 50);
+      background-color: #ffffff;
+      padding:0 40px;
+      box-sizing: border-box;
+      @include flex(row, center, space-between);
+      z-index: 100;
+      .nav-title {
+        cursor: pointer;
+        @include flex(row, center, flex-start);
+        h3 {
+          font-family: 'Poppins', sans-serif;
+          font-weight: 700;
+          font-size: 20px;
+          margin: 0;
+          line-height: 1.5;
+          color: map-get($md-cfprimary, 500);
+        }
+        mat-icon {
+          // color: map-get($md-cfprimary, 500);
+          margin-left: 10px;
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+        }
+      }
+      .drop-buttons{
+        display: inline-block;
+      }
+    }
+
   }
 }

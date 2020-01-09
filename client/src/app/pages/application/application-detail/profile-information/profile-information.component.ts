@@ -183,24 +183,11 @@ export class ProfileInformationComponent implements OnInit {
     }
     if (date1 !== date2) {
       const data = this.helperService.convertToyears(date1, date2);
-      if (data < 12) {
-        if (data === 1) {
-          return `${data} Month`;
-        } else {
-          return `${data} Months`;
-        }
-      } else if (data >= 12) {
-        if (data % 12 === 0) {
-          const result = data / 12;
-          if (result === 1) {
-            return `${result} Year`;
-          } else {
-            return `${result} Years`;
-          }
-        } else if (data % 12 !== 0) {
-          return `${Math.floor(data / 12)} Years  ${data % 12} Months`;
-        }
-      }
+      const years = Math.floor(data / 12);
+      const month = data % 12;
+      const yearStr = years > 1 ? years + ' Years' : years === 1 ? '1 Year' : '';
+      const monthStr = month === 1 ? '1 Month' : month > 1 ? month + ' Months' : '';
+      return  yearStr + ' ' + monthStr;
     }
   }
   getEducationList(userId) {

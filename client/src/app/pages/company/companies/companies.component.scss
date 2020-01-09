@@ -1,4 +1,4 @@
-@import '../../../../styles/variables';
+@import "../../../../styles/variables";
 $profile-form-field-mt: 30px;
 
 img.company-autocomplete-logo {
@@ -19,7 +19,7 @@ a {
   .career-main {
     background-color: $bg-color-1;
     height: 100%;
-    width:100%;
+    width: 100%;
     display: table;
 
     .common-search-filter {
@@ -50,7 +50,7 @@ a {
           cursor: pointer;
           font-size: 26px;
           position: absolute;
-          color: rgba(map-get($md-cfaccent, 500), .34);
+          color: rgba(map-get($md-cfaccent, 500), 0.34);
         }
       }
       .filter-data {
@@ -79,25 +79,27 @@ a {
           border-radius: 5px;
 
           h5.about-company {
-            font-family: 'Poppins-Regular', sans-serif;
+            font-family: "Poppins-Regular", sans-serif;
             font-weight: 400;
             font-style: normal;
             font-size: 14px;
             line-height: 21px;
             margin-top: 0;
             margin-bottom: 10px;
-            color: rgba(map-get($md-cfaccent, 500), .54);
+            color: rgba(map-get($md-cfaccent, 500), 0.54);
           }
 
           p.about-company {
-            font-family: 'Roboto', sans-serif;
+            font-family: "Roboto", sans-serif;
             font-weight: 400;
             font-style: normal;
             font-size: 14px;
             line-height: 22px;
             margin-top: 0;
             margin-bottom: 0;
-            color: rgba(map-get($md-cfaccent, 500), .84);
+            word-break: break-word;
+            white-space: pre-wrap;
+            color: rgba(map-get($md-cfaccent, 500), 0.84);
           }
 
           a {
@@ -139,15 +141,15 @@ a {
             h5 {
               margin-top: 0;
               margin-bottom: 0;
-              font-family: 'Poppins-Regular', sans-serif;
+              font-family: "Poppins-Regular", sans-serif;
               font-weight: 400;
               font-style: normal;
               font-size: 14px;
               line-height: 21px;
-              color: rgba(map-get($md-cfaccent, 500), .34);
+              color: rgba(map-get($md-cfaccent, 500), 0.34);
 
               span.count {
-                color: rgba(map-get($md-cfaccent, 500), .84);
+                color: rgba(map-get($md-cfaccent, 500), 0.84);
               }
             }
 
@@ -168,41 +170,38 @@ a {
           }
           & .card {
             margin: 20px 0;
-            & mat-grid-tile{
-                border: 1px solid #f0f0f0;
-                border-right: none;
-                &:last-child{
-                    border-right:1px solid #f0f0f0;
-                }
+            & mat-grid-tile {
+              border: 1px solid #f0f0f0;
+              border-right: none;
+              &:last-child {
+                border-right: 1px solid #f0f0f0;
+              }
             }
             & .card-item {
-                @include inline-block-btn;
-                width: 100%;
-                padding: 9px 15px 9px 15px;
-                vertical-align: middle;
+              @include inline-block-btn;
+              width: 100%;
+              padding: 9px 15px 9px 15px;
+              vertical-align: middle;
 
+              span {
+                color: rgba(map-get($md-cfaccent, 500), 0.44);
+                font-size: 14px;
+                font-family: "Poppins", sans-serif;
+                font-weight: 400;
+              }
 
-                span {
-                    color: rgba(map-get($md-cfaccent, 500), .44);
-                    font-size: 14px;
-                    font-family: "Poppins", sans-serif;
-                    font-weight: 400;
-                }
-
-                p {
-                    margin: 3px 0 0;
-                    font-size: 14px;
-                    line-height: 16px;
-                }
+              p {
+                margin: 3px 0 0;
+                font-size: 14px;
+                line-height: 16px;
+              }
             }
-        }
+          }
         }
 
         .company-info {
           display: grid;
-          grid-template:
-            " image info "auto / 60px minmax(min-content, max-content);
-          ;
+          grid-template: " image info " auto / 60px minmax(min-content, max-content);
           grid-column-gap: 15px;
           background-color: transparent;
 
@@ -210,14 +209,12 @@ a {
             grid-area: image;
             @include flex(row, center, flex-start);
 
-            &>img {
-              width: 60px;
-              height: 60px;
-              object-fit: cover;
+            & > img {
+              width: 100%;
             }
 
             &.secondary {
-              &>img {
+              & > img {
                 width: 56px;
                 height: 56px;
                 border-radius: 0;
@@ -231,39 +228,39 @@ a {
             @include flex(column, flex-start, center);
 
             h2.name {
-              font-family: 'Poppins', sans-serif;
+              font-family: "Poppins", sans-serif;
               font-weight: 600;
               font-size: 30px;
               line-height: 43px;
-              color: rgba(map-get($md-cfaccent, 500), .84);
+              color: rgba(map-get($md-cfaccent, 500), 0.84);
               margin: 0;
             }
 
             h3.title {
-              font-family: 'Poppins', sans-serif;
+              font-family: "Poppins", sans-serif;
               font-weight: 500;
               font-size: 16px;
               line-height: 23px;
-              color: rgba(map-get($md-cfaccent, 500), .84);
+              color: rgba(map-get($md-cfaccent, 500), 0.84);
               margin: 0;
             }
 
             h4.secondary-title {
-              font-family: 'Roboto', sans-serif;
+              font-family: "Roboto", sans-serif;
               font-weight: 400;
               font-style: normal;
               font-size: 16px;
               line-height: 17px;
-              color: rgba(map-get($md-cfaccent, 500), .84);
+              color: rgba(map-get($md-cfaccent, 500), 0.84);
               margin: 0;
             }
 
             h5.secondary-title {
-              font-family: 'Poppins-Medium', sans-serif;
+              font-family: "Poppins-Medium", sans-serif;
               font-weight: 400;
               font-size: 14px;
               line-height: 20px;
-              color: rgba(map-get($md-cfaccent, 500), .34);
+              color: rgba(map-get($md-cfaccent, 500), 0.34);
               margin: 0;
             }
           }
@@ -271,9 +268,7 @@ a {
 
         .company-info-box {
           display: grid;
-          grid-template:
-            "info " minmax(min-content, max-content);
-          ;
+          grid-template: "info " minmax(min-content, max-content);
           grid-column-gap: 10px;
           background-color: transparent;
 
@@ -286,22 +281,22 @@ a {
             width: 100%;
             @include flex(column, flex-start, center);
 
-            h4{
-              font-family: 'Roboto', sans-serif;
+            h4 {
+              font-family: "Roboto", sans-serif;
               font-weight: 400;
               font-style: normal;
               font-size: 16px;
               line-height: 17px;
-              color: rgba(map-get($md-cfaccent, 500), .84);
+              color: rgba(map-get($md-cfaccent, 500), 0.84);
               margin: 0;
             }
 
             h5 {
-              font-family: 'Poppins-Medium', sans-serif;
+              font-family: "Poppins-Medium", sans-serif;
               font-weight: 400;
               font-size: 14px;
               line-height: 20px;
-              color: rgba(map-get($md-cfaccent, 500), .34);
+              color: rgba(map-get($md-cfaccent, 500), 0.34);
               margin: 0;
             }
           }
@@ -347,7 +342,6 @@ a {
               vertical-align: middle;
               @include inline-block-btn;
             }
-
           }
         }
       }
@@ -361,12 +355,12 @@ a {
       height: calc(100vh - 70px);
       padding-bottom: 120px;
       overflow-y: scroll;
-      -ms-overflow-style: none;  // IE 10+
-      scrollbar-width: none;  // Firefox
+      -ms-overflow-style: none; // IE 10+
+      scrollbar-width: none; // Firefox
       box-sizing: border-box;
 
       &::-webkit-scrollbar {
-        display: none;  // Safari and Chrome
+        display: none; // Safari and Chrome
       }
 
       &::after {
@@ -386,12 +380,12 @@ a {
 
         h3 {
           margin: 0;
-            line-height: 30px;
-            color: rgba(0, 29, 64, 0.24);
-            text-transform: uppercase;
-            font-size: 20px;
-            font-family: "Poppins", sans-serif;
-            font-weight: 700;
+          line-height: 30px;
+          color: rgba(0, 29, 64, 0.24);
+          text-transform: uppercase;
+          font-size: 20px;
+          font-family: "Poppins", sans-serif;
+          font-weight: 700;
         }
       }
 
@@ -408,7 +402,7 @@ a {
           font-size: 14px;
           font-family: "Poppins", sans-serif;
           line-height: 21px;
-          color: rgba(map-get($md-cfaccent, 500), .34);
+          color: rgba(map-get($md-cfaccent, 500), 0.34);
           font-weight: 400;
 
           & .mat-form-field-wrapper {
@@ -443,7 +437,7 @@ a {
   }
 }
 
-@media only screen and (max-width:$max-mini-desktop-breakpoint) {
+@media only screen and (max-width: $max-mini-desktop-breakpoint) {
   :host {
     .career-main {
       .common-search-filter {
@@ -514,14 +508,14 @@ a {
             transition: top 0.5s;
             transition-timing-function: ease;
             background-color: #f2f2f2;
-            padding-top: 0
+            padding-top: 0;
           }
         }
 
-        .nav-title{
+        .nav-title {
           width: 97%;
         }
-        .filter-card{
+        .filter-card {
           width: 97%;
         }
       }
@@ -529,7 +523,7 @@ a {
   }
 }
 
-@media only screen and (min-width:$min-tablet-breakpoint) and (max-width:$max-tablet-breakpoint) {
+@media only screen and (min-width: $min-tablet-breakpoint) and (max-width: $max-tablet-breakpoint) {
   :host {
     .career-main {
       .common-search-filter {
@@ -549,12 +543,10 @@ a {
   }
 }
 
-
-
-@media only screen and (max-width:$max-mobile-breakpoint) {
+@media only screen and (max-width: $max-mobile-breakpoint) {
   :host {
     .career-main {
-      .common-search-filter  {
+      .common-search-filter {
         .companies-search-header {
           width: 70%;
         }
@@ -604,7 +596,6 @@ a {
           }
         }
       }
-
     }
   }
 }

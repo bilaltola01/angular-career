@@ -116,7 +116,7 @@ export class CompaniesComponent implements OnInit {
   ngOnInit() {
     this.initCompanyFilterForm();
     // Initial search
-    this.applyFilter();
+    this.getCompaniesData();
     this.breakpoint = (window.innerWidth <= 600) ? 2 : 3.5;
   }
 
