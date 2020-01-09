@@ -13,7 +13,7 @@
     <div class="postion-search-header">
       <mat-form-field appearance="standard" class="search">
         <mat-icon matSuffix (click)="onSearchPosition($event)">search</mat-icon>
-        <input matInput placeholder="Search career fairs by university or name" type="text" formControlName="searchCareerfair"
+        <input matInput placeholder="Search career fairs" type="text" formControlName="searchCareerfair"
           (keyup.enter)="onSearchPosition($event)">
       </mat-form-field>
     </div>
@@ -104,14 +104,14 @@
                 <li>
                   <div class="company-border date-bg">
                     <div class="date">
-                      <p>{{ fair.date_of_careerfair | date: 'd'}}</p>
-                      <small>{{ fair.date_of_careerfair | date: 'MMM'}}</small>
+                      <p>{{ fair.date_of_careerfair | date: 'd': 'UTC'}}</p>
+                      <small>{{ fair.date_of_careerfair | date: 'MMM': 'UTC'}}</small>
                     </div>
                   </div>
                   <div class="company-content">
                     <small>Event Date</small>
                     <span class="image">
-                      {{ fair.date_of_careerfair | date: 'MMM d, yyyy'}}</span>
+                      {{ fair.date_of_careerfair | date: 'MMM d, yyyy': 'UTC'}}</span>
                   </div>
                 </li>
               </ul>
