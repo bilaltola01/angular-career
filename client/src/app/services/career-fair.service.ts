@@ -47,6 +47,66 @@ export class CareerFairService {
         catchError(this.handleError)
       );
   }
+  public getCareerFairById(careerFairId: number): Observable<any> {
+    const queryUrl = `${this.career_fair_service_url}careerfair/${careerFairId}`;
+      return this.http.get(queryUrl, this.authHttpOptions())
+      .pipe(
+          map(
+            data => {
+              return { success: true, message: 'Success!', data: data };
+            }
+          ),
+          catchError(this.handleError)
+        );
+    }
+    getCompaniesCount(careerFairId) {
+      const queryUrl = `${this.career_fair_service_url}careerfair/${careerFairId}/companies-count`;
+      return this.http.get(queryUrl, this.authHttpOptions())
+      .pipe(
+          map(
+            data => {
+              return { success: true, message: 'Success!', data: data };
+            }
+          ),
+          catchError(this.handleError)
+        );
+    }
+    getPositionsCount(careerFairId) {
+      const queryUrl = `${this.career_fair_service_url}careerfair/${careerFairId}/positions-count`;
+      return this.http.get(queryUrl, this.authHttpOptions())
+      .pipe(
+          map(
+            data => {
+              return { success: true, message: 'Success!', data: data };
+            }
+          ),
+          catchError(this.handleError)
+        );
+    }
+  getPresentcompanies(careerfairId, queryString?: string): Observable<any>  {
+    const queryUrl = `${this.career_fair_service_url}careerfair/${careerfairId}/companies?${queryString}`;
+    return this.http.get(queryUrl, this.authHttpOptions())
+    .pipe(
+        map(
+          data => {
+            return { success: true, message: 'Success!', data: data };
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
+  getPresentPositions(careerfairId, queryString?: string): Observable<any>  {
+    const queryUrl = `${this.career_fair_service_url}careerfair/${careerfairId}/positions?${queryString}`;
+    return this.http.get(queryUrl, this.authHttpOptions())
+    .pipe(
+        map(
+          data => {
+            return { success: true, message: 'Success!', data: data };
+          }
+        ),
+        catchError(this.handleError)
+      );
+  }
 
   private handleError(error) {
     if (!environment.production) {
