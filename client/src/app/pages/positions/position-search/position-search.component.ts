@@ -102,7 +102,7 @@ export class PositionSearchComponent implements OnInit {
     this.updateSkillCallback = this.updateSkillCallback.bind(this);
   }
   ngOnInit() {
-    this. getSearchFromQueryParams();
+    this.getSearchFromQueryParams();
     this.initPositionFilterForm();
     this.getSavedJobs();
     this.getAppliedJobs();
