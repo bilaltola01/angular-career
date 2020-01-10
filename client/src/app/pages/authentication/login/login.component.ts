@@ -80,7 +80,7 @@ export class LoginComponent implements OnInit {
         email: this.loginForm.controls.emailAddress.value,
         password: this.loginForm.controls.password.value
       };
-      this.userService.login(user, this.isRememberMe).subscribe(
+      this.userService.login(user, this.isRememberMe, this.currentRole).subscribe(
         data => {
           if (data['success']) {
            this.getGeneralInformation();

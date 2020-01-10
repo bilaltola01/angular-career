@@ -133,8 +133,11 @@
         <a routerLink='settings' routerLinkActive="active-link" class="dropdown-href">
           App Settings
         </a>
-        <a routerLink='switch' routerLinkActive="active-link" class="dropdown-href">
+        <a *ngIf="userService.checkCurrentRole() === 0" routerLink='positions' routerLinkActive="active-link" class="dropdown-href" (click)="switchRecruiterApp()">
           Recruiter App
+        </a>
+        <a *ngIf="userService.checkCurrentRole() === 1" routerLink='positions' routerLinkActive="active-link" class="dropdown-href" (click)="switchApplicantApp()">
+          Applicant App
         </a>
         <a routerLink='login' (click)="logOut()" routerLinkActive="active-link" class="dropdown-href">
           Logout
