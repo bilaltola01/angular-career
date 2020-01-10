@@ -284,10 +284,15 @@ $profile-form-field-mt: 30px;
           }
 
           & .education-level-m {
+            .skills{
+              .interest-img {
+                margin: 0px 0 0px 10px;
+              }
+            }
             & img {
               width: 30px;
-              height: 29px;
-              margin: 7px 0 5px 10px;
+              height: 30px;
+              margin: 10px 0 0px 10px;
               cursor: pointer;
               &.edu_img {
                 margin-top: -4px;
@@ -362,16 +367,15 @@ $profile-form-field-mt: 30px;
         font-size: 14px;
         line-height: 22px;
         font-weight: 400;
-        max-height: 310px;
         width: 95%;
-        -webkit-box-orient: vertical;
-        display: block;
-        display: -webkit-box;
-        -webkit-line-clamp: 14;
-        overflow: hidden;
         /* autoprefixer: ignore next */
         -webkit-box-orient: vertical;
         text-overflow: ellipsis;
+        &.short-desc{
+          display: -webkit-box;
+          max-height: 310px;
+          overflow: hidden;
+        }
       }
 
       & .right-align {

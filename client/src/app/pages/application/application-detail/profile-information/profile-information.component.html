@@ -226,7 +226,7 @@
             <ng-container *ngIf="true; let short_desc">
               <p *ngIf="experience.job_desc" class="description"
                 [class.short-desc]="short_desc && experience.job_desc?.length > helperService.shortDescLength">
-                {{short_desc ? helperService.shortDescription(experience.job_desc) : experience.job_desc }}</p>
+              {{short_desc ? helperService.shortDescription(experience.job_desc) : experience.job_desc }}</p>
               <a *ngIf="experience.job_desc && experience.job_desc?.length > helperService.shortDescLength"
                 (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
             </ng-container>
@@ -343,9 +343,9 @@
                 <simple-tag *ngIf="(i < limit)" type="gray" title="{{interest.interest}}">
                 </simple-tag>
               </ng-container>
-              <img *ngIf="limit > displayItemsLimit" (click)="limit = limit - displayItemsLimit"
+              <img *ngIf="limit > displayItemsLimit"  class="interest-img" (click)="limit = limit - displayItemsLimit"
                 src="assets/icons/ic_see_less.svg" alt="See Less">
-              <img *ngIf="limit < interestsList?.length" (click)="limit = limit + displayItemsLimit"
+              <img *ngIf="limit < interestsList?.length" class="interest-img" (click)="limit = limit + displayItemsLimit"
                 src="assets/icons/ic_see_more.svg" alt="See More">
             </div>
           </div>

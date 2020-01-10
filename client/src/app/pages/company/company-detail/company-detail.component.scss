@@ -116,7 +116,7 @@ a {
                 color: rgba(map-get($md-cfaccent, 500), .34);
                 margin: 0;
               }
-        
+
               h4.secondary-title {
                 font-family: 'Roboto', sans-serif;
                 font-weight: 500;
@@ -153,6 +153,7 @@ a {
           color: rgba(map-get($md-cfaccent, 500), .30);
           margin: 10px 30px;
           text-transform: uppercase;
+          cursor: pointer;
           &.active {
             color: map-get($md-cfprimary, 500);
           }
@@ -304,6 +305,19 @@ a {
             margin-top: 10px;
           }
         }
+        .position-filters{
+          h3{
+          font-family: "Poppins", sans-serif;
+          font-weight: 700;
+          text-transform: uppercase;
+          font-size: 20px;
+          line-height: 1.5;
+          margin: 0;
+          color: rgba(0, 29, 64, 0.24);
+          margin-top: 10px;
+          margin-bottom: 10px;
+        }
+      }
 
       }
 
@@ -321,7 +335,7 @@ a {
           margin-bottom: 15px;
           & .selectall {
             float: left;
-            width: 70%;
+            width: 78%;
 
             & round-checkbox {
               display: inline;
@@ -335,6 +349,21 @@ a {
             @include inline-block-btn;
             margin-right: 2%;
           }
+          & .sort-item {
+            color: rgba(map-get($md-cfaccent, 500), .44);
+            font-size: 14px;
+            font-family: "Poppins", sans-serif;
+            font-weight: 400;
+
+            & mat-form-field {
+                margin-top: -10px;
+                margin-bottom: 5px;
+                width: 123px;
+                font-family: "Poppins", sans-serif;
+                font-weight: 400;
+
+            }
+        }
         }
 
         .row {
@@ -645,7 +674,7 @@ a {
             border: solid 3px $secondary-bg-color;
             border-radius: 38px;
             display: inline-grid;
-            grid-template: 
+            grid-template:
               "image title" 35px
               "image info" 35px
               / 70px auto;
@@ -677,6 +706,26 @@ a {
             }
           }
         }
+        .jobdesc-space-pera {
+          margin-top: 10px;
+          margin-bottom: 10px;
+          font-size: 14px;
+          line-height: 22px;
+          font-weight: 400;
+          word-break: break-word;
+          white-space: pre-wrap;
+          max-height: 310px;
+          width: 95%;
+          display: block;
+          display: -webkit-box;
+          -webkit-line-clamp: 14;
+          overflow: hidden;
+          -webkit-box-orient: vertical;
+          text-overflow: ellipsis;
+      }
+
+
+
       }
 
       .pagination {
@@ -723,6 +772,28 @@ a {
         }
       }
     }
+    .postion-search-header {
+      display: block;
+      border: none;
+      width: 450px;
+      margin: 0 auto;
+      position: relative;
+      border-radius: 50px;
+      background-color: #f2f2f4;
+      font-style: italic;
+      font-size: 14px;
+      line-height: 21px;
+      font-family: "Poppins", sans-serif;
+      font-weight: 500;
+
+      mat-form-field {
+          width: 100%;
+
+          mat-icon {
+              cursor: pointer;
+          }
+      }
+  }
   }
 }
 
@@ -737,6 +808,7 @@ a {
       width: 100%;
       background-color: $bg-color-1;
       border-bottom: 1px solid map-get($md-cfaccent, 50);
+      background-color: #ffffff;
       padding:0 40px;
       box-sizing: border-box;
       @include flex(row, center, space-between);
@@ -753,7 +825,7 @@ a {
           color: map-get($md-cfprimary, 500);
         }
         mat-icon {
-          color: map-get($md-cfprimary, 500);
+          // color: map-get($md-cfprimary, 500);
           margin-left: 10px;
           font-size: 20px;
           width: 20px;
@@ -765,12 +837,23 @@ a {
       }
     }
     .career-main {
+      #legend{
+        padding: 0 10px;
+        .postion-search-header{
+          max-width: 80%;
+        }
+      }
       .header-container {
-        margin-top: 60px;
+        margin-top: 75px;
         margin-bottom: 0;
 
         .tab-row {
-          display: none;
+          // display: none;
+          padding: 0 6px;
+          h4.tab-menu{
+            font-size: 20px;
+            margin: 10px 10px;
+          }
         }
       }
 
@@ -780,7 +863,7 @@ a {
           padding: 10px 40px 30px 40px;
           left: 0;
           width: 100%;
-          background-color: rgba(0, 0, 0, .32);
+          background-color: #f2f2f2;
           top: 130px;
           height: calc(100vh - 130px);
           transition: top 0.5s;
@@ -789,11 +872,24 @@ a {
           .nav-title {
             display: none;
           }
-        
+
           &.nav-hidden {
             top: -1000%;
             transition: top 0.5s;
             transition-timing-function: ease;
+          }
+          .searchbar-hide{
+            display: none;
+          }
+          .section-title{
+            font-size: 20px;
+            margin: 0;
+            line-height: 30px;
+            color: rgba(0, 29, 64, 0.24);
+            text-transform: uppercase;
+            padding-bottom: 12px;
+            font-family: "Poppins", sans-serif;
+            font-weight: 700;
           }
         }
 
@@ -806,7 +902,7 @@ a {
           .select-style {
             margin: 9px 0;
             & .selectall {
-              width: 74%;
+              width: 75%;
               padding-bottom: 6px;
 
               & action-button {
@@ -882,7 +978,13 @@ a {
         }
 
         .tab-row {
-          display: none;
+          // display: none;
+          padding: 0 6px;
+          h4.tab-menu{
+            font-size: 12px;
+            margin: 10px 10px;
+          }
+
         }
       }
       .main-container {
@@ -1013,10 +1115,13 @@ a {
   }
 }
 
-@media only screen and (max-width: 479px) {
+@media only screen and (min-width:$min-mini-desktop-breakpoint) and (max-width:$max-mini-desktop-breakpoint) {
+// @media only screen and (max-width: 479px) {
   :host {
     .career-main {
       .header-container {
+          margin-top: 75px;
+          margin-bottom: 0;
         .company-row {
 
           .company-detail {
@@ -1034,7 +1139,114 @@ a {
         .nav-container {
           padding: 10px 20px 30px 20px;
         }
+        .list-container {
+          .select-style {
+            .selectall {
+              float: none;
+              width: 100%;
+            }
+            .sort-item {
+              margin-left: 30px;
+            }
+          }
+        }
+
+        //extra css
+        .nav-container {
+          position: fixed;
+          padding: 10px 40px 30px 40px;
+          left: 0;
+          width: 100%;
+          background-color: #f2f2f2;
+          top: 130px;
+          height: calc(100vh - 130px);
+          transition: top 0.5s;
+          transition-timing-function: ease;
+          z-index: 1;
+          .nav-title {
+            display: none;
+          }
+
+          &.nav-hidden {
+            top: -1000%;
+            transition: top 0.5s;
+            transition-timing-function: ease;
+          }
+          .searchbar-hide{
+            display: none;
+          }
+          .section-title{
+            font-size: 20px;
+            margin: 0;
+            line-height: 30px;
+            color: rgba(0, 29, 64, 0.24);
+            text-transform: uppercase;
+            padding-bottom: 12px;
+            font-family: "Poppins", sans-serif;
+            font-weight: 700;
+          }
+        }
+
+        .list-container {
+          width: 100%;
+          &.positions-list {
+            padding-top: 10px;
+          }
+          .select-style {
+            margin: 9px 0;
+            & .selectall {
+              width: 80%;
+              padding-bottom: 6px;
+              float: left;
+              & action-button {
+                margin-bottom: 5px;
+              }
+            }
+          }
+
+        }
+
+
       }
     }
+
+    legend {
+      position: fixed;
+      margin: 0;
+      height: 60px;
+      top: 70px;
+      left: 0;
+      width: 100%;
+      background-color: $bg-color-1;
+      border-bottom: 1px solid map-get($md-cfaccent, 50);
+      background-color: #ffffff;
+      padding:0 40px;
+      box-sizing: border-box;
+      @include flex(row, center, space-between);
+      z-index: 100;
+      .nav-title {
+        cursor: pointer;
+        @include flex(row, center, flex-start);
+        h3 {
+          font-family: 'Poppins', sans-serif;
+          font-weight: 700;
+          font-size: 20px;
+          margin: 0;
+          line-height: 1.5;
+          color: map-get($md-cfprimary, 500);
+        }
+        mat-icon {
+          // color: map-get($md-cfprimary, 500);
+          margin-left: 10px;
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+        }
+      }
+      .drop-buttons{
+        display: inline-block;
+      }
+    }
+
   }
 }

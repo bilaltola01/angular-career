@@ -34,6 +34,7 @@ import {
 } from 'src/app/models';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { HostListener } from '@angular/core';
 import { AddSkillPopupComponent } from 'src/app/components/add-skill-popup/add-skill-popup.component';
 export interface DialogData {
   data: any;
@@ -103,6 +104,7 @@ export class CompanyDetailComponent implements OnInit {
   preLoadDataFlag = true;
   offsetParam;
   urlQueryParameter;
+  applicationUrlParams;
   skillUrlParams = [];
   skillUrlIdParam = [];
 
@@ -234,12 +236,14 @@ export class CompanyDetailComponent implements OnInit {
   /**
    * Retrieve positions info
    */
-  loadCompanyPositionsInfo() {
+  getSearchQueryParams() {
     this.currentPageNumber = 1;
-
     const urlParams = new URLSearchParams(window.location.search);
-    this.searchQueryParam = urlParams.get('search');
+    this.searchQueryParam = urlParams.get('CompanyPosition');
     if (this.searchQueryParam) {
+      this.urlParams = {};
+      this.skillUrlParams = [];
+      this.skillUrlIdParam = [];
       this.preLoadDataFlag = false;
       this.offsetFlag = true;
       const urlObject = this.searchQueryParam.split('&');
@@ -257,9 +261,13 @@ export class CompanyDetailComponent implements OnInit {
       }
       this.currentPageNumber = (this.urlParams['offset'] / this.urlParams['limit']) + 1;
     }
-
+  }
+  loadCompanyPositionsInfo() {
+    this.getSearchQueryParams();
     this.initPositionFilterForm();
     this.getJobData();
+    this.getSavedJobs();
+    this.getAppliedJobs();
 
     this.breakpoint = (window.innerWidth <= 500) ? 2 : 4;
   }
@@ -373,7 +381,7 @@ export class CompanyDetailComponent implements OnInit {
       this.positionForm.patchValue({
         'searchPosition': this.urlParams['position'],
         'minSal': this.urlParams['pay'],
-        'level': this.urlParams['level'],
+        'position': this.urlParams['level'],
         'education': this.urlParams['education'],
         'job': this.urlParams['job_type'],
         'company': this.urlParams['company'],
@@ -534,6 +542,7 @@ export class CompanyDetailComponent implements OnInit {
 
     if (this.searchQueryParam) {
       queryString = this.searchQueryParam;
+      this.applicationUrlParams = this.searchQueryParam;
       this.searchQueryParam = null;
     } else {
 
@@ -567,7 +576,7 @@ export class CompanyDetailComponent implements OnInit {
       }
       queryString = this.positionForm.value.searchPosition ? `${queryString ? queryString + '&' : ''}position=${this.positionForm.value.searchPosition}` : queryString;
 
-      // queryString = this.positionForm.value.sortBy ? `${queryString ? queryString + '&' : ''}sort=${this.positionForm.value.sortBy}` : queryString;
+      queryString = this.positionForm.value.sortBy ? `${queryString ? queryString + '&' : ''}sort=${this.positionForm.value.sortBy}` : queryString;
 
       urlQueryParam = this.positionForm.value.city ? `${urlQueryParam ? urlQueryParam + '&' : ''}city=${this.filterAttributes.city_id ? this.filterAttributes.city_id : this.urlParams['city']}&cityName=${this.positionForm.value.city}` : urlQueryParam;
       urlQueryParam = this.positionForm.value.position ? `${urlQueryParam ? urlQueryParam + '&' : ''}level=${this.positionForm.value.position}` : urlQueryParam;
@@ -584,7 +593,7 @@ export class CompanyDetailComponent implements OnInit {
       if (this.offsetParam || this.filterAttributes.offset === 0 || this.filterAttributes.offset === this.filterAttributes.limit) {
         urlQueryParam = urlQueryParam ? `${urlQueryParam}&offset=${this.offsetParam ? this.offsetParam : 0}` : `offset=${this.offsetParam ? this.offsetParam : 0}`;
         urlQueryParam = urlQueryParam ? `${urlQueryParam}&limit=${this.filterAttributes.limit}` : `offset=${this.filterAttributes.limit}`;
-        // urlQueryParam = this.positionForm.value.sortBy ? `${urlQueryParam ? urlQueryParam + '&' : ''}sort=${this.positionForm.value.sortBy}` : urlQueryParam;
+        urlQueryParam = this.positionForm.value.sortBy ? `${urlQueryParam ? urlQueryParam + '&' : ''}sort=${this.positionForm.value.sortBy}` : urlQueryParam;
       }
 
       this.userSkillsList.forEach(skill => {
@@ -608,11 +617,12 @@ export class CompanyDetailComponent implements OnInit {
       }
 
       if (this.queryFlag || this.prequeryFlag) {
+        this.applicationUrlParams = urlQueryParam;
         this.router.navigate(['/company-info'], { queryParams: {
           id: this.company_id,
           tabIndex: this.tabIndex,
           showBackButton: this.showBackButton,
-          search: queryString ? queryString : ''
+          CompanyPosition: urlQueryParam ? urlQueryParam : ''
         } });
       }
       this.urlQueryParameter = queryString;
@@ -623,9 +633,13 @@ export class CompanyDetailComponent implements OnInit {
 
   getJobData(offset?) {
     this.prequeryFlag = true;
-    this.offsetFlag = false;
+    // this.offsetFlag = false;
     this.selectedAllFlag = false;
-
+    if (this.searchQueryParam) {
+      this.currentPageNumber = (this.urlParams['offset'] / this.urlParams['limit']) + 1;
+    } else {
+      this.currentPageNumber = (this.filterAttributes.offset / this.filterAttributes.limit) + 1;
+    }
     if (this.preLoadDataObject[this.currentPageNumber]) {
       this.positionList = this.preLoadDataObject[this.currentPageNumber].data.data;
       this.setPaginationValues(this.preLoadDataObject[this.currentPageNumber]);
@@ -636,7 +650,7 @@ export class CompanyDetailComponent implements OnInit {
           id: this.company_id,
           tabIndex: this.tabIndex,
           showBackButton: this.showBackButton,
-          param: this.urlQueryParameter ? this.urlQueryParameter : ''
+          CompanyPosition: this.urlQueryParameter ? this.urlQueryParameter : ''
         } });
       }
     } else {
@@ -685,6 +699,8 @@ export class CompanyDetailComponent implements OnInit {
     this.positionForm.reset();
     this.userSkillsList = [];
     this.preLoadDataObject = {};
+    this.skillUrlIdParam = [];
+    this.skillUrlParams = [];
     this.positionForm.patchValue({ 'sortBy': sortValue });
     this.positionForm.patchValue({ 'searchPosition': setPositionValue });
     this.toggleTabMenuOpen();
@@ -705,6 +721,13 @@ export class CompanyDetailComponent implements OnInit {
     this.preLoadDataObject = {};
     this.getJobData();
     event.stopPropagation();
+  }
+  reloadResult() {
+    this.prequeryFlag = true;
+    this.offsetFlag = false;
+    this.filterAttributes.offset = 0;
+    this.preLoadDataObject = {};
+    this.getJobData();
   }
 
   applyFilter() {
@@ -778,8 +801,8 @@ export class CompanyDetailComponent implements OnInit {
   }
 
   unSaveJob(position) {
-    this.cartService.unSaveJob(position.position_id).subscribe(data => {
-      delete this.savedJobsMap[position.position_id];
+    this.cartService.unSaveJob(position).subscribe(data => {
+      delete this.savedJobsMap[position[0].position_id];
     },
     error => {
       this.alertsService.show(error.message, AlertType.error);
@@ -906,9 +929,36 @@ export class CompanyDetailComponent implements OnInit {
       panelClass: ['edit-dialog-container']
     });
   }
-
+  routerNavigate(application_id, position_id) {
+    this.router.navigate([`/applications/${application_id}/application-detail/`, position_id],
+    //  { queryParams: {
+    //   id: this.company_id,
+    //   tabIndex: this.tabIndex,
+    //   showBackButton: this.showBackButton,
+    //   positionParam: this.applicationUrlParams ? this.applicationUrlParams : this.urlQueryParameter
+    // }}
+    );
+  }
   onClickEdit() {
     this.router.navigate(['/edit-company'], { queryParams: { edit: true, id: this.companyInfo.company_id } });
   }
+  @HostListener('window:popstate', ['$event'])
+  onPopState(event) {
+    // URL Params are updated on the next process tick, so we need to wait
+    setTimeout(() => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const positionsParams = urlParams.get('CompanyPosition');
+      if (positionsParams && this.tabIndex === 1) {
+        this.positionForm.reset();
+        this.userSkillsList = [];
+        this.preLoadDataObject = {};
+        this.skillUrlIdParam = [];
+        this.skillUrlParams = [];
+        this.getSearchQueryParams();
+      this.initPositionFilterForm();
+      this.applyFilter();
+      }
+    }, 100);
+}
 
 }
