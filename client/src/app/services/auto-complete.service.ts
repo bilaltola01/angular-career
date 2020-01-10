@@ -25,7 +25,7 @@ export class AutoCompleteService {
     .pipe(
       map(
         data => {
-          if (isEmpty(data[0])) {
+          if (isEmpty(data)) {
             return {success: true, message: 'Success!', data: data};
           }
           // Filter out "non-english" (comma, space, bracket, and dash are accepted; ÃƒÂ© - not accepted ) characters for city and state,
