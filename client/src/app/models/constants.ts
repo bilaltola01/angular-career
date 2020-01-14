@@ -558,7 +558,7 @@ export const SkillLevelDescription = {
   3: { 'title': 'Proficient: ', 'description': 'sufficient training or experience to be considered competent (if someone were to hire you based on this skill you might need moderate training/assistance)' },
   4: { 'title': 'Highly proficient: ', 'description': 'substantial training or experience (if someone were to hire you based on this skill, you would need minimal training/assistance)' },
   5: { 'title': 'Extremely proficient: ', 'description': 'substantial training and experience in the subject, familiarity with industry standards, and some understanding of abstract or esoteric subject matter' },
-  6: { 'title': 'Specialized: ', 'description': 'extensive training, possible research experience, and substantial work experience. This level is usually reserved for people with at least 5 years of academic or industry experience or with MS or Ph.D levels of understanding' }
+  6: { 'title': 'Specialized: ', 'description': 'extensive training, possible research experience, and substantial work experience. This level is usually reserved for people with at least 5 years of academic or industry experience or for people with a graduate level education.' }
 };
 
 export const PositionLevel = [
