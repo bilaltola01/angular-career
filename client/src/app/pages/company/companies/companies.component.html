@@ -146,7 +146,7 @@
             </mat-grid-list>
             <h5 class="about-company">About Company</h5>
             <ng-container *ngIf="maxDescriptionLength; let maxDescription">
-              <p class="about-company">
+              <p class="about-company description">
                 {{company.company_desc | slice:0:maxDescription}}<span
                   *ngIf="company.company_desc.length>maxDescription">...</span>
               </p>
