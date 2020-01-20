@@ -482,6 +482,9 @@
                     <simple-tag *ngIf="job.true_fitscore_info?.skills_weight" type="gray" title="Skills Match"
                       ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.skills_fitscore)}}">
                     </simple-tag>
+                    <simple-tag *ngIf="job.minimum_skills" type="gray" title="Required Skills Match" ellipseTag="true"
+                      value="{{mathFloor(6*job.true_fitscore_info?.required_skills_fitscore)}}">
+                    </simple-tag>
                     <simple-tag *ngIf="job.true_fitscore_info?.experience_weight" type="gray" title="Experience Match"
                       ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.experience_fitscore)}}">
                     </simple-tag>
@@ -490,9 +493,6 @@
                     </simple-tag>
                     <simple-tag *ngIf="job.true_fitscore_info?.interests_weight" type="gray" title="Interests Match"
                       ellipseTag="true" value="{{mathFloor(6*job.true_fitscore_info?.interests_fitscore)}}">
-                    </simple-tag>
-                    <simple-tag *ngIf="job.minimum_skills" type="gray" title="Required Skills Match" ellipseTag="true"
-                      value="{{mathFloor(6*job.true_fitscore_info?.required_skills_fitscore)}}">
                     </simple-tag>
 
                     <p
