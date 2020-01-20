@@ -2466,26 +2466,34 @@ export class CreateProfileComponent implements OnInit {
     this.applicationService.getDisabilityInfo().subscribe(
       dataJson => {
         this.disabilityInfo = dataJson['data'];
+        if (!this.disabilityInfo || this.disabilityInfo.disability === null) {
+          this.disabilityInfo = {
+            user_id: this.generalInfoResponse.user_id,
+            disability: DISABILITY_OPTIONS[2],
+            disability_desc: null
+          };
+          this.postDisabilityInfo();
+        }
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
+        if (!this.disabilityInfo || this.disabilityInfo.disability === null) {
+          this.disabilityInfo = {
+            user_id: this.generalInfoResponse.user_id,
+            disability: DISABILITY_OPTIONS[2],
+            disability_desc: null
+          };
+          this.postDisabilityInfo();
+        }
       }
     );
   }
 
   disabilityChanged($event: any) {
     const disability = $event.value;
-    if (!this.disabilityInfo) {
-      this.disabilityInfo = {
-        user_id: this.generalInfoResponse.user_id,
-        disability: disability,
-        disability_desc: null
-      };
-    } else {
-      this.disabilityInfo.disability = disability;
-    }
 
     if (disability) {
+      this.disabilityInfo.disability = disability;
       this.postDisabilityInfo();
     }
   }

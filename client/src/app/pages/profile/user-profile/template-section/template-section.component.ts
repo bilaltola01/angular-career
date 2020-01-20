@@ -197,26 +197,37 @@ export class TemplateSectionComponent implements OnInit {
     this.applicationService.getDisabilityInfo().subscribe(
       dataJson => {
         this.disabilityInfo = dataJson['data'];
+        if (!this.disabilityInfo || this.disabilityInfo.disability === null) {
+          this.disabilityInfo = {
+            user_id: this.userGeneralInfo.user_id,
+            disability: DISABILITY_OPTIONS[2],
+            disability_desc: null
+          };
+          this.postDisabilityInfo();
+        } else {
+          this.count++;
+          this.checkLoadingStatus();
+        }
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
+        if (!this.disabilityInfo || this.disabilityInfo.disability === null) {
+          this.disabilityInfo = {
+            user_id: this.userGeneralInfo.user_id,
+            disability: DISABILITY_OPTIONS[2],
+            disability_desc: null
+          };
+          this.postDisabilityInfo();
+        }
       }
     );
   }
 
   disabilityChanged($event: any) {
     const disability = $event.value;
-    if (!this.disabilityInfo) {
-      this.disabilityInfo = {
-        user_id: this.userGeneralInfo.user_id,
-        disability: disability,
-        disability_desc: null
-      };
-    } else {
-      this.disabilityInfo.disability = disability;
-    }
 
     if (disability) {
+      this.disabilityInfo.disability = disability;
       this.postDisabilityInfo();
     }
   }
@@ -229,6 +240,10 @@ export class TemplateSectionComponent implements OnInit {
     };
     this.applicationService.postDisabilityInfo(postData).subscribe(
       dataJson => {
+        if (this.count < 4) {
+          this.count++;
+          this.checkLoadingStatus();
+        }
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
@@ -261,7 +276,7 @@ export class TemplateSectionComponent implements OnInit {
   }
 
   checkLoadingStatus() {
-    if (this.count === 3) {
+    if (this.count === 4) {
       this.isLoading = false;
     } else {
       this.isLoading = true;
