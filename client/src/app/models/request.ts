@@ -72,6 +72,12 @@ export interface MilitaryInfoRequest {
   military_status_description: string;
 }
 
+export interface DisabilityInfoRequest {
+  user_id: number;
+  disability:	string;
+  disability_desc: string;
+}
+
 export interface CriminalHistoryRequest {
   arrest_date: any;
   charge: string;

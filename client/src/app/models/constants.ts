@@ -548,8 +548,11 @@ export const MILITARY_STATUS_OPTIONS = [
   'I do not wish to self-identify'
 ];
 
-
-
+export const DISABILITY_OPTIONS = [
+  'Yes, I have, or previously had, a disability',
+  'No, I do not have a disability',
+  'I don’t wish to answer'
+];
 
 export const SkillLevelDescription = {
   0: { 'title': 'No proficiency: ', 'description': 'no training and no experience.' },
