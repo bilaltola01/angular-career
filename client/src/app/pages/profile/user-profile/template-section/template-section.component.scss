@@ -218,7 +218,8 @@
     &.proof-auth {
       width: fit-content
     }
-    &.military-service {
+    &.military-service,
+    &.disability-info {
       min-width: 200px;
       max-width: 650px;
     }

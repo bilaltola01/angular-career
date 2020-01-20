@@ -3,7 +3,8 @@ import {
   HelperService,
   AlertsService,
   AlertType,
-  ApplicationService
+  ApplicationService,
+  UserStateService
 } from 'src/app/services';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import {
@@ -14,7 +15,11 @@ import {
   MILITARY_STATUS_OPTIONS,
   MilitaryInfoRequest,
   CriminalHistoryRequest,
-  CriminalHistoryResponse
+  CriminalHistoryResponse,
+  DisabilityInfoResponse,
+  DISABILITY_OPTIONS,
+  DisabilityInfoRequest,
+  UserGeneralInfo
 } from 'src/app/models';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {
@@ -35,10 +40,11 @@ export interface DialogData {
   styleUrls: ['./template-section.component.scss']
 })
 export class TemplateSectionComponent implements OnInit {
-
+  userGeneralInfo: UserGeneralInfo;
   workAuth: WorkAuthResponse;
   militaryService: MilitaryInfoResponse;
   criminalHistories: CriminalHistoryResponse[];
+  disabilityInfo: DisabilityInfoResponse;
 
   editMode: boolean;
   count: number;
@@ -46,6 +52,7 @@ export class TemplateSectionComponent implements OnInit {
 
   proof_auth_options = PROOF_AUTH_OPTIONS;
   military_status_options = MILITARY_STATUS_OPTIONS;
+  disability_options = DISABILITY_OPTIONS;
 
   constructor(
     private router: Router,
@@ -53,6 +60,7 @@ export class TemplateSectionComponent implements OnInit {
     private helperService: HelperService,
     private alertsService: AlertsService,
     private applicationService: ApplicationService,
+    private userStateService: UserStateService,
     public dialog: MatDialog
   ) {
     this.parseRouterUrl(router.url);
@@ -80,9 +88,22 @@ export class TemplateSectionComponent implements OnInit {
   initialize() {
     this.isLoading = true;
     this.count = 0;
+    this.getGeneralInfo();
     this.getWorkAuthInfo();
     this.getMilitaryServiceInfo();
+    this.getDisabilityInfo();
     this.getCriminalHistoriesInfo();
+  }
+
+  getGeneralInfo() {
+    this.userStateService.getUser
+    .subscribe(user => {
+      if (user) {
+        this.userGeneralInfo = user;
+      }
+    }, error => {
+      this.alertsService.show(error.message, AlertType.error);
+    });
   }
 
   getWorkAuthInfo() {
@@ -165,6 +186,47 @@ export class TemplateSectionComponent implements OnInit {
           this.count++;
           this.checkLoadingStatus();
         }
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  getDisabilityInfo() {
+    this.applicationService.getDisabilityInfo().subscribe(
+      dataJson => {
+        this.disabilityInfo = dataJson['data'];
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  disabilityChanged($event: any) {
+    const disability = $event.value;
+    if (!this.disabilityInfo) {
+      this.disabilityInfo = {
+        user_id: this.userGeneralInfo.user_id,
+        disability: disability,
+        disability_desc: null
+      };
+    }
+
+    if (disability) {
+      this.postDisabilityInfo();
+    }
+  }
+
+  postDisabilityInfo() {
+    const postData: DisabilityInfoRequest = { 
+      user_id: this.userGeneralInfo.user_id,
+      disability: this.disabilityInfo.disability,
+      disability_desc: null
+    };
+    this.applicationService.postDisabilityInfo(postData).subscribe(
+      dataJson => {
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
