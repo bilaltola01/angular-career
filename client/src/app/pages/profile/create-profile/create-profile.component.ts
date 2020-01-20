@@ -242,7 +242,7 @@ export class CreateProfileComponent implements OnInit {
      * "Drop Resume Here" feature won't be available at launch.
      * if need to display this page, set selectedPageIndex to 0.
      */
-    this.selectedPageIndex = 8;
+    this.selectedPageIndex = 1;
 
     this.initBasicInfoForm();
     this.initAboutMeForm();
@@ -2481,6 +2481,8 @@ export class CreateProfileComponent implements OnInit {
         disability: disability,
         disability_desc: null
       };
+    } else {
+      this.disabilityInfo.disability = disability;
     }
 
     if (disability) {

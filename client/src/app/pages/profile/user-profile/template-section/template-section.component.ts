@@ -212,6 +212,8 @@ export class TemplateSectionComponent implements OnInit {
         disability: disability,
         disability_desc: null
       };
+    } else {
+      this.disabilityInfo.disability = disability;
     }
 
     if (disability) {
