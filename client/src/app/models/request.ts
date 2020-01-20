@@ -74,7 +74,7 @@ export interface MilitaryInfoRequest {
 
 export interface DisabilityInfoRequest {
   user_id: number;
-  disability:	string;
+  disability: string;
   disability_desc: string;
 }
 

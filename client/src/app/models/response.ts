@@ -111,7 +111,7 @@ export interface MilitaryInfoResponse {
 
 export interface DisabilityInfoResponse {
   user_id: number;
-  disability:	string;
+  disability: string;
   disability_desc: string;
 }
 
