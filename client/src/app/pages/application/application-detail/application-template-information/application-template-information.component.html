@@ -59,6 +59,42 @@
     <p class="response">{{militaryService.military_status}}</p>
   </div>
 
+  <div *ngIf="disabilityInfo && disabilityInfo.disability" class="row">
+    <h3>Disability Self-Identification</h3>
+
+    <ng-container *ngIf="true; let short_desc">
+      <p *ngIf="!short_desc">Why are you being asked to complete this form? Because companies you apply to may do business with the government, as such said companies must reach out to, hire, and provide equal opportunity to qualified people with disabilities.[1] To help us measure how well we and our partner companies are doing, we are asking you to tell us if you have a disability or if you ever had a disability. Completing this form is voluntary, but we hope that you will choose to fill it out. If you are applying for a job, any answer you give will be kept private and will not be used against you in any way.<br><br>
+      
+      If you work for us, your answer will not be used against you in any way. Because a person may become disabled at any time, we are required to ask all of our employees and applicants to update their information every five years. You may voluntarily self-identify as having a disability on this form without fear of any punishment because you did not identify as having a disability earlier.<br><br>
+      How do I know if I have a disability?<br>
+      You are considered to have a disability if you have a physical or mental impairment or medical condition that substantially limits a major life activity, or if you have a history or record of such an impairment or medical condition.<br><br>
+      
+      Disabilities include, but are not limited to:<br>
+      • Blindness<br>
+      • Deafness<br>
+      • Cancer<br>
+      • Diabetes<br>
+      • Epilepsy<br>
+      • Autism<br>
+      • Cerebral palsy<br>
+      • HIV/AIDS<br>
+      • Schizophrenia<br>
+      • Muscular dystrophy<br>
+      • Bipolar disorder<br>
+      • Major depression<br>
+      • Multiple sclerosis (MS)<br>
+      • Missing limbs or partially missing limbs<br>
+      • Post-traumatic stress disorder (PTSD)<br>
+      • Obsessive compulsive disorder<br>
+      • Impairments requiring the use of a wheelchair<br>
+      • Intellectual disability (previously called mental retardation)<br>
+      </p>
+      <a (click)="short_desc = !short_desc">{{short_desc ? 'Read More' : 'Read Less'}}</a>
+    </ng-container>
+    <p>Response</p>
+    <p class="response">{{disabilityInfo.disability}}</p>
+  </div>
+
   <div *ngIf="criminalHistories" class="row">
     <h3>Criminal History</h3>
     <p>If you have ever been convicted of a misdemeanor or felony offense please provide the following information.

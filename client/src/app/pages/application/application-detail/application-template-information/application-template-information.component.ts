@@ -19,6 +19,7 @@ export class ApplicationTemplateInformationComponent implements OnInit {
   workAuth;
   militaryService;
   criminalHistories;
+  disabilityInfo;
 
   count: number;
   isLoading: boolean;
@@ -45,6 +46,7 @@ export class ApplicationTemplateInformationComponent implements OnInit {
   initialize() {
     this.getWorkAuthInfo(this.applicationId);
     this.getMilitaryServiceInfo(this.applicationId);
+    this.getDisabilityInfo(this.applicationId);
     this.getCriminalHistoriesInfo(this.applicationId);
   }
 
@@ -66,6 +68,19 @@ export class ApplicationTemplateInformationComponent implements OnInit {
       dataJson => {
         this.isLoading = false;
         this.militaryService = dataJson['data']['military_info'];
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  getDisabilityInfo(applicationId) {
+    this.isLoading = true;
+    this.applicationService.getApplicationDisabilityInfo(applicationId).subscribe(
+      dataJson => {
+        this.isLoading = false;
+        this.disabilityInfo = dataJson['data'];
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
