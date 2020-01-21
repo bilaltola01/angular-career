@@ -109,6 +109,12 @@ export interface MilitaryInfoResponse {
   military_status_description: string;
 }
 
+export interface DisabilityInfoResponse {
+  user_id: number;
+  disability: string;
+  disability_desc: string;
+}
+
 export interface CriminalHistoryResponse {
   criminal_hist_id: number;
   user_id: number;

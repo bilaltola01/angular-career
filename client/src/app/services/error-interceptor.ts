@@ -27,7 +27,7 @@ export class ErrorInterceptor implements HttpInterceptor {
   private determineActionBasedOnStatusCode(statusCode: number, reqUrl: string): void {
     switch (statusCode) {
       case 404: {
-        if (!(reqUrl.includes(environment.auth_service) || reqUrl.includes('contact') || reqUrl.includes('request'))) {
+        if (!(reqUrl.includes(environment.auth_service) || reqUrl.includes('contact') || reqUrl.includes('disability-information') || reqUrl.includes('request'))) {
           this.router.navigate(['/error'], {queryParams: {'status-code': statusCode}});
           break;
         }

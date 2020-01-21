@@ -128,6 +128,40 @@ export class ApplicationService {
         catchError(this.handleError)
       );
   }
+  
+  public getDisabilityInfo(): Observable<any> {
+    return this.http.get(this.application_service_url + 'disability-information', this.authHttpOptions())
+      .pipe(
+        map(data => {
+          return { success: true, message: 'Success!', data: data };
+        }),
+        catchError(this.handleError)
+      );
+  }
+  public getApplicationDisabilityInfo(queryParam): Observable<any> {
+    let queryUrl = `${this.application_service_url}application`;
+    if (queryParam) {
+      queryUrl = `${this.application_service_url}application/${queryParam}/disability-information`;
+    }
+    return this.http.get(queryUrl, this.authHttpOptions())
+      .pipe(
+        map(data => {
+          return { success: true, message: 'Success!', data: data };
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  public postDisabilityInfo(postDisabilityInfo: any): Observable<any> {
+    return this.http.post(this.application_service_url + 'disability-information', postDisabilityInfo, this.authHttpOptions())
+      .pipe(
+        map(data => {
+          return { success: true, message: 'Success!', data: data };
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   public getApplicationReferences(queryParam): Observable<any> {
     let queryUrl = `${this.application_service_url}application`;
     if (queryParam) {

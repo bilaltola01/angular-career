@@ -44,8 +44,10 @@ import {
   CriminalHistoryRequest,
   PROOF_AUTH_OPTIONS,
   MILITARY_STATUS_OPTIONS,
-  SkillLevelDescription
-
+  SkillLevelDescription,
+  DisabilityInfoResponse,
+  DISABILITY_OPTIONS,
+  DisabilityInfoRequest
 } from 'src/app/models';
 import moment from 'moment';
 import { SkillDescriptionPopupComponent } from 'src/app/components/skill-description-popup/skill-description-popup.component';
@@ -209,9 +211,11 @@ export class CreateProfileComponent implements OnInit {
   militaryService: MilitaryInfoResponse;
   criminalHistories: CriminalHistoryResponse[];
   criminalHistoriesData: CriminalHistoryRequest[];
+  disabilityInfo: DisabilityInfoResponse;
 
   proof_auth_options = PROOF_AUTH_OPTIONS;
   military_status_options = MILITARY_STATUS_OPTIONS;
+  disability_options = DISABILITY_OPTIONS;
 
   userRole: string;
   is_skip: boolean;
@@ -2315,6 +2319,7 @@ export class CreateProfileComponent implements OnInit {
   initApplicationTemplatePage() {
     this.workAuth = null;
     this.militaryService = null;
+    this.disabilityInfo = null;
     this.criminalHistories = null;
     this.criminalHistoriesData = [];
     this.criminalFormArray = new FormArray([]);
@@ -2373,6 +2378,7 @@ export class CreateProfileComponent implements OnInit {
   getApplicationTemplateInfo() {
     this.getWorkAuthInfo();
     this.getMilitaryServiceInfo();
+    this.getDisabilityInfo();
     this.getCriminalHistoriesInfo();
   }
 
@@ -2449,6 +2455,57 @@ export class CreateProfileComponent implements OnInit {
           this.militaryService.military_status = MILITARY_STATUS_OPTIONS[3];
           this.postMilitaryServiceInfo();
         }
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+      }
+    );
+  }
+
+  getDisabilityInfo() {
+    this.applicationService.getDisabilityInfo().subscribe(
+      dataJson => {
+        this.disabilityInfo = dataJson['data'];
+        if (!this.disabilityInfo || this.disabilityInfo.disability === null) {
+          this.disabilityInfo = {
+            user_id: this.generalInfoResponse.user_id,
+            disability: DISABILITY_OPTIONS[2],
+            disability_desc: null
+          };
+          this.postDisabilityInfo();
+        }
+      },
+      error => {
+        this.alertsService.show(error.message, AlertType.error);
+        if (!this.disabilityInfo || this.disabilityInfo.disability === null) {
+          this.disabilityInfo = {
+            user_id: this.generalInfoResponse.user_id,
+            disability: DISABILITY_OPTIONS[2],
+            disability_desc: null
+          };
+          this.postDisabilityInfo();
+        }
+      }
+    );
+  }
+
+  disabilityChanged($event: any) {
+    const disability = $event.value;
+
+    if (disability) {
+      this.disabilityInfo.disability = disability;
+      this.postDisabilityInfo();
+    }
+  }
+
+  postDisabilityInfo() {
+    const postData: DisabilityInfoRequest = { 
+      user_id: this.generalInfoResponse.user_id,
+      disability: this.disabilityInfo.disability,
+      disability_desc: null
+    };
+    this.applicationService.postDisabilityInfo(postData).subscribe(
+      dataJson => {
       },
       error => {
         this.alertsService.show(error.message, AlertType.error);
