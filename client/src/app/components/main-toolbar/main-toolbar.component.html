@@ -12,7 +12,8 @@
     </mat-toolbar>
     <mat-nav-list>
       <ng-container *ngIf="isLoggedIn()">
-          <span class="spacer"></span>
+        <span class="spacer"></span>
+        <ng-container *ngIf="userService.checkCurrentRole() === 0">
           <a routerLink='career-fairs' routerLinkActive="active-link">
             Career Fairs
           </a>
@@ -31,10 +32,25 @@
           <a routerLink='saved-jobs' routerLinkActive="active-link">
             Saved Jobs
           </a>
-          <a routerLink='style-guide' routerLinkActive="active-link" *ngIf="isDevelopmentEnv()">
-            Style Guide
+        </ng-container>
+        <ng-container *ngIf="userService.checkCurrentRole() === 1">
+          <a routerLink='managed-positions' routerLinkActive="active-link">
+            Managed Positions
+          </a>
+          <a routerLink='user-companies' routerLinkActive="active-link">
+            User Companies
+          </a>
+          <a routerLink='user-careerfair' routerLinkActive="active-link">
+            User Career Fair
+          </a>
+          <a routerLink='people' routerLinkActive="active-link">
+            People
           </a>
         </ng-container>
+        <a routerLink='style-guide' routerLinkActive="active-link" *ngIf="isDevelopmentEnv()">
+          Style Guide
+        </a>
+      </ng-container>
 
         <ng-container *ngIf="!isLoggedIn()">
           <span class="spacer"></span>
@@ -71,24 +87,40 @@
       <div [ngClass]="{hidden: (isHandset$ | async)}" class="links-container" *ngIf="!isCreatingProfile()">
         <ng-container *ngIf="isLoggedIn()">
           <span class="spacer"></span>
-          <a routerLink='career-fairs' routerLinkActive="active-link">
-            Career Fairs
-          </a>
-          <a routerLink='positions' routerLinkActive="active-link">
-            Positions
-          </a>
-          <a routerLink='companies' routerLinkActive="active-link">
-            Companies
-          </a>
-          <a routerLink='people' routerLinkActive="active-link">
-            People
-          </a>
-          <a routerLink='applications' routerLinkActive="active-link">
-            Applications
-          </a>
-          <a routerLink='saved-jobs' routerLinkActive="active-link">
-            Saved Jobs
-          </a>
+          <ng-container *ngIf="userService.checkCurrentRole() === 0">
+            <a routerLink='career-fairs' routerLinkActive="active-link">
+              Career Fairs
+            </a>
+            <a routerLink='positions' routerLinkActive="active-link">
+              Positions
+            </a>
+            <a routerLink='companies' routerLinkActive="active-link">
+              Companies
+            </a>
+            <a routerLink='people' routerLinkActive="active-link">
+              People
+            </a>
+            <a routerLink='applications' routerLinkActive="active-link">
+              Applications
+            </a>
+            <a routerLink='saved-jobs' routerLinkActive="active-link">
+              Saved Jobs
+            </a>
+          </ng-container>
+          <ng-container *ngIf="userService.checkCurrentRole() === 1">
+            <a routerLink='managed-positions' routerLinkActive="active-link">
+              Managed Positions
+            </a>
+            <a routerLink='user-companies' routerLinkActive="active-link">
+              User Companies
+            </a>
+            <a routerLink='user-careerfair' routerLinkActive="active-link">
+              User Career Fair
+            </a>
+            <a routerLink='people' routerLinkActive="active-link">
+              People
+            </a>
+          </ng-container>
           <a routerLink='style-guide' routerLinkActive="active-link" *ngIf="isDevelopmentEnv()">
             Style Guide
           </a>
