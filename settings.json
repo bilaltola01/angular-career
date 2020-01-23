@@ -6,7 +6,7 @@
             "CAREERFAIR_URL": "http://localhost:4200"
         },
         "PRODUCTION": {
-            "GATEWAY": "http://localhost:8080",
+            "GATEWAY": "https://l9ooyym3s9.execute-api.us-west-1.amazonaws.com/prod",
             "GATEWAY_NAME": "proxy",
             "CAREERFAIR_URL": "https://www.yourcareerfair.com"
         }
