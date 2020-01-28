@@ -128,7 +128,7 @@ export class ApplicationService {
         catchError(this.handleError)
       );
   }
-  
+
   public getDisabilityInfo(): Observable<any> {
     return this.http.get(this.application_service_url + 'disability-information', this.authHttpOptions())
       .pipe(
