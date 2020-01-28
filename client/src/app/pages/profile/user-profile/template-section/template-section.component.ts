@@ -233,7 +233,7 @@ export class TemplateSectionComponent implements OnInit {
   }
 
   postDisabilityInfo() {
-    const postData: DisabilityInfoRequest = { 
+    const postData: DisabilityInfoRequest = {
       user_id: this.userGeneralInfo.user_id,
       disability: this.disabilityInfo.disability,
       disability_desc: null
